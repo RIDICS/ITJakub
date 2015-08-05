@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Copyright";
+}
+
+@section scripts{
+    @Scripts.Render("~/itjakub/home/javascript")
+}
+
+
+<div class="content-container top-offset-without-submenu">
+    <h1>Copyright</h1>
+    <p>
+        Copyright © 2006–2015, oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i.<br/>
+    </p>
+    <p>
+        <i>Podmínky užití</i><br />
+        <i>Vokabulář webový</i> je autorské dílo chráněné ve smyslu aktuálního znění zákona č. 121/2000 Sb., o právu autorském, a slouží výhradně k nekomerčnímu využití. Bez předchozí konzultace s oddělením vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., je zakázáno rozšiřovat jakoukoliv jeho část, ať již samostatně, či v rámci jiného projektu. Při <a href='@Url.Action("HowToCite", "Home", new { Area = ""})'>citaci</a> <i>Vokabuláře webového</i> či jeho součástí je nutné postupovat podle obecně uznávaných citačních pravidel.
+    </p>
+</div>

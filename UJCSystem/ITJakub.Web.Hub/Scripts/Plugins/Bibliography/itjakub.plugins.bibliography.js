@@ -3,8 +3,9 @@
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 /// <reference path="../itjakub.plugins.pagination.ts" />
 var BibliographyModule = (function () {
-    function BibliographyModule(resultsContainer, sortBarContainer, forcedBookType) {
+    function BibliographyModule(resultsContainer, sortBarContainer, sortChangeCallback, forcedBookType) {
         this.resultsContainer = $(resultsContainer);
+        this.sortChangeCallback = sortChangeCallback;
         this.booksContainer = document.createElement("div");
         $(this.booksContainer).addClass("bib-listing-books-div");
         this.paginatorContainer = document.createElement("div");
@@ -29,13 +30,14 @@ var BibliographyModule = (function () {
         this.configurationManager = new ConfigurationManager(configObj);
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
-        this.sortBar = new SortBar();
+        this.sortBar = new SortBar(this.sortChangeCallback);
         var sortBarHtml = this.sortBar.makeSortBar(this.booksContainer, this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
     BibliographyModule.prototype.showBooks = function (books) {
         var _this = this;
-        $(this.booksContainer).empty();
+        this.clearBooks();
+        this.clearLoading();
         if (books.length > 0) {
             var rootElement = document.createElement('ul');
             $(rootElement).addClass('bib-listing');
@@ -51,6 +53,15 @@ var BibliographyModule = (function () {
             divElement.innerHTML = "Žádné výsledky k zobrazení";
             $(this.booksContainer).append(divElement);
         }
+    };
+    BibliographyModule.prototype.clearBooks = function () {
+        $(this.booksContainer).empty();
+    };
+    BibliographyModule.prototype.clearLoading = function () {
+        $(this.booksContainer).removeClass("loader");
+    };
+    BibliographyModule.prototype.showLoading = function () {
+        $(this.booksContainer).addClass("loader");
     };
     BibliographyModule.prototype.makeBibliography = function (bibItem) {
         var liElement = document.createElement('li');

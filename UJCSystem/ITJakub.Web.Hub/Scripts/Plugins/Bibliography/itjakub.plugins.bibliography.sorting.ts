@@ -1,43 +1,46 @@
 ﻿class SortBar {
-    comparatorResolver: ComparatorResolver;
-    actualSortOrder: number;
-    actualSortOptionValue: SortEnum;
+    private actualSortOrder: number;
+    private actualSortOptionValue: SortEnum;
+    private sortChangeCallback: () => void;
 
 
-    constructor() {
-        this.comparatorResolver = new ComparatorResolver();
+    constructor(sortChangeCallback: () => void) {
         this.actualSortOrder = 1;
         this.actualSortOptionValue = SortEnum.Title;
+        this.sortChangeCallback = sortChangeCallback;
     }
 
     public makeSortBar(booksContainer: string, sortBarContainer: string): HTMLDivElement {
         var sortBarDiv: HTMLDivElement = document.createElement('div');
         $(sortBarDiv).addClass('bib-sortbar');
+
         var select: HTMLSelectElement = document.createElement('select');
+
         $(select).change(() => {
             var selectedOptionValue:string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
-            this.actualSortOptionValue = parseInt(selectedOptionValue);
-            var comparator = this.comparatorResolver.getComparatorForOptionValue(selectedOptionValue);
-            this.sort(comparator, this.actualSortOrder, booksContainer);
+            this.changeSortCriteria(parseInt(selectedOptionValue));
         });
+
         this.addOption(select, "Název", SortEnum.Title.toString());
-        this.addOption(select, "Datace", SortEnum.Dating.toString()); //TODO add options to json config
+        this.addOption(select, "Datace", SortEnum.Dating.toString());
         this.addOption(select, "Autor", SortEnum.Author.toString());
         this.addOption(select, "Editor", SortEnum.Editor.toString());
+
         sortBarDiv.appendChild(select);
 
         var sortOrderButton: HTMLButtonElement = document.createElement('button');
         sortOrderButton.type = 'button';
         $(sortOrderButton).addClass('btn btn-sm sort-button');
+
         var spanSortAsc: HTMLSpanElement = document.createElement('span');
         $(spanSortAsc).addClass('glyphicon glyphicon-arrow-up');
         sortOrderButton.appendChild(spanSortAsc);
+
         $(sortOrderButton).click((event) => {
             this.changeSortOrder();
-            var comparator = this.comparatorResolver.getComparatorForOptionValue(this.actualSortOptionValue.toString());
-            this.sort(comparator, this.actualSortOrder, booksContainer);
             $(event.currentTarget).children('span').toggleClass('glyphicon-arrow-up glyphicon-arrow-down');
         });
+
         sortBarDiv.appendChild(sortOrderButton);
 
         return sortBarDiv;
@@ -52,6 +55,16 @@
 
     private changeSortOrder() {
         this.actualSortOrder = -this.actualSortOrder;
+        this.sortingChanged();
+    }
+
+    private changeSortCriteria(sortOptionValue: SortEnum) {
+        this.actualSortOptionValue = sortOptionValue;
+        this.sortingChanged();
+    }
+
+    private sortingChanged() {
+        this.sortChangeCallback();
     }
 
     private addOption(selectbox: HTMLSelectElement, text: string, value: string) {
@@ -66,34 +79,7 @@
     }
 
     public getSortCriteria(): SortEnum {
-        return this.actualSortOptionValue; //TODO make enum
-    }
-}
-
-
-class ComparatorResolver {
-    private comparators: { (a: HTMLLIElement, b: HTMLLIElement): number; }[];
-
-    constructor() {
-        this.comparators = new Array();
-        this.comparators['Default'] = (value: string) => {
-            return (a: HTMLLIElement, b: HTMLLIElement) => {
-                var aval = $(a).data(value);
-                var bval = $(b).data(value);
-                if (aval == bval) {         //TODO to keep sort order compare by unique value, shoul be loaded from config
-                    aval = $(a).data("bookid");
-                    bval = $(b).data("bookid");
-                }
-                return aval > bval ? 1 : -1;
-            };
-        };
-    }
-
-    public getComparatorForOptionValue(optionValue: string): (a: HTMLLIElement, b: HTMLLIElement) => number {
-        if (typeof this.comparators[optionValue] !== 'undefined') {
-            return this.comparators[optionValue](optionValue);
-        }
-        return this.comparators['Default'](optionValue);
+        return this.actualSortOptionValue;
     }
 }
 

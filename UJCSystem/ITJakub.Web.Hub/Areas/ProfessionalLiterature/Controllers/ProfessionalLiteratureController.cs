@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Index()
         {
-            return View("Search");
+            return View("List");
         }
 
         public ActionResult Search()
@@ -23,11 +23,12 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             return View();
         }
-
-        public ActionResult TermsOfUse()
+        
+        public ActionResult List()
         {
             return View();
         }
+
 
         public ActionResult Feedback()
         {

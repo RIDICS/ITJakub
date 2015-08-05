@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Book reader";
+    ViewBag.Title = "Edice - Čtečka děl";
 }
 
 @section styles{
@@ -20,6 +20,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),"@Model.SearchText");
+        initReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)));
     });
 </script>

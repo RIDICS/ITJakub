@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         // GET: Editions/Editions
         public ActionResult Index()
         {
-            return View("Information");
+            return View("List");
         }
 
         public ActionResult Search()
@@ -63,7 +63,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
                     BookPages = book.BookPages,
-                    SearchText = HttpUtility.UrlDecode(searchText)
+                    SearchText = searchText
                 });
         }
 
@@ -87,12 +87,17 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
+        public ActionResult FeedBack()
         {
             return View();
         }
 
-        public ActionResult FeedBack()
+        public ActionResult Help()
+        {
+            return View();
+        }
+        
+        public ActionResult EditionPrinciples()
         {
             return View();
         }

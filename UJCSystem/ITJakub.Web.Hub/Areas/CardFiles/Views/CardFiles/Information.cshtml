@@ -5,8 +5,39 @@
     @Scripts.Render("~/itjakub/cardfiles/javascript")
 }
 
+@{
+    ViewBag.Title = "Kartotéky - Informace";
+}
+
+
 <div class="content-container">
     <h1>Informace</h1>
 
-    Zde budou informace ke kartotekam
+    <p>
+        V části <i>Kartotéky</i> zpřístupňujme digitalizovanou podobu dvou kartoték Jana Gebauera: kartotéky excerpce ze staročeské literatury a kartotéky pramenů k této excerpci.
+    </p>
+    <p>
+        Tyto kartotéky budoval Jan Gebauer (8. 10. 1838 – 25. 5. 1907) průběžně po celou dobu svého bádání na poli historického vývoje češtiny. Využíval ji nejprve při práci na historické mluvnici češtiny, ale už od 70. let 19. století si pořizoval výpisky s cílem sestavit na jejich základě slovník staré češtiny. Podrobně excerpoval památky pocházející ze 14. století, zvláště z jeho první poloviny; v textech z 15. století, popř. i v mladších se zaměřoval jen na ta slova a jazykové jevy, které pokládal za důležité.
+    </p>
+    <p>
+        Výpisky pořizoval Jan Gebauer (částečně za pomoci svých žáků a spolupracovníků) na kartotéční lístky (většinou o rozměrech 17 × 10,5 cm). Na četných lístcích jsou dodatečné přípisky a komentáře, dnes již málo zřetelné. Poměrně často je na jednom lístku uvedeno několik citátů, často z různých textů.
+    </p>
+    <p>
+        Kartotéka obsahuje lístky dokládající slova <i>netbalivý – Žitomíř</i>, protože tato část abecedy nebyla v Gebauerově slovníku zpracována. Lístky z abecedy ve slovníku obsažené Gebauer dále neuchovával. Kdy a kde se ztratily lístky z konce abecedy (konec písmene <i>ž</i>), není známo.
+    </p>
+    <p>
+        Po Gebauerově smrti v roce 1907 užíval kartotéku Emil Smetánka, jeho nástupce na univerzitě, a na jejím základě vydal dva další sešity staročeského slovníku. Poté byla kartotéka uložena v <i>Kanceláři Slovníku jazyka českého</i>. Po vzniku oddělení pro studium vývoje jazyka v Ústavu pro jazyk český roku 1948 se kartotéka stala základem jeho lexikálních sbírek a byla zprvu doplňována o nově pořizovanou excerpci; proto se u slov začínajících písmenem n nacházejí některá excerpta zcela jiného vzhledu. Brzy však byly tyto výpisky řazeny do samostatné kartotéky a Gebauerova excerpce byla pietně ponechána v původním stavu.
+    </p>
+    <p>
+        Kartotéka J. Gebauera dnes obsahuje na 80 tisíc lístků. Její nedílnou součástí je i soubor lístků s Gebauerovými záznamy o excerpovaných a zkoumaných textech. Tyto lístky jsou řazeny abecedně podle zkratky, pod níž je příslušná památka citována v jeho historické mluvnici a slovníku.
+    </p>
+    <p>
+        Digitalizovaná podoba kartotéky se základní anotací byla pořízena v letech 2005–2006 s úmyslem zpřístupnit tuto kartotéku veřejnosti prostřednictvím internetu v roce stého výročí úmrtí J. Gebauera. Kartotéku digitalizovala firma Imaging Systems, spol. s r. o. Lístky byly označeny údaji, které Jan Gebauer či jeho spolupracovníci zapsali v záhlaví lístků; na této anotaci se podílely zejména tehdejší studentky Filozofické fakulty Univerzity Karlovy Tereza Honková a Eva Vachková. Užité podoby slov v záhlaví záměrně nejsou sjednocovány časově ani lokálně, jsou zde zachyceny jak podoby staročeské, tak i pozdější. Některé lístky pouze odkazují na formální variantu slova uvedenou na jiném lístku. V jiných případech je v souladu s údaji na lístku v elektronickém záhlaví uvedeno více výrazů či je výraz doplněn o otazník. Tato nejednotnost anotace odráží pracovní charakter excerpce, ovšem za cenu obtížnějšího prohledávání zveřejňovaného materiálu, při němž musí uživatel zvažovat vhodný způsob formulace dotazu (zadávání různých vývojových podob slov, užívání zástupných znaků atp.). Součástí zpřístupněného materiálu je též databáze zkratek, jež obsahuje především zkratky excerpovaných památek – tyto lístky byly (pokud možno) anotovány v souladu se zkratkami otištěnými v Gebauerově Slovníku staročeském. – Lístky bez jakéhokoli údaje v záhlaví, které jsou v kartotéce uloženy odděleně od ostatních, do databáze nezařazujeme.
+    </p>
+    <p>
+        Za vytvoření anotovacího a vyhledávacího programu <i>Bára</i>, pomocí něhož jsou lístky zveřejněny, děkujeme Mgr. Miroslavu Spoustovi.
+    </p>
+    <p>
+        Pro obecné připomínky ke zveřejnění Gebauerovy excerpce je možné využít nabídku <a href='@Url.Action("Feedback", "CardFiles", new { Area = "CardFiles"})'>Připomínky</a>. Připomínky k jednotlivým lístkům lze zaslat po kliknutí na odkaz <i>Připomínka</i> ve spodní části jednotlivých záznamů. <span style="color: red">– poslední větu aktualizovat dle budoucího stavu</span>
+    </p>
 </div>

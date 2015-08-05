@@ -29,12 +29,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
+        public ActionResult Feedback()
         {
             return View();
         }
-
-        public ActionResult Feedback()
+        
+        public ActionResult Help()
         {
             return View();
         }

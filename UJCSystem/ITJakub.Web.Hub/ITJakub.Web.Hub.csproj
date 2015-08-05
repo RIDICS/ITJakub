@@ -186,6 +186,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\AudioBooks\AudioBooksAreaRegistration.cs" />
+    <Compile Include="Areas\AudioBooks\BundleConfig.cs" />
+    <Compile Include="Areas\AudioBooks\Controllers\AudioBooksController.cs" />
+    <Compile Include="Areas\AudioBooks\RouteConfig.cs" />
     <Compile Include="Areas\Bibliographies\BibliographiesAreaRegistration.cs" />
     <Compile Include="Areas\Bibliographies\BundleConfig.cs" />
     <Compile Include="Areas\Bibliographies\Controllers\BibliographiesController.cs" />
@@ -199,6 +203,10 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
+    <Compile Include="Areas\Tools\BundleConfig.cs" />
+    <Compile Include="Areas\Tools\Controllers\ToolsController.cs" />
+    <Compile Include="Areas\Tools\RouteConfig.cs" />
+    <Compile Include="Areas\Tools\ToolsAreaRegistration.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\DatingCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\DatingListCriteriaDescriptionProfile.cs" />
@@ -207,6 +215,7 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -297,6 +306,12 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.min.css">
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
+    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.css">
+      <DependentUpon>itjakub.oldgrammar.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
+      <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -322,15 +337,20 @@
     <Content Include="Content\ITJakub.Footer.min.css">
       <DependentUpon>ITJakub.Footer.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.css">
+      <DependentUpon>ITJakub.HorizontalLoader.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.min.css">
+      <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
+    </Content>
     <Content Include="Content\ITJakub.PluginMenu.css.map">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\List.cshtml" />
+    <Content Include="Areas\Bibliographies\Views\Bibliographies\Search.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\TermsOfUse.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
     <Content Include="Content\Plugins\Bibliography\configuration.json" />
     <Content Include="Content\ITJakub.css">
@@ -428,7 +448,6 @@
     <Content Include="Areas\Dictionaries\Views\web.config" />
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Index.cshtml" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
     <Content Include="Content\ITJakub.less" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css.map">
@@ -452,7 +471,6 @@
     <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\TermsOfUse.cshtml" />
     <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
@@ -460,7 +478,6 @@
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
     <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\TermsOfUse.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
@@ -478,13 +495,11 @@
       <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
     </Content>
     <Content Include="Areas\BohemianTextBank\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\TermsOfUse.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Search.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\List.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Information.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Feedback.cshtml" />
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.less" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\TermsOfUse.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
@@ -492,7 +507,7 @@
     <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\TermsOfUse.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
@@ -502,7 +517,6 @@
     </Content>
     <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\TermsOfUse.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
     <Content Include="Content\bootstrap-theme.css.map" />
@@ -588,6 +602,30 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.content.css.map">
       <DependentUpon>itjakub.editions.content.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.HorizontalLoader.css.map">
+      <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Help.cshtml" />
+    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.css.map">
+      <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Help.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\web.config" />
+    <Content Include="Areas\Tools\Views\web.config" />
+    <Content Include="Areas\AudioBooks\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\Feedback.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\Information.cshtml" />
+    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.less" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\List.cshtml" />
+    <Content Include="Areas\Tools\Content\itjakub.tools.less" />
+    <Content Include="Areas\Tools\Views\Tools\Feedback.cshtml" />
+    <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
+    <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
+    <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -657,16 +695,23 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Contacts.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Upload\Upload.cshtml" />
+    <Content Include="Views\Home\Copyright.cshtml" />
+    <Content Include="Views\Home\Support.cshtml" />
+    <Content Include="Views\Home\Links.cshtml" />
+    <Content Include="Views\Home\HowToCite.cshtml" />
+    <Content Include="Views\Home\Feedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AudioBooks\Models\" />
+    <Folder Include="Areas\AudioBooks\Views\Shared\" />
     <Folder Include="Areas\Bibliographies\Models\" />
     <Folder Include="Areas\Bibliographies\Views\Shared\" />
     <Folder Include="Areas\BohemianTextBank\Models\" />
@@ -680,14 +725,15 @@
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
     <Folder Include="Areas\ProfessionalLiterature\Models\" />
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
-    <Folder Include="Views\Author\" />
-    <Folder Include="Views\Bibliography\" />
+    <Folder Include="Areas\Tools\Models\" />
+    <Folder Include="Areas\Tools\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
@@ -699,6 +745,7 @@
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesFavoriteHeadwords.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
+    <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

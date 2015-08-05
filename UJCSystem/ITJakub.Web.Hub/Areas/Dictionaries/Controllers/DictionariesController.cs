@@ -23,10 +23,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
         }
 
-        // GET: Dictionaries/Dictionaries
         public ActionResult Index()
         {
-            return View();
+            return View("Search");
         }
 
         public ActionResult Search()
@@ -43,6 +42,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return View();
         }
+        public ActionResult Help()
+        {
+            return View();
+        }
 
         public ActionResult GetDictionariesWithCategories()
         {
@@ -53,11 +56,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
         public ActionResult Information()
-        {
-            return View();
-        }
-
-        public ActionResult TermsOfUse()
         {
             return View();
         }

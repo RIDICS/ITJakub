@@ -13,10 +13,10 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Index()
         {
-            return View("Information");
+            return View("Search");
         }
 
-        public ActionResult List()
+        public ActionResult Search()
         {
             return View();
         }
@@ -26,17 +26,12 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             return View();
         }
 
-        public ActionResult TermsOfUse()
-        {
-            return View();
-        }
-
         public ActionResult Feedback()
         {
             return View();
         }
 
-        public ActionResult Search(string term)
+        public ActionResult SearchTerm(string term)
         {
             IEnumerable<SearchResultContract> listBooks = m_serviceClient.Search(term);
             foreach (var list in listBooks)

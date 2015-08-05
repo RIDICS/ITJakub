@@ -4,7 +4,7 @@
 }
 .hovered-link {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .black-link {
   color: black;
@@ -12,13 +12,11 @@
 }
 a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
-a,
-a:visited {
-  color: black;
-  text-decoration: none;
-}
+/*a, a:visited {
+    .black-link;
+}*/
 .styled-background {
   background-color: #84ced7;
 }
@@ -33,20 +31,25 @@ body {
   width: 1100px;
   margin: auto;
 }
-.page-body-content a {
-  color: black;
-  text-decoration: none;
-}
+/*.page-body-content a {
+    .black-link;
+}*/
 .page-body-content a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .module-content {
-  margin: 115px 0 0 0;
+  margin: 88px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;
-  padding: 5px;
+  padding: 15px;
+  padding-top: 5px;
+  min-height: 77vh;
+}
+.content-container.top-offset-without-submenu {
+  min-height: 80vh;
 }
 .transparent-content-container {
   padding: 5px;
@@ -187,5 +190,11 @@ div.container {
   height: 20px;
   background: url(/Content/Images/loading.gif) no-repeat center;
   background-size: contain;
+}
+#cardfileSearchDiv .searchbar-inputs {
+  margin-right: 75px;
+}
+#cardFilesListSearchDiv .searchbar-inputs {
+  margin-right: 75px;
 }
 /*# sourceMappingURL=itjakub.cardfiles.css.map */

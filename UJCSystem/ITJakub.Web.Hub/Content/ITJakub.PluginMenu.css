@@ -4,7 +4,7 @@
 }
 .hovered-link {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .black-link {
   color: black;
@@ -12,13 +12,11 @@
 }
 a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
-a,
-a:visited {
-  color: black;
-  text-decoration: none;
-}
+/*a, a:visited {
+    .black-link;
+}*/
 .styled-background {
   background-color: #84ced7;
 }
@@ -33,20 +31,25 @@ body {
   width: 1100px;
   margin: auto;
 }
-.page-body-content a {
-  color: black;
-  text-decoration: none;
-}
+/*.page-body-content a {
+    .black-link;
+}*/
 .page-body-content a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .module-content {
-  margin: 115px 0 0 0;
+  margin: 88px 0 0 0;
+  min-height: 74vh;
 }
 .content-container {
   background-color: white;
-  padding: 5px;
+  padding: 15px;
+  padding-top: 5px;
+  min-height: 77vh;
+}
+.content-container.top-offset-without-submenu {
+  min-height: 80vh;
 }
 .transparent-content-container {
   padding: 5px;
@@ -118,7 +121,7 @@ div.container {
   color: black;
   display: block;
   font-family: Helvetica, Arial, Verdana, sans-serif;
-  padding: 10px 20px;
+  padding: 5px 20px;
   text-decoration: none;
 }
 #main-plugins-menu ul {
@@ -131,7 +134,6 @@ div.container {
   display: inline-block;
   float: left;
   margin: 0;
-  max-width: 135px;
   height: 100%;
 }
 #main-plugins-menu.align-center {
@@ -156,7 +158,7 @@ div.container {
   background-position: center 90%;
   background-repeat: no-repeat;
   background-size: 10px;
-  padding-bottom: 15px;
+  /*padding-bottom: 15px;*/
   vertical-align: middle;
 }
 #main-plugins-menu > ul > li:hover:after {
@@ -190,11 +192,16 @@ div.container {
 }
 #main-plugins-menu .has-sub:hover > ul {
   display: block;
+  border: 1px solid white;
+}
+#main-plugins-menu .has-sub.active:hover > ul {
+  display: block;
+  border: none;
 }
 #main-plugins-menu .has-sub ul {
   display: none;
   position: absolute;
-  width: 200px;
+  width: 148px;
   top: 100%;
   left: 0;
 }
@@ -212,7 +219,7 @@ div.container {
   filter: none;
   display: block;
   line-height: 120%;
-  padding: 10px;
+  padding: 8px 10px 8px 10px;
   color: #ffffff;
 }
 #main-plugins-menu .has-sub ul li:hover a {
@@ -269,5 +276,9 @@ div.container {
   position: relative;
   display: inline;
   float: left;
+}
+#main-plugins-menu ul > li.active > ul {
+  background-color: #84ced7;
+  padding-bottom: 0;
 }
 /*# sourceMappingURL=ITJakub.PluginMenu.css.map */

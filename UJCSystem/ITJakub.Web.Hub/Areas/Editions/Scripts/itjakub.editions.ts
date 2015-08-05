@@ -1,6 +1,4 @@
-﻿//window.onload = () => { alert("hello from editions!"); }
-
-function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
+﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
@@ -38,6 +36,7 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
             }
         });
@@ -59,12 +58,16 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
             contentType: 'application/json',
             success: response => {
                 var convertedResults = convertSearchResults(response["results"]);
+                readerPlugin.searchPanelRemoveLoading();
                 readerPlugin.showSearchInPanel(convertedResults);
             }
         });
     }
 
     function pageClickCallback(pageNumber: number) {
+        
+        readerPlugin.searchPanelClearResults();
+        readerPlugin.searchPanelShowLoading();
 
         if (search.isLastQueryJson()) {
             editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
@@ -151,4 +154,16 @@ function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, 
         decodedText = replaceSpecialChars(decodedText);
         search.processSearchQuery(decodedText);    
     }
+}
+
+
+
+function listBook(target) {
+    var bookId = $(target).parents("li.list-item").attr("data-bookid");
+    if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
+        window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+    } else {
+        window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId;
+    }
+    
 }

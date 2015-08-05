@@ -1,6 +1,7 @@
 ﻿@import "ITJakub.DefaultTheme.less";
 @import "dropzones.less";
 @import "ITJakub.NumberedOrderedList.less";
+@import "ITJakub.HorizontalLoader.less";
 @import "ITJakub.PluginMenu.less";
 @import "ITJakub.Footer.less";
 @import "Plugins/Bibliography/ITJakub.Bibliography.less";
@@ -24,33 +25,36 @@ a.main_logo_href {
 }
 
 a.main_logo_href img {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
 }
 
 .main_logo_text {
     position: absolute;
-    top: 7px;
-    left: 45px;
+    top: 14px;
+    left: 40px;
     margin-right: 50px;
     margin-left: 5px;
     color: white;
     line-height: normal;
 }
 
+.main_logo_text:hover {
+    color: @item-background-color;
+}
+
 .main_logo_text h1 {
-    display: block;
+    display: inline;
     font-size: 22px;
     font-weight: bold;
     margin: 0;
-    font-family: 'Times New Roman';
 }
 
 .main_logo_text h2 {
+    display: inline;
     font-size: 15px;
     font-weight: normal;
-    margin: 0 0 0 7px;
-    font-family: 'Times New Roman';
+    margin: 0 0 0 2px;
 }
 
 .main-navbar-container {
@@ -75,7 +79,7 @@ ul.navbar-right.navbar-login {
     display: inline;
     margin-left: 5px;
     list-style: none;
-    margin-top: 20px;
+    margin-top: 15px;
     margin-right: 5px!important; 
 }
 

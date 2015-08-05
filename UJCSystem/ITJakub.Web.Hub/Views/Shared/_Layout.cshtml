@@ -1,233 +1,344 @@
 ﻿<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>UJC - @ViewBag.Title</title>
-        @Styles.Render("~/Content/css")
-        @Styles.Render("~/Content/dropzonescss")
-        @Styles.Render("~/Content/jqueryuicss")
-        @Styles.Render("~/Content/itjakub")
-        @Scripts.Render("~/bundles/modernizr")
-        @RenderSection("styles", false)
-    </head>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UJC - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/dropzonescss")
+    @Styles.Render("~/Content/jqueryuicss")
+    @Styles.Render("~/Content/itjakub")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", false)
+</head>
 <body>
 
-    <div class="container page-body-content">
+<div class="container page-body-content">
 
-        @*top fixed part*@
-    <div class="navbar navbar-inverse navbar-fixed-top header-content">
-        <div class="">
-            <div class="main-navbar-container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+@*top fixed part*@
+<div class="navbar navbar-inverse navbar-fixed-top header-content">
+<div class="">
+    <div class="main-navbar-container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-                    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                        <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo"/> @*TODO make logo small as this size*@
-                        <div class="main_logo_text">
-                            <h1>Vokabulář</h1>
-                            <h2>webový</h2>
-                        </div>
-                    </a>
+            <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" class="main_logo"/> @*TODO make logo small as this size*@
+                <div class="main_logo_text">
+                    <h1>Vokabulář</h1>
+                    <h2>webový</h2>
                 </div>
-                <div class="navbar-collapse collapse">
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
+            </a>
         </div>
-
-        <div id="main-plugins-menu" class="main-plugins-menu">
-            <ul>
-                <li class='has-sub'>
-                    <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'><span>Slovníky</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'><span>Vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'><span>Listování hesly</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'><span>Seznam slovníků</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "Dictionaries", new {area = "Dictionaries"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("List", "Editions", new {area = "Editions"})'><span>Edice</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'><span>Vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("List", "Editions", new {area = "Editions"})'><span>Seznam</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "Editions", new {area = "Editions"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Staročeská textová banka</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Seznam</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'><span>Staré mluvnice</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'><span>Seznam mluvnic a vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'><span>Seznam termínů</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "OldGrammar", new {area = "OldGrammar"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'><span>Odborná literatura</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'><span>Seznam děl a vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'><span>Kartotéky excerpce</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'><span>Vyhledávání</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'><span>Listování</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'><span>Seznam</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "CardFiles", new {area = "CardFiles"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub'>
-                    <a href='@Url.Action("List", "Bibliographies", new {area = "Bibliographies"})'><span>Bibliografický modul</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("List", "Bibliographies", new {area = "Bibliographies"})'><span>Seznam</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'><span>Informace</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("TermsOfUse", "Bibliographies", new {area = "Bibliographies"})'><span>Podmínky užití</span></a>
-                        </li>
-                        <li>
-                            <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'><span>Připomínky</span></a>
-                        </li>
-                    </ul>
-                </li>
-                <li class='has-sub last'>
-                    <a href='@Url.Action("Upload", "Upload", new {area = ""})'><span>Administrační modul</span></a>
-                    <ul>
-                        <li>
-                            <a href='@Url.Action("Upload", "Upload", new {area = ""})'><span>Nahrání díla</span></a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+        <div class="navbar-collapse collapse">
+            @Html.Partial("_LoginPartial")
         </div>
     </div>
-    <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
+</div>
 
-            @Scripts.Render("~/bundles/jquery")
-            @Scripts.Render("~/bundles/jqueryui")
-            @Scripts.Render("~/bundles/bootstrap")
-            @Scripts.Render("~/itjakub/javascript")
-            @Scripts.Render("~/bundles/dropzonescripts")
-            @Scripts.Render("~/bundles/typeahead")
-            @Scripts.Render("~/bundles/jqueryappear")
-            @RenderSection("scripts", false)
-            @*main page content*@
-            <div class="container module-content">
+<div id="main-plugins-menu" class="main-plugins-menu">
+<ul>
+<li class="has-sub">
+    <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+        <span>Slovníky</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Headwords", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Listování</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Nápověda</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+        <span>Edice</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
+                <span>Ediční zásady</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
+                <span>Nápověda</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+        <span>Korpusy</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>Nápověda</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+        <span>Mluvnice</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Nápověda</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+        <span>Odborná literatura</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+        <span>Bibliografie</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+        <span>Kartotéky</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
+                <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
+                <span>Listování</span></a> @*TODO delete from menu*@
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+        <span>Audioknihy</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub">
+    <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+        <span>Pomůcky</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
+                <span>Informace</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+                <span>Seznam</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
+                <span>Připomínky</span></a>
+        </li>
+    </ul>
+</li>
+<li class="has-sub last">
+    <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+        <span>Administrace</span></a>
+    <ul>
+        <li>
+            <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+                <span>Nahrání díla</span></a>
+        </li>
+        <li>
+            <a href="#">
+                <span>Lemmatizace</span></a>
+        </li>
+        <li>
+            <a href="#">
+                <span>Správa práv</span></a>
+        </li>
+    </ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
 
-                @RenderBody()
-            </div>
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/jqueryui")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/itjakub/javascript")
+@Scripts.Render("~/bundles/dropzonescripts")
+@Scripts.Render("~/bundles/typeahead")
+@Scripts.Render("~/bundles/jqueryappear")
+@RenderSection("scripts", false)
+@*main page content*@
+<div class="container module-content">
 
-            <footer class="footer">
-                <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                    <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo" /> @*TODO make logo small as this size*@
-                </a>
+    @RenderBody()
+</div>
 
-                <div class="footer-text-area">
-                    <ul>
-                        <li class="footer-first"><a href="#">Copyright</a></li>
-                        <li><a href="#">Kontakty</a></li>   @*TODO make pages and link them*@
-                        <li><a href="#">Grantová podpora</a></li>
-                        <li><a href="#">Odkazy</a></li>
-                        <li><a href="#">Nápověda</a></li>
-                        <li><a href="#">Jak citovat</a></li>
-                        <li class="footer-last"><a href="#">Připomínky</a></li>
-                    </ul>
-                    <div class="footer-text">VOKABULÁŘ WEBOVÝ byl spuštěn před 6 lety, 5 měsíci a 13 dny</div> @*TODO make updated by JS*@
-                </div>
-            </footer>
+<footer class="footer">
+    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+        <img src="@Url.Content("~/Content/Images/logo.png")" alt="main_logo"/> @*TODO make logo small as this size*@
+    </a>
 
-       </div> 
+    <div class="footer-text-area">
+        <ul>
+            <li class="footer-first">
+                <a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a>
+            </li>
+            <li>
+                <a href='@Url.Action("Copyright", "Home", new {area = ""})'>Copyright</a>
+            </li>
+            <li>
+                <a href='@Url.Action("Contacts", "Home", new {area = ""})'>Kontakty</a>
+            </li>
+            <li>
+                <a href='@Url.Action("Links", "Home", new {area = ""})'>Odkazy</a>
+            </li>
+            <li>
+                <a href='@Url.Action("Support", "Home", new {area = ""})'>Podpora</a>
+            </li>
+            <li>
+                <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>Jak citovat</a>
+            </li>
+            <li class="footer-last">
+                <a href='@Url.Action("Feedback", "Home", new {area = ""})'>Připomínky</a>
+            </li>
+        </ul>
+        <div class="footer-text">
+            VOKABULÁŘ WEBOVÝ byl spuštěn před @{
+                                                  var now = DateTime.Now;
+                                                  var releaseDate = new DateTime(2015, 1, 1);
+                                                  var difference = now - releaseDate;
+                                                  DateTime age = DateTime.MinValue + difference;    //Min value is 1.1. 0001
+                                                  
+                                                  int years = age.Year - 1;
+                                                  int months = age.Month - 1;
+                                                  int days = age.Day - 1;
+                                                  
+                                                  @: @years lety, @months měsíci a @days dny
+                                              }
+        </div>
+    </div>
+</footer>
+
+</div>
 </body>
 </html>

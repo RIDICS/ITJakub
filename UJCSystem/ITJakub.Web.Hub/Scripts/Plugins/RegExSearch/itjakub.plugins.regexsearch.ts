@@ -102,6 +102,16 @@ class Search {
 
         this.searchInputTextbox = searchbarInput;
 
+        $(this.searchInputTextbox).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode; 
+            if (keyCode === 13) {     //13 = Enter
+                $(this.searchButton).click();
+                event.preventDefault(); 
+                event.stopPropagation();
+                return false;
+            }
+        });
+
         var searchbarAdvancedEditor = document.createElement("div");
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
@@ -136,7 +146,7 @@ class Search {
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
-        this.writeJsonToTextField(jsonData);
+        this.writeTextToTextField(jsonData);
         this.closeAdvancedSearchEditor();
     }
 
@@ -145,16 +155,17 @@ class Search {
         $(this.searchInputTextbox).prop('disabled', false);
         $(this.searchButton).prop('disabled', false);
         $(this.advancedButton).css("visibility", "visible");
+        $(this.searchInputTextbox).focus();
     }
 
-    writeJsonToTextField(json: string) {
-        $(this.searchInputTextbox).text(json);
-        $(this.searchInputTextbox).val(json);
+    writeTextToTextField(text: string) {
+        $(this.searchInputTextbox).text(text);
+        $(this.searchInputTextbox).val(text);
         $(this.searchInputTextbox).change();
     }
 
     public processSearchQuery(query: string) {
-        this.writeJsonToTextField(query);
+        this.writeTextToTextField(query);
         this.processSearch();
     }
 
@@ -173,7 +184,7 @@ class Search {
         if (this.isValidJson(searchboxValue)) {
             this.lastQueryWasJson = true;
             var query = this.getFilteredQuery(searchboxValue, this.disabledOptions); //filter disabled options
-            this.writeJsonToTextField(query);
+            this.writeTextToTextField(query);
             this.processSearchJsonCallback(query);
         } else {
             this.lastQueryWasJson = false;

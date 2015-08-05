@@ -1,6 +1,6 @@
 ﻿@import "../../ITJakub.DefaultTheme.less";
 @reader-body-height: 77vh;
-@reader-computed-height : calc(~'100vh - 355px');
+@reader-computed-height : calc(~'100vh - 367px');
 @reader-computed-height-fullscreen : calc(~'100vh - 140px');
 
 html,body {    
@@ -62,14 +62,21 @@ html,body {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 5px;
+    margin-left: 10px;
 }
 
 .reader-controls .page-input-button {
-    color: white;
+    border-radius: 0;
     background-color: @item-background-color;
-    border: none;
-    outline: 0;
+    color: white;
     height: 25px;
+    padding: 3px;
+    margin-top: -2px;
+}
+
+.reader-controls .page-input-button:hover {
+    background-color: lightgray;
+    color: black;
 }
 
 .reader-controls .page-input-text {
@@ -510,7 +517,7 @@ div.dummy-page {
     display: inherit!important;
 }
 
-.reader-search-result-match{
+.reader-search-result-match, .match{
     background-color: yellow;
 }
 
@@ -542,6 +549,13 @@ div.dummy-page {
 }
 
 /*testing class for displaying correct pages that contains search match */
-.search-unloaded {
+/*.search-unloaded {
     background-color: palegoldenrod;
+}*/
+
+.reader .content-container {
+    background-color: white;
+    padding: 0; 
+    padding-top: 5px; 
+    min-height: 0; 
 }

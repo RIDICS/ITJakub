@@ -88,6 +88,8 @@ class DropDownSelect {
     private selectedItems: Array<Item>;
     private selectedCategories: Array<Category>;
     protected callbackDelegate: DropDownSelectCallbackDelegate;
+    private moreSpan: HTMLSpanElement;
+    private dropDownBodyDiv: HTMLDivElement;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -145,6 +147,12 @@ class DropDownSelect {
         this.makeHeader(dropDownDiv);
         this.makeBody(dropDownDiv);
 
+        $(document).click((event) => {
+            if (!$(event.target).parents().is(dropDownDiv)) {
+                this.hideBody();
+            }
+        });
+
         $(this.dropDownSelectContainer).append(dropDownDiv);
     }
 
@@ -177,18 +185,15 @@ class DropDownSelect {
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("dropdown-select-more");
 
-        $(moreSpan).click(function() {
-            var body = $(this).parents(".dropdown-select").children(".dropdown-select-body");
-            if (body.is(":hidden")) {
-                $(this).children().removeClass("glyphicon-chevron-down");
-                $(this).children().addClass("glyphicon-chevron-up");
-                body.slideDown();
+        $(moreSpan).click(()=> {
+            if ($(this.dropDownBodyDiv).is(":hidden")) {
+                this.showBody();
             } else {
-                $(this).children().removeClass("glyphicon-chevron-up");
-                $(this).children().addClass("glyphicon-chevron-down");
-                body.slideUp();
+                this.hideBody();
             }
         });
+
+        this.moreSpan = moreSpan;
 
         var iconSpan = document.createElement("span");
         $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
@@ -200,9 +205,23 @@ class DropDownSelect {
         dropDownDiv.appendChild(dropDownHeadDiv);
     }
 
+    private showBody() {
+        $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
+        $(this.moreSpan).children().addClass("glyphicon-chevron-up");
+        $(this.dropDownBodyDiv).slideDown("fast");
+    }
+
+    private hideBody() {
+        $(this.moreSpan).children().removeClass("glyphicon-chevron-up");
+        $(this.moreSpan).children().addClass("glyphicon-chevron-down");
+        $(this.dropDownBodyDiv).slideUp("fast");
+    }
+
     private makeBody(dropDownDiv: HTMLDivElement) {
         var dropDownBodyDiv = document.createElement("div");
         $(dropDownBodyDiv).addClass("dropdown-select-body");
+
+        this.dropDownBodyDiv = dropDownBodyDiv;
 
         var filterDiv = document.createElement("div");
         $(filterDiv).addClass("dropdown-filter");

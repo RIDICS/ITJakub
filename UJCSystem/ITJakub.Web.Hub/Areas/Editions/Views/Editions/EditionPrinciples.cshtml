@@ -1,0 +1,70 @@
+﻿@{
+    ViewBag.Title = "Edice - Ediční zásady";
+}
+
+@section styles{
+    @Styles.Render("~/itjakub/editions/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/editions/javascript")
+}
+
+<div class="content-container">
+    <h1>Obecné ediční zásady</h1>
+
+    <p>Při vytváření elektronických edic je uplatňován kritický přístup k vydávanému textu. Texty jsou transkribovány, tj. převedeny do novočeského pravopisného systému, s tím, že jsou respektovány specifické rysy soudobého jazyka. Elektronické edice vznikají na akademickém pracovišti zabývajícím se lingvistickým výzkumem, proto je kladen mimořádný důraz na interpretaci a spolehlivý záznam jazyka pramenného textu.</p>
+    <p>Transkripce textů se řídí obecně uznávanými edičními pravidly, jimiž jsou pro období staré a střední češtiny zejména texty Jiřího Daňhelky <a href="#">Směrnice pro vydávání starších českých textů</a> (Husitský Tábor 8, 1985, s. 285–301), <a href="#">Obecné zásady ediční a poučení o starém jazyce českém</a> (in: Výbor z české literatury od počátků po dobu Husovu. Praha, Nakladatelství Československé akademie věd 1957, s. 25–35) a <a href="#">Obecné zásady ediční a poučení o češtině 15. století</a> (in: Výbor z české literatury doby husitské. Svazek první. Praha, Nakladatelství Československé akademie věd 1963, s. 31–41) a text Josefa Vintra <a href="#">Zásady transkripce českých textů z barokní doby</a> (Listy filologické 121, 1998, s. 341–346). Na základě těchto pravidel vznikly interní <i>Pokyny pro tvorbu elektronických edic</i>. Tato obecná pravidla jsou přizpůsobována stavu a vlastnostem konkrétního textu. Při transkripci textu editor dbá na to, aby svou interpretací nesetřel charakteristické rysy jazyka a textu, zároveň však nezaznamenává jevy, které nemají pro interpretaci textu či jazyka význam (např. grafické zvláštnosti textu). Na základě uvážení editora jsou v některých případech tyto obecné ediční zásady doplněny o specifickou ediční poznámku vážící se ke konkrétnímu textu.</p>
+    <p>Součástí elektronických edic je textověkritický a poznámkový aparát, jehož obsah a rozsah je zcela v kompetenci jednotlivých editorů. Bez výjimek jsou v kritickém aparátu zaznamenány všechny zásahy do textu, tj. emendace textu (uvozené grafickou značkou ]). Uzná-li to editor za vhodné, může k vybraným úsekům uvádět také transliterované znění předlohy (v tomto případě následuje transliterovaná podoba za dvojtečkou :). Pravidelně jsou zaznamenávány informace týkající se poškození či fragmentárnosti předlohy, nejistoty při interpretaci textu atp. Naopak výjimečně jsou zachyceny mezitextové vztahy.</p>
+    <p>Elektronické edice neobsahují slovníček vykládající méně známá slova. K tomuto účelu slouží mj. slovníky zveřejněné ve <i>Vokabuláři webovém</i>.</p>
+
+    <h1>Struktura a forma elektronických edic</h1>
+    <span style="color: red">nutno aktualizovat dle budoucího stavu</span>
+    <p>V přehledovém záznamu o elektronické edici je na prvním místě uvedeno jméno autora originálního textu (známe-li jej) a následuje název dokumentu; pokud se jedná o název nepůvodní, uzuální, je uzavřen v hranatých závorkách []. Dále uvádíme informace o rukopisu či tisku, z něhož byla edice pořízena (uložení, signatura, stránkové určení a datace). Tyto informace se zobrazují i při „listování“ textem edice v záhlaví dokumentu.</p>
+    <p>Další informace o elektronické edici poskytuje nabídka Detail edice, která je skryta pod ikonkou otazníku. Zde je dílo přiřazeno k literárnímu druhu a žánru a jsou zde uvedeny uzuální zkratky literární památky a pramene. Dále se zde nachází jméno editora elektronické edice a označení nositele osobnostních a majetkových autorských práv. V případě, že editor k textu vypracoval ještě specifickou ediční poznámku, vede k ní odkaz Ediční poznámka.</p>
+    <p>Text edice se zobrazí po kliknutí na ikonku otevřené knihy. Text je strukturován, tj. povinně je v nich zaznamenávána uzuální foliace či paginace. Ve výjimečných případech je v textu uvedena červenou barvou i foliace či paginace variantní (např. stránkování novodobé edice). Naznačena je i další struktura textu − text je členěn pomocí nadpisů a podnadpisů na nižší celky. V závislosti na charakteru předlohového textu mohou být v elektronické edici uvedena čísla veršů (u veršovaných předloh) či označení kapitol a veršů (u biblických textů). Zkratky označující kapitoly jsou uváděny v souladu s územ Staročeského slovníku, srov. Staročeský slovník. Úvodní stati, soupis pramenů a zkratek, Praha, Academia 1968, s. 119.</p>
+    <p>Kliknutím na zelenou ikonku stránky je možné zobrazit obsah dokumentu, tj. členění textu na kapitoly či podobné celky. Kliknutím na červenou ikonku stránky se tento obsah skryje.</p>
+    <p>Součástí elektronických edic je textověkritický a poznámkový aparát, který je v textech zachycen trojím způsobem: přímo v základním textu edice, jako rozvinovací poznámka pod čarou nebo jako bublinková nápověda k odpovídající značce poznámky pod čarou. Poznámkový aparát je možné skrýt kliknutím na červenou ikonku stránky s terčíkem v dolní části. Skryje se tak nejen textověkritický komentář, ale i proznačení stránkování. V textu zůstává vysvětlení, že text zapsaný kurzivou je text cizojazyčný, a dále vysvětlení užití různého typu závorek (pro přípisky různého typu, pro doplněný text).</p>
+    <p>Tučným písmem v horním indexu v hranatých závorkách jsou v edici signalizovány vnořené informace, které se po kliknutí zobrazí v dolní části obrazovky, kde jsou umístěny všechny vnořené informace ze zobrazené stránky; vybraná poznámka je graficky zvýrazněna. K označení vnořených informací je užito písmene či arabské číslice v hranatých závorkách:
+        <ul class="first-level">
+            <li>[a] – malé písmeno označuje emendace. U emendací je na prvním místě uvedeno kurzivou správné (tj. opravené) znění textu ve shodě s edicí, za grafickou značkou ] je uvedeno chybné znění pramenné předlohy</li>
+            <li>[1] – arabská číslice označuje poznámky a komentáře nejrůznějšího druhu, které editor pokládal za důležité pro interpretaci textu. Mj. zde uvádíme transkripci popisků k obrázkům umístěným v textu, a to včetně případných emendací a dalších poznámek editora</li>
+            <li>[A] – velké písmeno označuje živé záhlaví. V poznámkovém aparátu je umístěn samotný text živého záhlaví doplněný o případné poznámky editora, popř. emendace nebo transliterace</li>
+        </ul>
+    </p>
+    <p>
+        V elektronické edici je dále použito těchto typů závorek a dalšího grafického značení:
+        <ul class="first-level">
+            <li>
+                závorky; při umístění kurzoru nad textem v níže uvedených závorkách se objeví tzv. bublinková nápověda, která objasní jejich funkci (viz níže)
+                <ul class="second-level">
+                    <li>{} ve složených závorkách je zaznamenán text, který má charakter přípisku. Rozlišujeme přípisky co do umístění v textu (marginální a interlineární) a přípisky co do stáří vzhledem k základnímu textu (soudobou rukou a mladší rukou, dále textové orientátory a tištěné marginální přípisky.</li>
+                    <li>[] v hranatých závorkách je zaznamenán text, který není součástí předlohového textu, ale který lze na základě pravděpodobnosti či jiného textu do edice doplnit; text v hranatých závorkách může být doplněn i o poznámku (značenou arabskou číslicí v horním indexu) s údajem, odkud je text doplněn. V hranatých závorkách jsou rovněž umístěna čísla a údaje určující strukturu textu (např. foliace, paginace, značka pro obrázek nebo jiný grafický prvek).</li>
+                </ul>
+            </li>
+            <li>
+                odlišné písmo
+                <ul class="second-level">
+                    <li>kurziva označuje text, který byl editorem interpretován jako text nečeský; dále nerozlišujeme, o jaký jazyk se jedná, avšak nejfrekventovanější je latina</li>
+                    <li>větším písmem tmavězelené barvy jsou označeny nadpisy a podnadpisy</li>
+                    <li>velké tučné písmeno v základním textu znamená, že v pramenném textu je (iluminovaná) iniciála</li>
+                    <li>červené písmo je vyhrazeno pro variantní biblický překlad; zelené písmo pro adresáta textu (listu) a modré písmo pro tiskařské impresum (a informace s ním spojené)</li>
+                </ul>
+            </li>
+            <li>
+                grafické znaky
+                <ul class="second-level">
+                    <li>[#]– tzv. ležatý křížek v dvojitých lomených závorkách zastupuje obrázky, schémata či tabulky, které se nacházejí v předlohovém textu a které nelze z technických důvodů jednoduše převést do elektronické podoby. Zároveň se jedná o obsah, který nemá na interpretaci textu závažný dopad, a lze je proto vynechat. Znak [#] může být doplněn poznámkou (značenou arabskou číslicí v horním indexu), v níž je stručně popsána vynechaná pasáž</li>
+                </ul>
+            </li>
+            <li>
+                bublinková nápověda
+                <ul class="second-level">
+                    <li>při umístění kurzoru na text odlišující se podtečkováním, barvou, velikostí či řezem od základního textu (tučné, kurziva) se zobrazí bližší informace o důvodu užití odlišného písma. Bublinková nápověda je k dispozici i u textu v závorkách ({}, []) a u trojtečky (…), pokud se jedná o torzovité, doplněné či rekonstruované slovo</li>
+                    <li>nápověda je k dispozici také u emendací a poznámek a slouží k rychlému zobrazení informace, která je uvedena v poznámkovém aparátu na konci stránky. Tato nápověda se však zobrazuje pouze v případě, že komentovaný úsek netvoří součást jiného delšího úseku, který je sám o sobě vybaven bublinkovou nápovědou (tj. nejde např. o emendační poznámku v rámci cizojazyčného textu nebo přípisku)</li>
+                </ul>
+            </li>
+        </ul>
+</p>
+
+
+</div>

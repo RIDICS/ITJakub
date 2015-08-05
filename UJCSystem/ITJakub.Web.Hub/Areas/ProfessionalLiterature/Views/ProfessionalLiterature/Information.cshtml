@@ -5,7 +5,18 @@
     @Scripts.Render("~/itjakub/professionalliterature/javascript")
 }
 
+@{
+    ViewBag.Title = "Odborná literatura - Informace";
+}
+
 <div class="content-container">
     <h1>Informace</h1>
+
+    <p>V oddílu <i>Odborná literatura</i> (dále též <i>OL</i>) poskytujeme uživatelům digitalizované verze odborných textů, které se věnují problematice historické češtiny.</p>
+    <p>V současné době obsahuje <i>OL</i> kompletní Gebauerovu <i>Historickou mluvnici jazyka českého</i>. Jedná se celkem o čtyři svazky: <i>Historickou mluvnici jazyka českého</i>, Díl I, <i>Hláskosloví</i>. Praha, ČSAV 1963, 2., doplněné vydání, <i>Historickou mluvnici jazyka českého</i>, Díl III, <i>Tvarosloví. I. Skloňování</i>. Praha, ČSAV 1960, 2., doplněné vydání, <i>Historickou mluvnici jazyka českého</i>, Díl III, <i>Tvarosloví. II. Časování</i>. Praha, ČSAV 1958, 2., doplněné vydání a <i>Historickou mluvnici jazyka českého</i>, Díl IV, <i>Skladba</i>. Praha, Česká akademie věd a umění 1929.</p>
+    <p>Na elektronické verzi Gebauerovy mluvnice se pod vedením Mgr. Michala L. Hořejšího podíleli studenti bohemistiky FF UK v Praze a další spolupracovníci – Vít Černý, Jan Dušek, Tereza Hejdová, Ivo Jelínek, Pavlína Kuderová, Lucie Marková, Jana Markvartová, Milena Mráčková, Andrea Svobodová, Tereza Tomášková, Petr Valenta a Anna Vrbová.</p>
+    <p>Jednotlivé knihy Gebauerovy mluvnice jsou uloženy dvojím způsobem – jedná se a) o fotokopie originální knižní podoby a b) o přepsaný text. Obě verze jsou propojené s aktivním „obsahem“ a „rejstříkem“ a lze je zobrazovat paralelně (vedle sebe).</p>
+    <p>Kromě vyhledávání na základě obsahu a rejstříku je možné prohlížet text také prostým listováním, a to ve fotokopiích i přepsaném textu. Podrobné informace o možnostech užívání mluvnice jsou k dispozici v <a href='@Url.Action("Help", "OldGrammar", new { Area = "OldGrammar"})'>Nápovědě</a>.</p>
+    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>
 
 </div>

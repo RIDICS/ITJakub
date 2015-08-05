@@ -1,7 +1,42 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "O Vokabuláři webovém";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+@section scripts{
+    @Scripts.Render("~/itjakub/home/javascript")
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h1>O Vokabuláři webovém</h1>
+
+    <p>
+        <i>Vokabulář webový</i> jsou internetové stránky, které od listopadu 2006 postupně zpřístupňují textové, obrazové a zvukové zdroje k poznání historické češtiny. Tvůrcem a provozovatelem <i>Vokabuláře webového</i> je <a href="http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/">oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.</a> (dále ÚJČ). <i>Vokabulář webový</i> je autorské dílo chráněné ve smyslu aktuálního znění zákona č. 121/2000 Sb., o právu autorském, a je určen pouze k nekomerčnímu využití. Veškeré materiály poskytujeme se souhlasem nositelů autorských a reprodukčních práv.
+    </p>
+    <p>
+        Na stránky <i>Vokabuláře webového</i> jsme umístili různorodé zdroje. K vyhledávání informací o slovní zásobě hstorické češtiny slouží především oddíl <a href='@Url.Action("Index", "Dictionaries", new { Area = "Dictionaries"})'>Slovníky</a>, který tvoří různorodé novodobé i dobové lexikální zdroje. V oddílu <a href='@Url.Action("Index", "Editions", new { Area = "Editions"})'>Edice</a> jsou prameny zaznamenané starší češtinou prezentovány jako souvislý text společně s textově-kritickým komentářem. Souhrnně lze starší české texty prohledávat v části <a href='@Url.Action("Index", "BohemianTextBank", new { Area = "BohemianTextBank"})'>Korpusy</a>, <a href='#'>staročeský korpus</a> obsahuje texty staročeských pramenů z cca 13. až 15. století a zároveň může do určité míry nahradit dokladovou část u těch staročeských lexikografických zdrojů, které ji neobsahují. Do <a href="#">staročeského korpusu</a> zahrnujeme texty z období 16. až 18. století. Díla starší české literatury poskytujeme též ve formě <a href='@Url.Action("Index", "AudioBooks", new { Area = "AudioBooks"})'>audioknih</a>.
+    </p>
+    <p>
+        Poučení o historické češtině najde uživatel také v oddílu <a href='@Url.Action("Index", "OldGrammar", new { Area = "OldGrammar" })'>Mluvnice</a>, který prezentuje digitalizované verze mluvnic a obdobných příruček z 16. až počátku 20. století. Mluvnice slouží nejen ke studiu dobového stavu a proměn českého jazykového systému, ale též k bádání o vývoji českého mluvnictví. V části <a href='@Url.Action("Index", "ProfessionalLiterature", new { Area = "ProfessionalLiterature" })'>Odborná literatura</a> jsou zveřejněny digitalizované verze odborných textů, které se věnují problematice historické češtiny (<i>Historická mluvnice jazyka českého</i> Jana Gebauera).
+    </p>
+    <p>
+        V oddíle <a href='@Url.Action("Index", "Bibliographies", new { Area = "Bibliographies" })'>Bibliografie</a> nabízíme vyhledávání v bibliografických záznamech odborné literatury k problematice staršího českého jazyka a literatury.
+    </p>
+    <p>
+        V části <a href='@Url.Action("Index", "CardFiles", new { Area = "CardFiles" })'>Kartotéky</a> zpřístupňujme digitalizovanou podobu dvou kartoték Jana Gebauera: kartotéky excerpce ze staročeské literatury a kartotéky pramenů k této excerpci.
+    </p>
+    <p>
+        V oddíle <a href='@Url.Action("Index", "Tools", new { Area = "Tools" })'>Pomůcky</a> nabízíme softwarové nástroje a pomůcky pro práci s digitalizovanými zdroji. Tyto nástroje si mohou zájemci zdarma stáhnout a používat, a to včetně zdrojových kódů.
+    </p>
+    <p>
+        Snažíme se, aby se uživatelům s <i>Vokabulářem webovým</i> dobře pracovalo a aby jeho prostřednictvím získávali informace rychle a spolehlivě. Ačkoliv usilujeme o bezproblémový chod, jsme si vědomi toho, že se zřejmě nevyhneme nedostatkům a obtížím, které se mohou vyskytnout. Budeme rádi, když nás uživatelé budou informovat formou <a href='@Url.Action("Feedback", "Home", new { Area = "" })'>připomínek</a> nejen o své zkušenosti s fungováním <i>Vokabuláře webového</i>, ale také o chybějících či nesprávných údajích a informacích, a to buď prostřednictvím odkazu <i>Připomínky</i> v jednotlivých oddílech, nebo pomocí odkazu <i>Připomínky</i> v zápatí internetových stránek.
+    </p>
+    <p>
+        V budoucnosti se bude <i>Vokabulář webový</i> rozrůstat o další zdroje. Časový harmonogram „naplňování“ záměrně neuvádíme – rozvoj bude postupný, závislý na mnohých okolnostech.
+    </p>
+    <p>
+        Přístup ke stránkám <i>Vokabuláře webového</i> je bezplatný. Pokud budete užívat nalezené informace ve svých publikacích, citujte je podle <a href='@Url.Action("HowToCite", "Home", new { Area = "" })'>návodu</a>.
+    </p>
+    <p>
+        Tvorba <i>Vokabuláře webového</i> je <a href='@Url.Action("Support", "Home", new { Area = "" })'>podporována</a> z různých zdrojů.
+    </p>
+</div>

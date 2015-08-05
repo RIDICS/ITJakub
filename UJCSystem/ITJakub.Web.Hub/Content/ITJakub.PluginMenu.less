@@ -59,7 +59,7 @@
     color: black;
     display: block;
     font-family: Helvetica, Arial, Verdana, sans-serif;
-    padding: 10px 20px;
+    padding: 5px 20px;
     text-decoration: none;
 }
 
@@ -74,7 +74,6 @@
     display: inline-block;
     float: left;
     margin: 0;
-    max-width: 135px;
     height: 100%;
 }
 
@@ -105,7 +104,7 @@
     background-position: center 90%;
     background-repeat: no-repeat;
     background-size: 10px;
-    padding-bottom: 15px;
+    /*padding-bottom: 15px;*/
     vertical-align: middle;
 }
 
@@ -146,12 +145,18 @@
 
 #main-plugins-menu .has-sub:hover > ul {
     display: block;
+    border: 1px solid white;
+}
+
+#main-plugins-menu .has-sub.active:hover > ul {
+    display: block;
+    border: none;
 }
 
 #main-plugins-menu .has-sub ul {
     display: none;
     position: absolute;
-    width: 200px;
+    width: 148px;
     top: 100%;
     left: 0;
 }
@@ -172,7 +177,7 @@
     filter: none;
     display: block;
     line-height: 120%;
-    padding: 10px;
+    padding: 8px 10px 8px 10px;
     color: #ffffff;
 }
 
@@ -241,4 +246,9 @@
     position: relative;
     display: inline;
     float: left;
+}
+
+#main-plugins-menu ul > li.active > ul {
+    background-color: @item-background-color;
+    padding-bottom: 0;
 }
