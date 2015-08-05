@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="ITJakub.Lemmatization.DataEntities" namespace="ITJakub.Lemmatization.DataEntities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="TokenCharacteristic" table="[TokenCharacteristic]">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <property name="Description"/>
+    
+    <property name="MorphologicalCharakteristic" not-null="true">
+      <column name="MorphologicalCharakteristic" sql-type="nvarchar(17)"/>
+    </property>
+
+    <bag name="CanonicalForms" cascade="all" table="CanonicalForm_TokenCharacteristic">
+      <key column ="TokenCharacteristic"/>
+      <many-to-many class="CanonicalForm" column="CanonicalForm"/>
+    </bag>
+  
+  </class>
+</hibernate-mapping>
