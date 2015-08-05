@@ -22,6 +22,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly CardFileManager m_cardFileManager;        
         private readonly NotesManager m_notesManager;        
         private readonly WindsorContainer m_container = Container.Current;
+        private readonly FeedbackManager m_feedbackManager;
 
         public ItJakubServiceManager()
         {
@@ -32,6 +33,7 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
             m_notesManager = m_container.Resolve<NotesManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_feedbackManager = m_container.Resolve<FeedbackManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -99,9 +101,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageImage(bookPageImageContract);
         }
 
-        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
-            return m_bookManager.GetHeadwordImage(bookXmlId, entryXmlId);
+            return m_bookManager.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
         }
 
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)

@@ -113,14 +113,9 @@ namespace ITJakub.ITJakubService.Core
             return Stream.Null;
         }
 
-        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
-            var bookHeadword = m_bookVersionRepository.GetFirstHeadwordInfo(bookXmlId, entryXmlId);
-            if (bookHeadword.Image != null)
-                return m_fileSystemManager.GetResource(bookXmlId, bookHeadword.BookVersion.VersionId, bookHeadword.Image,
-                    ResourceType.Image);
-
-            return Stream.Null;
+            return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)

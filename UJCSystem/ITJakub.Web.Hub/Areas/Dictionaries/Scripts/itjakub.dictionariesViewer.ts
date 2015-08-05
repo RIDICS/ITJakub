@@ -51,6 +51,7 @@ class DictionaryViewer {
     }
 
     private searchAndDisplay(pageNumber: number) {
+        $("#cancelFilter").addClass("hidden");
         this.isRequestToPrint = false;
         if (this.recordCount === 0) {
             $(this.headwordListContainer).empty();
@@ -75,6 +76,7 @@ class DictionaryViewer {
     }
 
     public showHeadwords(headwords: IHeadwordList) {
+        $("#cancelFilter").addClass("hidden");
         $(this.headwordListContainer).empty();
         $(this.headwordDescriptionContainer).empty();
         this.headwordDescriptionDivs = [];
@@ -118,7 +120,7 @@ class DictionaryViewer {
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
 
-                if (dictionary.ImageUrl) {
+                if (dictionary.Image) {
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
                     var imageIconSpan = document.createElement("span");
@@ -227,7 +229,8 @@ class DictionaryViewer {
 
             var index = $(mainDiv).data("entry-index");
             var entryInfo = this.dictionariesInfo[index];
-            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.BookXmlId + "&entryXmlId=" + entryInfo.EntryXmlId;
+            var bookVersionXmlId = this.dictionariesMetadataList[entryInfo.BookXmlId].BookVersionXmlId;
+            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.BookXmlId + "&bookVersionXmlId=" + bookVersionXmlId + "&fileName=" + entryInfo.Image;
             var imageElement = document.createElement("img");
             imageElement.setAttribute("src", imageLink);
             imageContainer.append(imageElement);
@@ -352,7 +355,7 @@ class DictionaryViewer {
                 this.showLoadHeadword(response, container);
             },
             error: () => {
-                if (!headwordInfo.ImageUrl) {
+                if (!headwordInfo.Image) {
                     this.showLoadError(headword, container);
                 } else {
                     this.loadImageOnError(headwordIndex, container);
@@ -380,7 +383,7 @@ class DictionaryViewer {
                 this.showLoadHeadword(response, container);
             },
             error: () => {
-                if (!headwordInfo.ImageUrl) {
+                if (!headwordInfo.Image) {
                     this.showLoadError(headword, container);
                 } else {
                     this.loadImageOnError(headwordIndex, container);
@@ -486,7 +489,7 @@ class DictionaryViewer {
 interface IHeadwordBookInfo {
     BookXmlId: string;
     EntryXmlId: string;
-    ImageUrl: string;
+    Image: string;
 }
 
 interface IHeadword {

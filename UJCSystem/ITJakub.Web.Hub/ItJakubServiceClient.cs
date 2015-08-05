@@ -313,11 +313,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public Stream GetHeadwordImage(string bookXmlId, string entryXmlId)
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
             try
             {
-                return Channel.GetHeadwordImage(bookXmlId, entryXmlId);
+                return Channel.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
             }
             catch (CommunicationException ex)
             {
@@ -1078,6 +1078,32 @@ namespace ITJakub.Web.Hub
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
+        }
+
+        public void AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email, string content, bool publicationAgreement)
+        {
+            try
+            {
+                Channel.AddHeadwordFeedback(bookXmlId, bookVersionXmlId, entryXmlId, name, email, content, publicationAgreement);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordFeedback failed with: {0}", ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordFeedback failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("AddHeadwordFeedback timeouted with: {0}", ex);
+                throw;
+            }
         }
     }
 }

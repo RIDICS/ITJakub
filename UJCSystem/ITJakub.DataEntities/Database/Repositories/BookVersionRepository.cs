@@ -422,18 +422,18 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookHeadword GetFirstHeadwordInfo(string bookXmlId, string entryXmlId)
+        public virtual BookHeadword GetFirstHeadwordInfo(string bookXmlId, string entryXmlId, string bookVersionXmlId)
         {
             using (var session = GetSession())
             {
                 BookVersion bookVersionAlias = null;
                 Book bookAlias = null;
-
+                
                 var result = session.QueryOver<BookHeadword>()
-                    .Fetch(x => x.BookVersion).Eager
                     .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
                     .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                     .Where(x => x.XmlEntryId == entryXmlId && bookAlias.Guid == bookXmlId)
+                    .And(() => bookVersionAlias.VersionId == bookVersionXmlId)
                     .Take(1)
                     .SingleOrDefault<BookHeadword>();
 

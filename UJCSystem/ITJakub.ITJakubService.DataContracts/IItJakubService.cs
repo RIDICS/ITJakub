@@ -53,7 +53,7 @@ namespace ITJakub.ITJakubService.DataContracts
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
 
         [OperationContract]
-        Stream GetHeadwordImage(string bookXmlId, string entryXmlId);
+        Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName);
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
