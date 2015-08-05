@@ -4,30 +4,31 @@ using ITJakub.DataEntities.Database.Repositories;
 
 namespace ITJakub.ITJakubService.Core
 {
-    public class NotesManager
+    public class FeedbackManager
     {
-        private readonly NoteRepository m_noteRepository;
+        private readonly FeedbackRepository m_feedbackRepository;
         private UserRepository m_userRepository;
 
-        public NotesManager(UserRepository userRepository, NoteRepository noteRepository)
+        public FeedbackManager(UserRepository userRepository, FeedbackRepository feedbackRepository)
         {
             m_userRepository = userRepository;
-            m_noteRepository = noteRepository;
-        }
+            m_feedbackRepository = feedbackRepository;
+        }        
 
-        public void CreateNote(NoteRepository notesRepository)
-        {
-                        
-        }
-
-        public void CreateNote(string note, int? userId)
+        public void CreateFeedback(string note, int? userId)
         {
             User user = null;
             if(userId.HasValue)
                 user = m_userRepository.Load<User>(userId);
 
-            Note entity = new Note {CreateDate = DateTime.UtcNow, Text = note, User = user};
-            m_noteRepository.Save(entity);
+            Feedback entity = new Feedback {CreateDate = DateTime.UtcNow, Text = note, User = user};
+            m_feedbackRepository.Save(entity);
+        }
+
+        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        {
+            Feedback entity = new Feedback { CreateDate = DateTime.UtcNow, Text = feedback, Name = name, Email = email};
+            m_feedbackRepository.Save(entity);
         }
     }
 }

@@ -996,11 +996,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void CreateNote(string note, int? userId)
+        public void CreateFeedback(string feedback, int? userId)
         {
             try
             {
-                Channel.CreateNote(note, userId);
+                Channel.CreateFeedback(feedback, userId);
             }
             catch (CommunicationException ex)
             {
@@ -1022,12 +1022,38 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId,
+        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        {
+            try
+            {
+                Channel.CreateAnonymousFeedback(feedback, name, email);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
             int? userId)
         {
             try
             {
-                Channel.CreateNoteForHeadword(note,bookXmlId,  versionXmlId,  entryXmlId, userId);
+                Channel.CreateFeedbackForHeadword(feedback,bookXmlId,  versionXmlId,  entryXmlId, userId);
             }
             catch (CommunicationException ex)
             {
@@ -1049,11 +1075,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<NoteContract> GetAllNotes()
+        public List<FeedbackContract> GetAllFeedback()
         {
             try
             {
-               return Channel.GetAllNotes();
+               return Channel.GetAllFeedback();
             }
             catch (CommunicationException ex)
             {
@@ -1078,32 +1104,6 @@ namespace ITJakub.Web.Hub
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
-        }
-
-        public void AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email, string content, bool publicationAgreement)
-        {
-            try
-            {
-                Channel.AddHeadwordFeedback(bookXmlId, bookVersionXmlId, entryXmlId, name, email, content, publicationAgreement);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordFeedback failed with: {0}", ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordFeedback failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordFeedback timeouted with: {0}", ex);
-                throw;
-            }
-        }
+        }      
     }
 }

@@ -20,9 +20,8 @@ namespace ITJakub.ITJakubService.Services
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
-        private readonly NotesManager m_notesManager;        
-        private readonly WindsorContainer m_container = Container.Current;
-        private readonly FeedbackManager m_feedbackManager;
+        private readonly FeedbackManager m_feedbackManager;        
+        private readonly WindsorContainer m_container = Container.Current;        
 
         public ItJakubServiceManager()
         {
@@ -31,9 +30,8 @@ namespace ITJakub.ITJakubService.Services
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
-            m_notesManager = m_container.Resolve<NotesManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
+            m_cardFileManager = m_container.Resolve<CardFileManager>();           
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -231,17 +229,22 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
 
-        public void CreateNote(string note, int? userId)
+        public void CreateFeedback(string feedback, int? userId)
         {
-            m_notesManager.CreateNote(note, userId);
+            m_feedbackManager.CreateFeedback(feedback, userId);
         }
 
-        public void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
+        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        {
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
         {
             throw new System.NotImplementedException();
         }
 
-        public List<NoteContract> GetAllNotes()
+        public List<FeedbackContract> GetAllFeedback()
         {
             throw new System.NotImplementedException();
         }

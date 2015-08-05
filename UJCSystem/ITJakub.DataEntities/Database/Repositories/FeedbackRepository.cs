@@ -6,9 +6,9 @@ using ITJakub.DataEntities.Database.Entities;
 namespace ITJakub.DataEntities.Database.Repositories
 {
     [Transactional]
-    public class NoteRepository : NHibernateTransactionalDao<Note>
+    public class FeedbackRepository : NHibernateTransactionalDao<Feedback>
     {
-        public NoteRepository(ISessionManager sessManager) : base(sessManager)
+        public FeedbackRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
     }

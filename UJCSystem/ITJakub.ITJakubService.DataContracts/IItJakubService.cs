@@ -137,15 +137,18 @@ namespace ITJakub.ITJakubService.DataContracts
             string pageXmlId, OutputFormatEnumContract resultFormat);
 
 
-        #region Notes
+        #region Feedback
 
         [OperationContract]
-        void CreateNote(string note, int? userId);
+        void CreateFeedback(string feedback, int? userId);
 
         [OperationContract]
-        void CreateNoteForHeadword(string note, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
+        void CreateAnonymousFeedback(string feedback, string name, string email);
 
-        List<NoteContract> GetAllNotes();
+        [OperationContract]
+        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
+
+        List<FeedbackContract> GetAllFeedback();
 
         #endregion
 

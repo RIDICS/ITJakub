@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace ITJakub.Shared.Contracts.Notes
 {
     [DataContract]
-    public class NoteContract
+    public class FeedbackContract
     {
 
         [DataMember]

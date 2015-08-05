@@ -2,20 +2,24 @@
 
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
                    xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Note" 
-         table="[Notes]" 
-         discriminator-value="GenericNote">
+  <class name="Feedback" 
+         table="[Feedbacks]" 
+         discriminator-value="GenericFeedback">
 
     <id name="Id" column="Id">
       <generator class="identity" />
     </id>
 
-    <discriminator column="NoteType"
+    <discriminator column="FeedbackType"
                    not-null="true"
                    type="System.String" />    
 
     
     <property name ="Text"/>
+    
+    <property name ="Name"/>
+    
+    <property name ="Email"/>
     
     <property name ="CreateDate"/>
     
@@ -25,8 +29,8 @@
                  lazy="proxy" />
 
     <subclass
-      name="HeadwordNote"
-      discriminator-value="HeadwordNote">
+      name="HeadwordFeedback"
+      discriminator-value="HeadwordFeedback">
       
 
       <many-to-one name="BookHeadword"

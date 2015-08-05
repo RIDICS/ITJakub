@@ -271,7 +271,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
             string email, string content, bool publicationAgreement)
         {
-            m_mainServiceClient.AddHeadwordFeedback(bookXmlId, bookVersionXmlId, entryXmlId, name, email, content, publicationAgreement);
+            m_mainServiceClient.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, null);
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }

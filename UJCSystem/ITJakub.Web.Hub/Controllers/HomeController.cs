@@ -5,13 +5,6 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ItJakubServiceClient m_mainServiceClient;
-
-        public HomeController()
-        {
-            m_mainServiceClient = new ItJakubServiceClient();
-        }
-
         public ActionResult Index()
         {
             return View();
@@ -40,12 +33,11 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public  ActionResult Feedback(FeedbackViewModel model)
-        {
-            var name = model.Name;
-            var email = model.Email;
-            var text = model.Text;
-            //TODO implement call to add to DB
-            return View(model);
+        {            
+            var client = new ItJakubServiceClient();
+            client.CreateAnonymousFeedback(model.Text, model.Name, model.Email);
+
+            return View("Index");
         }
 
         public ActionResult HowToCite()
@@ -65,19 +57,22 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadAuthors(query);
+            var client = new ItJakubServiceClient();
+            var result = client.GetTypeaheadAuthors(query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadTitles(query);
+            var client = new ItJakubServiceClient();
+            var result = client.GetTypeaheadTitles(query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(null, null, query);
+            var client = new ItJakubServiceClient();
+            var result = client.GetTypeaheadDictionaryHeadwords(null, null, query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
