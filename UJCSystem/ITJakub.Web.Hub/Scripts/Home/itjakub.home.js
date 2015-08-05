@@ -5,4 +5,3 @@ $(document).ready(function () {
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 });
-//# sourceMappingURL=itjakub.home.js.map

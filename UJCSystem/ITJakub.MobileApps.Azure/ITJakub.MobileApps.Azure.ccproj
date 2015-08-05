@@ -38,16 +38,6 @@
     <ServiceConfiguration Include="ServiceConfiguration.Cloud.cscfg" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.MobileApps.Service\ITJakub.MobileApps.Service.csproj">
-      <Name>ITJakub.MobileApps.Service</Name>
-      <Project>{f1034de9-e00b-4ec6-8f87-45f25b45a67d}</Project>
-      <Private>True</Private>
-      <RoleType>Web</RoleType>
-      <RoleName>ITJakub.MobileApps.Service</RoleName>
-      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="ITJakub.MobileApps.ServiceContent\" />
     <Folder Include="Profiles" />
   </ItemGroup>
@@ -56,6 +46,16 @@
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="ITJakub.MobileApps.ServiceContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.Service\ITJakub.MobileApps.Service.csproj">
+      <Name>ITJakub.MobileApps.Service</Name>
+      <Project>{f1034de9-e00b-4ec6-8f87-45f25b45a67d}</Project>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <RoleName>ITJakub.MobileApps.Service</RoleName>
+      <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
+    </ProjectReference>
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

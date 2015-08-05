@@ -61,4 +61,3 @@ var SearchBox = (function () {
     };
     return SearchBox;
 })();
-//# sourceMappingURL=itjakub.plugins.searchbox.js.map
