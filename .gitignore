@@ -76,3 +76,4 @@ UJCSystem/ITJakub.Xml.Conversion/Ujc.Ovj.Ooxml.Conversion.Test/Data/Temp/
 
 #Less
 *.css
+*css.[Mm]ap
