@@ -70,6 +70,7 @@
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="FavoriteManager.cs" />
+    <Compile Include="NotesManager.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="CardFileManager.cs" />

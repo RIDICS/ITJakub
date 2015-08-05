@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Helpers;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
@@ -74,13 +72,13 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult AddBookmark(string bookId, string pageXmlId)
         {
-            m_mainServiceEncryptedClient.AddBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.AddPageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
             return Json(new {});
         }
 
         public ActionResult RemoveBookmark(string bookId, string pageXmlId)
         {
-            m_mainServiceEncryptedClient.RemoveBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
+            m_mainServiceEncryptedClient.RemovePageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
             return Json(new { });
         }
 

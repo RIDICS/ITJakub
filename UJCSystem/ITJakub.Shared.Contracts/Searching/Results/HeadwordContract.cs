@@ -19,7 +19,7 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
     {
         [DataMember]
         public string Headword { get; set; }
-
+        
         [DataMember]
         public IList<HeadwordBookInfoContract> Dictionaries { get; set; }
     }
@@ -32,6 +32,9 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
 
         [DataMember]
         public string BookXmlId { get; set; }
+
+        [DataMember]
+        public string Image { get; set; }
     }
 
     [DataContract]

@@ -2,9 +2,46 @@
     @Styles.Render("~/itjakub/dictionaries/css")
 }
 @section scripts{
-    @Scripts.Render("~/itjakub/dictionaries/javascript")
+    @Scripts.Render("~/itjakub/dictionaries/feedbackjs")
 }
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        initFeedbackView("@Request["bookId"]", "@Request["versionId"]", "@Request["entryId"]", "@Request["headword"]", "@Html.Raw(@Request["dictionary"])");
+    });
+</script>
+
 <div class="content-container">
-    <h1>Připomínky</h1>
+    <h2>Připomínky</h2>
+    <div>
+        <label>
+            <span>Heslo</span>
+            <input type="text" name="headword" readonly="readonly"/>
+        </label>
+        <label>
+            <span>Slovník</span>
+            <input type="text" name="dictionary" readonly="readonly" />
+        </label>
+    </div>
+    <form>
+        <label>
+            <span>Jméno</span>
+            <input type="text" name="name" />
+        </label>
+        <label>
+            <span>E-mail</span>
+            <input type="email" name="email"/>
+        </label>
+        <label>
+            <span>Připomínka</span>
+            <textarea name="feedback"></textarea>
+        </label>
+        <label>
+            <input type="checkbox" name="publication-agreement" />
+            <span>Souhlasím s publikováním připomínky na VW</span>
+        </label>
+        <button>
+            Odeslat
+        </button>
+    </form>
 </div>

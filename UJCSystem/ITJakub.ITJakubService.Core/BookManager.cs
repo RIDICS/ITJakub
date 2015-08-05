@@ -113,6 +113,11 @@ namespace ITJakub.ITJakubService.Core
             return Stream.Null;
         }
 
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
+        {
+            return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
+        }
+
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;

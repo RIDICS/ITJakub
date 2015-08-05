@@ -40,7 +40,8 @@ namespace ITJakub.ITJakubService.Core
 
         public List<SearchResultContract> Search(string term)
         {
-            var bookVersionResults = m_bookRepository.SearchByTitle(term);
+            var escapedTerm = EscapeQuery(term);
+            var bookVersionResults = m_bookRepository.SearchByTitle(escapedTerm);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
 
@@ -56,6 +57,11 @@ namespace ITJakub.ITJakubService.Core
                 Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
+        }
+
+        private string EscapeQuery(string query)
+        {
+            return query.Replace("[", "[[]");
         }
 
         private FilteredCriterias FilterSearchCriterias(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -186,6 +192,7 @@ namespace ITJakub.ITJakubService.Core
         private string PrepareQuery(string query)
         {
             query = query.TrimStart().TrimEnd().Replace(" ", "% %");
+            query = query.Replace("[", "[[]"); // escape character
             return string.Format("%{0}%", query);
         }
 
@@ -238,6 +245,7 @@ namespace ITJakub.ITJakubService.Core
                 return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount, bookIds);
 
             query = string.Format("{0}%", query);
+            query = EscapeQuery(query);
             return m_bookRepository.GetTypeaheadHeadwords(query, PrefetchRecordCount, bookIds);
         }
 
@@ -254,11 +262,9 @@ namespace ITJakub.ITJakubService.Core
                     dictionaryContract = new DictionaryContract
                     {
                         BookAcronym = headword.BookAcronym,
-                        BookId = 0, // TODO
                         BookTitle = headword.BookTitle,
                         BookXmlId = headword.BookGuid,
-                        BookVersionXmlId = null, //TODO
-                        BookVersionId = 0 // TODO
+                        BookVersionXmlId = headword.BookVersionId,
                     };
                     dictionaryList.Add(dictionaryContract.BookXmlId, dictionaryContract);
                 }
@@ -266,7 +272,8 @@ namespace ITJakub.ITJakubService.Core
                 var bookInfoContract = new HeadwordBookInfoContract
                 {
                     BookXmlId = headword.BookGuid,
-                    EntryXmlId = headword.XmlEntryId
+                    EntryXmlId = headword.XmlEntryId,
+                    Image = headword.Image
                 };
 
                 if (headword.Headword == headwordContract.Headword)
@@ -332,23 +339,38 @@ namespace ITJakub.ITJakubService.Core
         }
 
         public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
-            int start, int end)
+            int start, int count)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
             var databaseResult = bookIds == null
-                ? m_bookVersionRepository.GetHeadwordList(start, end)
-                : m_bookVersionRepository.GetHeadwordList(start, end, bookIds);
+                ? m_bookVersionRepository.GetHeadwordList(start, count)
+                : m_bookVersionRepository.GetHeadwordList(start, count, bookIds);
             var result = ConvertHeadwordSearchToContract(databaseResult);
 
             return result;
         }
 
-        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        {
+            var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+            query = string.Format("{0}%", query);
+            query = EscapeQuery(query);
+
+            var bookHeadword = m_bookVersionRepository.FindFirstHeadword(bookIds, query);
+            return m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, bookHeadword.BookVersion.Book.Guid,
+                bookHeadword.XmlEntryId);
+        }
+
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
-            return m_bookVersionRepository.GetHeadwordRowNumber(bookIds, query);
+            var resultRowNumber = m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, headwordBookId, headwordEntryXmlId);
+            if (resultRowNumber == 0)
+                throw new ArgumentException("Headword not found.");
+
+            return resultRowNumber;
         }
 
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
@@ -526,7 +548,7 @@ namespace ITJakub.ITJakubService.Core
         }
 
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
-    string pageXmlId, OutputFormatEnumContract resultFormat)
+            string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))

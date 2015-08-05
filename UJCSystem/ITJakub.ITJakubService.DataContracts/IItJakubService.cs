@@ -2,6 +2,7 @@
 using System.IO;
 using System.ServiceModel;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -50,6 +51,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+
+        [OperationContract]
+        Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName);
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -102,10 +106,13 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         [OperationContract]
-        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end);
+        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count);
 
         [OperationContract]
-        int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+        long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+
+        [OperationContract]
+        long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId);
 
         [OperationContract]
         HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
@@ -128,5 +135,22 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
+
+
+        #region Feedback
+
+        [OperationContract]
+        void CreateFeedback(string feedback, int? userId);
+
+        [OperationContract]
+        void CreateAnonymousFeedback(string feedback, string name, string email);
+
+        [OperationContract]
+        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
+
+        List<FeedbackContract> GetAllFeedback();
+
+        #endregion
+
     }
 }

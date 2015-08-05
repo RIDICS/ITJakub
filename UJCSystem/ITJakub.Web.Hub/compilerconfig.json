@@ -1,0 +1,66 @@
+﻿[
+  {
+    "outputFile": "Areas/Bibliographies/Content/itjakub.bibliographies.css",
+    "inputFile": "Areas/Bibliographies/Content/itjakub.bibliographies.less"
+  },
+  {
+    "outputFile": "Areas/BohemianTextBank/Content/itjakub.bohemiantextbank.css",
+    "inputFile": "Areas/BohemianTextBank/Content/itjakub.bohemiantextbank.less"
+  },
+  {
+    "outputFile": "Areas/CardFiles/Content/itjakub.cardfile.css",
+    "inputFile": "Areas/CardFiles/Content/itjakub.cardfile.less"
+  },
+  {
+    "outputFile": "Areas/CardFiles/Content/itjakub.cardfiles.css",
+    "inputFile": "Areas/CardFiles/Content/itjakub.cardfiles.less"
+  },
+  {
+    "outputFile": "Areas/Dictionaries/Content/itjakub.dictionaries.css",
+    "inputFile": "Areas/Dictionaries/Content/itjakub.dictionaries.less"
+  },
+  {
+    "outputFile": "Areas/Editions/Content/itjakub.editions.content.css",
+    "inputFile": "Areas/Editions/Content/itjakub.editions.content.less"
+  },
+  {
+    "outputFile": "Areas/Editions/Content/itjakub.editions.css",
+    "inputFile": "Areas/Editions/Content/itjakub.editions.less"
+  },
+  {
+    "outputFile": "Areas/OldGrammar/Content/itjakub.oldgrammar.css",
+    "inputFile": "Areas/OldGrammar/Content/itjakub.oldgrammar.less"
+  },
+  {
+    "outputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.css",
+    "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.less"
+  },
+  {
+    "outputFile": "Areas/Tools/Content/itjakub.tools.css",
+    "inputFile": "Areas/Tools/Content/itjakub.tools.less"
+  },
+  {
+    "outputFile": "Content/ITJakub.DefaultTheme.css",
+    "inputFile": "Content/ITJakub.DefaultTheme.less"
+  },
+  {
+    "outputFile": "Content/ITJakub.Footer.css",
+    "inputFile": "Content/ITJakub.Footer.less"
+  },
+  {
+    "outputFile": "Content/ITJakub.HorizontalLoader.css",
+    "inputFile": "Content/ITJakub.HorizontalLoader.less"
+  },
+  {
+    "outputFile": "Content/itjakub.css",
+    "inputFile": "Content/ITJakub.less"
+  },
+  {
+    "outputFile": "Content/ITJakub.NumberedOrderedList.css",
+    "inputFile": "Content/ITJakub.NumberedOrderedList.less"
+  },
+  {
+    "outputFile": "Content/ITJakub.PluginMenu.css",
+    "inputFile": "Content/ITJakub.PluginMenu.less"
+  }
+]

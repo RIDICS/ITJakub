@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
 using log4net;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -241,7 +242,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HeadwordSearchResult> GetHeadwordList(int start, int end, IList<long> selectedBookIds = null)
+        public virtual IList<HeadwordSearchResult> GetHeadwordList(int start, int count, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
             {
@@ -259,14 +260,17 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 var result = query.Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
+                        .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
                         .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
-                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
-                    .OrderBy(x => x.DefaultHeadword).Asc
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
+                        .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
+                    .OrderBy(x => x.SortOrder).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
-                    .Skip(start - 1)
-                    .Take(end - start + 1)
+                    .Skip(start)
+                    .Take(count)
                     .List<HeadwordSearchResult>();
 
                 return result;
@@ -290,7 +294,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => headwordCountAlias.BookId))
                     )
                     .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList)
-                    .And(creator.GetCondition(bookHeadwordAlias))
+                    .And(creator.GetCondition())
                     .TransformUsing(Transformers.AliasToBean<HeadwordCountResult>())
                     .List<HeadwordCountResult>();
 
@@ -313,13 +317,16 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
+                        .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
                         .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                         .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
                         .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
-                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))))
+                        .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
                     .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList)
-                    .And(creator.GetCondition(bookHeadwordAlias))
-                    .OrderBy(x => x.DefaultHeadword).Asc
+                    .And(creator.GetCondition())
+                    .OrderBy(x => x.SortOrder).Asc
                     .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
                     .Skip(start)
                     .Take(count)
@@ -330,12 +337,54 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetHeadwordRowNumber(IList<long> selectedBookIds, string headwordQuery)
+        public virtual BookHeadword FindFirstHeadword(IList<long> selectedBookIds, string headwordQuery)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookHeadword bookHeadwordAlias = null;
 
-                return 100; //TODO
+                var query = session.QueryOver(() => bookHeadwordAlias)
+                    .JoinQueryOver(() => bookHeadwordAlias.BookVersion, () => bookVersionAlias)
+                    .JoinQueryOver(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(() => bookHeadwordAlias.Headword).IsLike(headwordQuery);
+
+                if (selectedBookIds != null)
+                    query.AndRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
+
+                var result = query.OrderBy(() => bookHeadwordAlias.SortOrder).Asc
+                    .Take(1)
+                    .SingleOrDefault<BookHeadword>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual long GetHeadwordRowNumberById(IList<long> selectedBookIds, string headwordBookGuid, string headwordEntryXmlId)
+        {
+            using (var session = GetSession())
+            {
+                IQuery query;
+
+                if (selectedBookIds == null)
+                {
+                    query = session.GetNamedQuery("GetHeadwordRowNumber");
+                }
+                else
+                {
+                    query = session.GetNamedQuery("GetHeadwordRowNumberFiltered")
+                        .SetParameterList("bookIds", selectedBookIds);
+                }
+                
+                var result = query
+                    .SetParameter("bookGuid", headwordBookGuid)
+                    .SetParameter("xmlEntryId", headwordEntryXmlId)
+                    .UniqueResult<long>();
+
+                return result;
             }
         }
 
@@ -367,6 +416,26 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SetMaxResults(count)
                     .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>())
                     .List<HeadwordSearchResult>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookHeadword GetFirstHeadwordInfo(string bookXmlId, string entryXmlId, string bookVersionXmlId)
+        {
+            using (var session = GetSession())
+            {
+                BookVersion bookVersionAlias = null;
+                Book bookAlias = null;
+                
+                var result = session.QueryOver<BookHeadword>()
+                    .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(x => x.XmlEntryId == entryXmlId && bookAlias.Guid == bookXmlId)
+                    .And(() => bookVersionAlias.VersionId == bookVersionXmlId)
+                    .Take(1)
+                    .SingleOrDefault<BookHeadword>();
 
                 return result;
             }

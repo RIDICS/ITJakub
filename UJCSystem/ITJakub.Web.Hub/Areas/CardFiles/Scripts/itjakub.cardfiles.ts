@@ -4,6 +4,16 @@
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
 
+    $("#searchbox").keypress((event: any) => {
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {     //13 = Enter
+            $(this.searchButton).click();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
+
     $("#searchButton").click(() => {
         var noResultDiv = $("div.no-result");
         $(noResultDiv).hide();
@@ -216,11 +226,17 @@ function createListing() {
 
 }
 
+function sortOrderChanged() {
+    //TODO make ordering
+}
+
 function createList() {
-    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader");
+    var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
 
        $('#searchButton').click(() => {
            var text = $('#searchbox').val();
+           bibliographyModule.clearBooks();
+           bibliographyModule.showLoading();
            $.ajax({
                type: "GET",
                traditional: true,
@@ -233,6 +249,16 @@ function createList() {
                }
            });
     });
+
+    $("#searchbox").keypress((event: any) => {
+           var keyCode = event.which || event.keyCode;
+           if (keyCode === 13) {     //13 = Enter
+               $(this.searchButton).click();
+               event.preventDefault();
+               event.stopPropagation();
+               return false;
+           }
+     });
 
     $('#searchButton').click();
 

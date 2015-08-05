@@ -73,9 +73,9 @@ namespace ITJakub.DataEntities.Database
         public string GetQueryStringForHeadwordList()
         {
             var selectQueryString =
-                "select distinct b1.Guid as BookGuid, bv1.Title as BookTitle, bv1.Acronym as BookAcronym, bh1.DefaultHeadword as Headword, bh1.XmlEntryId as XmlEntryId from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
+                "select distinct b1.Guid as BookGuid, bv1.VersionId as BookVersionId, bv1.Title as BookTitle, bv1.Acronym as BookAcronym, bh1.DefaultHeadword as Headword, bh1.XmlEntryId as XmlEntryId, bh1.SortOrder as SortOrder, bh1.Image as Image from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
 
-            selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery order by bh1.DefaultHeadword", selectQueryString, GetQueryStringForIdList());
+            selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery order by bh1.SortOrder", selectQueryString, GetQueryStringForIdList());
             return selectQueryString;
         }
 

@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         // GET: Editions/Editions
         public ActionResult Index()
         {
-            return View("Information");
+            return View("List");
         }
 
         public ActionResult Search()
@@ -88,6 +88,16 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         }
 
         public ActionResult FeedBack()
+        {
+            return View();
+        }
+
+        public ActionResult Help()
+        {
+            return View();
+        }
+        
+        public ActionResult EditionPrinciples()
         {
             return View();
         }

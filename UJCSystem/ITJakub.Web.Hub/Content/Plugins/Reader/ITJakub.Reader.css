@@ -4,7 +4,7 @@
 }
 .hovered-link {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .black-link {
   color: black;
@@ -12,13 +12,11 @@
 }
 a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
-a,
-a:visited {
-  color: black;
-  text-decoration: none;
-}
+/*a, a:visited {
+    .black-link;
+}*/
 .styled-background {
   background-color: #84ced7;
 }
@@ -33,21 +31,25 @@ body {
   width: 1100px;
   margin: auto;
 }
-.page-body-content a {
-  color: black;
-  text-decoration: none;
-}
+/*.page-body-content a {
+    .black-link;
+}*/
 .page-body-content a:hover {
   color: #afdee4;
-  text-decoration: none;
+  /*text-decoration: none;*/
 }
 .module-content {
-  margin: 87px 0 0 0;
+  margin: 88px 0 0 0;
   min-height: 74vh;
 }
 .content-container {
   background-color: white;
-  padding: 5px;
+  padding: 15px;
+  padding-top: 5px;
+  min-height: 77vh;
+}
+.content-container.top-offset-without-submenu {
+  min-height: 80vh;
 }
 .transparent-content-container {
   padding: 5px;
@@ -120,6 +122,7 @@ body {
   font-size: 24px;
   font-weight: 500;
   margin-bottom: 5px;
+  margin-left: 10px;
 }
 .reader-controls .page-input-button {
   border-radius: 0;
@@ -275,7 +278,7 @@ body {
   width: 250px;
   border-right: 1px solid #e5e5e5;
   height: 77vh;
-  height: calc(100vh - 355px);
+  height: calc(100vh - 367px);
   min-width: 200px;
 }
 .reader-left-panel-body {
@@ -289,7 +292,7 @@ body {
   width: auto;
   background-color: white;
   height: 77vh;
-  height: calc(100vh - 355px);
+  height: calc(100vh - 367px);
   min-width: 200px;
 }
 .reader-right-panel-body {
@@ -504,7 +507,8 @@ body {
 div.dummy-page {
   display: inherit!important;
 }
-.reader-search-result-match {
+.reader-search-result-match,
+.match {
   background-color: yellow;
 }
 .reader-search-result-item:hover {
@@ -527,5 +531,15 @@ div.dummy-page {
 }
 .reader-search-result-paging {
   text-align: center;
+}
+/*testing class for displaying correct pages that contains search match */
+/*.search-unloaded {
+    background-color: palegoldenrod;
+}*/
+.reader .content-container {
+  background-color: white;
+  padding: 0;
+  padding-top: 5px;
+  min-height: 0;
 }
 /*# sourceMappingURL=ITJakub.Reader.css.map */

@@ -173,7 +173,7 @@ class DropDownSelect {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("dropdown-select-text");
-        textSpan.innerText = ""; //TODO read from parameter when root is not unique or is not description
+        $(textSpan).text(""); //TODO read from parameter when root is not unique or is not description
 
         dropDownHeadDiv.appendChild(textSpan);
 
@@ -522,7 +522,7 @@ class DropDownSelect {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("concrete-item-name");
-        nameSpan.innerText = this.getCategoryName(currentCategory);
+        $(nameSpan).text(this.getCategoryName(currentCategory));
         itemDiv.appendChild(nameSpan);
 
         var childsDiv = document.createElement("div");
@@ -672,7 +672,7 @@ class DropDownSelect {
     static getBookIdsFromState(state: State): number[] {
         var bookIdList = new Array(state.SelectedItems.length);
         for (var i = 0; i < state.SelectedItems.length; i++) {
-            bookIdList[i] = state.SelectedItems[i].Id;
+            bookIdList[i] = Number(state.SelectedItems[i].Id);
         }
         return bookIdList;
     }
@@ -680,7 +680,7 @@ class DropDownSelect {
     static getCategoryIdsFromState(state: State): number[] {
         var categoryIdList = new Array(state.SelectedCategories.length);
         for (var i = 0; i < state.SelectedCategories.length; i++) {
-            categoryIdList[i] = state.SelectedCategories[i].Id;
+            categoryIdList[i] = Number(state.SelectedCategories[i].Id);
         }
         return categoryIdList;
     }

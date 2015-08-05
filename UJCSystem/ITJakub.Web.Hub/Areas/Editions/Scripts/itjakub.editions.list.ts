@@ -1,21 +1,170 @@
 ﻿
+
+var search: Search;
+
 $(document).ready(() => {
+    var booksCountOnPage = 5;
 
-    var bookType = $("#listResults").data("book-type");
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", bookType);
+    var bookIds = new Array();
+    var categoryIds = new Array();
 
-    $.ajax({
-        type: "GET",
-        traditional: true,
-        url: getBaseUrl() + "Editions/Editions/SearchEditions",
-        data: {},
-        dataType: "json",
-        contentType: "application/json",
-        success: (response) => {
-            bibliographyModule.showBooks(response.books);
+    function sortOrderChanged() {
+        search.processSearch();
+    }
 
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+
+    function editionAdvancedSearchPaged(json: string, pageNumber: number) {
+
+        if (typeof json === "undefined" || json === null || json === "") return;
+
+        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        var count = bibliographyModule.getBooksCountOnPage();
+        var sortAsc = bibliographyModule.isSortedAsc();
+        var sortingEnum = bibliographyModule.getSortCriteria();
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                bibliographyModule.showBooks(response.books);
+            }
+        });
+    }
+
+    function editionBasicSearchPaged(text: string, pageNumber: number) {
+
+        if (typeof text === "undefined" || text === null || text === "") return;
+
+        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        var count = bibliographyModule.getBooksCountOnPage();
+        var sortAsc = bibliographyModule.isSortedAsc();
+        var sortingEnum = bibliographyModule.getSortCriteria();
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchPaged",
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                bibliographyModule.showBooks(response.books);
+            }
+        });
+    }
+
+    function pageClickCallbackForBiblModule(pageNumber: number) {
+
+        if (search.isLastQueryJson()) {
+            editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+        } else {
+            editionBasicSearchPaged(search.getLastQuery(), pageNumber);
         }
+    }
+
+    function editionBasicSearch(text: string) {
+
+        if (typeof text === "undefined" || text === null || text === "") return;
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+            }
+        });
+    }
+
+    function editionAdvancedSearch(json: string) {
+        if (typeof json === "undefined" || json === null || json === "") return;
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
+            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+
+                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+
+            }
+        });
+    }
+
+
+    var disabledOptions = new Array<SearchTypeEnum>();
+    disabledOptions.push(SearchTypeEnum.Fulltext);
+    disabledOptions.push(SearchTypeEnum.Heading);
+    disabledOptions.push(SearchTypeEnum.Headword);
+    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
+    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+    disabledOptions.push(SearchTypeEnum.Sentence);
+    disabledOptions.push(SearchTypeEnum.TokenDistance);
+
+    search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
+    search.makeSearch(disabledOptions);
+
+    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
+    typeaheadSearchBox.addDataSet("Title", "Název");
+    typeaheadSearchBox.create();
+    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+
+
+    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    callbackDelegate.selectedChangedCallback = (state: State) => {
+        bookIds = new Array();
+
+        for (var i = 0; i < state.SelectedItems.length; i++) {
+            bookIds.push(state.SelectedItems[i].Id);
+        }
+
+        categoryIds = new Array();
+
+        for (var i = 0; i < state.SelectedCategories.length; i++) {
+            categoryIds.push(state.SelectedCategories[i].Id);
+        }
+
+        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        typeaheadSearchBox.clearAndDestroy();
+        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+        typeaheadSearchBox.create();
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    };
+
+    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector.makeDropdown();
+
+
+    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
-
+    search.processSearchQuery("%"); //search for all by default criteria (title)
+    search.writeTextToTextField("");
 });
+
+
+

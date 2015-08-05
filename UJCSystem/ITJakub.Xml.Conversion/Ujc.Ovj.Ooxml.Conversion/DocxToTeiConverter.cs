@@ -2,24 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using System.Reflection;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Daliboris.OOXML.Word.Transform;
 using Daliboris.Texty.Evidence;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export;
 using Daliboris.Texty.Export.Rozhrani;
 using Daliboris.Texty.Export.SlovnikovyModul;
-using Daliboris.Transkripce.Objekty;
-using JetBrains.Annotations;
 using Ujc.Ovj.Xml.Tei.Contents;
 using Ujc.Ovj.Xml.Tei.Splitting;
-using Prepis = Daliboris.Texty.Evidence.Prepis;
-using Prepisy = Daliboris.Texty.Evidence.Prepisy;
 
 namespace Ujc.Ovj.Ooxml.Conversion
 {
@@ -190,7 +182,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			WriteListChange(finalOutputFileName, versions, _currentVersionInfoSkeleton);
 			File.Copy(finalOutputFileName, settings.OutputFilePath, true);
-			_result.MetadataFilePath = GetConversionMetadataFileFullPath(settings.OutputFilePath);
+			_result.MetadataFilePath = settings.OutputMetadataFilePath;
+                //GetConversionMetadataFileFullPath(settings.OutputFilePath);
 
 			SplittingResult splittingResult = null;
 			if (settings.SplitDocumentByPageBreaks)
@@ -209,7 +202,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			tocBuilder.StartingElement = "body";
 			tocResult = tocBuilder.MakeTableOfContent();
 
-			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, settings.OutputFilePath);
+			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, settings.OutputFilePath, settings.OutputMetadataFilePath);
 
 			if (!settings.Debug)
 			{
@@ -260,14 +253,14 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			}
 		}
 
-		private void GenerateConversionMetadataFile(SplittingResult splittingResult,
-			string documentType,
-			string finalOutputFileName)
-		{
-			GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileName);
-		}
+		//private void GenerateConversionMetadataFile(SplittingResult splittingResult,
+		//	string documentType,
+		//	string finalOutputFileName)
+		//{
+		//	GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileName);
+		//}
 
-		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName)
+		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName, string finalOutputMetadataFileName)
 		{
 
 			XDocument metada = new XDocument();
@@ -311,7 +304,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			metada.Root.Add(toc);
 			metada.Root.Add(hwt);
 			metada.Root.Add(hws);
-			metada.Save(GetConversionMetadataFileFullPath(finalOutputFileName));
+			metada.Save(finalOutputMetadataFileName);
 
 		}
 
@@ -551,11 +544,11 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		}
 		*/
 
-		private static string GetConversionMetadataFileFullPath(string outputFilePath)
-		{
-			string result = outputFilePath.Replace(XmlExtension, ".xmd");
-			return result;
-		}
+		//private static string GetConversionMetadataFileFullPath(string outputFilePath)
+		//{
+		//	string result = outputFilePath.Replace(XmlExtension, ".xmd");
+		//	return result;
+		//}
 
 		private SplittingResult SplitDocumentByPageBreaks(string fileFullPath, string fileNameWithoutExtension)
 		{

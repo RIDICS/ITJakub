@@ -13,11 +13,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
     {
         private readonly BookRepository m_bookRepository;
         private readonly string m_conversionMetadataPath;
+        private readonly string m_dataDirectoryPath;
         private readonly VersionIdGenerator m_versionIdGenerator;
-        private string m_dataDirectoryPath;
 
         public XmlConversionProcessor(string conversionMetadataPath, string dataDirectoryPath,
-                BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
+            BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
         {
             m_conversionMetadataPath = conversionMetadataPath;
             m_bookRepository = bookRepository;
@@ -31,13 +31,23 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 resourceSessionDirector.Resources.First(
                     resource => resource.ResourceType == ResourceType.SourceDocument);
 
-            var metaDataFileName = string.Format("{0}.xmd",
-                Path.GetFileNameWithoutExtension(inputFileResource.FileName));
+            string metaDataFileName;
+            if (resourceSessionDirector.Resources.Any(x => x.ResourceType == ResourceType.UploadedMetadata))
+            {
+                metaDataFileName = string.Format("{0}_converted.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
+            }
+            else
+            {
+                metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
+            }
+
+
+
             var metaDataResource = new Resource
             {
                 FileName = metaDataFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, metaDataFileName),
-                ResourceType = ResourceType.Metadata
+                ResourceType = ResourceType.ConvertedMetadata
             };
 
             var bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
@@ -57,7 +67,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 
-            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository, m_versionIdGenerator);
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository,
+                m_versionIdGenerator);
 
             var settings = new DocxToTeiConverterSettings
             {
@@ -65,6 +76,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 InputFilePath = inputFileResource.FullPath,
                 MetadataFilePath = m_conversionMetadataPath,
                 OutputFilePath = bookResource.FullPath,
+                OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookId,
                 SplitDocumentByPageBreaks = true,
@@ -81,8 +93,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
             else
             {
-                throw new ConversionException(string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'", conversionResult.Errors.FirstOrDefault()));
+                throw new ConversionException(
+                    string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'",
+                        conversionResult.Errors.FirstOrDefault()));
             }
+            
         }
     }
 
@@ -104,7 +119,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly string m_message;
         private readonly VersionIdGenerator m_versionIdGenerator;
 
-        public VersionProviderHelper(string message, DateTime createTime, BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
+        public VersionProviderHelper(string message, DateTime createTime, BookRepository bookRepository,
+            VersionIdGenerator versionIdGenerator)
         {
             m_message = message;
             m_createTime = createTime;

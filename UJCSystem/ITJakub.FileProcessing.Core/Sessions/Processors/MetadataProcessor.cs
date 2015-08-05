@@ -31,14 +31,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var metaData =
-                resourceSessionDirector.Resources.FirstOrDefault(
-                    resource => resource.ResourceType == ResourceType.Metadata);
-            if (metaData == null)
-                throw new ResourceMissingException("Metadata not found in resources");
+
+            var metaData = GetMetadataForProcessing(resourceSessionDirector);
+            
             var xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
 
-            var bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
+            BookVersion bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
 
             bookVersion.Description = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             bookVersion.CreateTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
@@ -69,6 +67,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 var transformation = GetTransformationObject(transResource);
                 bookVersion.Transformations.Add(transformation);
             }
+        }
+
+        private Resource GetMetadataForProcessing(ResourceSessionDirector resourceSessionDirector)
+        {
+            var metaData = resourceSessionDirector.Resources.FirstOrDefault(resource => resource.ResourceType == ResourceType.UploadedMetadata) ??
+                           resourceSessionDirector.Resources.FirstOrDefault(resource => resource.ResourceType == ResourceType.ConvertedMetadata);
+
+            if (metaData == null)
+                throw new ResourceMissingException("Metadata not found in resources");
+
+            return metaData;
         }
 
         private Transformation GetTransformationObject(Resource resource)

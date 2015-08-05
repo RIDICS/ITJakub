@@ -11,7 +11,7 @@ class Pagination {
         this.paginationContainer = paginationContainer;
     }
 
-    public createPagination(itemsCount: number,itemsOnPage: number, pageClickCallback: (pageNumber: number) => void) {
+    public createPagination(itemsCount: number, itemsOnPage: number, pageClickCallback: (pageNumber: number) => void, defaultPageNumber: number = 1) {
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
         this.pageClickCallback = pageClickCallback;
         
@@ -40,7 +40,7 @@ class Pagination {
 
         $(this.paginationContainer).append(paginationUl);
 
-        this.updateCurrentPage(1);
+        this.updateCurrentPage(defaultPageNumber);
     }
 
     private updateCurrentPage(newPageNumber: number) {

@@ -33,6 +33,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             return View();
         }
+        public ActionResult Help()
+        {
+            return View();
+        }
         
         public ActionResult GetTypeaheadAuthor(string query)
         {

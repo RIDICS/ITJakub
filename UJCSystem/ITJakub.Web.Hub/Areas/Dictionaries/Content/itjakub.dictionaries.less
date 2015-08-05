@@ -19,6 +19,7 @@
 
 .dictionary-header-buttons a, .dictionary-header-buttons a:hover {
     color: white;
+    margin-left: 10px;
 }
 
 .search-with-saved-word-area {
@@ -30,14 +31,30 @@
     float: left;
 }
 
+.short-search-area {
+    width: 65%;
+}
+
+.searchbar-inputs {
+    margin-right: 74px;
+}
 
 .saved-word-area {
     background-color: white;
     height: 100%;
-    width: 30%;
+    width: 35%;
     float: left;
     overflow: hidden;
     margin-top: 5px;
+}
+
+.saved-word-area > .dictionary-header {
+    height: 34px;
+    padding: 6px 8px 5px 8px;
+}
+
+.saved-word-area > .dictionary-header span {
+    vertical-align: middle;
 }
 
 .dictionary-selects {
@@ -59,6 +76,8 @@
 
 .dictionary-result-word-search-list-body {
     padding: 5px;
+    position: relative;
+    min-height: 450px;
 }
 
 .dictionary-result-pagination {
@@ -75,6 +94,8 @@
 
 .dictionary-result-word-search-description-body {
     padding: 5px;
+    position: relative;
+    min-height: 450px;
 }
 
 .dictionary-result-headword {
@@ -92,6 +113,11 @@ a.dictionary-result-headword-book {
 
 .dictionary-result-headword-favorite {
     float: right;
+    cursor: pointer;
+}
+
+.dictionary-result-headword-favorite:hover {
+    color: @item-background-color;
 }
 
 .saved-words-body {
@@ -127,22 +153,6 @@ a.dictionary-result-headword-book {
 
 .saved-word-area-more:hover {
     cursor: pointer;
-}
-
-.entryFree {
-    padding-left: @dictionary-entry-margin;
-    padding-right: @dictionary-entry-margin;
-}
-
-.bo {
-    position: relative;
-    left: -@dictionary-entry-margin;
-    font-size: 120%;
-    font-weight: bold;
-}
-
-.note {
-    font-style: italic;
 }
 
 .dictionary-entry-comments {
@@ -185,6 +195,26 @@ ul.pagination-sm {
     margin-bottom: 10px;
 }
 
+.dictionary-loading {
+    background: rgba(45,45,45,0.3);
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+
+.dictionary-loading > div {
+    background: white url(../../../Content/Images/loading.gif) no-repeat center;
+    width: 120px;
+    height: 64px;
+    margin: auto;
+    vertical-align: middle;
+    position: relative;
+    top: 50%;
+    margin-top: -60px;
+}
+
 @media print {
     .navbar, .footer, .search-with-saved-word-area, .dictionary-selects {
         display: none;
@@ -214,6 +244,10 @@ ul.pagination-sm {
     a:link:after, a:visited:after {  
         content: normal;  
     }
+
+    .dictionary-entry-image-switch {
+        display: none;
+    }
 }
 
 #search-tabs {
@@ -222,7 +256,7 @@ ul.pagination-sm {
 }
 
 #search-tabs a {
-    padding: 2px 10px 4px 10px;
+    padding: 2px 5px 4px 5px;
 }
 
 .tab-content > div {
@@ -230,8 +264,11 @@ ul.pagination-sm {
 }
 
 .dictionary-result-word-search-list .dictionary-header-tabs {
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 2px 5px 2px 2px;
+}
+
+.middle {
+    vertical-align: middle;
 }
 
 .dictionary-header a {
@@ -246,46 +283,99 @@ ul.pagination-sm {
     min-height: 24px;
 }
 
+.dictionary-entry-image-switch {
+    text-align: right;
+    float: right;
+}
+
+.dictionary-entry-image.loading {
+    min-height: 50px;
+}
+
+.dictionary-entry-image img {
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 6px;
+}
+
+.dictionary-entry-image-switch .btn-primary {
+    background-color: transparent;
+    border-color: @item-background-color;
+    color: @item-background-color;
+    margin: 0 15px 2px 10px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 0;
+}
+
+.dictionary-entry-image-switch .btn-primary:hover {
+    background-color: #e6e6e6;
+    border-color: #adadad;
+    color: #333333;
+}
+
+.dictionary-entry-image-switch .active {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+.entry-load-error {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+}
+
+.entry-image-header {
+    padding-left: @dictionary-entry-margin;
+    padding-right: @dictionary-entry-margin;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 120%;
+    font-weight: bold;
+    min-height: 30px;
+    display: block;
+}
 
 .entryFree {
     padding-left: @dictionary-entry-margin;
     padding-right: @dictionary-entry-margin;
-		font-family: 'Times New Roman', Times, serif;
-		text-align: justify;
-		font-size: 120%;
+    font-family: 'Times New Roman', Times, serif;
+    text-align: justify;
+    font-size: 120%;
 }
 
 .bo {
     position: relative;
     font-weight: bold;
-		font-size: 100%;
-		left: 0;
+    font-size: 100%;
+    left: 0;
 }
 
 .note {
+    font-style: italic;
     font-size: 80%;
 }
 
 .match {
-	background-color: yellow;
+    background-color: yellow;
 }
 
 
 .nonp {
-	font-size: 80%;
+    font-size: 80%;
 }
 
 .def {
-	font-style: italic;
+    font-style: italic;
 }
 
 div .sense {
-	  margin-left: 1em;
+    margin-left: 1em;
     text-indent: -1em;
 }
 
 .cap {
-	font-variant: small-caps;
+    font-variant: small-caps;
 }
 
 .dicitonaries-search .searchbar-inputs {

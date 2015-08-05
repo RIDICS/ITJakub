@@ -27,14 +27,15 @@ namespace ITJakub.ITJakubService.Core
 
         public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
         {
+            if (string.IsNullOrWhiteSpace(userName))
+                return new List<PageBookmarkContract>();
 
             var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookId, userName);
             return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
         }
 
-        public void AddBookmark(string bookId, string pageXmlId, string userName)
+        public void AddPageBookmark(string bookId, string pageXmlId, string userName)
         {
-            
             if (string.IsNullOrWhiteSpace(userName))
             {
                 string message = "Username is empty, cannot add bookmark";
@@ -74,10 +75,54 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Save(bookmark);
         }
 
-        public void RemoveBookmark(string bookId, string pageXmlId, string userName)
+        public void RemovePageBookmark(string bookId, string pageXmlId, string userName)
         {
-           m_favoritesRepository.DeletePageBookmarkByPageXmlId(bookId, pageXmlId, userName);
-        
+            m_favoritesRepository.DeletePageBookmarkByPageXmlId(bookId, pageXmlId, userName);
+        }
+
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+                return new List<HeadwordBookmarkContract>();
+
+            var headwordResults = m_favoritesRepository.GetAllHeadwordBookmarks(userName);
+            return Mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
+        }
+
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                string message = "Username is empty, cannot add bookmark";
+
+                if (m_log.IsWarnEnabled)
+                    m_log.Warn(message);
+                throw new ArgumentException(message);
+            }
+
+            User user = m_userRepository.FindByUserName(userName);
+
+            if (user == null)
+            {
+                string message = string.Format("Cannot locate user by username: '{0}'", userName);
+                if (m_log.IsErrorEnabled)
+                    m_log.Error(message);
+                throw new ArgumentException(message);
+            }
+
+            var bookmark = new HeadwordBookmark
+            {
+                Book = m_bookRepository.FindBookByGuid(bookXmlId),
+                User = user,
+                XmlEntryId = entryXmlId
+            };
+            
+            m_favoritesRepository.Save(bookmark);
+        }
+
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        {
+            m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
         }
     }
 }

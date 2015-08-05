@@ -5,6 +5,7 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -19,7 +20,8 @@ namespace ITJakub.ITJakubService.Services
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
-        private readonly WindsorContainer m_container = Container.Current;
+        private readonly FeedbackManager m_feedbackManager;        
+        private readonly WindsorContainer m_container = Container.Current;        
 
         public ItJakubServiceManager()
         {
@@ -28,7 +30,8 @@ namespace ITJakub.ITJakubService.Services
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_feedbackManager = m_container.Resolve<FeedbackManager>();
+            m_cardFileManager = m_container.Resolve<CardFileManager>();           
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -94,6 +97,11 @@ namespace ITJakub.ITJakubService.Services
         public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
         {
             return m_bookManager.GetBookPageImage(bookPageImageContract);
+        }
+
+        public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
+        {
+            return m_bookManager.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
         }
 
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -168,14 +176,20 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int end)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count)
         {
-            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
         }
 
-        public int GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
+        }
+
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        {
+            return m_searchManager.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId,
+                headwordEntryXmlId);
         }
 
         public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
@@ -213,6 +227,26 @@ namespace ITJakub.ITJakubService.Services
              string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
+        }
+
+        public void CreateFeedback(string feedback, int? userId)
+        {
+            m_feedbackManager.CreateFeedback(feedback, userId);
+        }
+
+        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        {
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public List<FeedbackContract> GetAllFeedback()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

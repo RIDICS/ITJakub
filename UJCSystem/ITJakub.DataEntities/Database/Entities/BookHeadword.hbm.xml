@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="BookHeadword" table="[BookHeadword]" lazy="true" >
+  <class name="BookHeadword" table="[BookHeadword]">
     
     <id name="Id" column="Id">
       <generator class="identity" />
@@ -15,6 +15,70 @@
     <property name="Headword" />
     
     <property name="Visibility" />
+
+    <property name="Image" />
+
+    <property name="SortOrder" />
     
   </class>
+
+  <sql-query name="GetHeadwordRowNumber">
+    <![CDATA[
+SELECT TOP (1) rowNumberAlias
+  FROM( 
+        SELECT * , 
+               ROW_NUMBER() OVER(ORDER BY q_.sortOrderAlias) AS rowNumberAlias
+          FROM( 
+        SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
+                        bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
+                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.Image AS imageAlias ,
+                        bookheadwo2_.SortOrder AS sortOrderAlias
+          FROM
+               Book bookAlias INNER JOIN
+                              BookVersion bookversio1_
+          ON bookAlias.LastVersion
+             = 
+             bookversio1_.Id
+                              INNER JOIN
+                              BookHeadword bookheadwo2_
+          ON bookversio1_.Id
+             = 
+             bookheadwo2_.BookVersion
+              ) AS q_
+      ) AS query
+  WHERE query.xmlEntryIdAlias = :xmlEntryId and query.bookGuidAlias = :bookGuid
+  ORDER BY query.rowNumberAlias;
+    ]]>
+  </sql-query>
+  <sql-query name="GetHeadwordRowNumberFiltered">
+    <![CDATA[
+SELECT TOP (1) rowNumberAlias
+  FROM( 
+        SELECT * , 
+               ROW_NUMBER() OVER(ORDER BY q_.sortOrderAlias) AS rowNumberAlias
+          FROM( 
+        SELECT DISTINCT bookAlias.Guid AS bookGuidAlias , 
+                        bookheadwo2_.DefaultHeadword AS defaultHeadwordAlias , 
+                        bookheadwo2_.XmlEntryId AS xmlEntryIdAlias ,
+                        bookheadwo2_.Image AS imageAlias ,
+                        bookheadwo2_.SortOrder AS sortOrderAlias
+          FROM
+               Book bookAlias INNER JOIN
+                              BookVersion bookversio1_
+          ON bookAlias.LastVersion
+             = 
+             bookversio1_.Id
+                              INNER JOIN
+                              BookHeadword bookheadwo2_
+          ON bookversio1_.Id
+             = 
+             bookheadwo2_.BookVersion
+          WHERE bookAlias.Id IN( :bookIds )
+              ) AS q_
+      ) AS query
+  WHERE query.xmlEntryIdAlias = :xmlEntryId and query.bookGuidAlias = :bookGuid
+  ORDER BY query.rowNumberAlias;
+    ]]>
+  </sql-query>
 </hibernate-mapping>

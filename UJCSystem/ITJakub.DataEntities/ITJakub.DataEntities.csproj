@@ -73,9 +73,12 @@
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
+    <Compile Include="Database\Entities\Feedback.cs" />
+    <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Repositories\FeedbackRepository.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
@@ -166,6 +169,9 @@
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

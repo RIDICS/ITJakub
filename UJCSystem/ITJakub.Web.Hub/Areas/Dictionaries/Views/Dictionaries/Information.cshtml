@@ -1,23 +1,16 @@
 ﻿@{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "Slovníky - Informace";
 }
 
 <div class="content-container">
     <h1>Informace</h1>
 
-    <p>
-        V rámci edičního modulu představujeme zájemcům elektronické edice česky psaných textů z období 13.–18. století.
-    </p>
-
-    <p>
-        Elektronické edice jsou jedním z výsledků vědecké práce oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i., a vznikají mj. v rámci projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází) a projektu MŠMT ČR LC 546 Výzkumné centrum vývoje staré a střední češtiny (od praslovanských kořenů po současný stav).
-    </p>
-
-    <p>
-        Elektronické edice slouží především jako materiálová báze pro následný jazykový výzkum, proto je jazykový přístup k textu upřednostněn ku příkladu před literárními či historickými aspekty. Edice jsou dále začleňovány do textové báze budovaného staročeského korpusu a připravovaného středněčeského korpusu. Spolu s digitálními kopiemi rovněž spoluvytvářejí virtuální badatelské prostředí Manuscriptorium.
-    </p>
-    <p>
-        Při editaci literárních památek jsou bezvýhradně dodržovány zásady vědeckého zpřístupňování historických textů, a dále nezbytné formální aspekty, které umožňují prezentovat texty prostřednictvím internetu při zachování nezbytných náležitostí kritické edice. Ačkoliv jsou editoři oddělení vývoje jazyka vedeni snahou aplikovat vědecké i formální přístupy maximálně jednotně a uplatňují obecné ediční zásady, nelze tento jednotný přístup nadřadit obsahově-formálním specifikům jednotlivých památek. Každá z nich je originální a svébytné dílo, jehož zvláštnosti musí editor ve své práci plně respektovat.
-    </p>
+    <p>V oddílu <i>Slovníky</i> Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>vyhledávání</a> a <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>listování</a>, tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>Nápovědě</a>.</p>
+    <p>Základ oddílu tvoří tato novodobá lexikografická díla pojednávající zejména o staročeské slovní zásobě: <a href="#">Elektronický slovník staré češtiny (ESSČ)</a>, <a href="#">Malý staročeský slovník (MSS)</a>, <a href="#">pracovní heslář k lístkové kartotéce Staročeského slovníku (HesStčS)</a>, <a href="#">Slovník staročeský Jana Gebauera (GbSlov)</a>, <a href="#">Staročeský slovník (StčS)</a>, <a href="#">Slovníček staré češtiny Františka Šimka (ŠimekSlov)</a> a <a href="#">Index Slovníku staročeských osobních jmen Jana Svobody (IndexSvob)</a>.</p>
+    <p>Jsou zde však též dostupné elektronické verze historických slovníků a podobných lexikografických příruček z období 16. až 19. století. Jedná se např. o <a href="#">Česko-německý slovnář</a> Jana Václava Pohla, jehož elektronickou edici vytvořil se svými kolegy prof. Tilman Berger z univerzity v Tubinkách; dále <a href="#">Dodavky ke slovníku Josefa Jungmanna</a> od F. L. Čelakovského; <a href="#">Slovář český</a> Jana Františka Josefa Ryvoly a <a href="#">Deutsch-böhmisches Wörterbuch</a> Josefa Dobrovského, <a href="#">Thesaurus Linguae Bohemicae</a> Václava Jana Rosy a další <a href="#">slovníky</a>, jejichž elektronické verze vznikají v oddělení vývoje jazyka ÚJČ a které primárně poskytují transliterovaný text, doplněný v některých případech o transkripci české jazykové části.</p>
+    <p>Formou digitalizovaných obrazů doplněných o metainformace (soupis hesel a podheslí) zveřejňujeme <a href="#">Slovník česko-německý</a> Josefa Jungmanna. Jedná se o fotokopie archivního exempláře, v němž sám autor označoval opravy a doplňky textu pro zamýšlené druhé vydání slovníku. Digitální kopii lze prohlížet dvěma způsoby: pomocí listování a vyhledávání v heslových slovech a podheslích, a to podle transliterované i transkribované podoby.</p>
+    <p>Informace získané vyhledáváním či listováním se liší v závislosti na zdroji, z něhož jsou čerpány – slovníky poskytnou heslovou stať, heslář ke kartotéce Staročeského slovníku pochopitelně pouze samotný výraz bez dalšího lexikografického zpracování apod. Získané údaje lze archivovat v tiskové verzi.</p>
+    <p>Elektronický slovník staré češtiny, Staročeský slovník i heslář ke kartotéce Staročeského slovníku jsou díla vzniklá (či vznikající) na půdě oddělení vývoje jazyka ÚJČ; na vzniku Indexu staročeských osobních jmen Jana Svobody se podíleli pracovníci ÚJČ PhDr. Libuše Olivová-Nezbedová, CSc., a doc. PhDr. & RNDr. Karel Oliva, Dr. Za možnost zapojit do <i>Vokabuláře webového</i> elektronickou verzi Malého staročeského slovníku děkujeme autorům či nositelům autorských práv k tomuto dílu, jmenovitě prof. PhDr. Karlu Kučerovi, CSc., doc. PhDr. Heleně Běličové, DrSc., a prof. PhDr. Karlu Kamišovi, CSc., kteří našemu záměru laskavě vyšli vstříc. Za souhlas s uveřejněním <a href='#'>dodatku k Malému staročeskému slovníku</a>, tj. stati Václava Křístka o staročeských pravopisných systémech, děkujeme nositelce autorských práv k uvedené práci PhDr. Marii Bělíkové. Stejně tak patří naše poděkování Středisku <a href='#'>Teiresiás</a>, zastoupenému PhDr. Petrem Peňázem, které nám poskytlo Malý staročeský slovník v elektronické formě.</p>
+    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>
 
 </div>

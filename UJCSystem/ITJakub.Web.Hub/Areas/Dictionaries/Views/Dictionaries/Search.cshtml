@@ -6,51 +6,31 @@
     @Scripts.Render("~/itjakub/dictionaries/searchjs")
 }
 
+@{
+    ViewBag.Title = "Slovníky - Vyhledávání";
+}
+
 <div class="transparent-content-container">
     <div class="search-with-saved-word-area">
         <div class="search-area transparent-content-container">
             <div id="dictionarySearchDiv">
             </div>
         </div>
-        @*<div class="saved-word-area">
-            <div class="dictionary-header">
-                Uložená hesla
-                <span class="saved-word-area-more"><span class="glyphicon glyphicon-collapse-down"></span></span>
-            </div>
-            <div class="saved-words-body">
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">pes</span>
-                </span>
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">starocesky slovnik</span>
-                </span>
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">novocesky slovnik</span>
-                </span>
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">novocesky slovnik</span>
-                </span>
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">novocesky slovnik</span>
-                </span>
-                <span class="saved-word">
-                    <span class="saved-word-remove glyphicon glyphicon glyphicon-remove-circle"></span>
-                    <span class="saved-word-text">novocesky slovnik</span>
-                </span>
-            </div>
-        </div>*@
     </div>
     <div class="dictionary-selects transparent-content-container">
-        
+        <div id="dropdownSelectDiv"></div>
+        <div class="dropdown-description">
+            <div id="dropdownDescriptionDiv"></div>
+        </div>
     </div>
     <div class="dictionary-result-area transparent-content-container">
         <div class="dictionary-result-word-search-list">
             <div class="dictionary-header dictionary-header-tabs">
+                <div class="dictionary-header-buttons">
+                    <a href="#" title="Tisk" id="printList">
+                        <span class="glyphicon glyphicon-print middle"></span>
+                    </a>
+                </div>
                 <ul class="nav nav-pills" id="search-tabs">
                     <li id="tab-headwords">
                         <a href="#headwords">Hesla <span class="badge" id="search-headword-count"></span></a>
@@ -62,11 +42,6 @@
                         <a href="#advanced">Pokročilé vyhledávání <span class="badge" id="search-advanced-count"></span></a>
                     </li>
                 </ul>
-                @*<div class="dictionary-header-buttons">
-                    <a href="#" alt="Tisk" id="printList">
-                        <span class="glyphicon glyphicon-print"></span>
-                    </a>
-                </div>*@
             </div>
             @*<div class="dictionary-header dictionary-subheader">
                 <span>Vše ()</span>
@@ -92,7 +67,11 @@
             <div class="dictionary-header">
                 <span>Heslové stati</span>
                 <div class="dictionary-header-buttons">
-                    <a href="#" alt="Tisk" id="printDescription">
+                    <a href="#" id="cancelFilter" class="hidden">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        <span>Zrušit filtr</span>
+                    </a>
+                    <a href="#" title="Tisk" id="printDescription">
                         <span class="glyphicon glyphicon-print"></span>
                     </a>
                 </div>

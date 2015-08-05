@@ -24,7 +24,7 @@ class DictionarySearch {
         this.callbackDelegate.selectedChangedCallback = (state) => {
             this.updateTypeaheadSearchBox(state);
         };
-        this.dictionarySelector = new DropDownSelect2("div.dictionary-selects", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
+        this.dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate, "#dropdownDescriptionDiv");
         
         this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
         this.dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
@@ -57,8 +57,17 @@ class DictionarySearch {
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
         this.typeaheadSearchBox.create();
 
+        $("#cancelFilter").click(() => {
+            this.getCurrentDictionaryViewer().cancelFilter();
+            $("#cancelFilter").addClass("hidden");
+        });
+
         $("#printDescription").click(() => {
             this.getCurrentDictionaryViewer().print();
+        });
+
+        $("#printList").click(() => {
+            this.getCurrentDictionaryViewer().printList();
         });
 
         window.matchMedia("print").addListener(mql => {

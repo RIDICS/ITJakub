@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Net.Mime;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -15,16 +15,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     public class DictionariesController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient;
+        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient;
 
         public DictionariesController()
         {
             m_mainServiceClient = new ItJakubServiceClient();
+            m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
         }
 
-        // GET: Dictionaries/Dictionaries
         public ActionResult Index()
         {
-            return View();
+            return View("Search");
         }
 
         public ActionResult Search()
@@ -37,29 +38,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Headwords()
+        public ActionResult Listing()
         {
             return View();
         }
-
-        public ActionResult GetTextWithCategories()
+        public ActionResult Help()
         {
-            var dictionariesAndCategories =
-                m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
-            //var booksDictionary =
-            //    dictionariesAndCategories.Books.GroupBy(x => x.CategoryId)
-            //        .ToDictionary(x => x.Key.ToString(), x => x.ToList());
-            var categoriesDictionary =
-                dictionariesAndCategories.Categories.GroupBy(x => x.ParentCategoryId)
-                    .ToDictionary(x => x.Key == null ? "" : x.Key.ToString(), x => x.ToList());
-            return
-                Json(
-                    new
-                    {
-                        type = BookTypeEnumContract.Edition,
-                        //books = booksDictionary,
-                        categories = categoriesDictionary
-                    }, JsonRequestBehavior.AllowGet);
+            return View();
         }
 
         public ActionResult GetDictionariesWithCategories()
@@ -234,9 +219,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            var start = (page - 1)*pageSize + 1;
-            var end = page*pageSize;
-            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, end);
+            var start = (page - 1)*pageSize;
+            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -247,10 +231,48 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId, int pageSize)
+        {
+            var rowNumber = m_mainServiceClient.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId);
+            var resultPageNumber = (rowNumber - 1) / pageSize + 1;
+            return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var result = m_mainServiceClient.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetHeadwordBookmarks()
+        {
+            var list = m_mainServiceEncryptedClient.GetHeadwordBookmarks(HttpContext.User.Identity.Name);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddHeadwordBookmark(string bookId, string entryXmlId)
+        {
+            m_mainServiceEncryptedClient.AddHeadwordBookmark(bookId, entryXmlId, HttpContext.User.Identity.Name);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveHeadwordBookmark(string bookId, string entryXmlId)
+        {
+            m_mainServiceEncryptedClient.RemoveHeadwordBookmark(bookId, entryXmlId, HttpContext.User.Identity.Name);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
+        {
+            var resultStream = m_mainServiceClient.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
+            return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
+        }
+
+        public ActionResult AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
+            string email, string content, bool publicationAgreement)
+        {
+            m_mainServiceClient.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, null);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
     }
 }

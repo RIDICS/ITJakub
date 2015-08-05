@@ -52,7 +52,7 @@ class BibliographyFactory {
             bookButton.appendChild(spanBook);
             $(bookButton).click((event) => {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
                 } else {
                     window.location.href = config.getReadButtonUrl(bookInfo);

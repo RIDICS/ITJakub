@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Castle.Windsor.Diagnostics;
 using ITJakub.Lemmatization.DataEntities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
 using ITJakub.Shared.Contracts;
@@ -26,7 +25,7 @@ namespace ITJakub.Lemmatization.Service
                 MorphologicalCharakteristic = ""
             };
 
-            Token token = new Token
+            var token = new Token
             {
                 Text = "TestovaciToken",
                 Description = "Testovaci popisek",
