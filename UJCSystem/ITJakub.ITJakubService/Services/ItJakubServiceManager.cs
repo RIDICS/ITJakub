@@ -244,6 +244,12 @@ namespace ITJakub.ITJakubService.Services
             throw new System.NotImplementedException();
         }
 
+        public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
+            string name, string email)
+        {
+            m_feedbackManager.CreateAnonymousFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, name, email);
+        }
+
         public List<FeedbackContract> GetAllFeedback()
         {
             throw new System.NotImplementedException();

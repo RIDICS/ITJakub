@@ -217,6 +217,7 @@
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
+    <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -741,7 +742,6 @@
     <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
-    <Folder Include="Areas\Dictionaries\Models\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Models\" />
