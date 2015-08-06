@@ -32,7 +32,7 @@
         updateSearchBox(state);
     };
 
-    var dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate, "#dropdownDescriptionDiv");
+    var dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
     dictionarySelector.makeAndRestore(selectedCategoryIds, selectedBookIds);
 
 

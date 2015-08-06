@@ -62,5 +62,37 @@
   {
     "outputFile": "Content/ITJakub.PluginMenu.css",
     "inputFile": "Content/ITJakub.PluginMenu.less"
+  },
+  {
+    "outputFile": "Content/Plugins/Bibliography/ITJakub.Bibliography.css",
+    "inputFile": "Content/Plugins/Bibliography/ITJakub.Bibliography.less"
+  },
+  {
+    "outputFile": "Content/Plugins/DropdownSelect/ITJakub.DropdownSelect.css",
+    "inputFile": "Content/Plugins/DropdownSelect/ITJakub.DropdownSelect.less"
+  },
+  {
+    "outputFile": "Content/Plugins/Reader/ITJakub.Reader.css",
+    "inputFile": "Content/Plugins/Reader/ITJakub.Reader.less"
+  },
+  {
+    "outputFile": "Content/Plugins/RegExSearch/ITJakub.RegExSearch.css",
+    "inputFile": "Content/Plugins/RegExSearch/ITJakub.RegExSearch.less"
+  },
+  {
+    "outputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.css",
+    "inputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.less"
+  },
+  {
+    "outputFile": "Areas/AudioBooks/Content/itjakub.audiobooks.css",
+    "inputFile": "Areas/AudioBooks/Content/itjakub.audiobooks.less"
+  },
+  {
+    "outputFile": "Content/dropzones.css",
+    "inputFile": "Content/dropzones.less"
+  },
+  {
+    "outputFile": "Content/bootstrap/bootstrap.css",
+    "inputFile": "Content/bootstrap/bootstrap.less"
   }
 ]
