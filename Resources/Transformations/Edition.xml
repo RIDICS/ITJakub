@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformations directory="D:\!UJC\OVJ\Texty\Konverze\Xslt"
+	xml:base="/D:/!UJC/OVJ/Texty/Konverze/Xslt/"
+	xmlns="http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0">
+	<transformation xml:id="header">
+		<step file="EM_Vytvorit_hlavicku_TEI.xsl" />
+	</transformation>
+	<transformation xml:id="front">
+		<step file="Vytvorit_front_TEI.xsl" />
+	</transformation>
+	<transformation xml:id="body">
+		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
+		<step file="Odstranit_tabulku_metadat.xsl" />
+		<step file="Odstranit_interni_poznamky.xsl" />
+		<step file="Prevest_sloucene_styly_na_elementy.xsl" />
+		<step file="Sloucit_obsah_nasledujicich_shodnych_elementu.xsl" />
+		<step file="Subsumovat_elementy_k_predchozimu_prvku.xsl" />
+		<step file="Sloucit_obsah_nasledujicich_shodnych_elementu.xsl" />
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+		<step file="Odstranit_prazdne_elementy.xsl" />
+		<step file="EM_Prevod_stylu_na_TEI.xsl" />
+		<step file="Oznacit_krizek_jako_obrazek.xsl" />
+		<!--<step file="EM_Upravit_obsah_prvku_unclear.xsl" />-->
+<!--		<step file="Rozdelit_element_obsahujici_note.xsl" />-->
+		<step file="EM_Upravit_obsah_prvku_unclear_2.0.xsl" />
+		<step file="EM_Upravit_prvek_orig_v_zivem_zahlavi.xsl" />
+		<step file="Upravit_obsah_prvku_cell.xsl" />
+		<step file="Seskupit_prvky_do_div_2.0_x.xsl" />
+		<step file="EM_Seskupit_prvky_Adresat_2.0.xsl" />
+		<!--<step file="TEI_Seskupit_odstavce_bez_div_2.0_x.xsl" />-->
+<!--		<step file="Seskupit_table_do_div_x.xsl" />-->
+		<step file="EB_Seskupit_prvky_Editorial_do_div_2.0_.xsl" />
+		<step file="Seskupit_prvky_explicit+incipit_do_div_2.0.xsl" />
+		
+		<!--<step file="Seskupit_prvky_do_div_2.0_2_x.xsl" />-->
+		
+		<!--<step file="Seskupit_prvky_head1_do_div_2.0.xsl" />-->
+		<step file="Seskupit_prvky_pred_nadpisem_2.0.xsl" />
+		<step file="Seskupit_prvky_head1_bez_head_2.0.xsl" />
+		<!--<step file="Seskupit_prvky_head_a_head1_do_div_2.0_.xsl" />-->
+		<step repeat="2" file="Seskupit_prvky_head_a_head1_do_div_2.0_x.xsl" />
+<!--		<step file="Seskupit_prvky_head_do_div_2.0_x.xsl" />-->
+		<step file="EM_Seskupit_prvky_oddelene_prazdnym_odstavcem_do_div_2.0.xsl" />
+		
+		<step repeat="4" file="Presunout_foliaci_pred_odstavec.xsl" />
+		<step file="TEI_Upravit_Foliaci.xsl" />
+		<step file="TEST_Seskupit_table_do_div.xsl" />
+		<step file="TEI_Slouceni_l_a_lb.xsl" />
+		<step file="Sloucit_corr_a_sic.xsl" />
+		<step file="Prevest_prvek_text_na_text.xsl" />
+<!--		<step file="Odstranit_mezery_mezi_elementy.xsl" />-->
+		<step file="Prejmenovat_head1.xsl" />
+		<step file="EM_Seskupit_polozky_rejstriku_2.0_x.xsl" />
+		<step file="EM_Prevod_relatoru.xsl" />
+	</transformation>
+	<transformation xml:id="back">
+	</transformation>
+	<transformation xml:id="joining">
+		<step file="EM_Spojit_s_hlavickou_a_front.xsl" />
+	</transformation>
+	<transformation xml:id="afterJoining">
+		<step file="EM_Presunout_edicni_komentar_x.xsl" />
+		<step file="EM_Vytvorit_projectDesc.xsl" />
+		<step file="EM_Presunout_docImprint.xsl" />
+		<step file="EM_Presunout_biblicke_misto_do_komentare.xsl" />
+		<step file="Upravit_transliteraci.xsl" />
+		<step file="EM_TEI_Prevest_del_do_note.xsl" />
+		<step file="EM_TEI_Priradit_Oznaceni_Note.xsl" />
+		<step file="TEI_Priradit_Hierarchicke_ID.xsl" />
+	</transformation>
+</transformations>

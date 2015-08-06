@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<transformations directory="D:\!UJC\OVJ\Texty\Konverze\Xslt"
+	xmlns="http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0">
+	<transformation xml:id="body" >
+		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
+		<!--<step file="Odstranit_tabulku_metadat.xsl" />-->
+		<step file="Odstranit_interni_poznamky.xsl" />
+		<step file="Prevest_sloucene_styly_na_elementy.xsl" />
+		<step file="Sloucit_obsah_nasledujicich_shodnych_elementu.xsl" />
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+		<step file="Odstranit_prazdne_elementy.xsl" />
+
+		<!--<step file="MOL_Prevod_paginace_na_TEI.xsl" />-->
+		<step file="MOL_Prevod_stylu_na_TEI.xsl" />
+		<step file="Upravit_obsah_prvku_cell.xsl" />
+
+		<step file="MOL_Seskupit_sousedni_prvky_Keywords.xsl" />
+		<step file="MOL_Seskupit_sousedni_prvky_Resume.xsl" />
+
+		<step file="MOL_Seskupit_prvky_do_div_2.0.xsl" />
+
+
+		<step file="TEI_Seskupit_odstavce_bez_div_2.0.xsl" />
+		<step file="Seskupit_table_do_div.xsl" />
+
+
+		<!--<step file="Seskupit_prvky_do_div_2.0_2.xsl" />-->
+
+		<!--<step file="MOL_Seskupit_prvky_do_div_2.0.xsl" />-->
+
+		<step file="Seskupit_prvky_head1_do_div_2.0.xsl" />
+
+		<!--<step file="Presunout_foliaci_pred_odstavec.xsl" />
+				<step file="Presunout_foliaci_pred_odstavec.xsl" />
+				<step file="Presunout_foliaci_pred_odstavec.xsl" />-->
+
+		<step file="TEI_Upravit_Foliaci.xsl" />
+		<step file="TEST_Seskupit_table_do_div.xsl" />
+		<step file="TEI_Slouceni_l_a_lb.xsl" />
+		<step file="Sloucit_corr_a_sic.xsl" />
+		<step file="Prevest_prvek_text_na_text.xsl" />
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+		<step file="Prejmenovat_head1.xsl" />
+		<step file="EM_Seskupit_polozky_rejstriku.xsl" />
+		<step file="EM_Prevod_relatoru.xsl" />
+		<step file="MOL_Vytvorit_teiHeader.xsl" />
+	</transformation>
+</transformations>
