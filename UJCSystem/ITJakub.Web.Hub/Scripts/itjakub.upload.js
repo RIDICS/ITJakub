@@ -93,6 +93,9 @@
                 $("#processing").hide();
                 done.show();
 
+                //TODO COMMENT THIS Line FOR MUSIC DISABLE
+                stopVideo();
+
             },
             error: function (xmlHttpRequest, textStatus, errorMessage) {
                 var done = $("#done");
