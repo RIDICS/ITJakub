@@ -4,14 +4,13 @@
     private categories: IDropDownCategoryDictionary;
     private rootCategory: DropDownCategory;
     private selectedChangedCallback: (state: State) => void;
-    private descriptionContainer: string;
     private restoreCategoryIds: Array<number>;
     private restoreBookIds: Array<number>;
+    private descriptionDiv: HTMLDivElement;
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate, selectionDescriptionContainer: string = null) {
+    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
-        this.descriptionContainer = selectionDescriptionContainer;
         this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
         callbackDelegate.selectedChangedCallback = null;
 
@@ -43,6 +42,14 @@
         this.restoreBookIds = bookIds;
 
         this.makeDropdown();
+    }
+
+    makeDropdown() {
+        super.makeDropdown();
+
+        this.descriptionDiv = document.createElement("div");
+        $(this.descriptionDiv).addClass("dropdown-description");
+        $(this.dropDownSelectContainer).append(this.descriptionDiv);
     }
 
     private restore() {
@@ -219,9 +226,6 @@
     }
 
     private updateSelectionInfo(categoriesCount: number, booksCount: number) {
-        if (!this.descriptionContainer)
-            return;
-
         var categoriesCountString = String(categoriesCount);
         var booksCountString = String(booksCount);
 
@@ -236,8 +240,8 @@
         
         infoDiv.innerHTML = infoText;
 
-        $(this.descriptionContainer).empty();
-        $(this.descriptionContainer).append(infoDiv);
+        $(this.descriptionDiv).empty();
+        $(this.descriptionDiv).append(infoDiv);
     }
 
     private getSelectedBookCount(): number {

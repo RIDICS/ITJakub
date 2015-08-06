@@ -84,12 +84,20 @@ class DictionarySearch {
         this.typeaheadSearchBox.create();
     }
 
+    private showLoadingBar() {
+        $(".dictionary-result-word-search-list").addClass("hidden");
+        $(".dictionary-result-word-search-description").addClass("hidden");
+        $("#main-loader").removeClass("hidden");
+    }
+
     private processSearchJson(json: string) {
+        this.showLoadingBar();
         var filteredJsonForShowing = this.search.getFilteredQuery(json, this.disabledShowOptions);
         this.dictionaryWrapperAdvanced.loadCount(json, filteredJsonForShowing);
     }
 
     private processSearchText(text: string) {
+        this.showLoadingBar();
         this.dictionaryWrapperBasic.loadCount(text);
     }
 
@@ -207,6 +215,7 @@ class DictionaryViewerJsonWrapper {
     loadCount(json: string, filteredJsonForShowing: string) {
         this.json = json;
         this.selectedIds = this.categoryDropDown.getSelectedIds();
+        this.dictionaryViewer.showLoading();
         $.ajax({
             type: "POST",
             traditional: true,
@@ -219,6 +228,7 @@ class DictionaryViewerJsonWrapper {
             dataType: "json",
             contentType: "application/json",
             success: (resultCount: number) => {
+                this.hideMainLoadingBar();
                 $("#search-advanced-count").text(resultCount);
                 this.tabs.showAdvanced();
                 this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, filteredJsonForShowing, true);
@@ -245,6 +255,12 @@ class DictionaryViewerJsonWrapper {
             }
         });
     }
+
+    private hideMainLoadingBar() {
+        $(".dictionary-result-word-search-list").removeClass("hidden");
+        $(".dictionary-result-word-search-description").removeClass("hidden");
+        $("#main-loader").addClass("hidden");
+    }
 }
 
 class DictionaryViewerTextWrapper {
@@ -267,6 +283,8 @@ class DictionaryViewerTextWrapper {
     loadCount(text: string) {
         this.text = text;
         this.selectedIds = this.categoryDropDown.getSelectedIds();
+        this.headwordViewer.showLoading();
+        this.fulltextViewer.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,
@@ -279,6 +297,7 @@ class DictionaryViewerTextWrapper {
             dataType: "json",
             contentType: "application/json",
             success: (response: IHeadwordSearchResult) => {
+                this.hideMainLoadingBar();
                 $("#search-headword-count").text(response.HeadwordCount);
                 $("#search-fulltext-count").text(response.FulltextCount);
                 this.tabs.showBasic();
@@ -326,6 +345,12 @@ class DictionaryViewerTextWrapper {
                 this.fulltextViewer.showHeadwords(response);
             }
         });
+    }
+
+    private hideMainLoadingBar() {
+        $(".dictionary-result-word-search-list").removeClass("hidden");
+        $(".dictionary-result-word-search-description").removeClass("hidden");
+        $("#main-loader").addClass("hidden");
     }
 }
 

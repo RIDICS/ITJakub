@@ -81,7 +81,7 @@ class DropDownSelectCallbackDelegate {
 
 class DropDownSelect {
 
-    private dropDownSelectContainer: string;
+    protected dropDownSelectContainer: string;
     protected dataUrl: string;
     protected showStar: boolean;
     private type: string;

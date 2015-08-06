@@ -24,11 +24,11 @@
         </div>
     </div>
     <div class="dictionary-result-area transparent-content-container">
-        <div class="dictionary-result-word-search-list">
+        <div class="dictionary-result-word-search-list hidden">
             <div class="dictionary-header dictionary-header-tabs">
                 <div class="dictionary-header-buttons">
                     <a href="#" title="Tisk" id="printList">
-                        <span class="glyphicon glyphicon-print middle"></span>
+                        <span class="glyphicon glyphicon-print dictionary-header-button-middle"></span>
                     </a>
                 </div>
                 <ul class="nav nav-pills" id="search-tabs">
@@ -63,7 +63,7 @@
                 </div>
             </div>
         </div>
-        <div class="dictionary-result-word-search-description">
+        <div class="dictionary-result-word-search-description hidden">
             <div class="dictionary-header">
                 <span>Heslové stati</span>
                 <div class="dictionary-header-buttons">
@@ -82,6 +82,7 @@
                 <div id="description-advanced"></div>
             </div>
         </div>
+        <div class="loader hidden" id="main-loader"></div>
     </div>
 
     <div id="print-modal" class="modal fade">
