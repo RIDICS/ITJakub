@@ -129,10 +129,6 @@
       <Project>{F4FC605C-64C5-4E59-B5E6-8F8644BC1C03}</Project>
       <Name>Daliboris.Pomucky.Funkce.Textove</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Pomucky.Xml.XsltTransformation\Daliboris.Pomucky.Xml.XsltTransformation.csproj">
-      <Project>{727cf318-94b5-48ab-93f7-98fb6ef44f61}</Project>
-      <Name>Daliboris.Pomucky.Xml.XsltTransformation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
       <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
       <Name>Daliboris.Pomucky.Xml</Name>

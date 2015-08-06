@@ -116,12 +116,6 @@
     <Compile Include="XsltTransformationProcess.cs" />
     <Compile Include="XsltTransformerFactory.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Daliboris.Pomucky.Xml.XsltTransformation.Interface\Daliboris.Pomucky.Xml.XsltTransformation.Interface.csproj">
-      <Project>{ae568406-c88f-4638-b29e-6582efb31c96}</Project>
-      <Name>Daliboris.Pomucky.Xml.XsltTransformation.Interface</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
