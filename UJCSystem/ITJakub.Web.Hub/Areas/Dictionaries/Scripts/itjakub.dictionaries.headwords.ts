@@ -137,6 +137,7 @@ class DictionaryViewerListWrapper {
     }
 
     private loadCount() {
+        this.dictionaryViewer.showLoading();
         $.ajax({
             type: "GET",
             traditional: true,

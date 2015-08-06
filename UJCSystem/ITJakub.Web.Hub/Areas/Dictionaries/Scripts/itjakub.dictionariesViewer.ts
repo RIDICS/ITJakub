@@ -56,6 +56,12 @@ class DictionaryViewer {
         if (this.recordCount === 0) {
             $(this.headwordListContainer).empty();
             $(this.headwordDescriptionContainer).empty();
+
+            var noEntryFoundDiv = document.createElement("div");
+            $(noEntryFoundDiv).text("Žádné výsledky k zobrazení");
+            $(noEntryFoundDiv).addClass("dictionary-list-empty");
+            $(this.headwordListContainer).append(noEntryFoundDiv);
+
             return;
         }
 
@@ -64,6 +70,9 @@ class DictionaryViewer {
     }
 
     private showLoadingBars() {
+        if ($(".dictionary-loading", $(this.headwordListContainer)).length > 0)
+            return;
+
         var backgroundDiv1 = document.createElement("div");
         var backgroundDiv2 = document.createElement("div");
         var loadingDiv = document.createElement("div");
@@ -71,8 +80,16 @@ class DictionaryViewer {
         $(backgroundDiv1).addClass("dictionary-loading");
         $(backgroundDiv2).addClass("dictionary-loading");
         $(backgroundDiv1).append(loadingDiv);
+        $(loadingDiv).addClass("loader");
         $(this.headwordListContainer).append(backgroundDiv1);
         $(this.headwordDescriptionContainer).append(backgroundDiv2);
+    }
+
+    public showLoading() {
+        $(this.headwordDescriptionContainer).empty();
+        $(this.headwordListContainer).empty();
+        $(this.paginationContainer).empty();
+        this.showLoadingBars();
     }
 
     public showHeadwords(headwords: IHeadwordList) {
@@ -482,7 +499,9 @@ class DictionaryViewer {
         doc.head.appendChild(style);
 
         printWindow.focus();
-        printWindow.print();
+        $(printWindow).ready(() => {
+            printWindow.print();
+        });
     }
 }
 

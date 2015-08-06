@@ -6,6 +6,10 @@
     @Scripts.Render("~/itjakub/dictionaries/headwordsjs")
 }
 
+@{
+    ViewBag.Title = "Slovníky - Listování";
+}
+
 <script type="text/javascript">
     $(document).ready(function() {
         initDictionaryViewer("@Request["categories"]", "@Request["books"]", "@Request["page"]");
