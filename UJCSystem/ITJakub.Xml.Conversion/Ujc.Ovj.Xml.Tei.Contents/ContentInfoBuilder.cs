@@ -19,9 +19,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 
 		static ContentInfoBuilder()
 		{
-			string filePath = Path.Combine(GetDataDirectory(), "CommonTEI.xsl");
-			xsltTransform = new XslCompiledTransform();
-			xsltTransform.Load(XmlReader.Create(filePath));
+		    xsltTransform = LoadCommonTeiXslt();
 		}
 
 		#region Vlastnosti
@@ -307,5 +305,14 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 				return Path.GetDirectoryName(path);
 			}
 		}
+
+        private static XslCompiledTransform LoadCommonTeiXslt()
+	    {
+           Assembly _assembly = Assembly.GetExecutingAssembly();
+           StreamReader _textStreamReader = new StreamReader(_assembly.GetManifestResourceStream("Ujc.Ovj.Xml.Tei.Contents.Data.CommonTEI.xsl"));
+           XslCompiledTransform xslt = new XslCompiledTransform();
+           xslt.Load(XmlReader.Create(_textStreamReader));
+            return xslt;
+	    }
 	}
 }
