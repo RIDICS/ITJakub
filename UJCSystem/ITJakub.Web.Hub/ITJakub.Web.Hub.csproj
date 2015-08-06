@@ -322,6 +322,9 @@
     <Content Include="Areas\Tools\Content\itjakub.tools.css">
       <DependentUpon>itjakub.tools.less</DependentUpon>
     </Content>
+    <Content Include="Areas\Tools\Content\itjakub.tools.min.css">
+      <DependentUpon>itjakub.tools.css</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -643,6 +646,9 @@
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css.map">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
+    </Content>
+    <Content Include="Areas\Tools\Content\itjakub.tools.css.map">
+      <DependentUpon>itjakub.tools.css</DependentUpon>
     </Content>
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
