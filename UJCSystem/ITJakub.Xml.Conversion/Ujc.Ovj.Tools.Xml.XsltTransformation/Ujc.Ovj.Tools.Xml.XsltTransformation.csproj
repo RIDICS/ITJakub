@@ -34,7 +34,7 @@
     <Reference Include="Altova.AltovaXML, Version=15.2.0.0, Culture=neutral, PublicKeyToken=bab301ea12809d38, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\..\Libs\AltovaXML2013\Altova.AltovaXML.dll</HintPath>
+      <HintPath>..\..\..\Libs\AltovaXML2013\Altova.AltovaXML.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
