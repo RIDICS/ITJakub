@@ -39,7 +39,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
             }
         }
 
-        public static SearchResultContract FromXml(string xml)
+        public static CorpusSearchResultContract FromXml(string xml)
         {
             using (Stream stream = new MemoryStream())
             {
@@ -50,8 +50,8 @@ namespace ITJakub.Shared.Contracts.Searching.Results
                 stream.Position = 0;
                 //object result = new XmlSerializer(typeof (Server)).Deserialize(stream); 
 
-                object result = new DataContractSerializer(typeof(SearchResultContract)).ReadObject(stream);
-                return (SearchResultContract)result;
+                object result = new DataContractSerializer(typeof(CorpusSearchResultContract)).ReadObject(stream);
+                return (CorpusSearchResultContract)result;
             }
         }
     }
