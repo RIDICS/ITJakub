@@ -547,6 +547,16 @@ namespace ITJakub.ITJakubService.Core
             return m_searchServiceClient.GetSearchEditionsPageList(searchCriterias.ToList());
         }
 
+        public CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceClient.GetCorpusSearchResults(searchCriterias.ToList());
+        }
+
+        public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchServiceClient.GetCorpusSearchResultsCount(searchCriterias.ToList());
+        }
+
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat)
         {

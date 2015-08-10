@@ -48,6 +48,8 @@
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
     <Compile Include="Notes\FeedbackContract.cs" />
+    <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
+    <Compile Include="Searching\Results\CorpusSearchResultContractList.cs" />
     <Compile Include="Searching\Results\HeadwordContract.cs" />
     <Compile Include="Searching\BookVersionPairContract.cs" />
     <Compile Include="Categories\CategoryShowType.cs" />
