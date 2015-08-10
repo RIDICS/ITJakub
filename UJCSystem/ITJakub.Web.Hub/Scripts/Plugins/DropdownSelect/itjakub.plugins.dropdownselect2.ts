@@ -104,6 +104,7 @@
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
                 this.restore();
+                this.dataLoaded(this.rootCategory.id);
             }
         });
     }
@@ -347,6 +348,7 @@
         var state = new State();
         state.SelectedCategories = [];
         state.SelectedItems = [];
+        state.IsOnlyRootSelected = selectedIds.isOnlyRootSelected;
 
         for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
             var id = selectedIds.selectedCategoryIds[i];
@@ -367,10 +369,15 @@
         if (!this.rootCategory || !this.rootCategory.checkBox.indeterminate) {
             state.selectedBookIds = [];
             state.selectedCategoryIds = [];
+            state.isOnlyRootSelected = true;
+            if (this.rootCategory) {
+                state.selectedCategoryIds.push(this.rootCategory.id);
+            }
         } else {
             this.getSelected(this.rootCategory, selectedCategories, selectedBooks);
             state.selectedBookIds = selectedBooks;
             state.selectedCategoryIds = selectedCategories;
+            state.isOnlyRootSelected = false;
         }
 
         return state;
@@ -400,6 +407,7 @@
 class DropDownSelected {
     selectedBookIds: Array<number>;
     selectedCategoryIds: Array<number>;
+    isOnlyRootSelected: boolean;
 }
 
 class DropDownBook {

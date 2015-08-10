@@ -25,6 +25,8 @@ class DropDownSelectCallbackDelegate {
     getChildCategoriesCallback: (categories, currentCategory) => Array<any>;
     getChildLeafItemsCallback: (leafItems, currentCategory) => Array<any>;
 
+    dataLoadedCallback: (rootCategoryId) => void;
+
     constructor() {
         this.mockup();
     }
@@ -282,6 +284,10 @@ class DropDownSelect {
                 $(dropDownItemsDiv).children("div.loading").remove();
 
                 this.makeTreeStructure(categories, items, dropDownItemsDiv);
+
+                var rootCategory = this.getRootCategory(categories);
+                var rootCategoryId = this.getCategoryId(rootCategory);
+                this.dataLoaded(rootCategoryId);
             }
         });
     }
@@ -343,6 +349,11 @@ class DropDownSelect {
                 this.makeLeafItem(dropDownItemsDiv, childBook);
             }
         }
+    }
+
+    protected dataLoaded(rootCategoryId) {
+        if (this.callbackDelegate.dataLoadedCallback)
+            this.callbackDelegate.dataLoadedCallback(rootCategoryId);
     }
 
     protected onCreateCategoryCheckBox(categoryId: any, checkBox: HTMLInputElement) { }
@@ -696,6 +707,7 @@ class State {
     Type: string;
     SelectedItems: Array<Item>;
     SelectedCategories: Array<Category>;
+    IsOnlyRootSelected: boolean;
 }
 
 class Item {

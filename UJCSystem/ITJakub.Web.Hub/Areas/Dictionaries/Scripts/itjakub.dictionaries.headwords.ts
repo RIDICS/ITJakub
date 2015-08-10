@@ -28,6 +28,9 @@
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
+        if (state.IsOnlyRootSelected)
+            state.SelectedCategories = [];
+
         dictionaryViewerWrapper.loadHeadwordList(state);
         updateSearchBox(state);
     };
@@ -51,13 +54,14 @@
 
     $("#searchButton").click(() => {
         var query = $("#searchbox").val();
+        var selectedIds = dictionarySelector.getSelectedIds();
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordPageNumber",
             data: {
-                selectedBookIds: DropDownSelect.getBookIdsFromState(dictionarySelector.getState()),
-                selectedCategoryIds: DropDownSelect.getCategoryIdsFromState(dictionarySelector.getState()),
+                selectedBookIds: selectedIds.selectedBookIds,
+                selectedCategoryIds: selectedIds.isOnlyRootSelected ? [] : selectedIds.selectedCategoryIds,
                 query: query,
                 pageSize: pageSize
             },
