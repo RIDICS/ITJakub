@@ -11,9 +11,11 @@ class DictionaryViewer {
     private headwordDescriptionDivs: HTMLDivElement[];
     private dictionariesInfo: IHeadwordBookInfo[];
     private headwordList: string[];
+    private favoriteHeadwordList: IDictionaryFavoriteHeadword[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
     private addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void;
+    private removeFavoriteCallback: (bookId: string, entryXmlId: string) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
@@ -27,14 +29,13 @@ class DictionaryViewer {
     }
 
     public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
-        isCriteriaJson: boolean = false, addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void = null)
+        isCriteriaJson: boolean = false)
     {
         this.recordCount = recordCount;
         this.showPageCallback = showPageCallback;
         this.pageSize = pageSize;
         this.searchCriteria = searchCriteria;
         this.isCriteriaJson = isCriteriaJson;
-        this.addNewFavoriteCallback = addNewFavoriteCallback;
 
         if (this.defaultPageNumber)
             this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this), this.defaultPageNumber);
@@ -48,6 +49,57 @@ class DictionaryViewer {
 
     public goToPage(pageNumber: number) {
         this.pagination.goToPage(pageNumber);
+    }
+
+    public setFavoriteCallback(addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void, removeFavoriteCallback: (bookId: string, entryXmlId: string) => void) {
+        this.addNewFavoriteCallback = addNewFavoriteCallback;
+        this.removeFavoriteCallback = removeFavoriteCallback;
+    }
+
+    public setFavoriteHeadwordList(list: Array<IDictionaryFavoriteHeadword>) {
+        this.favoriteHeadwordList = list;
+        var favoriteIcons = $(".glyphicon-star", $(this.headwordListContainer));
+        favoriteIcons.removeClass("glyphicon-star");
+        favoriteIcons.addClass("glyphicon-star-empty");
+
+        if (!this.dictionariesInfo)
+            return;
+
+        for (var i = 0; i < this.dictionariesInfo.length; i++) {
+            var headwordDictionaryInfo = this.dictionariesInfo[i];
+            
+            if (this.isHeadwordFavorite(headwordDictionaryInfo)) {
+                var favoriteIcon = $(".glyphicon[data-entry-index=\"" + i + "\"]", $(this.headwordListContainer));
+                favoriteIcon.removeClass("glyphicon-star-empty");
+                favoriteIcon.addClass("glyphicon-star");
+            }
+        }
+    }
+
+    private isHeadwordFavorite(headwordDictionaryInfo: IHeadwordBookInfo): boolean {
+        for (var i = 0; i < this.favoriteHeadwordList.length; i++) {
+            var favoriteHeadword = this.favoriteHeadwordList[i];
+            if (headwordDictionaryInfo.BookXmlId === favoriteHeadword.BookId && headwordDictionaryInfo.EntryXmlId === favoriteHeadword.EntryXmlId)
+                return true;
+        }
+        return false;
+    }
+
+    private isHeadwordFavoriteFromArray(array: Array<IHeadwordBookInfo>): boolean {
+        for (var i = 0; i < array.length; i++) {
+            if (this.isHeadwordFavorite(array[i]))
+                return true;
+        }
+        return false;
+    }
+
+    private getHeadwordIndex(bookId: string, entryXmlId: string): number {
+        for (var i = 0; i < this.dictionariesInfo.length; i++) {
+            var dictionaryInfo = this.dictionariesInfo[i];
+            if (dictionaryInfo.BookXmlId === bookId && dictionaryInfo.EntryXmlId === entryXmlId)
+                return i;
+        }
+        return -1;
     }
 
     private searchAndDisplay(pageNumber: number) {
@@ -113,10 +165,11 @@ class DictionaryViewer {
             headwordLi.appendChild(headwordSpan);
 
             if (this.addNewFavoriteCallback != null) {
+                var isFavorite = this.isHeadwordFavoriteFromArray(record.Dictionaries);
                 var favoriteGlyphSpan = document.createElement("span");
                 favoriteGlyphSpan.setAttribute("data-entry-index", String(this.headwordDescriptionDivs.length));
                 $(favoriteGlyphSpan).addClass("glyphicon")
-                    .addClass("glyphicon-star-empty")
+                    .addClass(isFavorite ? "glyphicon-star" : "glyphicon-star-empty")
                     .addClass("dictionary-result-headword-favorite");
                 $(favoriteGlyphSpan).click(event => {
                     var index: number = $(event.target).data("entry-index");

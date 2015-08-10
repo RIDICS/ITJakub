@@ -2,7 +2,9 @@
     private expandButton: string;
     private listContainer: string;
     private mainContainer: string;
+    private headwordList: Array<IDictionaryFavoriteHeadword>;
     private headwordClickCallback: (bookId: string, entryXmlId: string) => void;
+    private headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void;
 
     constructor(mainContainer: string, listContainer: string, expandButton: string) {
         this.expandButton = expandButton;
@@ -10,8 +12,9 @@
         this.mainContainer = mainContainer;
     }
 
-    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void) {
+    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
         this.headwordClickCallback = headwordClickCallback;
+        this.headwordListChangedCallback = headwordListChangedCallback;
         var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
         $(this.mainContainer).height(areaInitHeight);
 
@@ -78,6 +81,8 @@
 
     private showHeadwordList(list: Array<IDictionaryFavoriteHeadword>) {
         $(this.listContainer).empty();
+        this.headwordList = list;
+        this.headwordListChanged();
         var listDiv = document.createElement("div");
         var self = this;
 
@@ -145,6 +150,14 @@
         var entryXmlId = $(element).data("entryXmlId");
         var bookId = $(element).data("bookId");
 
+        for (var i = 0; i < this.headwordList.length; i++) {
+            var headword = this.headwordList[i];
+            if (headword.BookId === bookId && headword.EntryXmlId === entryXmlId) {
+                this.headwordList.splice(i, 1); // remove item from array
+                break;
+            }
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -159,6 +172,18 @@
                 
             }
         });
+        this.headwordListChanged();
+    }
+
+    removeHeadwordById(bookId: string, entryXmlId: string) {
+        throw new Error("Not implemented");
+    }
+
+    private headwordListChanged() {
+        if (this.headwordListChangedCallback) {
+            var listCopy = this.headwordList.slice();
+            this.headwordListChangedCallback(listCopy);
+        }
     }
 }
 
