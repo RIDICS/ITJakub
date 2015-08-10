@@ -1,8 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Mvc;
+using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 {
@@ -41,231 +45,124 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View();
         }
 
-        public ActionResult GetMockedSearchResults() //TODO remove after test
+        public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var title1 = new WordListCriteriaContract
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
-                Key = CriteriaKey.Title,
-                Disjunctions = new List<WordCriteriaContract>
+                new WordListCriteriaContract
                 {
-                    new WordCriteriaContract
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_serviceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
+
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                },
+                new ResultCriteriaContract
+                {
+                    Sorting = (SortEnum) sortingEnum,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                    HitSettingsContract = new HitSettingsContract
                     {
-                        EndsWith = "Romanorum_",
-                        StartsWith = "_Gesta"
-                    },
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "_Sbírka",
-                        Contains = new List<string> {"založených", "na"},
-                        EndsWith = "legendách_"
+                        ContextLength = 50,
+                        Count = count,
+                        Start = start
                     }
                 }
             };
 
-
-            var title2 = new WordListCriteriaContract
+            if (selectedBookIds != null || selectedCategoryIds != null)
             {
-                Key = CriteriaKey.Title,
-                Disjunctions = new List<WordCriteriaContract>
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"Ge%", "%oman"}
-                    },
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"al_žený"} //založených
-                    }
-                }
-            };
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
 
-            var editor1 = new WordListCriteriaContract
+            var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
             {
-                Key = CriteriaKey.Editor,
-                Disjunctions = new List<WordCriteriaContract>
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "Voleková"
-                    },
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "Hanzová"
-                    }
-                }
-            };
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
 
+            var count = m_serviceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
 
-            var editor2 = new WordListCriteriaContract
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
-                Key = CriteriaKey.Editor,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"Kate_ina"}
-                    },
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"Barbora"}
-                    }
-                }
-            };
-
-            var fulltext1 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Fulltext,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    //new WordCriteriaContract
-                    //{
-                    //    Contains = new List<string>{"T%s v Ř_mě"} // Titus v Římě    ---- Will this match if it's not single word?
-                    //},
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"p%st_n%"} // pústeník
-                    }
-                }
-            };
-
-            var fulltext2 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Fulltext,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "Ti",
-                        Contains = new List<string> {"tu", "tus"},
-                        EndsWith = "s"
-                    }
-                }
-            };
-
-            var sentence1 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Sentence,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        StartsWith = "Ti",
-                        Contains = new List<string> {"tu", "tus"},
-                        EndsWith = "s"
-                    },
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"zavinil"}
-                    }
-                }
-            };
-
-            var sentence2 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Sentence,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"prvorození"}
-                    }
-                }
-            };
-
-            var heading1 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Heading,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"lenosti"}
-                    }
-                }
-            };
-
-            var heading2 = new WordListCriteriaContract
-            {
-                Key = CriteriaKey.Heading,
-                Disjunctions = new List<WordCriteriaContract>
-                {
-                    new WordCriteriaContract
-                    {
-                        Contains = new List<string> {"synóv"}
-                    }
-                }
-            };
-
-            var tokens = new TokenDistanceListCriteriaContract
-            {
-                Key = CriteriaKey.TokenDistance,
-                Disjunctions = new List<TokenDistanceCriteriaContract>
-                {
-                    new TokenDistanceCriteriaContract
-                    {
-                        Distance = 3,
-                        First = new WordCriteriaContract
-                        {
-                            StartsWith = "Dor",
-                            Contains = new List<string> {"ote", "us"},
-                            EndsWith = "%"
-                        },
-                        Second = new WordCriteriaContract
-                        {
-                            Contains = new List<string> {"zákon"}
-                        }
-                    },
-                    new TokenDistanceCriteriaContract
-                    {
-                        Distance = 10,
-                        First = new WordCriteriaContract
-                        {
-                            StartsWith = "Gor",
-                            Contains = new List<string> {"gon", "iu"},
-                            EndsWith = "%"
-                        },
-                        Second = new WordCriteriaContract
-                        {
-                            Contains = new List<string> {"bíše"}
-                        }
-                    }
-                }
-            };
-
-            var resultCriteria = new ResultCriteriaContract
-            {
-                Count = 25,
-                Direction = ListSortDirection.Ascending,
-                Sorting = SortEnum.Title,
-                Start = 26,
+                Sorting = (SortEnum)sortingEnum,
+                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                 HitSettingsContract = new HitSettingsContract
                 {
-                    ContextLength = 70,
-                    Count = 3,
-                    Start = 1
+                    ContextLength = 50,
+                    Count = count,
+                    Start = start
                 }
-            };
+            });
 
-            var wordListCriteriaContracts = new List<SearchCriteriaContract>
+            if (selectedBookIds != null || selectedCategoryIds != null)
             {
-                title1,
-                title2,
-                editor1,
-                editor2,
-                fulltext1,
-                fulltext2,
-                sentence1,
-                sentence2,
-                heading1,
-                heading2,
-                tokens,
-                resultCriteria
-            };
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
 
-
-            var resultsCount = m_serviceClient.GetCorpusSearchResultsCount(wordListCriteriaContracts);
-            var results = m_serviceClient.GetCorpusSearchResults(wordListCriteriaContracts);
-            return Json(results, JsonRequestBehavior.AllowGet);
+            var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

@@ -19,6 +19,9 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         [DataMember]
         public PageResultContext PageResultContext { get; set; }
 
+        [DataMember]
+        public VerseResultContext VerseResultContext { get; set; }
+
 
         public virtual string ToXml()
         {
