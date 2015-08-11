@@ -93,15 +93,6 @@ class DictionaryViewer {
         return false;
     }
 
-    private getHeadwordIndex(bookId: string, entryXmlId: string): number {
-        for (var i = 0; i < this.dictionariesInfo.length; i++) {
-            var dictionaryInfo = this.dictionariesInfo[i];
-            if (dictionaryInfo.BookXmlId === bookId && dictionaryInfo.EntryXmlId === entryXmlId)
-                return i;
-        }
-        return -1;
-    }
-
     private searchAndDisplay(pageNumber: number) {
         $("#cancelFilter").addClass("hidden");
         this.isRequestToPrint = false;
@@ -172,8 +163,7 @@ class DictionaryViewer {
                     .addClass(isFavorite ? "glyphicon-star" : "glyphicon-star-empty")
                     .addClass("dictionary-result-headword-favorite");
                 $(favoriteGlyphSpan).click(event => {
-                    var index: number = $(event.target).data("entry-index");
-                    this.addNewFavoriteHeadword(index);
+                    this.favoriteHeadwordClick(event.target);
                 });
 
                 headwordLi.appendChild(favoriteGlyphSpan);
@@ -325,9 +315,20 @@ class DictionaryViewer {
         }
     }
 
-    private addNewFavoriteHeadword(index: number) {
+    private favoriteHeadwordClick(element: Element) {
+        var index: number = $(element).data("entry-index");
+        var isFavorite = $(element).hasClass("glyphicon-star");
         var dictionaryInfo = this.dictionariesInfo[index];
-        this.addNewFavoriteCallback(dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId);
+
+        if (isFavorite) {
+            $(element).removeClass("glyphicon-star");
+            $(element).addClass("glyphicon-star-empty");
+            this.removeFavoriteCallback(dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId);
+        } else {
+            $(element).removeClass("glyphicon-star-empty");
+            $(element).addClass("glyphicon-star");
+            this.addNewFavoriteCallback(dictionaryInfo.BookXmlId, dictionaryInfo.EntryXmlId);
+        }
     }
 
     private createLinkListener(aLink: HTMLAnchorElement, headword: string, headwordInfo: IHeadwordBookInfo, container: HTMLDivElement) {
