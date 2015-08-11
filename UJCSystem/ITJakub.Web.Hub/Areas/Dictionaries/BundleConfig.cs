@@ -6,9 +6,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
     {
         internal static void RegisterBundles(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/itjakub/dictionaries/javascript").Include(
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.js"));
-
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/searchjs").Include(
                "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.search.js",
                "~/Areas/Dictionaries/Scripts/itjakub.dictionariesViewer.js"));
@@ -20,6 +17,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/feedbackjs").Include(
                "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.feedback.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/dictionaries/listjs").Include(
+               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.list.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(
                 "~/Areas/Dictionaries/Content/itjakub.dictionaries.css"));

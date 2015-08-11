@@ -798,10 +798,10 @@
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.feedback.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.headwords.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.list.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesFavoriteHeadwords.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
-    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />

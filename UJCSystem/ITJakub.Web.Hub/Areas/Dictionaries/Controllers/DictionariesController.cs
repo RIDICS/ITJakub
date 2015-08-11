@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Mime;
 using System.Web.Mvc;
 using AutoMapper;
@@ -99,6 +100,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 Start = start,
                 Count = count
+            };
+        }
+
+        private ResultCriteriaContract CreateResultCriteriaContract(int start, int count, short sortingEnum, bool sortAsc)
+        {
+            return new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count,
+                Sorting = (SortEnum) sortingEnum,
+                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
             };
         }
 
@@ -254,6 +266,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Dictionary, selectedCategoryIds, selectedBookIds);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult GetHeadwordBookmarks()
         {
             var list = m_mainServiceEncryptedClient.GetHeadwordBookmarks(HttpContext.User.Identity.Name);
@@ -283,6 +301,66 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             m_mainServiceClient.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, null);
             return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DictionaryAdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DictionaryAdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
+            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count, sortingEnum, sortAsc));
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
+            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DictionaryBasicSearchResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                CreateWordListContract(CriteriaKey.Title, text)
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DictionaryBasicSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                CreateWordListContract(CriteriaKey.Title, text),
+                CreateResultCriteriaContract(start, count, sortingEnum, sortAsc)
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
+            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
     }
 }
