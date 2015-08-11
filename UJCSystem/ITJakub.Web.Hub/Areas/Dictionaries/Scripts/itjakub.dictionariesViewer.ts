@@ -346,6 +346,10 @@ class DictionaryViewer {
             if ($(headwordDiv).hasClass("lazy-loading")) {
                 this.loadHeadwordDescription(index);
             }
+
+            var headwordItem = $(event.target).closest("li");
+            $(headwordItem).siblings().removeClass("dictionary-headword-highlight");
+            $(headwordItem).addClass("dictionary-headword-highlight");
         });
     }
 
@@ -503,9 +507,8 @@ class DictionaryViewer {
     }
 
     public cancelFilter() {
-        for (var i = 0; i < this.headwordDescriptionDivs.length; i++) {
-            $(this.headwordDescriptionDivs[i]).removeClass("hidden");
-        }
+        $("li", $(this.headwordListContainer)).removeClass("dictionary-headword-highlight");
+        $(this.headwordDescriptionDivs).removeClass("hidden");
     }
 
     public print() {
