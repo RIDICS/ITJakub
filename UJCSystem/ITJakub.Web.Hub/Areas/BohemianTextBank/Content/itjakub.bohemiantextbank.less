@@ -1,7 +1,103 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
 
+@corpus-search-width: @max-body-width - 20px;
+
+@search-results-area-width: 860px;
+@search-results-area-height: 450px;
+@search-result-detail-area-height: 180px;
+
 .search-area {
     height: 100%;
     width: 70%;
     float: left;
+}
+
+.corpus-search-div{
+    clear:both;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: @corpus-search-width;
+    background-color: @background-color;
+    display: block;
+    padding-top: 15px;
+}
+
+.corpus-search-results-div{
+    height: @search-result-detail-area-height + @search-results-area-height;
+}
+
+.corpus-search-result-detail-div{
+    background-color: white;
+    height: @search-result-detail-area-height;
+    width: @search-results-area-width;
+    border-top: 1px solid @background-color;
+}
+
+.corpus-search-results-table-div {
+    background-color: white;
+    height: @search-results-area-height;
+}
+
+.corpus-search-setting-div {
+    float: right;
+    width: @corpus-search-width - @search-results-area-width;
+    height:@search-results-area-height;
+    background-color: @item-background-color;
+    line-height: 1.1;
+    padding: 15px;
+}
+
+.corpus-search-setting-div-checkboxes {
+    margin-bottom: 30px;
+}
+
+.corpus-search-setting-div .corpus-search-setting-div-label {
+    color: white;
+    font-size: larger;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.corpus-search-result-detail-div .corpus-search-detail{
+    display: table;
+    width: 80%;   
+    line-height: 1.1;
+    margin-bottom: 0;    
+}
+
+.corpus-table-row{
+    display: table-row;
+}
+
+.corpus-table-cell{
+    display: table-cell;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.corpus-search-detail .corpus-table-cell.label{
+    font-weight: bolder;
+    font-size: 100%;
+    color: grey;
+    padding-left: 15px;
+}
+
+.corpus-search-detail .corpus-search-detail .corpus-table-cell.label{  
+    font-weight: bold;
+    font-size: 100%;
+    color: black;
+    padding-left: 0;
+}    
+
+.corpus-search-setting-div-checkboxes .checkbox label input[type="checkbox"]{
+    margin: 0 0 0 -18px;
+}
+
+.corpus-search-setting-div-context select{
+    width: 80px;
+}
+
+.corpus-search-setting-div-context label {
+    font-weight: normal;
+    display: block;
 }

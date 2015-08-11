@@ -20,8 +20,104 @@
 </div>
 
 
-<div id="dropdownSelectDiv" style="margin-top: 50px; clear: both;">
+<div id="dropdownSelectDiv" style="clear: both; margin-top: 50px;">
 </div>
 
-<div id="listResults" style="margin-top: 50px; clear: both;">
+<div class="corpus-search-div">
+    <div class="corpus-search-setting-div">
+        <div class="corpus-search-setting-div-label">Možnosti zobrazení</div>
+        <div class="corpus-search-setting-div-checkboxes">
+            <div class="checkbox">
+                <label><input id="wordCheckbox" type="checkbox" value="">Slovo</label>
+            </div>
+            <div class="checkbox">
+                <label><input id="commentCheckbox" type="checkbox" value="">Komentář</label>
+            </div>
+            <div class="checkbox">
+                <label><input id="languageCheckbox" type="checkbox" value="">Jazyk</label>
+            </div>
+            <div class="checkbox">
+                <label><input id="structureCheckbox" type="checkbox" value="">Struktura textu</label>
+            </div>
+            <div class="checkbox">
+                <label><input id="paragraphCheckbox" type="checkbox" value="">Odstavec</label>
+            </div>
+
+            @*<input id="commentCheckbox" type="checkbox" class="checkbox"/>
+            <label for="commentCheckbox">Komentář</label>
+
+
+            <input id="languageCheckbox" type="checkbox"/>
+            <label for="languageCheckbox">Jazyk</label>
+
+            <input id="structureCheckbox" type="checkbox"/>
+            <label for="structureCheckbox">Struktura textu</label>
+            <br/>
+
+            <input id="paragraphCheckbox" type="checkbox"/>
+            <label for="paragraphCheckbox">Odstavec</label>*@
+        </div>
+        <div class="corpus-search-setting-div-context">
+            <label for="contextPositionsSelect">Pozic v kontextu</label>
+            <select id="contextPositionsSelect" class="regexsearch-select">
+                <option value="20">20</option>
+                <option value="50" selected="selected">50</option>
+                <option value="70">70</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+    </div>
+    <div class="corpus-search-results-div">
+        <div class="corpus-search-results-table-div">
+            table results
+        </div>
+        <div class="corpus-search-result-detail-div">
+            <div class="corpus-search-detail">
+                <div class="corpus-table-row">
+                    <div class="corpus-table-cell label">Doc</div>
+                    <div class="corpus-table-cell">
+                        <div class="corpus-search-detail">
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Autor</div>
+                                <div class="corpus-table-cell">Hanzová, Barbora</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Titul</div>
+                                <div class="corpus-table-cell">&lt;Nezadáno&gt;</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Zkratka památky</div>
+                                <div class="corpus-table-cell">&lt;Nezadáno&gt;</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Datace pramene</div>
+                                <div class="corpus-table-cell">&lt;Nezadáno&gt;</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Datace století</div>
+                                <div class="corpus-table-cell">&lt;Nezadáno&gt;</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <div class="corpus-table-cell label">Zkratka památky</div>
+                                <div class="corpus-table-cell">&lt;Nezadáno&gt;</div>
+                            </div>
+                            <div class="corpus-table-row">
+                                <a href="#">Ediční poznámka</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="corpus-table-row">
+                    <div class="corpus-table-cell label">Folio</div>
+                    <div class="corpus-table-cell"> cislo 153rb</div>
+                </div>
+                <div class="corpus-table-row">
+                    <div class="corpus-table-cell label">Vers</div>
+                    <div class="corpus-table-cell"> cislo 179</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>

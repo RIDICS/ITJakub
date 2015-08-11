@@ -599,6 +599,7 @@ namespace ITJakub.ITJakubService.Core
                 var localResult = Mapper.Map<CorpusSearchResultContract>(resultDictionary[searchResult.BookXmlId]);
                 localResult.Notes = searchResult.Notes;
                 localResult.PageResultContext = searchResult.PageResultContext;
+                localResult.VerseResultContext = searchResult.VerseResultContext;
                 searchResultFullContext.Add(localResult);
             }
 
