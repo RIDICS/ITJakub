@@ -362,5 +362,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetDictionaryInfo(string bookXmlId)
+        {
+            var result = m_mainServiceClient.GetBookInfo(bookXmlId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

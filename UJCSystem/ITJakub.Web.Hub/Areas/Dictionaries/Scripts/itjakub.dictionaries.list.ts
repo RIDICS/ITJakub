@@ -1,11 +1,13 @@
-﻿$(document).ready(() => {
+﻿function initDictionaryList(bookXmlId: string) {
     var bookCountPerPage = 20;
     var dictionariesList = new DictionariesList(bookCountPerPage);
+    dictionariesList.setInitDictionary(bookXmlId);
     dictionariesList.create();
-});
+}
 
 class DictionariesList {
     private bookCountPerPage: number;
+    private initBookXmlId: string;
     private search: Search;
     private typeaheadSearchBox: SearchBox;
     private dictionarySelector: DropDownSelect2;
@@ -45,6 +47,12 @@ class DictionariesList {
         };
         callbackDelegate.dataLoadedCallback = () => {
             $("#listResults").removeClass("loader");
+
+            if (this.initBookXmlId) {
+                this.loadDictionary(this.initBookXmlId);
+                return;
+            }
+
             this.search.processSearchQuery("%"); //search for all by default criteria (title)
             this.search.writeTextToTextField("");
         }
@@ -57,6 +65,26 @@ class DictionariesList {
 
         $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
             this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+        });
+    }
+
+    setInitDictionary(bookXmlId: string) {
+        this.initBookXmlId = bookXmlId;
+    }
+
+    private loadDictionary(bookXmlId: string) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/GetDictionaryInfo",
+            data: { bookXmlId: bookXmlId },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                var books = [response];
+                this.bibliographyModule.showBooks(books);
+                this.typeaheadSearchBox.value(response.Title);
+            }
         });
     }
 

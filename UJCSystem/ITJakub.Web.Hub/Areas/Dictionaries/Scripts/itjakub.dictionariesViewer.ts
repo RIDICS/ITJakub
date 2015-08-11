@@ -230,7 +230,7 @@ class DictionaryViewer {
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
                 $(dictionaryLink).text(dictionaryMetadata.BookTitle);
-                dictionaryLink.href = "?bookId=" + dictionary.BookXmlId;
+                dictionaryLink.href = "List?bookId=" + dictionary.BookXmlId;
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
 

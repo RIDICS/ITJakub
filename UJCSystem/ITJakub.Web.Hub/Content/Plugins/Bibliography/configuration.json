@@ -122,8 +122,8 @@
     "Dictionary": {
         "middle-panel": {
             "short-info": "{$linked}",
-            "title": "{Name} {Title}",
-            "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$authors}{$description}{$year}",
+            "title": "{Title} <span class=\"acronym\">[{Acronym}]</span>",
+            "body": "{BiblText} <br> {PublishPlace}, {PublishDate} <br> {$authors}{$description}{$year}",
             "variables": {
                 "$linked": {
                     "type": "if",
@@ -146,24 +146,15 @@
                     "type": "basic",
                     "pattern": " {Year}.",
                     "printIfNullValue": false
-                }
             }
         },
         "right-panel": {
             "info-button": {
-                "url": "Dictionary\\info\\{BookXmlId}"
+                "url": "Dictionaries\\Dictionaries\\List?bookId={BookXmlId}"
             },
             "read-button": {
-                "url": "Dictionary\\read\\{$test}"
-            },
-            "variables": {
-                "$test": {
-                    "type": "basic",
-                    "pattern": "{Name}",
-                    "printIfNullValue": false
-                }
+                "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
             }
-
         }
     },
 

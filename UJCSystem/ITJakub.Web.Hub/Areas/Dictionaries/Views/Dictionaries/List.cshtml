@@ -9,6 +9,12 @@
     ViewBag.Title = "Slovníky - Seznam";
 }
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        initDictionaryList("@Request["bookId"]");
+    });
+</script>
+
 <div class="transparent-content-container">
     <div class="search-with-saved-word-area">
         <div id="listHeader">

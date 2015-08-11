@@ -70,7 +70,7 @@ class BibliographyFactory {
             infoButton.appendChild(spanInfo);
             $(infoButton).click((event) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
                 } else {
                     window.location.href = config.getInfoButtonUrl(bookInfo);
