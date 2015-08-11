@@ -228,22 +228,12 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
-
-        public void CreateFeedback(string feedback, int? userId)
-        {
-            m_feedbackManager.CreateFeedback(feedback, userId);
-        }
-
+        
         public void CreateAnonymousFeedback(string feedback, string name, string email)
         {
             m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
         }
-
-        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
             string name, string email)
         {

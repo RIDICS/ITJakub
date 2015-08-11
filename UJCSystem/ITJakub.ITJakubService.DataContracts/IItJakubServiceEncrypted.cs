@@ -39,5 +39,14 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
+        #region Feedback
+
+        [OperationContract]
+        void CreateFeedback(string feedback, string username);
+
+        [OperationContract]
+        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
+
+        #endregion
     }
 }

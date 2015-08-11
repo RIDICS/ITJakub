@@ -296,10 +296,24 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
         }
 
-        public ActionResult AddHeadwordFeedback(string bookXmlId, string bookVersionXmlId, string entryXmlId, string name,
-            string email, string content, bool publicationAgreement)
+        public ActionResult AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
         {
-            m_mainServiceClient.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, null);
+            var username = HttpContext.User.Identity.Name;
+            if (bookXmlId == null || bookVersionXmlId == null || entryXmlId == null)
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                    m_mainServiceClient.CreateAnonymousFeedback(content, name, email);
+                else
+                    m_mainServiceEncryptedClient.CreateFeedback(content, username);
+            }
+            else
+            {
+                if (string.IsNullOrWhiteSpace(username))
+                    m_mainServiceClient.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
+                else
+                    m_mainServiceEncryptedClient.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
+            }
+            
             return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 

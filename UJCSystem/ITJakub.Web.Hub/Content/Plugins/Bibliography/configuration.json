@@ -146,6 +146,7 @@
                     "type": "basic",
                     "pattern": " {Year}.",
                     "printIfNullValue": false
+                }
             }
         },
         "right-panel": {

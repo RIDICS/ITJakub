@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
 using log4net;
@@ -20,13 +21,13 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("FindUserById failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("FindUserById timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -40,13 +41,13 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("FindUserByUserName failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("FindUserByUserName timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -60,13 +61,13 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateUser failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("CreateUser timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -81,19 +82,19 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetPageBookmarks timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -107,19 +108,19 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddPageBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddPageBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddPageBookmark timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -133,19 +134,19 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemovePageBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemovePageBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemovePageBookmark timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -159,19 +160,19 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordBookmarks failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetHeadwordBookmarks timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -185,19 +186,19 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddHeadwordBookmark timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
         }
@@ -211,21 +212,78 @@ namespace ITJakub.Web.Hub
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemoveHeadwordBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (ObjectDisposedException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemoveHeadwordBookmark failed with: {0}", ex);
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("RemoveHeadwordBookmark timeouted with: {0}", ex);
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
+        }
+
+        public void CreateFeedback(string feedback, string username)
+        {
+            try
+            {
+                Channel.CreateFeedback(feedback, username);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username)
+        {
+            try
+            {
+                Channel.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
         }
     }
 }
