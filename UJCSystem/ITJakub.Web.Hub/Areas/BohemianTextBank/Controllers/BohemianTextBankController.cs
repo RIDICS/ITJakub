@@ -51,7 +51,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             {
                 new WordListCriteriaContract
                 {
-                  Key = CriteriaKey.Title,
+                  Key = CriteriaKey.Fulltext,
                   Disjunctions = new List<WordCriteriaContract>
                   {
                       new WordCriteriaContract
@@ -82,7 +82,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             {
                 new WordListCriteriaContract
                 {
-                  Key = CriteriaKey.Title,
+                  Key = CriteriaKey.Fulltext,
                   Disjunctions = new List<WordCriteriaContract>
                   {
                       new WordCriteriaContract

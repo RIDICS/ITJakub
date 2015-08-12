@@ -18,9 +18,19 @@ $(document).ready(() => {
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result["PageResultContext"];
+            var verseContext = result["VerseResultContext"];
             var contextStructure = pageContext["ContextStructure"];
 
             var tr = document.createElement("tr");
+            $(tr).data("bookXmlId", result["BookXmlId"]);
+            $(tr).data("versionXmlId", result["VersionXmlId"]);
+            $(tr).data("pageXmlId", pageContext["PageXmlId"]);
+            $(tr).data("pageName", pageContext["PageName"]);
+
+            if (verseContext !== null && typeof verseContext !== "undefined") {
+                $(tr).data("verseXmlId", verseContext["VerseXmlId"]);
+                $(tr).data("verseName", verseContext["VerseName"]);   
+            }
 
             var tdBefore = document.createElement("td");
             tdBefore.innerHTML = contextStructure["Before"];
@@ -38,6 +48,14 @@ $(document).ready(() => {
 
             tableBody.appendChild(tr);
         }
+        
+
+        //scroll from left to center match column in table
+        var firstChildTdWidth = $(tableBody).children("tr").first().children("td").first().width();
+        var tableContainer = $(tableBody).parents(".corpus-search-results-table-div");
+        var tableContainerWidth = $(tableContainer).width();
+        var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
+        $(tableContainer).scrollLeft(scrollOffset);
     }
     
     function corpusAdvancedSearchPaged(json: string, pageNumber: number, contextLength: number) {
@@ -140,12 +158,6 @@ $(document).ready(() => {
     search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
     search.makeSearch();
 
-    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
-    typeaheadSearchBox.addDataSet("Title", "Název");
-    typeaheadSearchBox.create();
-    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-
-
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -161,24 +173,30 @@ $(document).ready(() => {
         }
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-        typeaheadSearchBox.clearAndDestroy();
-        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
-        typeaheadSearchBox.create();
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
 
     var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
+    function printDetailInfo(tableRow: HTMLElement) {
+        var undefinedReplaceString = "&lt;Nezadáno&gt;";
 
-    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-    });
+        document.getElementById("detail-author").innerHTML = "";
+        document.getElementById("detail-title").innerHTML = $(tableRow).data("bookXmlId");
+        document.getElementById("detail-dating").innerHTML = "";
+        document.getElementById("detail-dating-century").innerHTML = "";
+        document.getElementById("detail-abbrev").innerHTML = "";
+
+        document.getElementById("detail-folio").innerHTML = typeof $(tableRow).data("pageName") !== "undefined" ? $(tableRow).data("pageName") : undefinedReplaceString;
+        document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" ? $(tableRow).data("verseName") : undefinedReplaceString;
+    }
 
     $("#resultsTableBody").click((event: Event) => {
         $("#resultsTableBody").find("tr").removeClass("clicked");
         var row = $(event.target).parents("tr");
         $(row).addClass("clicked");
+
+        printDetailInfo(row[0]);
     });
 
     $("#contextPositionsSelect").change((evnet: Event) => {
