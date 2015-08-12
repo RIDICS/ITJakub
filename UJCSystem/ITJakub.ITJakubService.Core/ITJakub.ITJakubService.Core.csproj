@@ -58,6 +58,7 @@
     <Compile Include="AutoMapperProfiles\BookTypeEnumProfile.cs" />
     <Compile Include="AutoMapperProfiles\BucketShortContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\CorpusSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\DictionaryContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardShortContractProfile.cs" />

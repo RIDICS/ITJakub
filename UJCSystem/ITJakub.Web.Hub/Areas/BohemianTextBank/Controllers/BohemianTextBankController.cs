@@ -76,7 +76,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult TextSearchPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -97,7 +97,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                     HitSettingsContract = new HitSettingsContract
                     {
-                        ContextLength = 50,
+                        ContextLength = contextLength,
                         Count = count,
                         Start = start
                     }
@@ -114,7 +114,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
 
             var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            return Json(new { results = results.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -135,7 +135,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count,int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
@@ -146,7 +146,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                 HitSettingsContract = new HitSettingsContract
                 {
-                    ContextLength = 50,
+                    ContextLength = contextLength,
                     Count = count,
                     Start = start
                 }
@@ -162,7 +162,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
 
             var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            return Json(new { results = results.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)
