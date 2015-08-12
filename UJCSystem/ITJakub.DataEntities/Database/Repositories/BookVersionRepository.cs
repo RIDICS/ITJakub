@@ -212,6 +212,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
+                ManuscriptDescription manuscriptDescriptionAlias = null;
 
                 var query = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
@@ -229,22 +230,42 @@ namespace ITJakub.DataEntities.Database.Repositories
                     {
                         case SortEnum.Title:
                             queryOrder = query.OrderBy(x => x.Title);
+                            query = SetOrderDirection(queryOrder, direction.Value);
                             break;
+                        case SortEnum.Dating:
+                            if (direction.Value == ListSortDirection.Descending)
+                            {
+                                query = query
+                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias)
+                                    .OrderBy(() => manuscriptDescriptionAlias.NotAfter).Desc;
+                            }
+                            else
+                            {
+                                query = query
+                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias)
+                                    .OrderBy(() => manuscriptDescriptionAlias.NotBefore).Asc;
+                            }
+                            break;
+                        // TODO order by author and editor
                         default:
                             queryOrder = query.OrderBy(x => x.Title);
+                            query = SetOrderDirection(queryOrder, direction.Value);
                             break;
                     }
-
-                    query = direction.Value == ListSortDirection.Descending
-                        ? queryOrder.Desc
-                        : queryOrder.Asc;
                 }
 
                 var result = query.List<BookVersion>();
                 return result;
             }
         }
-        
+
+        private IQueryOver<Book, BookVersion> SetOrderDirection(IQueryOverOrderBuilder<Book, BookVersion> queryOrder, ListSortDirection direction)
+        {
+            return direction == ListSortDirection.Descending
+                ? queryOrder.Desc
+                : queryOrder.Asc;
+        }
+
         [Transaction(TransactionMode.Requires)]
         public virtual int GetHeadwordCount(IList<long> selectedBookIds = null)
         {
