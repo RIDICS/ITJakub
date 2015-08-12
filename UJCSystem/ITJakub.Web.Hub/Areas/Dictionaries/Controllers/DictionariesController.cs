@@ -72,8 +72,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(HeadwordFeedbackViewModel model)
         {
-            m_mainServiceClient.CreateAnonymousFeedbackForHeadword(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
-            return View("Search");
+            AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
+            return View("Information");
         }
 
         private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)

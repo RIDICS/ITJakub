@@ -14,7 +14,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
         protected override string NodeName
         {
-            get { return "contry"; }
+            get { return "country"; }
         }
 
         protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)

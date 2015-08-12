@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Castle.Facilities.NHibernateIntegration;
@@ -7,9 +8,11 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
+using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 using NHibernate;
 using NHibernate.Criterion;
+using NHibernate.Criterion.Lambda;
 using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -196,21 +199,49 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
+        public IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
+        {
+            return GetBookVersionsByGuid(bookGuidList, null, null, null, null);
+        }
 
         //TODO inspect performance (fix lazy=false)
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
+        public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList, int? start, int? count, SortEnum? sorting, ListSortDirection? direction)
         {
             using (var session = GetSession())
             {
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                return session.QueryOver(() => bookAlias)
+                var query = session.QueryOver(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .Select(x => x.LastVersion)
-                    .WhereRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .List<BookVersion>();
+                    .WhereRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList);
+
+                if (start != null && count != null)
+                    query.Skip(start.Value)
+                        .Take(count.Value);
+
+                if (sorting != null && direction != null)
+                {
+                    IQueryOverOrderBuilder<Book, BookVersion> queryOrder;
+                    switch (sorting.Value)
+                    {
+                        case SortEnum.Title:
+                            queryOrder = query.OrderBy(x => x.Title);
+                            break;
+                        default:
+                            queryOrder = query.OrderBy(x => x.Title);
+                            break;
+                    }
+
+                    query = direction.Value == ListSortDirection.Descending
+                        ? queryOrder.Desc
+                        : queryOrder.Asc;
+                }
+
+                var result = query.List<BookVersion>();
+                return result;
             }
         }
         

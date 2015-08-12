@@ -103,6 +103,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var filteredCriterias = FilterSearchCriterias(searchCriterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
+            var resultCriteria = filteredCriterias.ResultCriteria;
 
             if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
             {
@@ -126,7 +127,7 @@ namespace ITJakub.ITJakubService.Core
                 // Search only in SQL
                 var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
                 var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid);
-                var resultBookVersions = m_bookVersionRepository.GetBookVersionsByGuid(guidListRestriction);
+                var resultBookVersions = m_bookVersionRepository.GetBookVersionsByGuid(guidListRestriction, resultCriteria.Start, resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
                 return Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
             }
 
