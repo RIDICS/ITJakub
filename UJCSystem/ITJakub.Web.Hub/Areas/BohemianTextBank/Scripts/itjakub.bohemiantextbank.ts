@@ -12,6 +12,16 @@ $(document).ready(() => {
         search.processSearch();
     }
 
+    function showLoading() {
+        $("#result-table").hide();
+        $("#corpus-search-results-table-div-loader").addClass("loader");
+    }
+
+    function hideLoading() {
+        $("#corpus-search-results-table-div-loader").removeClass("loader");
+        $("#result-table").show();
+    }
+
     function fillResultsIntoTable(results: Array<any>) {
         var tableBody = document.getElementById("resultsTableBody");
         $(tableBody).empty();
@@ -24,8 +34,12 @@ $(document).ready(() => {
             var tr = document.createElement("tr");
             $(tr).data("bookXmlId", result["BookXmlId"]);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
+            $(tr).data("author", result["Author"]);
+            $(tr).data("title", result["Title"]);
+            $(tr).data("dating", result["OriginDate"]);
             $(tr).data("pageXmlId", pageContext["PageXmlId"]);
             $(tr).data("pageName", pageContext["PageName"]);
+
 
             if (verseContext !== null && typeof verseContext !== "undefined") {
                 $(tr).data("verseXmlId", verseContext["VerseXmlId"]);
@@ -66,6 +80,8 @@ $(document).ready(() => {
         var sortingEnum = SortEnum.Title; //TODO
         var sortAsc = true; //TODO
 
+        showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -75,6 +91,7 @@ $(document).ready(() => {
             contentType: 'application/json',
             success: response => {
                 fillResultsIntoTable(response["results"]);
+                hideLoading();
             }
         });
     }
@@ -87,6 +104,8 @@ $(document).ready(() => {
         var sortingEnum = SortEnum.Title; //TODO
         var sortAsc = true; //TODO
 
+        showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -96,6 +115,7 @@ $(document).ready(() => {
             contentType: 'application/json',
             success: response => {
                 fillResultsIntoTable(response["results"]);
+                hideLoading();
             }
         });
     }
@@ -124,6 +144,8 @@ $(document).ready(() => {
 
         if (typeof text === "undefined" || text === null || text === "") return;
 
+        showLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -140,6 +162,8 @@ $(document).ready(() => {
 
     function corpusAdvancedSearchCount(json: string) {
         if (typeof json === "undefined" || json === null || json === "") return;
+
+        showLoading();
 
         $.ajax({
             type: "GET",
@@ -181,14 +205,14 @@ $(document).ready(() => {
     function printDetailInfo(tableRow: HTMLElement) {
         var undefinedReplaceString = "&lt;Nezadáno&gt;";
 
-        document.getElementById("detail-author").innerHTML = "";
-        document.getElementById("detail-title").innerHTML = $(tableRow).data("bookXmlId");
-        document.getElementById("detail-dating").innerHTML = "";
-        document.getElementById("detail-dating-century").innerHTML = "";
-        document.getElementById("detail-abbrev").innerHTML = "";
+        document.getElementById("detail-author").innerHTML = typeof $(tableRow).data("author") !== "undefined" && $(tableRow).data("author") !== null? $(tableRow).data("author") : undefinedReplaceString;
+        document.getElementById("detail-title").innerHTML = typeof $(tableRow).data("title") !== "undefined" && $(tableRow).data("title") !== null? $(tableRow).data("title") : undefinedReplaceString;
+        document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;;
+        document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
+        document.getElementById("detail-abbrev").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
 
-        document.getElementById("detail-folio").innerHTML = typeof $(tableRow).data("pageName") !== "undefined" ? $(tableRow).data("pageName") : undefinedReplaceString;
-        document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" ? $(tableRow).data("verseName") : undefinedReplaceString;
+        document.getElementById("detail-folio").innerHTML = typeof $(tableRow).data("pageName") !== "undefined" && $(tableRow).data("pageName") !== null? $(tableRow).data("pageName") : undefinedReplaceString;
+        document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" && $(tableRow).data("verseName") !== null ? $(tableRow).data("verseName") : undefinedReplaceString;
     }
 
     $("#resultsTableBody").click((event: Event) => {
