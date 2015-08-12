@@ -10,7 +10,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<BookVersion, BookInfoContract>()
+            CreateMap<BookVersion, BookInfoWithPagesContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))
                 .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
                 .ForMember(dest => dest.LastVersionXmlId, opts => opts.MapFrom(src => src.VersionId))

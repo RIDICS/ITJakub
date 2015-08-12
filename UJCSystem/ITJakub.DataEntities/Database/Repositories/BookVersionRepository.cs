@@ -46,18 +46,6 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookVersion FindBookVersionByGuid(string bookVersionGuid)
-        {
-            using (var session = GetSession())
-            {
-                return
-                    session.QueryOver<BookVersion>()
-                        .Where(bookVersion => bookVersion.VersionId == bookVersionGuid)
-                        .SingleOrDefault<BookVersion>();
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
         public virtual Publisher FindPublisherByText(string text)
         {
             using (var session = GetSession())
@@ -102,26 +90,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookPage GetPageByVersionAndXmlId(BookVersion bookVersion, string pageXmlId)
+        public virtual BookPage FindBookPageByVersionAndPosition(long bookVersionId, int position)
         {
             using (var session = GetSession())
             {
                 var bookPage =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersion.Id && x.XmlId == pageXmlId)
-                        .SingleOrDefault<BookPage>();
-                return bookPage;
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndPosition(BookVersion bookVersion, int position)
-        {
-            using (var session = GetSession())
-            {
-                var bookPage =
-                    session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersion.Id && x.Position == position)
+                        .Where(x => x.BookVersion.Id == bookVersionId && x.Position == position)
                         .SingleOrDefault<BookPage>();
                 return bookPage;
             }
@@ -141,27 +116,27 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookPage> GetPageList(BookVersion bookVersion)
+        public virtual IList<BookPage> GetPageList(long bookVersionId)
         {
             using (var session = GetSession())
             {
                 var bookPages =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersion.Id)
+                        .Where(x => x.BookVersion.Id == bookVersionId)
                         .List<BookPage>();
                 return bookPages;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(BookVersion bookVersion)
+        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(long bookVersionId)
         {
             using (var session = GetSession())
             {
                 var bookContentItems =
                     session.QueryOver<BookContentItem>()
                         //.Fetch(x => x.Page).Eager
-                        .Where(item => item.BookVersion.Id == bookVersion.Id && item.ParentBookContentItem == null)
+                        .Where(item => item.BookVersion.Id == bookVersionId && item.ParentBookContentItem == null)
                         .List<BookContentItem>();
                 return bookContentItems;
             }

@@ -151,28 +151,14 @@ namespace ITJakub.ITJakubService.Core
 
             return searchResultFullContext;
         }
-
-        public List<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
-        {
-            var type = Mapper.Map<BookTypeEnum>(bookType);
-            var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
-            return Mapper.Map<List<SearchResultContract>>(bookVersions);
-        }
-
+        
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
             var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
             return Mapper.Map<List<BookContract>>(bookVersions);
         }
-
-        public List<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
-        {
-            var type = Mapper.Map<BookTypeEnum>(bookType);
-            var bookVersions = m_bookRepository.SearchByTitleAndBookType(term, type);
-            return Mapper.Map<List<SearchResultContract>>(bookVersions);
-        }
-
+        
         public IList<BookContract> Search(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
             var type = Mapper.Map<BookTypeEnum>(category);

@@ -130,7 +130,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
         {
-            var versions = m_bookRepository.GetAllVersionsByBookId(bookId);
+            var versions = m_bookRepository.GetAllVersionsByBookXmlId(bookId);
             var vers = versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;

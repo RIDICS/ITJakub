@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -14,7 +12,6 @@ using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Areas.Editions.Models;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
@@ -40,22 +37,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult SearchEditions(string term)
-        {
-            IEnumerable<SearchResultContract> listBooks = term.IsNullOrWhiteSpace()
-                ? m_serviceClient.GetBooksByBookType(BookTypeEnumContract.Edition)
-                : m_serviceClient.SearchBooksWithBookType(term, BookTypeEnumContract.Edition);
-
-            foreach (var list in listBooks)
-            {
-                list.CreateTimeString = list.CreateTime.ToString();
-            }
-            return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
-        }
-
         public ActionResult Listing(string bookId, string searchText)
         {
-            var book = m_serviceClient.GetBookInfo(bookId);
+            var book = m_serviceClient.GetBookInfoWithPages(bookId);
             return
                 View(new BookListingModel
                 {
@@ -69,11 +53,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public FileResult GetBookImage(string bookId, int position)
         {
-            var imageDataStream = m_serviceClient.GetBookPageImage(new BookPageImageContract
-            {
-                BookXmlId = bookId,
-                Position = position
-            });
+            var imageDataStream = m_serviceClient.GetBookPageImage(bookId, position);
             return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
         }
 

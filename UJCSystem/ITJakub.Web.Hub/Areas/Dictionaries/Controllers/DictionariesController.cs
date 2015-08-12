@@ -379,7 +379,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionaryInfo(string bookXmlId)
         {
-            var result = m_mainServiceClient.GetBookInfo(bookXmlId);
+            var result = m_mainServiceClient.GetBookInfoWithPages(bookXmlId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

@@ -44,22 +44,22 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public BookInfoContract GetBookInfo(string bookId)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookId)
         {
             try
             {
-                return Channel.GetBookInfo(bookId);
+                return Channel.GetBookInfoWithPages(bookId);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookInfo failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookInfoWithPages failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookInfo timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookInfoWithPages timeouted with: {0}", ex);
                 throw;
             }
         }
@@ -205,60 +205,6 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
-        {
-            try
-            {
-                return Channel.SearchBooksWithBookType(term, bookType);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
-        {
-            try
-            {
-                return Channel.GetBooksByBookType(bookType);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             try
@@ -286,11 +232,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
+        public Stream GetBookPageImage(string bookXmlId, int position)
         {
             try
             {
-                return Channel.GetBookPageImage(bookPageImageContract);
+                return Channel.GetBookPageImage(bookXmlId, position);
             }
             catch (CommunicationException ex)
             {

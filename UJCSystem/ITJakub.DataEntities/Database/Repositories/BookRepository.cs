@@ -31,27 +31,14 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var book = FindBookByGuid(bookGuid);
-
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                var lastVersionSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    .Where(item => item.Book.Id == book.Id)
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersionAlias.CreateTime)
-                        ));
-
-
                 var result = session.QueryOver(() => bookVersionAlias)
-                    .WithSubquery
-                    .WhereExists(lastVersionSubquery)
-                    .SingleOrDefault<BookVersion>();
-
+                    .JoinQueryOver(x => x.Book, () => bookAlias)
+                    .Where(x => x.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .SingleOrDefault();
 
                 return result;
             }
@@ -62,28 +49,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var book = FindBookByGuid(bookGuid);
-
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                var lastVersionSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    .Where(item => item.Book.Id == book.Id)
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersionAlias.CreateTime)
-                        ));
-
-
                 var result = session.QueryOver(() => bookVersionAlias)
-                    .WithSubquery
-                    .WhereExists(lastVersionSubquery)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .Fetch(x => x.BookPages).Eager
-                    .SingleOrDefault<BookVersion>();
-
+                    .SingleOrDefault();
 
                 return result;
             }
@@ -157,13 +131,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IEnumerable<BookVersion> GetAllVersionsByBookId(string bookId)
+        public virtual IEnumerable<BookVersion> GetAllVersionsByBookXmlId(string bookXmlId)
         {
             using (var session = GetSession())
             {
                 return session.QueryOver<BookVersion>()
                     .JoinQueryOver(version => version.Book)
-                    .Where(book => book.Guid == bookId).List<BookVersion>();
+                    .Where(book => book.Guid == bookXmlId).List<BookVersion>();
             }
         }
 

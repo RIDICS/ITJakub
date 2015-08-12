@@ -43,8 +43,7 @@
   <ItemGroup>
     <Compile Include="AuthorDetailContract.cs" />
     <Compile Include="AuthProviderEnumContract.cs" />
-    <Compile Include="BookInfoContract.cs" />
-    <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="BookInfoWithPagesContract.cs" />
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardShortContract.cs" />
     <Compile Include="HeadwordBookmarkContract.cs" />

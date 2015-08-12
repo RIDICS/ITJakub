@@ -44,9 +44,9 @@ namespace ITJakub.ITJakubService.Services
             return m_authorManager.CreateAuthor(name);
         }
 
-        public BookInfoContract GetBookInfo(string bookGuid)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
         {
-            return m_bookManager.GetBookInfo(bookGuid);
+            return m_bookManager.GetBookInfoWithPages(bookGuid);
         }
 
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
@@ -83,20 +83,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.Search(term);
         }
-
-        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        
+        public Stream GetBookPageImage(string bookXmlId, int position)
         {
-            return m_searchManager.SearchBooksWithBookType(term, bookType);
-        }
-
-        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
-        {
-            return m_searchManager.GetBooksByBookType(bookType);
-        }
-
-        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
-        {
-            return m_bookManager.GetBookPageImage(bookPageImageContract);
+            return m_bookManager.GetBookPageImage(bookXmlId, position);
         }
 
         public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)

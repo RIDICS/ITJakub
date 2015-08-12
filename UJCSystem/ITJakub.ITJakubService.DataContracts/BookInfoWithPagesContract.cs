@@ -5,7 +5,7 @@ using ITJakub.Shared.Contracts;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    public class BookInfoContract
+    public class BookInfoWithPagesContract
     {
         [DataMember]
         public long BookId { get; set; }

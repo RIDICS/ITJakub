@@ -25,16 +25,16 @@ namespace ITJakub.ITJakubService.Core
             m_bookVersionRepository = bookVersionRepository;
         }
 
-        public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
+        public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId, string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
                 return new List<PageBookmarkContract>();
 
-            var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookId, userName);
+            var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookXmlId, userName);
             return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
         }
 
-        public void AddPageBookmark(string bookId, string pageXmlId, string userName)
+        public void AddPageBookmark(string bookXmlId, string pageXmlId, string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
@@ -54,11 +54,11 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
-            var bookPage = m_bookVersionRepository.GetPageByXmlId(bookId, pageXmlId);
+            var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
 
             if (bookPage == null)
             {
-                string message = string.Format("Page not found for bookId: '{0}' and page xmlId: '{1}'", bookId, pageXmlId);
+                string message = string.Format("Page not found for bookXmlId: '{0}' and page xmlId: '{1}'", bookXmlId, pageXmlId);
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
                 throw new ArgumentException(message);
@@ -69,15 +69,15 @@ namespace ITJakub.ITJakubService.Core
                 PageXmlId = pageXmlId,
                 User = user,
                 PagePosition = bookPage.Position,
-                Book = m_bookRepository.FindBookByGuid(bookId),
+                Book = m_bookRepository.FindBookByGuid(bookXmlId),
             };
 
             m_favoritesRepository.Save(bookmark);
         }
 
-        public void RemovePageBookmark(string bookId, string pageXmlId, string userName)
+        public void RemovePageBookmark(string bookXmlId, string pageXmlId, string userName)
         {
-            m_favoritesRepository.DeletePageBookmarkByPageXmlId(bookId, pageXmlId, userName);
+            m_favoritesRepository.DeletePageBookmarkByPageXmlId(bookXmlId, pageXmlId, userName);
         }
 
         public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)

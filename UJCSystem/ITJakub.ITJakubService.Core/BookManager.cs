@@ -65,49 +65,49 @@ namespace ITJakub.ITJakubService.Core
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var pages = m_bookVersionRepository.GetPageList(bookVersion);
+            var pages = m_bookVersionRepository.GetPageList(bookVersion.Id);
             return Mapper.Map<IList<BookPageContract>>(pages);
         }
 
         public IList<PageContract> GetBookPagesListMobile(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var pages = m_bookVersionRepository.GetPageList(bookVersion);
+            var pages = m_bookVersionRepository.GetPageList(bookVersion.Id);
             return Mapper.Map<IList<PageContract>>(pages);
         }
 
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookVersion);
+            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookVersion.Id);
             var contentItemsContracts = Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
             return contentItemsContracts;
         }
 
-        public BookInfoContract GetBookInfo(string bookGuid)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
         {
             var bookVersion = m_bookRepository.GetLastVersionForBookWithPages(bookGuid);
-            return Mapper.Map<BookInfoContract>(bookVersion);
+            return Mapper.Map<BookInfoWithPagesContract>(bookVersion);
         }
 
-        public Stream GetBookPageImage(BookPageImageContract imageContract)
+        public Stream GetBookPageImage(string bookXmlId, int position)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(imageContract.BookXmlId);
-            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion, imageContract.Position);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
+            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion.Id, position);
 
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(imageContract.BookXmlId, bookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookXmlId, bookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
         }
 
-        public Stream GetBookPageImage(string bookGuid, string pageId)
+        public Stream GetBookPageImage(string bookXmlId, string pageId)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
             var bookPage = m_bookVersionRepository.FindBookPageByVersionAndXmlId(bookVersion.Id, pageId);
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(bookGuid, bookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookXmlId, bookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;

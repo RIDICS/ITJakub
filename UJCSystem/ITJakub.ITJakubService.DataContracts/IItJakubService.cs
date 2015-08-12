@@ -35,22 +35,16 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IEnumerable<SearchResultContract> Search(string term);
-
+        IEnumerable<SearchResultContract> Search(string term); // TODO probably remove
+        
         [OperationContract]
-        IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType);
-
-        [OperationContract]
-        IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType);
-
-        [OperationContract]
-        BookInfoContract GetBookInfo(string bookGuid);
+        BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
         [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
 
         [OperationContract]
-        Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+        Stream GetBookPageImage(string bookXmlId, int position);
 
         [OperationContract]
         Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName);
