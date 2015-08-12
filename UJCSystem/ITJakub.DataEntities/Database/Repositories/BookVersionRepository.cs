@@ -13,6 +13,7 @@ using log4net;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Criterion.Lambda;
+using NHibernate.SqlCommand;
 using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -174,25 +175,38 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        public IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList)
+        public IList<BookVersion> GetBookVersionsByGuid(IList<string> bookGuidList)
         {
             return GetBookVersionsByGuid(bookGuidList, null, null, null, null);
         }
 
         //TODO inspect performance (fix lazy=false)
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> GetBookVersionsByGuid(IEnumerable<string> bookGuidList, int? start, int? count, SortEnum? sorting, ListSortDirection? direction)
+        public virtual IList<BookVersion> GetBookVersionsByGuid(IList<string> bookGuidList, int? start, int? count, SortEnum? sorting, ListSortDirection? direction)
         {
             using (var session = GetSession())
             {
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
                 ManuscriptDescription manuscriptDescriptionAlias = null;
+                //BookPage bookPageAlias = null;
 
-                var query = session.QueryOver(() => bookAlias)
-                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
-                    .Select(x => x.LastVersion)
-                    .WhereRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList);
+                //session.QueryOver(() => bookPageAlias)
+                //    .Select(Projections.ProjectionList()
+                //        .Add(Projections.RowCount())
+                //        //.Add(Projections.GroupProperty(Projections.Property(() => bookPageAlias.BookVersion.Id))))
+                //        .Add(Projections.Group<BookPage>(x => x.BookVersion)))
+                //    .Future();
+
+                //session.QueryOver<BookPage>()
+                //    .Select(Projections.Group<BookPage>(x => x.BookVersion))
+                //    .row
+
+
+                var query = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList);
 
                 if (start != null && count != null)
                     query.Skip(start.Value)
@@ -200,7 +214,7 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 if (sorting != null && direction != null)
                 {
-                    IQueryOverOrderBuilder<Book, BookVersion> queryOrder;
+                    IQueryOverOrderBuilder<BookVersion, BookVersion> queryOrder;
                     switch (sorting.Value)
                     {
                         case SortEnum.Title:
@@ -229,12 +243,36 @@ namespace ITJakub.DataEntities.Database.Repositories
                     }
                 }
 
-                var result = query.List<BookVersion>();
+                var futureResult = query
+                    .Fetch(x => x.Publisher).Eager
+                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .Future<BookVersion>();
+
+                session.QueryOver<BookVersion>()
+                    //.JoinAlias(x => x.Book, () => bookAlias)
+                    //.Where(x => bookAlias.LastVersion.Id == x.Id)
+                    //.AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .Fetch(x => x.Keywords).Eager
+                    .Future<BookVersion>();
+
+                session.QueryOver<BookVersion>()
+                    .Fetch(x => x.Categories).Eager
+                    .JoinQueryOver(x => x.Categories, JoinType.LeftOuterJoin)
+                    .Future<BookVersion>();
+
+                var result = futureResult.ToList();
+
+                foreach (var bookVersion in result) // TODO this is incorrect solution
+                {
+                    var x = bookVersion.BookPages.Count;
+                }
+
                 return result;
             }
         }
 
-        private IQueryOver<Book, BookVersion> SetOrderDirection(IQueryOverOrderBuilder<Book, BookVersion> queryOrder, ListSortDirection direction)
+        private IQueryOver<BookVersion, BookVersion> SetOrderDirection(IQueryOverOrderBuilder<BookVersion, BookVersion> queryOrder, ListSortDirection direction)
         {
             return direction == ListSortDirection.Descending
                 ? queryOrder.Desc

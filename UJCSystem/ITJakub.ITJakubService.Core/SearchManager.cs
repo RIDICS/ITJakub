@@ -126,7 +126,7 @@ namespace ITJakub.ITJakubService.Core
             {
                 // Search only in SQL
                 var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
-                var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid);
+                var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
                 var resultBookVersions = m_bookVersionRepository.GetBookVersionsByGuid(guidListRestriction, resultCriteria.Start, resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
                 return Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
             }
@@ -134,7 +134,7 @@ namespace ITJakub.ITJakubService.Core
             // Fulltext search
             var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
 
-            var guidList = searchResults.SearchResults.Select(x => x.BookXmlId);
+            var guidList = searchResults.SearchResults.Select(x => x.BookXmlId).ToList();
             var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
 
             var resultDictionary = result.ToDictionary(x => x.Book.Guid);
@@ -492,7 +492,7 @@ namespace ITJakub.ITJakubService.Core
             var resultContract = m_searchServiceClient.ListSearchDictionariesResults(nonMetadataCriterias);
             
             // fill book info
-            var bookInfoList = m_bookVersionRepository.GetBookVersionsByGuid(resultContract.BookList.Keys);
+            var bookInfoList = m_bookVersionRepository.GetBookVersionsByGuid(resultContract.BookList.Keys.ToList());
             var bookInfoContracts = Mapper.Map<IList<DictionaryContract>>(bookInfoList);
             var bookDictionary = bookInfoContracts.ToDictionary(x => x.BookXmlId, x => x);
             resultContract.BookList = bookDictionary;

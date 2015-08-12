@@ -11,11 +11,11 @@
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
     
-    <many-to-one name="Publisher" cascade="save-update" lazy="false">
+    <many-to-one name="Publisher" cascade="save-update" lazy="proxy">
       <column name="Publisher" sql-type="int" not-null="false" />
     </many-to-one>
     
-    <many-to-one name="DefaultBookType" lazy="false">
+    <many-to-one name="DefaultBookType" lazy="proxy">
       <column name="DefaultBookType" sql-type="int" not-null="false" />
     </many-to-one>
     
@@ -53,11 +53,11 @@
       <column name="Acronym" sql-type="varchar" not-null="false" />
     </property>
 
-    <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="false">
+    <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
     </bag>
-    <bag name="Keywords" cascade="all-delete-orphan" lazy="false">
+    <bag name="Keywords" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
@@ -65,11 +65,11 @@
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
-    <bag name="BookPages" cascade="all-delete-orphan" lazy="false"> <!-- TODO use lazy extra -->
+    <bag name="BookPages" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
-    <bag name="BookContentItems" cascade="all-delete-orphan" lazy="false"> <!-- TODO use lazy extra -->
+    <bag name="BookContentItems" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookContentItem" />
     </bag>
@@ -85,7 +85,7 @@
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
-    <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="false"> <!-- TODO switch to lazy=true -->
+    <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Category" column="Category" />
     </bag>
