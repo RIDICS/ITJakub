@@ -11,11 +11,15 @@ $(document).ready(() => {
     function sortOrderChanged() {
         search.processSearch();
     }
+    
+    function hideTypeahead() {
+        $(".twitter-typeahead").find(".tt-menu").hide();
+    };
 
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
-
+        hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
         var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
@@ -40,7 +44,7 @@ $(document).ready(() => {
     }
 
     function editionBasicSearchPaged(text: string, pageNumber: number) {
-
+        hideTypeahead();
         if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
@@ -74,7 +78,7 @@ $(document).ready(() => {
     }
 
     function editionBasicSearch(text: string) {
-
+        hideTypeahead();
         if (typeof text === "undefined" || text === null || text === "") return;
 
         bibliographyModule.clearBooks();
@@ -94,6 +98,7 @@ $(document).ready(() => {
     }
 
     function editionAdvancedSearch(json: string) {
+        hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
         bibliographyModule.clearBooks();

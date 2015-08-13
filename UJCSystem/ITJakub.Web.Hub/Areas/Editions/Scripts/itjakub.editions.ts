@@ -162,8 +162,6 @@
     }
 }
 
-
-
 function listBook(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
     if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
