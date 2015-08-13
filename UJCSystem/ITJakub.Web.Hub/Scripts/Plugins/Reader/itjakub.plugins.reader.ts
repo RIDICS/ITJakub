@@ -188,7 +188,6 @@ class ReaderModule {
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         $(pageInputText).addClass('page-input-text');
-
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
@@ -204,11 +203,22 @@ class ReaderModule {
                     break;
                 }
             }
-            //TODO log pageIndex not exist
+
             var page: BookPage = this.pages[pageIndex];
             this.moveToPage(page.xmlId, true);
         });
+
         pageInputDiv.appendChild(pageInputButton);
+
+        $(pageInputText).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode;
+            if (keyCode === 13) {     //13 = Enter
+                $(pageInputButton).click();
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        });
 
         pagingDiv.appendChild(pageInputDiv);
 
