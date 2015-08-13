@@ -14,11 +14,14 @@ $(document).ready(() => {
 
     function showLoading() {
         $("#result-table").hide();
+        $("#corpus-search-results-table-div-loader").empty();
+        $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
     }
 
     function hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
+        $("#corpus-search-results-table-div-loader").hide();
         $("#result-table").show();
     }
 
@@ -66,9 +69,10 @@ $(document).ready(() => {
 
         //scroll from left to center match column in table
         var firstChildTdWidth = $(tableBody).children("tr").first().children("td").first().width();
-        var tableContainer = $(tableBody).parents(".corpus-search-results-table-div");
+        var tableContainer = $(tableBody).parents("#corpus-search-results-table-div");
         var tableContainerWidth = $(tableContainer).width();
         var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
+        alert(firstChildTdWidth + " - " + tableContainerWidth + "/2");
         $(tableContainer).scrollLeft(scrollOffset);
     }
     
@@ -90,8 +94,8 @@ $(document).ready(() => {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                fillResultsIntoTable(response["results"]);
                 hideLoading();
+                fillResultsIntoTable(response["results"]);
             }
         });
     }
@@ -114,8 +118,8 @@ $(document).ready(() => {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                fillResultsIntoTable(response["results"]);
                 hideLoading();
+                fillResultsIntoTable(response["results"]);
             }
         });
     }
