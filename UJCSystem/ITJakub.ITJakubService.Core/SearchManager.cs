@@ -127,25 +127,37 @@ namespace ITJakub.ITJakubService.Core
                 // Search only in SQL
                 var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
                 var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
-                var resultBookVersions = m_bookVersionRepository.GetBookVersionsByGuid(guidListRestriction, resultCriteria.Start, resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
-                return Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
+                var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction, resultCriteria.Start, resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
+                var pageCounts = m_bookVersionRepository.GetBooksPageCountByGuid(guidListRestriction)
+                    .ToDictionary(x => x.BookId, x => x.Count);
+
+                var resultContractList = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
+                foreach (var resultContract in resultContractList)
+                {
+                    resultContract.PageCount = pageCounts[resultContract.BookId];
+                }
+
+                return resultContractList;
             }
 
             // Fulltext search
             var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
 
             var guidList = searchResults.SearchResults.Select(x => x.BookXmlId).ToList();
-            var result = m_bookVersionRepository.GetBookVersionsByGuid(guidList);
+            var result = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidList);
+            var resultPageCountDictionary = m_bookVersionRepository.GetBooksPageCountByGuid(guidList)
+                .ToDictionary(x => x.BookId, x => x.Count);
 
-            var resultDictionary = result.ToDictionary(x => x.Book.Guid);
+            var resultDictionary = result.ToDictionary(x => x.Book.Id);
 
             var searchResultFullContext = new List<SearchResultContract>();
 
             foreach (var searchResult in searchResults.SearchResults)
             {
-                var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookXmlId]);
+                var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookId]);
                 localResult.TotalHitCount = searchResult.TotalHitCount;
                 localResult.Results = searchResult.Results;
+                localResult.PageCount = resultPageCountDictionary[searchResult.BookId];
                 searchResultFullContext.Add(localResult);
             }
 
@@ -509,7 +521,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
 
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat,
                 bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
@@ -543,7 +555,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
 
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookXmlId);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat,
                 bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;

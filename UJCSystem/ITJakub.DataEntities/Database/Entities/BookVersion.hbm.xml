@@ -7,7 +7,7 @@
       <generator class="identity" />
     </id>
     
-    <many-to-one name="Book" cascade="save-update" lazy="false">
+    <many-to-one name="Book" cascade="save-update" lazy="proxy">
       <column name="Book" sql-type="bigint" not-null="true" />
     </many-to-one>
     
@@ -73,11 +73,11 @@
       <key column="BookVersion" />
       <one-to-many class="BookContentItem" />
     </bag>
-    <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="false">
+    <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Author" column="Author" />
     </bag>
-    <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="false">
+    <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
     </bag>

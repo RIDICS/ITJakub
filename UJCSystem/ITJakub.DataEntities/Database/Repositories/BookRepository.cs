@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -38,6 +39,25 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.Book, () => bookAlias)
                     .Where(x => x.Guid == bookGuid)
                     .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetLastVersionForBookWithType(string bookGuid)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .Fetch(x => x.DefaultBookType).Eager
                     .SingleOrDefault();
 
                 return result;
@@ -213,9 +233,13 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
                         .OrderBy(() => bookVersionAlias.Title).Asc
                         .TransformUsing(Transformers.DistinctRootEntity)
-                        .List<BookVersion>();
+                        .Future<BookVersion>();
 
-                return bookVersions;
+                session.QueryOver(() => bookVersionAlias)
+                    .Fetch(x => x.Categories).Eager
+                    .Future<BookVersion>();
+                    
+                return bookVersions.ToList();
             }
         }
 

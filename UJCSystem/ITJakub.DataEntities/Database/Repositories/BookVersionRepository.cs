@@ -91,60 +91,80 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndPosition(long bookVersionId, int position)
+        public virtual BookPage FindBookPageByXmlIdAndPosition(string bookXmlId, int position)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
                 var bookPage =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersionId && x.Position == position)
+                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                        .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id && x.Position == position)
                         .SingleOrDefault<BookPage>();
                 return bookPage;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookPage FindBookPageByVersionAndXmlId(long versionId, string xmlId)
+        public virtual BookPage FindBookPageByXmlId(string bookXmlId, string xmlId)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                
                 var bookPage =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == versionId && x.XmlId == xmlId)
+                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                        .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id && x.XmlId == xmlId)
                         .SingleOrDefault<BookPage>();
                 return bookPage;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookPage> GetPageList(long bookVersionId)
+        public virtual IList<BookPage> GetLastVersionPageList(string bookXmlId)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
                 var bookPages =
                     session.QueryOver<BookPage>()
-                        .Where(x => x.BookVersion.Id == bookVersionId)
+                        .JoinQueryOver(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinQueryOver(x => x.Book, () => bookAlias)
+                        .Where(() => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id)
                         .List<BookPage>();
                 return bookPages;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(long bookVersionId)
+        public virtual IList<BookContentItem> GetRootBookContentItemsWithPagesAndAncestors(string bookXmlId)
         {
             using (var session = GetSession())
             {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
                 var bookContentItems =
                     session.QueryOver<BookContentItem>()
+                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         //.Fetch(x => x.Page).Eager
-                        .Where(item => item.BookVersion.Id == bookVersionId && item.ParentBookContentItem == null)
+                        .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id && x.ParentBookContentItem == null)
                         .List<BookContentItem>();
                 return bookContentItems;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual BookPage GetPageByXmlId(string bookId, string pageXmlId)
+        public virtual BookPage GetPageByXmlId(string bookXmlId, string pageXmlId)
         {
             using (var session = GetSession())
             {
@@ -154,7 +174,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var resultPage = session.QueryOver(() => page)
                     .JoinQueryOver(x => x.BookVersion, () => version)
                     .JoinQueryOver(x => x.Book)
-                    .Where(book => book.Guid == bookId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
+                    .Where(book => book.Guid == bookXmlId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
                     .SingleOrDefault<BookPage>();
 
                
@@ -175,33 +195,38 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        public IList<BookVersion> GetBookVersionsByGuid(IList<string> bookGuidList)
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> GetBookVersionsByGuid(IList<string> bookGuidList)
         {
-            return GetBookVersionsByGuid(bookGuidList, null, null, null, null);
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+
+                var result = session.QueryOver<BookVersion>()
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(x => x.Id == bookAlias.LastVersion.Id)
+                    .AndRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .List<BookVersion>();
+
+                return result;
+            }
         }
 
-        //TODO inspect performance (fix lazy=false)
+        public IList<BookVersion> GetBookVersionDetailsByGuid(IList<string> bookGuidList)
+        {
+            return GetBookVersionDetailsByGuid(bookGuidList, null, null, null, null);
+        }
+
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> GetBookVersionsByGuid(IList<string> bookGuidList, int? start, int? count, SortEnum? sorting, ListSortDirection? direction)
+        public virtual IList<BookVersion> GetBookVersionDetailsByGuid(IList<string> bookGuidList, int? start, int? count, SortEnum? sorting, ListSortDirection? direction)
         {
             using (var session = GetSession())
             {
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
                 ManuscriptDescription manuscriptDescriptionAlias = null;
-                //BookPage bookPageAlias = null;
-
-                //session.QueryOver(() => bookPageAlias)
-                //    .Select(Projections.ProjectionList()
-                //        .Add(Projections.RowCount())
-                //        //.Add(Projections.GroupProperty(Projections.Property(() => bookPageAlias.BookVersion.Id))))
-                //        .Add(Projections.Group<BookPage>(x => x.BookVersion)))
-                //    .Future();
-
-                //session.QueryOver<BookPage>()
-                //    .Select(Projections.Group<BookPage>(x => x.BookVersion))
-                //    .row
-
+                Responsible responsibleAlias = null;
+                ResponsibleType responsibleTypeAlias = null;
 
                 var query = session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
@@ -244,30 +269,35 @@ namespace ITJakub.DataEntities.Database.Repositories
                 }
 
                 var futureResult = query
+                    .Fetch(x => x.Book).Eager
                     .Fetch(x => x.Publisher).Eager
                     .Fetch(x => x.DefaultBookType).Eager
                     .Fetch(x => x.ManuscriptDescriptions).Eager
                     .Future<BookVersion>();
 
-                session.QueryOver<BookVersion>()
-                    //.JoinAlias(x => x.Book, () => bookAlias)
-                    //.Where(x => bookAlias.LastVersion.Id == x.Id)
-                    //.AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
                     .Fetch(x => x.Keywords).Eager
                     .Future<BookVersion>();
 
-                session.QueryOver<BookVersion>()
-                    .Fetch(x => x.Categories).Eager
-                    .JoinQueryOver(x => x.Categories, JoinType.LeftOuterJoin)
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .Fetch(x => x.Authors).Eager
                     .Future<BookVersion>();
 
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
+                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
+                    .Future<BookVersion>();
+                
                 var result = futureResult.ToList();
-
-                foreach (var bookVersion in result) // TODO this is incorrect solution
-                {
-                    var x = bookVersion.BookPages.Count;
-                }
-
                 return result;
             }
         }
@@ -277,6 +307,30 @@ namespace ITJakub.DataEntities.Database.Repositories
             return direction == ListSortDirection.Descending
                 ? queryOrder.Desc
                 : queryOrder.Asc;
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<PageCountResult> GetBooksPageCountByGuid(IList<string> bookGuidList)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookPage bookPageAlias = null;
+                PageCountResult resultAlias = null;
+
+                var result = session.QueryOver<BookVersion>()
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .JoinAlias(x => x.BookPages, () => bookPageAlias, JoinType.LeftOuterJoin)
+                    .SelectList(list => list
+                        .SelectGroup(() => bookAlias.Id).WithAlias(() => resultAlias.BookId)
+                        .SelectCount(() => bookPageAlias.Id).WithAlias(() => resultAlias.Count))
+                    .Where(x => x.Id == bookAlias.LastVersion.Id)
+                    .AndRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                    .List<PageCountResult>();
+
+                return result;
+            }
         }
 
         [Transaction(TransactionMode.Requires)]

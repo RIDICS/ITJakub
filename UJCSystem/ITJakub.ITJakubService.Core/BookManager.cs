@@ -49,7 +49,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Book type : '{0}' unknown", bookTypeContract));
             }
 
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType);
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
@@ -64,22 +64,19 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var pages = m_bookVersionRepository.GetPageList(bookVersion.Id);
+            var pages = m_bookVersionRepository.GetLastVersionPageList(bookGuid);
             return Mapper.Map<IList<BookPageContract>>(pages);
         }
 
         public IList<PageContract> GetBookPagesListMobile(string bookGuid)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var pages = m_bookVersionRepository.GetPageList(bookVersion.Id);
+            var pages = m_bookVersionRepository.GetLastVersionPageList(bookGuid);
             return Mapper.Map<IList<PageContract>>(pages);
         }
 
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
-            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookVersion.Id);
+            var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookGuid);
             var contentItemsContracts = Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
             return contentItemsContracts;
         }
@@ -92,11 +89,10 @@ namespace ITJakub.ITJakubService.Core
 
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
-            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndPosition(bookVersion.Id, position);
+            var bookPage = m_bookVersionRepository.FindBookPageByXmlIdAndPosition(bookXmlId, position);
 
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(bookXmlId, bookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookXmlId, bookPage.BookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
@@ -104,10 +100,10 @@ namespace ITJakub.ITJakubService.Core
 
         public Stream GetBookPageImage(string bookXmlId, string pageId)
         {
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookXmlId);
-            var bookPage = m_bookVersionRepository.FindBookPageByVersionAndXmlId(bookVersion.Id, pageId);
+            var bookPage = m_bookVersionRepository.FindBookPageByXmlId(bookXmlId, pageId);
+
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(bookXmlId, bookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookXmlId, bookPage.BookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
@@ -126,7 +122,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
 
-            var bookVersion = m_bookRepository.GetLastVersionForBook(bookGuid);
+            var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
