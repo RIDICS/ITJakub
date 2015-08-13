@@ -36,14 +36,16 @@ $(document).ready(() => {
             var pageContext = result["PageResultContext"];
             var verseContext = result["VerseResultContext"];
             var contextStructure = pageContext["ContextStructure"];
+            var bookXmlId = result["BookXmlId"];
+            var pageXmlId = pageContext["PageXmlId"];
 
             var tr = document.createElement("tr");
-            $(tr).data("bookXmlId", result["BookXmlId"]);
+            $(tr).data("bookXmlId", bookXmlId);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
             $(tr).data("author", result["Author"]);
             $(tr).data("title", result["Title"]);
             $(tr).data("dating", result["OriginDate"]);
-            $(tr).data("pageXmlId", pageContext["PageXmlId"]);
+            $(tr).data("pageXmlId", pageXmlId );
             $(tr).data("pageName", pageContext["PageName"]);
 
 
@@ -70,11 +72,17 @@ $(document).ready(() => {
 
             //fill left table with abbrev of corpus name
             var abbrevTr = document.createElement("tr");
-            $(abbrevTr).data("bookXmlId", result["BookXmlId"]);
-            $(abbrevTr).data("pageXmlId", pageContext["PageXmlId"]);
+            //$(abbrevTr).data("bookXmlId", bookXmlId);
+            //$(abbrevTr).data("pageXmlId", pageXmlId);
 
             var abbrevTd = document.createElement("td");
-            abbrevTd.innerHTML = result["Acronym"];
+
+            var abbrevHref = document.createElement("a");
+            abbrevHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookXmlId + "&searchText=" + search.getLastQuery() + "&page=" + pageXmlId;
+            abbrevHref.innerHTML = result["Acronym"];
+
+            abbrevTd.appendChild(abbrevHref);
+
             abbrevTr.appendChild(abbrevTd);
             abbrevTableBody.appendChild(abbrevTr);
         }
@@ -227,7 +235,14 @@ $(document).ready(() => {
         document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
         document.getElementById("detail-abbrev").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
 
-        document.getElementById("detail-folio").innerHTML = typeof $(tableRow).data("pageName") !== "undefined" && $(tableRow).data("pageName") !== null? $(tableRow).data("pageName") : undefinedReplaceString;
+        var folioHref = document.createElement("a");
+        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookXmlId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageXmlId");
+        folioHref.innerHTML = typeof $(tableRow).data("pageName") !== "undefined" && $(tableRow).data("pageName") !== null ? $(tableRow).data("pageName") : undefinedReplaceString;
+
+        $("#detail-folio").empty();
+        $("#detail-folio").append(folioHref);
+
+
         document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" && $(tableRow).data("verseName") !== null ? $(tableRow).data("verseName") : undefinedReplaceString;
     }
 
@@ -245,5 +260,9 @@ $(document).ready(() => {
 
     $("#corpus-search-results-table-div").scroll((event: Event) => {
         $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target).scrollTop());
+    });
+
+    $("#corpus-search-results-abbrev-table-div").scroll((event: Event) => {
+        $("#corpus-search-results-table-div").scrollTop($(event.target).scrollTop());
     });
 });

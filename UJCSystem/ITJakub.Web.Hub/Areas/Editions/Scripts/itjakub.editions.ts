@@ -1,4 +1,4 @@
-﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
+﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
@@ -153,6 +153,12 @@
         var decodedText = decodeURIComponent(searchedText);
         decodedText = replaceSpecialChars(decodedText);
         search.processSearchQuery(decodedText);    
+    }
+
+    if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
+        var decodedText = decodeURIComponent(initPageXmlId);
+        decodedText = replaceSpecialChars(decodedText);
+        readerPlugin.moveToPage(decodedText, true);
     }
 }
 

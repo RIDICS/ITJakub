@@ -53,7 +53,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Listing(string bookId, string searchText)
+        public ActionResult Listing(string bookId, string searchText, string page)
         {
             var book = m_serviceClient.GetBookInfo(bookId);
             return
@@ -63,7 +63,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
                     BookPages = book.BookPages,
-                    SearchText = searchText
+                    SearchText = searchText,
+                    InitPageXmlId = page
                 });
         }
 
