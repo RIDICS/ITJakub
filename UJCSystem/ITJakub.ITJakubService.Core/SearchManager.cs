@@ -48,7 +48,7 @@ namespace ITJakub.ITJakubService.Core
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
-            var books = m_bookRepository.FindBooksLastVersionsByBookType(type);
+            var books = m_bookRepository.FindBookVersionsByTypeWithCategories(type);
             var categories = m_categoryRepository.FindCategoriesByBookType(type).OrderBy(x => x.Description);
 
             return new BookTypeSearchResultContract
@@ -167,7 +167,7 @@ namespace ITJakub.ITJakubService.Core
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
-            var bookVersions = m_bookRepository.FindBooksLastVersionsByBookType(type);
+            var bookVersions = m_bookRepository.FindBookVersionsByTypeWithAuthors(type);
             return Mapper.Map<List<BookContract>>(bookVersions);
         }
         

@@ -6,7 +6,7 @@
       <generator class="identity" />
     </id>
     
-    <many-to-one name="ParentCategory" lazy="false">
+    <many-to-one name="ParentCategory" lazy="proxy">
       <column name="ParentCategory" sql-type="int" not-null="false" />
     </many-to-one>
     
@@ -22,7 +22,7 @@
       <column name="Path" sql-type="varchar" not-null="true" />
     </property>
     
-    <many-to-one name="BookType" lazy="false">
+    <many-to-one name="BookType" lazy="proxy">
       <column name="BookType" sql-type="int" not-null="false" />
     </many-to-one>
     

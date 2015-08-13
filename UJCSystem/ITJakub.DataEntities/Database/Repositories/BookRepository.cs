@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -8,6 +9,7 @@ using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using ResponsibleType = ITJakub.DataEntities.Database.Entities.ResponsibleType;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -166,30 +168,44 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                BookVersion bookVersion = null;
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Responsible responsibleAlias = null;
+                ResponsibleType responsibleTypeAlias = null;
 
-                // subquery to be later used for EXISTS
-                var maxSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    // WHERE Clause
-                    .Where(x => x.Book.Id == bookVersion.Book.Id)
-                    // HAVING Clause
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersion.CreateTime)
-                        ));
+                var futureResult = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Book).Eager
+                    .Fetch(x => x.Publisher).Eager
+                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .Future<BookVersion>();
 
-                // final query without any transformations/projections... but filtered
-                var result = session.QueryOver(() => bookVersion)
-                    .WhereRestrictionOn(x => x.Title).IsLike(string.Format("%{0}%", text))
-                    .WithSubquery
-                    .WhereExists(maxSubquery)
-                    .List<BookVersion>();
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Keywords).Eager
+                    .Future<BookVersion>();
 
-                //var pagesCount = result.First().BookPages.Count;
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Authors).Eager
+                    .Future<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
+                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
+                    .Future<BookVersion>();
+
+                var result = futureResult.ToList();
                 return result;
             }
         }
@@ -216,7 +232,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> FindBooksLastVersionsByBookType(BookTypeEnum bookType)
+        public virtual IList<BookVersion> FindBookVersionsByTypeWithCategories(BookTypeEnum bookType)
         {
             Book bookAlias = null;
             BookVersion bookVersionAlias = null;
@@ -236,11 +252,19 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookVersionAlias.Id == bookAlias.LastVersion.Id)
                     .Fetch(x => x.Categories).Eager
                     .Future<BookVersion>();
-                    
+
                 return bookVersions.ToList();
             }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> FindBookVersionsByTypeWithAuthors(BookTypeEnum bookType)
+        {
+            throw new NotImplementedException();
         }
 
         [Transaction(TransactionMode.Requires)]
