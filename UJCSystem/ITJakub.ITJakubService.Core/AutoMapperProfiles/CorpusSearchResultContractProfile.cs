@@ -14,6 +14,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId))
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Author, opts => opts.MapFrom(src => src.Authors.FirstOrDefault() != null ? src.Authors.First().Name : null))
+                .ForMember(dest => dest.Acronym, opts => opts.MapFrom(src => src.Acronym))
                 .ForMember(dest => dest.OriginDate, opts => opts.MapFrom(src => src.ManuscriptDescriptions.FirstOrDefault() != null ? src.ManuscriptDescriptions.First().OriginDate : null));
         }
     }

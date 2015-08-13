@@ -23,6 +23,9 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         public string OriginDate { get; set; }
 
         [DataMember]
+        public string Acronym { get; set; }
+
+        [DataMember]
         public IList<string> Notes { get; set; }
 
         [DataMember]

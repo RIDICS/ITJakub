@@ -109,7 +109,7 @@
     width: 100%;
 }
 
-.corpus-search-results-table-div table tr {
+.corpus-search-results-table-div table tr, #corpus-search-results-abbrev-table-div table tr {
     cursor: pointer;    
     border-top: 1px solid transparent;
 }
@@ -164,4 +164,26 @@
 #corpus-search-results-table-div-loader{
     text-align: center;
     margin-top: 180px;
+}
+
+#corpus-search-results-abbrev-table-div {
+    float: left;
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: white;
+    height: @search-results-area-height;
+    padding-right: 5px;
+}
+
+#corpus-search-results-abbrev-table-div::-webkit-scrollbar {
+    visibility: hidden;
+}
+
+#result-abbrev-table {
+    min-width: 90px;
+    text-align: center;
+}
+
+#result-abbrev-table tr:hover{
+    color: @item-background-color;
 }

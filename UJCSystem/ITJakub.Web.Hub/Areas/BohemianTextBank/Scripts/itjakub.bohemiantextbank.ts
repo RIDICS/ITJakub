@@ -14,6 +14,7 @@ $(document).ready(() => {
 
     function showLoading() {
         $("#result-table").hide();
+        $("#result-abbrev-table").hide();
         $("#corpus-search-results-table-div-loader").empty();
         $("#corpus-search-results-table-div-loader").show();
         $("#corpus-search-results-table-div-loader").addClass("loader");
@@ -22,11 +23,13 @@ $(document).ready(() => {
     function hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
+        $("#result-abbrev-table").show();
         $("#result-table").show();
     }
 
     function fillResultsIntoTable(results: Array<any>) {
         var tableBody = document.getElementById("resultsTableBody");
+        var abbrevTableBody = document.getElementById("resultsAbbrevTableBody");
         $(tableBody).empty();
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
@@ -64,6 +67,16 @@ $(document).ready(() => {
             tr.appendChild(tdAfter);
 
             tableBody.appendChild(tr);
+
+            //fill left table with abbrev of corpus name
+            var abbrevTr = document.createElement("tr");
+            $(abbrevTr).data("bookXmlId", result["BookXmlId"]);
+            $(abbrevTr).data("pageXmlId", pageContext["PageXmlId"]);
+
+            var abbrevTd = document.createElement("td");
+            abbrevTd.innerHTML = result["Acronym"];
+            abbrevTr.appendChild(abbrevTd);
+            abbrevTableBody.appendChild(abbrevTr);
         }
         
 
@@ -72,7 +85,6 @@ $(document).ready(() => {
         var tableContainer = $(tableBody).parents("#corpus-search-results-table-div");
         var tableContainerWidth = $(tableContainer).width();
         var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
-        alert(firstChildTdWidth + " - " + tableContainerWidth + "/2");
         $(tableContainer).scrollLeft(scrollOffset);
     }
     
@@ -229,5 +241,9 @@ $(document).ready(() => {
 
     $("#contextPositionsSelect").change((evnet: Event) => {
         searchForPageNumber(actualPage);
+    });
+
+    $("#corpus-search-results-table-div").scroll((event: Event) => {
+        $("#corpus-search-results-abbrev-table-div").scrollTop($(event.target).scrollTop());
     });
 });
