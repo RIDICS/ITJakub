@@ -148,16 +148,16 @@ namespace ITJakub.ITJakubService.Core
             var resultPageCountDictionary = m_bookVersionRepository.GetBooksPageCountByGuid(guidList)
                 .ToDictionary(x => x.BookId, x => x.Count);
 
-            var resultDictionary = result.ToDictionary(x => x.Book.Id);
+            var resultDictionary = result.ToDictionary(x => x.Book.Guid);
 
             var searchResultFullContext = new List<SearchResultContract>();
 
             foreach (var searchResult in searchResults.SearchResults)
             {
-                var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookId]);
+                var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookXmlId]);
                 localResult.TotalHitCount = searchResult.TotalHitCount;
                 localResult.Results = searchResult.Results;
-                localResult.PageCount = resultPageCountDictionary[searchResult.BookId];
+                localResult.PageCount = resultPageCountDictionary[localResult.BookId];
                 searchResultFullContext.Add(localResult);
             }
 
