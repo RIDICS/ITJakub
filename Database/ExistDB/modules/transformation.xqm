@@ -11,8 +11,8 @@ declare namespace util = "http://exist-db.org/xquery/util";
 declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 
 declare function vw:transform-document($node-to-transform as node(), $output-format as xs:string, $xsl-path as xs:string) as item() {
-	let $template := doc(escape-html-uri($xsl-path)) 
-let $transformation := 
+let $template := doc(escape-html-uri($xsl-path)) 
+(:let $transformation := 
 	if($output-format = "Xml") then
 			$node-to-transform
 	else if($output-format = "Html") then
@@ -22,8 +22,15 @@ let $transformation :=
 		else if($output-format = "Pdf") 
 		then vw:transform-document-to-pdf($node-to-transform, $template)
 		else()
+:)
+return switch($output-format)
+	case "Xml" return $node-to-transform
+	case "Html" return transform:stream-transform($node-to-transform, $template, ())
+	case "Rtf" return vw:transform-document-to-rtf($node-to-transform, $template)
+	case "Pdf" return vw:transform-document-to-pdf($node-to-transform, $template)
+	default return ()
 
-return ($transformation)
+(:return ($transformation):)
 
 } ;
 

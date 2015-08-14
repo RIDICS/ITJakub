@@ -37,7 +37,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult Listing(string bookId, string searchText)
+        public ActionResult Listing(string bookId, string searchText, string page)
         {
             var book = m_serviceClient.GetBookInfoWithPages(bookId);
             return
@@ -47,7 +47,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
                     BookPages = book.BookPages,
-                    SearchText = searchText
+                    SearchText = searchText,
+                    InitPageXmlId = page
                 });
         }
 
@@ -379,6 +380,37 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Fulltext,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_serviceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
@@ -386,6 +418,49 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 new WordListCriteriaContract
                 {
                   Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                },
+                new ResultCriteriaContract
+                {
+                    Start = start,
+                    Count = count,
+                    Sorting = (SortEnum) sortingEnum,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                    HitSettingsContract = new HitSettingsContract
+                    {
+                        ContextLength = 50,
+                        Count = 3,
+                        Start = 1
+                    }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var results = m_serviceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Fulltext,
                   Disjunctions = new List<WordCriteriaContract>
                   {
                       new WordCriteriaContract

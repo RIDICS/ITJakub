@@ -211,5 +211,28 @@ namespace ITJakub.SearchService.Core.Exist
             return m_client.GetEditionPageFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, pageXmlId,
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
+
+
+        public CorpusSearchResultContractList GetCorpusSearchResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return null;
+
+            AdjustStartIndexes(resultSearchCriteria.ResultSpecifications);
+
+            var stringResult = m_client.GetSearchCorpus(resultSearchCriteria.ToXml());
+            return CorpusSearchResultContractList.FromXml(stringResult);
+        }
+
+        public int GetCorpusSearchResultsCount(List<SearchCriteriaContract> searchCriterias)
+        {
+            var resultSearchCriteria = GetFilteredResultSearchCriterias(searchCriterias);
+            if (resultSearchCriteria.ResultBooks == null)
+                return 0;
+
+            var result = m_client.GetSearchCorpusCount(resultSearchCriteria.ToXml());
+            return result;
+        }
     }
 }

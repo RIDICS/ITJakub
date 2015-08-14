@@ -115,6 +115,12 @@ namespace ITJakub.ITJakubService.DataContracts
         int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
 
         [OperationContract]
+        CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
+        
+        [OperationContract]
+        int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
         int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]

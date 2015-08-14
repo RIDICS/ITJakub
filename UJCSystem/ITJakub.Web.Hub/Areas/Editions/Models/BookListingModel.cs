@@ -10,5 +10,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Models
         public string BookTitle { get; set; }
         public IList<BookPageContract> BookPages { get; set; }
         public string SearchText { get; set; }
+        public string InitPageXmlId { get; set; }
     }
 }

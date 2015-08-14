@@ -546,6 +546,96 @@ namespace ITJakub.ITJakubService.Core
             return m_searchServiceClient.GetSearchEditionsPageList(searchCriterias.ToList());
         }
 
+        public CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
+
+            if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
+            {
+                var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
+
+                if (databaseSearchResult.Count == 0)
+                {
+                    return new CorpusSearchResultContractList();
+                }
+
+                var resultContract = new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks = databaseSearchResult
+                };
+                nonMetadataCriterias.Add(resultContract);
+            }
+
+            if (filteredCriterias.NonMetadataCriterias.All(
+                    x => x.Key == CriteriaKey.ResultRestriction || x.Key == CriteriaKey.Result))
+            {
+                // Search only in SQL
+                var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
+                var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
+                var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction);
+                var results =  Mapper.Map<IList<CorpusSearchResultContract>>(resultBookVersions);
+                var resultList = new CorpusSearchResultContractList
+                {
+                    SearchResults = results
+                };
+
+                return resultList;
+            }
+
+            // Fulltext search
+            var searchResults = m_searchServiceClient.GetCorpusSearchResults(nonMetadataCriterias);
+
+            var guidList = searchResults.SearchResults.Select(x => x.BookXmlId).ToList();
+            var result = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidList);
+
+            var resultDictionary = result.ToDictionary(x => x.Book.Guid);
+
+            var searchResultFullContext = new List<CorpusSearchResultContract>();
+
+            foreach (var searchResult in searchResults.SearchResults)
+            {
+                var localResult = Mapper.Map<CorpusSearchResultContract>(resultDictionary[searchResult.BookXmlId]);
+                localResult.Notes = searchResult.Notes;
+                localResult.PageResultContext = searchResult.PageResultContext;
+                localResult.VerseResultContext = searchResult.VerseResultContext;
+                searchResultFullContext.Add(localResult);
+            }
+
+            var searchList = new CorpusSearchResultContractList
+            {
+                SearchResults = searchResultFullContext
+            };
+
+            return searchList;
+        }
+
+        public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
+            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
+                filteredCriterias.MetadataParameters);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
+            if (databaseSearchResult.Count == 0)
+                return 0;
+
+            if (nonMetadataCriterias.All(x => x.Key == CriteriaKey.Result))
+            {
+                // Search only in SQL
+                return databaseSearchResult.Count;
+            }
+
+            // Fulltext search
+            var resultContract = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = databaseSearchResult
+            };
+            nonMetadataCriterias.Add(resultContract);
+
+            return m_searchServiceClient.GetCorpusSearchResultsCount(nonMetadataCriterias);
+        }
+
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat)
         {

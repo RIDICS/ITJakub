@@ -211,6 +211,24 @@ namespace ITJakub.SearchService.Core.Exist
             return GetEditionPageFromSearch(serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat, null);
         }
 
+        public string GetSearchCorpus(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public int GetSearchCorpusCount(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
+        }
+
         public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
