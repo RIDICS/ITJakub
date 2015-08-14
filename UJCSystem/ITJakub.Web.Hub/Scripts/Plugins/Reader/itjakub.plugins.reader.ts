@@ -32,9 +32,12 @@ class ReaderModule {
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
 
+    pageChangedCallback: (pageXmlId: string) => void;
 
-    constructor(readerContainer: HTMLDivElement) {
+
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void) {
         this.readerContainer = readerContainer;
+        this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
     }
 
@@ -554,6 +557,9 @@ class ReaderModule {
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
         this.notifyPanelsMovePage(pageIndex, scrollTo);
+
+        var pageXmlId = this.pages[pageIndex].xmlId;
+        this.pageChangedCallback(pageXmlId);
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
