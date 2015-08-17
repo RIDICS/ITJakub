@@ -174,12 +174,12 @@ namespace ITJakub.ITJakubService.Core
         public IList<BookContract> Search(BookTypeContract category, SearchDestinationContract searchBy, string query)
         {
             var type = Mapper.Map<BookTypeEnum>(category);
-            IList<BookVersion> bookList = null;
+            IList<BookVersion> bookList;
 
             switch (searchBy)
             {
                 case SearchDestinationContract.Author:
-                    //TODO search by author
+                    bookList = m_bookRepository.SearchByAuthorAndBookType(query, type);
                     break;
                 default:
                     bookList = m_bookRepository.SearchByTitleAndBookType(query, type);

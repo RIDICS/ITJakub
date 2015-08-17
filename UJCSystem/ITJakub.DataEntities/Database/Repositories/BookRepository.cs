@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -225,8 +224,44 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
                         .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
-                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id && bookVersionAlias.Title.IsLike(string.Format("%{0}%", text)))
+                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .AndRestrictionOn(() => bookVersionAlias.Title).IsLike(text, MatchMode.Anywhere)
+                        .Fetch(x => x.Authors).Eager
+                        .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookVersion>();
+                return bookVersions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> SearchByAuthorAndBookType(string query, BookTypeEnum bookType)
+        {
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+            Author authorAlias = null;
+
+            using (var session = GetSession())
+            {
+                var bookIds = QueryOver.Of(() => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => bookVersionAlias.Authors, () => authorAlias, JoinType.InnerJoin)
+                    .Select(x => x.Id)
+                    .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                    .AndRestrictionOn(() => authorAlias.Name).IsLike(query, MatchMode.Anywhere);
+
+                var bookVersions = session.QueryOver(() => bookVersionAlias)
+                    .Fetch(x => x.Book).Eager
+                    .Fetch(x => x.Authors).Eager
+                    .WithSubquery
+                    .WhereProperty(x => x.Id)
+                    .In(bookIds)
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+
                 return bookVersions;
             }
         }
@@ -264,7 +299,25 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual IList<BookVersion> FindBookVersionsByTypeWithAuthors(BookTypeEnum bookType)
         {
-            throw new NotImplementedException();
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                    .Fetch(x => x.Authors).Eager
+                    .OrderBy(() => bookVersionAlias.Title).Asc
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+
+                return result;
+            }
         }
 
         [Transaction(TransactionMode.Requires)]
