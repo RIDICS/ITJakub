@@ -10,6 +10,8 @@ namespace ITJakub.Shared.Contracts.Notes
     [DataContract]
     public class FeedbackContract
     {
+        [DataMember]
+        public long Id { get; set; }
 
         [DataMember]
         public string Text { get; set; }

@@ -13,7 +13,7 @@
     <div class="row" style="margin-left: 5px; width: 80%;">
         <div class="col-md-12">
             <section id="loginForm">
-                @using (Html.BeginForm("Login", "Account", new { model = this.Model, returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("Login", "Account", new { model = Model, returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     <h4>Přihlaste se pomocí svého účtu</h4>

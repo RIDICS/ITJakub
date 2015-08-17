@@ -1046,11 +1046,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<FeedbackContract> GetAllFeedback()
+        public List<FeedbackContract> GetFeedbacks()
         {
             try
             {
-               return Channel.GetAllFeedback();
+               return Channel.GetFeedbacks();
             }
             catch (CommunicationException ex)
             {
@@ -1072,9 +1072,63 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public int GetFeedbacksCount()
+        {
+            try
+            {
+               return Channel.GetFeedbacksCount();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+        
+        public void DeleteFeedback(long feedbackId)
+        {
+            try
+            {
+               Channel.DeleteFeedback(feedbackId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
-        }      
+        }
+
     }
 }

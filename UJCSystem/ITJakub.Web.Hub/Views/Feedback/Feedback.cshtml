@@ -2,6 +2,17 @@
     ViewBag.Title = "Správa připomínek";
 }
 
+@section scripts{
+    @Scripts.Render("~/Scripts/itjakub.feedbacks.js")
+}
+
 <div class="content-container">
     <h2>Správa připomínek</h2>
+
+    <div class="feedbacks-count-area">
+        Počet připomínek: <span id="feedbacks-count"></span>
+    </div>
+    
+    <div id="feedbacks" class="feedbacks-area">
+    </div>
 </div>

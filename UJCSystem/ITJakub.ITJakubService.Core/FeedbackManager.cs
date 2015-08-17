@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
@@ -76,6 +78,22 @@ namespace ITJakub.ITJakubService.Core
                 Category = FeedbackCategoryEnum.Dictionaries
             };
             m_feedbackRepository.Save(entity);
+        }
+
+        public List<FeedbackContract> GetFeedbacks()
+        {
+            var feedbacks = m_feedbackRepository.GetFeedbacks();
+            return Mapper.Map<List<FeedbackContract>>(feedbacks);
+        }
+
+        public int GetFeedbacksCount()
+        {
+            return m_feedbackRepository.GetFeedbacksCount();
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            m_feedbackRepository.DeleteFeedback(feedbackId);
         }
     }
 }

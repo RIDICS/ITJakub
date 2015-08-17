@@ -15,7 +15,21 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetFeedbacksCount()
         {
-            return Json(0, JsonRequestBehavior.AllowGet);
+            var count = m_mainServiceClient.GetFeedbacksCount();
+            return Json( count , JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetFeedbacks()
+        {
+            var results = m_mainServiceClient.GetFeedbacks();
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteFeedback(long feedbackId)
+        {
+            m_mainServiceClient.DeleteFeedback(feedbackId);
+            return Json(new {});
         }
     }
 }
