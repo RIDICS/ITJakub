@@ -228,9 +228,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
         
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
         }
         
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,

@@ -5,9 +5,11 @@ using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 
@@ -62,9 +64,22 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult FeedBack()
+        public ActionResult Feedback()
         {
-            return View();
+            var username = HttpContext.User.Identity.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return View();
+            }
+
+            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
+            var viewModel = new HeadwordFeedbackViewModel
+            {
+                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                Email = user.Email
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -302,9 +317,9 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             if (bookXmlId == null || bookVersionXmlId == null || entryXmlId == null)
             {
                 if (string.IsNullOrWhiteSpace(username))
-                    m_mainServiceClient.CreateAnonymousFeedback(content, name, email);
+                    m_mainServiceClient.CreateAnonymousFeedback(content, name, email, FeedbackCategoryEnumContract.Dictionaries);
                 else
-                    m_mainServiceEncryptedClient.CreateFeedback(content, username);
+                    m_mainServiceEncryptedClient.CreateFeedback(content, username, FeedbackCategoryEnumContract.Dictionaries);
             }
             else
             {

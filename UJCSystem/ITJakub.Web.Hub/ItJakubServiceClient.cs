@@ -994,11 +994,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
             try
             {
-                Channel.CreateAnonymousFeedback(feedback, name, email);
+                Channel.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
             }
             catch (CommunicationException ex)
             {

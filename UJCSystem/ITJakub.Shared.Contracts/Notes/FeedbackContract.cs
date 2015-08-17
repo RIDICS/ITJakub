@@ -14,5 +14,17 @@ namespace ITJakub.Shared.Contracts.Notes
         [DataMember]
         public string Text { get; set; }
 
+        [DataMember]
+        public DateTime CreateDate { get; set; }
+
+        [DataMember]
+        public string FilledName { get; set; }
+
+        [DataMember]
+        public string FilledEmail { get; set; }
+
+        [DataMember]
+        public FeedbackCategoryEnumContract Category { get; set; }
+
     }
 }

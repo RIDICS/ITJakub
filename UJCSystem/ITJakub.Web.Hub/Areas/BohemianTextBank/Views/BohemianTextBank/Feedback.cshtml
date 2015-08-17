@@ -37,17 +37,18 @@
                 Můžete používat diakritiku
             </div>
 
+
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." })
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled"}) : Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno..."}))
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." })
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled"}) : Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail..."}))
                 </div>
             </div>
 

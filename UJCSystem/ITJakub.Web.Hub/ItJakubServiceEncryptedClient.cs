@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts.Notes;
 using log4net;
 
 namespace ITJakub.Web.Hub
@@ -229,11 +230,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void CreateFeedback(string feedback, string username)
+        public void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category)
         {
             try
             {
-                Channel.CreateFeedback(feedback, username);
+                Channel.CreateFeedback(feedback, username, category);
             }
             catch (CommunicationException ex)
             {

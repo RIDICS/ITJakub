@@ -140,7 +140,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Feedback
 
         [OperationContract]
-        void CreateAnonymousFeedback(string feedback, string name, string email);
+        void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory);
 
         [OperationContract]
         void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string name, string email);

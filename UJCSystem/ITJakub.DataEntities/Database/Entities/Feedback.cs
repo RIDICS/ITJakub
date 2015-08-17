@@ -1,5 +1,5 @@
 using System;
-using System.Data;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
@@ -16,6 +16,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual User User { get; set; }
 
         public virtual DateTime CreateDate { get; set; }
+
+        public virtual FeedbackCategoryEnum Category { get; set; }
 
 
         public virtual bool Equals(Feedback other)

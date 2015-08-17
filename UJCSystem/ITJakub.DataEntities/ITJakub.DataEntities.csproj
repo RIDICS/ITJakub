@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
+    <Compile Include="Database\Entities\Enums\FeedbackCategoryEnum.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
@@ -166,13 +167,13 @@
     <EmbeddedResource Include="Database\Entities\BookHeadword.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
@@ -8,7 +9,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
     public class OldGrammarController : Controller
     {
 
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
 
         public ActionResult Index()
         {
@@ -32,7 +34,20 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Feedback()
         {
-            return View();
+            var username = HttpContext.User.Identity.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return View();
+            }
+
+            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
+            var viewModel = new FeedbackViewModel
+            {
+                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                Email = user.Email
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -40,8 +55,13 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-            var client = new ItJakubServiceClient();
-            client.CreateAnonymousFeedback(model.Text, model.Name, model.Email);
+            var username = HttpContext.User.Identity.Name;
+
+            if (string.IsNullOrWhiteSpace(username))
+                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.OldGrammar);
+            else
+                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.OldGrammar);
+
             return View("Information");
         }
 
@@ -52,13 +72,13 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
+            var result = m_mainServiceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, null, null);
+            var result = m_mainServiceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, null, null);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

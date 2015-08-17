@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -42,7 +43,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Feedback
 
         [OperationContract]
-        void CreateFeedback(string feedback, string username);
+        void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category);
 
         [OperationContract]
         void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
