@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
@@ -40,6 +41,32 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         public string GetStemma(string word)
         {
             throw new System.NotImplementedException();
+        }
+
+        public IList<LemmatizationTypeaheadContract> GetTypeaheadToken(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadToken(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
 
         private string GetCurrentMethod([CallerMemberName] string methodName = null)

@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 
 namespace ITJakub.Lemmatization.Shared.Contracts
 {
@@ -10,5 +11,8 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 
         [OperationContract]
         string GetStemma(string word);
+
+        [OperationContract]
+        IList<LemmatizationTypeaheadContract> GetTypeaheadToken(string query);
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\..\Libs\AutoMapper.3.1.0\lib\windows8\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,11 +44,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="AutoMapperProfiles\TokenProfile.cs" />
+    <Compile Include="LemmatizationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ITJakub.Lemmatization.Core.Container.Config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
+      <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
+      <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj">
+      <Project>{69076B65-4268-497A-ABF6-64D7FFA50911}</Project>
+      <Name>ITJakub.Lemmatization.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj">
+      <Project>{ADCE48CE-05C9-494A-A848-1C681DAD5FD9}</Project>
+      <Name>ITJakub.Lemmatization.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
