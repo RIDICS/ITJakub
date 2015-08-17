@@ -1,6 +1,21 @@
-﻿
-@{
-    ViewBag.Title = "Lemmatization";
+﻿@{
+    ViewBag.Title = "Lemmatizace";
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/lemmatization/javascript")
 }
 
-<h2>Lemmatization</h2>
+<h2>Lemmatizace</h2>
+
+<div>
+    <div>
+        <input type="text" id="mainSearchInput" />
+    </div>
+    <button id="addNewTokenButton">+</button>
+    <button id="loadButton">Načíst</button>
+</div>
+<div>
+    <span>Token: </span>
+    <span id="specificToken"></span>
+</div>
+<div id="mainContainer"></div>
