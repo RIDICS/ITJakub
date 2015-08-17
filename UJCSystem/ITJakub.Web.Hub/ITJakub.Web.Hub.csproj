@@ -226,6 +226,7 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Controllers\LemmatizationController.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
@@ -765,6 +766,8 @@
     <Content Include="Views\Home\Links.cshtml" />
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Lemmatization\Lemmatization.cshtml" />
+    <Content Include="Views\Lemmatization\LemmatizationList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -830,6 +833,10 @@
     <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
       <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
       <Name>ITJakub.ITJakubService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj">
+      <Project>{ADCE48CE-05C9-494A-A848-1C681DAD5FD9}</Project>
+      <Name>ITJakub.Lemmatization.Shared.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

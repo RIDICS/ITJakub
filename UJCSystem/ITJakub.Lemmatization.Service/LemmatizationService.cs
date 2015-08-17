@@ -2,7 +2,7 @@
 using System.Reflection;
 using ITJakub.Lemmatization.DataEntities;
 using ITJakub.Lemmatization.DataEntities.Repositories;
-using ITJakub.Shared.Contracts;
+using ITJakub.Lemmatization.Shared.Contracts;
 using log4net;
 
 namespace ITJakub.Lemmatization.Service
