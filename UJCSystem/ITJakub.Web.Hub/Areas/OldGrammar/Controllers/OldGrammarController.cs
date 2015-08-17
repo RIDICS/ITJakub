@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
@@ -33,7 +34,17 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             return View();
         }
-        
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Feedback(FeedbackViewModel model)
+        {
+            var client = new ItJakubServiceClient();
+            client.CreateAnonymousFeedback(model.Text, model.Name, model.Email);
+            return View("Information");
+        }
+
         public ActionResult Help()
         {
             return View();

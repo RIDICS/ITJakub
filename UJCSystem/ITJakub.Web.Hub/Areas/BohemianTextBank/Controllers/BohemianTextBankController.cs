@@ -5,6 +5,7 @@ using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 
@@ -40,6 +41,17 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             return View();
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Feedback(FeedbackViewModel model)
+        {
+            var client = new ItJakubServiceClient();
+            client.CreateAnonymousFeedback(model.Text, model.Name, model.Email);
+            return View("Information");
+        }
+
         public ActionResult Help()
         {
             return View();
