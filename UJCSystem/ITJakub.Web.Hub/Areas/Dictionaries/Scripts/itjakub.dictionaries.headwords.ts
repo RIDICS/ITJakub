@@ -195,10 +195,8 @@ class DictionaryViewerListWrapper {
     }
 
     private updateUrl() {
-        var url = "?categories=" + JSON.stringify(this.selectedCategoryIds)
-            + "&books=" + JSON.stringify(this.selectedBookIds)
-            + "&page=" + this.currentPageNumber;
-
-        window.history.replaceState(null, null, url);
+        updateQueryStringParameter("categories", JSON.stringify(this.selectedCategoryIds));
+        updateQueryStringParameter("books", JSON.stringify(this.selectedBookIds));
+        updateQueryStringParameter("page", this.currentPageNumber);
     }
 }
