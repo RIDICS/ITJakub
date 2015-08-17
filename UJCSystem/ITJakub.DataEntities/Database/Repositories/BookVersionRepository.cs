@@ -153,12 +153,17 @@ namespace ITJakub.DataEntities.Database.Repositories
                 BookVersion bookVersionAlias = null;
 
                 var bookContentItems =
-                    session.QueryOver<BookContentItem>()
-                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
-                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
-                        //.Fetch(x => x.Page).Eager
-                        .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id && x.ParentBookContentItem == null)
-                        .List<BookContentItem>();
+                   session.QueryOver<BookContentItem>()
+                       .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                       .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                       .Fetch(x => x.Page).Eager
+                       .Fetch(x => x.ChildContentItems).Eager
+                       .Where(x => bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                       .TransformUsing(Transformers.DistinctRootEntity)
+                       .List<BookContentItem>()
+                       .Where(x => x.ParentBookContentItem == null)
+                       .ToList();
+
                 return bookContentItems;
             }
         }

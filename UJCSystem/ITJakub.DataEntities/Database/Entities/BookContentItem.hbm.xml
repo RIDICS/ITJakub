@@ -13,13 +13,13 @@
     <many-to-one name="BookVersion">
       <column name="BookVersion" sql-type="bigint" not-null="true" />
     </many-to-one>
-    <many-to-one name="Page" lazy="false">
+    <many-to-one name="Page" lazy="proxy">
       <column name="BookPage" sql-type="bigint" not-null="false" />
     </many-to-one>
-    <many-to-one name="ParentBookContentItem" lazy="false">
+    <many-to-one name="ParentBookContentItem" lazy="proxy">
       <column name="ParentBookContentItem" sql-type="bigint" not-null="false" />
     </many-to-one>
-    <bag name="ChildContentItems" inverse="true" cascade="none" lazy="false">
+    <bag name="ChildContentItems" inverse="true" cascade="none" lazy="true">
       <key column="ParentBookContentItem" />
       <one-to-many class="BookContentItem" />
     </bag>
