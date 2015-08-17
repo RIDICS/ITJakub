@@ -1,6 +1,11 @@
 ﻿@model ITJakub.Web.Hub.Models.LoginViewModel
 @{
     ViewBag.Title = "Přihlášení";
+    
+    if (ViewContext.HttpContext.Request.UrlReferrer != null)
+    {
+        ViewBag.ReturnUrl = ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery;
+    }
 }
 
 <div class="content-container top-offset-without-submenu">
@@ -8,7 +13,7 @@
     <div class="row" style="margin-left: 5px; width: 80%;">
         <div class="col-md-12">
             <section id="loginForm">
-                @using (Html.BeginForm("Login", "Account", new { ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("Login", "Account", new { model = this.Model, returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     <h4>Přihlaste se pomocí svého účtu</h4>
