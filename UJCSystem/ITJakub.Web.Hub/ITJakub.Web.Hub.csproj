@@ -715,6 +715,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />

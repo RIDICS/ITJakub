@@ -15,14 +15,30 @@ class Lemmatization {
     public make() {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
-        this.searchBox.create((suggestionsCount: number) => {
-            console.log("suggestions: " + suggestionsCount);
+        this.searchBox.create((selectedExists: boolean) => {
+            if (selectedExists)
+                $("#addNewTokenButton").addClass("hidden");
+            else
+                $("#addNewTokenButton").removeClass("hidden");
         });
 
+        $("#loadButton").click(() => {
+            this.loadToken(this.searchBox.getValue());
+        });
 
+        $("#addNewTokenButton").click(() => {
+            $("#newTokenDialog").modal("show");
+        });
+
+        $("#addNewCharacteristic").click(() => {
+            $("#newTokenCharacteristic").modal("show");
+        });
     }
 
-    
+    private loadToken(item: ILemmatizationSearchBoxItem) {
+        $("#specificToken").text(item.Text);
+        $("#specificTokenDescription").text(item.Description);
+    }
 }
 
 class LemmatizationSearchBox {
@@ -31,6 +47,7 @@ class LemmatizationSearchBox {
     private options: Twitter.Typeahead.Options;
     private dataset: Twitter.Typeahead.Dataset;
     private bloodhound: Bloodhound<string>;
+    private currentItem: ILemmatizationSearchBoxItem;
 
     constructor(inputFieldElement: string) {
         this.inputField = inputFieldElement;
@@ -38,19 +55,49 @@ class LemmatizationSearchBox {
 
         this.options = {
             hint: true,
-            highlight: true,
+            highlight: false,
             minLength: 1
         };
     }
     
-    value(value: any): void {
+    setValue(value: any): void {
         $(this.inputField).typeahead('val', value);
     }
 
-    create(selectionChangedCallback: (suggestionCount: number) => void): void {
+    getValue(): ILemmatizationSearchBoxItem {
+        return this.currentItem;
+    }
+
+    create(selectionChangedCallback: (selectedExists: boolean) => void): void {
+        var self = this;
         $(this.inputField).typeahead(this.options, this.dataset);
-        $(this.inputField).bind("typeahead:render", <any>function (e, suggestions) {
-            selectionChangedCallback(suggestions ? suggestions.length : 0);
+        $(this.inputField).bind("typeahead:render", <any>function(e, ...datums) {
+            var isEmpty = $(".tt-menu", e.target.parentNode).hasClass("tt-empty");
+            if (isEmpty) {
+                self.currentItem = null;
+                selectionChangedCallback(false);
+                return;
+            }
+
+            var currentText = $(".tt-input", e.target.parentNode).val();
+            var suggestionElements = $(".suggestion", e.target.parentNode);
+            for (var i = 0; i < suggestionElements.length; i++) {
+                if ($(suggestionElements[i]).text() === currentText) {
+                    self.currentItem = datums[i];
+                    selectionChangedCallback(true);
+                    return;
+                }
+            }
+            self.currentItem = null;
+            selectionChangedCallback(false);
+        });
+        $(this.inputField).bind("typeahead:select", <any>function (e, datum) {
+            self.currentItem = datum;
+            selectionChangedCallback(true);
+        });
+        $(this.inputField).bind("typeahead:autocomplete", <any>function (e, datum) {
+            self.currentItem = datum;
+            selectionChangedCallback(true);
         });
     }
 
@@ -72,11 +119,9 @@ class LemmatizationSearchBox {
 
     setDataSet(name: string, parameterUrlString: string = null): void {
         this.clearAndDestroy();
-        var prefetchUrl: string = this.urlWithController + "/GetTypeahead" + name;
         var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
 
         if (parameterUrlString != null) {
-            prefetchUrl += "?" + parameterUrlString;
             remoteUrl += "&" + parameterUrlString;
         }
 
@@ -88,7 +133,6 @@ class LemmatizationSearchBox {
         var bloodhound: Bloodhound<string> = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: prefetchUrl,
             remote: remoteOptions
         });
 
@@ -96,6 +140,7 @@ class LemmatizationSearchBox {
             name: name,
             limit: 10,
             source: bloodhound,
+            display: "Text",
             templates: {
                 suggestion: this.getSuggestionTemplate
             }
@@ -106,11 +151,12 @@ class LemmatizationSearchBox {
     }
 
     private getSuggestionTemplate(item: ILemmatizationSearchBoxItem) {
-        return "<div class=\"suggestion\">" + item.Text + "</div><div class=\"description\">" + item.Description + "</div>";
+        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
     }
 }
 
 interface ILemmatizationSearchBoxItem {
+    Id: number;
     Text: string;
     Description: string;
 }

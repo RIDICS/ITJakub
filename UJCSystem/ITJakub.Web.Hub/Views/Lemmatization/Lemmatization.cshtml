@@ -1,6 +1,9 @@
 ﻿@{
     ViewBag.Title = "Lemmatizace";
 }
+@section styles{
+    @Styles.Render("~/itjakub/lemmatization/css")
+}
 @section scripts{
     @Scripts.Render("~/itjakub/lemmatization/javascript")
 }
@@ -8,14 +11,343 @@
 <h2>Lemmatizace</h2>
 
 <div>
-    <div>
-        <input type="text" id="mainSearchInput" />
+    <div class="lemmatization-main-buttons">
+        <button id="addNewTokenButton" class="hidden btn btn-default lemmatization-button">+</button>
+        <button id="loadButton" class="btn btn-default lemmatization-button">Načíst</button>
     </div>
-    <button id="addNewTokenButton">+</button>
-    <button id="loadButton">Načíst</button>
+    <div class="lemmatization-search">
+        <input type="text" class="form-control lemmatization-search-input" id="mainSearchInput"/>
+    </div>
 </div>
-<div>
-    <span>Token: </span>
-    <span id="specificToken"></span>
+<div class="content">
+    <div>
+        <span>Token: </span>
+        <span id="specificToken"></span>
+    </div>
+    <div>
+        <span>Popis: </span>
+        <span id="specificTokenDescription"></span>
+    </div>
 </div>
-<div id="mainContainer"></div>
+<div class="content">
+    <span>Charakteristiky:</span>
+    <div id="mainContainer"></div>
+    <div>
+        <button class="btn btn-default lemmatization-button" id="addNewCharacteristic">Přidat novou charakteristiku</button>
+    </div>
+</div>
+
+
+<div id="newTokenDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nový token</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="new-text" class="col-md-1 control-label">Token</label>
+                        <div class="col-md-3">
+                            <input class="form-control" id="new-text" name="new-text" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-description" class="col-md-1 control-label">Popis</label>
+                        <div class="col-md-3">
+                            <input class="form-control" id="new-description" name="new-text" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-token">Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newTokenCharacteristic" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Charakteristika tokenu</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal form-characteristic">
+                    <div class="form-group">
+                        <label for="new-token-text-description" class="col-md-4 control-label">Popis</label>
+                        <div class="col-md-7">
+                            <input class="form-control" id="new-token-text-description" name="new-token-text-description" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-00" class="col-md-4 control-label">Slovní druh</label>
+                        <div class="col-md-7">
+                            <select id="description-00" name="description-01" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="N">N - substantivum (podstatné jméno)</option>
+                                <option value="A">A - adjektivum (přídavné jméno)</option>
+                                <option value="P">P - pronomen (zájmeno)</option>
+                                <option value="C">C - numerál (číslovka, nebo číselný výraz s číslicemi)</option>
+                                <option value="V">V - verbum (sloveso)</option>
+                                <option value="D">D - adverbium (příslovce)</option>
+                                <option value="R">R - prepozice (předložka)</option>
+                                <option value="J">J - konjunkce (spojka)</option>
+                                <option value="T">T - partikule (částice)</option>
+                                <option value="I">I - interjekce (citoslovce)</option>
+                                <option value="Z">Z - interpunkce</option>
+                                <option value="X">X - neznámý nebo neurčený slovní druh</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-01" class="col-md-4 control-label">Detail slovního druhu</label>
+                        <div class="col-md-7">
+                            <select id="description-01" name="description-01" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value=",">, - spojka podřadicí (vč. "aby", "kdyby" ve všech tvarech)</option>
+                                <option value="1">1 - vztažné přivlastňovací zájmeno "jehož", "jejíž", ...</option>
+                                <option value="0">0 - předložka s připojeným "-ň"(něj): "proň", "naň", atd. (značkováno jako zájmeno)</option>
+                                <option value="2">2 - slovo před pomlčkou</option>
+                                <option value="6">6 - reflexívní zájmeno "se" v dlouhých tvarech ("sebe", "sobě", "sebou")</option>
+                                <option value="9">9 - vztažné zájmeno "jenž", "již", ... po předložce ("n-": "něhož", "níž", ...)</option>
+                                <option value="A">A - adjektivum obyčejné</option>
+                                <option value="@Html.Raw("@")">@@ - nerozpoznaný slovní tvar (značkováno jako neznámý slovní druh)</option>
+                                <option value="B">B - sloveso, tvar přítomného nebo budoucího času</option>
+                                <option value="D">D - zájmeno ukazovací ("ten", "onen", ...)</option>
+                                <option value="G">G - přídavné jméno odvozené od slovesného tvaru přítomného přechodníku</option>
+                                <option value="F">F - součást předložky, která nikdy nestojí samostatně ("nehledě", "vzhledem", ...)</option>
+                                <option value="K">K - zájmeno tázací nebo vztažné "kdo", vč. tvarů s "ž" a "s"</option>
+                                <option value="J">J - vztažné zájmeno "jenž" ("již", ...), ne po předložce</option>
+                                <option value="R">R - předložka, obyčejná</option>
+                                <option value="T">T - částice</option>
+                                <option value="W">W - zájmena záporná ("nic", "nikdo", "nijaký", "žádný", ...)</option>
+                                <option value="Z">Z - zájmeno neurčité ("nějaký", "některý", "číkoli", "cosi", ...)</option>
+                                <option value="a">a - číslovka neurčitá ("mnoho", "málo", "tolik", "několik", "kdovíkolik", ...)</option>
+                                <option value="b">b - příslovce, bez určení stupně a negace ("pozadu", "naplocho", ...)</option>
+                                <option value="d">d - číslovka druhová, adjektivní skloňování ("jedny", "dvojí", "desaterý", ...)</option>
+                                <option value="h">h - číslovka druhová "jedny" a "nejedny"</option>
+                                <option value="k">k - číslovka druhová &gt;= 4, adjektivní postavení, krátký tvar ("čtvery", ...)</option>
+                                <option value="j">j - číslovka druhová &gt;= 4, substantivní postavení ("čtvero", "desatero", ...)</option>
+                                <option value="m">m - slovesný tvar přechodníku minulého, příp. (zastarale) přechodník přítomný dokonavý</option>
+                                <option value="l">l - číslovka základní 1-4, "půl", ...; "sto" a "tisíc" v nesubstantivním skloňování</option>
+                                <option value="n">n - číslovky základní >= 5</option>
+                                <option value="q">q - archaický slovesný tvar minulého aktivního příčestí (zakončení "-ť")</option>
+                                <option value="t">t - archaický slovesný tvar přítomného a budoucího času (zakončení "-ť")</option>
+                                <option value="w">w - číslovka neurčitá s adjektivním skloňováním ("nejeden", "tolikátý", "několikátý"...)</option>
+                                <option value="y">y - zlomek zakončený na "-ina" (značkováno jako číslovka)</option>
+                                <option value="?">? - číslovka "kolik"</option>
+                                <option value="*">* - slovo "krát" (slovní druh: spojka)</option>
+                                <option value="^">^ - spojka souřadicí</option>
+                                <option value="5">5 - zájmeno "on" ve tvarech po předložce (tj. "n-": "něj", "něho", ...)</option>
+                                <option value="4">4 - vztažné nebo tázací zájmeno s adjektivním skloňováním (obou typů: "jaký", "který", "čí", ...)</option>
+                                <option value="7">7 - reflexívní zájmeno "se", "si" pouze v těchto tvarech, a dále "ses", "sis"</option>
+                                <option value="8">8 - přivlastňovací zájmeno "svůj"</option>
+                                <option value=":">: - interpunkce všeobecně</option>
+                                <option value="=">= - číslo psané číslicemi (značkováno jako číslovka)</option>
+                                <option value="C">C - adjektivum, jmenný tvar</option>
+                                <option value="E">E - vztažné zájmeno "což"</option>
+                                <option value="I">I - citoslovce</option>
+                                <option value="H">H - krátké tvary osobních zájmen ("mě", "mi", "ti", "mu", ...)</option>
+                                <option value="M">M - přídavné jméno odvozené od slovesného tvaru minulého přechodníku</option>
+                                <option value="L">L - zájmeno neurčité "všechen", "sám"</option>
+                                <option value="O">O - samostatně stojící zájmeno "svůj", "nesvůj", "tentam"</option>
+                                <option value="N">N - substantivum, obyčejné</option>
+                                <option value="Q">Q - zájmeno tázací nebo vztažné "co", "copak", "cožpak"</option>
+                                <option value="P">P - osobní zájmeno (vč. tvaru "tys")</option>
+                                <option value="S">S - zájmeno přivlastňovací "můj", "tvůj", "jeho" (vč. plurálu)</option>
+                                <option value="U">U - adjektivum přivlastňovací (na "-ův" a "-in")</option>
+                                <option value="V">V - předložka vokalizovaná ("ve", "pode", "ku", ...)</option>
+                                <option value="Y">Y - zájmeno "co" spojené s předložkou ("oč", "nač", "zač")</option>
+                                <option value="X">X - slovní tvar, který byl rozpoznán, ale značka ve slovníku zatím chybí</option>
+                                <option value="c">c - kondicionál slovesa být ("by", "bych", "bys", "bychom", "byste")</option>
+                                <option value="e">e - slovesný tvar přechodníku přítomného ("-e", "-íc", "-íce")</option>
+                                <option value="g">g - příslovce, s určením stupně a negace ("velký", "zajímavý", ...)</option>
+                                <option value="f">f - infinitiv</option>
+                                <option value="i">i - způsob rozkazovací</option>
+                                <option value="o">o - číslovka násobná neurčitá ("-krát": "mnohokrát", "tolikrát", ...)</option>
+                                <option value="p">p - slovesný tvar minulého aktivního příčestí (včetně přidaného "-s")</option>
+                                <option value="s">s - slovesný tvar pasivního příčestí (vč. přidaného "-s")</option>
+                                <option value="r">r - číslovka řadová</option>
+                                <option value="u">u - číslovka tázací násobná "kolikrát"</option>
+                                <option value="v">v - číslovka násobná ("-krát": "pětkrát", "poprvé"...)</option>
+                                <option value="x">x - zkratka, neznámý nebo neurčený slovní druh</option>
+                                <option value="z">z - číslovka tázací řadová "kolikátý"</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-02" class="col-md-4 control-label">Jmenný rod</label>
+                        <div class="col-md-7">
+                            <select id="description-02" name="description-02" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="M">M - maskulinum animatum (rod mužský životný)</option>
+                                <option value="I">I - maskulinum inanimatum (rod mužský neživotný)</option>
+                                <option value="F">F - femininum (ženský rod)</option>
+                                <option value="N">N - neutrum (střední rod)</option>
+                                <option value="X">X - libovolný rod (F/M/I/N)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-03" class="col-md-4 control-label">Číslo</label>
+                        <div class="col-md-7">
+                            <select id="description-03" name="description-03" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="S">S - singulár (jednotné číslo)</option>
+                                <option value="P">P - plurál (množné číslo)</option>
+                                <option value="D">D - duál (pouze 7. pád feminin)</option>
+                                <option value="X">X - libovolné číslo (P/S/D)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-04" class="col-md-4 control-label">Pád</label>
+                        <div class="col-md-7">
+                            <select id="description-04" name="description-04" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="1">1 - nominativ (1. pád)</option>
+                                <option value="2">2 - genitiv (2. pád)</option>
+                                <option value="3">3 - dativ (3. pád)</option>
+                                <option value="4">4 - akuzativ (4. pád)</option>
+                                <option value="5">5 - vokativ (5. pád)</option>
+                                <option value="6">6 - lokativ (6. pád)</option>
+                                <option value="7">7 - instrumentál (7. pád)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-05" class="col-md-4 control-label">Přivlastňovací rod</label>
+                        <div class="col-md-7">
+                            <select id="description-05" name="description-05" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="M">M - maskulinum animatum (rod mužský životný)</option>
+                                <option value="I">I - maskulinum inanimatum (rod mužský neživotný)</option>
+                                <option value="F">F - femininum (ženský rod)</option>
+                                <option value="N">N - neutrum (střední rod)</option>
+                                <option value="X">X - libovolný rod (F/M/I/N)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-06" class="col-md-4 control-label">Přivlastňovací číslo</label>
+                        <div class="col-md-7">
+                            <select id="description-06" name="description-06" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="S">S - singulár (jednotné číslo)</option>
+                                <option value="P">P - plurál (množné číslo)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-07" class="col-md-4 control-label">Osoba</label>
+                        <div class="col-md-7">
+                            <select id="description-07" name="description-07" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="1">1 - 1. osoba</option>
+                                <option value="2">2 - 2. osoba</option>
+                                <option value="3">3 - 3. osoba</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-08" class="col-md-4 control-label">Čas</label>
+                        <div class="col-md-7">
+                            <select id="description-08" name="description-08" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="R">R - minulý čas</option>
+                                <option value="P">P - prézens (přítomný čas)</option>
+                                <option value="F">F - futurum (budoucí čas)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-09" class="col-md-4 control-label">Stupeň</label>
+                        <div class="col-md-7">
+                            <select id="description-09" name="description-09" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="1">1 - 1. stupeň</option>
+                                <option value="2">2 - 2. stupeň</option>
+                                <option value="3">3 - 3. stupeň</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-10" class="col-md-4 control-label">Negace</label>
+                        <div class="col-md-7">
+                            <select id="description-10" name="description-10" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="A">A - afirmativ (bez negativní předpony "ne-")</option>
+                                <option value="N">N - negace (tvar s negativní předponou "ne-")</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-11" class="col-md-4 control-label">Aktivum/pasivum</label>
+                        <div class="col-md-7">
+                            <select id="description-11" name="description-11" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="A">A - aktivum nebo 'nikoli pasivum'</option>
+                                <option value="P">P - pasivum</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-12" class="col-md-4 control-label">Nepoužito</label>
+                        <div class="col-md-7">
+                            <select id="description-12" name="description-12" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-13" class="col-md-4 control-label">Nepoužito</label>
+                        <div class="col-md-7">
+                            <select id="description-13" name="description-13" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-14" class="col-md-4 control-label">Varianta</label>
+                        <div class="col-md-7">
+                            <select id="description-14" name="description-14" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="1">1 - varianta, víceméně rovnocenná ("méně častá")</option>
+                                <option value="2">2 - řídká, archaická nebo knižní varianta</option>
+                                <option value="3">3 - velmi archaický tvar, též archaický a hovorový</option>
+                                <option value="4">4 - velmi archaický nebo knižní tvar, pouze spisovný (ve své době)</option>
+                                <option value="5">5 - hovorový tvar, ale tolerovaný ve veřejných projevech</option>
+                                <option value="6">6 - hovorový tvar (koncovka standardní obecné češtiny)</option>
+                                <option value="7">7 - hovorový tvar (koncovka standardní obecné češtiny), varianta k '6'</option>
+                                <option value="8">8 - zkratky</option>
+                                <option value="9">9 - speciální použití (tvary zájmen po předložkách apod.)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="description-15" class="col-md-4 control-label">Vid</label>
+                        <div class="col-md-7">
+                            <select id="description-15" name="description-15" class="form-control">
+                                <option selected value="-"> - </option>
+                                <option value="P">P - perfektivum (dokonavé sloveso)</option>
+                                <option value="I">I - imperfektivum (nedokonavé sloveso)</option>
+                                <option value="B">B - obouvidé sloveso</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4"></label>
+                        <div class="col-md-7">
+                            tag
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-characteristic">Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>

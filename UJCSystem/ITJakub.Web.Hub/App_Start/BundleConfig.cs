@@ -69,6 +69,9 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
               "~/Content/themes/base/*.css"));
 
+            bundles.Add(new StyleBundle("~/itjakub/lemmatization/css")
+                .Include("~/Content/Lemmatization/itjakub.lemmatization.css"));
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             //BundleTable.EnableOptimizations = true;
