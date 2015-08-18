@@ -48,11 +48,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
 
             switch (extension)
             {
-                case "mp3":
+                case ".mp3":
                     return AudioType.Mp3;
-                case "ogg":
+                case ".ogg":
                     return AudioType.Ogg;
-                case "wav":
+                case ".wav":
                     return AudioType.Wav;
                 default:
                     return AudioType.Unknown;
