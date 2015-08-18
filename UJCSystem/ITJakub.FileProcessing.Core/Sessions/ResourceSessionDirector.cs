@@ -25,8 +25,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
         }
 
         public string SessionId { get; private set; }
+
         public string SessionPath { get; private set; }
+
         public DateTime CreateTime { get; private set; }
+
         public List<Resource> Resources { get; set; }
 
 
@@ -72,24 +75,35 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public void AddResource(string fileName, Stream dataStream)
         {
-            string fullpath = Path.Combine(SessionPath, fileName);
+            string fullpath = GetFullPathForNewSessionResource(fileName);
 
             using (FileStream fs = File.Create(fullpath))
             {
                 dataStream.CopyTo(fs);
             }
 
-            ResourceType resourceType = m_resourceTypeResolverManager.Resolve(fileName);
-
             var resource = new Resource
             {
                 FullPath = fullpath,
-                FileName = fileName,
-                ResourceType = resourceType
+                FileName = fileName,              
             };
+
+            AddResource(resource);
+        }
+
+        public string GetFullPathForNewSessionResource(string fileName)
+        {
+            return Path.Combine(SessionPath, fileName);
+        }       
+
+        public void AddResource(Resource resource)
+        {
+            ResourceType resourceType = m_resourceTypeResolverManager.Resolve(resource.FileName);
+            resource.ResourceType = resourceType;
 
             Resources.Add(resource);
         }
+
 
         public T GetSessionInfoValue<T>(SessionInfo sessionInfo)
         {

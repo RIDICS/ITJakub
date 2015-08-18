@@ -1,5 +1,4 @@
 using ITJakub.Core;
-using ITJakub.Core.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -14,7 +13,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            foreach (Resource resource in resourceSessionDirector.Resources)
+            foreach (var resource in resourceSessionDirector.Resources)
             {
                 m_fileSystemManager.SaveResource(
                     resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.BookId),

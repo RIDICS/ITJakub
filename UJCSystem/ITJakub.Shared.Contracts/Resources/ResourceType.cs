@@ -10,5 +10,6 @@
         Transformation = 5,
         Image = 6,
         Audio = 7,
+        ExtractableArchive = 8,
     }
 }

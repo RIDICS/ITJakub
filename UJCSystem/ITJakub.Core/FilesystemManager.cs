@@ -44,6 +44,14 @@ namespace ITJakub.Core
         public void SaveResource(string bookId, string bookVersionId, Resource resource)
         {
             var pathResolver = GetPathResolver(resource.ResourceType);
+
+            if (pathResolver == null)
+            {
+                var message = $"Resource with type '{resource.ResourceType}' does not have rule for resolving path and will be skipped";
+                if (m_log.IsWarnEnabled)
+                    m_log.WarnFormat(message);
+                return;
+            }
             var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
             var fullPath = GetFullPath(relativePath);
             CreateDirsIfNotExist(fullPath);
@@ -109,14 +117,7 @@ namespace ITJakub.Core
         {
             IResourceTypePathResolver pathResolver;
             m_resourceTypePathResolvers.TryGetValue(resourceType, out pathResolver);
-            if (pathResolver == null)
-            {
-                var message = string.Format("Resource with type '{0}' does not have rule for resolving path",
-                    resourceType);
-                if (m_log.IsFatalEnabled)
-                    m_log.FatalFormat(message);
-                throw new InvalidEnumArgumentException(message);
-            }
+          
             return pathResolver;
         }
     }

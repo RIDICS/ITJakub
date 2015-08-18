@@ -9,28 +9,24 @@ BEGIN TRAN
    --     Grammar = 2,                   //Mluvnice
    --     ProfessionalLiterature = 3,    //Odborna literatura
    --     TextBank = 4,				 //Textova banka
+   --     BibliographicalItem = 5,        //Bibliograficke zaznamy
+   --     AudioBook = 6,                  //Audioknihy
 
 	  INSERT INTO [dbo].[BookType]
 	  (    
 	      [Type]	-- Type - smallint
 	  )
 	  VALUES
-	  (0),(1),(2),(3),(4)
+	  (0),(1),(2),(3),(4), (5), (6)
 
-	  DECLARE @EditionTypeId INT
-	  SELECT @EditionTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=0
-
-	  DECLARE @DictionaryTypeId INT
-	  SELECT @DictionaryTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=1
-	  
-	  DECLARE @GrammarTypeId INT
-	  SELECT @GrammarTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=2
-	  
-	  DECLARE @ProfessionalLiteratureTypeId INT
-	  SELECT @ProfessionalLiteratureTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=3
-	  
-	  DECLARE @TextBankTypeId INT
+	  DECLARE @EditionTypeId INT, @DictionaryTypeId INT,  @GrammarTypeId INT,  @ProfessionalLiteratureTypeId INT, @TextBankTypeId INT, @BibliographicItemId INT, @AudioBooksId INT
+	  SELECT @EditionTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=0	  
+	  SELECT @DictionaryTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=1	  	  
+	  SELECT @GrammarTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=2	  	  
+	  SELECT @ProfessionalLiteratureTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=3	  	  
 	  SELECT @TextBankTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=4
+	  SELECT @BibliographicItemId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=5
+	  SELECT @AudioBooksId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=6
 
    --****** Output formats ********
    --Unknown = 0,
@@ -76,7 +72,9 @@ BEGIN TRAN
 	  ('output-dictionary','Slovnik',NULL,@DictionaryTypeId,'/output-dictionary/'),
 	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId,'/output-text_bank/'),
 	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId,'/output-scholary_literature/'),
-	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/')
+	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/'),
+	  ('output-bibliography', 'Bibliograficky zaznam', NULL, @BibliographicItemId, '/output-bibliography/'),
+	  ('output-audiobooks', 'Audioknihy', NULL, @AudioBooksId, '/output-audiobooks/') 
 	  
 
     INSERT INTO [dbo].[DatabaseVersion]

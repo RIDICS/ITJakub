@@ -114,4 +114,13 @@ namespace ITJakub.FileProcessing.Core.Sessions
             get { return ResourceType.Audio; }
         }
     }
+
+    public class ExtractableArchiveTypeResolver:ResourceTypeResolverBase
+    {
+        public ExtractableArchiveTypeResolver(string[] fileExtensions) : base(fileExtensions)
+        {
+        }
+
+        public override ResourceType ResolveResourceType { get {return ResourceType.ExtractableArchive;} }
+    }
 }
