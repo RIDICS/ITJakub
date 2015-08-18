@@ -8,7 +8,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual Track Track { get; set; }
 
-        public virtual TimeSpan Lenght { get; set; }
+        public virtual TimeSpan Length { get; set; }
 
         public virtual string FileName { get; set; }
 
@@ -40,8 +40,10 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public enum AudioType
     {
+        Unknown,
         Mp3,
         Ogg,
         Wav,
+        
     }
 }

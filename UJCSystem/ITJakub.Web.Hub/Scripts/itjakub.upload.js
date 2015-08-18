@@ -74,7 +74,7 @@
         $("#processing").show();
 
         //TODO COMMENT THIS Line FOR MUSIC DISABLE
-        readyplayer.playVideo();
+        //readyplayer.playVideo();
 
 
         $.ajax({

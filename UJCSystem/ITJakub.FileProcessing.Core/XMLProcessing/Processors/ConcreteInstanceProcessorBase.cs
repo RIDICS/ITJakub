@@ -9,8 +9,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 {
     public abstract class ConcreteInstanceProcessorBase<T> : ProcessorBase
     {
-        private Dictionary<string, ConcreteInstanceProcessorBase<T>> m_concreteInstaceProcessors;
-        private bool m_initialized;
+        private Dictionary<string, ConcreteInstanceProcessorBase<T>> m_concreteInstaceProcessors;        
 
         protected ConcreteInstanceProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -32,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         {
         }
 
-        protected override sealed void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
             var instance = LoadInstance(bookVersion);
             Process(bookVersion, instance, xmlReader);
@@ -49,7 +48,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         }
 
         protected virtual void ProcessElement(BookVersion bookVersion, T instance, XmlReader xmlReader)
-        {
+        {     
+            Init();    
+
             while (xmlReader.Read())
             {
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
@@ -61,25 +62,19 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         }
 
         public void Process(BookVersion bookVersion,T instance, XmlReader xmlReader)
-        {
-            if (!m_initialized)
-            {
-                Init();
-            }
+        {          
+            Init();
+
             PreprocessSetup(instance);
             ProcessAttributes(instance, xmlReader);
             ProcessElement(bookVersion, instance, xmlReader);
         }
+        
 
-        private void Init()
+        protected  override  void InitializeProcessors()
         {
-            m_concreteInstaceProcessors = GetConcreteProcessors();
-            m_initialized = true;
-        }
-
-        private Dictionary<string, ConcreteInstanceProcessorBase<T>> GetConcreteProcessors()
-        {
-            return ConcreteSubProcessors.ToDictionary(x => x.NodeName);
+            m_concreteInstaceProcessors = ConcreteSubProcessors.ToDictionary(x => x.NodeName);
+            base.InitializeProcessors();
         }
     }
 }

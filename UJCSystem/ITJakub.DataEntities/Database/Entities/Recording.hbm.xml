@@ -8,7 +8,7 @@
 
     <many-to-one name="Track" />
 
-    <property name="Lenght"/>
+    <property name="Length"/>    
     
     <property name="FileName"/>
     

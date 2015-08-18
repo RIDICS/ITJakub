@@ -79,29 +79,40 @@
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
+    
     <bag name="BookContentItems" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookContentItem" />
     </bag>
+    
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Author" column="Author" />
     </bag>
+    
     <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
     </bag>
+    
     <bag name="Transformations" table="BookVersion_Transformation" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
+    
     <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Category" column="Category" />
     </bag>
+    
     <bag name="BookHeadwords" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="BookHeadword" />
+    </bag>
+    
+    <bag name="Tracks" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <one-to-many class="Track" />
     </bag>
     
   </class>

@@ -15,7 +15,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<Recording> Recordings { get; set; }
 
-        public bool Equals(Track other)
+        public virtual bool Equals(Track other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

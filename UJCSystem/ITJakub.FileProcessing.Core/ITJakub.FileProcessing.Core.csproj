@@ -62,6 +62,9 @@
     <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\TracksProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\HeadProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\ItemProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\ListProcessor.cs" />

@@ -74,10 +74,12 @@
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
+    <Compile Include="Database\Entities\Recording.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\Entities\SelectResults\BookVersionDetails.cs" />
+    <Compile Include="Database\Entities\Track.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
     <Compile Include="Database\Repositories\FeedbackRepository.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
@@ -173,6 +175,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Track.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Recording.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
