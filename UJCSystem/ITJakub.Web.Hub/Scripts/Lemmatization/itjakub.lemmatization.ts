@@ -6,10 +6,12 @@
 class Lemmatization {
     private mainContainer: string;
     private searchBox: LemmatizationSearchBox;
+    private lemmatizationCharacteristic: LemmatizationCharacteristic;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
         this.searchBox = new LemmatizationSearchBox("#mainSearchInput");
+        this.lemmatizationCharacteristic = new LemmatizationCharacteristic();
     }
 
     public make() {
@@ -21,6 +23,7 @@ class Lemmatization {
             else
                 $("#addNewTokenButton").removeClass("hidden");
         });
+        this.lemmatizationCharacteristic.init();
 
         $("#loadButton").click(() => {
             this.loadToken(this.searchBox.getValue());
@@ -31,13 +34,61 @@ class Lemmatization {
         });
 
         $("#addNewCharacteristic").click(() => {
-            $("#newTokenCharacteristic").modal("show");
+            this.lemmatizationCharacteristic.show();
+        });
+
+        $("#saveCharacteristic").click(() => {
+            alert(this.lemmatizationCharacteristic.getValue());
         });
     }
 
     private loadToken(item: ILemmatizationSearchBoxItem) {
         $("#specificToken").text(item.Text);
         $("#specificTokenDescription").text(item.Description);
+    }
+}
+
+class LemmatizationCharacteristic {
+    private currentValue: string;
+
+    init() {
+        $("#newTokenCharacteristic select").on("change", () => {
+            var currentValue = this.getNewValue();
+            $("#result-characteristic-tag").text("Tag=\"" + currentValue + "\"");
+        });
+    }
+
+    private getNewValue(): string {
+        var selects = $("#newTokenCharacteristic select");
+        var result = "";
+
+        for (var i = 0; i < selects.length; i++) {
+            var value = selects.filter("#description-" + i).val();
+            result += value;
+        }
+
+        return result;
+    }
+
+    private clear() {
+        $("#newTokenCharacteristic select").each((index, element) => {
+            //todo set element selected index to 0
+        });
+    }
+
+    getValue(): string {
+        return this.currentValue;
+    }
+
+    show() {
+        $("#newTokenCharacteristic").modal({
+            show: true,
+            backdrop: "static"
+        });
+    }
+
+    save() {
+        
     }
 }
 
