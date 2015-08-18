@@ -21,7 +21,9 @@ class BibliographyModule {
 
     private sortChangeCallback: () => void;
 
-    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum) {
+    private defaultConfigurationUrl = "Bibliography/GetConfiguration";
+
+    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string) {
         this.resultsContainer = $(resultsContainer);
         this.sortChangeCallback = sortChangeCallback;
 
@@ -37,12 +39,19 @@ class BibliographyModule {
         this.forcedBookType = forcedBookType;
 
         //Download configuration
+
+        var configDownloadPath = this.defaultConfigurationUrl;
+
+        if (typeof customConfigurationPath !== "undefined" && customConfigurationPath !== null && customConfigurationPath !== "") {
+            configDownloadPath = customConfigurationPath;
+        }
+
         var configObj;
         $.ajax({
             type: "GET",
             traditional: true,
             async: false,
-            url: getBaseUrl()+"Bibliography/GetConfiguration",
+            url: getBaseUrl() + configDownloadPath,
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
@@ -190,47 +199,6 @@ interface IBookInfo {
     Year: number;
 }
 
-
-////TODO remove or move to separated file
-//class BookInfo implements IBookInfo {
-//    BookXmlId = "{FA10177B-25E6-4BB6-B061-0DB988AD3840}";
-//    //BookXmlId = "%7BFA10177B-25E6-4BB6-B061-0DB988AD3840%7D";
-//    BookType: BookTypeEnum;
-//    Title = "PasKal";
-//    Editor: string;
-//    Pattern: string;
-//    SourceAbbreviation: string;
-//    RelicAbbreviation: string;
-//    LiteraryType: string;
-//    LiteraryGenre: string;
-//    LastEditation: string;
-//    EditationNote: string; //anchor href?
-//    Copyright: string;
-//    Pages: IPage[];
-//    Archive: IArchive;
-//    Century: number;
-//    Sign: string;
-//    Authors: IAuthor[];
-//    Description: string;
-//    Year: number;
-
-//}
-
-
-//
-//  [DataContract]
-//  public enum BookTypeEnumContract : byte
-//  {
-//    [EnumMember] Edition = 0, //Edice
-//    [EnumMember] Dictionary = 1, //Slovnik
-//    [EnumMember] Grammar = 2, //Mluvnice
-//    [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
-//    [EnumMember] TextBank = 4, //Textova banka
-//    [EnumMember] BibliographicalItem = 5,
-//    [EnumMember] CardFile = 6,
-        
-//    }
-
 enum BookTypeEnum {
     Edition = 0, //Edice
     Dictionary = 1, //Slovnik
@@ -239,6 +207,7 @@ enum BookTypeEnum {
     TextBank = 4, //Textova banka
     BibliographicalItem = 5,
     CardFile = 6,
+    AudioBook = 7
 }
 
 interface IPage {
