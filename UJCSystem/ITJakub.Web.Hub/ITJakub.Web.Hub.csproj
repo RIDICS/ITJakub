@@ -398,6 +398,7 @@
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
+    <Content Include="Content\Images\mlceni2.jpg" />
     <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\Images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.DefaultTheme.css.map">

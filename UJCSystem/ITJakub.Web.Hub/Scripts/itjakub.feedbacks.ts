@@ -1,17 +1,4 @@
-﻿//enum FeedbackCategory {
-//    None = 0,
-//    Dictionaries = 1,
-//    Editions = 2,
-//    BohemianTextBank = 3,
-//    OldGrammar = 4,
-//    ProfessionalLiterature = 5,
-//    Bibliographies = 6,
-//    CardFiles = 7,
-//    AudioBooks = 8,
-//    Tools = 9,
-//}
-
-var categoryTranslation = [
+﻿var categoryTranslation = [
     "Žádná",
     "Slovníky",
     "Edice",
@@ -26,7 +13,7 @@ var categoryTranslation = [
 
 $(document).ready(() => {
 
-    var notFilledMessage = "<Nezadáno>";
+    var notFilledMessage = "&lt;Nezadáno&gt;";
 
 
     function deleteFeedback(feedbackId: string)
@@ -128,9 +115,11 @@ $(document).ready(() => {
 
 
                 var feedbackDeleteButton = document.createElement("button");
-                feedbackDeleteButton.type = "button";
-                feedbackDeleteButton.innerHTML = "Smazat";
-                $(feedbackDeleteButton).addClass("feedback-delete-button btn btn-default styled-button ");
+                $(feedbackDeleteButton).addClass("feedback-delete-button");
+
+                var removeGlyph = document.createElement("span");
+                $(removeGlyph).addClass("glyphicon glyphicon-trash");
+                feedbackDeleteButton.appendChild(removeGlyph);
 
                 $(feedbackDeleteButton).click((event: Event) => {
                     var elementId = $(event.target).parents(".feedback")[0].id;
