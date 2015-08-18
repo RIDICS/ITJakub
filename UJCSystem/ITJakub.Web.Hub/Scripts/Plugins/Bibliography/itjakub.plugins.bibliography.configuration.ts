@@ -16,12 +16,22 @@ class BookTypeConfiguration {
     middlePanelConfig: MiddlePanelConfiguration;
     bottomPanelConfig: BottomPanelConfiguration;
 
+    private exists: boolean;
+
     constructor(bookType: BookTypeEnum, bookTypeConfig: Object) {
         this.bookType = bookType;
-        this.rightPanelConfig = new RightPanelConfiguration(bookTypeConfig['right-panel']);
-        this.middlePanelConfig = new MiddlePanelConfiguration(bookTypeConfig['middle-panel']);
-        this.bottomPanelConfig = new BottomPanelConfiguration(bookTypeConfig['bottom-panel']);
+
+        if (typeof bookTypeConfig !== "undefined" && bookTypeConfig !== null) {
+            this.exists = true;
+            this.rightPanelConfig = new RightPanelConfiguration(bookTypeConfig['right-panel']);
+            this.middlePanelConfig = new MiddlePanelConfiguration(bookTypeConfig['middle-panel']);
+            this.bottomPanelConfig = new BottomPanelConfiguration(bookTypeConfig['bottom-panel']);
+        } else {
+            this.exists = false;
+        }
     }
+
+    exist() { return this.exists}
 
     containsMiddlePanel() { return this.middlePanelConfig.exist(); }
 
