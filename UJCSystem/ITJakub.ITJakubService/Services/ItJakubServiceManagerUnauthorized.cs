@@ -2,6 +2,7 @@
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services

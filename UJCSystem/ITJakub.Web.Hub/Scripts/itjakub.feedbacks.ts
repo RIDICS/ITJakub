@@ -85,7 +85,7 @@ $(document).ready(() => {
 
                 var user = actualFeedback["User"];
                 if (typeof user !== "undefined" && user !== null) {
-                    name = user["Name"];
+                    name = user["FirstName"]+" "+user["LastName"];
                     email = user["Email"];
                     signed = "ano";
                 } else {

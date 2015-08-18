@@ -19,7 +19,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                return session.QueryOver<Feedback>().List<Feedback>();
+                return session.QueryOver<Feedback>().Fetch(x => x.User).Eager.List<Feedback>();
             }
         }
 
