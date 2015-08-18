@@ -22,6 +22,8 @@
     <property name ="Email"/>
     
     <property name ="CreateDate"/>
+
+    <property name="Category"/>
     
     <many-to-one name="User"
                  column="[User]"

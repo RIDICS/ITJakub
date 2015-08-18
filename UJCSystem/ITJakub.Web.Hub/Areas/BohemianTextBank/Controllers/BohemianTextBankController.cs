@@ -3,8 +3,10 @@ using System.ComponentModel;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 
@@ -14,7 +16,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
     public class BohemianTextBankController : Controller
     {
 
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
 
         public ActionResult Index()
         {
@@ -38,8 +41,37 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult Feedback()
         {
-            return View();
+            var username = HttpContext.User.Identity.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return View();
+            }
+
+            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
+            var viewModel = new FeedbackViewModel
+            {
+                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                Email = user.Email
+            };
+
+            return View(viewModel);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Feedback(FeedbackViewModel model)
+        {
+            var username = HttpContext.User.Identity.Name;
+
+            if (string.IsNullOrWhiteSpace(username))
+                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.BohemianTextBank);
+            else
+                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.BohemianTextBank);
+
+            return View("Information");
+        }
+
         public ActionResult Help()
         {
             return View();
@@ -71,7 +103,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            var count = m_serviceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -113,7 +145,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
+            var results = m_mainServiceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
             return Json(new { results = results.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
@@ -131,7 +163,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            var count = m_serviceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
@@ -161,19 +193,19 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            var results = m_serviceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
+            var results = m_mainServiceClient.GetCorpusSearchResults(listSearchCriteriaContracts);
             return Json(new { results = results.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_serviceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.TextBank);
+            var result = m_mainServiceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.TextBank);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_serviceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.TextBank, null, null);
+            var result = m_mainServiceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.TextBank, null, null);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

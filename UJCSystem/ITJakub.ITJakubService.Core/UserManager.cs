@@ -4,6 +4,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.Core
 {

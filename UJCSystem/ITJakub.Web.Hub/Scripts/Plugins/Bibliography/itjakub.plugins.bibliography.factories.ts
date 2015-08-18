@@ -8,6 +8,10 @@
         this.factories[BookTypeEnum.Dictionary] = new DictionaryFactory(new BookTypeConfiguration(BookTypeEnum.Dictionary, booksConfigurations["Dictionary"]));
         this.factories[BookTypeEnum.TextBank] = new TextBankFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, booksConfigurations["TextBank"]));
         this.factories[BookTypeEnum.CardFile] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.CardFile, booksConfigurations["CardFile"]));
+        this.factories[BookTypeEnum.Grammar] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.Grammar, booksConfigurations["Grammar"]));
+        this.factories[BookTypeEnum.BibliographicalItem] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.BibliographicalItem, booksConfigurations["BibliographicalItem"]));
+        this.factories[BookTypeEnum.ProfessionalLiterature] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.ProfessionalLiterature, booksConfigurations["ProfessionalLiterature"]));
+        this.factories[BookTypeEnum.AudioBook] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.AudioBook, booksConfigurations["AudioBook"]));
         //this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
 
     }

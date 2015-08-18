@@ -2,6 +2,8 @@
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services
 {
@@ -70,9 +72,9 @@ namespace ITJakub.ITJakubService.Services
 
         #region Feedback
 
-        public void CreateFeedback(string feedback, string username)
+        public void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category)
         {
-            m_feedbackManager.CreateFeedback(feedback, username);
+            m_feedbackManager.CreateFeedback(feedback, username, category);
         }
 
         public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,

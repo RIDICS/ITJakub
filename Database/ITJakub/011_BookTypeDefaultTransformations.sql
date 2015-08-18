@@ -8,25 +8,28 @@ BEGIN TRAN
    --     Dictionary = 1,                //Slovnik
    --     Grammar = 2,                   //Mluvnice
    --     ProfessionalLiterature = 3,    //Odborna literatura
-   --     TextBank = 4,				 //Textova banka
-   --     BibliographicalItem = 5,        //Bibliograficke zaznamy
-   --     AudioBook = 6,                  //Audioknihy
+   --     TextBank = 4,					 //Textova banka
+   --     BibliographicalItem = 5,		 //Bibliograficke zaznamy
+   --     CardFile = 6,					 //Kartoteka
+   --     AudioBook = 7,				 //Audiokniha
 
 	  INSERT INTO [dbo].[BookType]
 	  (    
 	      [Type]	-- Type - smallint
 	  )
 	  VALUES
-	  (0),(1),(2),(3),(4), (5), (6)
+	  (0),(1),(2),(3),(4),(5),(6),(7)
 
-	  DECLARE @EditionTypeId INT, @DictionaryTypeId INT,  @GrammarTypeId INT,  @ProfessionalLiteratureTypeId INT, @TextBankTypeId INT, @BibliographicItemId INT, @AudioBooksId INT
-	  SELECT @EditionTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=0	  
-	  SELECT @DictionaryTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=1	  	  
-	  SELECT @GrammarTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=2	  	  
-	  SELECT @ProfessionalLiteratureTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=3	  	  
+	  DECLARE @EditionTypeId INT, @DictionaryTypeId INT, @GrammarTypeId INT, @ProfessionalLiteratureTypeId INT, @TextBankTypeId INT, @BibliographicalItemTypeId INT, @CardFileTypeId INT, @AudioBookTypeId INT
+
+	  SELECT @EditionTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=0
+	  SELECT @DictionaryTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=1
+	  SELECT @GrammarTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=2
+	  SELECT @ProfessionalLiteratureTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=3
 	  SELECT @TextBankTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=4
-	  SELECT @BibliographicItemId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=5
-	  SELECT @AudioBooksId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=6
+	  SELECT @BibliographicalItemTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=5
+	  SELECT @CardFileTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=6
+	  SELECT @AudioBookTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=7
 
    --****** Output formats ********
    --Unknown = 0,
@@ -73,8 +76,9 @@ BEGIN TRAN
 	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId,'/output-text_bank/'),
 	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId,'/output-scholary_literature/'),
 	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/'),
-	  ('output-bibliography', 'Bibliograficky zaznam', NULL, @BibliographicItemId, '/output-bibliography/'),
-	  ('output-audiobooks', 'Audioknihy', NULL, @AudioBooksId, '/output-audiobooks/') 
+	  ('output-bibliography','Bibliograficky zaznam',NULL,@BibliographicalItemTypeId,'/output-bibliography/'),
+	  ('output-cardfiles','Kartoteky',NULL,@CardFileTypeId,'/output-cardfiles/'),
+	  ('output-audiobooks','Audioknihy',NULL,@AudioBookTypeId,'/output-audiobooks/')
 	  
 
     INSERT INTO [dbo].[DatabaseVersion]

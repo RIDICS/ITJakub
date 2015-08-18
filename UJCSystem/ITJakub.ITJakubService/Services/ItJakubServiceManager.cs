@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
@@ -228,9 +229,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
         
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
         }
         
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
@@ -239,9 +240,19 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.CreateAnonymousFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, name, email);
         }
 
-        public List<FeedbackContract> GetAllFeedback()
+        public List<FeedbackContract> GetFeedbacks()
         {
-            throw new System.NotImplementedException();
+            return m_feedbackManager.GetFeedbacks();
+        }
+
+        public int GetFeedbacksCount()
+        {
+            return m_feedbackManager.GetFeedbacksCount();
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            m_feedbackManager.DeleteFeedback(feedbackId);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.Shared.Contracts
 {
     [DataContract]
     public class UserContract

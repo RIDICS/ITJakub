@@ -200,7 +200,7 @@ ul.navbar-right.navbar-login {
     float: right;
 }
 
-.searchbar-button {
+.searchbar-button, .styled-button {
     border-radius: 0;
     background-color: @item-background-color;
     color: white;
@@ -217,3 +217,69 @@ ul.navbar-right.navbar-login {
 .navbar-login li a:hover{
     color: @item-background-color;
 }
+
+
+// styles for feedback area
+
+#feedbacks-count {
+    margin: 10px;
+}
+
+.feedback {
+    
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.feedback-header {
+    background-color: @item-background-color;    
+    color: white;
+    height: 30px;
+    padding-top: 4px;
+}
+
+.feedback-header span {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.feedback-text {
+    min-height: 30px;
+    padding: 5px;
+    background-color: white;
+}
+
+.feedback-name {
+    width: 200px;
+}
+
+.feedback-email {
+    width: 200px;
+}
+
+.feedback-category {
+    width: 200px;
+}
+
+.feedback-signed {
+    width: 200px;
+}
+
+.feedback-delete-button {
+    padding: 1px 5px 0 5px;
+    float: right;
+    font-size: 13px;
+    border-radius: 0;
+    color: white;
+    background-color: transparent;
+    border-style: none;
+    margin-top: 2px;
+    margin-right: 10px;
+}
+
+.feedback-delete-button:hover {
+    color: black;
+}
+
+
+// end of styles for feedback area

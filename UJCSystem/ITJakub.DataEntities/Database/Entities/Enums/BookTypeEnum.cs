@@ -7,7 +7,8 @@ namespace ITJakub.DataEntities.Database.Entities.Enums
         Grammar = 2,                   //Mluvnice
         ProfessionalLiterature = 3,    //Odborna literatura
         TextBank = 4,                  //Textova banka
-        BibliographicalItem = 5,        //Bibliograficke zaznamy
-        AudioBook = 6,                  //Audioknihy
+        BibliographicalItem = 5,       //Bibliograficke zaznamy
+        CardFile = 6,                  //Kartoteka
+        AudioBook = 7                  //Audiokniha
     }
 }

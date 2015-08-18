@@ -5,7 +5,9 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Results;
+using ITJakub.Web.Hub.Models;
 using Microsoft.Ajax.Utilities;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
@@ -13,7 +15,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
     [RouteArea("CardFiles")]
     public class CardFilesController : Controller
     {
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
+        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
 
         public ActionResult Index()
         {
@@ -38,7 +41,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         public ActionResult SearchList(string term)
         {
             term = term.ToLower();
-            var cardFiles = m_serviceClient.GetCardFiles();
+            var cardFiles = m_mainServiceClient.GetCardFiles();
             var result = new List<SearchResultContract>();
             foreach (var cardFile in cardFiles)
             {
@@ -63,38 +66,66 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Feedback()
         {
-            return View();
+            var username = HttpContext.User.Identity.Name;
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return View();
+            }
+
+            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
+            var viewModel = new FeedbackViewModel
+            {
+                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                Email = user.Email
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult Feedback(FeedbackViewModel model)
+        {
+            var username = HttpContext.User.Identity.Name;
+
+            if (string.IsNullOrWhiteSpace(username))
+                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.CardFiles);
+            else
+                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.CardFiles);
+
+            return View("Information");
         }
 
         public ActionResult CardFiles()
         {
-            var cardFiles = m_serviceClient.GetCardFiles();
+            var cardFiles = m_mainServiceClient.GetCardFiles();
             return Json(new {cardFiles}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Buckets(string cardFileId, string headword)
         {
             var buckets = headword.IsEmpty()
-                ? m_serviceClient.GetBuckets(cardFileId)
-                : m_serviceClient.GetBucketsWithHeadword(cardFileId, headword);
+                ? m_mainServiceClient.GetBuckets(cardFileId)
+                : m_mainServiceClient.GetBucketsWithHeadword(cardFileId, headword);
             return Json(new {buckets}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Cards(string cardFileId, string bucketId)
         {
-            var cards = m_serviceClient.GetCards(cardFileId, bucketId);
+            var cards = m_mainServiceClient.GetCards(cardFileId, bucketId);
             return Json(new {cards}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CardsShort(string cardFileId, string bucketId)
         {
-            var cards = m_serviceClient.GetCardsShort(cardFileId, bucketId);
+            var cards = m_mainServiceClient.GetCardsShort(cardFileId, bucketId);
             return Json(new {cards}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Card(string cardFileId, string bucketId, string cardId)
         {
-            var card = m_serviceClient.GetCard(cardFileId, bucketId, cardId);
+            var card = m_mainServiceClient.GetCard(cardFileId, bucketId, cardId);
             return Json(new {card}, JsonRequestBehavior.AllowGet);
         }
 
@@ -108,7 +139,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
             }
 
-            var imageDataStream = m_serviceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
+            var imageDataStream = m_mainServiceClient.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
             return new FileStreamResult(imageDataStream, "image/jpeg");
         }
     }
