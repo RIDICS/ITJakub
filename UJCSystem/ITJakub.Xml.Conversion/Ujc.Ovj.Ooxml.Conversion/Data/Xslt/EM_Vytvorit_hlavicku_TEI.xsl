@@ -59,6 +59,7 @@
 				
 				
 				<sourceDesc>
+					<xsl:call-template name="listBibl" />
 					<msDesc xml:lang="cs">
 						<xsl:call-template name="identifikaceRukopisu" />
 						<msContents>
@@ -129,21 +130,45 @@
 	</xsl:template>
 
 	<xsl:template name="keywords">
-		<xsl:if test="ev:Zpracovani/ev:LiterarniDruh/text() | ev:Zpracovani/ev:LiterarniZanr/text()">
+		<xsl:if test="ev:Zpracovani/ev:LiterarniDruh/text() | ev:Zpracovani/ev:LiterarniZanr/text()
+			| ev:Hlava/ev:Pamatka/ev:Zkratka/text() | ev:Hlava/ev:Pamatka/ev:Pramen/ev:Zkratka/text()">
 		<keywords scheme="http://vokabular.ujc.cas.cz/scheme/classification/secondary">
 			<xsl:apply-templates select="ev:Zpracovani/ev:LiterarniDruh | ev:Zpracovani/ev:LiterarniZanr" mode="term" />
 		</keywords>
 		</xsl:if>
 	</xsl:template>
-	
 
 	
-	<xsl:template match="ev:LiterarniDruh | ev:LiterarniZanr" mode="term">
-		<term>
+	<xsl:template match="ev:LiterarniDruh" mode="term">
+		<term type="literary-form">
 			<xsl:apply-templates />
 		</term>
 	</xsl:template>
 	
+	<xsl:template match="ev:LiterarniZanr" mode="term">
+		<term type="literary-genre">
+			<xsl:apply-templates />
+		</term>
+	</xsl:template>
+	
+	<xsl:template match="ev:Pramen/ev:Zkratka" mode="bibl">
+		<bibl type="acronym" subtype="source">
+			<xsl:apply-templates />
+		</bibl>
+	</xsl:template>
+	
+	<xsl:template match="ev:Pamatka/ev:Zkratka" mode="bibl">
+		<bibl type="acronym" subtype="original-text">
+			<xsl:apply-templates />
+		</bibl>
+	</xsl:template>
+	
+	
+	<xsl:template name="listBibl">
+		<listBibl>
+			<xsl:apply-templates select="ev:Hlava/ev:Pamatka/ev:Zkratka | ev:Hlava/ev:Pamatka/ev:Pramen/ev:Zkratka" mode="bibl" />
+		</listBibl>
+	</xsl:template>
 	
 	<xsl:template name="identifikaceRukopisu">
 		<msIdentifier>
