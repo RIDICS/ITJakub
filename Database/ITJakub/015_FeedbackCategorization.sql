@@ -8,7 +8,7 @@ BEGIN TRAN;
     INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion
 		 )
-    VALUES( '014' );
+    VALUES( '015' );
     -- DatabaseVersion - varchar
 --ROLLBACK
 COMMIT;
