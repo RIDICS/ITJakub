@@ -6,12 +6,8 @@ namespace ITJakub.Shared.Contracts.Notes
     public enum FeedbackSortEnum : short
     {
         [EnumMember]
-        Author = 0,
+        Date = 0,
         [EnumMember]
-        Email = 1,
-        [EnumMember]
-        Category = 2,
-        [EnumMember]
-        Dating = 3,
+        Category = 1,
     }
 }

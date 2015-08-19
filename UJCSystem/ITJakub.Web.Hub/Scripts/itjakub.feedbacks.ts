@@ -12,10 +12,8 @@
 ];
 
 enum FeedbackSortEnum {
-    Author = 0,
-    Email = 1,
-    Category = 2,
-    Dating = 3,
+    Date = 0,
+    Category = 1,
 }
 
 var sortEnumTranslation = [
@@ -25,7 +23,7 @@ var sortEnumTranslation = [
     "Datum"
 ];
 
-var sortCriteria = FeedbackSortEnum.Dating;
+var sortCriteria = FeedbackSortEnum.Date;
 var sortOrderAsc = false;
 var categories = new Array<number>();
 var paginator: Pagination;

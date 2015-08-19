@@ -6,6 +6,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Notes;
+using FeedbackSortEnum = ITJakub.DataEntities.Database.Entities.Enums.FeedbackSortEnum;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -84,7 +85,8 @@ namespace ITJakub.ITJakubService.Core
         public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
-            var feedbacks = m_feedbackRepository.GetFeedbacks(categories, feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
+            var sortCriteria = feedbackSearchCriteria.SortCriteria;
+            var feedbacks = m_feedbackRepository.GetFeedbacks(categories,(FeedbackSortEnum)sortCriteria.SortByField,sortCriteria.SortAsc, feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
             return Mapper.Map<List<FeedbackContract>>(feedbacks);
         }
 

@@ -18,11 +18,16 @@ namespace ITJakub.DataEntities.Database.Repositories
 
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Feedback> GetFeedbacks(List<FeedbackCategoryEnum> categories, int? start, int? count)
+        public virtual IList<Feedback> GetFeedbacks(List<FeedbackCategoryEnum> categories, FeedbackSortEnum sortCriteria, bool sortAsc, int? start, int? count)
         {
             using (var session = GetSession())
             {
                 var query = session.QueryOver<Feedback>();
+
+                var queryOrderBuilder = query.OrderBy(Projections.Property(sortCriteria.ToString()));
+
+                query = sortAsc ? queryOrderBuilder.Asc : queryOrderBuilder.Desc;
+
                 if (categories != null)
                 {
                     query.Where(x => x.Category.IsIn(categories));
