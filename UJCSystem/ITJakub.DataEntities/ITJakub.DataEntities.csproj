@@ -73,6 +73,7 @@
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackCategoryEnum.cs" />
+    <Compile Include="Database\Entities\Enums\FeedbackSortEnum.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
     <Compile Include="Database\Entities\Recording.cs" />
