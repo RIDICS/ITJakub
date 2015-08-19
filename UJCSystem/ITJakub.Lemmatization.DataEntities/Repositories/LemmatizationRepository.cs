@@ -12,12 +12,6 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         {
         }
 
-        public T Create<T>(T instance)
-        {
-            var result = base.Create(instance);
-            return (T) result;
-        }
-
         [Transaction(TransactionMode.Requires)]
         public virtual IList<Token> GetTypeaheadToken(string query, int recordCount)
         {

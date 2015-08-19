@@ -32,5 +32,23 @@ namespace ITJakub.Web.Hub.Controllers
             var result = m_serviceClient.GetTypeaheadToken(query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult CreateToken(string token, string description)
+        {
+            var result = m_serviceClient.CreateToken(token, description);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTokenCharacteristic(long tokenId)
+        {
+            var result = m_serviceClient.GetTokenCharacteristic(tokenId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
+        {
+            var result = m_serviceClient.AddTokenCharacteristic(tokenId, morphologicalCharacteristic, description);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

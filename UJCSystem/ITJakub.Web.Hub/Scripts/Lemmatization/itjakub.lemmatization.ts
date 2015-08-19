@@ -6,19 +6,19 @@
 class Lemmatization {
     private mainContainer: string;
     private searchBox: LemmatizationSearchBox;
-    private lemmatizationCharacteristic: LemmatizationCharacteristic;
+    private lemmatizationCharacteristic: LemmatizationCharacteristicEditor;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
         this.searchBox = new LemmatizationSearchBox("#mainSearchInput");
-        this.lemmatizationCharacteristic = new LemmatizationCharacteristic();
+        this.lemmatizationCharacteristic = new LemmatizationCharacteristicEditor();
     }
 
     public make() {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
         this.searchBox.create((selectedExists: boolean) => {
-            if (selectedExists)
+            if (selectedExists || this.searchBox.getInputValue() === "")
                 $("#addNewTokenButton").addClass("hidden");
             else
                 $("#addNewTokenButton").removeClass("hidden");
@@ -26,11 +26,12 @@ class Lemmatization {
         this.lemmatizationCharacteristic.init();
 
         $("#loadButton").click(() => {
-            this.loadToken(this.searchBox.getValue());
+            var tokenItem = this.searchBox.getValue();
+            this.loadToken(tokenItem);
         });
 
         $("#addNewTokenButton").click(() => {
-            $("#newTokenDialog").modal("show");
+            this.showAddNewToken();
         });
 
         $("#addNewCharacteristic").click(() => {
@@ -40,15 +41,86 @@ class Lemmatization {
         $("#saveCharacteristic").click(() => {
             alert(this.lemmatizationCharacteristic.getValue());
         });
+
+        $("#save-token").click(() => {
+            this.saveNewToken();
+        });
     }
 
-    private loadToken(item: ILemmatizationSearchBoxItem) {
-        $("#specificToken").text(item.Text);
-        $("#specificTokenDescription").text(item.Description);
+    private loadToken(tokenItem: ILemmatizationSearchBoxItem) {
+        $("#specificToken").text(tokenItem.Text);
+        $("#specificTokenDescription").text(tokenItem.Description);
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/GetTokenCharacteristic",
+            data: {
+                tokenId: tokenItem.Id
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (list) => {
+                this.loadCharacteristics(list);
+            }
+        });
+    }
+
+    private loadCharacteristics(list: Array<ITokenCharacteristic>) {
+        $(this.mainContainer).empty();
+
+        for (var i = 0; i < list.length; i++) {
+            var containerDiv = document.createElement("div");
+            var characteristicItem = list[i];
+            var characteristicTable = new LemmatizationCharacteristicTable(characteristicItem, containerDiv);
+            characteristicTable.make();
+
+            $(this.mainContainer).append(containerDiv);
+        }
+    }
+
+    private showAddNewToken() {
+        var tokenName = this.searchBox.getInputValue();
+        $("#new-token").val(tokenName);
+        $("#new-token-description").val("");
+        
+        $("#newTokenDialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    }
+
+    private saveNewToken() {
+        var token = $("#new-token").val();
+        var description = $("#new-token-description").val();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/CreateToken",
+            data: {
+                token: token,
+                description: description
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (newTokenId) => {
+                $("#newTokenDialog").modal("hide");
+                $("#addNewTokenButton").addClass("hidden");
+                this.searchBox.reload();
+
+                var tokenItem: ILemmatizationSearchBoxItem = {
+                    Id: newTokenId,
+                    Text: token,
+                    Description: description
+                };
+                this.loadToken(tokenItem);
+            }
+        });
     }
 }
 
-class LemmatizationCharacteristic {
+class LemmatizationCharacteristicEditor {
     private currentValue: string;
 
     init() {
@@ -71,8 +143,8 @@ class LemmatizationCharacteristic {
     }
 
     private clear() {
-        $("#newTokenCharacteristic select").each((index, element) => {
-            //todo set element selected index to 0
+        $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
+            element.selectedIndex = 0;
         });
     }
 
@@ -89,6 +161,107 @@ class LemmatizationCharacteristic {
 
     save() {
         
+    }
+}
+
+class LemmatizationCharacteristicTable {
+    private container: HTMLDivElement;
+    private item: ITokenCharacteristic;
+    
+    constructor(item: ITokenCharacteristic, container: HTMLDivElement) {
+        this.container = container;
+        this.item = item;
+    }
+
+    make() {
+        $(this.container).empty();
+
+        var morphologicalDiv = document.createElement("div");
+        var descriptionDiv = document.createElement("div");
+        var tableDiv = document.createElement("div");
+
+        $(morphologicalDiv)
+            .addClass("lemmatization-morphologic")
+            .text(this.item.MorphologicalCharacteristic);
+
+        $(descriptionDiv)
+            .addClass("lemmatization-characteristic-description")
+            .text(this.item.Description);
+
+        $(tableDiv)
+            .addClass("lemmatization-characteristic");
+
+        var table = document.createElement("table");
+        var headerTr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+
+        $(td1).text("Kanonická forma");
+        $(td2).text("Typ");
+        $(td3).text("Popis");
+        $(headerTr)
+            .append(td1)
+            .append(td2)
+            .append(td3);
+        $(table).append(headerTr);
+
+        for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
+            var canonicalFormItem = this.item.CanonicalFormList[i];
+            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, canonicalFormItem, table);
+            canonicalForm.make();
+        }
+
+        $(tableDiv).append(table);
+
+        $(this.container)
+            .append(descriptionDiv)
+            .append(morphologicalDiv)
+            .append(tableDiv);
+    }
+}
+
+class LemmatizationCanonicalForm {
+    private tableContainer: HTMLTableElement;
+    private canonicalForm: ICanonicalForm;
+    private tokenId: number;
+
+    constructor(tokenCharacteristicId: number, canonicalForm: ICanonicalForm, tableContainer: HTMLTableElement) {
+        this.tableContainer = tableContainer;
+        this.canonicalForm = canonicalForm;
+        this.tokenId = tokenCharacteristicId;
+    }
+
+    make() {
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+
+        $(td1).text(this.canonicalForm.Text);
+        $(td2).text(this.typeToString(this.canonicalForm.Type));
+        $(td3).text(this.canonicalForm.Description);
+
+        $(tr).append(td1)
+            .append(td2)
+            .append(td3);
+
+        $(this.tableContainer).append(tr);
+    }
+
+    private typeToString(canonicalFormType: CanonicalFormTypeEnum): string {
+        switch (canonicalFormType) {
+            case CanonicalFormTypeEnum.Lemma:
+                return "Lemma";
+            case CanonicalFormTypeEnum.LemmaOld:
+                return "Staré lemma";
+            case CanonicalFormTypeEnum.Stemma:
+                return "Stemma";
+            case CanonicalFormTypeEnum.StemmaOld:
+                return "Staré stemma";
+            default:
+                return "";
+        }
     }
 }
 
@@ -119,6 +292,10 @@ class LemmatizationSearchBox {
         return this.currentItem;
     }
 
+    getInputValue(): string {
+        return <any>($(this.inputField).typeahead("val"));
+    }
+
     create(selectionChangedCallback: (selectedExists: boolean) => void): void {
         var self = this;
         $(this.inputField).typeahead(this.options, this.dataset);
@@ -130,7 +307,7 @@ class LemmatizationSearchBox {
                 return;
             }
 
-            var currentText = $(".tt-input", e.target.parentNode).val();
+            var currentText = self.getInputValue();
             var suggestionElements = $(".suggestion", e.target.parentNode);
             for (var i = 0; i < suggestionElements.length; i++) {
                 if ($(suggestionElements[i]).text() === currentText) {
@@ -156,20 +333,24 @@ class LemmatizationSearchBox {
         $(this.inputField).typeahead("destroy");
     }
 
-    clearAndDestroy(): void {
+    reload() {
+        this.clearCache();
+        var value = this.getInputValue();
+        this.setValue("");
+        this.setValue(value);
+    }
+
+    clearCache(): void {
         if (this.bloodhound) {
             this.bloodhound.clear();
             this.bloodhound.clearPrefetchCache();
             this.bloodhound.clearRemoteCache();
         }
-
-        this.dataset = null;
-        this.bloodhound = null;
-        this.destroy();
     }
 
     setDataSet(name: string, parameterUrlString: string = null): void {
-        this.clearAndDestroy();
+        this.clearCache();
+        this.destroy();
         var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
 
         if (parameterUrlString != null) {
@@ -210,4 +391,30 @@ interface ILemmatizationSearchBoxItem {
     Id: number;
     Text: string;
     Description: string;
+}
+
+interface ITokenCharacteristic {
+    Id: number;
+    MorphologicalCharacteristic: string;
+    Description: string;
+    CanonicalFormList: Array<ICanonicalForm>;
+}
+
+interface ICanonicalForm {
+    Id: number;
+    Text: string;
+    Description: string;
+    Type: CanonicalFormTypeEnum;
+}
+
+enum CanonicalFormTypeEnum {
+    Lemma = 0,
+    Stemma = 1,
+    LemmaOld = 2,
+    StemmaOld = 3,
+}
+
+enum HyperCanonicalFormTypeEnum {
+    HyperLemma = 0,
+    HyperStemma = 1,
 }

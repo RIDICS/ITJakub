@@ -38,8 +38,8 @@ namespace ITJakub.Lemmatization.Core
                 Description = description
             };
 
-            newToken = m_repository.Create(newToken);
-            return newToken.Id;
+            var id = m_repository.Create(newToken);
+            return (long) id;
         }
 
         public IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId)
@@ -58,8 +58,8 @@ namespace ITJakub.Lemmatization.Core
                 Token = tokenEntity
             };
 
-            newTokenCharacteristic = m_repository.Create(newTokenCharacteristic);
-            return newTokenCharacteristic.Id;
+            var id = m_repository.Create(newTokenCharacteristic);
+            return (long) id;
         }
 
         public IList<CanonicalFormContract> GetTypeaheadCannonicalForm(string query)
@@ -79,8 +79,8 @@ namespace ITJakub.Lemmatization.Core
                 Description = description
             };
 
-            newCanonicalForm = m_repository.Create(newCanonicalForm);
-            return newCanonicalForm.Id;
+            var id = m_repository.Create(newCanonicalForm);
+            return (long) id;
         }
 
         public void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
