@@ -1,176 +1,181 @@
-﻿
-
-var search: Search;
+﻿function initAudibooksList() {
+    var bookCountPerPage = 5;
+    var audibooksList = new AudibooksList(bookCountPerPage);
+    audibooksList.create();
+}
 
 $(document).ready(() => {
-    var booksCountOnPage = 5;
+    initAudibooksList();
+});
 
-    var bookIds = new Array();
-    var categoryIds = new Array();
+class AudibooksList {
+    private bookCountPerPage: number;
+    private search: Search;
+    private typeaheadSearchBox: SearchBox;
+    private audibookSelector: DropDownSelect2;
+    private bibliographyModule: BibliographyModule;
+    private bookIds: Array<number>;
+    private categoryIds: Array<number>;
 
-    function sortOrderChanged() {
-        search.processSearch();
+    constructor(bookCountPerPage: number) {
+        this.bookCountPerPage = bookCountPerPage;
     }
 
-    function hideTypeahead() {
-        $(".twitter-typeahead").find(".tt-menu").hide();
-    };
+    create() {
+        var disabledOptions = new Array<SearchTypeEnum>();
+        disabledOptions.push(SearchTypeEnum.Fulltext);
+        disabledOptions.push(SearchTypeEnum.Heading);
+        disabledOptions.push(SearchTypeEnum.Headword);
+        disabledOptions.push(SearchTypeEnum.HeadwordDescription);
+        disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+        disabledOptions.push(SearchTypeEnum.Sentence);
+        disabledOptions.push(SearchTypeEnum.TokenDistance);
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+        this.search = new Search(<any>$("#listSearchDiv")[0], (json: string)=> {this.audioAdvancedSearch(json)}, (text:string) => {this.audioBasicSearch(text)});
+        this.search.makeSearch(disabledOptions);
 
-    function audioAdvancedSearchPaged(json: string, pageNumber: number) {
-        hideTypeahead();
+        this.typeaheadSearchBox = new SearchBox(".searchbar-input", "AudioBooks/AudioBooks");
+        this.typeaheadSearchBox.addDataSet("Title", "Název");
+        this.typeaheadSearchBox.create();
+        this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+
+        var callbackDelegate = new DropDownSelectCallbackDelegate();
+        callbackDelegate.selectedChangedCallback = (state: State) => {
+            var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+            this.typeaheadSearchBox.clearAndDestroy();
+            this.typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+            this.typeaheadSearchBox.create();
+            this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+
+            var selectedIds = this.audibookSelector.getSelectedIds();
+            this.bookIds = selectedIds.selectedBookIds;
+            this.categoryIds = selectedIds.selectedCategoryIds;
+        };
+        callbackDelegate.dataLoadedCallback = () => {
+            var selectedIds = this.audibookSelector.getSelectedIds();
+            this.bookIds = selectedIds.selectedBookIds;
+            this.categoryIds = selectedIds.selectedCategoryIds;
+            $("#listResults").removeClass("loader");
+            this.search.processSearchQuery("%"); //search for all by default criteria (title)
+            this.search.writeTextToTextField("");
+        };
+        this.audibookSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories", true, callbackDelegate);
+        this.audibookSelector.makeDropdown();
+
+        this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", ()=> {this.sortOrderChanged()}, BookTypeEnum.Edition); //TODO audiobook
+
+
+        $(".searchbar-input.tt-input").change(() => { //prevent clearing input value on blur() 
+            this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+        });
+    }
+
+    private audioAdvancedSearchPaged(json: string, pageNumber: number) {
+        this.hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
-        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
-        var count = bibliographyModule.getBooksCountOnPage();
-        var sortAsc = bibliographyModule.isSortedAsc();
-        var sortingEnum = bibliographyModule.getSortCriteria();
+        var start = (pageNumber - 1) * this.bibliographyModule.getBooksCountOnPage();
+        var count = this.bibliographyModule.getBooksCountOnPage();
+        var sortAsc = this.bibliographyModule.isSortedAsc();
+        var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+        this.bibliographyModule.clearBooks();
+        this.bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchPaged",
-            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
-                bibliographyModule.showBooks(response.books);
+                this.bibliographyModule.showBooks(response.books);
             }
         });
     }
 
-    function audioBasicSearchPaged(text: string, pageNumber: number) {
-        hideTypeahead();
+    private audioBasicSearchPaged(text: string, pageNumber: number) {
+        this.hideTypeahead();
         if (typeof text === "undefined" || text === null || text === "") return;
 
-        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
-        var count = bibliographyModule.getBooksCountOnPage();
-        var sortAsc = bibliographyModule.isSortedAsc();
-        var sortingEnum = bibliographyModule.getSortCriteria();
+        var start = (pageNumber - 1) * this.bibliographyModule.getBooksCountOnPage();
+        var count = this.bibliographyModule.getBooksCountOnPage();
+        var sortAsc = this.bibliographyModule.isSortedAsc();
+        var sortingEnum = this.bibliographyModule.getSortCriteria();
 
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+        this.bibliographyModule.clearBooks();
+        this.bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchPaged",
-            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
-                bibliographyModule.showBooks(response.books);
+                this.bibliographyModule.showBooks(response.books);
             }
         });
     }
 
-    function pageClickCallbackForBiblModule(pageNumber: number) {
+    private pageClickCallbackForBiblModule(pageNumber: number) {
 
-        if (search.isLastQueryJson()) {
-            audioAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+        if (this.search.isLastQueryJson()) {
+            this.audioAdvancedSearchPaged(this.search.getLastQuery(), pageNumber);
         } else {
-            audioBasicSearchPaged(search.getLastQuery(), pageNumber);
+            this.audioBasicSearchPaged(this.search.getLastQuery(), pageNumber);
         }
     }
 
-    function audioBasicSearch(text: string) {
-        hideTypeahead();
+    private audioBasicSearch(text: string) {
+        this.hideTypeahead();
         if (typeof text === "undefined" || text === null || text === "") return;
 
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+        this.bibliographyModule.clearBooks();
+        this.bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchCount",
-            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            data: { text: text, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
-                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+                this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => {this.pageClickCallbackForBiblModule(pageNumber)}, response["count"]); //enable pagination
             }
         });
     }
 
-    function audioAdvancedSearch(json: string) {
-        hideTypeahead();
+    private audioAdvancedSearch(json: string) {
+        this.hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+        this.bibliographyModule.clearBooks();
+        this.bibliographyModule.showLoading();
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            data: { json: json, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
-                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+                this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, response["count"]); //enable pagination
             }
         });
     }
 
+    private sortOrderChanged() {
+        this.search.processSearch();
+    }
 
-    var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.Heading);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    private hideTypeahead() {
+        $(".twitter-typeahead").find(".tt-menu").hide();
+    }
 
-    search = new Search(<any>$("#listSearchDiv")[0], audioAdvancedSearch, audioBasicSearch);
-    search.makeSearch(disabledOptions);
-
-    var typeaheadSearchBox = new SearchBox(".searchbar-input", "AudioBooks/AudioBooks");
-    typeaheadSearchBox.addDataSet("Title", "Název");
-    typeaheadSearchBox.create();
-    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-
-
-    var callbackDelegate = new DropDownSelectCallbackDelegate();
-    callbackDelegate.selectedChangedCallback = (state: State) => {
-        bookIds = new Array();
-
-        for (var i = 0; i < state.SelectedItems.length; i++) {
-            bookIds.push(state.SelectedItems[i].Id);
-        }
-
-        categoryIds = new Array();
-
-        for (var i = 0; i < state.SelectedCategories.length; i++) {
-            categoryIds.push(state.SelectedCategories[i].Id);
-        }
-
-        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-        typeaheadSearchBox.clearAndDestroy();
-        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
-        typeaheadSearchBox.create();
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-    };
-
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories", true, callbackDelegate);
-    editionsSelector.makeDropdown();
-
-
-    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-    });
-
-    search.processSearchQuery("%"); //search for all by default criteria (title)
-    search.writeTextToTextField("");
-});
-
-
-
-
-
+}
 

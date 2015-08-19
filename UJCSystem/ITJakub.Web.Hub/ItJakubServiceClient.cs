@@ -1178,6 +1178,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public FileDataContract DownloadWholeAudiobook()
+        {
+            throw new NotImplementedException();
+        }
+
 
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
