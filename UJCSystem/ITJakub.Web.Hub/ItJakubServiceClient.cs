@@ -1046,11 +1046,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<FeedbackContract> GetFeedbacks()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             try
             {
-               return Channel.GetFeedbacks();
+               return Channel.GetFeedbacks(feedbackSearchCriteria);
             }
             catch (CommunicationException ex)
             {
@@ -1072,11 +1072,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public int GetFeedbacksCount()
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             try
             {
-               return Channel.GetFeedbacksCount();
+               return Channel.GetFeedbacksCount(feedbackSearchCriteria);
             }
             catch (CommunicationException ex)
             {

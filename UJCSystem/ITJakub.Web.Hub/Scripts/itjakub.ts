@@ -47,6 +47,10 @@ function getBaseUrl() {
     return baseUrl;
 }
 
+function convertDate(date: string): Date {
+    return new Date(parseInt(date.substr(6)));
+}
+
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Notes;
+using FeedbackSortEnum = ITJakub.DataEntities.Database.Entities.Enums.FeedbackSortEnum;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -80,15 +82,18 @@ namespace ITJakub.ITJakubService.Core
             m_feedbackRepository.Save(entity);
         }
 
-        public List<FeedbackContract> GetFeedbacks()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            var feedbacks = m_feedbackRepository.GetFeedbacks();
+            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
+            var sortCriteria = feedbackSearchCriteria.SortCriteria;
+            var feedbacks = m_feedbackRepository.GetFeedbacks(categories,(FeedbackSortEnum)sortCriteria.SortByField,sortCriteria.SortAsc, feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
             return Mapper.Map<List<FeedbackContract>>(feedbacks);
         }
 
-        public int GetFeedbacksCount()
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            return m_feedbackRepository.GetFeedbacksCount();
+            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum)category).ToList();
+            return m_feedbackRepository.GetFeedbacksCount(categories);
         }
 
         public void DeleteFeedback(long feedbackId)
