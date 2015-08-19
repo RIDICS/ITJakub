@@ -1,4 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Web.Mvc;
+using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -13,15 +16,27 @@ namespace ITJakub.Web.Hub.Controllers
             return View();
         }
 
-        public ActionResult GetFeedbacksCount()
+        public ActionResult GetFeedbacksCount(IEnumerable<byte> categories)
         {
-            var count = m_mainServiceClient.GetFeedbacksCount();
-            return Json( count , JsonRequestBehavior.AllowGet);
+            var feedbackCriteria = new FeedbackCriteriaContract
+            {
+                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
+            };
+
+            var count = m_mainServiceClient.GetFeedbacksCount(feedbackCriteria);
+            return Json(count, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetFeedbacks()
+        public ActionResult GetFeedbacks(IEnumerable<byte> categories, int? start, int? count)
         {
-            var results = m_mainServiceClient.GetFeedbacks();
+            var feedbackCriteria = new FeedbackCriteriaContract
+            {
+                Start = start,
+                Count = count,
+                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
+            };
+
+            var results = m_mainServiceClient.GetFeedbacks(feedbackCriteria);
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 

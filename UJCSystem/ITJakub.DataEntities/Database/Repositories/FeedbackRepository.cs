@@ -3,6 +3,9 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.Shared.Contracts.Searching.Criteria;
+using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -15,21 +18,44 @@ namespace ITJakub.DataEntities.Database.Repositories
 
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<Feedback> GetFeedbacks()
+        public virtual IList<Feedback> GetFeedbacks(List<FeedbackCategoryEnum> categories, int? start, int? count)
         {
             using (var session = GetSession())
             {
-                return session.QueryOver<Feedback>().Fetch(x => x.User).Eager.List<Feedback>();
+                var query = session.QueryOver<Feedback>();
+                if (categories != null)
+                {
+                    query.Where(x => x.Category.IsIn(categories));
+                }
+
+                if (start.HasValue)
+                {
+                    query.Skip(start.Value);
+                }
+
+                if (count.HasValue)
+                {
+                    query.Take(count.Value);
+                }
+
+                return query.Fetch(x => x.User).Eager.List<Feedback>();
             }
         }
 
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int GetFeedbacksCount()
+        public virtual int GetFeedbacksCount(List<FeedbackCategoryEnum> categories)
         {
             using (var session = GetSession())
             {
-                return session.QueryOver<Feedback>().RowCount();
+                var query =  session.QueryOver<Feedback>();
+
+                if (categories != null)
+                {
+                    query.Where(x => x.Category.IsIn(categories));
+                }
+
+                return query.RowCount();
             }
         }
 

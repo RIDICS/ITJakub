@@ -240,14 +240,14 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.CreateAnonymousFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, name, email);
         }
 
-        public List<FeedbackContract> GetFeedbacks()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            return m_feedbackManager.GetFeedbacks();
+            return m_feedbackManager.GetFeedbacks(feedbackSearchCriteria);
         }
 
-        public int GetFeedbacksCount()
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            return m_feedbackManager.GetFeedbacksCount();
+            return m_feedbackManager.GetFeedbacksCount(feedbackSearchCriteria);
         }
 
         public void DeleteFeedback(long feedbackId)

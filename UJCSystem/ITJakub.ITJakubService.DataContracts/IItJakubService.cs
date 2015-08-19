@@ -146,10 +146,10 @@ namespace ITJakub.ITJakubService.DataContracts
         void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string name, string email);
 
         [OperationContract]
-        List<FeedbackContract> GetFeedbacks();
+        List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria);
 
         [OperationContract]
-        int GetFeedbacksCount();
+        int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria);
 
         [OperationContract]
         void DeleteFeedback(long feedbackId);
