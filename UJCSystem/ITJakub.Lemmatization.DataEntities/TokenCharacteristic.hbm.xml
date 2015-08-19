@@ -14,6 +14,8 @@
       <column name="MorphologicalCharakteristic" sql-type="nvarchar(17)"/>
     </property>
 
+    <many-to-one name="Token" class="Token" cascade="save-update"/>
+
     <bag name="CanonicalForms" cascade="all" table="CanonicalForm_TokenCharacteristic">
       <key column ="TokenCharacteristic"/>
       <many-to-many class="CanonicalForm" column="CanonicalForm"/>

@@ -7,12 +7,21 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     public interface ILemmatizationService
     {
         [OperationContract]
-        string GetLemma(string word);
+        IList<TokenContract> GetTypeaheadToken(string query);
 
         [OperationContract]
-        string GetStemma(string word);
+        long CreateToken(string token, string description);
 
         [OperationContract]
-        IList<LemmatizationTypeaheadContract> GetTypeaheadToken(string query);
+        IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId);
+
+        [OperationContract]
+        long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description);
+
+        [OperationContract]
+        void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId);
+
+        [OperationContract]
+        long CreateCanonicalForm(CanonicalFormTypeContract type, string text, string description);
     }
 }

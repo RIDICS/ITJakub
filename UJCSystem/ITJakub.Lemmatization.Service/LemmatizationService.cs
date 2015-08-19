@@ -19,23 +19,34 @@ namespace ITJakub.Lemmatization.Service
             m_lemmatizationManager = m_container.Resolve<LemmatizationManager>();
         }
 
-        public string GetLemma(string word)
-        {
-            return null;
-        }
-
-        public string GetStemma(string word)
-        {
-
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("test");
-
-            return null;
-        }
-
-        public IList<LemmatizationTypeaheadContract> GetTypeaheadToken(string query)
+        public IList<TokenContract> GetTypeaheadToken(string query)
         {
             return m_lemmatizationManager.GetTypeaheadToken(query);
+        }
+
+        public long CreateToken(string token, string description)
+        {
+            return m_lemmatizationManager.CreateToken(token, description);
+        }
+
+        public IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId)
+        {
+            return m_lemmatizationManager.GetTokenCharacteristic(tokenId);
+        }
+
+        public long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
+        {
+            return m_lemmatizationManager.AddTokenCharacteristic(tokenId, morphologicalCharacteristic, description);
+        }
+
+        public void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
+        {
+            m_lemmatizationManager.AddCanonicalForm(tokenCharacteristicId, canonicalFormId);
+        }
+
+        public long CreateCanonicalForm(CanonicalFormTypeContract type, string text, string description)
+        {
+            return m_lemmatizationManager.CreateCanonicalForm(type, text, description);
         }
     }
 }

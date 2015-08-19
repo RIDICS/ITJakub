@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoMapperProfiles\CanonicalFormProfile.cs" />
+    <Compile Include="AutoMapperProfiles\HyperCanonicalFormProfile.cs" />
+    <Compile Include="AutoMapperProfiles\TokenCharacteristicProfile.cs" />
     <Compile Include="AutoMapperProfiles\TokenProfile.cs" />
     <Compile Include="LemmatizationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

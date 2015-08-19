@@ -50,9 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CanonicalFormContract.cs" />
+    <Compile Include="HyperCanonicalFormContract.cs" />
     <Compile Include="LemmatizationServiceClient.cs" />
     <Compile Include="ILemmatizationService.cs" />
-    <Compile Include="LemmatizationTypeaheadContract.cs" />
+    <Compile Include="TokenCharacteristicContract.cs" />
+    <Compile Include="TokenContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

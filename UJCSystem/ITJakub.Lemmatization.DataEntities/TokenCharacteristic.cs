@@ -11,6 +11,8 @@ namespace ITJakub.Lemmatization.DataEntities
 
         public virtual string MorphologicalCharakteristic { get; set; }
 
+        public virtual Token Token { get; set; }
+
         public virtual IList<CanonicalForm> CanonicalForms { get; set; }        
 
         public virtual bool Equals(TokenCharacteristic other)
