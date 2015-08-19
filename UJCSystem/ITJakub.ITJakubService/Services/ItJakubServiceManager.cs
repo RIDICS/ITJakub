@@ -253,9 +253,10 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.DeleteFeedback(feedbackId);
         }
 
-        public FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType)
+        public FileDataContract DownloadWholeAudiobook()
         {
-            return m_audioBookManager.DownloadWholeAudioBook(bookId, audioType);
+            throw new NotImplementedException();
+            //return m_audioBookManager.DownloadWholeAudioBook(bookId, audioType);
         }
     }
 }

@@ -160,7 +160,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #region AudioBooks
 
         [OperationContract]
-        FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType);
+        FileDataContract DownloadWholeAudiobook();
 
 
         #endregion
