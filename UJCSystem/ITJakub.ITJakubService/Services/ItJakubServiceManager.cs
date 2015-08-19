@@ -40,11 +40,6 @@ namespace ITJakub.ITJakubService.Services
             return m_authorManager.GetAllAuthors();
         }
 
-        public int CreateAuthor(string name)
-        {
-            return m_authorManager.CreateAuthor(name);
-        }
-
         public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
         {
             return m_bookManager.GetBookInfoWithPages(bookGuid);
