@@ -7,6 +7,7 @@ class Lemmatization {
     private mainContainer: string;
     private searchBox: LemmatizationSearchBox;
     private lemmatizationCharacteristic: LemmatizationCharacteristicEditor;
+    private currentTokenItem: IToken;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
@@ -18,10 +19,13 @@ class Lemmatization {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
         this.searchBox.create((selectedExists: boolean) => {
-            if (selectedExists || this.searchBox.getInputValue() === "")
+            if (selectedExists || this.searchBox.getInputValue() === "") {
                 $("#addNewTokenButton").addClass("hidden");
-            else
+                $("#loadButton").removeClass("hidden");
+            } else {
                 $("#addNewTokenButton").removeClass("hidden");
+                $("#loadButton").addClass("hidden");
+            }
         });
         this.lemmatizationCharacteristic.init();
 
@@ -35,11 +39,7 @@ class Lemmatization {
         });
 
         $("#addNewCharacteristic").click(() => {
-            this.lemmatizationCharacteristic.show();
-        });
-
-        $("#saveCharacteristic").click(() => {
-            alert(this.lemmatizationCharacteristic.getValue());
+            this.lemmatizationCharacteristic.show(this.currentTokenItem.Id);
         });
 
         $("#save-token").click(() => {
@@ -47,7 +47,9 @@ class Lemmatization {
         });
     }
 
-    private loadToken(tokenItem: ILemmatizationSearchBoxItem) {
+    private loadToken(tokenItem: IToken) {
+        this.currentTokenItem = tokenItem;
+        $(".content").removeClass("hidden");
         $("#specificToken").text(tokenItem.Text);
         $("#specificTokenDescription").text(tokenItem.Description);
 
@@ -109,7 +111,7 @@ class Lemmatization {
                 $("#addNewTokenButton").addClass("hidden");
                 this.searchBox.reload();
 
-                var tokenItem: ILemmatizationSearchBoxItem = {
+                var tokenItem: IToken = {
                     Id: newTokenId,
                     Text: token,
                     Description: description
@@ -122,12 +124,21 @@ class Lemmatization {
 
 class LemmatizationCharacteristicEditor {
     private currentValue: string;
+    private tokenId: number;
 
     init() {
         $("#newTokenCharacteristic select").on("change", () => {
-            var currentValue = this.getNewValue();
-            $("#result-characteristic-tag").text("Tag=\"" + currentValue + "\"");
+            this.updateTag();
         });
+
+        $("#saveCharacteristic").click(() => {
+            this.save();
+        });
+    }
+
+    private updateTag() {
+        this.currentValue = this.getNewValue();
+        $("#result-characteristic-tag").text("Tag=\"" + this.currentValue + "\"");
     }
 
     private getNewValue(): string {
@@ -146,21 +157,42 @@ class LemmatizationCharacteristicEditor {
         $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
             element.selectedIndex = 0;
         });
+        $("#new-token-text-description").val("");
+        this.updateTag();
     }
 
     getValue(): string {
         return this.currentValue;
     }
 
-    show() {
+    show(tokenId: number) {
+        this.tokenId = tokenId;
+        this.clear();
         $("#newTokenCharacteristic").modal({
             show: true,
             backdrop: "static"
         });
     }
 
-    save() {
-        
+    private save() {
+        var description = $("#new-token-text-description").val();
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
+            data: {
+                tokenId: this.tokenId,
+                morphologicalCharacteristic: this.currentValue,
+                description: description
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (newTokenId) => {
+                $("#newTokenCharacteristic").modal("hide");
+
+                //todo show new empty characteristic
+            }
+        });
     }
 }
 
@@ -212,12 +244,31 @@ class LemmatizationCharacteristicTable {
             canonicalForm.make();
         }
 
+        this.addRowWithNewLineCommand(table);
         $(tableDiv).append(table);
 
         $(this.container)
             .append(descriptionDiv)
             .append(morphologicalDiv)
             .append(tableDiv);
+    }
+
+    private addRowWithNewLineCommand(table: HTMLTableElement) {
+        var tr = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+
+        var newFormButton = document.createElement("button");
+        $(newFormButton).text("+");
+
+        $(td1).append(newFormButton);
+        $(td2).text("");
+        $(td3).text("");
+        $(tr).append(td1)
+            .append(td2)
+            .append(td3);
+        $(table).append(tr);
     }
 }
 
@@ -271,7 +322,7 @@ class LemmatizationSearchBox {
     private options: Twitter.Typeahead.Options;
     private dataset: Twitter.Typeahead.Dataset;
     private bloodhound: Bloodhound<string>;
-    private currentItem: ILemmatizationSearchBoxItem;
+    private currentItem: IToken;
 
     constructor(inputFieldElement: string) {
         this.inputField = inputFieldElement;
@@ -288,7 +339,7 @@ class LemmatizationSearchBox {
         $(this.inputField).typeahead('val', value);
     }
 
-    getValue(): ILemmatizationSearchBoxItem {
+    getValue(): IToken {
         return this.currentItem;
     }
 
@@ -382,12 +433,12 @@ class LemmatizationSearchBox {
         this.dataset = dataset;
     }
 
-    private getSuggestionTemplate(item: ILemmatizationSearchBoxItem) {
+    private getSuggestionTemplate(item: IToken) {
         return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
     }
 }
 
-interface ILemmatizationSearchBoxItem {
+interface IToken {
     Id: number;
     Text: string;
     Description: string;
