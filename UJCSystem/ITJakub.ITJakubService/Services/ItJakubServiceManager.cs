@@ -15,6 +15,8 @@ namespace ITJakub.ITJakubService.Services
 {
     public class ItJakubServiceManager : IItJakubService
     {
+        private readonly WindsorContainer m_container = Container.Current;
+
         private readonly UserManager m_userManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
@@ -22,17 +24,18 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;        
-        private readonly WindsorContainer m_container = Container.Current;        
+        private readonly AudioBookManager m_audioBookManager;
 
         public ItJakubServiceManager()
-        {
+        {            
             m_userManager = m_container.Resolve<UserManager>();
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();           
+            m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_audioBookManager = m_container.Resolve<AudioBookManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -248,6 +251,11 @@ namespace ITJakub.ITJakubService.Services
         public void DeleteFeedback(long feedbackId)
         {
             m_feedbackManager.DeleteFeedback(feedbackId);
+        }
+
+        public FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType)
+        {
+            return m_audioBookManager.DownloadWholeAudioBook(bookId, audioType);
         }
     }
 }

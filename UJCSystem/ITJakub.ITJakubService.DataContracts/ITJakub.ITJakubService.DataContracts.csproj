@@ -46,6 +46,7 @@
     <Compile Include="BookInfoWithPagesContract.cs" />
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardShortContract.cs" />
+    <Compile Include="FileDataContract.cs" />
     <Compile Include="HeadwordBookmarkContract.cs" />
     <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />

@@ -38,12 +38,12 @@ namespace ITJakub.DataEntities.Database.Entities
     }
 
 
-    public enum AudioType
+    public enum AudioType :byte
     {
-        Unknown,
-        Mp3,
-        Ogg,
-        Wav,
+        Unknown = 0,
+        Mp3 = 1,
+        Ogg = 2,
+        Wav = 3,
         
     }
 }
