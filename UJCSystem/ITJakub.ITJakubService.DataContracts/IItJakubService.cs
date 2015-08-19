@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -159,7 +160,11 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #region AudioBooks
 
-        FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType);
+        [OperationContract]
+        void DownloadWholeAudiobook(DownloadWholeBookContract requestContract);
+
+        [OperationContract]
+        void DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
 
         #endregion
 

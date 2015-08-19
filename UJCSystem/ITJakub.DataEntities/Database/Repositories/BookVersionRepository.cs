@@ -22,6 +22,7 @@ namespace ITJakub.DataEntities.Database.Repositories
     public class BookVersionRepository : NHibernateTransactionalDao
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
 
         public BookVersionRepository(ISessionManager sessManager)
             : base(sessManager)
@@ -564,5 +565,38 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return result;
             }
         }
-    }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Book GetBookWithLastVersionAndAudioTrack(long bookId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Book>()
+                    .Where(x=>x.Id == bookId)
+                    .Fetch(x=>x.LastVersion).Eager
+                    .SingleOrDefault<Book>();                
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Recording GetRecordingByTrackAndAudioType(long bookId, long trackPosition, AudioType audioType)
+        {
+            using (var session = GetSession())
+            {
+                Track trackAlias = null;
+                BookVersion bookVersionAlias = null;
+                Book bookAlias = null;
+                Recording recordingAlias = null;
+
+                return session.QueryOver<Book>(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Tracks, () => trackAlias)
+                    .JoinQueryOver(x => x.Recordings, () => recordingAlias)
+                    .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId
+                                && recordingAlias.AudioType == audioType)
+                    .Take(1)
+                    .SingleOrDefault<Recording>();
+            }
+        }
+    }    
 }

@@ -41,12 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioBooks\AudioTypeContract.cs" />
+    <Compile Include="AudioBooks\DownloadAudioBookTrackContract.cs" />
+    <Compile Include="AudioBooks\DownloadWholeBookContract.cs" />
     <Compile Include="AuthorDetailContract.cs" />
     <Compile Include="AuthProviderEnumContract.cs" />
     <Compile Include="BookInfoWithPagesContract.cs" />
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardShortContract.cs" />
-    <Compile Include="FileDataContract.cs" />
+    <Compile Include="AudioBooks\FileDataContract.cs" />
     <Compile Include="HeadwordBookmarkContract.cs" />
     <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />

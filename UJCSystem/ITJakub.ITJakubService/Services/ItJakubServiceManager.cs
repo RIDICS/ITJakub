@@ -5,6 +5,7 @@ using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -252,10 +253,16 @@ namespace ITJakub.ITJakubService.Services
         {
             m_feedbackManager.DeleteFeedback(feedbackId);
         }
+      
 
-        public FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType)
+        public void DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
         {
-            return m_audioBookManager.DownloadWholeAudioBook(bookId, audioType);
+            m_audioBookManager.DownloadWholeAudioBook(requestContract);
+        }
+
+        public void DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
+        {
+            m_audioBookManager.DownloadAudioBookTrack(requestContract);
         }
     }
 }
