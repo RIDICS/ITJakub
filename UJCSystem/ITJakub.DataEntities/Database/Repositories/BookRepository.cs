@@ -425,7 +425,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.Categories, () => categoryAlias)
                     .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
-                    .Select(x => bookVersionAlias.Title)
+                    .Select(Projections.Distinct(Projections.Property(() => bookVersionAlias.Title)))
                     .Where(x => bookTypeAlias.Type == bookType);
 
                 if (bookIdList != null)
@@ -468,7 +468,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.Categories, () => categoryAlias)
                     .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
-                    .Select(x => bookVersionAlias.Title)
+                    .Select(Projections.Distinct(Projections.Property(() => bookVersionAlias.Title)))
                     .Where(x => bookTypeAlias.Type == bookType)
                     .AndRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query);
 
