@@ -50,6 +50,7 @@
     <Compile Include="Notes\FeedbackCategoryEnumContract.cs" />
     <Compile Include="Notes\FeedbackContract.cs" />
     <Compile Include="Notes\FeedbackCriteriaContract.cs" />
+    <Compile Include="Notes\FeedbackSortCriteriaContract.cs" />
     <Compile Include="Notes\FeedbackSortEnum.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContractList.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts.Notes
@@ -10,6 +9,9 @@ namespace ITJakub.Shared.Contracts.Notes
 
         [DataMember]
         public IList<FeedbackCategoryEnumContract> Categories { get; set; }
+
+        [DataMember]
+        public FeedbackSortCriteriaContract SortCriteria { get; set; }
 
         [DataMember]
         public int? Start { get; set; }

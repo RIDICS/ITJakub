@@ -27,13 +27,18 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(count, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetFeedbacks(IEnumerable<byte> categories, int? start, int? count)
+        public ActionResult GetFeedbacks(IEnumerable<byte> categories, int? start, int? count, byte sortCriteria, bool sortAsc)
         {
             var feedbackCriteria = new FeedbackCriteriaContract
             {
                 Start = start,
                 Count = count,
-                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
+                Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList(),
+                SortCriteria = new FeedbackSortCriteriaContract
+                {
+                    SortAsc = sortAsc,
+                    SortByField = (FeedbackSortEnum) sortCriteria
+                }
             };
 
             var results = m_mainServiceClient.GetFeedbacks(feedbackCriteria);
