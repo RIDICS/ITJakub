@@ -155,5 +155,14 @@ namespace ITJakub.ITJakubService.DataContracts
         void DeleteFeedback(long feedbackId);
 
         #endregion
+
+
+        #region AudioBooks
+
+        FileDataContract DownloadWholeAudiobook(long bookId, AudioTypeContract audioType);
+
+        #endregion
+
+
     }
 }
