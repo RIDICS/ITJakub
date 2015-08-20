@@ -28,12 +28,13 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<CanonicalForm> GetTypeaheadCannonicalForm(string query, int recordCount)
+        public virtual IList<CanonicalForm> GetTypeaheadCannonicalForm(CanonicalFormType type, string query, int recordCount)
         {
             using (var session = GetSession())
             {
                 var result = session.QueryOver<CanonicalForm>()
                     .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                    .And(x => x.Type == type)
                     .OrderBy(x => x.Text).Asc
                     .Take(recordCount)
                     .List();
@@ -65,6 +66,20 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                     .Fetch(x => x.CanonicalForms).Eager
                     .TransformUsing(Transformers.DistinctRootEntity)
                     .List();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual TokenCharacteristic GetTokenCharacteristicWithCanonicalForms(long tokenCharacteristicId)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<TokenCharacteristic>()
+                    .Where(x => x.Id == tokenCharacteristicId)
+                    .Fetch(x => x.CanonicalForms).Eager
+                    .SingleOrDefault();
 
                 return result;
             }

@@ -25,7 +25,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description);
 
         [OperationContract]
-        IList<CanonicalFormContract> GetTypeaheadCanonicalForm(string query);
+        IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query);
 
         [OperationContract]
         IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query);

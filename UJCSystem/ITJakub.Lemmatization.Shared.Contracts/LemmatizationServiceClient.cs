@@ -167,11 +167,11 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(string query)
+        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
             try
             {
-                return Channel.GetTypeaheadCanonicalForm(query);
+                return Channel.GetTypeaheadCanonicalForm(type, query);
             }
             catch (CommunicationException ex)
             {

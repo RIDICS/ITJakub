@@ -406,7 +406,24 @@
 
                 <div class="tab-content">
                     <div id="tab-select-existing" class="tab-pane active">
-                        TYPEAHEAD
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="new-form-existing-type" class="col-md-3 control-label">Typ</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="new-form-existing-type"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-form" class="col-md-3 control-label">Vyberte existující</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-form-existing-input" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3 control-label">Popis</div>
+                                <div class="col-md-8" id="new-form-existing-description"></div>
+                            </div>
+                        </div>
                     </div>
                     <div id="tab-create-new" class="tab-pane">
                         <div class="form-horizontal">
@@ -419,7 +436,7 @@
                             <div class="form-group">
                                 <label for="new-form-type" class="col-md-3 control-label">Typ</label>
                                 <div class="col-md-8">
-                                    <select class="form-control" id="new-form-type" type="text"></select>
+                                    <select class="form-control" id="new-form-type"></select>
                                 </div>
                             </div>
                             <div class="form-group">

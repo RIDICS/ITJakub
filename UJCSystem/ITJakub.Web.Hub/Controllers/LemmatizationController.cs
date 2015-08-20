@@ -51,9 +51,9 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult GetTypeaheadCanonicalForm(string query)
+        public ActionResult GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
-            var result = m_serviceClient.GetTypeaheadCanonicalForm(query);
+            var result = m_serviceClient.GetTypeaheadCanonicalForm(type, query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

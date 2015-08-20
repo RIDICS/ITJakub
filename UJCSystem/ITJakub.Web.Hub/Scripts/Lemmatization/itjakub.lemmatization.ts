@@ -28,14 +28,14 @@ class Lemmatization {
             }
 
             if (selectionConfirmed) {
-                this.loadToken(this.searchBox.getValue());
+                this.loadToken(<IToken>this.searchBox.getValue());
             }
         });
         this.lemmatizationCharacteristic.init();
         LemmatizationCanonicalForm.init();
 
         $("#loadButton").click(() => {
-            var tokenItem = this.searchBox.getValue();
+            var tokenItem = <IToken>this.searchBox.getValue();
             this.loadToken(tokenItem);
         });
 
@@ -267,6 +267,7 @@ class LemmatizationCharacteristicTable {
 }
 
 class LemmatizationCanonicalForm {
+    private static searchBox: LemmatizationSearchBox;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
     private tableContainer: HTMLTableElement;
     private canonicalForm: ICanonicalForm;
@@ -367,28 +368,50 @@ class LemmatizationCanonicalForm {
                 dataType: "json",
                 contentType: "application/json",
                 success: (newCanonicalFormId) => {
-                    this.canonicalForm = {
-                        Id: newCanonicalFormId,
-                        Text: name,
-                        Type: formType,
-                        Description: description
-                    };
-
-                    $("#newTokenCharacteristic").modal("hide");
-
-                    $(this.containerCanonicalForm).text(this.canonicalForm.Text);
-                    $(this.containerDescription).text(this.canonicalForm.Description);
-                    $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
-                    $(this.editButton).text("E");
-
-                    this.newCanonicalFormCreatedCallback(this.canonicalForm);
-                    this.hideCreateDialog();
-
+                    this.updateUiAfterItemCreation(newCanonicalFormId, name, formType, description);
                 }
             });
         } else {
-            //todo add new canonical form
+            var searchBox = LemmatizationCanonicalForm.searchBox;
+            var currentItem: ICanonicalForm = <ICanonicalForm>(searchBox.getValue());
+
+            if (!currentItem)
+                return; //TODO show error
+
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: getBaseUrl() + "Lemmatization/AddCanonicalForm",
+                data: {
+                    tokenCharacteristicId: this.tokenCharacteristicId,
+                    canonicalFormId: currentItem.Id
+                },
+                dataType: "json",
+                contentType: "application/json",
+                success: () => {
+                    this.updateUiAfterItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
+                }
+            });
         }
+    }
+
+    private updateUiAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
+        this.canonicalForm = {
+            Id: newId,
+            Text: name,
+            Type: formType,
+            Description: description
+        };
+
+        $("#newTokenCharacteristic").modal("hide");
+
+        $(this.containerCanonicalForm).text(this.canonicalForm.Text);
+        $(this.containerDescription).text(this.canonicalForm.Description);
+        $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
+        $(this.editButton).text("E");
+
+        this.newCanonicalFormCreatedCallback(this.canonicalForm);
+        this.hideCreateDialog();
     }
 
     private updateItem() {
@@ -411,20 +434,46 @@ class LemmatizationCanonicalForm {
         //});
     }
 
-    private static addOption(value: CanonicalFormTypeEnum): void {
+    private static createOption(value: CanonicalFormTypeEnum): HTMLOptionElement {
         var label = LemmatizationCanonicalForm.typeToString(value);
         var element = document.createElement("option");
         $(element).attr("value", value);
         $(element).text(label);
 
-        $("#new-form-type").append(element);
+        return element;
     }
 
     static init() {
-        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.Lemma);
-        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.LemmaOld);
-        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.Stemma);
-        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.StemmaOld);
+        $("#new-form-type")
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+
+        $("#new-form-existing-type")
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+
+        var searchBox = new LemmatizationSearchBox("#new-form-existing-input");
+        var selectedChangedCallback = (selectedExist, selectionConfirmed) => {
+            var currentItem = searchBox.getValue();
+            var description = currentItem ? currentItem.Description : "";
+            $("#new-form-existing-description").text(description);
+        };
+
+        searchBox.setDataSet("CanonicalForm", "type=0");
+        searchBox.create(selectedChangedCallback);
+
+        $("#new-form-existing-type").on("change", (e) => {
+            var value = $(e.target).val();
+            searchBox.setDataSet("CanonicalForm", "type=" + value);
+            searchBox.create(selectedChangedCallback);
+            searchBox.reload();
+        });
+
+        LemmatizationCanonicalForm.searchBox = searchBox;
     }
 
     static typeToString(canonicalFormType: CanonicalFormTypeEnum): string {
@@ -456,14 +505,16 @@ class LemmatizationCanonicalForm {
 
 class LemmatizationSearchBox {
     private inputField: string;
+    private suggestionTemplate: (item: any) => string;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
     private dataset: Twitter.Typeahead.Dataset;
     private bloodhound: Bloodhound<string>;
-    private currentItem: IToken;
+    private currentItem: ITypeaheadItem;
 
-    constructor(inputFieldElement: string) {
+    constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
         this.inputField = inputFieldElement;
+        this.suggestionTemplate = suggestionTemplate;
         this.urlWithController = getBaseUrl() + "Lemmatization";
 
         this.options = {
@@ -477,7 +528,7 @@ class LemmatizationSearchBox {
         $(this.inputField).typeahead('val', value);
     }
 
-    getValue(): IToken {
+    getValue(): ITypeaheadItem {
         return this.currentItem;
     }
 
@@ -557,13 +608,14 @@ class LemmatizationSearchBox {
             remote: remoteOptions
         });
 
+        var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
         var dataset: Twitter.Typeahead.Dataset = {
             name: name,
             limit: 10,
             source: bloodhound,
             display: "Text",
             templates: {
-                suggestion: this.getSuggestionTemplate
+                suggestion: suggestionTemplate
             }
         };
 
@@ -571,9 +623,14 @@ class LemmatizationSearchBox {
         this.dataset = dataset;
     }
 
-    private getSuggestionTemplate(item: IToken) {
+    private getDefaultSuggestionTemplate(item: IToken): string {
         return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
     }
+}
+
+interface ITypeaheadItem {
+    Text: string;
+    Description: string;
 }
 
 interface IToken {

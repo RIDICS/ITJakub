@@ -49,9 +49,9 @@ namespace ITJakub.Lemmatization.Service
             return m_lemmatizationManager.CreateCanonicalForm(tokenCharacteristicId, type, text, description);
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(string query)
+        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
-            return m_lemmatizationManager.GetTypeaheadCannonicalForm(query);
+            return m_lemmatizationManager.GetTypeaheadCannonicalForm(type, query);
         }
 
         public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query)

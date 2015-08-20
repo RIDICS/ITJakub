@@ -62,10 +62,11 @@ namespace ITJakub.Lemmatization.Core
             return (long) id;
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCannonicalForm(string query)
+        public IList<CanonicalFormContract> GetTypeaheadCannonicalForm(CanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
-            var result = m_repository.GetTypeaheadCannonicalForm(query, PrefetchRecordCount);
+            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
+            var result = m_repository.GetTypeaheadCannonicalForm(canonicalFormType, query, PrefetchRecordCount);
             return Mapper.Map<IList<CanonicalFormContract>>(result);
         }
 
@@ -79,10 +80,10 @@ namespace ITJakub.Lemmatization.Core
         public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
             var tokenCharacteristic = m_repository.Load<TokenCharacteristic>(tokenCharacteristicId);
-            var formType = Mapper.Map<CanonicalFormType>(type);
+            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
             var newCanonicalForm = new CanonicalForm
             {
-                Type = formType,
+                Type = canonicalFormType,
                 Text = text,
                 Description = description,
                 CanonicalFormFor = new List<TokenCharacteristic> {tokenCharacteristic}
@@ -94,7 +95,7 @@ namespace ITJakub.Lemmatization.Core
 
         public void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
         {
-            var tokenCharacteristic = m_repository.FindById<TokenCharacteristic>(tokenCharacteristicId);
+            var tokenCharacteristic = m_repository.GetTokenCharacteristicWithCanonicalForms(tokenCharacteristicId);
             var cannonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
 
             tokenCharacteristic.CanonicalForms.Add(cannonicalForm);
