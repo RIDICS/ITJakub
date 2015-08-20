@@ -47,13 +47,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             foreach (var page in bookVersion.BookPages)
             {
-                var pageResource = new Resource
-                {
-                    FileName = page.XmlResource,
-                    FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
-                    ResourceType = ResourceType.Page
-                };
-                resourceSessionDirector.Resources.Add(pageResource);
+                if(!String.IsNullOrWhiteSpace(page.XmlResource)) { 
+                    var pageResource = new Resource
+                    {
+                        FileName = page.XmlResource,
+                        FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
+                        ResourceType = ResourceType.Page
+                    };
+                    resourceSessionDirector.Resources.Add(pageResource);
+                }
             }
 
             var trans = resourceSessionDirector.Resources.Where(x => x.ResourceType == ResourceType.Transformation);
