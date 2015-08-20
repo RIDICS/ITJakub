@@ -77,7 +77,42 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return View();
         }
 
+        public ActionResult GetCorpusWithCategories()
+        {
+            var audiosWithCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
+            return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -108,7 +143,47 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TextSearchPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult TextSearchPaged(string text, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                  Key = CriteriaKey.Title,
+                  Disjunctions = new List<WordCriteriaContract>
+                  {
+                      new WordCriteriaContract
+                      {
+                          Contains = new List<string>{ text }
+                      }
+                  }
+                },
+                new ResultCriteriaContract
+                {
+                    Sorting = (SortEnum) sortingEnum,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                    HitSettingsContract = new HitSettingsContract
+                    {
+                        ContextLength = 50,
+                        Count = 3,
+                        Start = 1
+                    }
+                }
+            };
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { results }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -149,7 +224,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { results = results.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchCorpusResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
@@ -167,7 +242,54 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count,int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult AdvancedSearchPaged(string json, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Sorting = (SortEnum)sortingEnum,
+                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    ContextLength = 50,
+                    Count = 3,
+                    Start = 1
+                }
+            });
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new {results }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count,int contextLength, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);

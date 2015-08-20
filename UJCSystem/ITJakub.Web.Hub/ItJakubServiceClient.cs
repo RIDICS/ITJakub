@@ -45,11 +45,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public BookInfoWithPagesContract GetBookInfoWithPages(string bookId)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookXmlId)
         {
             try
             {
-                return Channel.GetBookInfoWithPages(bookId);
+                return Channel.GetBookInfoWithPages(bookXmlId);
             }
             catch (CommunicationException ex)
             {

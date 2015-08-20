@@ -737,7 +737,8 @@
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
-    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.list.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.search.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.feedback.ts" />
@@ -814,7 +815,6 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties Scripts_4dropzone_4dropzone-amd-module_1min_1js_1map__JSONSchema="" />
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

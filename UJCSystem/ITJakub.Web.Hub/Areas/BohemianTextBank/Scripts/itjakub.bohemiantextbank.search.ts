@@ -1,7 +1,8 @@
 ﻿var search: Search;
 var actualPage: number;
 
-$(document).ready(() => {
+function initSearch() {
+
     var resultsCountOnPage = 30;
     var paginationMaxVisibleElements = 5;
 
@@ -109,7 +110,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchPaged",
+            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusPaged",
             data: { json: json, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -133,7 +134,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchPaged",
+            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextPaged",
             data: { text: text, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -173,7 +174,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchCount",
+            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextCount",
             data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -192,7 +193,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchResultsCount",
+            url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusResultsCount",
             data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -229,7 +230,7 @@ $(document).ready(() => {
         categoryIds = selectedIds.selectedCategoryIds;
     };
 
-    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {
@@ -271,4 +272,4 @@ $(document).ready(() => {
     $("#corpus-search-results-abbrev-table-div").scroll((event: Event) => {
         $("#corpus-search-results-table-div").scrollTop($(event.target).scrollTop());
     });
-});
+}

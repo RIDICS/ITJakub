@@ -77,7 +77,7 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='#'>Editační poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='#'>Ediční poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -206,9 +206,15 @@
 
   "TextBank": {
     "middle-panel": {
-      "title": "{Title}",
+      "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
       "variables": {
+        "$test": {
+          "type": "if",
+          "pattern": "{Century}",
+          "onTrue": "{Editor}",
+          "onFalse": "was false"
+        },
         "$manuscripts": {
           "type": "array",
           "scope": "Manuscripts",
@@ -217,7 +223,7 @@
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors} : ",
+          "pattern": "{$authors}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -276,7 +282,7 @@
       }
     },
     "bottom-panel": {
-      "body": "{$printSearchResultsCondition}{$editionTable}<a href='#'>Editační poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='#'>Ediční poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
       "variables": {
         "$editionTable": {
           "type": "table",
@@ -313,17 +319,30 @@
             }
           ]
         },
+        "$printSearchResults": {
+          "type": "basic",
+          "pattern": "<div class=\"results\"><div class=\"hits-count\">({TotalHitCount}x)</div><div class=\"hits-results\">{$printSearchResultsArray}</div></div>",
+          "printIfNullValue": true
+        },
+        "$printSearchResultsArray": {
+          "type": "array",
+          "scope": "Results",
+          "pattern": "<div class=\"result-hit\">{$printSearchResultContext}</div>",
+          "delimeter": ""
+        },        
+        "$printSearchResultContext": {
+          "type": "basic",
+          "scope": "ContextStructure",
+          "pattern": "<div class=\"search-context-before\">{Before}</div> <div class=\"search-context-match\">{Match}</div><div class=\"search-context-after\">{After}</div>",
+          "delimeter": ""
+        },
         "$printSearchResultsCondition": {
           "type": "if",
           "pattern": "{Results}",
-          "onTrue": "Jep{$printSearchResults}",
-          "onFalse": "Nic"
+          "onTrue": "{$printSearchResults}",
+          "onFalse": ""
         },
-        "$printSearchResults": {
-          "type":  "basic",
-          "pattern": "<div class=\"results\"> {TotalHitCount} </div>",
-          "printIfNullValue": true
-        },
+
         "$editor": {
           "type": "array",
           "scope": "Editors",
@@ -334,10 +353,17 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick": "listBook(this)"
+        "url": "Editions\\Editions\\Listing?bookId={BookXmlId}"
       },
       "read-button": {
-        "onclick": "listBook(this)"
+        "url": "Editions\\Editions\\Listing?bookId={BookXmlId}"
+      },
+      "variables": {
+        "$test": {
+          "type": "basic",
+          "pattern": "{Name}",
+          "printIfNullValue": false
+        }
       }
 
     }
