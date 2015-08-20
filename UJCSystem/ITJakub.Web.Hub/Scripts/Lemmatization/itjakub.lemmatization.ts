@@ -44,7 +44,9 @@ class Lemmatization {
         });
 
         $("#addNewCharacteristic").click(() => {
-            this.lemmatizationCharacteristic.show(this.currentTokenItem.Id);
+            this.lemmatizationCharacteristic.show(this.currentTokenItem.Id, (newTokenCharacteristic) => {
+                this.addNewCharacteristic(newTokenCharacteristic);
+            });
         });
 
         $("#save-token").click(() => {
@@ -84,6 +86,14 @@ class Lemmatization {
 
             $(this.mainContainer).append(containerDiv);
         }
+    }
+
+    private addNewCharacteristic(item: ITokenCharacteristic) {
+        var containerDiv = document.createElement("div");
+        var characteristicTable = new LemmatizationCharacteristicTable(item, containerDiv);
+        characteristicTable.make();
+
+        $(this.mainContainer).append(containerDiv);
     }
 
     private showAddNewToken() {
@@ -130,6 +140,7 @@ class Lemmatization {
 class LemmatizationCharacteristicEditor {
     private currentValue: string;
     private tokenId: number;
+    private itemSavedCallback: (newTokenCharacteristic: ITokenCharacteristic) => void;
 
     init() {
         $("#newTokenCharacteristic select").on("change", () => {
@@ -170,8 +181,9 @@ class LemmatizationCharacteristicEditor {
         return this.currentValue;
     }
 
-    show(tokenId: number) {
+    show(tokenId: number, itemSavedCallback: (newTokenCharacteristic: ITokenCharacteristic) => void ) {
         this.tokenId = tokenId;
+        this.itemSavedCallback = itemSavedCallback;
         this.clear();
         $("#newTokenCharacteristic").modal({
             show: true,
@@ -192,10 +204,17 @@ class LemmatizationCharacteristicEditor {
             },
             dataType: "json",
             contentType: "application/json",
-            success: (newTokenId) => {
+            success: (newTokenCharacteristicId) => {
                 $("#newTokenCharacteristic").modal("hide");
 
-                //todo show new empty characteristic
+                var newTokenCharacteristic: ITokenCharacteristic = {
+                    Id: newTokenCharacteristicId,
+                    Description: description,
+                    MorphologicalCharacteristic: this.currentValue,
+                    CanonicalFormList: []
+                }
+
+                this.itemSavedCallback(newTokenCharacteristic);
             }
         });
     }
@@ -234,15 +253,18 @@ class LemmatizationCharacteristicTable {
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
         var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
         this.table = table;
 
-        $(td1).text("Kanonická forma");
-        $(td2).text("Typ");
-        $(td3).text("Popis");
+        $(td1).text("");
+        $(td2).text("Kanonická forma");
+        $(td3).text("Typ");
+        $(td4).text("Popis");
         $(headerTr)
             .append(td1)
             .append(td2)
-            .append(td3);
+            .append(td3)
+            .append(td4);
         $(table).append(headerTr);
 
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
@@ -289,6 +311,7 @@ class LemmatizationCanonicalForm {
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
         var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
         var containerCanonicalForm = document.createElement("div");
         var containerType = document.createElement("div");
         var containerDescription = document.createElement("div");
@@ -308,13 +331,14 @@ class LemmatizationCanonicalForm {
         }
 
 
-        $(td1).append(editButton)
-            .append(containerCanonicalForm);
-        $(td2).append(containerType);
-        $(td3).append(containerDescription);
+        $(td1).append(editButton);
+        $(td2).append(containerCanonicalForm);
+        $(td3).append(containerType);
+        $(td4).append(containerDescription);
         $(tr).append(td1)
             .append(td2)
-            .append(td3);
+            .append(td3)
+            .append(td4);
 
         $(this.tableContainer).append(tr);
 
@@ -336,6 +360,11 @@ class LemmatizationCanonicalForm {
             else
                 this.createItem();
         });
+
+        $("#new-form").val("");
+        $("#new-form-description").val("");
+        $("#new-form-existing-description").val("");
+        LemmatizationCanonicalForm.searchBox.setValue("");
     }
 
     private showEditDialog() {
@@ -343,6 +372,14 @@ class LemmatizationCanonicalForm {
             show: true,
             backdrop: "static"
         });
+        $("#save-edited-form").off("click");
+        $("#save-edited-form").click(() => {
+            alert("todo save edited");
+        });
+
+        $("#edit-form-text").val(this.canonicalForm.Text);
+        $("#edit-form-type").val(String(this.canonicalForm.Type));
+        $("#edit-form-description").val(this.canonicalForm.Description);
     }
 
     private hideCreateDialog() {
@@ -456,11 +493,17 @@ class LemmatizationCanonicalForm {
             .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
             .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
 
+        $("#edit-form-type")
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
+            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+
         var searchBox = new LemmatizationSearchBox("#new-form-existing-input");
         var selectedChangedCallback = (selectedExist, selectionConfirmed) => {
             var currentItem = searchBox.getValue();
             var description = currentItem ? currentItem.Description : "";
-            $("#new-form-existing-description").text(description);
+            $("#new-form-existing-description").val(description);
         };
 
         searchBox.setDataSet("CanonicalForm", "type=0");
