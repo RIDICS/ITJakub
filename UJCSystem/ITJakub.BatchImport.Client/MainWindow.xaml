@@ -1,0 +1,68 @@
+﻿<controls:MetroWindow x:Class="ITJakub.BatchImport.Client.MainWindow"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                      xmlns:behaviors="clr-namespace:ITJakub.BatchImport.Client.Behaviors"
+                      mc:Ignorable="d"
+                      ShowIconOnTitleBar="True"
+                      Title="ITJakub Batch import" Height="350" Width="525"
+                      BorderBrush="Black" BorderThickness="1px" MinHeight="250" MinWidth="250"
+                      DataContext="{Binding Source={StaticResource Locator}, Path=Main}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="28" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Content="{Binding Path=FolderPath}"/>
+
+        <ListView Grid.Row="1">
+            <ListView.Resources>
+                <DataTemplate DataType="" />
+            </ListView.Resources>
+        </ListView>
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Left"
+                Width="50"
+                Height="50"
+                Style="{DynamicResource MetroCircleButtonStyle}">
+            <Rectangle Width="20"
+                       Height="20"
+                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill"
+                                 Visual="{DynamicResource appbar_add_multiple}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+
+            <i:Interaction.Behaviors>
+                <behaviors:FolderDialogBehavior FolderName="{Binding Path=FolderPath, Mode=TwoWay}" />
+            </i:Interaction.Behaviors>
+
+        </Button>
+
+
+        <Button Grid.Row="2"
+                HorizontalAlignment="Right"
+                Width="50"
+                Height="50"
+                Style="{DynamicResource MetroCircleButtonStyle}"
+                Command="{Binding ConvertCommand}">
+            <Rectangle Width="20"
+                       Height="20"
+                       Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                <Rectangle.OpacityMask>
+                    <VisualBrush Stretch="Fill"
+                                 Visual="{DynamicResource appbar_cabinet_files}" />
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Button>
+
+
+    </Grid>
+</controls:MetroWindow>
