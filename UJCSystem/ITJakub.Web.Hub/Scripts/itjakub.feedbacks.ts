@@ -74,6 +74,11 @@ $(document).ready(() => {
                     var feedbackHeaderDiv = document.createElement("div");
                     $(feedbackHeaderDiv).addClass("feedback-header");
 
+
+                    var feedbackHeaderInfosDiv = document.createElement("div");
+                    $(feedbackHeaderInfosDiv).addClass("feedback-header-info-div");
+                    
+
                     var name = "";
                     var email = "";
                     var signed = "";
@@ -103,37 +108,40 @@ $(document).ready(() => {
                     $(feedbackNameSpan).addClass("feedback-name");
                     feedbackNameSpan.innerHTML = `Jméno: ${name}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackNameSpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackNameSpan);
 
                     var feedbackEmailSpan = document.createElement("span");
                     $(feedbackEmailSpan).addClass("feedback-email");
                     feedbackEmailSpan.innerHTML = `E-mail: ${email}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackEmailSpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackEmailSpan);
 
                     var feedbackSignedUserSpan = document.createElement("span");
                     $(feedbackSignedUserSpan).addClass("feedback-signed");
                     feedbackSignedUserSpan.innerHTML = `Přihlášený uživatel: ${signed}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackSignedUserSpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackSignedUserSpan);
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
                     feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation[parseInt(category)]}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackCategorySpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
                     var feedbackDateSpan = document.createElement("span");
                     $(feedbackDateSpan).addClass("feedback-date");
                     feedbackDateSpan.innerHTML = `Datum: ${date.toLocaleDateString()}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackDateSpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackDateSpan);
 
                     var feedbackTimeSpan = document.createElement("span");
                     $(feedbackTimeSpan).addClass("feedback-time");
                     feedbackTimeSpan.innerHTML = `Čas: ${date.toLocaleTimeString()}`;
 
-                    feedbackHeaderDiv.appendChild(feedbackTimeSpan);
+                    feedbackHeaderInfosDiv.appendChild(feedbackTimeSpan);
+
+                    var feedbackDeleteButtonDiv = document.createElement("div");
+                    $(feedbackDeleteButtonDiv).addClass("feedback-delete-button-div");
 
                     var feedbackDeleteButton = document.createElement("button");
                     $(feedbackDeleteButton).addClass("feedback-delete-button");
@@ -147,7 +155,10 @@ $(document).ready(() => {
                         deleteFeedback(elementId);
                     });
 
-                    feedbackHeaderDiv.appendChild(feedbackDeleteButton);
+                    feedbackDeleteButtonDiv.appendChild(feedbackDeleteButton);
+
+                    feedbackHeaderDiv.appendChild(feedbackDeleteButtonDiv);
+                    feedbackHeaderDiv.appendChild(feedbackHeaderInfosDiv);
 
                     var feedbackTextDiv = document.createElement("div");
                     $(feedbackTextDiv).addClass("feedback-text");

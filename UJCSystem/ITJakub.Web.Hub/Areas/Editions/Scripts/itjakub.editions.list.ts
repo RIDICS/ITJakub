@@ -137,7 +137,7 @@ $(document).ready(() => {
     typeaheadSearchBox.create();
     typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
-
+    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -158,8 +158,15 @@ $(document).ready(() => {
         typeaheadSearchBox.create();
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
+    callbackDelegate.dataLoadedCallback = () => {
+        var selectedIds = editionsSelector.getSelectedIds();
+        bookIds = selectedIds.selectedBookIds;
+        categoryIds = selectedIds.selectedCategoryIds;
+        search.processSearchQuery("%"); //search for all by default criteria (title)
+        search.writeTextToTextField("");
+    };
 
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
 
@@ -167,8 +174,6 @@ $(document).ready(() => {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
-    search.processSearchQuery("%"); //search for all by default criteria (title)
-    search.writeTextToTextField("");
 });
 
 
