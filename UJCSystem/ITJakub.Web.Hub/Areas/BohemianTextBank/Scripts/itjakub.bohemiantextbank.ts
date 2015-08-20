@@ -206,6 +206,7 @@ $(document).ready(() => {
     search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
     search.makeSearch();
 
+    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -222,8 +223,13 @@ $(document).ready(() => {
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
     };
+    callbackDelegate.dataLoadedCallback = () => {
+        var selectedIds = editionsSelector.getSelectedIds();
+        bookIds = selectedIds.selectedBookIds;
+        categoryIds = selectedIds.selectedCategoryIds;
+    };
 
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {
