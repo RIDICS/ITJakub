@@ -161,10 +161,10 @@ namespace ITJakub.ITJakubService.DataContracts
         #region AudioBooks
 
         [OperationContract]
-        void DownloadWholeAudiobook(DownloadWholeBookContract requestContract);
+        FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract);
 
         [OperationContract]
-        void DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
+        AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
 
         #endregion
 

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
                    xmlns="urn:nhibernate-mapping-2.2">
@@ -16,7 +16,7 @@
 
     <bag name="Recordings" cascade="all-delete-orphan">
       <key column="Track" />
-      <one-to-many class="Recording" />
+      <one-to-many class="TrackRecording" />
     </bag>
 
   </class>

@@ -12,17 +12,17 @@ BEGIN TRAN;
 
 	CREATE TABLE [dbo].[Recording](
 		[Id] bigint IDENTITY(1,1) NOT null CONSTRAINT [PK_Recording(Id)] PRIMARY KEY CLUSTERED,
-		[Length] bigint NOT NULL,		
+		[Length] bigint NULL,		
 		[FileName] varchar(255) NOT NULL,
 		[AudioType] tinyint NOT NULL,
 		[MimeType] varchar(255) NULL,
-		[Track] bigint NOT NULL CONSTRAINT [FK_Recording(Track)_Track(Id)] FOREIGN KEY REFERENCES [dbo].[Track](Id)
+		[RecordingType] varchar(255) NOT NULL,
+		[BookVersion] bigint NULL CONSTRAINT[FK_Recording(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
+		[Track] bigint NULL CONSTRAINT [FK_Recording(Track)_Track(Id)] FOREIGN KEY REFERENCES [dbo].[Track](Id)
 	);
-	
 
     INSERT INTO [dbo].[DatabaseVersion]
-		 ( DatabaseVersion
-		 )
+		 ( DatabaseVersion )
     VALUES( '014' );
     -- DatabaseVersion - varchar
 --ROLLBACK

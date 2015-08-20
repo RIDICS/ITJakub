@@ -1126,11 +1126,11 @@ namespace ITJakub.Web.Hub
         }
         
                 
-        public void DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
+        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
         {
             try
             {
-                Channel.DownloadWholeAudiobook(requestContract);
+                return Channel.DownloadWholeAudiobook(requestContract);
             }
             catch (CommunicationException ex)
             {
@@ -1152,11 +1152,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
+        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
         {
             try
             {
-                Channel.DownloadAudioBookTrack(requestContract);
+               return Channel.DownloadAudioBookTrack(requestContract);
             }
             catch (CommunicationException ex)
             {
@@ -1177,12 +1177,6 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
-
-        public FileDataContract DownloadWholeAudiobook()
-        {
-            throw new NotImplementedException();
-        }
-
 
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {

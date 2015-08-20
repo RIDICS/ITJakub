@@ -22,7 +22,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                var filesFromArchive = ExtractFilesFromArchive(archive, resourceSessionDirector);
                 foreach (var extractedFile in filesFromArchive)
                 {
-                    resourceSessionDirector.AddResource(extractedFile);
+                    resourceSessionDirector.AddResourceAndFillResourceTypeByExtension(extractedFile);
                 }
             }            
         }
