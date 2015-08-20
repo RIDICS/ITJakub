@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using ITJakub.Core.Resources;
 using ITJakub.Shared.Contracts.Resources;
@@ -73,11 +74,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
             SessionPath = path;
         }
 
-        public void AddResource(string fileName, Stream dataStream)
+        public void AddResourceAndFillResourceTypeByExtension(string fileName, Stream dataStream)
         {
             string fullpath = GetFullPathForNewSessionResource(fileName);
 
-            using (FileStream fs = File.Create(fullpath))
+            using (FileStream fs = new FileStream(fullpath, FileMode.Create))
             {
                 dataStream.CopyTo(fs);
             }
@@ -88,15 +89,15 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 FileName = fileName,              
             };
 
-            AddResource(resource);
-        }
+            AddResourceAndFillResourceTypeByExtension(resource);
+        }        
 
         public string GetFullPathForNewSessionResource(string fileName)
         {
             return Path.Combine(SessionPath, fileName);
         }       
 
-        public void AddResource(Resource resource)
+        public void AddResourceAndFillResourceTypeByExtension(Resource resource)
         {
             ResourceType resourceType = m_resourceTypeResolverManager.Resolve(resource.FileName);
             resource.ResourceType = resourceType;
@@ -104,6 +105,10 @@ namespace ITJakub.FileProcessing.Core.Sessions
             Resources.Add(resource);
         }
 
+        public Resource GetResourceFromSession(ResourceType resourceType, string fileName)
+        {
+            return Resources.FirstOrDefault(x => x.ResourceType == resourceType && x.FileName == fileName);
+        }
 
         public T GetSessionInfoValue<T>(SessionInfo sessionInfo)
         {

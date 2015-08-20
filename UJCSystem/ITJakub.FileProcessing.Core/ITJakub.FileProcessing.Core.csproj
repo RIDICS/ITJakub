@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sessions\Processors\AudioBookArchiveProcessor.cs" />
     <Compile Include="Sessions\Processors\ExtractableArchiveProcessor.cs" />
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\IResourceProcessor.cs" />

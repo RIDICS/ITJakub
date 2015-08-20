@@ -568,7 +568,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Book GetBookWithLastVersionAndAudioTrack(long bookId)
+        public virtual Book GetBookWithLastVersion(long bookId)
         {
             using (var session = GetSession())
             {
@@ -580,15 +580,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Recording GetRecordingByTrackAndAudioType(long bookId, long trackPosition, AudioType audioType)
+        public virtual TrackRecording GetRecordingByTrackAndAudioType(long bookId, long trackPosition, AudioType audioType)
         {
             using (var session = GetSession())
             {
                 Track trackAlias = null;
                 BookVersion bookVersionAlias = null;
-                Book bookAlias = null;
-                //Recording recordingAlias = null;
-
+                Book bookAlias = null;                
 
                 var trackId = session.QueryOver<Book>(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
@@ -596,22 +594,24 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId)
                     .Select(Projections.Property(() => trackAlias.Id))
                     .Take(1)
-                    .SingleOrDefault<long>();
+                    .SingleOrDefault<long>();                
 
-
-                //return session.QueryOver<Book>(() => bookAlias)
-                //    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
-                //    .JoinQueryOver(x => x.Tracks, () => trackAlias)
-                //    .JoinQueryOver(x => x.Recordings, () => recordingAlias)
-                //    .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId
-                //                && recordingAlias.AudioType == audioType)                    
-                //    .Take(1)
-                //    .SingleOrDefault<Recording>();
-
-                return session.QueryOver<Recording>()
+                return session.QueryOver<TrackRecording>()
                     .Where(x => x.Track.Id == trackId && x.AudioType == audioType)
                     .Take(1)
-                    .SingleOrDefault<Recording>();
+                    .SingleOrDefault<TrackRecording>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public  virtual FullBookRecording GetFullBookRecording(long bookVersionId, AudioType audioType)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FullBookRecording>()
+                 .Where(x=>x.BookVersion.Id == bookVersionId && x.AudioType == audioType)
+                 .Take(1)
+                 .SingleOrDefault<FullBookRecording>();
             }
         }
     }    

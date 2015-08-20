@@ -255,14 +255,14 @@ namespace ITJakub.ITJakubService.Services
         }
       
 
-        public void DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
+        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
         {
-            m_audioBookManager.DownloadWholeAudioBook(requestContract);
+            return m_audioBookManager.DownloadWholeAudioBook(requestContract);
         }
 
-        public void DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
+        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
         {
-            m_audioBookManager.DownloadAudioBookTrack(requestContract);
+            return m_audioBookManager.DownloadAudioBookTrack(requestContract);
         }
     }
 }

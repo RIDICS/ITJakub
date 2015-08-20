@@ -9,7 +9,10 @@ namespace ITJakub.ITJakubService.DataContracts.AudioBooks
     {
         [MessageHeader(MustUnderstand = true)]
         public string FileName { get; set; }
-        
+
+        [MessageHeader(MustUnderstand = true)]
+        public string MimeType { get; set; }
+
         [MessageBodyMember(Order = 1)]
         public Stream FileData { get; set; }
     }
@@ -25,7 +28,7 @@ namespace ITJakub.ITJakubService.DataContracts.AudioBooks
         public string MimeType { get; set; }
 
         [MessageHeader(MustUnderstand = true)]
-        public TimeSpan Lenght { get; set; }
+        public TimeSpan? Lenght { get; set; }
 
         [MessageBodyMember(Order = 1)]
         public Stream FileData { get; set; }
