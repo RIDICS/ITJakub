@@ -18,7 +18,7 @@ class Lemmatization {
     public make() {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
-        this.searchBox.create((selectedExists: boolean) => {
+        this.searchBox.create((selectedExists: boolean, selectionConfirmed: boolean) => {
             if (selectedExists || this.searchBox.getInputValue() === "") {
                 $("#addNewTokenButton").addClass("hidden");
                 $("#loadButton").removeClass("hidden");
@@ -26,8 +26,13 @@ class Lemmatization {
                 $("#addNewTokenButton").removeClass("hidden");
                 $("#loadButton").addClass("hidden");
             }
+
+            if (selectionConfirmed) {
+                this.loadToken(this.searchBox.getValue());
+            }
         });
         this.lemmatizationCharacteristic.init();
+        LemmatizationCanonicalForm.init();
 
         $("#loadButton").click(() => {
             var tokenItem = this.searchBox.getValue();
@@ -240,11 +245,13 @@ class LemmatizationCharacteristicTable {
 
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
             var canonicalFormItem = this.item.CanonicalFormList[i];
-            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, canonicalFormItem, table);
+            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, table, canonicalFormItem);
             canonicalForm.make();
         }
 
-        this.addRowWithNewLineCommand(table);
+        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, table);
+        canonicalForm.make();
+
         $(tableDiv).append(table);
 
         $(this.container)
@@ -252,32 +259,18 @@ class LemmatizationCharacteristicTable {
             .append(morphologicalDiv)
             .append(tableDiv);
     }
-
-    private addRowWithNewLineCommand(table: HTMLTableElement) {
-        var tr = document.createElement("tr");
-        var td1 = document.createElement("td");
-        var td2 = document.createElement("td");
-        var td3 = document.createElement("td");
-
-        var newFormButton = document.createElement("button");
-        $(newFormButton).text("+");
-
-        $(td1).append(newFormButton);
-        $(td2).text("");
-        $(td3).text("");
-        $(tr).append(td1)
-            .append(td2)
-            .append(td3);
-        $(table).append(tr);
-    }
 }
 
 class LemmatizationCanonicalForm {
     private tableContainer: HTMLTableElement;
     private canonicalForm: ICanonicalForm;
     private tokenId: number;
+    private containerCanonicalForm: HTMLDivElement;
+    private containerType: HTMLDivElement;
+    private containerDescription: HTMLDivElement;
+    private editButton: HTMLButtonElement;
 
-    constructor(tokenCharacteristicId: number, canonicalForm: ICanonicalForm, tableContainer: HTMLTableElement) {
+    constructor(tokenCharacteristicId: number, tableContainer: HTMLTableElement, canonicalForm: ICanonicalForm = null) {
         this.tableContainer = tableContainer;
         this.canonicalForm = canonicalForm;
         this.tokenId = tokenCharacteristicId;
@@ -288,19 +281,129 @@ class LemmatizationCanonicalForm {
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
         var td3 = document.createElement("td");
+        var containerCanonicalForm = document.createElement("div");
+        var containerType = document.createElement("div");
+        var containerDescription = document.createElement("div");
+        var editButton = document.createElement("button");
+        $(editButton).text(this.canonicalForm ? "E" : "+");
+        $(editButton).click(() => {
+            if (this.canonicalForm)
+                this.showEditDialog();
+            else
+                this.showCreateDialog();
+        });
 
-        $(td1).text(this.canonicalForm.Text);
-        $(td2).text(this.typeToString(this.canonicalForm.Type));
-        $(td3).text(this.canonicalForm.Description);
+        if (this.canonicalForm) {
+            $(containerCanonicalForm).text(this.canonicalForm.Text);
+            $(containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
+            $(containerDescription).text(this.canonicalForm.Description);
+        }
 
+
+        $(td1).append(editButton)
+            .append(containerCanonicalForm);
+        $(td2).append(containerType);
+        $(td3).append(containerDescription);
         $(tr).append(td1)
             .append(td2)
             .append(td3);
 
         $(this.tableContainer).append(tr);
+
+        this.containerCanonicalForm = containerCanonicalForm;
+        this.containerType = containerType;
+        this.containerDescription = containerDescription;
+        this.editButton = editButton;
     }
 
-    private typeToString(canonicalFormType: CanonicalFormTypeEnum): string {
+    private showCreateDialog() {
+        $("#newCanonicalFormDialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+        $("#save-form").off("click");
+        $("#save-form").click(() => {
+            alert("todo save");
+        });
+    }
+
+    private showEditDialog() {
+        $("#editCanonicalFormDialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+    }
+
+    switchToEditMode() {
+        var cancelButton = document.createElement("button");
+        $(cancelButton).text("X");
+
+        $(this.editButton).text("Uložit");
+        $(this.editButton).click(() => {
+            if (this.canonicalForm)
+                this.updateItem();
+            else
+                this.createItem();
+        });
+    }
+
+    private createItem() {
+        //$.ajax({
+        //    type: "GET",
+        //    traditional: true,
+        //    url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
+        //    data: {
+        //        tokenId: this.tokenId,
+        //        morphologicalCharacteristic: this.currentValue,
+        //        description: description
+        //    },
+        //    dataType: "json",
+        //    contentType: "application/json",
+        //    success: (newTokenId) => {
+        //        $("#newTokenCharacteristic").modal("hide");
+
+        //        //todo show new empty characteristic
+        //    }
+        //});
+    }
+
+    private updateItem() {
+        //$.ajax({
+        //    type: "GET",
+        //    traditional: true,
+        //    url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
+        //    data: {
+        //        tokenId: this.tokenId,
+        //        morphologicalCharacteristic: this.currentValue,
+        //        description: description
+        //    },
+        //    dataType: "json",
+        //    contentType: "application/json",
+        //    success: (newTokenId) => {
+        //        $("#newTokenCharacteristic").modal("hide");
+
+        //        //todo show new empty characteristic
+        //    }
+        //});
+    }
+
+    private static addOption(value: CanonicalFormTypeEnum): void {
+        var label = LemmatizationCanonicalForm.typeToString(value);
+        var element = document.createElement("option");
+        $(element).attr("value", value);
+        $(element).text(label);
+
+        $("#new-form-type").append(element);
+    }
+
+    static init() {
+        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.Lemma);
+        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.LemmaOld);
+        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.Stemma);
+        LemmatizationCanonicalForm.addOption(CanonicalFormTypeEnum.StemmaOld);
+    }
+
+    static typeToString(canonicalFormType: CanonicalFormTypeEnum): string {
         switch (canonicalFormType) {
             case CanonicalFormTypeEnum.Lemma:
                 return "Lemma";
@@ -310,6 +413,17 @@ class LemmatizationCanonicalForm {
                 return "Stemma";
             case CanonicalFormTypeEnum.StemmaOld:
                 return "Staré stemma";
+            default:
+                return "";
+        }
+    }
+
+    static hyperTypeToString(hyperCanonicalForm: HyperCanonicalFormTypeEnum): string {
+        switch (hyperCanonicalForm) {
+            case HyperCanonicalFormTypeEnum.HyperLemma:
+                return "Hyperlemma";
+            case HyperCanonicalFormTypeEnum.HyperStemma:
+                return "Hyperstemma";
             default:
                 return "";
         }
@@ -347,14 +461,14 @@ class LemmatizationSearchBox {
         return <any>($(this.inputField).typeahead("val"));
     }
 
-    create(selectionChangedCallback: (selectedExists: boolean) => void): void {
+    create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
         var self = this;
         $(this.inputField).typeahead(this.options, this.dataset);
         $(this.inputField).bind("typeahead:render", <any>function(e, ...datums) {
             var isEmpty = $(".tt-menu", e.target.parentNode).hasClass("tt-empty");
             if (isEmpty) {
                 self.currentItem = null;
-                selectionChangedCallback(false);
+                selectionChangedCallback(false, false);
                 return;
             }
 
@@ -363,20 +477,20 @@ class LemmatizationSearchBox {
             for (var i = 0; i < suggestionElements.length; i++) {
                 if ($(suggestionElements[i]).text() === currentText) {
                     self.currentItem = datums[i];
-                    selectionChangedCallback(true);
+                    selectionChangedCallback(true, false);
                     return;
                 }
             }
             self.currentItem = null;
-            selectionChangedCallback(false);
+            selectionChangedCallback(false, false);
         });
         $(this.inputField).bind("typeahead:select", <any>function (e, datum) {
             self.currentItem = datum;
-            selectionChangedCallback(true);
+            selectionChangedCallback(true, true);
         });
         $(this.inputField).bind("typeahead:autocomplete", <any>function (e, datum) {
             self.currentItem = datum;
-            selectionChangedCallback(true);
+            selectionChangedCallback(true, false);
         });
     }
 
