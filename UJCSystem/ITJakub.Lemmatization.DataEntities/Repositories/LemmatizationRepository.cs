@@ -3,6 +3,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
 {
@@ -41,6 +42,20 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<HyperCanonicalForm> GetTypeaheadHyperCannonicalForm(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<HyperCanonicalForm>()
+                    .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                    .OrderBy(x => x.Text).Asc
+                    .Take(recordCount)
+                    .List();
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<TokenCharacteristic> GetTokenCharacteristicDetail(long tokenId)
         {
             using (var session = GetSession())
@@ -48,6 +63,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                 var result = session.QueryOver<TokenCharacteristic>()
                     .Where(x => x.Token.Id == tokenId)
                     .Fetch(x => x.CanonicalForms).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
                     .List();
 
                 return result;

@@ -141,11 +141,63 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
-        public long CreateCanonicalForm(CanonicalFormTypeContract type, string text, string description)
+        public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
             try
             {
-                return Channel.CreateCanonicalForm(type, text, description);
+                return Channel.CreateCanonicalForm(tokenCharacteristicId, type, text, description);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadCanonicalForm(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadHyperCanonicalForm(query);
             }
             catch (CommunicationException ex)
             {

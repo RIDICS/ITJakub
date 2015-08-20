@@ -203,6 +203,7 @@ class LemmatizationCharacteristicEditor {
 
 class LemmatizationCharacteristicTable {
     private container: HTMLDivElement;
+    private table: HTMLTableElement;
     private item: ITokenCharacteristic;
     
     constructor(item: ITokenCharacteristic, container: HTMLDivElement) {
@@ -233,6 +234,7 @@ class LemmatizationCharacteristicTable {
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
         var td3 = document.createElement("td");
+        this.table = table;
 
         $(td1).text("Kanonická forma");
         $(td2).text("Typ");
@@ -246,11 +248,9 @@ class LemmatizationCharacteristicTable {
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
             var canonicalFormItem = this.item.CanonicalFormList[i];
             var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, table, canonicalFormItem);
-            canonicalForm.make();
+            canonicalForm.make(this.addNewEmptyRow.bind(this));
         }
-
-        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, table);
-        canonicalForm.make();
+        this.addNewEmptyRow();
 
         $(tableDiv).append(table);
 
@@ -259,12 +259,18 @@ class LemmatizationCharacteristicTable {
             .append(morphologicalDiv)
             .append(tableDiv);
     }
+
+    private addNewEmptyRow() {
+        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.table);
+        canonicalForm.make(this.addNewEmptyRow.bind(this));
+    }
 }
 
 class LemmatizationCanonicalForm {
+    private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
     private tableContainer: HTMLTableElement;
     private canonicalForm: ICanonicalForm;
-    private tokenId: number;
+    private tokenCharacteristicId: number;
     private containerCanonicalForm: HTMLDivElement;
     private containerType: HTMLDivElement;
     private containerDescription: HTMLDivElement;
@@ -273,10 +279,11 @@ class LemmatizationCanonicalForm {
     constructor(tokenCharacteristicId: number, tableContainer: HTMLTableElement, canonicalForm: ICanonicalForm = null) {
         this.tableContainer = tableContainer;
         this.canonicalForm = canonicalForm;
-        this.tokenId = tokenCharacteristicId;
+        this.tokenCharacteristicId = tokenCharacteristicId;
     }
 
-    make() {
+    make(newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void) {
+        this.newCanonicalFormCreatedCallback = newCanonicalFormCreatedCallback;
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
@@ -323,7 +330,10 @@ class LemmatizationCanonicalForm {
         });
         $("#save-form").off("click");
         $("#save-form").click(() => {
-            alert("todo save");
+            if (this.canonicalForm)
+                this.updateItem();
+            else
+                this.createItem();
         });
     }
 
@@ -334,37 +344,51 @@ class LemmatizationCanonicalForm {
         });
     }
 
-    switchToEditMode() {
-        var cancelButton = document.createElement("button");
-        $(cancelButton).text("X");
-
-        $(this.editButton).text("Uložit");
-        $(this.editButton).click(() => {
-            if (this.canonicalForm)
-                this.updateItem();
-            else
-                this.createItem();
-        });
+    private hideCreateDialog() {
+        $("#newCanonicalFormDialog").modal("hide");
     }
 
     private createItem() {
-        //$.ajax({
-        //    type: "GET",
-        //    traditional: true,
-        //    url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
-        //    data: {
-        //        tokenId: this.tokenId,
-        //        morphologicalCharacteristic: this.currentValue,
-        //        description: description
-        //    },
-        //    dataType: "json",
-        //    contentType: "application/json",
-        //    success: (newTokenId) => {
-        //        $("#newTokenCharacteristic").modal("hide");
+        var name = $("#new-form").val();
+        var formType = Number($("#new-form-type").val());
+        var description = $("#new-form-description").val();
 
-        //        //todo show new empty characteristic
-        //    }
-        //});
+        if ($("#tab-create-new").hasClass("active")) {
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: getBaseUrl() + "Lemmatization/CreateCanonicalForm",
+                data: {
+                    tokenCharacteristicId: this.tokenCharacteristicId,
+                    text: name,
+                    type: formType,
+                    description: description
+                },
+                dataType: "json",
+                contentType: "application/json",
+                success: (newCanonicalFormId) => {
+                    this.canonicalForm = {
+                        Id: newCanonicalFormId,
+                        Text: name,
+                        Type: formType,
+                        Description: description
+                    };
+
+                    $("#newTokenCharacteristic").modal("hide");
+
+                    $(this.containerCanonicalForm).text(this.canonicalForm.Text);
+                    $(this.containerDescription).text(this.canonicalForm.Description);
+                    $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
+                    $(this.editButton).text("E");
+
+                    this.newCanonicalFormCreatedCallback(this.canonicalForm);
+                    this.hideCreateDialog();
+
+                }
+            });
+        } else {
+            //todo add new canonical form
+        }
     }
 
     private updateItem() {

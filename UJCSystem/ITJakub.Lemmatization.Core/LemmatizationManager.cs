@@ -69,14 +69,23 @@ namespace ITJakub.Lemmatization.Core
             return Mapper.Map<IList<CanonicalFormContract>>(result);
         }
 
-        public long CreateCanonicalForm(CanonicalFormTypeContract type, string text, string description)
+        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCannonicalForm(string query)
         {
+            query = EscapeQuery(query);
+            var result = m_repository.GetTypeaheadHyperCannonicalForm(query, PrefetchRecordCount);
+            return Mapper.Map<IList<HyperCanonicalFormContract>>(result);
+        }
+
+        public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
+        {
+            var tokenCharacteristic = m_repository.Load<TokenCharacteristic>(tokenCharacteristicId);
             var formType = Mapper.Map<CanonicalFormType>(type);
             var newCanonicalForm = new CanonicalForm
             {
                 Type = formType,
                 Text = text,
-                Description = description
+                Description = description,
+                CanonicalFormFor = new List<TokenCharacteristic> {tokenCharacteristic}
             };
 
             var id = m_repository.Create(newCanonicalForm);

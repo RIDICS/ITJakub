@@ -396,41 +396,42 @@
             </div>
             <div class="modal-body">
                 <ul class="nav nav-tabs">
-                    <li id="tab-headwords" class="active">
+                    <li class="active">
                         <a href="#tab-select-existing" data-toggle="tab">Výběr existujícího</a>
                     </li>
-                    <li id="tab-fulltext">
+                    <li>
                         <a href="#tab-create-new" data-toggle="tab">Vytvoření nového</a>
                     </li>
                 </ul>
 
                 <div class="tab-content">
-                    <div id="tab-select-existing">
+                    <div id="tab-select-existing" class="tab-pane active">
                         TYPEAHEAD
                     </div>
-                    <div id="tab-create-new" class="form-horizontal">
-                        <div class="form-group">
-                            <label for="new-form" class="col-md-3 control-label">Kanonická forma</label>
-                            <div class="col-md-8">
-                                <input class="form-control" id="new-form" type="text" disabled="disabled">
+                    <div id="tab-create-new" class="tab-pane">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="new-form" class="col-md-3 control-label">Kanonická forma</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-form" type="text">
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="new-form-type" class="col-md-3 control-label">Typ</label>
-                            <div class="col-md-8">
-                                <select class="form-control" id="new-form-type" type="text">
-                                </select>
+                            <div class="form-group">
+                                <label for="new-form-type" class="col-md-3 control-label">Typ</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="new-form-type" type="text"></select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="new-form-description" class="col-md-3 control-label">Popis</label>
-                            <div class="col-md-8">
-                                <textarea class="form-control" id="new-form-description"></textarea>
+                            <div class="form-group">
+                                <label for="new-form-description" class="col-md-3 control-label">Popis</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="new-form-description"></textarea>
+                                </div>
                             </div>
-                        </div>
-                        <h5>Hyper kanonická forma</h5>
-                        <div>
-                            TODO typeahead, ...
+                            <h5>Hyper kanonická forma</h5>
+                            <div>
+                                TODO typeahead, ...
+                            </div>
                         </div>
                     </div>
                 </div>
