@@ -15,6 +15,7 @@ using NHibernate.Criterion;
 using NHibernate.Criterion.Lambda;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Remotion.Linq.Parsing.Structure.IntermediateModel;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -586,14 +587,29 @@ namespace ITJakub.DataEntities.Database.Repositories
                 Track trackAlias = null;
                 BookVersion bookVersionAlias = null;
                 Book bookAlias = null;
-                Recording recordingAlias = null;
+                //Recording recordingAlias = null;
 
-                return session.QueryOver<Book>(() => bookAlias)
+
+                var trackId = session.QueryOver<Book>(() => bookAlias)
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.Tracks, () => trackAlias)
-                    .JoinQueryOver(x => x.Recordings, () => recordingAlias)
-                    .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId
-                                && recordingAlias.AudioType == audioType)
+                    .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId)
+                    .Select(Projections.Property(() => trackAlias.Id))
+                    .Take(1)
+                    .SingleOrDefault<long>();
+
+
+                //return session.QueryOver<Book>(() => bookAlias)
+                //    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                //    .JoinQueryOver(x => x.Tracks, () => trackAlias)
+                //    .JoinQueryOver(x => x.Recordings, () => recordingAlias)
+                //    .Where(x => trackAlias.Position == trackPosition && bookAlias.Id == bookId
+                //                && recordingAlias.AudioType == audioType)                    
+                //    .Take(1)
+                //    .SingleOrDefault<Recording>();
+
+                return session.QueryOver<Recording>()
+                    .Where(x => x.Track.Id == trackId && x.AudioType == audioType)
                     .Take(1)
                     .SingleOrDefault<Recording>();
             }

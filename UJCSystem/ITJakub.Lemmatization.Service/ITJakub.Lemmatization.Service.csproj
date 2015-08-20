@@ -101,6 +101,8 @@
     <Content Include="ITJakub.Lemmatization.Service.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
+    <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

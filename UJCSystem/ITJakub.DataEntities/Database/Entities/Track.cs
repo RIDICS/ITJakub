@@ -5,7 +5,7 @@ namespace ITJakub.DataEntities.Database.Entities
 {
     public class Track : IEquatable<Track>
     {
-        protected virtual long Id { get; set; }
+        public virtual long Id { get; protected set; }
 
         public virtual BookVersion BookVersion { get; set; }
 
