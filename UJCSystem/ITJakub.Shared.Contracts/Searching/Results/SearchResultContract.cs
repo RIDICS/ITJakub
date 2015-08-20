@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.Shared.Contracts.Searching.Results
 {
     [DataContract]
+    [KnownType(typeof(AudioBookSearchResultContract))]
     public class SearchResultContract
     {
         [DataMember]

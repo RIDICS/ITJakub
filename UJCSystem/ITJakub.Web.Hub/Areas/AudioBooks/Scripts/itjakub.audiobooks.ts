@@ -62,7 +62,7 @@ class AudibooksList {
         this.audibookSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories", true, callbackDelegate);
         this.audibookSelector.makeDropdown();
 
-        this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", ()=> {this.sortOrderChanged()}, BookTypeEnum.Edition); //TODO audiobook
+        this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", ()=> {this.sortOrderChanged()}, BookTypeEnum.AudioBook);
 
 
         $(".searchbar-input.tt-input").change(() => { //prevent clearing input value on blur() 

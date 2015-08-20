@@ -100,7 +100,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
@@ -126,7 +126,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
             return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
 
@@ -157,7 +157,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -196,7 +196,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
             return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
     }
