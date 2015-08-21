@@ -6,6 +6,8 @@
                       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
                       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
                       xmlns:behaviors="clr-namespace:ITJakub.BatchImport.Client.Behaviors"
+                      xmlns:viewModel="clr-namespace:ITJakub.BatchImport.Client.ViewModel"
+                      xmlns:view="clr-namespace:ITJakub.BatchImport.Client.View"
                       mc:Ignorable="d"
                       ShowIconOnTitleBar="True"
                       Title="ITJakub Batch import" Height="350" Width="525"
@@ -18,11 +20,13 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Path=FolderPath}"/>
+        <Label Grid.Row="0" Content="{Binding Path=FolderPath}" />
 
-        <ListView Grid.Row="1">
+        <ListView Grid.Row="1" ItemsSource="{Binding FileItems}">
             <ListView.Resources>
-                <DataTemplate DataType="" />
+                <DataTemplate DataType="{x:Type viewModel:FileViewModel}">
+                    <view:FileView/>
+                </DataTemplate>
             </ListView.Resources>
         </ListView>
 
@@ -30,7 +34,8 @@
                 HorizontalAlignment="Left"
                 Width="50"
                 Height="50"
-                Style="{DynamicResource MetroCircleButtonStyle}">
+                Style="{DynamicResource MetroCircleButtonStyle}"
+                Command="{Binding LoadItemsCommand}">
             <Rectangle Width="20"
                        Height="20"
                        Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
