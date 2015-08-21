@@ -669,11 +669,23 @@ namespace ITJakub.ITJakubService.Core
             // Search only in SQL
             var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
             var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
-            var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuidWithAudio(guidListRestriction);
-            var results = Mapper.Map<IList<AudioBookSearchResultContract>>(resultBookVersions);
+            var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction);
+
+            var audibookList = new List<AudioBookSearchResultContract>();
+
+            foreach (var bookVersion in resultBookVersions)
+            {
+                var tracks = m_bookVersionRepository.GetTracksForBookVersion(bookVersion.Id);
+
+                var audioBook = Mapper.Map<AudioBookSearchResultContract>(bookVersion);
+                audioBook.Tracks = Mapper.Map<IList<TrackContract>>(tracks);
+
+                audibookList.Add(audioBook);
+            }
+
             var resultList = new AudioBookSearchResultContractList
             {
-                Results = results
+                Results = audibookList
             };
 
             return resultList;

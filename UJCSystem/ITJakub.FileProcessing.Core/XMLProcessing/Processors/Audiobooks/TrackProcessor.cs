@@ -34,7 +34,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
                 BookVersion = bookVersion,
                 Name = xmlReader.GetAttribute("title"),
                 Position = Convert.ToInt32(xmlReader.GetAttribute("n")),
-                Recordings = new HashSet<TrackRecording>()
+                Recordings = new List<TrackRecording>()
             };
             bookVersion.Tracks.Add(track);
 

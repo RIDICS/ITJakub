@@ -425,7 +425,7 @@
   "AudioBook": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts}",
+      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> {$fullRecords}",
       "variables": {
         "$manuscripts": {
           "type": "array",
@@ -450,6 +450,13 @@
           "pattern": "{Text}",
           "printIfNullValue": false,
           "replaceNullValueBy": ""
+        },
+        "$fullRecords": {
+          "type": "array",
+          "scope": "FullBookRecordings",
+          "pattern": "<a href='AudioBooks\\AudioBooks\\Download?fileName={FileName}&mimeType={MimeType}&audioType={AudioType}'>Stáhnout celou audioknihu</a>",
+          "printIfNullValue": false,
+          "delimeter": " "
         }
       }
     },
@@ -460,7 +467,20 @@
 
     },
     "bottom-panel": {
-      "body": "Toto je telicko audioknihy"
+      "body": "{$tracksList}",
+      "variables": {
+        "$tracksList": {
+          "type": "basic",
+          "pattern": "<div class='tracks-list'>{$tracks}</div>",
+          "printIfNullValue": false
+        },
+        "$tracks": {
+          "type": "array",
+          "scope": "Tracks",
+          "pattern": "<div class='track'>{Name}</div>",
+          "delimeter": ""
+        }
+      }
     }
   }
 

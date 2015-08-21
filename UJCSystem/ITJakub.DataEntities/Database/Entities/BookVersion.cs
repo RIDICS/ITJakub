@@ -57,7 +57,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<BookHeadword> BookHeadwords { get; set; } 
 
-        public virtual ISet<Track> Tracks { get; set; }
+        public virtual IList<Track> Tracks { get; set; }
 
         public virtual IList<FullBookRecording> FullBookRecordings { get; set; }
 

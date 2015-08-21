@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
         {
             if (bookVersion.Tracks == null)
             {
-                bookVersion.Tracks = new HashSet<Track>();
+                bookVersion.Tracks = new List<Track>();
             }
         }
     }

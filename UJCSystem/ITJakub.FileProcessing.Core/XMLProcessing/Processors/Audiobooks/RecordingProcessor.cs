@@ -23,7 +23,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
         protected override void ProcessElement(BookVersion bookVersion, Track track, XmlReader xmlReader)
         {
             if (track.Recordings == null)
-                track.Recordings = new HashSet<TrackRecording>();
+                track.Recordings = new List<TrackRecording>();
 
 
             var fileName = xmlReader.GetAttribute("url");

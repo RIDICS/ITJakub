@@ -14,10 +14,10 @@
 
     <property name="Position" />
 
-    <set name="Recordings" cascade="all-delete-orphan">
+    <bag name="Recordings" cascade="all-delete-orphan">
       <key column="Track" />
       <one-to-many class="TrackRecording" />
-    </set>
+    </bag>
 
   </class>
 </hibernate-mapping>

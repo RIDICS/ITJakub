@@ -222,67 +222,21 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> GetBookVersionDetailsByGuidWithAudio(IList<string> bookGuidList)
+        public virtual IList<Track> GetTracksForBookVersion(long bookVersionId)
         {
             using (var session = GetSession())
             {
-                Book bookAlias = null;
-                BookVersion bookVersionAlias = null;
-                Responsible responsibleAlias = null;
-                ResponsibleType responsibleTypeAlias = null;
                 Track trackAlias = null;
-                TrackRecording recordingAlias = null;
 
-                var query = session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList);
+                var query = session.QueryOver(()=> trackAlias)
+                    .Where( () => trackAlias.BookVersion.Id == bookVersionId)
+                    .Future<Track>();
 
-                var futureResult = query
-                    .Fetch(x => x.Book).Eager
-                    .Fetch(x => x.Publisher).Eager
-                    .Fetch(x => x.DefaultBookType).Eager
-                    .Fetch(x => x.ManuscriptDescriptions).Eager
-                    .Future<BookVersion>();
+                session.QueryOver(() => trackAlias)
+                    .Fetch(x => x.Recordings).Eager
+                    .Future<Track>();
 
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.Keywords).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.Authors).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.FullBookRecordings).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
-                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.Tracks, () => trackAlias)
-                    .Left.JoinAlias(() => trackAlias.Recordings, () => recordingAlias)
-                    .Future<BookVersion>();
-
-                var result = futureResult.ToList();
+                var result = query.ToList();
                 return result;
             }
         }
@@ -357,6 +311,13 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
                     .Fetch(x => x.Authors).Eager
+                    .Future<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                    .Fetch(x => x.FullBookRecordings).Eager
                     .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
