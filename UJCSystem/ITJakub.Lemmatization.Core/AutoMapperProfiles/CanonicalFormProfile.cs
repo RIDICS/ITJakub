@@ -14,7 +14,8 @@ namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Type));
 
-            CreateMap<CanonicalFormType, CanonicalFormTypeContract>();
+            CreateMap<CanonicalFormType, CanonicalFormTypeContract>()
+                .ReverseMap();
         }
     }
 }

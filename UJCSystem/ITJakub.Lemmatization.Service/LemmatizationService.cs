@@ -44,9 +44,19 @@ namespace ITJakub.Lemmatization.Service
             m_lemmatizationManager.AddCanonicalForm(tokenCharacteristicId, canonicalFormId);
         }
 
+        public void SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId)
+        {
+            m_lemmatizationManager.SetHyperCanonicalForm(canonicalFormId, hyperCanonicalFormId);
+        }
+
         public long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
             return m_lemmatizationManager.CreateCanonicalForm(tokenCharacteristicId, type, text, description);
+        }
+
+        public long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
+        {
+            return m_lemmatizationManager.CreateHyperCanonicalForm(canonicalFormId, type, text, description);
         }
 
         public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)

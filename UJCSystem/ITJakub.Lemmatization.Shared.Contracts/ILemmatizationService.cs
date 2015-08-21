@@ -22,7 +22,13 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         void AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId);
 
         [OperationContract]
+        void SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId);
+
+        [OperationContract]
         long CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description);
+
+        [OperationContract]
+        long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description);
 
         [OperationContract]
         IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query);

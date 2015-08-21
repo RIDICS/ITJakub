@@ -101,5 +101,30 @@ namespace ITJakub.Lemmatization.Core
             tokenCharacteristic.CanonicalForms.Add(cannonicalForm);
             m_repository.Update(tokenCharacteristic);
         }
+
+        public void SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId)
+        {
+            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
+            var hyperCanonicalForm = m_repository.Load<HyperCanonicalForm>(hyperCanonicalFormId);
+
+            canonicalForm.HyperCanonicalForm = hyperCanonicalForm;
+            m_repository.Update(canonicalForm);
+        }
+
+        public long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
+        {
+            var canonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
+            var hyperCanonicalFormType = Mapper.Map<HyperCanonicalFormType>(type);
+            var hyperCanonicalForm = new HyperCanonicalForm
+            {
+                Type = hyperCanonicalFormType,
+                Text = text,
+                Description = description,
+                CanonicalForms = new List<CanonicalForm> { canonicalForm }
+            };
+
+            var id = m_repository.Create(hyperCanonicalForm);
+            return (long) id;
+        }
     }
 }

@@ -16,6 +16,9 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 
         [DataMember]
         public CanonicalFormTypeContract Type { get; set; }
+
+        [DataMember]
+        public HyperCanonicalFormContract HyperCanonicalForm { get; set; }
     }
 
     [DataContract]

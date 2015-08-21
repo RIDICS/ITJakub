@@ -3,6 +3,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using NHibernate.Transform;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
@@ -61,11 +62,27 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         {
             using (var session = GetSession())
             {
-                var result = session.QueryOver<TokenCharacteristic>()
-                    .Where(x => x.Token.Id == tokenId)
+                //var result = session.QueryOver<TokenCharacteristic>()
+                //    .Where(x => x.Token.Id == tokenId)
+                //    .Fetch(x => x.CanonicalForms).Eager
+                //    .TransformUsing(Transformers.DistinctRootEntity)
+                //    .List();
+
+                TokenCharacteristic tokenCharacteristicAlias = null;
+                CanonicalForm canonicalFormAlias = null;
+                HyperCanonicalForm hyperCanonicalFormAlias = null;
+
+                var result = session.QueryOver(() => tokenCharacteristicAlias)
+                    .JoinQueryOver(x => x.CanonicalForms, () => canonicalFormAlias, JoinType.LeftOuterJoin)
+                    .JoinQueryOver(x => x.HyperCanonicalForm, () => hyperCanonicalFormAlias, JoinType.LeftOuterJoin)
                     .Fetch(x => x.CanonicalForms).Eager
-                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .Where(() => tokenCharacteristicAlias.Token.Id == tokenId)
                     .List();
+
+                //session.QueryOver<TokenCharacteristic>()
+                //    .JoinQueryOver(x => x.CanonicalForms)
+                //    .JoinQueryOver(x => x.)
+                //    .JoinQueryOver(x => x.)
 
                 return result;
             }
