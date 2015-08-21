@@ -74,5 +74,17 @@ namespace ITJakub.Web.Hub.Controllers
             m_serviceClient.AddCanonicalForm(tokenCharacteristicId, canonicalFormId);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
+        {
+            var resultId = m_serviceClient.CreateHyperCanonicalForm(canonicalFormId, type, text, description);
+            return Json(resultId, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId)
+        {
+            m_serviceClient.SetHyperCanonicalForm(canonicalFormId, hyperCanonicalFormId);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
     }
 }

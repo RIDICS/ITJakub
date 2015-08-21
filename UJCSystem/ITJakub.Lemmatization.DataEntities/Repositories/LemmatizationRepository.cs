@@ -62,12 +62,6 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         {
             using (var session = GetSession())
             {
-                //var result = session.QueryOver<TokenCharacteristic>()
-                //    .Where(x => x.Token.Id == tokenId)
-                //    .Fetch(x => x.CanonicalForms).Eager
-                //    .TransformUsing(Transformers.DistinctRootEntity)
-                //    .List();
-
                 TokenCharacteristic tokenCharacteristicAlias = null;
                 CanonicalForm canonicalFormAlias = null;
                 HyperCanonicalForm hyperCanonicalFormAlias = null;
@@ -77,12 +71,8 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                     .JoinQueryOver(x => x.HyperCanonicalForm, () => hyperCanonicalFormAlias, JoinType.LeftOuterJoin)
                     .Fetch(x => x.CanonicalForms).Eager
                     .Where(() => tokenCharacteristicAlias.Token.Id == tokenId)
+                    .TransformUsing(Transformers.DistinctRootEntity)
                     .List();
-
-                //session.QueryOver<TokenCharacteristic>()
-                //    .JoinQueryOver(x => x.CanonicalForms)
-                //    .JoinQueryOver(x => x.)
-                //    .JoinQueryOver(x => x.)
 
                 return result;
             }

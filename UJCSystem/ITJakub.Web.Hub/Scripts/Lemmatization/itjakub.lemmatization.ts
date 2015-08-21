@@ -298,6 +298,7 @@ class LemmatizationCanonicalForm {
     private containerType: HTMLDivElement;
     private containerDescription: HTMLDivElement;
     private editButton: HTMLButtonElement;
+    private hyperCanonicalForm: LemmatizationHyperCanonicalForm;
 
     constructor(tokenCharacteristicId: number, tableContainer: HTMLTableElement, canonicalForm: ICanonicalForm = null) {
         this.tableContainer = tableContainer;
@@ -335,17 +336,67 @@ class LemmatizationCanonicalForm {
         $(td2).append(containerCanonicalForm);
         $(td3).append(containerType);
         $(td4).append(containerDescription);
-        $(tr).append(td1)
+        $(tr).addClass("canonical-form-row")
+            .append(td1)
             .append(td2)
             .append(td3)
             .append(td4);
 
+        // hyper canonical form
+        var hyperTr = document.createElement("tr");
+        var hyperTd1 = document.createElement("td");
+        var hyperTd2 = document.createElement("td");
+        var hyperTd3 = document.createElement("td");
+        var hyperTd4 = document.createElement("td");
+        var containerHyperForm = document.createElement("div");
+        var containerHyperType = document.createElement("div");
+        var containerHyperDescription = document.createElement("div");
+        var editHyperButton = document.createElement("button");
+        $(editHyperButton).text("+");
+
+        if (this.canonicalForm) {
+            if (this.canonicalForm.HyperCanonicalForm) {
+                var hyperCanonicalForm = this.canonicalForm.HyperCanonicalForm;
+
+                $(hyperTd2).text(hyperCanonicalForm.Text);
+                $(hyperTd3).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
+                $(hyperTd4).text(hyperCanonicalForm.Description);
+                $(editHyperButton).text("E");
+            }
+        } else {
+            $(editHyperButton).addClass("hidden");
+        }
+
+        $(editHyperButton).click(() => {
+            if (this.canonicalForm.HyperCanonicalForm)
+                this.showEditHyperDialog();
+            else
+                this.showCreateHyperDialog();
+        });
+
+        $(hyperTd1).append(editHyperButton);
+        $(hyperTd2).append(containerHyperForm);
+        $(hyperTd3).append(containerHyperType);
+        $(hyperTd4).append(containerHyperDescription);
+        $(hyperTr).addClass("hyper-canonical-form-row")
+            .append(hyperTd1)
+            .append(hyperTd2)
+            .append(hyperTd3)
+            .append(hyperTd4);
+
         $(this.tableContainer).append(tr);
+        $(this.tableContainer).append(hyperTr);
 
         this.containerCanonicalForm = containerCanonicalForm;
         this.containerType = containerType;
         this.containerDescription = containerDescription;
         this.editButton = editButton;
+
+        this.hyperCanonicalForm = new LemmatizationHyperCanonicalForm();
+        this.hyperCanonicalForm.containerName = containerHyperForm;
+        this.hyperCanonicalForm.containerType = containerHyperType;
+        this.hyperCanonicalForm.containerDescription = containerHyperDescription;
+        this.hyperCanonicalForm.editButton = editHyperButton;
     }
 
     private showCreateDialog() {
@@ -355,10 +406,7 @@ class LemmatizationCanonicalForm {
         });
         $("#save-form").off("click");
         $("#save-form").click(() => {
-            if (this.canonicalForm)
-                this.updateItem();
-            else
-                this.createItem();
+            this.createItem();
         });
 
         $("#new-form").val("");
@@ -382,8 +430,26 @@ class LemmatizationCanonicalForm {
         $("#edit-form-description").val(this.canonicalForm.Description);
     }
 
-    private hideCreateDialog() {
-        $("#newCanonicalFormDialog").modal("hide");
+    private showCreateHyperDialog() {
+        $("#newHyperCanonicalFormDialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+        $("#save-hyper").off("click");
+        $("#save-hyper").click(() => {
+            this.createHyperItem();
+        });
+    }
+
+    private showEditHyperDialog() {
+        $("#newHyperCanonicalFormDialog").modal({
+            show: true,
+            backdrop: "static"
+        });
+        $("#save-edited-hyper").off("click");
+        $("#save-edited-hyper").click(() => {
+
+        });
     }
 
     private createItem() {
@@ -432,23 +498,86 @@ class LemmatizationCanonicalForm {
         }
     }
 
+    private createHyperItem() {
+        var name = $("#new-hyper").val();
+        var formType = Number($("#new-hyper-type").val());
+        var description = $("#new-hyper-description").val();
+
+        if ($("#tab2-create-new").hasClass("active")) {
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: getBaseUrl() + "Lemmatization/CreateHyperCanonicalForm",
+                data: {
+                    canonicalFormId: this.canonicalForm.Id,
+                    text: name,
+                    type: formType,
+                    description: description
+                },
+                dataType: "json",
+                contentType: "application/json",
+                success: (newHyperCanonicalFormId) => {
+                    this.updateUiAfterHyperItemCreation(newHyperCanonicalFormId, name, formType, description);
+                }
+            });
+        } else {
+            throw "Prepare typeahead searchbox first!";
+            var searchBox = LemmatizationCanonicalForm.searchBox;
+            var currentItem: ICanonicalForm = <ICanonicalForm>(searchBox.getValue());
+
+            if (!currentItem)
+                return; //TODO show error
+
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: getBaseUrl() + "Lemmatization/SetHyperCanonicalForm",
+                data: {
+                    tokenCharacteristicId: this.tokenCharacteristicId,
+                    canonicalFormId: currentItem.Id
+                },
+                dataType: "json",
+                contentType: "application/json",
+                success: () => {
+                 //   this.updateUiAfterHyperItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
+                }
+            });
+        }
+    }
+
     private updateUiAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
         this.canonicalForm = {
             Id: newId,
             Text: name,
             Type: formType,
-            Description: description
+            Description: description,
+            HyperCanonicalForm: null
         };
-
-        $("#newTokenCharacteristic").modal("hide");
 
         $(this.containerCanonicalForm).text(this.canonicalForm.Text);
         $(this.containerDescription).text(this.canonicalForm.Description);
         $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
         $(this.editButton).text("E");
+        $(this.hyperCanonicalForm.editButton).removeClass("hidden");
 
         this.newCanonicalFormCreatedCallback(this.canonicalForm);
-        this.hideCreateDialog();
+        $("#newCanonicalFormDialog").modal("hide");
+    }
+
+    private updateUiAfterHyperItemCreation(newId: number, name: string, formType: HyperCanonicalFormTypeEnum, description: string) {
+        this.canonicalForm.HyperCanonicalForm = {
+            Id: newId,
+            Text: name,
+            Type: formType,
+            Description: description
+        }
+
+        //$(this.containerCanonicalForm).text(this.canonicalForm.Text);
+        //$(this.containerDescription).text(this.canonicalForm.Description);
+        //$(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
+        //$(this.editButton).text("E");
+
+        $("#newHyperCanonicalFormDialog").modal("hide");
     }
 
     private updateItem() {
@@ -471,33 +600,52 @@ class LemmatizationCanonicalForm {
         //});
     }
 
-    private static createOption(value: CanonicalFormTypeEnum): HTMLOptionElement {
-        var label = LemmatizationCanonicalForm.typeToString(value);
-        var element = document.createElement("option");
-        $(element).attr("value", value);
-        $(element).text(label);
-
-        return element;
-    }
-
     static init() {
+        var createOption = (value: CanonicalFormTypeEnum): HTMLOptionElement => {
+            var label = LemmatizationCanonicalForm.typeToString(value);
+            var element = document.createElement("option");
+            $(element).attr("value", value);
+            $(element).text(label);
+            return element;
+        }
+
+        var createHyperOption = (value: HyperCanonicalFormTypeEnum): HTMLOptionElement => {
+            var label = LemmatizationCanonicalForm.hyperTypeToString(value);
+            var element = document.createElement("option");
+            $(element).attr("value", value);
+            $(element).text(label);
+            return element;
+        };
+
         $("#new-form-type")
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+            .append(createOption(CanonicalFormTypeEnum.Lemma))
+            .append(createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(createOption(CanonicalFormTypeEnum.Stemma))
+            .append(createOption(CanonicalFormTypeEnum.StemmaOld));
 
         $("#new-form-existing-type")
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+            .append(createOption(CanonicalFormTypeEnum.Lemma))
+            .append(createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(createOption(CanonicalFormTypeEnum.Stemma))
+            .append(createOption(CanonicalFormTypeEnum.StemmaOld));
 
         $("#edit-form-type")
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Lemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.LemmaOld))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.Stemma))
-            .append(LemmatizationCanonicalForm.createOption(CanonicalFormTypeEnum.StemmaOld));
+            .append(createOption(CanonicalFormTypeEnum.Lemma))
+            .append(createOption(CanonicalFormTypeEnum.LemmaOld))
+            .append(createOption(CanonicalFormTypeEnum.Stemma))
+            .append(createOption(CanonicalFormTypeEnum.StemmaOld));
+
+        $("#new-hyper-type")
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperLemma))
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
+
+        $("#new-hyper-existing-type")
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperLemma))
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
+
+        $("#edit-hyper-type")
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperLemma))
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
 
         var searchBox = new LemmatizationSearchBox("#new-form-existing-input");
         var selectedChangedCallback = (selectedExist, selectionConfirmed) => {
@@ -544,6 +692,13 @@ class LemmatizationCanonicalForm {
                 return "";
         }
     }
+}
+
+class LemmatizationHyperCanonicalForm {
+    public editButton: HTMLButtonElement;
+    public containerName: HTMLDivElement;
+    public containerType: HTMLDivElement;
+    public containerDescription: HTMLDivElement;
 }
 
 class LemmatizationSearchBox {
@@ -694,6 +849,14 @@ interface ICanonicalForm {
     Text: string;
     Description: string;
     Type: CanonicalFormTypeEnum;
+    HyperCanonicalForm: IHyperCanonicalForm;
+}
+
+interface IHyperCanonicalForm {
+    Id: number;
+    Text: string;
+    Description: string;
+    Type: HyperCanonicalFormTypeEnum;
 }
 
 enum CanonicalFormTypeEnum {
