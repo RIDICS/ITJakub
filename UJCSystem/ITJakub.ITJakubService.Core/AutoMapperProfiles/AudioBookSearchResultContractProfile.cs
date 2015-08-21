@@ -30,7 +30,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
                 .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleType.Editor)))
                 .ForMember(dest => dest.FullBookRecordings, opt => opt.MapFrom(src => src.FullBookRecordings))
-                .ForMember(dest => dest.Tracks, opt => opt.MapFrom(src => src.Tracks));
+                .ForMember(dest => dest.Tracks, opt => opt.MapFrom(src => src.Tracks.ToList()));
 
             CreateMap<FullBookRecording, RecordingContract>()
                 .ForMember(dest => dest.AudioType, opts => opts.MapFrom(src => src.AudioType))
@@ -40,7 +40,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<Track, TrackContract>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
-                .ForMember(dest => dest.Recordings, opt => opt.MapFrom(src => src.Recordings));
+                .ForMember(dest => dest.Recordings, opt => opt.MapFrom(src => src.Recordings.ToList()));
 
             CreateMap<TrackRecording, TrackRecordingContract>()
                 .ForMember(dest => dest.Length, opts => opts.MapFrom(src => src.Length));

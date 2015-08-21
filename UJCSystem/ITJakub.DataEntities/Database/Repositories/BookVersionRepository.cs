@@ -278,15 +278,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch( x=> x.Tracks).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .JoinQueryOver( x=> x.Tracks, ()=> trackAlias)
-                    .Fetch(x => trackAlias.Recordings).Eager
+                    .Left.JoinAlias(() => bookVersionAlias.Tracks, () => trackAlias)
+                    .Left.JoinAlias(() => trackAlias.Recordings, () => recordingAlias)
                     .Future<BookVersion>();
 
                 var result = futureResult.ToList();

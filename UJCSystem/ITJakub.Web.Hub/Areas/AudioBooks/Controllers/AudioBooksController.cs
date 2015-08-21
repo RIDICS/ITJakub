@@ -127,7 +127,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             }
 
             var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -197,7 +197,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             }
 
             var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
         }
     }
 }

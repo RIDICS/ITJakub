@@ -13,7 +13,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual int Position { get; set; }
 
-        public virtual IList<TrackRecording> Recordings { get; set; }
+        public virtual ISet<TrackRecording> Recordings { get; set; }
 
         public virtual bool Equals(Track other)
         {

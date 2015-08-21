@@ -110,10 +110,10 @@
       <one-to-many class="BookHeadword" />
     </bag>
     
-    <bag name="Tracks" cascade="all-delete-orphan" lazy="true">
+    <set name="Tracks" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="Track" />
-    </bag>
+    </set>
 
     <bag name="FullBookRecordings" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion"/>
