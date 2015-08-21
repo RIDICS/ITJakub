@@ -425,7 +425,7 @@
   "AudioBook": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> {$fullRecords}",
+      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Stáhnout celou audioknihu: {$fullRecords}",
       "variables": {
         "$manuscripts": {
           "type": "array",
@@ -454,7 +454,7 @@
         "$fullRecords": {
           "type": "array",
           "scope": "FullBookRecordings",
-          "pattern": "<a href='AudioBooks\\AudioBooks\\Download?fileName={FileName}&mimeType={MimeType}&audioType={AudioType}'>Stáhnout celou audioknihu</a>",
+          "pattern": "<a href='Download?fileName={FileName}&mimeType={MimeType}&audioType={AudioType}'>{AudioType}</a>",
           "printIfNullValue": false,
           "delimeter": " "
         }
@@ -471,13 +471,13 @@
       "variables": {
         "$tracksList": {
           "type": "basic",
-          "pattern": "<div class='tracks-list'>{$tracks}</div>",
+          "pattern": "<ul class='tracks-list'>{$tracks}</ul>",
           "printIfNullValue": false
         },
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<div class='track'>{Name}</div>",
+          "pattern": "<li class='track'>{Name}</div><div class='audio'><audio controls='controls' preload='none'><source src='' type=''><source src='' type=''><source src='' type=''>Váš prohlížeč nepodporuje html audio<code>audio</code></audio></li>",
           "delimeter": ""
         }
       }
