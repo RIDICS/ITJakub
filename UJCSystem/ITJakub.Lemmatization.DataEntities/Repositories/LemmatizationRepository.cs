@@ -44,12 +44,13 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<HyperCanonicalForm> GetTypeaheadHyperCannonicalForm(string query, int recordCount)
+        public virtual IList<HyperCanonicalForm> GetTypeaheadHyperCannonicalForm(HyperCanonicalFormType type, string query, int recordCount)
         {
             using (var session = GetSession())
             {
                 var result = session.QueryOver<HyperCanonicalForm>()
                     .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
+                    .And(x => x.Type == type)
                     .OrderBy(x => x.Text).Asc
                     .Take(recordCount)
                     .List();

@@ -62,18 +62,19 @@ namespace ITJakub.Lemmatization.Core
             return (long) id;
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCannonicalForm(CanonicalFormTypeContract type, string query)
+        public IList<CanonicalFormTypeaheadContract> GetTypeaheadCannonicalForm(CanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
             var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
             var result = m_repository.GetTypeaheadCannonicalForm(canonicalFormType, query, PrefetchRecordCount);
-            return Mapper.Map<IList<CanonicalFormContract>>(result);
+            return Mapper.Map<IList<CanonicalFormTypeaheadContract>>(result);
         }
 
-        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCannonicalForm(string query)
+        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCannonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             query = EscapeQuery(query);
-            var result = m_repository.GetTypeaheadHyperCannonicalForm(query, PrefetchRecordCount);
+            var formType = Mapper.Map<HyperCanonicalFormType>(type);
+            var result = m_repository.GetTypeaheadHyperCannonicalForm(formType, query, PrefetchRecordCount);
             return Mapper.Map<IList<HyperCanonicalFormContract>>(result);
         }
 

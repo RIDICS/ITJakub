@@ -14,7 +14,7 @@
 
     <bag name="CanonicalForms" cascade="all">
       <key column="HyperCanonicalForm"/>
-      <one-to-many class="HyperCanonicalForm"/>
+      <one-to-many class="CanonicalForm"/>
     </bag>
         
   </class>

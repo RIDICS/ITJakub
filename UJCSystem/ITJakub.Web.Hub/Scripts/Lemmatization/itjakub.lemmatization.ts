@@ -290,6 +290,7 @@ class LemmatizationCharacteristicTable {
 
 class LemmatizationCanonicalForm {
     private static searchBox: LemmatizationSearchBox;
+    private static hyperSearchBox: LemmatizationSearchBox;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
     private tableContainer: HTMLTableElement;
     private canonicalForm: ICanonicalForm;
@@ -439,10 +440,15 @@ class LemmatizationCanonicalForm {
         $("#save-hyper").click(() => {
             this.createHyperItem();
         });
+
+        $("#new-hyper").val("");
+        $("#new-hyper-description").val("");
+        $("#new-hyper-existing-description").val("");
+        LemmatizationCanonicalForm.hyperSearchBox.setValue("");
     }
 
     private showEditHyperDialog() {
-        $("#newHyperCanonicalFormDialog").modal({
+        $("#editHyperCanonicalFormDialog").modal({
             show: true,
             backdrop: "static"
         });
@@ -450,6 +456,10 @@ class LemmatizationCanonicalForm {
         $("#save-edited-hyper").click(() => {
 
         });
+
+        $("#edit-hyper-text").val(this.canonicalForm.HyperCanonicalForm.Text);
+        $("#edit-hyper-type").val(String(this.canonicalForm.HyperCanonicalForm.Type));
+        $("#edit-hyper-description").val(this.canonicalForm.HyperCanonicalForm.Description);
     }
 
     private createItem() {
@@ -572,10 +582,11 @@ class LemmatizationCanonicalForm {
             Description: description
         }
 
-        //$(this.containerCanonicalForm).text(this.canonicalForm.Text);
-        //$(this.containerDescription).text(this.canonicalForm.Description);
-        //$(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
-        //$(this.editButton).text("E");
+        var hyperCanonicalForm = this.canonicalForm.HyperCanonicalForm;
+        $(this.hyperCanonicalForm.containerName).text(hyperCanonicalForm.Text);
+        $(this.hyperCanonicalForm.containerDescription).text(hyperCanonicalForm.Description);
+        $(this.hyperCanonicalForm.containerType).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
+        $(this.hyperCanonicalForm.editButton).text("E");
 
         $("#newHyperCanonicalFormDialog").modal("hide");
     }
@@ -648,14 +659,23 @@ class LemmatizationCanonicalForm {
             .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
 
         var searchBox = new LemmatizationSearchBox("#new-form-existing-input");
+        var hyperSearchBox = new LemmatizationSearchBox("#new-hyper-existing-input");
+
         var selectedChangedCallback = (selectedExist, selectionConfirmed) => {
             var currentItem = searchBox.getValue();
             var description = currentItem ? currentItem.Description : "";
             $("#new-form-existing-description").val(description);
         };
+        var hyperSelectedChangedCallback = (selectedExist, selectionConfirmed) => {
+            var currentItem = hyperSearchBox.getValue();
+            var description = currentItem ? currentItem.Description : "";
+            $("#new-hyper-existing-description").val(description);
+        };
 
         searchBox.setDataSet("CanonicalForm", "type=0");
         searchBox.create(selectedChangedCallback);
+        hyperSearchBox.setDataSet("HyperCanonicalForm", "type=0");
+        hyperSearchBox.create(hyperSelectedChangedCallback);
 
         $("#new-form-existing-type").on("change", (e) => {
             var value = $(e.target).val();
@@ -663,8 +683,15 @@ class LemmatizationCanonicalForm {
             searchBox.create(selectedChangedCallback);
             searchBox.reload();
         });
+        $("#new-hyper-existing-type").on("change", (e) => {
+            var value = $(e.target).val();
+            hyperSearchBox.setDataSet("HyperCanonicalForm", "type=" + value);
+            hyperSearchBox.create(hyperSelectedChangedCallback);
+            hyperSearchBox.reload();
+        });
 
         LemmatizationCanonicalForm.searchBox = searchBox;
+        LemmatizationCanonicalForm.hyperSearchBox = hyperSearchBox;
     }
 
     static typeToString(canonicalFormType: CanonicalFormTypeEnum): string {

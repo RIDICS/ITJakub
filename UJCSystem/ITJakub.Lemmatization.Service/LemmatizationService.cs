@@ -59,14 +59,14 @@ namespace ITJakub.Lemmatization.Service
             return m_lemmatizationManager.CreateHyperCanonicalForm(canonicalFormId, type, text, description);
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
+        public IList<CanonicalFormTypeaheadContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
             return m_lemmatizationManager.GetTypeaheadCannonicalForm(type, query);
         }
 
-        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query)
+        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
-            return m_lemmatizationManager.GetTypeaheadHyperCannonicalForm(query);
+            return m_lemmatizationManager.GetTypeaheadHyperCannonicalForm(type, query);
         }
     }
 }

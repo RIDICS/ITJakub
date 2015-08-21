@@ -31,9 +31,9 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         long CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description);
 
         [OperationContract]
-        IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query);
+        IList<CanonicalFormTypeaheadContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query);
 
         [OperationContract]
-        IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query);
+        IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query);
     }
 }

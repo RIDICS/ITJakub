@@ -219,7 +219,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
-        public IList<CanonicalFormContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
+        public IList<CanonicalFormTypeaheadContract> GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
             try
             {
@@ -245,11 +245,11 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
-        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(string query)
+        public IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             try
             {
-                return Channel.GetTypeaheadHyperCanonicalForm(query);
+                return Channel.GetTypeaheadHyperCanonicalForm(type, query);
             }
             catch (CommunicationException ex)
             {
