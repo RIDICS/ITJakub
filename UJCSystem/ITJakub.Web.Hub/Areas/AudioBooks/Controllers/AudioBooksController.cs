@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -198,6 +199,30 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
             var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
             return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileResult DownloadAudioBookTrack(long bookId, int trackPosition, AudioTypeContract audioType)
+        {
+            var audioTrackContract = new DownloadAudioBookTrackContract
+            {
+                BookId = bookId,
+                RequestedAudioType = audioType,
+                TrackPosition = trackPosition
+            };
+            var audioTrack = m_mainServiceClient.DownloadAudioBookTrack(audioTrackContract);
+            return new FileStreamResult(audioTrack.FileData, audioTrack.MimeType);
+        }
+
+        public FileResult DownloadAudioBook(long bookId, AudioTypeContract audioType)
+        {
+            var audioTrackContract = new DownloadWholeBookContract
+            {
+                BookId = bookId,
+                RequestedAudioType = audioType,
+            };
+
+            var audioTrack = m_mainServiceClient.DownloadWholeAudiobook(audioTrackContract);
+            return new FileStreamResult(audioTrack.FileData, audioTrack.MimeType);
         }
     }
 }

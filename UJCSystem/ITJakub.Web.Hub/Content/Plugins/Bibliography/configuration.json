@@ -454,7 +454,7 @@
         "$fullRecords": {
           "type": "array",
           "scope": "FullBookRecordings",
-          "pattern": "<a href='Download?fileName={FileName}&mimeType={MimeType}&audioType={AudioType}'>{AudioType}</a>",
+          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}'>{AudioType}</a>",
           "printIfNullValue": false,
           "delimeter": " "
         }
@@ -477,7 +477,13 @@
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<li class='track'>{Name}</div><div class='audio'><audio controls='controls' preload='none'><source src='' type=''><source src='' type=''><source src='' type=''>Váš prohlížeč nepodporuje html audio<code>audio</code></audio></li>",
+          "pattern": "<li class='track'>{Name}</div><div class='audio'><audio controls='controls' preload='yes'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio></li>",
+          "delimeter": ""
+        },
+        "$trackRecordings": {
+          "type": "array",
+          "scope": "Recordings",
+          "pattern": "<source src='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' type='{MimeType}'>",
           "delimeter": ""
         }
       }
