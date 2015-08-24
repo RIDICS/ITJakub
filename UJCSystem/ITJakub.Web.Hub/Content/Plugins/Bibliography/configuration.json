@@ -454,9 +454,14 @@
         "$fullRecords": {
           "type": "array",
           "scope": "FullBookRecordings",
-          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}'>{AudioType}</a>",
+          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}'>{$translateAudioType}</a>",
           "printIfNullValue": false,
           "delimeter": " "
+        },
+        "$translateAudioType": {
+          "type": "script",
+          "pattern": "translateAudioType({AudioType});",
+          "printIfNullValue": false
         }
       }
     },
@@ -471,13 +476,13 @@
       "variables": {
         "$tracksList": {
           "type": "basic",
-          "pattern": "<ul class='tracks-list'>{$tracks}</ul>",
+          "pattern": "<ol class='tracks-list'>{$tracks}</ol>",
           "printIfNullValue": false
         },
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<li class='track'>{Name}</div><div class='audio'><audio controls='controls' preload='yes'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio></li>",
+          "pattern": "<li class='track'>{Name}<div class='audio'><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
           "delimeter": ""
         },
         "$trackRecordings": {
@@ -485,6 +490,17 @@
           "scope": "Recordings",
           "pattern": "<source src='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' type='{MimeType}'>",
           "delimeter": ""
+        },
+        "$trackRecordingsDownload": {
+          "type": "array",
+          "scope": "Recordings",
+          "pattern": "<a href='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}'>{$translateAudioType}</a>",
+          "delimeter": " "
+        },
+        "$translateAudioType": {
+          "type": "script",
+          "pattern": "translateAudioType({AudioType});",
+          "printIfNullValue": false
         }
       }
     }

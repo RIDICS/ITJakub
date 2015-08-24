@@ -1,7 +1,26 @@
-﻿function initAudibooksList() {
+﻿var aduioTypeTranslation = [
+    "Neznámý",
+    "Mp3",
+    "Ogg",
+    "Wav"
+];
+
+enum AudioTypeEnum {
+    Unknown = 0,
+    Mp3 = 1,
+    Ogg = 2,
+    Wav = 3,
+}
+
+
+function initAudibooksList() {
     var bookCountPerPage = 5;
     var audibooksList = new AudibooksList(bookCountPerPage);
     audibooksList.create();
+}
+
+function translateAudioType(audioType: number): string {
+    return aduioTypeTranslation[audioType];
 }
 
 $(document).ready(() => {

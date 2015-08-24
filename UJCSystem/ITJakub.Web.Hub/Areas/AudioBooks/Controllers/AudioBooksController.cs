@@ -9,6 +9,7 @@ using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Jewelery;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
@@ -210,7 +211,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 TrackPosition = trackPosition
             };
             var audioTrack = m_mainServiceClient.DownloadAudioBookTrack(audioTrackContract);
-            return new FileStreamResult(audioTrack.FileData, audioTrack.MimeType);
+            var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
+            return result;
         }
 
         public FileResult DownloadAudioBook(long bookId, AudioTypeContract audioType)
@@ -222,7 +224,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             };
 
             var audioTrack = m_mainServiceClient.DownloadWholeAudiobook(audioTrackContract);
-            return new FileStreamResult(audioTrack.FileData, audioTrack.MimeType);
+            var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) { FileDownloadName = audioTrack.FileName };
+            return result;
         }
     }
 }
