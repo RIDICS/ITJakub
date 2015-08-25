@@ -1,17 +1,26 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
     public class BookPage : IEquatable<BookPage>
     {
         public virtual long Id { get; set; }
+
         public virtual BookVersion BookVersion { get; set; }
+
         public virtual string Text { get; set; }
+
         public virtual string XmlId { get; set; }
+
         public virtual string XmlResource { get; set; }
+
         public virtual string Image { get; set; }
+
         public virtual int Position { get; set; }
 
+        public virtual IList<Term> Terms { get; set; }
 
         public virtual bool Equals(BookPage other)
         {
