@@ -29,6 +29,9 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         public string Name { get; set; }
 
         [DataMember]
+        public string Text { get; set; }
+
+        [DataMember]
         public int Position { get; set; }
 
         [DataMember]

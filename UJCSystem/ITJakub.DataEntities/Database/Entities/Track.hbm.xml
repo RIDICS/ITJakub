@@ -11,6 +11,8 @@
     <many-to-one name="BookVersion" />
 
     <property name="Name" />
+    
+    <property name="Text" />
 
     <property name="Position" />
 

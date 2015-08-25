@@ -11,6 +11,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual  string Name { get; set; }
 
+        public virtual  string Text { get; set; }
+
         public virtual int Position { get; set; }
 
         public virtual IList<TrackRecording> Recordings { get; set; }

@@ -482,7 +482,7 @@
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<li class='track'>{Name}<div class='audio'><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-length'>Délka: <div class='audio-length-value'>{$trackLength}</div></div><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
+          "pattern": "<li class='track'>{Name}<div class='audio'><div class='audio-text'>{Text}</div><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-length'>Délka: <div class='audio-length-value'>{$trackLength}</div></div><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
           "delimeter": ""
         },
         "$trackLength": {

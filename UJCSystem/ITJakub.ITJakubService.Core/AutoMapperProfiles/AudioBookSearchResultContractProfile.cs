@@ -40,6 +40,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<Track, TrackContract>()
                 .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Text, opts => opts.MapFrom(src => src.Text))
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position))
                 .ForMember(dest => dest.Recordings, opt => opt.MapFrom(src => src.Recordings));
 
