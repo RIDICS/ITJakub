@@ -70,5 +70,13 @@ namespace ITJakub.SearchService.Core.Exist
         [ExistQuery(XqueryName = "get-page-from-search.xquery")]
         string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat);
 
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-search-corpus.xquery")]
+        string GetSearchCorpus(string serializedSearchCriteria);
+
+        [OperationContract]
+        [ExistQuery(XqueryName = "get-search-corpus-count.xquery")]
+        int GetSearchCorpusCount(string serializedSearchCriteria);
+
     }
 }

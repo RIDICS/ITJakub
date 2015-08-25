@@ -5,8 +5,11 @@ using ITJakub.Shared.Contracts;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [DataContract]
-    public class BookInfoContract
+    public class BookInfoWithPagesContract
     {
+        [DataMember]
+        public long BookId { get; set; }
+
         [DataMember]
         public string BookXmlId { get; set; }
         
@@ -18,7 +21,13 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [DataMember]
         public string SubTitle { get; set; }
-        
+
+        [DataMember]
+        public string Acronym { get; set; }
+
+        [DataMember]
+        public string BiblText { get; set; }
+
         [DataMember]
         public string Description { get; set; }
 

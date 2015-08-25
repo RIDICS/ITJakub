@@ -24,7 +24,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             var position = bookVersion.BookPages.Count + 1;
-            var faxValue = xmlReader.GetAttribute("fax");
+            var facsValue = xmlReader.GetAttribute("facs");
             var pageNameValue = xmlReader.GetAttribute("n") ?? Convert.ToString(position);
             var pageIdValue = xmlReader.GetAttribute("id", XmlNamespace.NamespaceName) ?? Convert.ToString(Guid.NewGuid());
             var xmlResourceValue = xmlReader.GetAttribute("resource");
@@ -38,7 +38,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
                 Position = position,
                 Text = pageNameValue,
                 BookVersion = bookVersion,
-                Image = faxValue,
+                Image = facsValue,
                 XmlId = pageIdValue,
                 XmlResource = xmlResourceValue
             });

@@ -6,8 +6,12 @@ using System.Runtime.Serialization;
 namespace ITJakub.Shared.Contracts.Searching.Results
 {
     [DataContract]
+    [KnownType(typeof(AudioBookSearchResultContract))]
     public class SearchResultContract
     {
+        [DataMember]
+        public long BookId { get; set; }
+
         [DataMember]
         public string BookXmlId { get; set; }
 
@@ -22,6 +26,12 @@ namespace ITJakub.Shared.Contracts.Searching.Results
 
         [DataMember]
         public string SubTitle { get; set; }
+
+        [DataMember]
+        public string Acronym { get; set; }
+
+        [DataMember]
+        public string BiblText { get; set; }
 
         [DataMember]
         public string PublishPlace { get; set; }

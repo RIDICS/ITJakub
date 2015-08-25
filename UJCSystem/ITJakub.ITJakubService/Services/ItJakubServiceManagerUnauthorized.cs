@@ -2,6 +2,8 @@
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services
 {
@@ -10,11 +12,13 @@ namespace ITJakub.ITJakubService.Services
         private readonly WindsorContainer m_container = Container.Current;
         private readonly UserManager m_userManager;
         private readonly FavoriteManager m_favoriteManager;
+        private readonly FeedbackManager m_feedbackManager;
 
         public ItJakubServiceAuthenticatedManager()
         {
             m_userManager = m_container.Resolve<UserManager>();
             m_favoriteManager = m_container.Resolve<FavoriteManager>();
+            m_feedbackManager = m_container.Resolve<FeedbackManager>();
         }
 
         public UserContract FindUserById(int userId)
@@ -62,6 +66,21 @@ namespace ITJakub.ITJakubService.Services
         public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
+        }
+
+        #endregion
+
+        #region Feedback
+
+        public void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category)
+        {
+            m_feedbackManager.CreateFeedback(feedback, username, category);
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
+            string username)
+        {
+            m_feedbackManager.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
         }
 
         #endregion

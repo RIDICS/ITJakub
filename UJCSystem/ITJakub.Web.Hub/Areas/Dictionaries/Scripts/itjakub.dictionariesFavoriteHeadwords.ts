@@ -2,7 +2,9 @@
     private expandButton: string;
     private listContainer: string;
     private mainContainer: string;
+    private headwordList: Array<IDictionaryFavoriteHeadword>;
     private headwordClickCallback: (bookId: string, entryXmlId: string) => void;
+    private headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void;
 
     constructor(mainContainer: string, listContainer: string, expandButton: string) {
         this.expandButton = expandButton;
@@ -10,8 +12,9 @@
         this.mainContainer = mainContainer;
     }
 
-    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void) {
+    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
         this.headwordClickCallback = headwordClickCallback;
+        this.headwordListChangedCallback = headwordListChangedCallback;
         var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
         $(this.mainContainer).height(areaInitHeight);
 
@@ -78,8 +81,9 @@
 
     private showHeadwordList(list: Array<IDictionaryFavoriteHeadword>) {
         $(this.listContainer).empty();
+        this.headwordList = list;
+        this.headwordListChanged();
         var listDiv = document.createElement("div");
-        var self = this;
 
         for (var i = 0; i < list.length; i++) {
             var favoriteHeadword = list[i];
@@ -89,27 +93,20 @@
             var textWordSpan = document.createElement("span");
 
             $(wordSpan).addClass("saved-word");
+            $(wordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
+            $(wordSpan).data("bookId", favoriteHeadword.BookId);
             
             $(removeWordSpan).addClass("saved-word-remove")
                 .addClass("glyphicon")
                 .addClass("glyphicon-remove-circle");
-            $(removeWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
-            $(removeWordSpan).data("bookId", favoriteHeadword.BookId);
             $(removeWordSpan).click(event => {
-                var element = event.target;
-                $(element).parent(".saved-word").fadeOut(function () {
-                    $(element).remove();
-                    self.updateVisibleHeight();
-                });
-                this.removeHeadword(element);
+                this.removeHeadword(event.target.parentElement);
             });
 
             $(textWordSpan).addClass("saved-word-text");
             $(textWordSpan).text(favoriteHeadword.Headword);
-            $(textWordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
-            $(textWordSpan).data("bookId", favoriteHeadword.BookId);
             $(textWordSpan).click(event => {
-                this.goToPageWithSelectedHeadword(event.target);
+                this.goToPageWithSelectedHeadword(event.target.parentElement);
             });
 
             wordSpan.appendChild(removeWordSpan);
@@ -145,6 +142,19 @@
         var entryXmlId = $(element).data("entryXmlId");
         var bookId = $(element).data("bookId");
 
+        $(element).fadeOut(() => {
+            $(element).remove();
+            this.updateVisibleHeight();
+        });
+
+        for (var i = 0; i < this.headwordList.length; i++) {
+            var headword = this.headwordList[i];
+            if (headword.BookId === bookId && headword.EntryXmlId === entryXmlId) {
+                this.headwordList.splice(i, 1); // remove item from array
+                break;
+            }
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -159,6 +169,25 @@
                 
             }
         });
+        this.headwordListChanged();
+    }
+
+    public removeHeadwordById(bookId: string, entryXmlId: string) {
+        var elements = $(".saved-word", $(this.listContainer));
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements.get(i);
+            if ($(element).data("bookId") === bookId && $(element).data("entryXmlId") === entryXmlId) {
+                this.removeHeadword(element);
+                return;
+            }
+        }
+    }
+
+    private headwordListChanged() {
+        if (this.headwordListChangedCallback) {
+            var listCopy = this.headwordList.slice();
+            this.headwordListChangedCallback(listCopy);
+        }
     }
 }
 

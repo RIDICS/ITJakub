@@ -309,6 +309,58 @@ namespace ITJakub.Core.SearchService
             }
         }
 
+        public int GetCorpusSearchResultsCount(List<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetCorpusSearchResultsCount(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public CorpusSearchResultContractList GetCorpusSearchResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetCorpusSearchResults(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookXmlId, string versionId, string pageXmlId,
             string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {

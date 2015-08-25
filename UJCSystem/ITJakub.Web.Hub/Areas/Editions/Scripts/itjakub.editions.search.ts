@@ -53,7 +53,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchPaged",
+            url: getBaseUrl() + "Editions/Editions/TextSearchFulltextPaged",
             data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -82,7 +82,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Editions/Editions/TextSearchCount",
+            url: getBaseUrl() + "Editions/Editions/TextSearchFulltextCount",
             data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -93,6 +93,7 @@ $(document).ready(() => {
     }
 
     function editionAdvancedSearch(json: string) {
+
         if (typeof json === "undefined" || json === null || json === "") return;
 
         bibliographyModule.clearBooks();
@@ -121,12 +122,7 @@ $(document).ready(() => {
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch();
 
-    var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
-    typeaheadSearchBox.addDataSet("Title", "Název");
-    typeaheadSearchBox.create();
-    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-    
-
+    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -142,19 +138,14 @@ $(document).ready(() => {
         }
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-        typeaheadSearchBox.clearAndDestroy();
-        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
-        typeaheadSearchBox.create();
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    };
+    callbackDelegate.dataLoadedCallback = () => {
+        var selectedIds = editionsSelector.getSelectedIds();
+        bookIds = selectedIds.selectedBookIds;
+        categoryIds = selectedIds.selectedCategoryIds;
     };
 
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
-
-
-    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
-        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-    });
-
 });
 

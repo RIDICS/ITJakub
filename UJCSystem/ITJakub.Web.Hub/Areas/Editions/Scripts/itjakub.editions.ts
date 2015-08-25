@@ -1,5 +1,11 @@
-﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string) {
-    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
+﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
+
+
+    function readerPageChangedCallback(pageXmlId: string) {
+        updateQueryStringParameter("page", pageXmlId);
+    }
+
+    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
 
@@ -64,7 +70,7 @@
         });
     }
 
-    function pageClickCallback(pageNumber: number) {
+    function paginatorPageClickCallback(pageNumber: number) {
         
         readerPlugin.searchPanelClearResults();
         readerPlugin.searchPanelShowLoading();
@@ -89,7 +95,7 @@
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", text);
-                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);
             }
         });
 
@@ -118,7 +124,7 @@
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", json);
-                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);
             }
         });
 
@@ -154,9 +160,13 @@
         decodedText = replaceSpecialChars(decodedText);
         search.processSearchQuery(decodedText);    
     }
+
+    if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
+        var decodedText = decodeURIComponent(initPageXmlId);
+        decodedText = replaceSpecialChars(decodedText);
+        readerPlugin.moveToPage(decodedText, true);
+    }
 }
-
-
 
 function listBook(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");

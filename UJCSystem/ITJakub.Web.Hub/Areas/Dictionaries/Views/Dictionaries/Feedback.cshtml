@@ -6,11 +6,10 @@
     @Scripts.Render("~/itjakub/dictionaries/feedbackjs")
 }
 
-<script type="text/javascript">
-    $(document).ready(function() {
-       // initFeedbackView("@Request["bookId"]", "@Request["versionId"]", "@Request["entryId"]", "@Request["headword"]", "@Html.Raw(@Request["dictionary"])");
-    });
-</script>
+@{
+    ViewBag.Title = "Slovníky - Připomínky";
+}
+
 
 <div class="content-container">
     <h1>Připomínky</h1>
@@ -34,14 +33,14 @@
             @Html.HiddenFor(m => m.BookVersionXmlId, new {Value = @Request["versionId"]})
             @Html.HiddenFor(m => m.EntryXmlId, new {Value = @Request["entryId"]})
 
-            <div class="form-group">
+            <div class="form-group optional">
                 @Html.LabelFor(m => m.Dictionary, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
                     @Html.TextBoxFor(m => m.Dictionary, new {@class = "form-control", @readonly = "readonly", Value = @Request["dictionary"]})
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group optional">
                 @Html.LabelFor(m => m.Headword, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
                     @Html.TextBoxFor(m => m.Headword, new {@class = "form-control", @readonly = "readonly", Value = @Request["headword"]})
@@ -59,16 +58,16 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Name, new {@class = "col-md-1 control-label"})
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno..."})
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new {@class = "col-md-1 control-label"})
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail..."})
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
                 </div>
             </div>
 

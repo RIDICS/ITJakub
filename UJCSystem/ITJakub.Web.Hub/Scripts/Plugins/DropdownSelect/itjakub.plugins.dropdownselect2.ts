@@ -7,6 +7,7 @@
     private restoreCategoryIds: Array<number>;
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
+    private isLoaded: boolean;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
@@ -35,6 +36,8 @@
         callbackDelegate.getLeafItemTextCallback = (item) => {
             return this.books[item].name;
         }
+
+        this.isLoaded = false;
     }
 
     makeAndRestore(categoryIds: Array<number>, bookIds: Array<number>) {
@@ -47,6 +50,7 @@
     makeDropdown() {
         super.makeDropdown();
 
+        this.isLoaded = false;
         this.descriptionDiv = document.createElement("div");
         $(this.descriptionDiv).addClass("dropdown-description");
         $(this.dropDownSelectContainer).append(this.descriptionDiv);
@@ -104,6 +108,8 @@
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
                 this.restore();
+                this.isLoaded = true;
+                this.dataLoaded(this.rootCategory.id);
             }
         });
     }
@@ -347,6 +353,7 @@
         var state = new State();
         state.SelectedCategories = [];
         state.SelectedItems = [];
+        state.IsOnlyRootSelected = selectedIds.isOnlyRootSelected;
 
         for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
             var id = selectedIds.selectedCategoryIds[i];
@@ -367,13 +374,22 @@
         if (!this.rootCategory || !this.rootCategory.checkBox.indeterminate) {
             state.selectedBookIds = [];
             state.selectedCategoryIds = [];
+            state.isOnlyRootSelected = true;
+            if (this.rootCategory) {
+                state.selectedCategoryIds.push(this.rootCategory.id);
+            }
         } else {
             this.getSelected(this.rootCategory, selectedCategories, selectedBooks);
             state.selectedBookIds = selectedBooks;
             state.selectedCategoryIds = selectedCategories;
+            state.isOnlyRootSelected = false;
         }
 
         return state;
+    }
+
+    isDataLoaded(): boolean {
+        return this.isLoaded;
     }
 
     static getUrlStringFromState(state: State): string {
@@ -400,6 +416,7 @@
 class DropDownSelected {
     selectedBookIds: Array<number>;
     selectedCategoryIds: Array<number>;
+    isOnlyRootSelected: boolean;
 }
 
 class DropDownBook {

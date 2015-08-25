@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -44,22 +45,22 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public BookInfoContract GetBookInfo(string bookId)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookXmlId)
         {
             try
             {
-                return Channel.GetBookInfo(bookId);
+                return Channel.GetBookInfoWithPages(bookXmlId);
             }
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookInfo failed with: {0}", ex);
+                    m_log.ErrorFormat("GetBookInfoWithPages failed with: {0}", ex);
                 throw;
             }
             catch (TimeoutException ex)
             {
                 if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBookInfo timeouted with: {0}", ex);
+                    m_log.ErrorFormat("GetBookInfoWithPages timeouted with: {0}", ex);
                 throw;
             }
         }
@@ -205,60 +206,6 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
-        {
-            try
-            {
-                return Channel.SearchBooksWithBookType(term, bookType);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("SearchBooksWithBookType timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
-        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
-        {
-            try
-            {
-                return Channel.GetBooksByBookType(bookType);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("GetBooksByBookType timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             try
@@ -286,11 +233,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
+        public Stream GetBookPageImage(string bookXmlId, int position)
         {
             try
             {
-                return Channel.GetBookPageImage(bookPageImageContract);
+                return Channel.GetBookPageImage(bookXmlId, position);
             }
             catch (CommunicationException ex)
             {
@@ -968,6 +915,58 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetCorpusSearchResults(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetCorpusSearchResultsCount(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId,
             OutputFormatEnumContract resultFormat)
@@ -996,64 +995,11 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public void CreateFeedback(string feedback, int? userId)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
             try
             {
-                Channel.CreateFeedback(feedback, userId);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
-        {
-            try
-            {
-                Channel.CreateAnonymousFeedback(feedback, name, email);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
-            int? userId)
-        {
-            try
-            {
-                Channel.CreateFeedbackForHeadword(feedback,bookXmlId,  versionXmlId,  entryXmlId, userId);
+                Channel.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
             }
             catch (CommunicationException ex)
             {
@@ -1101,11 +1047,168 @@ namespace ITJakub.Web.Hub
             }
         }
 
-        public List<FeedbackContract> GetAllFeedback()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             try
             {
-               return Channel.GetAllFeedback();
+               return Channel.GetFeedbacks(feedbackSearchCriteria);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
+        {
+            try
+            {
+               return Channel.GetFeedbacksCount(feedbackSearchCriteria);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+        
+        public void DeleteFeedback(long feedbackId)
+        {
+            try
+            {
+               Channel.DeleteFeedback(feedbackId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+        
+                
+        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
+        {
+            try
+            {
+                return Channel.DownloadWholeAudiobook(requestContract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
+        {
+            try
+            {
+               return Channel.DownloadAudioBookTrack(requestContract);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetAudioBooksSearchResults(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetAudioBooksSearchResultsCount(searchCriterias);
             }
             catch (CommunicationException ex)
             {
@@ -1130,6 +1233,7 @@ namespace ITJakub.Web.Hub
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
-        }      
+        }
+
     }
 }

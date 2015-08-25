@@ -226,6 +226,7 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
@@ -349,41 +350,11 @@
     <Content Include="Content\bootstrap\bootstrap.min.css">
       <DependentUpon>bootstrap.css</DependentUpon>
     </Content>
-    <Content Include="Content\bootstrap\media.css">
-      <DependentUpon>media.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\media.min.css">
-      <DependentUpon>media.css</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\mixins.css">
-      <DependentUpon>mixins.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\normalize.css">
-      <DependentUpon>normalize.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\normalize.min.css">
-      <DependentUpon>normalize.css</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap\print.css">
       <DependentUpon>print.less</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap\print.min.css">
       <DependentUpon>print.css</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\responsive-embed.css">
-      <DependentUpon>responsive-embed.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\responsive-embed.min.css">
-      <DependentUpon>responsive-embed.css</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\theme.css">
-      <DependentUpon>theme.less</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\theme.min.css">
-      <DependentUpon>theme.css</DependentUpon>
-    </Content>
-    <Content Include="Content\bootstrap\variables.css">
-      <DependentUpon>variables.less</DependentUpon>
     </Content>
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -397,12 +368,9 @@
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
     <Content Include="Content\Images\mlceni.jpg" />
+    <Content Include="Content\Images\mlceni2.jpg" />
     <Content Include="Content\Images\news_background.png" />
-    <Content Include="Content\Images\Plugins\Reader\loading.gif" />
     <Content Include="Content\Images\small_trans_loading.gif" />
-    <Content Include="Content\ITJakub.DefaultTheme.css.map">
-      <DependentUpon>ITJakub.DefaultTheme.css</DependentUpon>
-    </Content>
     <Content Include="Content\ITJakub.Footer.css">
       <DependentUpon>ITJakub.Footer.less</DependentUpon>
     </Content>
@@ -420,9 +388,6 @@
     </Content>
     <Content Include="Content\ITJakub.NumberedOrderedList.min.css">
       <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
-    </Content>
-    <Content Include="Content\ITJakub.PluginMenu.css.map">
-      <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
@@ -529,9 +494,6 @@
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
     <Content Include="Content\ITJakub.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
-    <Content Include="Areas\Editions\Content\itjakub.editions.css.map">
-      <DependentUpon>itjakub.editions.css</DependentUpon>
-    </Content>
     <Content Include="Content\ITJakub.PluginMenu.less" />
     <Content Include="Scripts\itjakub.upload.js" />
     <Content Include="Scripts\dropzone\css\basic.css" />
@@ -578,9 +540,6 @@
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
     <Content Include="Content\ITJakub.Footer.less" />
-    <Content Include="Content\ITJakub.Footer.css.map">
-      <DependentUpon>ITJakub.Footer.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
@@ -661,16 +620,7 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css.map">
-      <DependentUpon>itjakub.bibliographies.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Editions\Content\itjakub.editions.content.less" />
-    <Content Include="Areas\Editions\Content\itjakub.editions.content.css.map">
-      <DependentUpon>itjakub.editions.content.css</DependentUpon>
-    </Content>
-    <Content Include="Content\ITJakub.HorizontalLoader.css.map">
-      <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
-    </Content>
     <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
@@ -688,17 +638,8 @@
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css.map">
-      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
-    </Content>
-    <Content Include="Areas\Tools\Content\itjakub.tools.css.map">
-      <DependentUpon>itjakub.tools.css</DependentUpon>
-    </Content>
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
-    <Content Include="Content\ITJakub.NumberedOrderedList.css.map">
-      <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
-    </Content>
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
       <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
@@ -714,6 +655,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
+    <Content Include="Content\Plugins\ITJakub.Pagination.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -765,6 +707,7 @@
     <Content Include="Views\Home\Links.cshtml" />
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Feedback\Feedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -784,6 +727,7 @@
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
     <Folder Include="Areas\Tools\Models\" />
     <Folder Include="Areas\Tools\Views\Shared\" />
+    <Folder Include="Content\Images\Plugins\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -793,16 +737,18 @@
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
     <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
-    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.list.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.search.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfiles.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.feedback.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.headwords.ts" />
+    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.list.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesFavoriteHeadwords.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
-    <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
+    <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

@@ -32,9 +32,12 @@ class ReaderModule {
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
 
+    pageChangedCallback: (pageXmlId: string) => void;
 
-    constructor(readerContainer: HTMLDivElement) {
+
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void) {
         this.readerContainer = readerContainer;
+        this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
     }
 
@@ -188,7 +191,6 @@ class ReaderModule {
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         $(pageInputText).addClass('page-input-text');
-
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
@@ -204,11 +206,22 @@ class ReaderModule {
                     break;
                 }
             }
-            //TODO log pageIndex not exist
+
             var page: BookPage = this.pages[pageIndex];
             this.moveToPage(page.xmlId, true);
         });
+
         pageInputDiv.appendChild(pageInputButton);
+
+        $(pageInputText).keypress((event: any) => {
+            var keyCode = event.which || event.keyCode;
+            if (keyCode === 13) {     //13 = Enter
+                $(pageInputButton).click();
+                event.preventDefault();
+                event.stopPropagation();
+                return false;
+            }
+        });
 
         pagingDiv.appendChild(pageInputDiv);
 
@@ -544,6 +557,9 @@ class ReaderModule {
         this.actualizeSlider(pageIndex);
         this.actualizePagination(pageIndex);
         this.notifyPanelsMovePage(pageIndex, scrollTo);
+
+        var pageXmlId = this.pages[pageIndex].xmlId;
+        this.pageChangedCallback(pageXmlId);
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {

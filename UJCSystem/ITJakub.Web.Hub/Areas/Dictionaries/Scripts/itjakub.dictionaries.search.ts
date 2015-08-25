@@ -22,6 +22,9 @@ class DictionarySearch {
         this.tabs = new DictionarySearchTabs();
         this.callbackDelegate = new DropDownSelectCallbackDelegate();
         this.callbackDelegate.selectedChangedCallback = (state) => {
+            if (state.IsOnlyRootSelected)
+                state.SelectedCategories = [];
+
             this.updateTypeaheadSearchBox(state);
         };
         this.dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
@@ -215,6 +218,9 @@ class DictionaryViewerJsonWrapper {
     loadCount(json: string, filteredJsonForShowing: string) {
         this.json = json;
         this.selectedIds = this.categoryDropDown.getSelectedIds();
+        if (this.selectedIds.isOnlyRootSelected)
+            this.selectedIds.selectedCategoryIds = [];
+
         this.dictionaryViewer.showLoading();
         $.ajax({
             type: "POST",
@@ -283,6 +289,9 @@ class DictionaryViewerTextWrapper {
     loadCount(text: string) {
         this.text = text;
         this.selectedIds = this.categoryDropDown.getSelectedIds();
+        if (this.selectedIds.isOnlyRootSelected)
+            this.selectedIds.selectedCategoryIds = [];
+
         this.headwordViewer.showLoading();
         this.fulltextViewer.showLoading();
         $.ajax({

@@ -47,6 +47,12 @@ namespace ITJakub.Shared.Contracts
         PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
+        int GetCorpusSearchResultsCount(List<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        CorpusSearchResultContractList GetCorpusSearchResults(List<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
         string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookId,
             string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
     }

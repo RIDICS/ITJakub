@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity

@@ -22,7 +22,6 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         {
             var notBefore = xmlReader.GetAttribute("notBefore");
             var notAfter = xmlReader.GetAttribute("notAfter");
-            // TODO better conversion
             msDesc.NotBefore = new DateTime(Convert.ToInt32(notBefore), 1, 1);
             msDesc.NotAfter = new DateTime(Convert.ToInt32(notAfter), 1, 1);
             msDesc.OriginDate = GetInnerContentAsString(xmlReader);

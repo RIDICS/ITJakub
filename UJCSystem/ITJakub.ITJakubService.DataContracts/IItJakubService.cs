@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -35,22 +36,16 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IEnumerable<SearchResultContract> Search(string term);
-
+        IEnumerable<SearchResultContract> Search(string term); // TODO probably remove
+        
         [OperationContract]
-        IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType);
-
-        [OperationContract]
-        IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType);
-
-        [OperationContract]
-        BookInfoContract GetBookInfo(string bookGuid);
+        BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
         [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
 
         [OperationContract]
-        Stream GetBookPageImage(BookPageImageContract bookPageImageContract);
+        Stream GetBookPageImage(string bookXmlId, int position);
 
         [OperationContract]
         Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName);
@@ -121,6 +116,12 @@ namespace ITJakub.ITJakubService.DataContracts
         int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
 
         [OperationContract]
+        CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
+        
+        [OperationContract]
+        int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
         int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
@@ -140,20 +141,39 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Feedback
 
         [OperationContract]
-        void CreateFeedback(string feedback, int? userId);
-
-        [OperationContract]
-        void CreateAnonymousFeedback(string feedback, string name, string email);
-
-        [OperationContract]
-        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId);
+        void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory);
 
         [OperationContract]
         void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string name, string email);
 
         [OperationContract]
-        List<FeedbackContract> GetAllFeedback();
+        List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria);
+
+        [OperationContract]
+        int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria);
+
+        [OperationContract]
+        void DeleteFeedback(long feedbackId);
 
         #endregion
+
+
+        #region AudioBooks
+
+        [OperationContract]
+        FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract);
+
+        [OperationContract]
+        AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
+
+        [OperationContract]
+        AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        #endregion
+
+
     }
 }

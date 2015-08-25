@@ -41,12 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioBooks\AudioTypeContract.cs" />
+    <Compile Include="AudioBooks\DownloadAudioBookTrackContract.cs" />
+    <Compile Include="AudioBooks\DownloadWholeBookContract.cs" />
     <Compile Include="AuthorDetailContract.cs" />
     <Compile Include="AuthProviderEnumContract.cs" />
-    <Compile Include="BookInfoContract.cs" />
-    <Compile Include="BookPageImageContract.cs" />
+    <Compile Include="BookInfoWithPagesContract.cs" />
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardShortContract.cs" />
+    <Compile Include="AudioBooks\FileDataContract.cs" />
     <Compile Include="HeadwordBookmarkContract.cs" />
     <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />
@@ -63,7 +66,6 @@
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedCategoriesContract.cs" />
-    <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />
   </ItemGroup>
   <ItemGroup>

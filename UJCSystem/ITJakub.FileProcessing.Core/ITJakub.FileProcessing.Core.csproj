@@ -41,6 +41,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,8 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sessions\Processors\AudioBookArchiveProcessor.cs" />
+    <Compile Include="Sessions\Processors\ExtractableArchiveProcessor.cs" />
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\IResourceProcessor.cs" />
+    <Compile Include="Sessions\Processors\TransformationsProcessor.cs" />
     <Compile Include="Sessions\Processors\VersionIdGenerator.cs" />
     <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
     <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
@@ -58,6 +63,9 @@
     <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Audiobooks\TracksProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\HeadProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\ItemProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\BookContent\ListProcessor.cs" />
@@ -117,7 +125,9 @@
     <Compile Include="XMLProcessing\XmlMetadataProcessingManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config" />
+    <EmbeddedResource Include="ITJakub.FileProcessing.Core.Container.Config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">

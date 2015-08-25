@@ -595,6 +595,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					return new EdicniModul(exportSettings);
 				case "Dictionary":
 					return new SlovnikovyModul(exportSettings);
+                case "Grammar":
+			        return new ModulMluvnic(exportSettings);
 			}
 
 			return null;

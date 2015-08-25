@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             var transliterated = xmlReader.GetAttribute("hw-transliterated");
             var visibility = xmlReader.GetAttribute("visibility");
             var visibilityEnum = ParseEnum<VisibilityEnum>(visibility);
-            var image = xmlReader.GetAttribute("image-name");
+            var image = xmlReader.GetAttribute("facs");
 
             var bookHeadword = new BookHeadword
             {

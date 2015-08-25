@@ -25,19 +25,19 @@ let $all-hits :=
 for $document in $result-documents
 	let $hits := search:get-document-search-matches-by-fragments($document, $queries, 1, 0, $kwic-context-length)
 	for $hit at $pos in $hits
-		return <SearchResultContract>
+		return <CorpusSearchResultContract>
 					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
 					{
 						if ($pos mod 3 eq 0) then
 						<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-							<a:string><span class="superscript">{$pos}</span> poznámka textová</a:string>
-							<a:string><span class="superscript">ac</span> <span class="italic">cestu</span>] cěstú </a:string>
+							<a:string>poznámka textová</a:string>
+							<a:string>cěstú</a:string>
 						</Notes>
 						else ()
 					}
 					{$hit}
 					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
-				</SearchResultContract>
+				</CorpusSearchResultContract>
 	return if ($kwic-count = 0) then
 			subsequence($all-hits, $kwic-start)
 		else

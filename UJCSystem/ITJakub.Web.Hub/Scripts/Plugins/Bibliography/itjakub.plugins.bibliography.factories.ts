@@ -4,10 +4,14 @@
 
     constructor(booksConfigurations: Object) {
         this.factories = new Array();
-        this.factories[BookTypeEnum.Edition] = new EditionFactory(new BookTypeConfiguration(BookTypeEnum.Edition, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
+        this.factories[BookTypeEnum.Edition] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Edition, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
         this.factories[BookTypeEnum.Dictionary] = new DictionaryFactory(new BookTypeConfiguration(BookTypeEnum.Dictionary, booksConfigurations["Dictionary"]));
-        this.factories[BookTypeEnum.TextBank] = new TextBankFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, booksConfigurations["TextBank"]));
+        this.factories[BookTypeEnum.TextBank] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, booksConfigurations["TextBank"]));
         this.factories[BookTypeEnum.CardFile] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.CardFile, booksConfigurations["CardFile"]));
+        this.factories[BookTypeEnum.Grammar] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Grammar, booksConfigurations["Grammar"]));
+        this.factories[BookTypeEnum.BibliographicalItem] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.BibliographicalItem, booksConfigurations["BibliographicalItem"]));
+        this.factories[BookTypeEnum.ProfessionalLiterature] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.ProfessionalLiterature, booksConfigurations["ProfessionalLiterature"]));
+        this.factories[BookTypeEnum.AudioBook] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.AudioBook, booksConfigurations["AudioBook"]));
         //this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
 
     }
@@ -70,7 +74,7 @@ class BibliographyFactory {
             infoButton.appendChild(spanInfo);
             $(infoButton).click((event) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null) {
+                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
                 } else {
                     window.location.href = config.getInfoButtonUrl(bookInfo);
@@ -158,11 +162,12 @@ class BibliographyFactory {
     }
 }
 
-class TextBankFactory extends BibliographyFactory {
+class BasicFactory extends BibliographyFactory {
 
     constructor(configuration: BookTypeConfiguration) {
         super(configuration);
     }
+
 }
 
 class DictionaryFactory extends BibliographyFactory {
@@ -251,13 +256,4 @@ class CardFileFactory extends BibliographyFactory {
 
         return leftPanel;
     }
-}
-
-class EditionFactory extends BibliographyFactory {
-
-
-    constructor(configuration: BookTypeConfiguration) {
-        super(configuration);
-    }
-
 }

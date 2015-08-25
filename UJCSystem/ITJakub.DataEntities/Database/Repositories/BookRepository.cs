@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -7,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using ResponsibleType = ITJakub.DataEntities.Database.Entities.ResponsibleType;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -31,27 +33,33 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var book = FindBookByGuid(bookGuid);
-
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                var lastVersionSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    .Where(item => item.Book.Id == book.Id)
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersionAlias.CreateTime)
-                        ));
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .JoinQueryOver(x => x.Book, () => bookAlias)
+                    .Where(x => x.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .SingleOrDefault();
 
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetLastVersionForBookWithType(string bookGuid)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
 
                 var result = session.QueryOver(() => bookVersionAlias)
-                    .WithSubquery
-                    .WhereExists(lastVersionSubquery)
-                    .SingleOrDefault<BookVersion>();
-
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .Fetch(x => x.DefaultBookType).Eager
+                    .SingleOrDefault();
 
                 return result;
             }
@@ -62,28 +70,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                var book = FindBookByGuid(bookGuid);
-
+                Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                var lastVersionSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    .Where(item => item.Book.Id == book.Id)
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersionAlias.CreateTime)
-                        ));
-
-
                 var result = session.QueryOver(() => bookVersionAlias)
-                    .WithSubquery
-                    .WhereExists(lastVersionSubquery)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .Fetch(x => x.BookPages).Eager
-                    .SingleOrDefault<BookVersion>();
-
+                    .SingleOrDefault();
 
                 return result;
             }
@@ -157,13 +152,13 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IEnumerable<BookVersion> GetAllVersionsByBookId(string bookId)
+        public virtual IEnumerable<BookVersion> GetAllVersionsByBookXmlId(string bookXmlId)
         {
             using (var session = GetSession())
             {
                 return session.QueryOver<BookVersion>()
                     .JoinQueryOver(version => version.Book)
-                    .Where(book => book.Guid == bookId).List<BookVersion>();
+                    .Where(book => book.Guid == bookXmlId).List<BookVersion>();
             }
         }
 
@@ -172,30 +167,44 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
             using (var session = GetSession())
             {
-                BookVersion bookVersion = null;
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Responsible responsibleAlias = null;
+                ResponsibleType responsibleTypeAlias = null;
 
-                // subquery to be later used for EXISTS
-                var maxSubquery = QueryOver.Of<BookVersion>()
-                    .SelectList(l => l
-                        .SelectGroup(item => item.Book.Id)
-                        .SelectMax(item => item.CreateTime)
-                    )
-                    // WHERE Clause
-                    .Where(x => x.Book.Id == bookVersion.Book.Id)
-                    // HAVING Clause
-                    .Where(Restrictions.EqProperty(
-                        Projections.Max<BookVersion>(item => item.CreateTime),
-                        Projections.Property(() => bookVersion.CreateTime)
-                        ));
+                var futureResult = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Book).Eager
+                    .Fetch(x => x.Publisher).Eager
+                    .Fetch(x => x.DefaultBookType).Eager
+                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .Future<BookVersion>();
 
-                // final query without any transformations/projections... but filtered
-                var result = session.QueryOver(() => bookVersion)
-                    .WhereRestrictionOn(x => x.Title).IsLike(string.Format("%{0}%", text))
-                    .WithSubquery
-                    .WhereExists(maxSubquery)
-                    .List<BookVersion>();
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Keywords).Eager
+                    .Future<BookVersion>();
 
-                //var pagesCount = result.First().BookPages.Count;
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Fetch(x => x.Authors).Eager
+                    .Future<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .AndRestrictionOn(x => x.Title).IsLike(text, MatchMode.Anywhere)
+                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
+                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
+                    .Future<BookVersion>();
+
+                var result = futureResult.ToList();
                 return result;
             }
         }
@@ -215,14 +224,50 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
                         .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
-                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id && bookVersionAlias.Title.IsLike(string.Format("%{0}%", text)))
+                        .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .AndRestrictionOn(() => bookVersionAlias.Title).IsLike(text, MatchMode.Anywhere)
+                        .Fetch(x => x.Authors).Eager
+                        .TransformUsing(Transformers.DistinctRootEntity)
                         .List<BookVersion>();
                 return bookVersions;
             }
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<BookVersion> FindBooksLastVersionsByBookType(BookTypeEnum bookType)
+        public virtual IList<BookVersion> SearchByAuthorAndBookType(string query, BookTypeEnum bookType)
+        {
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+            Author authorAlias = null;
+
+            using (var session = GetSession())
+            {
+                var bookIds = QueryOver.Of(() => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias, JoinType.InnerJoin)
+                    .JoinAlias(() => bookVersionAlias.Authors, () => authorAlias, JoinType.InnerJoin)
+                    .Select(x => x.Id)
+                    .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                    .AndRestrictionOn(() => authorAlias.Name).IsLike(query, MatchMode.Anywhere);
+
+                var bookVersions = session.QueryOver(() => bookVersionAlias)
+                    .Fetch(x => x.Book).Eager
+                    .Fetch(x => x.Authors).Eager
+                    .WithSubquery
+                    .WhereProperty(x => x.Id)
+                    .In(bookIds)
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+
+                return bookVersions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> FindBookVersionsByTypeWithCategories(BookTypeEnum bookType)
         {
             Book bookAlias = null;
             BookVersion bookVersionAlias = null;
@@ -239,9 +284,39 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
                         .OrderBy(() => bookVersionAlias.Title).Asc
                         .TransformUsing(Transformers.DistinctRootEntity)
-                        .List<BookVersion>();
+                        .Future<BookVersion>();
 
-                return bookVersions;
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                    .Fetch(x => x.Categories).Eager
+                    .Future<BookVersion>();
+
+                return bookVersions.ToList();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> FindBookVersionsByTypeWithAuthors(BookTypeEnum bookType)
+        {
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                    .Fetch(x => x.Authors).Eager
+                    .OrderBy(() => bookVersionAlias.Title).Asc
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List();
+
+                return result;
             }
         }
 

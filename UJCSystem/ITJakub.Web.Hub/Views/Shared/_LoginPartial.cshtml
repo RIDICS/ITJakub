@@ -13,8 +13,12 @@
 }
 else
 {
+    if (ViewContext.HttpContext.Request.UrlReferrer != null)
+    {
+        ViewBag.ReturnUrl = ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery;
+    }
     <ul class="navbar-right navbar-login">
-        <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = ""}, new {id = "loginLink"})</li>
+        <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
         <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
     </ul>
 }

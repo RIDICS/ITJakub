@@ -12,6 +12,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<BookVersion, SearchResultContract>()
+                .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))
                 .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
                 .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId)) 
                 .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(src => src.CreateTime)) 
@@ -22,9 +23,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Publisher, opts => opts.MapFrom(src => src.Publisher))
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle))
-                .ForMember(dest => dest.Copyright, opts => opts.MapFrom(src => src.Copyright))
+                .ForMember(dest => dest.Acronym, opts => opts.MapFrom(src => src.Acronym))
+                .ForMember(dest => dest.BiblText, opts => opts.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
-                .ForMember(dest => dest.PageCount, opts => opts.MapFrom(src => src.BookPages.Count))
                 .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
                 .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleType.Editor))); //TODO add category

@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -14,6 +16,8 @@ namespace ITJakub.ITJakubService.Services
 {
     public class ItJakubServiceManager : IItJakubService
     {
+        private readonly WindsorContainer m_container = Container.Current;
+
         private readonly UserManager m_userManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
@@ -21,17 +25,18 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;        
-        private readonly WindsorContainer m_container = Container.Current;        
+        private readonly AudioBookManager m_audioBookManager;
 
         public ItJakubServiceManager()
-        {
+        {            
             m_userManager = m_container.Resolve<UserManager>();
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();           
+            m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_audioBookManager = m_container.Resolve<AudioBookManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -39,14 +44,9 @@ namespace ITJakub.ITJakubService.Services
             return m_authorManager.GetAllAuthors();
         }
 
-        public int CreateAuthor(string name)
+        public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
         {
-            return m_authorManager.CreateAuthor(name);
-        }
-
-        public BookInfoContract GetBookInfo(string bookGuid)
-        {
-            return m_bookManager.GetBookInfo(bookGuid);
+            return m_bookManager.GetBookInfoWithPages(bookGuid);
         }
 
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
@@ -83,20 +83,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.Search(term);
         }
-
-        public IEnumerable<SearchResultContract> SearchBooksWithBookType(string term, BookTypeEnumContract bookType)
+        
+        public Stream GetBookPageImage(string bookXmlId, int position)
         {
-            return m_searchManager.SearchBooksWithBookType(term, bookType);
-        }
-
-        public IEnumerable<SearchResultContract> GetBooksByBookType(BookTypeEnumContract bookType)
-        {
-            return m_searchManager.GetBooksByBookType(bookType);
-        }
-
-        public Stream GetBookPageImage(BookPageImageContract bookPageImageContract)
-        {
-            return m_bookManager.GetBookPageImage(bookPageImageContract);
+            return m_bookManager.GetBookPageImage(bookXmlId, position);
         }
 
         public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
@@ -223,36 +213,66 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetSearchEditionsPageList(searchCriterias);
         }
 
+        public CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetCorpusSearchResults(searchCriterias);
+        }
+        public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetCorpusSearchResultsCount(searchCriterias);
+        }
+
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
              string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
-
-        public void CreateFeedback(string feedback, int? userId)
+        
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            m_feedbackManager.CreateFeedback(feedback, userId);
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
         }
-
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
-        {
-            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
-        }
-
-        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, int? userId)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
             string name, string email)
         {
             m_feedbackManager.CreateAnonymousFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, name, email);
         }
 
-        public List<FeedbackContract> GetAllFeedback()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            throw new System.NotImplementedException();
+            return m_feedbackManager.GetFeedbacks(feedbackSearchCriteria);
+        }
+
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
+        {
+            return m_feedbackManager.GetFeedbacksCount(feedbackSearchCriteria);
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            m_feedbackManager.DeleteFeedback(feedbackId);
+        }
+      
+
+        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
+        {
+            return m_audioBookManager.DownloadWholeAudioBook(requestContract);
+        }
+
+        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
+        {
+            return m_audioBookManager.DownloadAudioBookTrack(requestContract);
+        }
+
+        public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBookSearchResults(searchCriterias);
+        }
+
+        public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
         }
     }
 }

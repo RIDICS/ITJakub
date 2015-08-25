@@ -109,5 +109,15 @@ namespace ITJakub.SearchService
                 transformationName, outputFormat,
                 transformationLevel);
         }
+
+        public int GetCorpusSearchResultsCount(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.GetCorpusSearchResultsCount(searchCriterias);
+        }
+
+        public CorpusSearchResultContractList GetCorpusSearchResults(List<SearchCriteriaContract> searchCriterias)
+        {
+            return m_existManager.GetCorpusSearchResults(searchCriterias);
+        }
     }
 }

@@ -28,6 +28,9 @@
 
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
+        if (state.IsOnlyRootSelected)
+            state.SelectedCategories = [];
+
         dictionaryViewerWrapper.loadHeadwordList(state);
         updateSearchBox(state);
     };
@@ -51,13 +54,14 @@
 
     $("#searchButton").click(() => {
         var query = $("#searchbox").val();
+        var selectedIds = dictionarySelector.getSelectedIds();
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordPageNumber",
             data: {
-                selectedBookIds: DropDownSelect.getBookIdsFromState(dictionarySelector.getState()),
-                selectedCategoryIds: DropDownSelect.getCategoryIdsFromState(dictionarySelector.getState()),
+                selectedBookIds: selectedIds.selectedBookIds,
+                selectedCategoryIds: selectedIds.isOnlyRootSelected ? [] : selectedIds.selectedCategoryIds,
                 query: query,
                 pageSize: pageSize
             },
@@ -84,6 +88,7 @@ class DictionaryViewerListWrapper {
     constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
+        this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
 
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
@@ -92,7 +97,7 @@ class DictionaryViewerListWrapper {
         });
 
         this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
-        this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this));
+        this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
     }
 
     private goToPageWithHeadword(bookId: string, entryXmlId: string) {
@@ -116,8 +121,16 @@ class DictionaryViewerListWrapper {
         });
     }
 
+    private favoriteHeadwordsChanged(list: Array<IDictionaryFavoriteHeadword>) {
+        this.dictionaryViewer.setFavoriteHeadwordList(list);
+    }
+
     private addNewFavoriteHeadword(bookId: string, entryXmlId: string) {
         this.favoriteHeadwords.addNewHeadword(bookId, entryXmlId);
+    }
+
+    private removeFavoriteHeadword(bookId: string, entryXmlId: string) {
+        this.favoriteHeadwords.removeHeadwordById(bookId, entryXmlId);
     }
 
     loadDefault(categoryIds: Array<number>, bookIds: Array<number>, defaultPageNumber: number) {
@@ -155,7 +168,7 @@ class DictionaryViewerListWrapper {
                     this.updateUrl();
                 }
 
-                this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null, this.addNewFavoriteHeadword.bind(this));
+                this.dictionaryViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, null, null);
             }
         });
     }
@@ -182,10 +195,8 @@ class DictionaryViewerListWrapper {
     }
 
     private updateUrl() {
-        var url = "?categories=" + JSON.stringify(this.selectedCategoryIds)
-            + "&books=" + JSON.stringify(this.selectedBookIds)
-            + "&page=" + this.currentPageNumber;
-
-        window.history.replaceState(null, null, url);
+        updateQueryStringParameter("categories", JSON.stringify(this.selectedCategoryIds));
+        updateQueryStringParameter("books", JSON.stringify(this.selectedBookIds));
+        updateQueryStringParameter("page", this.currentPageNumber);
     }
 }

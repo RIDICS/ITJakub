@@ -1,7 +1,195 @@
 ﻿@import "../../../Content/ITJakub.DefaultTheme.less";
 
+@corpus-search-width: @max-body-width - 20px;
+
+@search-results-area-width: 855px;
+@search-results-area-height: 450px;
+@search-result-detail-area-height: 190px;
+
 .search-area {
     height: 100%;
     width: 70%;
     float: left;
+}
+
+.corpus-search-div{
+    clear:both;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: @corpus-search-width;
+    background-color: @background-color;
+    display: block;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
+
+.corpus-search-results-div{
+    height: @search-result-detail-area-height + @search-results-area-height;
+}
+
+.corpus-search-result-detail-div{
+    background-color: white;
+    height: @search-result-detail-area-height;
+    width: @search-results-area-width;
+    border-top: 3px solid @background-color;
+}
+
+.corpus-search-results-table-div {
+    background-color: white;
+    height: @search-results-area-height;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.corpus-search-setting-div {
+    float: right;
+    width: @corpus-search-width - @search-results-area-width;
+    height:@search-results-area-height;
+    background-color: @item-background-color;
+    line-height: 1.1;
+    padding: 15px;
+}
+
+.corpus-search-setting-div-checkboxes {
+    margin-bottom: 30px;
+}
+
+.corpus-search-setting-div .corpus-search-setting-div-label {
+    color: white;
+    font-size: larger;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.corpus-search-result-detail-div .corpus-search-detail{
+    display: table;
+    width: 80%;   
+    line-height: 1.1;
+    margin-bottom: 0;    
+}
+
+.corpus-table-row{
+    display: table-row;
+}
+
+.corpus-table-cell{
+    display: table-cell;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.corpus-search-detail .corpus-table-cell.label{
+    font-weight: bolder;
+    font-size: 100%;
+    color: grey;
+    padding-left: 15px;
+}
+
+.corpus-search-detail .corpus-search-detail .corpus-table-cell.label{  
+    font-weight: bold;
+    font-size: 100%;
+    color: black;
+    padding-left: 0;
+}    
+
+.corpus-search-setting-div-checkboxes .checkbox label input[type="checkbox"]{
+    margin: 0 0 0 -18px;
+}
+
+.corpus-search-setting-div-context select{
+    width: 80px;
+}
+
+.corpus-search-setting-div-context label {
+    font-weight: normal;
+    display: block;
+}
+
+.corpus-search-results-table-div table {
+    width: 100%;
+}
+
+.corpus-search-results-table-div table tr, #corpus-search-results-abbrev-table-div table tr {
+    cursor: pointer;    
+    border-top: 1px solid transparent;
+}
+
+.corpus-search-results-table-div table tr.clicked {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;    
+}
+
+.corpus-search-results-table-div table tr td{
+    white-space: nowrap;
+}
+
+.corpus-search-results-table-div table tr:hover {
+    background-color: lightgray;
+}
+
+.corpus-search-results-table-div table td.match {
+    background-color: @item-background-color;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+}
+
+.corpus-search-results-table-div table tr td:first-child {
+    text-align: right;
+    padding-right: 3px;
+}
+
+.corpus-search-results-table-div table tr td:last-child {
+    text-align: left;
+    padding-left: 3px;
+}
+
+.corpus-search-setting-div-results-count{
+    margin-top: 70px;
+    margin-bottom: 10px;
+}
+
+#totalResultCountDiv {
+    margin-top: 5px;
+}
+
+#paginationContainer {
+    text-align: center;
+}
+
+#corpus-search-results-table-div-loader{
+    text-align: center;
+    margin-top: 180px;
+}
+
+#corpus-search-results-abbrev-table-div {
+    float: left;
+    overflow-x: auto;
+    overflow-y: auto;
+    background-color: white;
+    height: @search-results-area-height;
+    padding-right: 5px;
+}
+
+#corpus-search-results-abbrev-table-div::-webkit-scrollbar {
+    visibility: hidden;
+}
+
+#result-abbrev-table {
+    min-width: 90px;
+    text-align: center;
+}
+
+#result-abbrev-table tr:hover{
+    color: @item-background-color;
+}
+
+.corpus-search-detail a, .corpus-search-results-abbrev-table-div a {
+    text-decoration: none;
+    color: @item-background-color;
+}
+
+.corpus-search-detail a:hover, .corpus-search-results-abbrev-table-div a:hover {
+    text-decoration: none;
+    /*background-color: lightgray;*/
 }
