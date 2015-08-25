@@ -116,10 +116,13 @@
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PageProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PagesProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Pages\TermRefProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\ProcessorBase.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TeiHeaderProcessor.cs" />
     <Compile Include="Sessions\ResourceProcessorManager.cs" />
     <Compile Include="Sessions\ResourceSessionManager.cs" />
+    <Compile Include="XMLProcessing\Processors\Terms\TermProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Terms\TermsProcessor.cs" />
     <Compile Include="XMLProcessing\XSLT\XsltTransformationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLProcessing\XmlMetadataProcessingManager.cs" />
