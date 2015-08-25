@@ -8,6 +8,7 @@ using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
@@ -43,6 +44,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                     Container.Resolve<TeiHeaderProcessor>(),
                     Container.Resolve<TableOfContentProcessor>(),
                     Container.Resolve<PagesProcessor>(),
+                    Container.Resolve<TermsProcessor>(),
                     Container.Resolve<TracksProcessor>(),
                     Container.Resolve<HeadwordsTableProcessor>()
                 };

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
@@ -8,7 +9,7 @@ using log4net;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 {
-    public class PageProcessor : ListProcessorBase
+    public class PageProcessor : ProcessorBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -42,6 +43,17 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
                 XmlId = pageIdValue,
                 XmlResource = xmlResourceValue
             });
+        }
+
+        protected override IEnumerable<ProcessorBase> SubProcessors
+        {
+            get
+            {
+                return new List<ProcessorBase>
+                {
+                    Container.Resolve<TermRefProcessor>()
+                };
+            }
         }
     }
 }
