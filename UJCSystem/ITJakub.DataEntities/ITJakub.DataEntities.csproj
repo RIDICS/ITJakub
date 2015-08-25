@@ -187,7 +187,7 @@
     <EmbeddedResource Include="Database\Entities\RecordingBase.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Database\Entities\Term.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Term.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
