@@ -22,13 +22,29 @@ namespace ITJakub.BatchImport.Client
                     {
                         if (m_current == null)
                         {
-                            m_current = new Container(ContainerConfigName);
+                            m_current = new Container(GetContainerFullPath());
                         }
                     }
                 }
                 return m_current;
             }
             set { m_current = value; }
+        }
+
+        private static string GetContainerFullPath()
+        {
+            var assembly = GetAssemblyLocation();
+            var assemblyLocation = Path.GetDirectoryName(assembly);
+            if (assemblyLocation != null)
+                return Path.Combine(assemblyLocation, ContainerConfigName);
+
+            return ContainerConfigName;
+        }
+
+
+        private static string GetAssemblyLocation()
+        {
+            return Assembly.GetAssembly(typeof(Container)).Location;
         }
 
         public Container(string configFile)
