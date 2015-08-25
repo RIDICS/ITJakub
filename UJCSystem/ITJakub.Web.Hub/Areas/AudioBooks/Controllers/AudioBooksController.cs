@@ -210,6 +210,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 RequestedAudioType = audioType,
                 TrackPosition = trackPosition
             };
+
             var audioTrack = m_mainServiceClient.DownloadAudioBookTrack(audioTrackContract);
             var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
             return result;

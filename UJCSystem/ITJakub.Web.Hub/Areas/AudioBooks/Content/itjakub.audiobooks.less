@@ -1,4 +1,5 @@
-﻿
+﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+
 ol.tracks-list li::before  {
     content: counter(li);
     counter-increment: li;
@@ -28,6 +29,7 @@ ol.tracks-list > li {
     border-top: 2px solid #666;
     width: 85%; 
     margin-bottom: 30px;
+    font-weight: bold;
 }
 
 ol.tracks-list {
@@ -37,4 +39,31 @@ ol.tracks-list {
 div.audio {
     margin-top: 30px;
     margin-left: 50px;
+    font-weight: normal;
+}
+
+.audio-download {
+    display: inline-block;
+    margin-left: 50px;
+}
+
+.audio-length {
+    display: inline-block;
+    margin-left: 30px;
+}
+
+ ul.bib-listing li.list-item a.audio-download-href { 
+    border-radius: 5px 15px; 
+    background: @item-background-color; 
+    padding: 5px;  
+    width: 120px; 
+    height:100px;      
+    color: white; 
+    text-decoration:none; 
+    font-weight: bold; 
+    font-family: "Arial"; 
+}
+ 
+ ul.bib-listing li.list-item a.audio-download-href:hover {      
+    color: black; 
 }

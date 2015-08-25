@@ -454,7 +454,7 @@
         "$fullRecords": {
           "type": "array",
           "scope": "FullBookRecordings",
-          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}'>{$translateAudioType}</a>",
+          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
           "printIfNullValue": false,
           "delimeter": " "
         },
@@ -482,8 +482,23 @@
         "$tracks": {
           "type": "array",
           "scope": "Tracks",
-          "pattern": "<li class='track'>{Name}<div class='audio'><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
+          "pattern": "<li class='track'>{Name}<div class='audio'><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-length'>Délka: {$trackLength}</div><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
           "delimeter": ""
+        },
+        "$trackLength": {
+          "type": "basic",
+          "scope": "Recordings",
+          "pattern": "{$firstTrack}"
+        },
+        "$firstTrack": {
+          "type": "basic",
+          "scope": "0",
+          "pattern": "{$printLength}"
+        },
+        "$printLength": {
+          "type": "basic",
+          "scope": "Length",
+          "pattern": "{Minutes}:{Seconds}"
         },
         "$trackRecordings": {
           "type": "array",
@@ -494,7 +509,7 @@
         "$trackRecordingsDownload": {
           "type": "array",
           "scope": "Recordings",
-          "pattern": "<a href='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}'>{$translateAudioType}</a>",
+          "pattern": "<a href='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
           "delimeter": " "
         },
         "$translateAudioType": {
