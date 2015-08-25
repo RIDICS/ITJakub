@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -210,6 +210,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.DataEntities", "ITJakub.Lemmatization.DataEntities\ITJakub.Lemmatization.DataEntities.csproj", "{69076B65-4268-497A-ABF6-64D7FFA50911}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.Service.Test", "ITJakub.Lemmatization.Service.Test\ITJakub.Lemmatization.Service.Test.csproj", "{3DFCD82A-531B-4E5D-B428-2371605FE9B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.ModulMluvnic", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.ModulMluvnic\Daliboris.Texty.Export.ModulMluvnic.csproj", "{3F9E4F36-8033-48EB-B362-8BC46678EBA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1392,6 +1394,26 @@ Global
 		{3DFCD82A-531B-4E5D-B428-2371605FE9B7}.Release|x64.Build.0 = Release|Any CPU
 		{3DFCD82A-531B-4E5D-B428-2371605FE9B7}.Release|x86.ActiveCfg = Release|Any CPU
 		{3DFCD82A-531B-4E5D-B428-2371605FE9B7}.Release|x86.Build.0 = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|ARM.Build.0 = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|x64.Build.0 = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Debug|x86.Build.0 = Debug|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|ARM.ActiveCfg = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|ARM.Build.0 = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|x64.ActiveCfg = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|x64.Build.0 = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|x86.ActiveCfg = Release|Any CPU
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1466,6 +1488,7 @@ Global
 		{0CCC8005-5A92-4A47-93DF-05FB6E333279} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
 		{69076B65-4268-497A-ABF6-64D7FFA50911} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
 		{3DFCD82A-531B-4E5D-B428-2371605FE9B7} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
+		{3F9E4F36-8033-48EB-B362-8BC46678EBA9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi
