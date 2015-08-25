@@ -2,6 +2,7 @@
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
 
@@ -9,10 +10,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
 {
     public class TermProcessor : ListProcessorBase
     {
+        private readonly TermRepository m_termRepository;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public TermProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
+        public TermProcessor(TermRepository termsRepository, XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
         {
+            m_termRepository = termsRepository;
         }
 
         protected override string NodeName
@@ -26,7 +29,15 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
             var position = xmlReader.GetAttribute("n");
             string text = GetInnerContentAsString(xmlReader);
 
-            //TODO create term
+            var term = new Term
+            {
+                XmlId = termXmlId,
+                Position = long.Parse(position),
+                Text = text
+            };
+
+            m_termRepository.SaveOrUpdate(term);
+
         }
     }
 }
