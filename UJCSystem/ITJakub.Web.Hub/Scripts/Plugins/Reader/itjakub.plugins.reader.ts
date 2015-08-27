@@ -788,15 +788,15 @@ class ReaderModule {
 
     setRightPanelsLayout() {
         var rightPanels = this.rightSidePanels;
-        var allPinned = true;
+        var pinnedPanelsCount = 0;
         for (var i = 0; i < rightPanels.length; i++) {
             var panel = rightPanels[i].panelHtml;
-            if (!$(panel).is(':visible') || $(panel).hasClass('ui-draggable')) {
-                allPinned = false;
+            if ($(panel).is(':visible') && !$(panel).hasClass('ui-draggable')) {
+                ++pinnedPanelsCount;
             }
         }
 
-        if (allPinned) {
+        if (pinnedPanelsCount > 1) {
             $(".reader-body-container").addClass("both-pinned");
             var leftPanels = this.leftSidePanels;
             for (var i = 0; i < leftPanels.length; i++) {
