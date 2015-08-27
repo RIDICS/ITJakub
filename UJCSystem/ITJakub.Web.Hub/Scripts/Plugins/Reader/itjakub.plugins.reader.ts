@@ -203,13 +203,17 @@ class ReaderModule {
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
+        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
         $(pageInputText).addClass('page-input-text');
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
-        pageInputButton.innerHTML = "Přejít na stránku";
-        $(pageInputButton).addClass('btn btn-default');
-        $(pageInputButton).addClass('page-input-button');
+        $(pageInputButton).addClass('btn btn-default page-input-button');
+
+        var pageInputButtonSpan = document.createElement("span");
+        $(pageInputButtonSpan).addClass('glyphicon glyphicon-indent-left');
+        $(pageInputButton).append(pageInputButtonSpan);
+
         $(pageInputButton).click((event: Event) => {
             var pageName = $('#pageInputText').val();
             var pageIndex: number = -1;
