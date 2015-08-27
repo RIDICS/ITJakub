@@ -1,0 +1,26 @@
+﻿@model ITJakub.Web.Hub.Areas.Editions.Models.BookListingModel
+@{
+    ViewBag.Title = "Mluvnice - Čtečka děl";
+}
+
+@section styles{
+    @Styles.Render("~/itjakub/oldgrammar/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/oldgrammar/javascript")
+}
+
+
+<div id="SearchDiv" class="top-offset-without-submenu">
+
+</div>
+
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId">
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        initGrammarReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
+    });
+</script>

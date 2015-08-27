@@ -22,6 +22,7 @@ class ReaderModule {
     imagePanelIdentificator: string = "ImagePanel";
     textPanelIdentificator: string = "TextPanel";
     searchPanelIdentificator: string = "SearchPanel";
+    termsPanelIdentificator: string = "TermsPanel";
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
@@ -31,14 +32,22 @@ class ReaderModule {
     searchPanel: SearchResultPanel;
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
+    termsPanel: TermsPanel;
+
+    showPanelList: Array<ReaderPanelEnum>;
+    showLeftSidePanelsButtonList: Array<PanelButtonEnum>;
+    showMainPanelsButtonList: Array<PanelButtonEnum>;
 
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
+        this.showPanelList = showPanelList;
+        this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
+        this.showMainPanelsButtonList = showMainPanelsButtonList;
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -52,11 +61,15 @@ class ReaderModule {
 
         $(window).on("beforeunload", (event: Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
-                this.leftSidePanels[k].childwindow.close();
+                if (this.leftSidePanels && this.leftSidePanels[k].childwindow) {
+                    this.leftSidePanels[k].childwindow.close();    
+                }
             }
 
             for (var k = 0; k < this.rightSidePanels.length; k++) {
-                this.rightSidePanels[k].childwindow.close();
+                if (this.rightSidePanels && this.rightSidePanels[k].childwindow) {
+                    this.rightSidePanels[k].childwindow.close();
+                }
             }
         });
 
@@ -190,13 +203,17 @@ class ReaderModule {
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
+        pageInputText.setAttribute("placeholder", "Přejít na stranu...");
         $(pageInputText).addClass('page-input-text');
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
-        pageInputButton.innerHTML = "Přejít na stránku";
-        $(pageInputButton).addClass('btn btn-default');
-        $(pageInputButton).addClass('page-input-button');
+        $(pageInputButton).addClass('btn btn-default page-input-button');
+
+        var pageInputButtonSpan = document.createElement("span");
+        $(pageInputButtonSpan).addClass('glyphicon glyphicon-indent-left');
+        $(pageInputButton).append(pageInputButtonSpan);
+
         $(pageInputButton).click((event: Event) => {
             var pageName = $('#pageInputText').val();
             var pageIndex: number = -1;
@@ -222,6 +239,8 @@ class ReaderModule {
                 return false;
             }
         });
+
+        this.activateTypeahead(pageInputText);
 
         pagingDiv.appendChild(pageInputDiv);
 
@@ -357,85 +376,135 @@ class ReaderModule {
 
         buttonsDiv.appendChild(bookmarkButton);
 
-        var commentButton = document.createElement("button");
-        $(commentButton).addClass('comment-button');
+        if (this.showPanelList.indexOf(ReaderPanelEnum.SettingsPanel) >= 0) {
 
-        var commentSpan = document.createElement("span");
-        $(commentSpan).addClass('glyphicon glyphicon-cog');
-        $(commentButton).append(commentSpan);
+            var settingsButton = document.createElement("button");
+            $(settingsButton).addClass('comment-button');
 
-        var commentSpanText = document.createElement("span");
-        $(commentSpanText).addClass('button-text');
-        $(commentSpanText).append("Možnosti zobrazeni");
-        $(commentButton).append(commentSpanText);
+            var settingsSpan = document.createElement("span");
+            $(settingsSpan).addClass('glyphicon glyphicon-cog');
+            $(settingsButton).append(settingsSpan);
 
-        $(commentButton).click((event: Event) => {
-            var panelId = this.settingsPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this);
-                this.loadSidePanel(settingsPanel.panelHtml);
-                this.leftSidePanels.push(settingsPanel);
-                this.settingsPanel = settingsPanel;
-            }
-            this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
-        });
+            var settingsSpanText = document.createElement("span");
+            $(settingsSpanText).addClass('button-text');
+            $(settingsSpanText).append("Zobrazení");
+            $(settingsButton).append(settingsSpanText);
 
-        buttonsDiv.appendChild(commentButton);
+            $(settingsButton).click((event: Event) => {
+                var panelId = this.settingsPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(settingsPanel.panelHtml);
+                    this.leftSidePanels.push(settingsPanel);
+                    this.settingsPanel = settingsPanel;
+                }
+                this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
+            });
 
-        var searchResultButton = document.createElement("button");
-        $(searchResultButton).addClass('search-button');
+            buttonsDiv.appendChild(settingsButton);
+        }
 
-        var searchSpan = document.createElement("span");
-        $(searchSpan).addClass('glyphicon glyphicon-search');
-        $(searchResultButton).append(searchSpan);
+        if (this.showPanelList.indexOf(ReaderPanelEnum.SearchPanel) >= 0) {
 
-        var searchSpanText = document.createElement("span");
-        $(searchSpanText).addClass('button-text');
-        $(searchSpanText).append("Výsledky vyhledávání");
-        $(searchResultButton).append(searchSpanText);
+            var searchResultButton = document.createElement("button");
+            $(searchResultButton).addClass('search-button');
 
-        $(searchResultButton).click((event: Event) => {
-            var panelId = this.searchPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var searchPanel = new SearchResultPanel(panelId, this);
-                this.loadSidePanel(searchPanel.panelHtml);
-                this.leftSidePanels.push(<any>searchPanel);
-                this.searchPanel = searchPanel;
-            }
-            this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
-        });
+            var searchSpan = document.createElement("span");
+            $(searchSpan).addClass('glyphicon glyphicon-search');
+            $(searchResultButton).append(searchSpan);
 
-        buttonsDiv.appendChild(searchResultButton);
+            var searchSpanText = document.createElement("span");
+            $(searchSpanText).addClass('button-text');
+            $(searchSpanText).append("Vyhledávání");
+            $(searchResultButton).append(searchSpanText);
 
-        var contentButton = document.createElement("button");
-        $(contentButton).addClass('content-button');
+            $(searchResultButton).click((event: Event) => {
+                var panelId = this.searchPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(searchPanel.panelHtml);
+                    this.leftSidePanels.push(<any>searchPanel);
+                    this.searchPanel = searchPanel;
+                }
+                this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
+            });
 
-        var contentSpan = document.createElement("span");
-        $(contentSpan).addClass('glyphicon glyphicon-book');
-        $(contentButton).append(contentSpan);
+            buttonsDiv.appendChild(searchResultButton);
+        }
 
-        var contentSpanText = document.createElement("span");
-        $(contentSpanText).addClass('button-text');
-        $(contentSpanText).append("Obsah");
-        $(contentButton).append(contentSpanText);
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TermsPanel) >= 0) {
 
-        $(contentButton).click((event: Event) => {
-            var panelId = this.contentPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var contentPanel: ContentPanel = new ContentPanel(panelId, this);
-                this.loadSidePanel(contentPanel.panelHtml);
-                this.leftSidePanels.push(contentPanel);
-                this.contentPanel = contentPanel;
-            }
-            this.changeSidePanelVisibility(this.contentPanelIdentificator, 'left');
-        });
+            var termsButton = document.createElement("button");
+            $(termsButton).addClass('terms-button');
 
-        buttonsDiv.appendChild(contentButton);
+            var termsSpan = document.createElement("span");
+            $(termsSpan).addClass('glyphicon glyphicon-list-alt');
+            $(termsButton).append(termsSpan);
+
+            var termsSpanText = document.createElement("span");
+            $(termsSpanText).addClass('button-text');
+            $(termsSpanText).append("Témata");
+            $(termsButton).append(termsSpanText);
+
+            $(termsButton).click((event: Event) => {
+                var panelId = this.termsPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var termsPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(termsPanel.panelHtml);
+                    this.leftSidePanels.push(<any>termsPanel);
+                    this.termsPanel = termsPanel;
+                }
+                this.changeSidePanelVisibility(this.termsPanelIdentificator, 'left');
+            });
+
+            buttonsDiv.appendChild(termsButton);
+        }
+
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
+
+            var contentButton = document.createElement("button");
+            $(contentButton).addClass('content-button');
+
+            var contentSpan = document.createElement("span");
+            $(contentSpan).addClass('glyphicon glyphicon-book');
+            $(contentButton).append(contentSpan);
+
+        
+                var contentSpanText = document.createElement("span");
+                $(contentSpanText).addClass('button-text');
+                $(contentSpanText).append("Obsah");
+                $(contentButton).append(contentSpanText);
+
+                $(contentButton).click((event: Event) => {
+                    var panelId = this.contentPanelIdentificator;
+                    if (!this.existSidePanel(panelId)) {
+                        var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                        this.loadSidePanel(contentPanel.panelHtml);
+                        this.leftSidePanels.push(contentPanel);
+                        this.contentPanel = contentPanel;
+                    }
+                    this.changeSidePanelVisibility(this.contentPanelIdentificator, 'left');
+                });
+
+                buttonsDiv.appendChild(contentButton);
+        }
 
         pagingDiv.appendChild(buttonsDiv);
 
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
+    }
+
+    private activateTypeahead(input: HTMLInputElement) {
+
+        var pagesTexts = new Array<string>();
+        $.each(this.pages, (index, page: BookPage) => {
+            pagesTexts.push(page.text);
+        });
+
+        var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
+
+        $(input).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: 'pages', source: pages });
     }
 
     private loadBookmarks() {
@@ -526,18 +595,29 @@ class ReaderModule {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
-        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
-        this.rightSidePanels.push(textPanel);
-        this.textPanel = textPanel;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
 
-        bodyContainerDiv.appendChild(textPanel.panelHtml);
+            var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
+            this.rightSidePanels.push(textPanel);
+            this.textPanel = textPanel;
 
-        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
-        this.rightSidePanels.push(imagePanel);
-        this.imagePanel = imagePanel;
+            bodyContainerDiv.appendChild(textPanel.panelHtml);   
 
-        $(imagePanel.panelHtml).hide();
-        bodyContainerDiv.appendChild(imagePanel.panelHtml);
+        }
+
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
+
+            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
+            this.rightSidePanels.push(imagePanel);
+            this.imagePanel = imagePanel;
+
+            if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {       //Text panel is higher priority
+                $(imagePanel.panelHtml).hide();    
+            }
+            
+            bodyContainerDiv.appendChild(imagePanel.panelHtml);
+
+        }
 
         return bodyContainerDiv;
     }
@@ -726,15 +806,15 @@ class ReaderModule {
 
     setRightPanelsLayout() {
         var rightPanels = this.rightSidePanels;
-        var allPinned = true;
+        var pinnedPanelsCount = 0;
         for (var i = 0; i < rightPanels.length; i++) {
             var panel = rightPanels[i].panelHtml;
-            if (!$(panel).is(':visible') || $(panel).hasClass('ui-draggable')) {
-                allPinned = false;
+            if ($(panel).is(':visible') && !$(panel).hasClass('ui-draggable')) {
+                ++pinnedPanelsCount;
             }
         }
 
-        if (allPinned) {
+        if (pinnedPanelsCount > 1) {
             $(".reader-body-container").addClass("both-pinned");
             var leftPanels = this.leftSidePanels;
             for (var i = 0; i < leftPanels.length; i++) {
@@ -791,7 +871,7 @@ class ReaderModule {
     private getSearchPanel(): SearchResultPanel {
         var panelId = this.searchPanelIdentificator;
         if (!this.existSidePanel(panelId)) {
-            var searchPanel = new SearchResultPanel(panelId, this);
+            var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
             this.loadSidePanel(searchPanel.panelHtml);
             this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
@@ -826,6 +906,8 @@ class ReaderModule {
     searchPanelClearResults() {
         this.searchPanel.clearResults();
     }
+
+    
 }
 
 
@@ -844,7 +926,7 @@ class SidePanel {
     isDraggable: boolean;
     documentWindow: Window;
 
-    public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
+    public constructor(identificator: string, headerName: string, parentReader: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         this.parentReader = parentReader;
         this.identificator = identificator;
         this.headerName = headerName;
@@ -861,47 +943,54 @@ class SidePanel {
         $(nameSpan).append(headerName);
         $(panelHeaderDiv).append(nameSpan);
 
-        var sidePanelCloseButton = document.createElement("button");
-        $(sidePanelCloseButton).addClass('close-button');
-        $(sidePanelCloseButton).click((event: Event) => {
-            this.onCloseButtonClick(sidePanelDiv);
-        });
+        if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
+            var sidePanelCloseButton = document.createElement("button");
+            $(sidePanelCloseButton).addClass('close-button');
+            $(sidePanelCloseButton).click((event: Event) => {
+                this.onCloseButtonClick(sidePanelDiv);
+            });
 
-        var closeSpan = document.createElement("span");
-        $(closeSpan).addClass('glyphicon glyphicon-remove');
-        $(sidePanelCloseButton).append(closeSpan);
+            var closeSpan = document.createElement("span");
+            $(closeSpan).addClass('glyphicon glyphicon-remove');
+            $(sidePanelCloseButton).append(closeSpan);
 
-        this.closeButton = sidePanelCloseButton;
+            this.closeButton = sidePanelCloseButton;
 
-        panelHeaderDiv.appendChild(sidePanelCloseButton);
+            panelHeaderDiv.appendChild(sidePanelCloseButton);
+        }
 
-        var panelPinButton = document.createElement("button");
-        $(panelPinButton).addClass('pin-button');
-        $(panelPinButton).click((event: Event) => {
-            this.onPinButtonClick(sidePanelDiv);
-        });
+        if(showPanelButtonList.indexOf(PanelButtonEnum.Pin) >= 0)
+        {
+            var panelPinButton = document.createElement("button");
+            $(panelPinButton).addClass('pin-button');
+            $(panelPinButton).click((event: Event) => {
+                this.onPinButtonClick(sidePanelDiv);
+            });
 
-        var pinSpan = document.createElement("span");
-        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(panelPinButton).append(pinSpan);
+            var pinSpan = document.createElement("span");
+            $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+            $(panelPinButton).append(pinSpan);
 
-        this.pinButton = panelPinButton;
+            this.pinButton = panelPinButton;
 
-        panelHeaderDiv.appendChild(panelPinButton);
+            panelHeaderDiv.appendChild(panelPinButton);   
+        }
 
-        var newWindowButton = document.createElement("button");
-        $(newWindowButton).addClass('new-window-button');
-        $(newWindowButton).click((event: Event) => {
-            this.onNewWindowButtonClick(sidePanelDiv);
-        });
+        if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
+            var newWindowButton = document.createElement("button");
+            $(newWindowButton).addClass('new-window-button');
+            $(newWindowButton).click((event: Event) => {
+                this.onNewWindowButtonClick(sidePanelDiv);
+            });
 
-        var windowSpan = document.createElement("span");
-        $(windowSpan).addClass('glyphicon glyphicon-new-window');
-        $(newWindowButton).append(windowSpan);
+            var windowSpan = document.createElement("span");
+            $(windowSpan).addClass('glyphicon glyphicon-new-window');
+            $(newWindowButton).append(windowSpan);
 
-        this.newWindowButton = newWindowButton;
+            this.newWindowButton = newWindowButton;
 
-        panelHeaderDiv.appendChild(newWindowButton);
+            panelHeaderDiv.appendChild(newWindowButton);
+        }
 
         sidePanelDiv.appendChild(panelHeaderDiv);
 
@@ -1031,8 +1120,8 @@ class LeftSidePanel extends SidePanel {
 
 class SettingsPanel extends LeftSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Zobrazení", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Zobrazení", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1142,8 +1231,8 @@ class SearchResultPanel extends LeftSidePanel {
     private resultsOnPage;
     private maxPaginatorVisibleElements;
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Vyhledávání", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Vyhledávání", readerModule, showPanelButtonList);
     }
 
     showLoading() {
@@ -1232,8 +1321,8 @@ class SearchResultPanel extends LeftSidePanel {
 
 class ContentPanel extends LeftSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Obsah", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Obsah", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1380,8 +1469,8 @@ class RightSidePanel extends SidePanel {
 
 class ImagePanel extends RightSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Obrázky", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Obrázky", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1410,8 +1499,8 @@ class TextPanel extends RightSidePanel {
     private query: string; //search for text search
     private queryIsJson: boolean;
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Text", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Text", readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
     }
@@ -1605,6 +1694,19 @@ class TextPanel extends RightSidePanel {
     }
 }
 
+class TermsPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Témata", readerModule, showPanelButtonList);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        return innerContent;
+    }
+}
+
+
 
 class BookPage {
     private _xmlId: string;
@@ -1672,4 +1774,20 @@ class SearchResult {
 class PageDescription {
     PageXmlId: string;
     PageName: string;
+}
+
+
+enum ReaderPanelEnum {
+    TextPanel,
+    ImagePanel,
+    SearchPanel,
+    ContentPanel,
+    TermsPanel,
+    SettingsPanel
+}
+
+enum PanelButtonEnum {
+    Close,
+    Pin,
+    ToNewWindow
 }
