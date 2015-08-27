@@ -638,6 +638,7 @@
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
@@ -747,6 +748,7 @@
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesFavoriteHeadwords.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
+    <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />

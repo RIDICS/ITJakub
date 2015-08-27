@@ -32,13 +32,18 @@ class ReaderModule {
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
 
+    showPanelList: Array<ReaderPanelEnum>;
+    showPanelButtonList: Array<PanelButtonEnum>;
+
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showPanelButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
+        this.showPanelList = showPanelList;
+        this.showPanelButtonList = showPanelButtonList;
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -52,11 +57,15 @@ class ReaderModule {
 
         $(window).on("beforeunload", (event: Event) => {
             for (var k = 0; k < this.leftSidePanels.length; k++) {
-                this.leftSidePanels[k].childwindow.close();
+                if (this.leftSidePanels && this.leftSidePanels[k].childwindow) {
+                    this.leftSidePanels[k].childwindow.close();    
+                }
             }
 
             for (var k = 0; k < this.rightSidePanels.length; k++) {
-                this.rightSidePanels[k].childwindow.close();
+                if (this.rightSidePanels && this.rightSidePanels[k].childwindow) {
+                    this.rightSidePanels[k].childwindow.close();
+                }
             }
         });
 
@@ -372,7 +381,7 @@ class ReaderModule {
         $(commentButton).click((event: Event) => {
             var panelId = this.settingsPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this);
+                var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showPanelButtonList);
                 this.loadSidePanel(settingsPanel.panelHtml);
                 this.leftSidePanels.push(settingsPanel);
                 this.settingsPanel = settingsPanel;
@@ -397,7 +406,7 @@ class ReaderModule {
         $(searchResultButton).click((event: Event) => {
             var panelId = this.searchPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var searchPanel = new SearchResultPanel(panelId, this);
+                var searchPanel = new SearchResultPanel(panelId, this, this.showPanelButtonList);
                 this.loadSidePanel(searchPanel.panelHtml);
                 this.leftSidePanels.push(<any>searchPanel);
                 this.searchPanel = searchPanel;
@@ -422,7 +431,7 @@ class ReaderModule {
         $(contentButton).click((event: Event) => {
             var panelId = this.contentPanelIdentificator;
             if (!this.existSidePanel(panelId)) {
-                var contentPanel: ContentPanel = new ContentPanel(panelId, this);
+                var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showPanelButtonList);
                 this.loadSidePanel(contentPanel.panelHtml);
                 this.leftSidePanels.push(contentPanel);
                 this.contentPanel = contentPanel;
@@ -526,18 +535,26 @@ class ReaderModule {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
-        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this);
-        this.rightSidePanels.push(textPanel);
-        this.textPanel = textPanel;
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
 
-        bodyContainerDiv.appendChild(textPanel.panelHtml);
+            var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showPanelButtonList);
+            this.rightSidePanels.push(textPanel);
+            this.textPanel = textPanel;
 
-        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this);
-        this.rightSidePanels.push(imagePanel);
-        this.imagePanel = imagePanel;
+            bodyContainerDiv.appendChild(textPanel.panelHtml);   
 
-        $(imagePanel.panelHtml).hide();
-        bodyContainerDiv.appendChild(imagePanel.panelHtml);
+        }
+
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
+
+            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showPanelButtonList);
+            this.rightSidePanels.push(imagePanel);
+            this.imagePanel = imagePanel;
+
+            $(imagePanel.panelHtml).hide();
+            bodyContainerDiv.appendChild(imagePanel.panelHtml);
+
+        }
 
         return bodyContainerDiv;
     }
@@ -791,7 +808,7 @@ class ReaderModule {
     private getSearchPanel(): SearchResultPanel {
         var panelId = this.searchPanelIdentificator;
         if (!this.existSidePanel(panelId)) {
-            var searchPanel = new SearchResultPanel(panelId, this);
+            var searchPanel = new SearchResultPanel(panelId, this, this.showPanelButtonList);
             this.loadSidePanel(searchPanel.panelHtml);
             this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
@@ -826,6 +843,8 @@ class ReaderModule {
     searchPanelClearResults() {
         this.searchPanel.clearResults();
     }
+
+    
 }
 
 
@@ -844,7 +863,7 @@ class SidePanel {
     isDraggable: boolean;
     documentWindow: Window;
 
-    public constructor(identificator: string, headerName: string, parentReader: ReaderModule) {
+    public constructor(identificator: string, headerName: string, parentReader: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         this.parentReader = parentReader;
         this.identificator = identificator;
         this.headerName = headerName;
@@ -861,47 +880,54 @@ class SidePanel {
         $(nameSpan).append(headerName);
         $(panelHeaderDiv).append(nameSpan);
 
-        var sidePanelCloseButton = document.createElement("button");
-        $(sidePanelCloseButton).addClass('close-button');
-        $(sidePanelCloseButton).click((event: Event) => {
-            this.onCloseButtonClick(sidePanelDiv);
-        });
+        if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
+            var sidePanelCloseButton = document.createElement("button");
+            $(sidePanelCloseButton).addClass('close-button');
+            $(sidePanelCloseButton).click((event: Event) => {
+                this.onCloseButtonClick(sidePanelDiv);
+            });
 
-        var closeSpan = document.createElement("span");
-        $(closeSpan).addClass('glyphicon glyphicon-remove');
-        $(sidePanelCloseButton).append(closeSpan);
+            var closeSpan = document.createElement("span");
+            $(closeSpan).addClass('glyphicon glyphicon-remove');
+            $(sidePanelCloseButton).append(closeSpan);
 
-        this.closeButton = sidePanelCloseButton;
+            this.closeButton = sidePanelCloseButton;
 
-        panelHeaderDiv.appendChild(sidePanelCloseButton);
+            panelHeaderDiv.appendChild(sidePanelCloseButton);
+        }
 
-        var panelPinButton = document.createElement("button");
-        $(panelPinButton).addClass('pin-button');
-        $(panelPinButton).click((event: Event) => {
-            this.onPinButtonClick(sidePanelDiv);
-        });
+        if(showPanelButtonList.indexOf(PanelButtonEnum.Pin) >= 0)
+        {
+            var panelPinButton = document.createElement("button");
+            $(panelPinButton).addClass('pin-button');
+            $(panelPinButton).click((event: Event) => {
+                this.onPinButtonClick(sidePanelDiv);
+            });
 
-        var pinSpan = document.createElement("span");
-        $(pinSpan).addClass('glyphicon glyphicon-pushpin');
-        $(panelPinButton).append(pinSpan);
+            var pinSpan = document.createElement("span");
+            $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+            $(panelPinButton).append(pinSpan);
 
-        this.pinButton = panelPinButton;
+            this.pinButton = panelPinButton;
 
-        panelHeaderDiv.appendChild(panelPinButton);
+            panelHeaderDiv.appendChild(panelPinButton);   
+        }
 
-        var newWindowButton = document.createElement("button");
-        $(newWindowButton).addClass('new-window-button');
-        $(newWindowButton).click((event: Event) => {
-            this.onNewWindowButtonClick(sidePanelDiv);
-        });
+        if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
+            var newWindowButton = document.createElement("button");
+            $(newWindowButton).addClass('new-window-button');
+            $(newWindowButton).click((event: Event) => {
+                this.onNewWindowButtonClick(sidePanelDiv);
+            });
 
-        var windowSpan = document.createElement("span");
-        $(windowSpan).addClass('glyphicon glyphicon-new-window');
-        $(newWindowButton).append(windowSpan);
+            var windowSpan = document.createElement("span");
+            $(windowSpan).addClass('glyphicon glyphicon-new-window');
+            $(newWindowButton).append(windowSpan);
 
-        this.newWindowButton = newWindowButton;
+            this.newWindowButton = newWindowButton;
 
-        panelHeaderDiv.appendChild(newWindowButton);
+            panelHeaderDiv.appendChild(newWindowButton);
+        }
 
         sidePanelDiv.appendChild(panelHeaderDiv);
 
@@ -1031,8 +1057,8 @@ class LeftSidePanel extends SidePanel {
 
 class SettingsPanel extends LeftSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Zobrazení", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Zobrazení", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1142,8 +1168,8 @@ class SearchResultPanel extends LeftSidePanel {
     private resultsOnPage;
     private maxPaginatorVisibleElements;
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Vyhledávání", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Vyhledávání", readerModule, showPanelButtonList);
     }
 
     showLoading() {
@@ -1232,8 +1258,8 @@ class SearchResultPanel extends LeftSidePanel {
 
 class ContentPanel extends LeftSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Obsah", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Obsah", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1380,8 +1406,8 @@ class RightSidePanel extends SidePanel {
 
 class ImagePanel extends RightSidePanel {
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Obrázky", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Obrázky", readerModule, showPanelButtonList);
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -1410,8 +1436,8 @@ class TextPanel extends RightSidePanel {
     private query: string; //search for text search
     private queryIsJson: boolean;
 
-    constructor(identificator: string, readerModule: ReaderModule) {
-        super(identificator, "Text", readerModule);
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Text", readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
     }
@@ -1672,4 +1698,20 @@ class SearchResult {
 class PageDescription {
     PageXmlId: string;
     PageName: string;
+}
+
+
+enum ReaderPanelEnum {
+    TextPanel,
+    ImagePanel,
+    SearchPanel,
+    ContentPanel,
+    TermsPanel,
+    SettingsPanel
+}
+
+enum PanelButtonEnum {
+    Close,
+    Pin,
+    ToNewWindow
 }
