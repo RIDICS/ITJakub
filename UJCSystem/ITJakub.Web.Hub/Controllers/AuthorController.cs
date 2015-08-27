@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Controllers
 {

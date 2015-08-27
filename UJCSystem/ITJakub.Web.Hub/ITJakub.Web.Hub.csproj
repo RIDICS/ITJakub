@@ -261,8 +261,6 @@
     <Compile Include="Identity\ApplicationUserManager.cs" />
     <Compile Include="Identity\ApplicationUserStore.cs" />
     <Compile Include="Identity\EmailService.cs" />
-    <Compile Include="ItJakubServiceClient.cs" />
-    <Compile Include="ItJakubServiceEncryptedClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Converters\ConditionCriteriaDescriptionConverter.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionTypeEnum.cs" />

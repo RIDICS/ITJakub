@@ -20,7 +20,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Path=FolderPath}" />
+        <Label Grid.Row="0" Content="{Binding Path=FolderPath}"/>
 
         <ListView Grid.Row="1" ItemsSource="{Binding FileItems}">
             <ListView.Resources>

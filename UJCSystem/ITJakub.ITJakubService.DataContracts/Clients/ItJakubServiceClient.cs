@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
@@ -13,7 +12,7 @@ using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.ITJakubService.DataContracts.Clients
 {
     public class ItJakubServiceClient : ClientBase<IItJakubService>, IItJakubService
     {

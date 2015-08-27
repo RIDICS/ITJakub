@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Web.Hub.Models;
 

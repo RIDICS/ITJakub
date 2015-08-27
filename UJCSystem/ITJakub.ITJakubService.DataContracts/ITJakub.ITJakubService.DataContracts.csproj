@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -50,6 +53,8 @@
     <Compile Include="BucketContract.cs" />
     <Compile Include="CardShortContract.cs" />
     <Compile Include="AudioBooks\FileDataContract.cs" />
+    <Compile Include="Clients\ItJakubServiceClient.cs" />
+    <Compile Include="Clients\ItJakubServiceEncryptedClient.cs" />
     <Compile Include="HeadwordBookmarkContract.cs" />
     <Compile Include="ImageSizeEnumContract.cs" />
     <Compile Include="ImageContract.cs" />

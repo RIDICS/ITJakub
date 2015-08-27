@@ -1,4 +1,3 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
@@ -32,7 +31,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
         {
             m_dataService = dataService;
 
-            
+
             InitializeData();
             InitializeCommands();
 
@@ -58,9 +57,10 @@ namespace ITJakub.BatchImport.Client.ViewModel
         }
 
         public RelayCommand ConvertCommand { get; set; }
+
         public RelayCommand LoadItemsCommand { get; set; }
 
-        public ObservableCollection<FileViewModel> FileItems { get; set; }        
+        public ObservableCollection<FileViewModel> FileItems { get; set; }
 
 
         private void InitializeCommands()
@@ -71,23 +71,26 @@ namespace ITJakub.BatchImport.Client.ViewModel
 
         public void LoadItems()
         {
-            var item = FolderPath;
-            m_dataService.LoadAllItems((result, error) =>
+            FileItems.Clear();
+
+            if (!string.IsNullOrWhiteSpace(FolderPath))
             {
-                if (error != null)
-                    return;
-                if (result != null)
+                m_dataService.LoadAllItems((result, error) =>
                 {
-                    foreach (var variable in result)
+                    if (error != null)
+                        return;
+                    if (result != null)
                     {
-                        DispatcherHelper.CheckBeginInvokeOnUI(()=>FileItems.Add(variable));
+                        foreach (var variable in result)
+                        {
+                            DispatcherHelper.CheckBeginInvokeOnUI(() => FileItems.Add(variable));
+                        }
                     }
-                }
-                
-            }, FolderPath);
+                }, FolderPath);
+            }
 
 
-            item = item.ToLowerInvariant();
+            //item = item.ToLowerInvariant();
         }
 
         private void ConvertSelectedPath()
@@ -105,7 +108,6 @@ namespace ITJakub.BatchImport.Client.ViewModel
                             DispatcherHelper.CheckBeginInvokeOnUI(() => FileItems.Remove(variable));
                             break;
                         }
-                            
                     }
                 }
             });
@@ -114,18 +116,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
         private void InitializeData()
         {
             FileItems = new ObservableCollection<FileViewModel>();
-
-            m_dataService.TestMethod((result, error) =>
-            {
-                if (error != null)
-                {
-                    return;
-                }
-                if (result != null)
-                {
-                    FolderPath = result;
-                }
-            });
+            FolderPath = "Please select path";
         }
     }
 }

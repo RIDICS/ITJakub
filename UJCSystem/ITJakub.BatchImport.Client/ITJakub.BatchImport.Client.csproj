@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.0.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -101,6 +102,7 @@
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Converters\FileStateToProgressbarVisibilityConverter.cs" />
     <Compile Include="View\FileView.xaml.cs">
       <DependentUpon>FileView.xaml</DependentUpon>
     </Compile>
@@ -165,6 +167,20 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512cdc-6912-49b3-8ac4-ce96a0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
+      <Project>{8ddd85a2-4124-4470-9da5-e18bcfe3d573}</Project>
+      <Name>ITJakub.ITJakubService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
