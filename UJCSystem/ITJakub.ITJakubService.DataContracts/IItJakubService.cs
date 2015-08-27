@@ -166,6 +166,12 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
 
+        [OperationContract]
+        AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
         #endregion
 
 

@@ -1177,6 +1177,58 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetAudioBooksSearchResults(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            try
+            {
+                return Channel.GetAudioBooksSearchResultsCount(searchCriterias);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;

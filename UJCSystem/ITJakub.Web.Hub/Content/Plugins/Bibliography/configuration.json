@@ -124,7 +124,7 @@
           "scope": "Results",
           "pattern": "<div class=\"result-hit\">{$printSearchResultContext}</div>",
           "delimeter": ""
-        },        
+        },
         "$printSearchResultContext": {
           "type": "basic",
           "scope": "ContextStructure",
@@ -329,7 +329,7 @@
           "scope": "Results",
           "pattern": "<div class=\"result-hit\">{$printSearchResultContext}</div>",
           "delimeter": ""
-        },        
+        },
         "$printSearchResultContext": {
           "type": "basic",
           "scope": "ContextStructure",
@@ -368,59 +368,161 @@
 
     }
   },
-    "CardFile": {
-        "middle-panel": {
-            "title": "{Title}",
-            "body": "{$description}",
-            "variables": {
-                "$srcAbbreHref": {
-                    "type": "basic",
-                    "pattern": "<a href='#'>[AAA]</a>",
-                    "printIfNullValue": true
-                },            
-                "$description": {
-                    "type": "basic",
-                    "pattern": "{SubTitle}",
-                    "printIfNullValue": false
-                }
-            }
+  "CardFile": {
+    "middle-panel": {
+      "title": "{Title}",
+      "body": "{$description}",
+      "variables": {
+        "$srcAbbreHref": {
+          "type": "basic",
+          "pattern": "<a href='#'>[AAA]</a>",
+          "printIfNullValue": true
         },
-        "right-panel": {
-            "read-button": {
-                "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookXmlId}"
-            },
-            "variables": {
-                "$test": {
-                    "type": "basic",
-                    "pattern": "{Name}",
-                    "printIfNullValue": false
-                }
-            }
-
+        "$description": {
+          "type": "basic",
+          "pattern": "{SubTitle}",
+          "printIfNullValue": false
         }
+      }
     },
-    "Default": {
-        "middle-panel": {
-            "title": "{$withoutEmpty}",
-            "body": "{$authors}",
-            "variables": {
-                "$authors": {
-                    "type": "array",
-                    "scope": "Authors",
-                    "pattern": "{Name}",
-                    "delimeter": ", "
-                },
-                "$withoutEmpty": {
-                    "type": "replace",
-                    "pattern": "{Name},,,,",
-                    "replacing": ",{2,}",
-                    "replacement": " "
-                }
-            }
-        },
-        "right-panel": {
-
+    "right-panel": {
+      "read-button": {
+        "url": "CardFiles\\CardFiles\\Listing?cardFileId={BookXmlId}"
+      },
+      "variables": {
+        "$test": {
+          "type": "basic",
+          "pattern": "{Name}",
+          "printIfNullValue": false
         }
+      }
+
     }
+  },
+  "Default": {
+    "middle-panel": {
+      "title": "{$withoutEmpty}",
+      "body": "{$authors}",
+      "variables": {
+        "$authors": {
+          "type": "array",
+          "scope": "Authors",
+          "pattern": "{Name}",
+          "delimeter": ", "
+        },
+        "$withoutEmpty": {
+          "type": "replace",
+          "pattern": "{Name},,,,",
+          "replacing": ",{2,}",
+          "replacement": " "
+        }
+      }
+    },
+    "right-panel": {
+
+    }
+  },
+  "AudioBook": {
+    "middle-panel": {
+      "title": "{$printAuthors}{Title}",
+      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Stáhnout celou audioknihu: {$fullRecords}",
+      "variables": {
+        "$manuscripts": {
+          "type": "array",
+          "scope": "Manuscripts",
+          "pattern": "{Settlement}, {Repository}, {OriginDate}",
+          "delimeter": " <br> "
+        },
+        "$printAuthors": {
+          "type": "basic",
+          "pattern": "{$authors}: ",
+          "printIfNullValue": false
+        },
+        "$authors": {
+          "type": "array",
+          "scope": "Authors",
+          "pattern": "{Name}",
+          "delimeter": ", "
+        },
+        "$publisher": {
+          "type": "basic",
+          "scope": "Publisher",
+          "pattern": "{Text}",
+          "printIfNullValue": false,
+          "replaceNullValueBy": ""
+        },
+        "$fullRecords": {
+          "type": "array",
+          "scope": "FullBookRecordings",
+          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
+          "printIfNullValue": false,
+          "delimeter": " "
+        },
+        "$translateAudioType": {
+          "type": "script",
+          "pattern": "translateAudioType({AudioType});",
+          "printIfNullValue": false
+        }
+      }
+    },
+    "right-panel": {
+      "info-button": {
+        "url": "AudioBooks\\AudioBooks\\Listing?bookId={BookXmlId}"
+      }
+
+    },
+    "bottom-panel": {
+      "body": "{$tracksList}",
+      "variables": {
+        "$tracksList": {
+          "type": "basic",
+          "pattern": "<ol class='tracks-list'>{$tracks}</ol>",
+          "printIfNullValue": false
+        },
+        "$tracks": {
+          "type": "array",
+          "scope": "Tracks",
+          "pattern": "<li class='track'>{Name}<div class='audio'><div class='audio-text'>{Text}</div><audio controls='controls' preload='none'>{$trackRecordings}Váš prohlížeč nepodporuje html audio<code>audio</code></audio><div class='audio-length'>Délka: <div class='audio-length-value'>{$trackLength}</div></div><div class='audio-download'>Stáhnout kapitolu: {$trackRecordingsDownload}</div></div></li>",
+          "delimeter": ""
+        },
+        "$trackLength": {
+          "type": "basic",
+          "scope": "Recordings",
+          "pattern": "{$firstTrack}"
+        },
+        "$firstTrack": {
+          "type": "basic",
+          "scope": "0",
+          "pattern": "{$printLength}"
+        },
+        "$printLength": {
+          "type": "basic",
+          "scope": "Length",
+          "pattern": "{Minutes}:{$printSeconds}"
+        },
+        "$printSeconds": {
+          "type": "script",
+          "pattern": "fillLeadingZero({Seconds})"
+        },
+        "$trackRecordings": {
+          "type": "array",
+          "scope": "Recordings",
+          "pattern": "<source src='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' type='{MimeType}'>",
+          "delimeter": ""
+        },
+        "$trackRecordingsDownload": {
+          "type": "array",
+          "scope": "Recordings",
+          "pattern": "<a href='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
+          "delimeter": " "
+        },
+        "$translateAudioType": {
+          "type": "script",
+          "pattern": "translateAudioType({AudioType});",
+          "printIfNullValue": false
+        }
+      }
+    }
+  }
 
 }

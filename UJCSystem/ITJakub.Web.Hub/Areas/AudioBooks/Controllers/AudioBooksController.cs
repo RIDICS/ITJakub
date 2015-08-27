@@ -3,12 +3,14 @@ using System.ComponentModel;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.ITJakubService.DataContracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Jewelery;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
@@ -101,7 +103,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
@@ -127,8 +129,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -158,7 +160,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -197,8 +199,35 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            var results = m_mainServiceClient.GetAudioBooksSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
+        }
+
+        public FileResult DownloadAudioBookTrack(long bookId, int trackPosition, AudioTypeContract audioType)
+        {
+            var audioTrackContract = new DownloadAudioBookTrackContract
+            {
+                BookId = bookId,
+                RequestedAudioType = audioType,
+                TrackPosition = trackPosition
+            };
+
+            var audioTrack = m_mainServiceClient.DownloadAudioBookTrack(audioTrackContract);
+            var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
+            return result;
+        }
+
+        public FileResult DownloadAudioBook(long bookId, AudioTypeContract audioType)
+        {
+            var audioTrackContract = new DownloadWholeBookContract
+            {
+                BookId = bookId,
+                RequestedAudioType = audioType,
+            };
+
+            var audioTrack = m_mainServiceClient.DownloadWholeAudiobook(audioTrackContract);
+            var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) { FileDownloadName = audioTrack.FileName };
+            return result;
         }
     }
 }

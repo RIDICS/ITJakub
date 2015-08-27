@@ -264,5 +264,15 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_audioBookManager.DownloadAudioBookTrack(requestContract);
         }
+
+        public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBookSearchResults(searchCriterias);
+        }
+
+        public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
+        }
     }
 }

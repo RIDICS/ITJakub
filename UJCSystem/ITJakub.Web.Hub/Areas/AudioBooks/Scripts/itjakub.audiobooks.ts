@@ -1,7 +1,34 @@
-﻿function initAudibooksList() {
+﻿var aduioTypeTranslation = [
+    "Neznámý",
+    "Mp3",
+    "Ogg",
+    "Wav"
+];
+
+enum AudioTypeEnum {
+    Unknown = 0,
+    Mp3 = 1,
+    Ogg = 2,
+    Wav = 3,
+}
+
+
+function initAudibooksList() {
     var bookCountPerPage = 5;
     var audibooksList = new AudibooksList(bookCountPerPage);
     audibooksList.create();
+}
+
+function translateAudioType(audioType: number): string {
+    return aduioTypeTranslation[audioType];
+}
+
+function fillLeadingZero(seconds: number): string {
+    var secondsString = seconds.toString();
+    if (secondsString.length === 1) {
+        secondsString = `0${secondsString}`;
+    }
+    return secondsString;
 }
 
 $(document).ready(() => {
@@ -62,7 +89,7 @@ class AudibooksList {
         this.audibookSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories", true, callbackDelegate);
         this.audibookSelector.makeDropdown();
 
-        this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", ()=> {this.sortOrderChanged()}, BookTypeEnum.Edition); //TODO audiobook
+        this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", ()=> {this.sortOrderChanged()}, BookTypeEnum.AudioBook);
 
 
         $(".searchbar-input.tt-input").change(() => { //prevent clearing input value on blur() 

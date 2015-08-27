@@ -5,6 +5,7 @@ BEGIN TRAN;
     
 	 CREATE TABLE [dbo].[Track]([Id] BIGINT IDENTITY(1, 1)	NOT NULL  CONSTRAINT [PK_Track(Id)] PRIMARY KEY CLUSTERED,
 								[Name] varchar(255) NOT NULL,
+								[Text] varchar(MAX) NULL,
 								[Position] SMALLINT NOT NULL,
 								[BookVersion] bigint NOT NULL CONSTRAINT [FK_Track(BookVersion)_BookVersion(Id)] FOREIGN KEY REFERENCES [dbo].[BookVersion](Id)
 								);

@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioBookManager.cs" />
+    <Compile Include="AutoMapperProfiles\AudioBookSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookContentItemProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookInfoProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookPageProfile.cs" />
