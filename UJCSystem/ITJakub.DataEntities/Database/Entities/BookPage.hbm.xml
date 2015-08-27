@@ -30,9 +30,9 @@
       <column name="Position" sql-type="int" not-null="true" />
     </property>
 
-    <bag name="Terms" table="BookPage_Term" cascade="all-delete-orphan">
+    <bag name="Terms" table="BookPage_Term" cascade="delete-orphan">
       <key column="BookPage" />
-      <many-to-many class="Term"/>
+      <many-to-many class="Term" column="Term"/>
     </bag>
 
 

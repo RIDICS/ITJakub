@@ -169,7 +169,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[BookBibl] 
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_BookBibl(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] varchar(50) NULL,
+	   [Text] varchar(MAX) NULL,
 	   [Type] varchar(50) NULL,
 	   [Subtype] varchar(50) NULL,
 	   [BiblType] smallint NULL,

@@ -14,9 +14,9 @@
 
     <property name="Position" />
 
-    <bag name="ReferencedFrom" table="BookPage_Term" cascade="all-delete-orphan">
+    <bag name="ReferencedFrom" table="BookPage_Term" cascade="delete-orphan">
       <key column="Term" />
-      <many-to-many class="BookPage"/>
+      <many-to-many class="BookPage" column="BookPage"/>
     </bag>
 
   </class>
