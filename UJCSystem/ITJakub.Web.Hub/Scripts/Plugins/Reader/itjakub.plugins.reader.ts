@@ -22,6 +22,7 @@ class ReaderModule {
     imagePanelIdentificator: string = "ImagePanel";
     textPanelIdentificator: string = "TextPanel";
     searchPanelIdentificator: string = "SearchPanel";
+    termsPanelIdentificator: string = "TermsPanel";
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
@@ -31,19 +32,22 @@ class ReaderModule {
     searchPanel: SearchResultPanel;
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
+    termsPanel: TermsPanel;
 
     showPanelList: Array<ReaderPanelEnum>;
-    showPanelButtonList: Array<PanelButtonEnum>;
+    showLeftSidePanelsButtonList: Array<PanelButtonEnum>;
+    showMainPanelsButtonList: Array<PanelButtonEnum>;
 
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showPanelButtonList: Array<PanelButtonEnum>) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
         this.showPanelList = showPanelList;
-        this.showPanelButtonList = showPanelButtonList;
+        this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
+        this.showMainPanelsButtonList = showMainPanelsButtonList;
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -366,80 +370,118 @@ class ReaderModule {
 
         buttonsDiv.appendChild(bookmarkButton);
 
-        var commentButton = document.createElement("button");
-        $(commentButton).addClass('comment-button');
+        if (this.showPanelList.indexOf(ReaderPanelEnum.SettingsPanel) >= 0) {
 
-        var commentSpan = document.createElement("span");
-        $(commentSpan).addClass('glyphicon glyphicon-cog');
-        $(commentButton).append(commentSpan);
+            var settingsButton = document.createElement("button");
+            $(settingsButton).addClass('comment-button');
 
-        var commentSpanText = document.createElement("span");
-        $(commentSpanText).addClass('button-text');
-        $(commentSpanText).append("Možnosti zobrazeni");
-        $(commentButton).append(commentSpanText);
+            var settingsSpan = document.createElement("span");
+            $(settingsSpan).addClass('glyphicon glyphicon-cog');
+            $(settingsButton).append(settingsSpan);
 
-        $(commentButton).click((event: Event) => {
-            var panelId = this.settingsPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showPanelButtonList);
-                this.loadSidePanel(settingsPanel.panelHtml);
-                this.leftSidePanels.push(settingsPanel);
-                this.settingsPanel = settingsPanel;
-            }
-            this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
-        });
+            var settingsSpanText = document.createElement("span");
+            $(settingsSpanText).addClass('button-text');
+            $(settingsSpanText).append("Zobrazení");
+            $(settingsButton).append(settingsSpanText);
 
-        buttonsDiv.appendChild(commentButton);
+            $(settingsButton).click((event: Event) => {
+                var panelId = this.settingsPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var settingsPanel: SettingsPanel = new SettingsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(settingsPanel.panelHtml);
+                    this.leftSidePanels.push(settingsPanel);
+                    this.settingsPanel = settingsPanel;
+                }
+                this.changeSidePanelVisibility(this.settingsPanelIdentificator, 'left');
+            });
 
-        var searchResultButton = document.createElement("button");
-        $(searchResultButton).addClass('search-button');
+            buttonsDiv.appendChild(settingsButton);
+        }
 
-        var searchSpan = document.createElement("span");
-        $(searchSpan).addClass('glyphicon glyphicon-search');
-        $(searchResultButton).append(searchSpan);
+        if (this.showPanelList.indexOf(ReaderPanelEnum.SearchPanel) >= 0) {
 
-        var searchSpanText = document.createElement("span");
-        $(searchSpanText).addClass('button-text');
-        $(searchSpanText).append("Výsledky vyhledávání");
-        $(searchResultButton).append(searchSpanText);
+            var searchResultButton = document.createElement("button");
+            $(searchResultButton).addClass('search-button');
 
-        $(searchResultButton).click((event: Event) => {
-            var panelId = this.searchPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var searchPanel = new SearchResultPanel(panelId, this, this.showPanelButtonList);
-                this.loadSidePanel(searchPanel.panelHtml);
-                this.leftSidePanels.push(<any>searchPanel);
-                this.searchPanel = searchPanel;
-            }
-            this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
-        });
+            var searchSpan = document.createElement("span");
+            $(searchSpan).addClass('glyphicon glyphicon-search');
+            $(searchResultButton).append(searchSpan);
 
-        buttonsDiv.appendChild(searchResultButton);
+            var searchSpanText = document.createElement("span");
+            $(searchSpanText).addClass('button-text');
+            $(searchSpanText).append("Vyhledávání");
+            $(searchResultButton).append(searchSpanText);
 
-        var contentButton = document.createElement("button");
-        $(contentButton).addClass('content-button');
+            $(searchResultButton).click((event: Event) => {
+                var panelId = this.searchPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(searchPanel.panelHtml);
+                    this.leftSidePanels.push(<any>searchPanel);
+                    this.searchPanel = searchPanel;
+                }
+                this.changeSidePanelVisibility(this.searchPanelIdentificator, 'left');
+            });
 
-        var contentSpan = document.createElement("span");
-        $(contentSpan).addClass('glyphicon glyphicon-book');
-        $(contentButton).append(contentSpan);
+            buttonsDiv.appendChild(searchResultButton);
+        }
 
-        var contentSpanText = document.createElement("span");
-        $(contentSpanText).addClass('button-text');
-        $(contentSpanText).append("Obsah");
-        $(contentButton).append(contentSpanText);
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TermsPanel) >= 0) {
 
-        $(contentButton).click((event: Event) => {
-            var panelId = this.contentPanelIdentificator;
-            if (!this.existSidePanel(panelId)) {
-                var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showPanelButtonList);
-                this.loadSidePanel(contentPanel.panelHtml);
-                this.leftSidePanels.push(contentPanel);
-                this.contentPanel = contentPanel;
-            }
-            this.changeSidePanelVisibility(this.contentPanelIdentificator, 'left');
-        });
+            var termsButton = document.createElement("button");
+            $(termsButton).addClass('terms-button');
 
-        buttonsDiv.appendChild(contentButton);
+            var termsSpan = document.createElement("span");
+            $(termsSpan).addClass('glyphicon glyphicon-list-alt');
+            $(termsButton).append(termsSpan);
+
+            var termsSpanText = document.createElement("span");
+            $(termsSpanText).addClass('button-text');
+            $(termsSpanText).append("Témata");
+            $(termsButton).append(termsSpanText);
+
+            $(termsButton).click((event: Event) => {
+                var panelId = this.termsPanelIdentificator;
+                if (!this.existSidePanel(panelId)) {
+                    var termsPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                    this.loadSidePanel(termsPanel.panelHtml);
+                    this.leftSidePanels.push(<any>termsPanel);
+                    this.termsPanel = termsPanel;
+                }
+                this.changeSidePanelVisibility(this.termsPanelIdentificator, 'left');
+            });
+
+            buttonsDiv.appendChild(termsButton);
+        }
+
+        if (this.showPanelList.indexOf(ReaderPanelEnum.ContentPanel) >= 0) {
+
+            var contentButton = document.createElement("button");
+            $(contentButton).addClass('content-button');
+
+            var contentSpan = document.createElement("span");
+            $(contentSpan).addClass('glyphicon glyphicon-book');
+            $(contentButton).append(contentSpan);
+
+        
+                var contentSpanText = document.createElement("span");
+                $(contentSpanText).addClass('button-text');
+                $(contentSpanText).append("Obsah");
+                $(contentButton).append(contentSpanText);
+
+                $(contentButton).click((event: Event) => {
+                    var panelId = this.contentPanelIdentificator;
+                    if (!this.existSidePanel(panelId)) {
+                        var contentPanel: ContentPanel = new ContentPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                        this.loadSidePanel(contentPanel.panelHtml);
+                        this.leftSidePanels.push(contentPanel);
+                        this.contentPanel = contentPanel;
+                    }
+                    this.changeSidePanelVisibility(this.contentPanelIdentificator, 'left');
+                });
+
+                buttonsDiv.appendChild(contentButton);
+        }
 
         pagingDiv.appendChild(buttonsDiv);
 
@@ -537,7 +579,7 @@ class ReaderModule {
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
 
-            var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showPanelButtonList);
+            var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
             this.rightSidePanels.push(textPanel);
             this.textPanel = textPanel;
 
@@ -547,11 +589,14 @@ class ReaderModule {
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
 
-            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showPanelButtonList);
+            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
             this.rightSidePanels.push(imagePanel);
             this.imagePanel = imagePanel;
 
-            $(imagePanel.panelHtml).hide();
+            if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {       //Text panel is higher priority
+                $(imagePanel.panelHtml).hide();    
+            }
+            
             bodyContainerDiv.appendChild(imagePanel.panelHtml);
 
         }
@@ -808,7 +853,7 @@ class ReaderModule {
     private getSearchPanel(): SearchResultPanel {
         var panelId = this.searchPanelIdentificator;
         if (!this.existSidePanel(panelId)) {
-            var searchPanel = new SearchResultPanel(panelId, this, this.showPanelButtonList);
+            var searchPanel = new SearchResultPanel(panelId, this, this.showLeftSidePanelsButtonList);
             this.loadSidePanel(searchPanel.panelHtml);
             this.leftSidePanels.push(<any>searchPanel);
             this.searchPanel = searchPanel;
@@ -1630,6 +1675,19 @@ class TextPanel extends RightSidePanel {
         this.queryIsJson = isJson;
     }
 }
+
+class TermsPanel extends LeftSidePanel {
+
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Témata", readerModule, showPanelButtonList);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        return innerContent;
+    }
+}
+
 
 
 class BookPage {

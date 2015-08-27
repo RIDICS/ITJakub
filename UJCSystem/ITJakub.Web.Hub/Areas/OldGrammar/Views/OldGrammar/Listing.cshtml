@@ -21,6 +21,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
+        initGrammarReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
     });
 </script>

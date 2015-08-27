@@ -6,9 +6,10 @@
     }
 
     var readerPanels = [ReaderPanelEnum.ImagePanel, ReaderPanelEnum.TermsPanel];
-    var panelButtons = [PanelButtonEnum.Pin];
+    var leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close, PanelButtonEnum.ToNewWindow];
+    var mainPanelButtons = [PanelButtonEnum.Pin];
 
-    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, panelButtons);
+    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
     
@@ -29,6 +30,9 @@
     disabledOptions.push(SearchTypeEnum.Author);
     disabledOptions.push(SearchTypeEnum.Dating);
     disabledOptions.push(SearchTypeEnum.Editor);
+    disabledOptions.push(SearchTypeEnum.Headword);
+    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
+    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
     disabledOptions.push(SearchTypeEnum.Title);
     search.makeSearch(disabledOptions);
 
@@ -45,7 +49,7 @@
     }
 }
 
-function listBook(target) {
+function listGrammarBook(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
     if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
         window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
