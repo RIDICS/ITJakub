@@ -240,6 +240,8 @@ class ReaderModule {
             }
         });
 
+        this.activateTypeahead(pageInputText);
+
         pagingDiv.appendChild(pageInputDiv);
 
         var paginationUl: HTMLUListElement = document.createElement('ul');
@@ -491,6 +493,18 @@ class ReaderModule {
 
         controlsDiv.appendChild(pagingDiv);
         return controlsDiv;
+    }
+
+    private activateTypeahead(input: HTMLInputElement) {
+
+        var pagesTexts = new Array<string>();
+        $.each(this.pages, (index, page: BookPage) => {
+            pagesTexts.push(page.text);
+        });
+
+        var pages = new Bloodhound({ datumTokenizer: Bloodhound.tokenizers.whitespace, queryTokenizer: Bloodhound.tokenizers.whitespace, local: (): string[] => { return pagesTexts; } });
+
+        $(input).typeahead({ hint: true, highlight: true, minLength: 1 },{ name: 'pages', source: pages });
     }
 
     private loadBookmarks() {
