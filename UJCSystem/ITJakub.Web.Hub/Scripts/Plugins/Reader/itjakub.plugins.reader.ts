@@ -1695,6 +1695,8 @@ class TextPanel extends RightSidePanel {
 }
 
 class TermsPanel extends LeftSidePanel {
+    private searchResultItemsDiv: HTMLDivElement;
+    private termsResultItemsDiv: HTMLDivElement;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
@@ -1702,7 +1704,77 @@ class TermsPanel extends LeftSidePanel {
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
         var innerContent: HTMLDivElement = window.document.createElement("div");
+        $(innerContent).addClass("reader-terms-div");
+
+        var searchResultDiv = window.document.createElement("div");
+        $(searchResultDiv).addClass("reader-search-result-div");
+
+        var searchResultDivHeading = window.document.createElement("h2");
+        searchResultDivHeading.innerHTML = "Výskyty na stránce";
+        searchResultDiv.appendChild(searchResultDivHeading);
+
+        var searchResultItemsDiv = window.document.createElement("div");
+        $(searchResultItemsDiv).addClass("reader-terms-search-result-items-div");
+        this.searchResultItemsDiv = searchResultItemsDiv;
+        searchResultDiv.appendChild(searchResultItemsDiv);
+
+        innerContent.appendChild(searchResultDiv);
+
+
+        var termsResultDiv = window.document.createElement("div");
+        $(termsResultDiv).addClass("reader-terms-result-div");
+
+        var termsResultDivHeading = window.document.createElement("h2");
+        termsResultDivHeading.innerHTML = "Témata na stránce";
+        termsResultDiv.appendChild(termsResultDivHeading);
+
+        var termsResultItemsDiv = window.document.createElement("div");
+        $(termsResultItemsDiv).addClass("reader-terms-result-items-div");
+        this.termsResultItemsDiv = termsResultItemsDiv;
+        termsResultDiv.appendChild(termsResultItemsDiv);
+
+        innerContent.appendChild(termsResultDiv);
         return innerContent;
+    }
+
+    
+
+    showLoading() {
+        $(this.searchResultItemsDiv).addClass("loader");
+
+    }
+
+    clearLoading() {
+        $(this.searchResultItemsDiv).removeClass("loader");
+    }
+
+    clearResults() {
+        $(this.searchResultItemsDiv).empty();
+    }
+
+    showResults(searchResults: SearchResult[]) {
+        $(this.searchResultItemsDiv).empty();
+        for (var i = 0; i < searchResults.length; i++) {
+            var result = searchResults[i];
+            var resultItem = this.createResultItem(result);
+            this.searchResultItemsDiv.appendChild(resultItem);
+        }
+    }
+
+    private createResultItem(result: SearchResult): HTMLLIElement {
+        var resultItemListElement = document.createElement("li");
+        resultItemListElement.innerHTML = `[${result.pageName}]`;
+
+        $(resultItemListElement).click(() => {
+            this.parentReader.moveToPage(result.pageXmlId, true);
+        });
+
+        return resultItemListElement;
+    }
+
+
+    public onMoveToPage(pageIndex: number, scrollTo: boolean) {
+        //TODO load terms on page
     }
 }
 
