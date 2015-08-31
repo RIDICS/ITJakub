@@ -3,7 +3,7 @@ using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Markup;
 
-namespace ITJakub.MobileApps.Client.Core
+namespace ITJakub.MobileApps.Client.Core.Template
 {
     public class DataTemplateCreator
     {

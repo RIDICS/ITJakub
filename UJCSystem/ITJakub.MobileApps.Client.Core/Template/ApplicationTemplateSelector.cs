@@ -4,7 +4,7 @@ using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ITJakub.MobileApps.Client.Core
+namespace ITJakub.MobileApps.Client.Core.Template
 {
     public class ApplicationTemplateSelector : DataTemplateSelector
     {

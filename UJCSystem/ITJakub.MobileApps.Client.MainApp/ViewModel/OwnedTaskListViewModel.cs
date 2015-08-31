@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -33,6 +35,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             CreateNewTaskCommand = new RelayCommand(CreateNewTask);
             RefreshListCommand = new RelayCommand(LoadTasks);
+            TaskClickCommand = new RelayCommand<ItemClickEventArgs>(OpenTaskPreview);
 
             LoadTasks();
         }
@@ -42,6 +45,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand CreateNewTaskCommand { get; private set; }
 
         public RelayCommand RefreshListCommand { get; private set; }
+
+        public RelayCommand<ItemClickEventArgs> TaskClickCommand { get; private set; }
 
         public ObservableCollection<IGrouping<ApplicationType, TaskViewModel>> GroupedTaskList
         {
@@ -88,7 +93,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        
         private void LoadTasks()
         {
             Loading = true;
@@ -133,6 +138,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
             m_navigationService.Navigate<SelectApplicationView>();
+        }
+
+        private void OpenTaskPreview(ItemClickEventArgs args)
+        {
+            var item = args.ClickedItem as TaskViewModel;
+            if (item == null)
+                return;
+            
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage {TaskViewModel = item});
         }
     }
 }

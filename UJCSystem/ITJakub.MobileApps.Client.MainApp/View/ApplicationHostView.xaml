@@ -4,16 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
+        <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
         <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />

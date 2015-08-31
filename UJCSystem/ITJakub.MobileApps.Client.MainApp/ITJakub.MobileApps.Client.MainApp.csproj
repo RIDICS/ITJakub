@@ -107,9 +107,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="View\AdminHostView.xaml.cs">
+      <DependentUpon>AdminHostView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\AdminHostViewModel.cs" />
     <Compile Include="ViewModel\ApplicationTypeComparator.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortGroupItem.cs" />
     <Compile Include="ViewModel\ComboBoxItem\SortTaskItem.cs" />
@@ -123,6 +127,8 @@
     <Compile Include="ViewModel\GroupPage\GroupStateViewModel.cs" />
     <Compile Include="ViewModel\Login\UserMenu\LogOutMessage.cs" />
     <Compile Include="ViewModel\OwnedTaskListViewModel.cs" />
+    <Compile Include="ViewModel\SelectedTaskMessage.cs" />
+    <Compile Include="ViewModel\TaskPreviewHostViewModel.cs" />
     <Compile Include="ViewModel\UserAccountSettingsViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
@@ -190,6 +196,9 @@
     <Compile Include="View\SelectTaskView.xaml.cs">
       <DependentUpon>SelectTaskView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\TaskPreviewHostView.xaml.cs">
+      <DependentUpon>TaskPreviewHostView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\UserAccountSettingsFlyout.xaml.cs">
       <DependentUpon>UserAccountSettingsFlyout.xaml</DependentUpon>
     </Compile>
@@ -232,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="View\AdminHostView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\AboutSettingsFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -282,6 +295,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SelectTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TaskPreviewHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

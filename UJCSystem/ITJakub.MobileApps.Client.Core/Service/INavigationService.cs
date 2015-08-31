@@ -21,5 +21,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void Navigate(Type sourcePageType, object parameter);
         void Navigate<T>();
         void Navigate<T>(object parameter);
+        void OpenPopup<T>();
+        void ClosePopup();
     }
 }
