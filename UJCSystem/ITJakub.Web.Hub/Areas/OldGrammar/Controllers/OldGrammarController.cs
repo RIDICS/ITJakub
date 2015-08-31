@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Areas.Editions.Models;
 using ITJakub.Web.Hub.Converters;
@@ -290,5 +292,51 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new { books = results }, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        #region search in boook
+
+        public ActionResult TextSearchInBook(string text, string bookXmlId, string versionXmlId)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Term,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                },
+                new ResultCriteriaContract
+                {
+                    Start = 0,
+                    Count = 1
+                },
+                new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks =
+                        new List<BookVersionPairContract>
+                        {
+                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
+                        }
+                }
+            };
+
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                return Json(new { results = result.Results }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
     }
 }

@@ -6,26 +6,47 @@
     }
 
     var readerPanels = [ReaderPanelEnum.ImagePanel, ReaderPanelEnum.TermsPanel];
-    var leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close, PanelButtonEnum.ToNewWindow];
+    var leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
     var mainPanelButtons = [PanelButtonEnum.Pin];
 
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
     
+    function convertSearchResults(responseResults: Array<Object>): PageDescription[]{
+
+        var searchResults = new Array<PageDescription>();
+        for (var i = 0; i < responseResults.length; i++) {
+            var result = responseResults[i];
+            var searchResult = new PageDescription();
+            searchResult.PageXmlId = result["PageXmlId"];
+            searchResult.PageName = result["PageName"];
+            searchResults.push(searchResult);
+        }
+
+        return searchResults;
+    }
 
     function basicSearch(text: string) {
 
         if (typeof text === "undefined" || text === null || text === "") return;
 
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchInBook",
+            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                updateQueryStringParameter("searchText", text);
+                //TODO
+            }
+        });
+
     }
 
-    function advancedSearch(json: string) {
-        if (typeof json === "undefined" || json === null || json === "") return;
-
-    }
-
-    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
+    search = new Search(<any>$("#SearchDiv")[0], null, basicSearch);
     var disabledOptions = new Array<SearchTypeEnum>();
     disabledOptions.push(SearchTypeEnum.Author);
     disabledOptions.push(SearchTypeEnum.Dating);

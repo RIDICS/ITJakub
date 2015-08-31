@@ -483,6 +483,7 @@ class RegExConditionListItem {
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Téma", SearchTypeEnum.Term.toString()));
 
         var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
         searchDestinationSelect.appendChild(textOptGroup);
@@ -2172,6 +2173,7 @@ enum SearchTypeEnum {
     HeadwordDescription = 11,
     HeadwordDescriptionTokenDistance = 12,
     SelectedCategory = 13,
+    Term = 14,
 }
 
 /*
