@@ -1747,6 +1747,10 @@ class TermsPanel extends LeftSidePanel {
         this.termsResultItemsDiv.appendChild(this.termsOrderedList);
 
         innerContent.appendChild(termsResultDiv);
+
+        var actualPage = this.parentReader.pages[this.parentReader.actualPageIndex];
+        this.loadTermsOnPage(actualPage);
+
         return innerContent;
     }
 
@@ -1799,6 +1803,10 @@ class TermsPanel extends LeftSidePanel {
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
         var page = this.parentReader.pages[pageIndex];
+        this.loadTermsOnPage(page);
+    }
+
+    private loadTermsOnPage(page: BookPage) {
 
         $(this.termsOrderedList).empty();
         $(this.termsResultItemsLoadDiv).show();
