@@ -6,12 +6,24 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <template:AdminTemplateSelector x:Key="AdminTemplateSelector" />
+        <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 
+    <Page.BottomAppBar>
+        <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
+            <AppBarToggleButton Icon="Comment" 
+                                Label="Chat" 
+                                IsEnabled="{Binding IsChatSupported}"
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
+        </CommandBar>
+    </Page.BottomAppBar>
+    
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
@@ -29,19 +41,41 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Margin="39,59,39,0"
-                    Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                    Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
                     VerticalAlignment="Top"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button" />
-            <TextBlock Text="{StaticResource AppName}"
-                       Style="{StaticResource HeaderTextBlockStyle}"
+            <TextBlock Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1" 
                        IsHitTestVisible="false"
                        TextWrapping="NoWrap"
                        VerticalAlignment="Bottom"
-                       Margin="0,0,30,40" />
+                       Margin="0,0,30,40">
+                <Run>Skupina:</Run>
+                <Run Text="{Binding GroupName}" />
+            </TextBlock>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <ContentControl Grid.Column="0"
+                            Content="{Binding AdminViewModel}"
+                            ContentTemplateSelector="{StaticResource AdminTemplateSelector}"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch" />
+
+            <ContentControl Grid.Column="1"
+                            Visibility="{Binding IsChatDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Content="{Binding ChatApplicationViewModel}"
+                            ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
+                            VerticalContentAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch" />
         </Grid>
     </Grid>
 </Page>

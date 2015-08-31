@@ -45,10 +45,14 @@
                           Icon="Forward"
                           Command="{Binding ConnectToGroupCommand}"
                           IsEnabled="{Binding CanConnectToGroup}" />
-            <AppBarButton Label="Zobrazit aplikaci"
-                          Icon="Forward"
+            <AppBarButton Label="Zobrazit aplikaci jako student"
+                          Icon="NewWindow"
                           Command="{Binding OpenApplicationCommand}"
                           IsEnabled="{Binding CanOpenApplication}" />
+            <AppBarButton Label="Zobrazit aplikaci jako učitel"
+                          Icon="OtherUser"
+                          Command="{Binding OpenAdminCommand}"
+                          IsEnabled="{Binding CanOpenAdmin}" />
 
             <!--TODO kick user function + UI-->
             <!--<CommandBar.SecondaryCommands>
@@ -130,8 +134,8 @@
                     </Button>
                     
                     <Button Margin="10,0,0,0"
-                            Command="{Binding OpenApplicationCommand}"
-                            IsEnabled="{Binding CanOpenApplication}"
+                            Command="{Binding OpenAdminCommand}"
+                            IsEnabled="{Binding CanOpenAdmin}"
                             Content="Zobrazit aplikaci" />
                 </StackPanel>
                 

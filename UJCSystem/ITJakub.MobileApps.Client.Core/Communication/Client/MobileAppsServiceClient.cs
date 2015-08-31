@@ -412,6 +412,33 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
+        public Task<TaskDataContract> GetTaskAsync(long taskId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTask(taskId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
         public Task<TaskDataContract> GetTaskForGroupAsync(long groupId)
         {
             return Task.Run(() =>

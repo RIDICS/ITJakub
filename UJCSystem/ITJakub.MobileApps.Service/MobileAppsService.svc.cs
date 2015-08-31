@@ -246,6 +246,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public TaskDataContract GetTask(long taskId)
+        {
+            try
+            {
+                return m_serviceManager.GetTask(taskId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public TaskDataContract GetTaskForGroup(long groupId)
         {
             try

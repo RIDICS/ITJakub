@@ -141,5 +141,31 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 callback(null, exception);
             }
         }
+
+        public async void GetTask(long taskId, Action<TaskViewModel, Exception> callback)
+        {
+            try
+            {
+                var result = await m_client.GetTaskAsync(taskId);
+                if (result == null)
+                    return;
+
+                var task = new TaskViewModel
+                {
+                    Application = await m_applicationIdManager.GetApplicationType(result.ApplicationId),
+                    Id = result.Id,
+                    Data = result.Data
+                };
+                callback(task, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
     }
 }

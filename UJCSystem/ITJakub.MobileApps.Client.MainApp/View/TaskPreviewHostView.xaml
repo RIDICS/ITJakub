@@ -60,8 +60,8 @@
             </TextBlock>
         </Grid>
 
-        <ContentControl Grid.Row="1" 
-                        Content="{Binding TaskPreviewViewModel}" 
+        <ContentControl Grid.Row="1"
+                        Content="{Binding TaskPreviewViewModel}"
                         ContentTemplateSelector="{StaticResource TaskPreviewTemplateSelector}"
                         VerticalContentAlignment="Stretch"
                         HorizontalContentAlignment="Stretch" />

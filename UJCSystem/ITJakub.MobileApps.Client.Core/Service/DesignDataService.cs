@@ -148,6 +148,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(null);
         }
 
+        public void GetTask(long taskId, Action<TaskViewModel, Exception> callback)
+        {
+            callback(null, new Exception());
+        }
+
         public void GetTaskForGroup(long groupId, Action<TaskViewModel, Exception> callback)
         {
             callback(null, new Exception());

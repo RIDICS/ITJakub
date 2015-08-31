@@ -7,5 +7,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public CrosswordsTaskPreviewViewModel()
         {
         }
+
+        public override void ShowTask(string data)
+        {
+            
+        }
     }
 }

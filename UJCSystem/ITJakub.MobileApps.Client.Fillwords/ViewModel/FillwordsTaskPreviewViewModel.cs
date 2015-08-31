@@ -7,5 +7,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public FillwordsTaskPreviewViewModel()
         {
         }
+
+        public override void ShowTask(string data)
+        {
+            
+        }
     }
 }

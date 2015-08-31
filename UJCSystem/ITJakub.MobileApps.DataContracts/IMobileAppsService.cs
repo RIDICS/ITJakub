@@ -71,6 +71,10 @@ namespace ITJakub.MobileApps.DataContracts
         void CreateTask(long userId, int applicationId, string name, string data);
 
         [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        TaskDataContract GetTask(long taskId);
+
+        [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         TaskDataContract GetTaskForGroup(long groupId);
 

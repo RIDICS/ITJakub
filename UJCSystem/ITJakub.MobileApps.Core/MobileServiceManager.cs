@@ -104,6 +104,11 @@ namespace ITJakub.MobileApps.Core
             m_taskManager.CreateTask(userId, applicationId, name, data);
         }
 
+        public TaskDataContract GetTask(long taskId)
+        {
+            return m_taskManager.GetTask(taskId);
+        }
+
         public TaskDataContract GetTaskForGroup(long groupId)
         {
             return m_taskManager.GetTaskForGroup(groupId);

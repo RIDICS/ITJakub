@@ -45,6 +45,18 @@ namespace ITJakub.MobileApps.Core.Tasks
             var tasks = m_usersRepository.GetTasksByApplication(applicationId);
             return Mapper.Map<IList<TaskDetailContract>>(tasks);
         }
+        
+        public TaskDataContract GetTask(long taskId)
+        {
+            var taskEntity = m_usersRepository.FindById<Task>(taskId);
+            var taskAzure = m_azureTableTaskDao.FindByRowAndPartitionKey(Convert.ToString(taskEntity.Id),
+                Convert.ToString(taskEntity.Application.Id));
+
+            var task = Mapper.Map<TaskDataContract>(taskEntity);
+            task.Data = taskAzure.Data;
+
+            return task;
+        }
 
         public TaskDataContract GetTaskForGroup(long groupId)
         {

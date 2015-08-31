@@ -1,4 +1,5 @@
 ﻿<Page
+    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.SelectTaskView"
     DataContext="{Binding SelectTaskViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,7 +13,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <CollectionViewSource x:Name="TaskList" Source="{Binding GroupedTaskList}" IsSourceGrouped="True" />
+        <CollectionViewSource x:Key="TaskList" Source="{Binding GroupedTaskList}" IsSourceGrouped="True" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:IsMyOwnershipToNameConverter x:Key="IsMyOwnershipToNameConverter" />
@@ -159,6 +160,14 @@
                                 <Run Text="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
                             </TextBlock>
                         </StackPanel>
+                        
+                        <Button VerticalAlignment="Center"
+                                Style="{StaticResource CircleButtonStyle}"
+                                Command="{Binding Path=DataContext.PreviewTaskCommand, ElementName=PageRoot}"
+                                CommandParameter="{Binding}"
+                                Margin="10,0,10,0">
+                            <SymbolIcon Symbol="Preview" />
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>

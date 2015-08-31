@@ -9,6 +9,6 @@
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanAdminViewModel}">
     
     <Grid>
-
+        <TextBlock Text="test"></TextBlock>
     </Grid>
 </UserControl>

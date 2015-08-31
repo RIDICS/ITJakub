@@ -8,5 +8,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         public ReadingTaskPreviewViewModel(ReaderDataService dataService)
         {
         }
+
+        public override void ShowTask(string data)
+        {
+            
+        }
     }
 }

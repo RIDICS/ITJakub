@@ -52,7 +52,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadTask(long taskId)
         {
-            // TODO get task
+            m_dataService.GetTask(taskId, (task, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_errorService.ShowConnectionWarning();
+                    return;
+                }
+
+                TaskPreviewViewModel.ShowTask(task.Data);
+            });
         }
 
         public RelayCommand GoBackCommand { get; private set; }
