@@ -1697,9 +1697,11 @@ class TextPanel extends RightSidePanel {
 class TermsPanel extends LeftSidePanel {
     private searchResultItemsDiv: HTMLDivElement;
     private termsResultItemsDiv: HTMLDivElement;
+    private searchResultOrderedList: HTMLOListElement;
     private termsOrderedList: HTMLOListElement;
 
     private termsResultItemsLoadDiv: HTMLDivElement;
+    private searchResultItemsLoadDiv: HTMLDivElement;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
@@ -1716,10 +1718,20 @@ class TermsPanel extends LeftSidePanel {
         searchResultDivHeading.innerHTML = "Výskyty na stránce";
         searchResultDiv.appendChild(searchResultDivHeading);
 
+        var searchResultItemsLoadDiv = window.document.createElement("div");
+        $(searchResultItemsLoadDiv).addClass("reader-terms-search-result-items-div-load loader");
+        this.searchResultItemsLoadDiv = searchResultItemsLoadDiv;
+        $(searchResultItemsLoadDiv).hide();
+        searchResultDiv.appendChild(searchResultItemsLoadDiv);
+
         var searchResultItemsDiv = window.document.createElement("div");
         $(searchResultItemsDiv).addClass("reader-terms-search-result-items-div");
         this.searchResultItemsDiv = searchResultItemsDiv;
         searchResultDiv.appendChild(searchResultItemsDiv);
+
+        this.searchResultOrderedList = window.document.createElement("ol");
+
+        this.searchResultItemsDiv.appendChild(this.searchResultOrderedList);
 
         innerContent.appendChild(searchResultDiv);
 
@@ -1749,7 +1761,9 @@ class TermsPanel extends LeftSidePanel {
         innerContent.appendChild(termsResultDiv);
 
         var actualPage = this.parentReader.pages[this.parentReader.actualPageIndex];
+
         this.loadTermsOnPage(actualPage);
+        this.clearResults();
 
         return innerContent;
     }
@@ -1757,33 +1771,45 @@ class TermsPanel extends LeftSidePanel {
     
 
     showLoading() {
-        $(this.searchResultItemsDiv).addClass("loader");
+        $(this.searchResultItemsDiv).hide();
+        $(this.searchResultItemsLoadDiv).show();
 
     }
 
     clearLoading() {
-        $(this.searchResultItemsDiv).removeClass("loader");
+        $(this.searchResultItemsLoadDiv).hide();
+        $(this.searchResultItemsDiv).show();
     }
 
     clearResults() {
-        $(this.searchResultItemsDiv).empty();
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).append("Pro zobrazení výskytů použijte vyhledávání.");
+        $(this.searchResultOrderedList).addClass("no-items");
     }
 
-    showResults(searchResults: SearchResult[]) {
-        $(this.searchResultItemsDiv).empty();
+    showResults(searchResults: PageDescription[]) {
+
+        $(this.searchResultOrderedList).empty();
+        $(this.searchResultOrderedList).removeClass("no-items");
+
         for (var i = 0; i < searchResults.length; i++) {
             var result = searchResults[i];
             var resultItem = this.createResultItem(result);
-            this.searchResultItemsDiv.appendChild(resultItem);
+            this.searchResultOrderedList.appendChild(resultItem);
+        }
+
+        if (searchResults.length === 0) {
+            $(this.searchResultOrderedList).addClass("no-items");
+            $(this.searchResultOrderedList).append("Žádné výskyty na stránce.");
         }
     }
 
-    private createResultItem(result: SearchResult): HTMLLIElement {
+    private createResultItem(page: PageDescription): HTMLLIElement {
         var resultItemListElement = document.createElement("li");
-        resultItemListElement.innerHTML = `[${result.pageName}]`;
+        resultItemListElement.innerHTML = `[${page.PageName}]`;
 
         $(resultItemListElement).click(() => {
-            this.parentReader.moveToPage(result.pageXmlId, true);
+            this.parentReader.moveToPage(page.PageXmlId, true);
         });
 
         return resultItemListElement;
@@ -1809,6 +1835,7 @@ class TermsPanel extends LeftSidePanel {
     private loadTermsOnPage(page: BookPage) {
 
         $(this.termsOrderedList).empty();
+        $(this.termsOrderedList).removeClass("no-items");
         $(this.termsResultItemsLoadDiv).show();
         $(this.termsResultItemsDiv).hide();
 
@@ -1828,10 +1855,16 @@ class TermsPanel extends LeftSidePanel {
                     var term = terms[i];
                     this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
                 }
+
+                if (terms.length === 0) {
+                    $(this.termsOrderedList).addClass("no-items");
+                    $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                }
             },
             error: (response) => {
                 $(this.termsResultItemsLoadDiv).hide();
                 $(this.termsResultItemsDiv).show();
+                $(this.termsOrderedList).addClass("no-items");
                 $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
             }
         });
