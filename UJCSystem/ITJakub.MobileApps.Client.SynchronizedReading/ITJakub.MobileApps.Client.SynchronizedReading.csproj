@@ -124,6 +124,7 @@
     <Compile Include="ViewModel\ControlViewModel.cs" />
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />
+    <Compile Include="ViewModel\ReadingTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\Reading\ImageReaderViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\Reading\TextReaderViewModel.cs" />
@@ -139,6 +140,9 @@
     <Compile Include="View\Converter\UserInfoToStringConverter.cs" />
     <Compile Include="View\ReadingEditorView.xaml.cs">
       <DependentUpon>ReadingEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReadingPreviewView.xaml.cs">
+      <DependentUpon>ReadingPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ReadingView.xaml.cs">
       <DependentUpon>ReadingView.xaml</DependentUpon>
@@ -180,6 +184,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="View\ReadingEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReadingPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

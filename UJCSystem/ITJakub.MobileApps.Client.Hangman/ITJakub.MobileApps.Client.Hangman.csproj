@@ -122,7 +122,9 @@
     <Compile Include="DataService\VersusGuessManager.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
     <Compile Include="ViewModel\GameOverViewModel.cs" />
+    <Compile Include="ViewModel\HangmanAdminViewModel.cs" />
     <Compile Include="ViewModel\HangmanEditorViewModel.cs" />
+    <Compile Include="ViewModel\HangmanTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\KeyboardViewModel.cs" />
     <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
     <Compile Include="ViewModel\Comparer\PlayerProgressComparer.cs" />
@@ -137,11 +139,17 @@
       <DependentUpon>GameOverControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converter\GuessedLettersTextConverter.cs" />
+    <Compile Include="View\HangmanAdminView.xaml.cs">
+      <DependentUpon>HangmanAdminView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\HangmanEditorView.xaml.cs">
       <DependentUpon>HangmanEditorView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HangmanPictureControl.xaml.cs">
       <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HangmanPreviewView.xaml.cs">
+      <DependentUpon>HangmanPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HangmanView.xaml.cs">
       <DependentUpon>HangmanView.xaml</DependentUpon>
@@ -166,11 +174,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\HangmanAdminView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\HangmanEditorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\HangmanPictureControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HangmanPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

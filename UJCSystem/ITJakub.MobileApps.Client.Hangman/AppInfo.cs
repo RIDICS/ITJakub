@@ -45,6 +45,26 @@ namespace ITJakub.MobileApps.Client.Hangman
             get { return typeof(HangmanEditorView); }
         }
 
+        public override AdminBaseViewModel AdminViewModel
+        {
+            get { return new HangmanAdminViewModel(m_dataService); }
+        }
+
+        public override Type AdminDataTemplate
+        {
+            get { return typeof (HangmanAdminView); }
+        }
+
+        public override TaskPreviewBaseViewModel TaskPreviewViewModel
+        {
+            get { return new HangmanTaskPreviewViewModel(); }
+        }
+
+        public override Type TaskPreviewDataTemplate
+        {
+            get { return typeof (HangmanPreviewView); }
+        }
+
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.MainApp;}

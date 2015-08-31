@@ -45,6 +45,26 @@ namespace ITJakub.MobileApps.Client.Crosswords
             get { return typeof(CrosswordsEditorView); }
         }
 
+        public override AdminBaseViewModel AdminViewModel
+        {
+            get { return new CrosswordsAdminViewModel(m_dataService); }
+        }
+
+        public override Type AdminDataTemplate
+        {
+            get { return typeof (CrosswordsAdminView); }
+        }
+
+        public override TaskPreviewBaseViewModel TaskPreviewViewModel
+        {
+            get { return new CrosswordsTaskPreviewViewModel(); }
+        }
+
+        public override Type TaskPreviewDataTemplate
+        {
+            get { return typeof (CrosswordsPreviewView); }
+        }
+
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.MainApp; }
