@@ -640,5 +640,26 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SingleOrDefault<FullBookRecording>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Term> GetTermsOnPage(string bookXmlId, string pageXmlId)
+        {
+            using (var session = GetSession())
+            {
+                Term term = null;
+                BookPage page = null;
+                BookVersion version = null;
+
+                var terms = session.QueryOver(() => term)
+                    .JoinQueryOver(x => term.ReferencedFrom, () => page)
+                    .JoinQueryOver(x => page.BookVersion, () => version)
+                    .JoinQueryOver(x => version.Book)
+                    .Where(book => book.Guid == bookXmlId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
+                    .OrderBy(() => term.Position).Asc
+                    .List<Term>();
+
+                return terms;
+            }
+        }
     }
 }

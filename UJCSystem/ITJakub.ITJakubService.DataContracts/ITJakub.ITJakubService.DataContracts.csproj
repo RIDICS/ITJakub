@@ -66,6 +66,7 @@
     <Compile Include="ProcessedFileInfoContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelectedCategoriesContract.cs" />
+    <Compile Include="TermContract.cs" />
     <Compile Include="UserDetailContract.cs" />
   </ItemGroup>
   <ItemGroup>

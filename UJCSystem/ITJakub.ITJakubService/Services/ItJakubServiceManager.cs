@@ -274,5 +274,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
         }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
+        {
+            return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
+        }
     }
 }

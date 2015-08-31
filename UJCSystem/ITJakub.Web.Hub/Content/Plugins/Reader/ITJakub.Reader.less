@@ -597,6 +597,11 @@ div.dummy-page {
 .reader-terms-result-items-div,  .reader-terms-search-result-items-div {
     overflow-y: auto;
     padding: 5px;
+    height: 100%;
+}
+
+.reader-terms-result-items-div.loader, .reader-terms-search-result-items-div.loader {
+    overflow-y: initial;
 }
 
 .reader-terms-div {
@@ -609,4 +614,8 @@ div.dummy-page {
 
 .reader-terms-result-div {
     height: 40%;
+}
+
+.reader-terms-result-items-div ol {
+    list-style-type: none;
 }

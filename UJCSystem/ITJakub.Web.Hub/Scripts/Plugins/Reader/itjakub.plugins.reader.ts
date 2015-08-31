@@ -1697,6 +1697,9 @@ class TextPanel extends RightSidePanel {
 class TermsPanel extends LeftSidePanel {
     private searchResultItemsDiv: HTMLDivElement;
     private termsResultItemsDiv: HTMLDivElement;
+    private termsOrderedList: HTMLOListElement;
+
+    private termsResultItemsLoadDiv: HTMLDivElement;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
@@ -1728,10 +1731,20 @@ class TermsPanel extends LeftSidePanel {
         termsResultDivHeading.innerHTML = "Témata na stránce";
         termsResultDiv.appendChild(termsResultDivHeading);
 
+        var termsResultItemsLoadDiv = window.document.createElement("div");
+        $(termsResultItemsLoadDiv).addClass("reader-terms-result-items-div-load loader");
+        this.termsResultItemsLoadDiv = termsResultItemsLoadDiv;
+        $(termsResultItemsLoadDiv).hide();
+        termsResultDiv.appendChild(termsResultItemsLoadDiv);
+
         var termsResultItemsDiv = window.document.createElement("div");
         $(termsResultItemsDiv).addClass("reader-terms-result-items-div");
         this.termsResultItemsDiv = termsResultItemsDiv;
         termsResultDiv.appendChild(termsResultItemsDiv);
+
+        this.termsOrderedList = window.document.createElement("ol");
+
+        this.termsResultItemsDiv.appendChild(this.termsOrderedList);
 
         innerContent.appendChild(termsResultDiv);
         return innerContent;
@@ -1772,9 +1785,48 @@ class TermsPanel extends LeftSidePanel {
         return resultItemListElement;
     }
 
+    private createTermItem(xmlId: string, text: string): HTMLLIElement {
+        var termItemListElement = document.createElement("li");
+        termItemListElement.innerHTML = `[${text}]`;
+
+        $(termItemListElement).click(() => {
+            
+        });
+
+        return termItemListElement;
+    }
+
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        //TODO load terms on page
+        var page = this.parentReader.pages[pageIndex];
+
+        $(this.termsOrderedList).empty();
+        $(this.termsResultItemsLoadDiv).show();
+        $(this.termsResultItemsDiv).hide();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            url: getBaseUrl() + "Reader/GetTermsOnPage",
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                $(this.termsResultItemsLoadDiv).hide();
+                $(this.termsResultItemsDiv).show();
+
+                var terms = response["terms"];
+                for (var i = 0; i < terms.length; i++) {
+                    var term = terms[i];
+                    this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
+                }
+            },
+            error: (response) => {
+                $(this.termsResultItemsLoadDiv).hide();
+                $(this.termsResultItemsDiv).show();
+                $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+            }
+        });
     }
 }
 

@@ -174,6 +174,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-
+        [OperationContract]
+        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
     }
 }

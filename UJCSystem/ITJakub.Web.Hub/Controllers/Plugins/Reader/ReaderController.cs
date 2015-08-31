@@ -25,6 +25,11 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             var text = m_mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
         }
+        public ActionResult GetTermsOnPage(string bookId, string pageXmlId)
+        {
+            var terms = m_mainServiceClient.GetTermsOnPage(bookId, pageXmlId);
+            return Json(new { terms }, JsonRequestBehavior.AllowGet);
+        }
 
         
         public ActionResult GetBookSearchPageByXmlId(string query,bool isQueryJson, string bookId, string pageXmlId)
