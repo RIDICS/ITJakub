@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts.Contracts
 {
     [DataContract]
     public class AuthorDetailContract

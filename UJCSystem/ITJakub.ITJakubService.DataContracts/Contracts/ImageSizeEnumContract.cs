@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Jewelery;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts.Contracts
 {
     [DataContract]
     public enum ImageSizeEnum

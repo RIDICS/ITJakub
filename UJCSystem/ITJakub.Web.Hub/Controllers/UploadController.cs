@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
@@ -10,7 +9,7 @@ namespace ITJakub.Web.Hub.Controllers
     //[Authorize]
     public class UploadController : Controller
     {
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        //private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
 
         public ActionResult Upload()
         {
@@ -20,19 +19,22 @@ namespace ITJakub.Web.Hub.Controllers
         //Dropzone upload method
         public ActionResult UploadFile(string sessionId)
         {
-            for (int i = 0; i < Request.Files.Count; i++)
+            for (var i = 0; i < Request.Files.Count; i++)
             {
-                HttpPostedFileBase file = Request.Files[i];
+                var file = Request.Files[i];
                 if (file != null && file.ContentLength != 0)
                 {
-                    m_serviceClient.AddResource(
-                        new UploadResourceContract
-                        {
-                            SessionId = sessionId,
-                            FileName = file.FileName,
-                            Data = file.InputStream
-                        }
-                        );
+                    using (var client = new ItJakubServiceStreamedClient())
+                    {
+                        client.AddResource(
+                            new UploadResourceContract
+                            {
+                                SessionId = sessionId,
+                                FileName = file.FileName,
+                                Data = file.InputStream
+                            }
+                            );
+                    }
                 }
             }
             return Json(new {});
@@ -40,7 +42,11 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult ProcessUploadedFiles(string sessionId, string uploadMessage)
         {
-            return Json(new { success = m_serviceClient.ProcessSession(sessionId, uploadMessage) });
+            using (var client = new ItJakubServiceClient())
+            {
+                var success = client.ProcessSession(sessionId, uploadMessage);
+                return Json(new {success});
+            }
         }
     }
 }

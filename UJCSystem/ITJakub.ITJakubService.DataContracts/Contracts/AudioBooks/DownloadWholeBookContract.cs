@@ -1,6 +1,6 @@
 using System.ServiceModel;
 
-namespace ITJakub.ITJakubService.DataContracts.AudioBooks
+namespace ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks
 {
     [MessageContract]    
     public class DownloadWholeBookContract

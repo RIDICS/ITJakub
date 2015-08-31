@@ -47,36 +47,39 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
         private void ProcessFile(FileModel file)
         {
-            var client = new ItJakubServiceClient();
-
-            file.CurrentState = FileStateType.Uploading;
-
             var session = Guid.NewGuid().ToString();
-
-            using (var dataStream = GetDataStream(file.FullPath))
+            using (var client = new ItJakubServiceStreamedClient())
             {
-                var contract = new UploadResourceContract
+                file.CurrentState = FileStateType.Uploading;
+                using (var dataStream = GetDataStream(file.FullPath))
                 {
-                    FileName = file.FileName,
-                    Data = dataStream,
-                    SessionId = session
-                };
+                    var contract = new UploadResourceContract
+                    {
+                        FileName = file.FileName,
+                        Data = dataStream,
+                        SessionId = session
+                    };
 
-                client.AddResource(contract);
+                    client.AddResource(contract);
+                }
             }
 
             file.CurrentState = FileStateType.Processing;
-            try
+                        
+            using (var client = new ItJakubServiceClient())
             {
-                client.ProcessSession(session, DefaultUploadMessage);
-            }
-            catch (Exception)
-            {
-                file.CurrentState = FileStateType.Error;
-                throw;
-            }
+                try
+                {
+                    client.ProcessSession(session, DefaultUploadMessage);
+                }
+                catch (Exception)
+                {
+                    file.CurrentState = FileStateType.Error;
+                    throw;
+                }
 
-            file.CurrentState = FileStateType.Done;
+                file.CurrentState = FileStateType.Done;
+            }
         }
 
         private Stream GetDataStream(string fullPath)
