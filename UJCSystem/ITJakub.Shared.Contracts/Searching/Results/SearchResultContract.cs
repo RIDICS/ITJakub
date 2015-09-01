@@ -72,6 +72,12 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         [DataMember]
         public IList<PageResultContext> Results { get; set; }
 
+        [DataMember]
+        public int TermsPageHitsCount { get; set; }
+
+        [DataMember]
+        public IList<PageDescriptionContract> TermsPageHits { get; set; }
+
 
         public virtual string ToXml()
         {

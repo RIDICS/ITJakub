@@ -626,6 +626,51 @@ namespace ITJakub.ITJakubService.Core
             return m_searchServiceClient.GetCorpusSearchResultsCount(nonMetadataCriterias);
         }
 
+        public SearchResultContractList GetGrammarSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
+
+            if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
+            {
+                var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
+
+                if (databaseSearchResult.Count == 0)
+                {
+                    return new SearchResultContractList();
+                }
+
+                var resultContract = new ResultRestrictionCriteriaContract
+                {
+                    ResultBooks = databaseSearchResult
+                };
+                nonMetadataCriterias.Add(resultContract);
+            }
+
+
+             // Search only in SQL
+            var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
+            var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
+            var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction);
+
+            //TODO load terms
+            var results = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
+               
+            return new SearchResultContractList { SearchResults = results };
+        }
+
+        public int GetGrammarSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
+                filteredCriterias.MetadataParameters);
+            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
+            if (databaseSearchResult.Count == 0)
+                return 0;
+
+            return databaseSearchResult.Count;
+        }
+
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             OutputFormat outputFormat;
