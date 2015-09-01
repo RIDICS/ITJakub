@@ -11,7 +11,7 @@ using ITJakub.BatchImport.Client.BusinessLogic;
 namespace ITJakub.BatchImport.Client.View.Converters
 {
     [ValueConversion(typeof(FileStateType), typeof(Visibility))]
-    class FileStateToProgressbarVisibilityConverter:IValueConverter
+    public class FileStateToProgressbarVisibilityConverter:IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -27,5 +27,5 @@ namespace ITJakub.BatchImport.Client.View.Converters
         {
             throw new NotSupportedException();
         }
-    }    
+    }
 }
