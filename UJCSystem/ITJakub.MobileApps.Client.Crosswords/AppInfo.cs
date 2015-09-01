@@ -57,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Crosswords
 
         public override TaskPreviewBaseViewModel TaskPreviewViewModel
         {
-            get { return new CrosswordsTaskPreviewViewModel(); }
+            get { return new CrosswordsTaskPreviewViewModel(m_dataService); }
         }
 
         public override Type TaskPreviewDataTemplate

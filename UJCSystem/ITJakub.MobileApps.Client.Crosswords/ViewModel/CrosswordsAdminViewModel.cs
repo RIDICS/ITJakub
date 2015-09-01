@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -7,23 +9,106 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 {
     public class CrosswordsAdminViewModel : AdminBaseViewModel
     {
+        private readonly ICrosswordsDataService m_dataService;
+        private readonly Dictionary<long, ProgressViewModel> m_memberProgress;
+        private ObservableCollection<ProgressViewModel> m_playerRanking;
+        private ObservableCollection<CrosswordRowViewModel> m_rowListPattern;
+
         public CrosswordsAdminViewModel(ICrosswordsDataService dataService)
         {
+            m_dataService = dataService;
+            m_memberProgress = new Dictionary<long, ProgressViewModel>();
+            PlayerRanking = new ObservableCollection<ProgressViewModel>();
         }
 
         public override void SetTask(string data)
         {
-            throw new System.NotImplementedException();
+            m_dataService.SetTaskAndGetConfiguration(data, rowList =>
+            {
+                m_rowListPattern = rowList;
+
+                // TODO update all user progress
+            }, true);
         }
 
         public override void InitializeCommunication()
         {
-            throw new System.NotImplementedException();
+            m_dataService.ResetLastRequestTime();
+            m_dataService.StartPollingProgress((progressUpdateList, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
+                    return;
+                }
+
+                UpdateProgress(progressUpdateList);
+            });
+        }
+
+        private void UpdateProgress(List<ProgressUpdateViewModel> progressUpdateList)
+        {
+            foreach (var progressUpdate in progressUpdateList)
+            {
+                // todo update rank
+                ProgressViewModel viewModel;
+                
+                if (!m_memberProgress.ContainsKey(progressUpdate.UserInfo.Id))
+                {
+                    viewModel = CreateProgressViewModel(progressUpdate.UserInfo);
+
+                    m_memberProgress.Add(progressUpdate.UserInfo.Id, viewModel);
+                    PlayerRanking.Add(viewModel);
+                }
+                else
+                {
+                    viewModel = m_memberProgress[progressUpdate.UserInfo.Id];
+                }
+
+                var rowViewModel = viewModel.Rows.First(row => row.RowIndex == progressUpdate.RowIndex);
+                rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
+                rowViewModel.IsCorrect = progressUpdate.IsCorrect;
+
+            }
         }
 
         public override void UpdateGroupMembers(IEnumerable<UserInfo> members)
         {
-            throw new System.NotImplementedException();
+            foreach (var memberInfo in members.Where(x => !m_memberProgress.ContainsKey(x.Id)))
+            {
+                var newProgressInfo = CreateProgressViewModel(memberInfo);
+
+                m_memberProgress.Add(memberInfo.Id, newProgressInfo);
+                PlayerRanking.Add(newProgressInfo);
+            }
+
+           // PlayerRanking = new ObservableCollection<ProgressViewModel>(PlayerRanking.OrderBy(x => x, new PlayerRankComparer()));
+           // TODO add sorting
+        }
+
+        private ProgressViewModel CreateProgressViewModel(UserInfo userInfo)
+        {
+            var rowProgressViewModels = m_rowListPattern.Select(model => model.Cells != null
+                ? new RowProgressViewModel(model.RowIndex, model.Cells.Count, model.StartPosition, model.AnswerPosition)
+                : new RowProgressViewModel());
+
+            var viewModel = new ProgressViewModel
+            {
+                UserInfo = userInfo,
+                Rows = new ObservableCollection<RowProgressViewModel>(rowProgressViewModels)
+            };
+
+            return viewModel;
+        }
+
+        public ObservableCollection<ProgressViewModel> PlayerRanking
+        {
+            get { return m_playerRanking; }
+            set
+            {
+                m_playerRanking = value;
+                RaisePropertyChanged();
+            }
         }
     }
 }
