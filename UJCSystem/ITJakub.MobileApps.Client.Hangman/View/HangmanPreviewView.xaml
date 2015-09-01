@@ -5,10 +5,37 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
+    xmlns:control="using:ITJakub.MobileApps.Client.Hangman.View.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanTaskPreviewViewModel}">
     
     <Grid>
-        <TextBlock Text="{Binding Test}"></TextBlock>
+        <ListView SelectionMode="None"
+                  ItemsSource="{Binding TaskLevelList}">
+            
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.ItemContainerStyle>
+            
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Grid.Column="0"
+                                   Text="TODO text zadání"/>
+                        <control:WordControl Grid.Column="1"
+                                             HorizontalAlignment="Left"
+                                             HorizontalContentAlignment="Left"
+                                             DataContext="{Binding ResultWord}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

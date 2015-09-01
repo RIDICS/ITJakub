@@ -63,5 +63,24 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         }
         
         public abstract void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
+
+        public void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback)
+        {
+            if (data == null)
+                return;
+            
+            var taskContract = JsonConvert.DeserializeObject<HangmanTaskContract>(data);
+            var taskLevelList = new ObservableCollection<TaskLevelDetailViewModel>();
+            foreach (var word in taskContract.Words)
+            {
+                taskLevelList.Add(new TaskLevelDetailViewModel
+                {
+                    Hint = "TODO", //TODO
+                    ResultWord = new WordViewModel { Word = word.ToUpper() }
+                });
+            }
+
+            callback(taskLevelList);
+        }
     }
 }

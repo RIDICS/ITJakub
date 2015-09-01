@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class TaskSettingsViewModel

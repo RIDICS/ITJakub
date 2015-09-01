@@ -129,6 +129,7 @@
     <Compile Include="ViewModel\HangmanPictureViewModel.cs" />
     <Compile Include="ViewModel\Comparer\PlayerProgressComparer.cs" />
     <Compile Include="ViewModel\ProgressInfoViewModel.cs" />
+    <Compile Include="ViewModel\TaskLevelDetailViewModel.cs" />
     <Compile Include="ViewModel\TaskInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />

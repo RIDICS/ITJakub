@@ -57,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Hangman
 
         public override TaskPreviewBaseViewModel TaskPreviewViewModel
         {
-            get { return new HangmanTaskPreviewViewModel(); }
+            get { return new HangmanTaskPreviewViewModel(m_dataService); }
         }
 
         public override Type TaskPreviewDataTemplate
