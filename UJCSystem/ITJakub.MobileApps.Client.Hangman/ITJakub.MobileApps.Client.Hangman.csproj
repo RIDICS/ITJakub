@@ -133,9 +133,12 @@
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\Control\ResultTableControl.xaml.cs">
+      <DependentUpon>ResultTableControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Converter\TotalTimeConverter.cs" />
     <Compile Include="View\Converter\WinToColorConverter.cs" />
-    <Compile Include="View\GameOverControl.xaml.cs">
+    <Compile Include="View\Control\GameOverControl.xaml.cs">
       <DependentUpon>GameOverControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Converter\GuessedLettersTextConverter.cs" />
@@ -145,7 +148,7 @@
     <Compile Include="View\HangmanEditorView.xaml.cs">
       <DependentUpon>HangmanEditorView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\HangmanPictureControl.xaml.cs">
+    <Compile Include="View\Control\HangmanPictureControl.xaml.cs">
       <DependentUpon>HangmanPictureControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\HangmanPreviewView.xaml.cs">
@@ -155,12 +158,12 @@
       <DependentUpon>HangmanView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\HangmanViewModel.cs" />
-    <Compile Include="View\KeyboardControl.xaml.cs">
+    <Compile Include="View\Control\KeyboardControl.xaml.cs">
       <DependentUpon>KeyboardControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\NoLostFocusTextBox.cs" />
-    <Compile Include="View\SpecialTextBox.cs" />
-    <Compile Include="View\WordControl.xaml.cs">
+    <Compile Include="View\Control\NoLostFocusTextBox.cs" />
+    <Compile Include="View\Control\SpecialTextBox.cs" />
+    <Compile Include="View\Control\WordControl.xaml.cs">
       <DependentUpon>WordControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -170,7 +173,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="View\GameOverControl.xaml">
+    <Page Include="View\Control\GameOverControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\ResultTableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,7 +189,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\HangmanPictureControl.xaml">
+    <Page Include="View\Control\HangmanPictureControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -194,7 +201,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\KeyboardControl.xaml">
+    <Page Include="View\Control\KeyboardControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -203,7 +210,7 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
-    <Page Include="View\WordControl.xaml">
+    <Page Include="View\Control\WordControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

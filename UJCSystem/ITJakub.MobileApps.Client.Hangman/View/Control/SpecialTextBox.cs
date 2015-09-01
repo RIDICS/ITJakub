@@ -2,12 +2,12 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ITJakub.MobileApps.Client.Hangman.View
+namespace ITJakub.MobileApps.Client.Hangman.View.Control
 {
     [TemplatePart(Type = typeof(TextBox), Name = "TextBox")]
     [TemplatePart(Type = typeof(GridView), Name = "GridView")]
     [TemplatePart(Type = typeof(Button), Name = "ShowKeyboardButton")]
-    public sealed class SpecialTextBox : Control
+    public sealed class SpecialTextBox : Windows.UI.Xaml.Controls.Control
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof (string), typeof (SpecialTextBox), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty KeyboardLettersProperty = DependencyProperty.Register("KeyboardLetters", typeof (string), typeof (SpecialTextBox), new PropertyMetadata(string.Empty, OnKeyboardLettersChanged));

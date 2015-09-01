@@ -1,7 +1,7 @@
 ﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ITJakub.MobileApps.Client.Hangman.View
+namespace ITJakub.MobileApps.Client.Hangman.View.Control
 {
     public class NoLostFocusTextBox : TextBox
     {

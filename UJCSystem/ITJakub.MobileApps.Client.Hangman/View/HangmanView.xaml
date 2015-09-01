@@ -4,11 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Hangman.View.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
@@ -55,7 +55,7 @@
                      VerticalAlignment="Top"
                      Margin="0,10,0,25"
                      MinWidth="100">
-                <view:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
+                <control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
                                             Margin="25,0,25,0" />
             </Viewbox>
         </Grid>
@@ -67,7 +67,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <view:WordControl DataContext="{Binding WordViewModel}"
+            <control1:WordControl DataContext="{Binding WordViewModel}"
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center" />
 
@@ -75,7 +75,7 @@
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollMode="Disabled"
                           ZoomMode="Disabled">
-                <view:KeyboardControl DataContext="{Binding KeyboardViewModel}"
+                <control1:KeyboardControl DataContext="{Binding KeyboardViewModel}"
                                       MaxWidth="800" />
             </ScrollViewer>
         </Grid>
@@ -149,7 +149,7 @@
                             BorderBrush="#22FFFFFF">
                     <Grid>
                         <Viewbox>
-                            <view:HangmanPictureControl DataContext="{Binding PictureViewModel}"
+                            <control1:HangmanPictureControl DataContext="{Binding PictureViewModel}"
                                                         HorizontalAlignment="Center"
                                                         Margin="0,15,0,20" />
                         </Viewbox>
@@ -176,7 +176,7 @@
             </GridView.ItemTemplate>
         </GridView>
         
-        <view:GameOverControl Grid.Row="0"
+        <control1:GameOverControl Grid.Row="0"
                               Grid.Column="0"
                               Grid.RowSpan="2"
                               Grid.ColumnSpan="3"

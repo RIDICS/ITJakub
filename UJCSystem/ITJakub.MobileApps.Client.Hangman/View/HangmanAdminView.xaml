@@ -5,10 +5,79 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
+    xmlns:control="using:ITJakub.MobileApps.Client.Hangman.View.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanAdminViewModel}">
     
-    <Grid>
-        <TextBlock Text="test"></TextBlock>
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="400" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Text="Aktuální stav"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />
+
+        <TextBlock Grid.Column="1"
+                   Grid.Row="0"
+                   Text="Výsledné pořadí"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />
+        
+        <ListView Grid.Row="1"
+                  Grid.Column="0"
+                  Margin="0,30,10,10"
+                  ItemsSource="{Binding PlayerRanking}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Viewbox Height="100"
+                                 Margin="20,0,20,0">
+                            <control:HangmanPictureControl DataContext="{Binding PictureViewModel}"
+                                                           HorizontalAlignment="Center"
+                                                           Margin="0,15,0,20" />
+                        </Viewbox>
+                        
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            
+                            <TextBlock>
+                                <Run Text="{Binding UserInfo.FirstName}" />
+                                <Run Text="{Binding UserInfo.LastName}" />
+                                <LineBreak />
+                                <Run Text="Uhádnuto slov:" />
+                                <Run Text="{Binding LetterCount}" />
+                                <Run Text="(písmen:" /><Run Text="{Binding LetterCount}" /><Run Text=")" />
+                                <LineBreak />
+                                <Run Text="Zbývá životů:" />
+                                <Run Text="{Binding Lives}" />
+                            </TextBlock>
+                            
+                            <control:WordControl Grid.Row="1"
+                                                  /><!--TODO add WordViewModel as datacontext-->
+                        </Grid>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <control:ResultTableControl
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10,30,10,10"
+                ItemsSource="{Binding PlayerRanking}" />
     </Grid>
 </UserControl>

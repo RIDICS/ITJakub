@@ -5,9 +5,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
-    xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Hangman.View.Control"
     mc:Ignorable="d"
     x:Name="RootElement"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanEditorViewModel}">
@@ -147,7 +147,7 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <view:SpecialTextBox Grid.Column="1"
+                        <control1:SpecialTextBox Grid.Column="1"
                                              Margin="0,0,10,0"
                                              VerticalAlignment="Center"
                                              FontSize="16"
