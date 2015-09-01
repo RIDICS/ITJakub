@@ -2,9 +2,9 @@ using System.Collections.Generic;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel.Comparer
 {
-    public class PlayerRankComparer : IComparer<PlayerRankViewModel>
+    public class PlayerProgressComparer : IComparer<ProgressViewModel>
     {
-        public int Compare(PlayerRankViewModel x, PlayerRankViewModel y)
+        public int Compare(ProgressViewModel x, ProgressViewModel y)
         {
             if (x.LetterCount != y.LetterCount)
                 return y.LetterCount - x.LetterCount;

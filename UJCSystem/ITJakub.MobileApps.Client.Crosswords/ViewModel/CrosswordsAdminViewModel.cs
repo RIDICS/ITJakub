@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
+using ITJakub.MobileApps.Client.Crosswords.ViewModel.Comparer;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
@@ -55,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 
                 if (!m_memberProgress.ContainsKey(progressUpdate.UserInfo.Id))
                 {
-                    viewModel = CreateProgressViewModel(progressUpdate.UserInfo);
+                    viewModel = CreateProgressViewModel(progressUpdate.UserInfo, progressUpdate.Time);
 
                     m_memberProgress.Add(progressUpdate.UserInfo.Id, viewModel);
                     PlayerRanking.Add(viewModel);
@@ -82,17 +84,16 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 PlayerRanking.Add(newProgressInfo);
             }
 
-           // PlayerRanking = new ObservableCollection<ProgressViewModel>(PlayerRanking.OrderBy(x => x, new PlayerRankComparer()));
-           // TODO add sorting
+            PlayerRanking = new ObservableCollection<ProgressViewModel>(PlayerRanking.OrderBy(x => x, new PlayerProgressComparer()));
         }
 
-        private ProgressViewModel CreateProgressViewModel(UserInfo userInfo)
+        private ProgressViewModel CreateProgressViewModel(UserInfo userInfo, DateTime? firstTime = null)
         {
             var rowProgressViewModels = m_rowListPattern.Select(model => model.Cells != null
                 ? new RowProgressViewModel(model.RowIndex, model.Cells.Count, model.StartPosition, model.AnswerPosition)
                 : new RowProgressViewModel());
 
-            var viewModel = new ProgressViewModel
+            var viewModel = new ProgressViewModel(userInfo, firstTime)
             {
                 UserInfo = userInfo,
                 Rows = new ObservableCollection<RowProgressViewModel>(rowProgressViewModels)

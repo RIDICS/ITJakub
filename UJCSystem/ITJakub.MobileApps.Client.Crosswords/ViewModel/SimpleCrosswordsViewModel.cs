@@ -66,7 +66,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         {
             foreach (var progressUpdate in list)
             {
-                PlayerRankingViewModel.UpdatePlayerRank(progressUpdate);
+                UpdatePlayerProgress(progressUpdate);
+
+                //PlayerRankingViewModel.UpdatePlayerProgressList(progressUpdate);
+                //PlayerRankingViewModel.UpdatePlayerRank(progressUpdate);
 
                 if (progressUpdate.UserInfo.IsMe)
                 {
@@ -78,32 +81,37 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     rowViewModel.UpdateWord(progressUpdate.FilledWord);
                     rowViewModel.IsCorrect = progressUpdate.IsCorrect;
                 }
-                else
-                {
-                    // Load opponent progress
-                    var viewModel = OpponentProgress.SingleOrDefault(model => model.UserInfo.Id == progressUpdate.UserInfo.Id);
-                    if (viewModel == null)
-                    {
-                        var rowProgressViewModels = Crossword.Select(model => model.Cells != null
-                            ? new RowProgressViewModel(model.RowIndex, model.Cells.Count, model.StartPosition, model.AnswerPosition)
-                            : new RowProgressViewModel());
-                        
-                        viewModel = new ProgressViewModel
-                        {
-                            UserInfo = progressUpdate.UserInfo,
-                            Rows = new ObservableCollection<RowProgressViewModel>(rowProgressViewModels)
-                        };
-
-                        OpponentProgress.Add(viewModel);
-                    }
-                    var rowViewModel = viewModel.Rows.First(row => row.RowIndex == progressUpdate.RowIndex);
-                    rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
-                    rowViewModel.IsCorrect = progressUpdate.IsCorrect;
-                }
             }
             m_firstUpdate = false;
             if (list.Count > 0)
                 PlayerRankingViewModel.UpdatePlayerOrder();
+        }
+
+        private void UpdatePlayerProgress(ProgressUpdateViewModel progressUpdate)
+        {
+            var viewModel = PlayerRankingViewModel.PlayerRanking.SingleOrDefault(model => model.UserInfo.Id == progressUpdate.UserInfo.Id);
+            if (viewModel == null)
+            {
+                var rowProgressViewModels = Crossword.Select(model => model.Cells != null
+                    ? new RowProgressViewModel(model.RowIndex, model.Cells.Count, model.StartPosition, model.AnswerPosition)
+                    : new RowProgressViewModel());
+
+                viewModel = new ProgressViewModel(progressUpdate.UserInfo, progressUpdate.Time)
+                {
+                    Rows = new ObservableCollection<RowProgressViewModel>(rowProgressViewModels)
+                };
+
+                PlayerRankingViewModel.PlayerRanking.Add(viewModel);
+
+                if (!progressUpdate.UserInfo.IsMe)
+                    OpponentProgress.Add(viewModel);
+            }
+            var rowViewModel = viewModel.Rows.First(row => row.RowIndex == progressUpdate.RowIndex);
+            rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
+            rowViewModel.IsCorrect = progressUpdate.IsCorrect;
+
+            viewModel.LetterCount = viewModel.Rows.Count(x => x.IsCorrect);
+            viewModel.Win = viewModel.Rows.Where(x => x.Cells != null).All(x => x.IsCorrect);
         }
 
         public void SetWin(bool isWin)

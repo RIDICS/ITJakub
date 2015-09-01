@@ -120,7 +120,7 @@
     <Compile Include="ViewModel\CrosswordsTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\EditorItemViewModel.cs" />
     <Compile Include="ViewModel\GameInfoViewModel.cs" />
-    <Compile Include="ViewModel\Comparer\PlayerRankComparer.cs" />
+    <Compile Include="ViewModel\Comparer\PlayerProgressComparer.cs" />
     <Compile Include="ViewModel\PlayerRankViewModel.cs" />
     <Compile Include="ViewModel\CrosswordRowViewModel.cs" />
     <Compile Include="ViewModel\ProgressUpdateViewModel.cs" />
