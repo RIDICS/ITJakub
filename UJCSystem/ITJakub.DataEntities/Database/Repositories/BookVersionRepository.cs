@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -363,6 +364,12 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 return result;
             }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermPageResult> GetBooksTermResultsByGuid(List<string> guidListRestriction, int? start, int? count)
+        {
+            throw new NotImplementedException();
         }
 
         [Transaction(TransactionMode.Requires)]

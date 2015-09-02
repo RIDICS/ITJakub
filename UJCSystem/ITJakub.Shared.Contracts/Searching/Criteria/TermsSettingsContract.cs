@@ -6,9 +6,9 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
     public class TermsSettingsContract
     {
         [DataMember]
-        public int Count { get; set; }
+        public int? Count { get; set; }
 
         [DataMember]
-        public int Start { get; set; }
+        public int? Start { get; set; }
     }
 }
