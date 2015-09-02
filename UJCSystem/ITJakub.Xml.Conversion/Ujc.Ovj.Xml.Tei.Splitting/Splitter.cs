@@ -24,7 +24,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 		const string TrueValue = "true";
 
 		const string NAttributeName = "n";
-		const string XmlIdAttributeName = "xml:id";
+	    const string ChangeAttributeName = "change";
 		const string DivElementName = "div";
 		const string PbElementName = "pb";
 		const string IdAttributeName = "id";
@@ -32,6 +32,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 		const string PElementName = "p";
 		const string LElementName = "l";
 		const string FragmentElementlName = "fragment";
+	    const string TeiElementName = "TEI";
 
 		readonly List<string> _divElementNames  = new List<string>() {DivElementName};
 		readonly List<string> _blockElementNames = new List<string>() { PElementName, LElementName };
@@ -48,11 +49,14 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 
 		private PageBreakSplitInfo _currentSplitInfo;
 
-		#region Vlastnosti
-		/// <summary>
-		/// Soubor XML, který se má rozdělit na menší části
-		/// </summary>
-		public string XmlFile { get; set; }
+        private SourceDocumentInfo _sourceDocumentInfo;
+
+
+        #region Vlastnosti
+        /// <summary>
+        /// Soubor XML, který se má rozdělit na menší části
+        /// </summary>
+        public string XmlFile { get; set; }
 
 		/// <summary>
 		/// Složka, do níž se uloží jednotlivé části rozděleného souboru
@@ -193,8 +197,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 
 			ElementInfos elementStack = new ElementInfos();
 			FileInfo xmlFileInfo = new FileInfo(XmlFile);
-
-
+		    
 
 
 			string newFileFormat = xmlFileInfo.Name.Substring(0, xmlFileInfo.Name.Length - xmlFileInfo.Extension.Length) + NumberedXmlPattern;
@@ -211,15 +214,23 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			{
 				using (XmlReader reader = XmlReader.Create(XmlFile))
 				{
-					reader.MoveToContent();
-					while (reader.Read())
+
+                    while (reader.Read())
 					{
 						switch (reader.NodeType)
 						{
 							case XmlNodeType.Element:
-								ElementInfo element = ElementInfo.GetElementInfo(reader);
+                                ElementInfo element = ElementInfo.GetElementInfo(reader);
 
-								if (!splittingStarted)
+                                if (element.Name == TeiElementName)
+                                {
+
+                                    string documentXmlId = element.Attributes.GetAttributeByLocalName(String.Empty, NAttributeName).Value;
+                                    string documentVersionId = element.Attributes.GetAttributeByLocalName(String.Empty, ChangeAttributeName).Value;
+                                    _sourceDocumentInfo = new SourceDocumentInfo(documentXmlId, documentVersionId);
+                                }
+
+                                if (!splittingStarted)
 								{
 									if (!ShouldSplittingStart(element, startElement)) continue;
 								}
@@ -227,7 +238,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 								{
 									startElement = element.Clone();
 									splittingStarted = true;
-									_currentSplitInfo = new PageBreakSplitInfo();
+									_currentSplitInfo = new PageBreakSplitInfo(_sourceDocumentInfo);
 								}
 
 								if (element.Name == PbElementName)
@@ -347,7 +358,9 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			_currentWriter.WriteStartDocument();
 			_currentWriter.WriteStartElement(VwNamespacePrefix, FragmentElementlName, ItJakubTeiNamespace);
 			_currentWriter.WriteAttributeString(XmlnsAttributeName, TeiNamespace);
-			if (tempQueue == null)
+            _currentWriter.WriteAttributeString(NAttributeName, _sourceDocumentInfo.XmlId);
+            _currentWriter.WriteAttributeString(ChangeAttributeName, _sourceDocumentInfo.VersionId);
+            if (tempQueue == null)
 				return;
 			foreach (ElementInfo elementInfo in tempQueue)
 			{
@@ -381,7 +394,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
 			if (_currentSplitInfo != null && _currentSplitInfo.Id != null)
 			{
 				_result.PageBreaksSplitInfo.Add(_currentSplitInfo);
-				_currentSplitInfo = new PageBreakSplitInfo();
+				_currentSplitInfo = new PageBreakSplitInfo(_sourceDocumentInfo);
 			}
 
 			return tempQueue;

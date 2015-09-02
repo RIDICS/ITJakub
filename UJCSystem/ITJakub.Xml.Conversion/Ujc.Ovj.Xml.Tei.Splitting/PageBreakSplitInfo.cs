@@ -5,8 +5,15 @@
 
 		#region Constructors
 
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+	    /// </summary>
+	    public PageBreakSplitInfo(SourceDocumentInfo sourceDocumentInfo)
+	    {
+	        SourceDocumentInfo = sourceDocumentInfo;
+	    }
 
-		public PageBreakSplitInfo()
+	    public PageBreakSplitInfo()
 		{
 		}
 
@@ -19,7 +26,11 @@
 			FullPath = fullPath;
 		}
 
-		/// <summary>
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="T:System.Object"/> class.
+	    /// </summary>
+
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="T:System.Object"/> class.
 		/// </summary>
 		public PageBreakSplitInfo(string id, string number, string fileName, string fullPath)
@@ -40,6 +51,10 @@
 		public string FullPath { get; set; }
 		//File name with facsimile picture of the page.
 		public string Facsimile { get; set; }
+        /// <summary>
+        /// Identifier and version identifier of the source document
+        /// </summary>
+        public SourceDocumentInfo SourceDocumentInfo { get; set; }
 		#endregion
 
 		#region Methods
