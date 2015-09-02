@@ -145,6 +145,24 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return Json(new { books = result.SearchResults}, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
+            return Json(new { count }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
