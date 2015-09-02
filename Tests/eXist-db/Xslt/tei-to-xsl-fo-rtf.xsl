@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns="http://www.w3.org/1999/XSL/Format"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
-	xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" 
+	xmlns:exist="http://exist.sourceforge.net/NS/exist"
+	xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist"
+	xmlns:vw="http://vokabular.ujc.cas.cz/ns/it-jakub/tei/1.0" 
+	xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0"
 	xmlns:tei="http://www.tei-c.org/ns/1.0"
-	exclude-result-prefixes="xs xd nlp tei"
-	version="2.0">
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" exclude-result-prefixes="xs xd exist itj vw nlp tei" version="2.0">
 	<xsl:import href="fo2/tei.xsl"/>
 	<xsl:import href="ujc-ovj-rozmery-a4.xsl"/>
 	<xsl:import href="ujc-ovj-xsl-fo.xsl"/>
@@ -18,6 +19,86 @@
 			<xd:p>Slouží ke generování XSL-FO pro transformaci na dokument ve formátu RFT</xd:p>
 		</xd:desc>
 	</xd:doc>
+
+
+	<xsl:template match="itj:result">
+		<root>
+			<xsl:call-template name="setupPagemasters"/>
+			<xsl:call-template name="mainAction"/>
+		</root>
+	</xsl:template>
+	
+	<xd:doc>
+		<xd:short>Process elements  tei:body</xd:short>
+		<xd:detail> </xd:detail>
+	</xd:doc>
+	<xsl:template match="vw:fragment">
+		<xsl:choose>
+			<xsl:when test="ancestor::tei:floatingText">
+				<xsl:apply-templates/>
+			</xsl:when>
+			<xsl:when test="ancestor::tei:p">
+				<xsl:apply-templates/>
+			</xsl:when>
+			<xsl:when test="ancestor::tei:group">
+				<xsl:apply-templates/>
+			</xsl:when>
+			<xsl:otherwise>
+				<!-- start page sequence -->
+				<page-sequence format="{$formatBodypage}" text-align="{$alignment}" hyphenate="{$hyphenate}" language="{$language}" initial-page-number="1">
+					<xsl:call-template name="choosePageMaster">
+						<xsl:with-param name="where">
+							<xsl:value-of select="$bodyMulticolumns"/>
+						</xsl:with-param>
+					</xsl:call-template>
+					<!-- static areas -->
+					<xsl:choose>
+						<xsl:when test="$twoSided='true'">
+							<xsl:call-template name="headers-footers-twoside"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:call-template name="headers-footers-oneside"/>
+						</xsl:otherwise>
+					</xsl:choose>
+					<!-- now start the main  flow -->
+					<flow flow-name="xsl-region-body" font-family="{$bodyFont}" font-size="{$bodySize}">
+						<xsl:if test="not($flowMarginLeft='')">
+							<xsl:attribute name="margin-left">
+								<xsl:value-of select="$flowMarginLeft"/>
+							</xsl:attribute>
+						</xsl:if>
+						<!--include front matter if there is no separate titlepage -->
+						<xsl:if test="not($titlePage='true') and not(preceding-sibling::tei:front)">
+							<xsl:call-template name="Header"/>
+						</xsl:if>
+						<xsl:apply-templates/>
+						<xsl:if test=".//tei:note[@place='end']">
+							<block>
+								<xsl:call-template name="setupDiv2"/>
+								<xsl:text>Notes</xsl:text>
+							</block>
+							<xsl:apply-templates select=".//tei:note[@place='end']" mode="endnote"/>
+						</xsl:if>
+					</flow>
+				</page-sequence>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+	
+	<xsl:template name="mainAction">
+		<xsl:choose>
+			<xsl:when test="tei:text/tei:group">
+				<xsl:apply-templates select="tei:text/tei:front"/>
+				<xsl:apply-templates select="tei:text/tei:group"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates select="tei:text/tei:front"/>
+				<xsl:apply-templates select="tei:text/tei:body"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		<xsl:apply-templates select="tei:text/tei:back"/>
+		<xsl:apply-templates select="vw:fragment" />
+	</xsl:template>
 
 
 	<xd:doc class="style" type="string">Font size for footnote numbers</xd:doc>

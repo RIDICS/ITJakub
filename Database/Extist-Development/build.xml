@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xdb="http://exist-db.org/ant" basedir="." name="eXistDbDevelopment" default="extract-resources-to-disk">
+<project xmlns:xdb="http://exist-db.org/ant" basedir="." name="eXistDbDevelopment" default="clean-data-collection">
 	<property file="local.properties"/>
 	<path id="classpath.core">
 		<fileset dir="${exist-home}/lib/core">
@@ -96,4 +96,15 @@
 		</xdb:store>
 		
 	</target>
+
+	<target name="clean-data-collection">
+		<echo message="Removing collection data" />
+		<xdb:remove xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}" collection="data"/>
+	
+	<echo message="Creating collection data" />
+		<xdb:create xmlns:xdb="http://exist-db.org/ant"
+		uri="${uri}" collection="data"/>
+</target>
+
 </project>
