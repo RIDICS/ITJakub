@@ -8,12 +8,19 @@
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:converters="clr-namespace:ITJakub.BatchImport.Client.View.Converters"
              mc:Ignorable="d"              
-             
+             d:DesignWidth="200"
              d:DataContext="{d:DesignInstance Type=viewModel:FileViewModel}">
 
     <UserControl.Resources>
         <ResourceDictionary>
             <converters:FileStateToProgressbarVisibilityConverter x:Key="FileStateToProgressbarVisibility"/>
+            <converters:FileStateToIconConverter x:Key="FileStateToIconConverter"
+                                                 PendingIcon="{StaticResource appbar_add}"
+                                                 UploadingIcon="{StaticResource appbar_clipboard_file}"
+                                                 ProcessingIcon="{StaticResource appbar_progress}"
+                                                 DoneIcon="{StaticResource appbar_database_sql}"
+                                                 ErrorIcon="{StaticResource appbar_checkmark_cross}"/>
+            
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -30,8 +37,10 @@
         
         <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,2,5,2">
             <Rectangle.Fill> 
-                <VisualBrush Stretch="Uniform"
-                             Visual="{StaticResource appbar_clipboard_file}" />
+                <VisualBrush Stretch="Uniform"                             
+                             Visual="{Binding State, Converter={StaticResource FileStateToIconConverter} }" />
+
+                <!--StaticResource appbar_clipboard_file}-->
             </Rectangle.Fill>
 
         </Rectangle>

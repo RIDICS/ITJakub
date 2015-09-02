@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Results;

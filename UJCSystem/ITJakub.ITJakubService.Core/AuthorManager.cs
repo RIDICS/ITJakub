@@ -3,6 +3,7 @@ using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 
 namespace ITJakub.ITJakubService.Core
 {

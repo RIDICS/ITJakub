@@ -2,14 +2,14 @@
 using System.Reflection;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
+using Castle.Windsor.Installer;
+using GalaSoft.MvvmLight.Views;
 using log4net.Config;
 
 namespace ITJakub.BatchImport.Client
 {
     public class Container : WindsorContainer
-    {
-        private const string ContainerConfigName = "ITJakub.BatchImport.Client.Container.Config";
-
+    {        
         private volatile static WindsorContainer m_current;
 
         public static WindsorContainer Current
@@ -22,7 +22,7 @@ namespace ITJakub.BatchImport.Client
                     {
                         if (m_current == null)
                         {
-                            m_current = new Container(GetContainerFullPath());
+                            m_current = new Container();
                         }
                     }
                 }
@@ -30,31 +30,19 @@ namespace ITJakub.BatchImport.Client
             }
             set { m_current = value; }
         }
-
-        private static string GetContainerFullPath()
-        {
-            var assembly = GetAssemblyLocation();
-            var assemblyLocation = Path.GetDirectoryName(assembly);
-            if (assemblyLocation != null)
-                return Path.Combine(assemblyLocation, ContainerConfigName);
-
-            return ContainerConfigName;
-        }
-
-
-        private static string GetAssemblyLocation()
-        {
-            return Assembly.GetAssembly(typeof(Container)).Location;
-        }
-
-        public Container(string configFile)
-            : base(new XmlInterpreter(configFile))
+                
+        private Container()
         {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
-            //XmlConfigurator.Configure();
-            //configure AutoMapper         
-        }        
+            //XmlConfigurator.Configure();              
 
+            InstallComponents();
+        }
+
+        private void InstallComponents()
+        {
+            Install(FromAssembly.InThisApplication());
+        }
     }
 }

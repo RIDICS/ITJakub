@@ -5,6 +5,7 @@ using AutoMapper;
 using ITJakub.CardFile.Core;
 using ITJakub.CardFile.Core.DataContractEntities;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using Jewelery;
 
 namespace ITJakub.ITJakubService.Core
