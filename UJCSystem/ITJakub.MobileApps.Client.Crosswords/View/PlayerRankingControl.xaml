@@ -53,7 +53,7 @@
                                 <Image Source="../Icon/olympic_medal-26.png"
                                        Grid.Column="0"
                                        Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <TextBlock Text="{Binding LetterCount}"
+                                <TextBlock Text="{Binding CorrectAnswers}"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"

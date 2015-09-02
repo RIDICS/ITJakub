@@ -6,8 +6,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel.Comparer
     {
         public int Compare(ProgressViewModel x, ProgressViewModel y)
         {
-            if (x.LetterCount != y.LetterCount)
-                return y.LetterCount - x.LetterCount;
+            if (x.CorrectAnswers != y.CorrectAnswers)
+                return y.CorrectAnswers - x.CorrectAnswers;
 
             return x.GameTime.CompareTo(y.GameTime);
         }

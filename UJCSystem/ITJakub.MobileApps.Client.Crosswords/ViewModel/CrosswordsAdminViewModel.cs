@@ -28,8 +28,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_dataService.SetTaskAndGetConfiguration(data, rowList =>
             {
                 m_rowListPattern = rowList;
-
-                // TODO update all user progress
             }, true);
         }
 
@@ -52,7 +50,6 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         {
             foreach (var progressUpdate in progressUpdateList)
             {
-                // todo update rank
                 ProgressViewModel viewModel;
                 
                 if (!m_memberProgress.ContainsKey(progressUpdate.UserInfo.Id))
@@ -71,6 +68,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
                 rowViewModel.IsCorrect = progressUpdate.IsCorrect;
 
+                viewModel.CorrectAnswers = viewModel.Rows.Count(x => x.IsCorrect);
+                viewModel.Win = viewModel.Rows.Where(x => x.Cells != null).All(x => x.IsCorrect);
+                viewModel.UpdateTime(progressUpdate.Time);
+            }
+
+            if (progressUpdateList.Count > 0)
+            {
+                PlayerRanking = new ObservableCollection<ProgressViewModel>(PlayerRanking.OrderBy(x => x, new PlayerProgressComparer()));
             }
         }
 

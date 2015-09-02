@@ -102,16 +102,9 @@
                                 <Run Text="{Binding UserInfo.LastName}" />
                                 <LineBreak />
                                 <Run Text="Uhádnuto slov:" />
-                                <Run Text="{Binding LetterCount}" />
-                                <Run Text="(písmen:" /><Run Text="{Binding LetterCount}" /><Run Text=")" />
-                                <LineBreak />
-                                <Run Text="Zbývá životů:" />
-                                <Run Text="{Binding Lives}" />
+                                <Run Text="{Binding CorrectAnswers}" />
                             </TextBlock>
 
-                            <!--<control:WordControl Grid.Row="1"
-                                                  />-->
-                            <!--TODO add WordViewModel as datacontext-->
                         </Grid>
                     </Grid>
                 </DataTemplate>
@@ -136,7 +129,7 @@
                             <Image Source="../Icon/olympic_medal-26.png"
                                    Grid.Column="0"
                                    Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                            <TextBlock Text="{Binding LetterCount}"
+                            <TextBlock Text="{Binding CorrectAnswers}"
                                        Grid.Column="1"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"

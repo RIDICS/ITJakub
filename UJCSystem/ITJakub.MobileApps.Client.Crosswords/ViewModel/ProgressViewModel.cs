@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     {
         private DateTime? m_firstTime;
         private bool m_win;
-        private int m_letterCount;
+        private int m_correctAnswers;
 
         public ProgressViewModel(UserInfo userInfo, DateTime? firstTime)
         {
@@ -33,12 +33,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
         }
 
-        public int LetterCount
+        public int CorrectAnswers
         {
-            get { return m_letterCount; }
+            get { return m_correctAnswers; }
             set
             {
-                m_letterCount = value;
+                m_correctAnswers = value;
                 RaisePropertyChanged();
             }
         }
@@ -46,7 +46,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         //public void UpdateRowInfo(int row, bool isCorrect)
         //{
         //    m_correctAnswers[row] = isCorrect;
-        //    LetterCount = m_correctAnswers.Count(b => b);
+        //    CorrectAnswers = m_correctAnswers.Count(b => b);
         //    Win = m_correctAnswers.All(correctAnswer => correctAnswer);
         //}
 

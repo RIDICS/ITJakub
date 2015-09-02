@@ -31,7 +31,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 m_crossword = value;
                 RaisePropertyChanged();
                 SetSubmitCallbacks(m_crossword);
-                PlayerRankingViewModel = new PlayerRankingViewModel(m_crossword.Count(row => row.Cells != null));
+                PlayerRankingViewModel = new PlayerRankingViewModel();
             }
         }
         
@@ -67,10 +67,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             foreach (var progressUpdate in list)
             {
                 UpdatePlayerProgress(progressUpdate);
-
-                //PlayerRankingViewModel.UpdatePlayerProgressList(progressUpdate);
-                //PlayerRankingViewModel.UpdatePlayerRank(progressUpdate);
-
+                
                 if (progressUpdate.UserInfo.IsMe)
                 {
                     // Load my progress history (only first load)
@@ -110,8 +107,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             rowViewModel.FilledLength = progressUpdate.FilledWord.Length;
             rowViewModel.IsCorrect = progressUpdate.IsCorrect;
 
-            viewModel.LetterCount = viewModel.Rows.Count(x => x.IsCorrect);
+            viewModel.CorrectAnswers = viewModel.Rows.Count(x => x.IsCorrect);
             viewModel.Win = viewModel.Rows.Where(x => x.Cells != null).All(x => x.IsCorrect);
+            viewModel.UpdateTime(progressUpdate.Time);
         }
 
         public void SetWin(bool isWin)
