@@ -1,16 +1,9 @@
-﻿using ITJakub.FileProcessing.Core.Sessions;
+using ITJakub.FileProcessing.Core.Sessions;
 using ITJakub.FileProcessing.DataContracts;
 using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Service
 {
-
-    public interface IFileProcessingServiceLocal : IFileProcessingService
-    {
-        
-    }
-
-
     public class FileProcessingService : IFileProcessingService
     {
         private readonly ResourceSessionManager m_sessionManager = Container.Current.Resolve<ResourceSessionManager>();

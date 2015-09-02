@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts.Contracts
 {
     [DataContract]
-    public class LoginUserContract
+    public class CreateUserContract
     {
         [DataMember]
         public string Email { get; set; }
@@ -12,6 +12,12 @@ namespace ITJakub.ITJakubService.DataContracts
         public string Password { get; set; }
 
         [DataMember]
+        public string FirstName { get; set; }
+
+        [DataMember]
+        public string LastName { get; set; }
+
+        [DataMember]
         public AuthProviderEnumContract AuthenticationProvider { get; set; }
     }
-}   
+}

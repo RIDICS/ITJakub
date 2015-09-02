@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using ITJakub.Shared.Contracts;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts.Contracts
 {
     [DataContract]
     public class BookInfoWithPagesContract

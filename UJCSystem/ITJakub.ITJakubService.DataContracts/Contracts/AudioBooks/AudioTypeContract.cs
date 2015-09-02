@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts.AudioBooks
+namespace ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks
 {
     [DataContract]
     public enum AudioTypeContract:byte

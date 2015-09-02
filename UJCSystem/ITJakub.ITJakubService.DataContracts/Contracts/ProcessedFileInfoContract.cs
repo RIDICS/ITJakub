@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace ITJakub.ITJakubService.DataContracts
+namespace ITJakub.ITJakubService.DataContracts.Contracts
 {
     [MessageContract]
     public class ProcessedFileInfoContract

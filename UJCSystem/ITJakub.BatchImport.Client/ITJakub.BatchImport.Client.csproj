@@ -95,6 +95,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\FolderDialogBehavior.cs" />
+    <Compile Include="ComponentInstaller.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="DataService\DataService.cs" />
     <Compile Include="BusinessLogic\FileUploadManager.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\Converters\FileStateToIconConverter.cs" />
     <Compile Include="View\Converters\FileStateToProgressbarVisibilityConverter.cs" />
     <Compile Include="View\FileView.xaml.cs">
       <DependentUpon>FileView.xaml</DependentUpon>
@@ -146,9 +148,6 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Content Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ITJakub.BatchImport.Client.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />

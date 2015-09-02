@@ -5,7 +5,7 @@ using ITJakub.Core;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.ITJakubService.DataContracts.AudioBooks;
+using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
 

@@ -22,9 +22,7 @@ namespace ITJakub.BatchImport.Client.Behaviors
         #endregion
 
         #region FolderName Dependency Property
-        public static readonly DependencyProperty FolderName =
-            DependencyProperty.RegisterAttached("FolderName",
-                typeof(string), typeof(FolderDialogBehavior));
+        public static readonly DependencyProperty FolderName = DependencyProperty.RegisterAttached("FolderName",typeof(string), typeof(FolderDialogBehavior));
 
         public static string GetFolderName(DependencyObject obj)
         {

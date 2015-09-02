@@ -4,16 +4,18 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
-using ITJakub.ITJakubService.DataContracts.AudioBooks;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 
 namespace ITJakub.ITJakubService.DataContracts.Clients
 {
+    
+
+
     public class ItJakubServiceClient : ClientBase<IItJakubService>, IItJakubService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -22,6 +24,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         {
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("MainServiceClient created.");
+        }
+
+        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -125,31 +132,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public void AddResource(UploadResourceContract resourceInfoSkeleton)
-        {
-            try
-            {
-                Channel.AddResource(resourceInfoSkeleton);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddResource failed with: {0}", ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddResource failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("AddResource timeouted with: {0}", ex);
-                throw;
-            }
-        }
+      
 
         public bool ProcessSession(string sessionId, string uploadMessage)
         {
@@ -833,12 +816,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -860,13 +842,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
-            string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+                return Channel.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -1125,57 +1105,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         }
         
                 
-        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
-        {
-            try
-            {
-                return Channel.DownloadWholeAudiobook(requestContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
-        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
-        {
-            try
-            {
-               return Channel.DownloadAudioBookTrack(requestContract);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
+    
 
         public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
@@ -1229,10 +1159,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        private string GetCurrentMethod([CallerMemberName] string methodName = null)
-        {
-            return methodName;
-        }
-
+   
     }
 }

@@ -28,6 +28,7 @@
                     <view:FileView/>
                 </DataTemplate>
             </ListView.Resources>
+            
         </ListView>
 
         <Button Grid.Row="2"
