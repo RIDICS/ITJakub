@@ -114,6 +114,7 @@
     <Compile Include="DataService\ProgressManager.cs" />
     <Compile Include="DataService\TaskManager.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\Comparer\UserInfoNameComparer.cs" />
     <Compile Include="ViewModel\Enum\AnswerState.cs" />
     <Compile Include="ViewModel\FillwordsAdminViewModel.cs" />
     <Compile Include="ViewModel\FillwordsTaskPreviewViewModel.cs" />

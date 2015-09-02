@@ -57,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Fillwords
 
         public override TaskPreviewBaseViewModel TaskPreviewViewModel
         {
-            get { return new FillwordsTaskPreviewViewModel(); }
+            get { return new FillwordsTaskPreviewViewModel(m_dataService); }
         }
 
         public override Type TaskPreviewDataTemplate

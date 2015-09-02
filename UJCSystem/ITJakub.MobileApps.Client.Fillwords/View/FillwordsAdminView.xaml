@@ -5,10 +5,72 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Fillwords.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:FillwordsAdminViewModel}">
+
+    <UserControl.Resources>
+        <converter:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
+    </UserControl.Resources>
     
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!--<TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Text="Aktuální stav"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />-->
+
+        <TextBlock Grid.Column="1"
+                   Grid.Row="0"
+                   Text="Výsledné pořadí"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />
+
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
+                  Width="270"
+                  Margin="10,10,20,0"
+                  SelectionMode="None"
+                  IsItemClickEnabled="False"
+                  ItemsSource="{Binding ResultList}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold">
+                            <Run Text="{Binding UserInfo.FirstName}" />
+                            <Run Text="{Binding UserInfo.LastName}" />
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsTaskSubmited, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid Background="LightGray"
+                                  RequestedTheme="Light">
+                                <TextBlock Margin="2">
+                                    <Run Text="{Binding PercentageSuccess, Converter={StaticResource DoubleToStringConverter}}" /><Run Text="%" />
+                                </TextBlock>
+                            </Grid>
+                            <TextBlock Margin="10,0,0,0">
+                                <Run Text="Správně:" />
+                                <Run Text="{Binding CorrectAnswers}" />
+                                <Run Text="z" />
+                                <Run Text="{Binding TotalAnswers}" />
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Text="(Nevyplněno)"
+                                   Visibility="{Binding IsTaskSubmited, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>
