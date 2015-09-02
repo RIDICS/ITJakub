@@ -1257,10 +1257,63 @@ namespace ITJakub.Web.Hub
             }
         }
 
+        public SearchResultContractList GetGrammarSearchResults(IEnumerable<SearchCriteriaContract> listSearchCriteriaContracts)
+        {
+            try
+            {
+                return Channel.GetGrammarSearchResults(listSearchCriteriaContracts);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetGrammarSearchResultsCount(IEnumerable<SearchCriteriaContract> listSearchCriteriaContracts)
+        {
+            try
+            {
+                return Channel.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
         }
+
 
     }
 }

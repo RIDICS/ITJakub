@@ -279,5 +279,15 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
         }
+
+        public SearchResultContractList GetGrammarSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetGrammarSearchResults(searchCriterias);
+        }
+
+        public int GetGrammarSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetGrammarSearchResultsCount(searchCriterias);
+        }
     }
 }

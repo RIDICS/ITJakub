@@ -141,8 +141,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = result.SearchResults}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -171,7 +171,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -202,7 +202,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -246,8 +246,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = result.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -289,8 +289,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var results = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = results }, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
+            return Json(new { books = result.SearchResults }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -327,10 +327,10 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 }
             };
 
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts).SearchResults.FirstOrDefault();
             if (result != null)
             {
-                return Json(new { results = result.Results }, JsonRequestBehavior.AllowGet);
+                return Json(new { results = result.TermsPageHits }, JsonRequestBehavior.AllowGet);
             }
 
             return Json(new { }, JsonRequestBehavior.AllowGet);

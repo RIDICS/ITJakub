@@ -21,6 +21,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader("@Model.BookXmlId", "@Model.VersionXmlId", "@Model.BookTitle", @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
+        initReader(@Html.Raw(Json.Encode(@Model.BookXmlId)), @Html.Raw(Json.Encode(@Model.VersionXmlId)),  @Html.Raw(Json.Encode(@Model.BookTitle)), @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
     });
 </script>
