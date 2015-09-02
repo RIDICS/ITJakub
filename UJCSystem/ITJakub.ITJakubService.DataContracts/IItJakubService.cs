@@ -125,10 +125,10 @@ namespace ITJakub.ITJakubService.DataContracts
         int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
         
         [OperationContract]
-        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
         PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);

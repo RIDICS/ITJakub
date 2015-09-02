@@ -226,7 +226,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
         {
-            var result = m_mainServiceClient.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
+            var result = m_mainServiceClient.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, BookTypeEnumContract.Dictionary);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -245,7 +245,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 };
             }
 
-            var result = m_mainServiceClient.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html);
+            var result = m_mainServiceClient.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html, BookTypeEnumContract.Dictionary);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

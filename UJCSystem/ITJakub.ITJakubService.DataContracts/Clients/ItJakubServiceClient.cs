@@ -833,12 +833,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+                return Channel.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -860,13 +859,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid,
-            string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+                return Channel.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat, bookType);
             }
             catch (CommunicationException ex)
             {
