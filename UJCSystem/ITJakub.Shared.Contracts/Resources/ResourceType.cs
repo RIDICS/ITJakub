@@ -11,5 +11,8 @@
         Image = 6,
         Audio = 7,
         ExtractableArchive = 8,
+        UnknownXmlFile = 9,
+        ConvertedDocument = 10,
+        BibliographyDocument = 11,
     }
 }

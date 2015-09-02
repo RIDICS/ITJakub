@@ -115,6 +115,20 @@ namespace ITJakub.FileProcessing.Core.Sessions
         }
     }
 
+    public class UnknownXmlTypeResolver : ResourceTypeResolverBase
+    {
+        public UnknownXmlTypeResolver(string[] fileExtensions)
+            : base(fileExtensions)
+        {
+        }
+
+        public override ResourceType ResolveResourceType
+        {
+            get { return ResourceType.UnknownXmlFile; }
+        }
+    }
+
+
     public class ExtractableArchiveTypeResolver:ResourceTypeResolverBase
     {
         public ExtractableArchiveTypeResolver(string[] fileExtensions) : base(fileExtensions)
