@@ -33,8 +33,6 @@ namespace ITJakub.DataEntities.Database.Entities
         }
     }
 
-
-
     public class TrackRecording : RecordingBase
     {
         public virtual TimeSpan? Length { get; set; }
@@ -52,7 +50,6 @@ namespace ITJakub.DataEntities.Database.Entities
         Unknown = 0,
         Mp3 = 1,
         Ogg = 2,
-        Wav = 3,
-        
+        Wav = 3,        
     }
 }

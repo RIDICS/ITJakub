@@ -51,6 +51,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\ExtractableArchiveTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\ImageTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\MetadataTypeResolver.cs" />
     <Compile Include="Sessions\Processors\AudioBookArchiveProcessor.cs" />
     <Compile Include="Sessions\Processors\ExtractableArchiveProcessor.cs" />
     <Compile Include="Sessions\Processors\FileDbStoreProcessor.cs" />
@@ -62,7 +66,11 @@
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\ResourceTypeResolverBase.cs" />
     <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\SourceDocumentTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\TransformationTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\UnknownXmlTypeResolver.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TracksProcessor.cs" />
