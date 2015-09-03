@@ -176,11 +176,5 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
-
-        [OperationContract]
-        SearchResultContractList GetGrammarSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        [OperationContract]
-        int GetGrammarSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
     }
 }

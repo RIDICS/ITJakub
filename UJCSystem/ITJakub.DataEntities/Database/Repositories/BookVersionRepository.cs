@@ -367,9 +367,30 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<TermPageResult> GetBooksTermResultsByGuid(List<string> guidListRestriction, int? start, int? count)
+        public virtual IList<TermResult> GetBooksTermResults(SearchCriteriaQueryCreator creator, string termMatchQuery, int? start, int? count)
         {
-            throw new NotImplementedException();
+            using (var session = GetSession())
+            {
+                var queryString = creator.GetQueryStringForTermResults(termMatchQuery, start, count);
+                var query = session.CreateQuery(queryString);
+                creator.SetParameters(query);
+                var result = query.SetResultTransformer(Transformers.AliasToBean<TermResult>()).List<TermResult>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermCountResult> GetBooksTermResultsCount(SearchCriteriaQueryCreator creator, string termMatchQuery)
+        {
+            using (var session = GetSession())
+            {
+                var query = session.CreateQuery(creator.GetQueryStringForTermResultsCount(termMatchQuery));
+                creator.SetParameters(query);
+                var result = query.SetResultTransformer(Transformers.AliasToBean<TermCountResult>()).List<TermCountResult>();
+
+                return result;
+            }
         }
 
         [Transaction(TransactionMode.Requires)]

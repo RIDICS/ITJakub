@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using AutoMapper;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
@@ -102,15 +103,17 @@ namespace ITJakub.ITJakubService.Core
 
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var searchCriteriaContracts = searchCriterias.ToList();
+            var filteredCriterias = FilterSearchCriterias(searchCriteriaContracts);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             var resultCriteria = filteredCriterias.ResultCriteria;
+
+            var queryCreator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
 
             if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
             {
                 var databaseSearchResult =
-                    m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
-                        filteredCriterias.MetadataParameters));
+                    m_bookVersionRepository.SearchByCriteriaQuery(queryCreator);
 
                 if (databaseSearchResult.Count == 0)
                 {
@@ -124,6 +127,11 @@ namespace ITJakub.ITJakubService.Core
                 nonMetadataCriterias.Add(resultContract);
             }
 
+            var resultCriteriaContract = nonMetadataCriterias.OfType<ResultCriteriaContract>().FirstOrDefault();
+
+            Dictionary<long, List<PageDescriptionContract>> bookTermResults = null;
+            Dictionary<long, long> bookTermResultsCount = null;
+
             if (filteredCriterias.NonMetadataCriterias.All(x => x.Key == CriteriaKey.ResultRestriction || x.Key == CriteriaKey.Result))
             {
                 // Search only in SQL
@@ -133,14 +141,19 @@ namespace ITJakub.ITJakubService.Core
                     resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
                 var pageCounts = m_bookVersionRepository.GetBooksPageCountByGuid(guidListRestriction)
                     .ToDictionary(x => x.BookId, x => x.Count);
+                
 
-                Dictionary<long,IList<BookPage>> bookTerms = null;
-
-                if (filteredCriterias.MetadataCriterias.OfType<TermsSettingsContract>().FirstOrDefault() != null)
+                if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
                 {
-                    var termSettings = filteredCriterias.MetadataCriterias.OfType<TermsSettingsContract>().First();
-                    var booksTermResults = m_bookVersionRepository.GetBooksTermResultsByGuid(guidListRestriction, termSettings.Start, termSettings.Count);
-                    bookTerms = booksTermResults.ToDictionary(x => x.BookId, x => x.Pages);
+                    var termSettings = resultCriteriaContract.TermsSettingsContract;
+
+                    var termWhereClause = CreateWhereClauseForTerms(searchCriteriaContracts);
+
+                    var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
+                    bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName,PageXmlId = x.PageXmlId}).ToDictionary(x=>x.Key, x => x.ToList());
+
+                    var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(queryCreator, termWhereClause);
+                    bookTermResultsCount = booksTermResultsCount.ToDictionary(x=>x.BookId, x => x.PagesCount);
                 }
 
 
@@ -148,10 +161,12 @@ namespace ITJakub.ITJakubService.Core
                 foreach (var resultContract in resultContractList)
                 {
                     resultContract.PageCount = pageCounts[resultContract.BookId];
-                    if (bookTerms != null)
+
+                    if (bookTermResults != null)
                     {
-                        resultContract.TermsPageHits = Mapper.Map<IList<PageDescriptionContract>>(bookTerms[resultContract.BookId]);
-                        resultContract.TermsPageHitsCount = 0; //TODO select count
+                        List<PageDescriptionContract> pageDescriptionContracts;
+                        resultContract.TermsPageHits = bookTermResults.TryGetValue(resultContract.BookId, out pageDescriptionContracts) ? pageDescriptionContracts : new List<PageDescriptionContract>();
+                        resultContract.TermsPageHitsCount = Convert.ToInt32(bookTermResultsCount[resultContract.BookId]);
                     }
                 }
 
@@ -167,15 +182,19 @@ namespace ITJakub.ITJakubService.Core
                 .ToDictionary(x => x.BookId, x => x.Count);
 
             var resultDictionary = result.ToDictionary(x => x.Book.Guid);
+            
 
-
-            Dictionary<long, IList<BookPage>> bookTermsResults = null;
-
-            if (filteredCriterias.MetadataCriterias.OfType<TermsSettingsContract>().FirstOrDefault() != null)
+            if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
             {
-                var termSettings = filteredCriterias.MetadataCriterias.OfType<TermsSettingsContract>().First();
-                var booksTermResults = m_bookVersionRepository.GetBooksTermResultsByGuid(guidList, termSettings.Start, termSettings.Count);
-                bookTermsResults = booksTermResults.ToDictionary(x => x.BookId, x => x.Pages);
+                var termSettings = resultCriteriaContract.TermsSettingsContract;
+
+                var termWhereClause = CreateWhereClauseForTerms(searchCriteriaContracts);
+
+                var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
+                bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName, PageXmlId = x.PageXmlId }).ToDictionary(x => x.Key, x => x.ToList());
+
+                var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(queryCreator, termWhereClause);
+                bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
             }
 
             var searchResultFullContext = new List<SearchResultContract>();
@@ -187,16 +206,53 @@ namespace ITJakub.ITJakubService.Core
                 localResult.Results = searchResult.Results;
                 localResult.PageCount = resultPageCountDictionary[localResult.BookId];
 
-                if (bookTermsResults != null)
+                if (bookTermResults != null)
                 {
-                    localResult.TermsPageHits = Mapper.Map<IList<PageDescriptionContract>>(bookTermsResults[localResult.BookId]);
-                    localResult.TermsPageHitsCount = 0; //TODO select count
+                    List<PageDescriptionContract> pageDescriptionContracts;
+                    localResult.TermsPageHits = bookTermResults.TryGetValue(localResult.BookId, out pageDescriptionContracts) ? pageDescriptionContracts : new List<PageDescriptionContract>();
+                    localResult.TermsPageHitsCount = Convert.ToInt32(bookTermResultsCount[localResult.BookId]);
                 }
 
                 searchResultFullContext.Add(localResult);
             }
 
             return searchResultFullContext;
+        }
+
+        private string CreateWhereClauseForTerms(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+
+            var termCriterias = searchCriterias.Where(x => x.Key == CriteriaKey.Term);
+
+            var queryDisjunctionList = new List<string>();
+
+            foreach (var termCriteria in termCriterias)
+            {
+                var wordListCriteria = (WordListCriteriaContract)termCriteria;
+                var termCriteriaBuilder = new StringBuilder();
+
+                foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
+                {
+                    if (termCriteriaBuilder.Length > 0)
+                        termCriteriaBuilder.Append(" or");
+
+                    termCriteriaBuilder.AppendFormat(" t1.Text like (:{0})", CriteriaConditionBuilder.Create(wordCriteria));
+                }
+
+                queryDisjunctionList.Add(termCriteriaBuilder.ToString());
+            }
+
+            var whereBuilder = new StringBuilder();
+
+            foreach (var criteriaQuery in queryDisjunctionList)
+            {
+                
+                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : "");
+
+                whereBuilder.Append(" (").Append(criteriaQuery).Append(')');
+            }
+
+            return whereBuilder.ToString();
         }
 
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
@@ -361,6 +417,8 @@ namespace ITJakub.ITJakubService.Core
 
             return CriteriaConditionBuilder.Create(wordCriteria);
         }
+
+       
 
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
@@ -657,51 +715,6 @@ namespace ITJakub.ITJakubService.Core
             nonMetadataCriterias.Add(resultContract);
 
             return m_searchServiceClient.GetCorpusSearchResultsCount(nonMetadataCriterias);
-        }
-
-        public SearchResultContractList GetGrammarSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
-        {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
-            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-
-            if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
-            {
-                var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters));
-
-                if (databaseSearchResult.Count == 0)
-                {
-                    return new SearchResultContractList();
-                }
-
-                var resultContract = new ResultRestrictionCriteriaContract
-                {
-                    ResultBooks = databaseSearchResult
-                };
-                nonMetadataCriterias.Add(resultContract);
-            }
-
-
-             // Search only in SQL
-            var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
-            var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
-            var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction);
-
-            //TODO load terms
-            var results = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
-               
-            return new SearchResultContractList { SearchResults = results };
-        }
-
-        public int GetGrammarSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
-        {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
-            var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
-                filteredCriterias.MetadataParameters);
-            var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
-            if (databaseSearchResult.Count == 0)
-                return 0;
-
-            return databaseSearchResult.Count;
         }
 
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId, OutputFormatEnumContract resultFormat)

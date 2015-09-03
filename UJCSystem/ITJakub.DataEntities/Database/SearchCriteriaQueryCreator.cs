@@ -23,19 +23,10 @@ namespace ITJakub.DataEntities.Database
         {
             var queryString =
                 "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
-            var joinBuilder = new StringBuilder();
-            var whereBuilder = new StringBuilder();
-            foreach (var criteriaQuery in m_conjunctionQuery)
-            {
-                if (!string.IsNullOrEmpty(criteriaQuery.Join))
-                    joinBuilder.Append(' ').Append(criteriaQuery.Join);
 
-                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : " where");
+            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
 
-                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
-            }
-
-            queryString = string.Format("{0}{1}{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
+            queryString = string.Format("{0}{1} group by b.Guid", queryString, whereClause);
 
             return queryString;
         }
@@ -44,9 +35,19 @@ namespace ITJakub.DataEntities.Database
         {
             var queryString =
                 "select b.Id from Book b inner join b.LastVersion bv";
+
+            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
+
+            queryString = string.Format("{0}{1} group by b.Id", queryString, whereClause);
+
+            return queryString;
+        }
+
+        private string CreateWhereClauseForQueryString(List<SearchCriteriaQuery> conjunctionQuery)
+        {
             var joinBuilder = new StringBuilder();
             var whereBuilder = new StringBuilder();
-            foreach (var criteriaQuery in m_conjunctionQuery)
+            foreach (var criteriaQuery in conjunctionQuery)
             {
                 if (!string.IsNullOrEmpty(criteriaQuery.Join))
                     joinBuilder.Append(' ').Append(criteriaQuery.Join);
@@ -56,10 +57,10 @@ namespace ITJakub.DataEntities.Database
                 whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
             }
 
-            queryString = string.Format("{0}{1}{2} group by b.Id", queryString, joinBuilder, whereBuilder);
-
-            return queryString;
+            return string.Format("{0}{1}", joinBuilder, whereBuilder);
         }
+
+
 
         public string GetQueryStringForHeadwordCount()
         {
@@ -76,6 +77,36 @@ namespace ITJakub.DataEntities.Database
                 "select distinct b1.Guid as BookGuid, bv1.VersionId as BookVersionId, bv1.Title as BookTitle, bv1.Acronym as BookAcronym, bh1.DefaultHeadword as Headword, bh1.XmlEntryId as XmlEntryId, bh1.SortOrder as SortOrder, bh1.Image as Image from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
 
             selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery order by bh1.SortOrder", selectQueryString, GetQueryStringForIdList());
+            return selectQueryString;
+        }
+
+        public string GetQueryStringForTermResults(string termMatchQuery, int? start, int? count)
+        {
+            var selectQueryString =
+                "select distinct b1.Id as BookId, bp1.XmlId as PageXmlId, bp1.Text as PageName from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookPages bp1 inner join bp1.Terms t1";  //TODO should be start and count here used in subselect and order by bp1.Position
+
+            selectQueryString = string.Format("{0} where b1.Id in ({1})", selectQueryString, GetQueryStringForIdList());
+
+            if (!string.IsNullOrEmpty(termMatchQuery))
+            {
+                selectQueryString = string.Format("{0} and {1}", selectQueryString, termMatchQuery);
+            }
+
+            return selectQueryString;
+        }
+
+        public string GetQueryStringForTermResultsCount(string termMatchQuery)
+        {
+            var selectQueryString =
+                "select b1.Id as BookId, count(distinct bp1.Id) as PagesCount from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookPages bp1 inner join bp1.Terms t1";
+
+            selectQueryString = string.Format("{0} where b1.Id in ({1}) group by b1.Id", selectQueryString, GetQueryStringForIdList());
+
+            if (!string.IsNullOrEmpty(termMatchQuery))
+            {
+                selectQueryString = string.Format("{0} and {1}", selectQueryString, termMatchQuery);
+            }
+            
             return selectQueryString;
         }
 

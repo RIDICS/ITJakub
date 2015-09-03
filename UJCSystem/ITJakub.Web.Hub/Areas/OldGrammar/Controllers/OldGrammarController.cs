@@ -129,6 +129,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     ContextLength = 50,
                     Count = 3,
                     Start = 1
+                },
+                TermsSettingsContract = new TermsSettingsContract
+                {
+                    Start = 1,
+                    Count = 25
                 }
             });
 
@@ -141,8 +146,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = result.SearchResults}, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = result}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -159,7 +164,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
@@ -189,7 +194,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -200,7 +205,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 new WordListCriteriaContract
                 {
-                    Key = CriteriaKey.Fulltext,
+                    Key = CriteriaKey.Term,
                     Disjunctions = new List<WordCriteriaContract>
                     {
                         new WordCriteriaContract
@@ -220,7 +225,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var count = m_mainServiceClient.GetGrammarSearchResultsCount(listSearchCriteriaContracts);
+            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
@@ -251,8 +256,13 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         ContextLength = 50,
                         Count = 3,
                         Start = 1
+                    },
+                    TermsSettingsContract = new TermsSettingsContract
+                    {
+                        Start = 1,
+                        Count = 25
                     }
-                }
+                },
             };
 
             if (selectedBookIds != null || selectedCategoryIds != null)
@@ -264,8 +274,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = result.SearchResults }, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = result }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -274,7 +284,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 new WordListCriteriaContract
                 {
-                    Key = CriteriaKey.Fulltext,
+                    Key = CriteriaKey.Term,
                     Disjunctions = new List<WordCriteriaContract>
                     {
                         new WordCriteriaContract
@@ -294,6 +304,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         ContextLength = 50,
                         Count = 3,
                         Start = 1
+                    },
+                    TermsSettingsContract = new TermsSettingsContract
+                    {
+                        Start = 1,
+                        Count = 25
                     }
                 }
             };
@@ -307,8 +322,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
             }
 
-            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts);
-            return Json(new { books = result.SearchResults }, JsonRequestBehavior.AllowGet);
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
+            return Json(new { books = result }, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -333,7 +348,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 new ResultCriteriaContract
                 {
                     Start = 0,
-                    Count = 1
+                    Count = 1,
+                    TermsSettingsContract = new TermsSettingsContract()
                 },
                 new ResultRestrictionCriteriaContract
                 {
@@ -345,7 +361,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 }
             };
 
-            var result = m_mainServiceClient.GetGrammarSearchResults(listSearchCriteriaContracts).SearchResults.FirstOrDefault();
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
             if (result != null)
             {
                 return Json(new { results = result.TermsPageHits }, JsonRequestBehavior.AllowGet);
