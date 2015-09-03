@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="Book.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Enum\ReaderMode.cs" />
     <Compile Include="Manager\BookManager.cs" />
     <Compile Include="Manager\Cache\CacheBase.cs" />
     <Compile Include="Manager\Cache\DocumentCache.cs" />
@@ -146,7 +147,7 @@
     <Compile Include="Service\Client\BookServiceClient.cs" />
     <Compile Include="Manager\Cache\PhotoCache.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />
-    <Compile Include="Message\SelectedPageMessage.cs" />
+    <Compile Include="Message\CloseBookSelectAppMessage.cs" />
     <Compile Include="Service\DataService.cs" />
     <Compile Include="Service\NavigationService.cs" />
     <Compile Include="ViewModel\BookViewModel.cs" />

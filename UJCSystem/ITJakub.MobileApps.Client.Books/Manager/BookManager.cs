@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Manager.Cache;
 using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Books.ViewModel;
@@ -43,6 +44,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             }
             set { m_currentBook = value; }
         }
+
+        public ReaderMode ReaderMode { get; set; }
 
         private string GetAuthorStringFromList(IEnumerable<AuthorContract> authors)
         {

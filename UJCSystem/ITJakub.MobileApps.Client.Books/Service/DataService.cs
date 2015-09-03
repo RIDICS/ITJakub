@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Manager;
 using ITJakub.MobileApps.Client.Books.ViewModel;
 using ITJakub.MobileApps.MobileContracts;
@@ -54,6 +55,16 @@ namespace ITJakub.MobileApps.Client.Books.Service
         public void GetCurrentBook(Action<BookViewModel> callback)
         {
             callback(m_bookManager.CurrentBook);
+        }
+
+        public void SetMode(ReaderMode readerMode)
+        {
+            m_bookManager.ReaderMode = readerMode;
+        }
+
+        public void GetMode(Action<ReaderMode> callback)
+        {
+            callback(m_bookManager.ReaderMode);
         }
     }
 }

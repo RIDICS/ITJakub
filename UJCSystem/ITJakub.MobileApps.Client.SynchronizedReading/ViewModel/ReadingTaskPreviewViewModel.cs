@@ -1,5 +1,6 @@
 using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight.Command;
+using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 using ITJakub.MobileApps.Client.SynchronizedReading.DataService;
@@ -19,14 +20,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_isPageLoadError;
         private bool m_loadingPage;
         private bool m_loadingImage;
+        private string m_bookGuid;
 
         public ReadingTaskPreviewViewModel(ReaderDataService dataService)
         {
             m_dataService = dataService;
 
-            ShowBookReaderCommand = new RelayCommand(() => { }); // TODO show book reader
+            ShowBookReaderCommand = new RelayCommand(ShowReader);
         }
-
+        
         public override void ShowTask(string data)
         {
             m_dataService.SetTask(data);
@@ -38,6 +40,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                     return;
                 }
 
+                m_bookGuid = bookInfo.Guid;
                 BookName = bookInfo.Title;
                 BookAuthor = string.IsNullOrEmpty(bookInfo.Authors) ? "(nezadáno)" : bookInfo.Authors;
                 PublishDate = string.IsNullOrEmpty(bookInfo.PublishDate) ? "(nezadáno)" : bookInfo.PublishDate;
@@ -190,6 +193,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             {
                 BookPagePhoto = null;
             }
+        }
+
+        private void ShowReader()
+        {
+            Book.ShowReader(m_bookGuid);
         }
     }
 }

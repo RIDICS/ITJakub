@@ -2,8 +2,8 @@
 
 namespace ITJakub.MobileApps.Client.Books.Message
 {
-    public class SelectedPageMessage
+    public class CloseBookSelectAppMessage
     {
-        public BookPageViewModel BookPage { get; set; }
+        public BookPageViewModel SelectedBookPage { get; set; }
     }
 }
