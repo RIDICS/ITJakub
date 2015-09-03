@@ -166,7 +166,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 {
                     new CategoryItem{Category = BookTypeContract.Edition, Name = "Edice"},
                     new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
-                    new CategoryItem{Category = BookTypeContract.Dictionary, Name = "Slovníky"},
                     new CategoryItem{Category = BookTypeContract.ProfessionalLiterature, Name = "Odborná literatura"},
                 };
             }

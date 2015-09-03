@@ -31,10 +31,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService, PageLoadedCallback);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
+            GoToPreviousCommand = new RelayCommand(GoToPreviousPage);
+            GoToNextCommand = new RelayCommand(GoToNextPage);
 
             m_dataService.GetCurrentBook(LoadData);
         }
-        
+
         private void LoadData(BookViewModel bookViewModel)
         {
             m_dataService.GetMode(readerMode =>
@@ -105,10 +107,26 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             PagePhotoViewModel.OpenPagePhoto(page);
         }
 
+        private void GoToNextPage()
+        {
+            if (CurrentPageNumber < PageCount)
+                CurrentPageNumber++;
+        }
+
+        private void GoToPreviousPage()
+        {
+            if (CurrentPageNumber > 1)
+                CurrentPageNumber--;
+        }
+        
 
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand SelectCommand { get; private set; }
+
+        public RelayCommand GoToPreviousCommand { get; private set; }
+
+        public RelayCommand GoToNextCommand { get; private set; }
 
         public PageTextViewModel PageTextViewModel { get; set; }
 
