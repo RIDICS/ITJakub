@@ -16,5 +16,7 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
         Task<string> GetPageAsRtfAsync(string bookGuid, string pageId);
 
         Task<Stream> GetPagePhotoAsync(string bookGuid, string pageId);
+
+        Task<BookContract> GetBookInfo(string bookGuid);
     }
 }

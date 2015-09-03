@@ -143,7 +143,7 @@
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\Client\MobileCommunicationException.cs" />
     <Compile Include="Service\Client\MockServiceClient.cs" />
-    <Compile Include="Service\Client\ServiceClient.cs" />
+    <Compile Include="Service\Client\BookServiceClient.cs" />
     <Compile Include="Manager\Cache\PhotoCache.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />
     <Compile Include="Message\SelectedPageMessage.cs" />

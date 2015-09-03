@@ -121,6 +121,7 @@
     <Compile Include="DataContract\UpdateContract.cs" />
     <Compile Include="DataService\BookManager.cs" />
     <Compile Include="DataService\ReaderTaskManager.cs" />
+    <Compile Include="ViewModel\BookInfoViewModel.cs" />
     <Compile Include="ViewModel\ControlViewModel.cs" />
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />

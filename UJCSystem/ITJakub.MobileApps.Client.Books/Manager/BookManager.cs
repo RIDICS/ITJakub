@@ -160,5 +160,29 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 callback(null, exception);
             }
         }
+
+        public async void GetBookInfo(string bookGuid, Action<BookViewModel, Exception> callback)
+        {
+            try
+            {
+                var bookInfo = await m_serviceClient.GetBookInfo(bookGuid);
+                var bookViewModel = new BookViewModel
+                {
+                    Authors = GetAuthorStringFromList(bookInfo.Authors),
+                    Guid = bookInfo.Guid,
+                    Title = bookInfo.Title,
+                    PublishDate = bookInfo.PublishDate
+                };
+                callback(bookViewModel, null);
+            }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
+            }
+            catch (MobileCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
     }
 }

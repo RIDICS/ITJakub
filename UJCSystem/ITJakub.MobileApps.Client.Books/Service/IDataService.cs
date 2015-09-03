@@ -11,6 +11,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
         void GetPageList(string bookGuid, Action<ObservableCollection<PageViewModel>, Exception> callback);
         void GetPageAsRtf(string bookGuid, string pageId, Action<string, Exception> callback);
         void GetPagePhoto(string bookGuid, string pageId, Action<BitmapImage, Exception> callback);
+        void GetBookInfo(string bookGuid, Action<BookViewModel, Exception> callback);
     }
 
     public interface IDataService : IBookDataService

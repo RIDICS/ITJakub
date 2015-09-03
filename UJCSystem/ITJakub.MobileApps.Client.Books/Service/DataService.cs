@@ -41,6 +41,11 @@ namespace ITJakub.MobileApps.Client.Books.Service
             m_bookManager.GetPagePhoto(bookGuid, pageId, callback);
         }
 
+        public void GetBookInfo(string bookGuid, Action<BookViewModel, Exception> callback)
+        {
+            m_bookManager.GetBookInfo(bookGuid, callback);
+        }
+
         public void SetCurrentBook(BookViewModel book)
         {
             m_bookManager.CurrentBook = book;

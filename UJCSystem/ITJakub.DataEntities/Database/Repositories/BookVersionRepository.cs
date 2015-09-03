@@ -640,5 +640,23 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SingleOrDefault<FullBookRecording>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetBookVersionWithAuthorsByGuid(string bookGuid)
+        {
+            Book bookAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<BookVersion>()
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(x => x.Id == bookAlias.LastVersion.Id && bookAlias.Guid == bookGuid)
+                    .Fetch(x => x.Authors).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
     }
 }

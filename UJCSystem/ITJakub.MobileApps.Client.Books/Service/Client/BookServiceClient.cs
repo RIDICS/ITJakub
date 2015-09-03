@@ -9,13 +9,13 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public class ServiceClient : ClientBase<IMobileAppsService>, IServiceClient
+    public class BookServiceClient : ClientBase<IMobileAppsService>, IServiceClient
     {
-        //private const string EndpointAddress = "http://localhost/MainService/MobileApps.svc";
-        private const string EndpointAddress = "http://147.32.81.136/MainService/MobileApps.svc";
+        private const string EndpointAddress = "http://localhost/MainService/MobileApps.svc";
+        //private const string EndpointAddress = "http://147.32.81.136/MainService/MobileApps.svc";
         //private const string EndpointAddress = "http://censeo2.felk.cvut.cz/MainService/MobileApps.svc";
 
-        public ServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
+        public BookServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
         {
             
         }
@@ -135,6 +135,33 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                 try
                 {
                     return Channel.GetPagePhoto(bookGuid, pageId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new NotFoundException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new MobileCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<BookContract> GetBookInfo(string bookGuid)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetBookInfo(bookGuid);
                 }
                 catch (FaultException ex)
                 {
