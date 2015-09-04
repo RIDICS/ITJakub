@@ -145,13 +145,10 @@ namespace ITJakub.ITJakubService.Core
 
                 if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
                 {
-                    var termSettings = resultCriteriaContract.TermsSettingsContract;
-
                     var termQueryCreator = new TermCriteriaQueryCreator();
                     termQueryCreator.AddCriteria(filteredCriterias.MetadataCriterias);
 
-                    var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidListRestriction, termQueryCreator, termSettings.Start, termSettings.Count);
-                    //var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
+                    var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidListRestriction, termQueryCreator);
                     bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName,PageXmlId = x.PageXmlId}).ToDictionary(x=>x.Key, x => x.ToList());
 
                     var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidListRestriction, termQueryCreator);
@@ -188,14 +185,10 @@ namespace ITJakub.ITJakubService.Core
 
             if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
             {
-                var termSettings = resultCriteriaContract.TermsSettingsContract;
-
-
                 var termQueryCreator = new TermCriteriaQueryCreator();
                 termQueryCreator.AddCriteria(filteredCriterias.MetadataCriterias);
 
-                var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidList, termQueryCreator, termSettings.Start, termSettings.Count);
-                //var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
+                var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidList, termQueryCreator);
                 bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName, PageXmlId = x.PageXmlId }).ToDictionary(x => x.Key, x => x.ToList());
 
                 var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidList, termQueryCreator);

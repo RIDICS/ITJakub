@@ -5,10 +5,6 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
     [DataContract]
     public class TermsSettingsContract
     {
-        [DataMember]
-        public int? Count { get; set; }
-
-        [DataMember]
-        public int? Start { get; set; }
+        // count and start ommited because missing use case. This contract is used as request for loading terms.
     }
 }

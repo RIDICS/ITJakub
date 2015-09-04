@@ -129,11 +129,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     ContextLength = 50,
                     Count = 3,
                     Start = 1
-                },
-                TermsSettingsContract = new TermsSettingsContract
-                {
-                    Start = 1,
-                    Count = 25
                 }
             });
 
@@ -144,6 +139,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
+            }
+
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Term) != null)
+            {
+                listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
 
             var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
@@ -256,11 +256,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         ContextLength = 50,
                         Count = 3,
                         Start = 1
-                    },
-                    TermsSettingsContract = new TermsSettingsContract
-                    {
-                        Start = 1,
-                        Count = 25
                     }
                 },
             };
@@ -305,11 +300,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         Count = 3,
                         Start = 1
                     },
-                    TermsSettingsContract = new TermsSettingsContract
-                    {
-                        Start = 1,
-                        Count = 25
-                    }
                 }
             };
 
@@ -320,6 +310,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
+            }
+
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
 
             var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
@@ -349,7 +344,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 {
                     Start = 0,
                     Count = 1,
-                    TermsSettingsContract = new TermsSettingsContract()
                 },
                 new ResultRestrictionCriteriaContract
                 {
@@ -360,6 +354,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         }
                 }
             };
+
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
+            }
 
             var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
             if (result != null)
