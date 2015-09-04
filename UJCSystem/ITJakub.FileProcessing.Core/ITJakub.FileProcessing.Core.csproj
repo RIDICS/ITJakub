@@ -71,6 +71,7 @@
     <Compile Include="Sessions\ResourceTypeResolvers\SourceDocumentTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\TransformationTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\UnknownXmlTypeResolver.cs" />
+    <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TracksProcessor.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="XMLProcessing\Processors\BookContent\TableOfContentProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TitleProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PublicationStmtProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Accessories\AccessoriesProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PageProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\PagesProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Pages\TermRefProcessor.cs" />

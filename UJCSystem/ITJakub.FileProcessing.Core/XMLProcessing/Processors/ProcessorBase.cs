@@ -92,7 +92,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
         protected virtual void InitializeProcessors()
         {
-            m_processors = SubProcessors.ToDictionary(x => x.NodeName);            
+            if(SubProcessors != null)
+                m_processors = SubProcessors.ToDictionary(x => x.NodeName);            
         }
 
         protected string GetAttributeValue(XElement pageElement, XName attributeName)

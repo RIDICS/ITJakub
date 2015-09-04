@@ -121,6 +121,11 @@
     <bag name="FullBookRecordings" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion"/>
       <one-to-many class="FullBookRecording"/>
+    </bag>   
+    
+    <bag name="Accessories" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion"/>
+      <one-to-many class="BookAccessory"/>
     </bag>
     
   </class>
