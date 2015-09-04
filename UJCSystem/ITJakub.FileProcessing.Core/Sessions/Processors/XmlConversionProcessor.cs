@@ -51,12 +51,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             };
 
             var bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
-            var bookResource = new Resource
-            {
-                FileName = bookFileName,
-                FullPath = Path.Combine(resourceSessionDirector.SessionPath, bookFileName),
-                ResourceType = ResourceType.Book
-            };
+            //var bookResource = new Resource
+            //{
+            //    FileName = bookFileName,
+            //    FullPath = Path.Combine(resourceSessionDirector.SessionPath, bookFileName),
+            //    ResourceType = ResourceType.Book
+            //};
 
             var tmpDirPath = Path.Combine(resourceSessionDirector.SessionPath, "tmp");
             if (!Directory.Exists(tmpDirPath))
@@ -75,7 +75,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 Debug = false,
                 InputFilePath = inputFileResource.FullPath,
                 MetadataFilePath = m_conversionMetadataPath,
-                OutputFilePath = bookResource.FullPath,
+                OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookId,
@@ -89,7 +89,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             if (conversionResult.IsConverted)
             {
                 resourceSessionDirector.Resources.Add(metaDataResource);
-                resourceSessionDirector.Resources.Add(bookResource);
+                //resourceSessionDirector.Resources.Add(bookResource);
             }
             else
             {
