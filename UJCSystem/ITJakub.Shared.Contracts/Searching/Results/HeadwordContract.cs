@@ -5,16 +5,6 @@ using System.Runtime.Serialization;
 namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together with change xquery
 {
     [DataContract]
-    public class HeadwordSearchResultContract
-    {
-        [DataMember]
-        public int HeadwordCount { get; set; }
-
-        [DataMember]
-        public int FulltextCount { get; set; }
-    }
-
-    [DataContract]
     public class HeadwordContract
     {
         [DataMember]
