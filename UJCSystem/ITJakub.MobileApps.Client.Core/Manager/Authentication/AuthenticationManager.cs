@@ -15,7 +15,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
     public class AuthenticationManager
     {
         private readonly Dictionary<AuthProvidersContract, ILoginProvider> m_loginProviders = new Dictionary<AuthProvidersContract, ILoginProvider>();
-
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly MobileAppsServiceClient m_serviceClient;
 
@@ -64,9 +63,30 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await LoginItJakubAsync(loginProviderType);
+            try
+            {
+                await LoginItJakubAsync(loginProviderType);
+            }
+            catch (UserNotRegisteredException)
+            {
+                await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
+            }
 
             return UserLoginInfo;
+        }
+
+
+        private async Task CreateUserItJakubAsync(AuthProvidersContract loginProviderType,
+            UserLoginSkeleton loginSkeleton)
+        {
+            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, new UserDetailContract
+            {
+                Email = loginSkeleton.Email,
+                FirstName = loginSkeleton.FirstName,
+                LastName = loginSkeleton.LastName
+            });
+
+            await LoginItJakubAsync(loginProviderType);
         }
 
         private async Task<UserLoginSkeleton> CreateUserAsync(AuthProvidersContract loginProviderType)
@@ -77,14 +97,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             if (!loginSkeleton.Success)
                 return UserLoginInfo;
 
-            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, new UserDetailContract
-            {
-                Email = loginSkeleton.Email,
-                FirstName = loginSkeleton.FirstName,
-                LastName = loginSkeleton.LastName
-            });
-
-            await LoginItJakubAsync(loginProviderType);
+            await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
 
             return UserLoginInfo;
         }
@@ -107,6 +120,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 callback(false, exception);
             }
             catch (ClientCommunicationException exception)
+            {
+                callback(false, exception);
+            }
+            catch (UserAlreadyRegisteredException exception) //because of trying register user
             {
                 callback(false, exception);
             }

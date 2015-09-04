@@ -7,7 +7,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
     {
         public Task<UserLoginSkeleton> LoginAsync()
         {
-            throw new System.NotImplementedException();
+            LocalAuthenticationBroker.LocalAuthenticationBroker.CreateUserAsync();
+            return Task.Run(() => new UserLoginSkeleton
+            {
+                Success = false
+            });
+
+            // TODO ITJ login
         }
 
         public string AccountName { get { return "It Jakub"; } }
