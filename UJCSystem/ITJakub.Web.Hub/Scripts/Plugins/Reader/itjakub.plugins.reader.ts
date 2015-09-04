@@ -134,6 +134,14 @@ class ReaderModule {
         return this.versionId;
     }
 
+    getActualPage(): BookPage {
+        return this.pages[this.actualPageIndex];
+    }
+
+    getPageByIndex(pageIndex: number): BookPage {
+        return this.pages[pageIndex];
+    }
+
     private makeTitle(bookTitle: string): HTMLDivElement {
         var titleDiv: HTMLDivElement = document.createElement('div');
         $(titleDiv).addClass('title');
@@ -679,10 +687,10 @@ class ReaderModule {
         var pager = $(this.readerContainer).find('ul.pagination');
         pager.find('li.page-navigation').css('visibility', 'visible');
         pager.find('li.more-pages').css('visibility', 'visible');
-        if (pageIndex == 0) {
+        if (pageIndex === 0) {
             pager.find('li.page-navigation-left').css('visibility', 'hidden');
             pager.find('li.more-pages-left').css('visibility', 'hidden');
-        } else if (pageIndex == this.pages.length - 1) {
+        } else if (pageIndex === this.pages.length - 1) {
             pager.find('li.page-navigation-right').css('visibility', 'hidden');
             pager.find('li.more-pages-right').css('visibility', 'hidden');
         }
@@ -856,6 +864,8 @@ class ReaderModule {
         $(panel.panelHtml).css('z-index', max + 1);
     }
 
+    //******** Reader search panel start ************
+    
     showSearchInPanel(searchResults: Array<SearchResult>) {
         this.getSearchPanel().showResults(searchResults);
     }
@@ -895,18 +905,53 @@ class ReaderModule {
     }
 
     searchPanelShowLoading() {
-        this.searchPanel.showLoading();
+        this.getSearchPanel().showLoading();
 
     }
 
     searchPanelRemoveLoading() {
-        this.searchPanel.clearLoading();
+        this.getSearchPanel().clearLoading();
     }
 
     searchPanelClearResults() {
-        this.searchPanel.clearResults();
+        this.getSearchPanel().clearResults();
     }
 
+    //******** Reader search panel end ************
+
+
+    //******** Reader terms search panel start ************
+
+    showSearchInTermsPanel(searchResults: Array<PageDescription>) {
+        this.getTermsPanel().showResults(searchResults);
+    }
+
+    private getTermsPanel(): TermsPanel {
+        var panelId = this.termsPanelIdentificator;
+        if (!this.existSidePanel(panelId)) {
+            var termPanel = new TermsPanel(panelId, this, this.showLeftSidePanelsButtonList);
+            this.loadSidePanel(termPanel.panelHtml);
+            this.leftSidePanels.push(<any>termPanel);
+            this.termsPanel = termPanel;
+        }
+
+        return this.termsPanel;
+    }
+
+    termsPanelShowLoading() {
+        this.getTermsPanel().showLoading();
+
+    }
+
+    termsPanelRemoveLoading() {
+        this.getTermsPanel().clearLoading();
+    }
+
+    termsPanelClearResults() {
+        this.getTermsPanel().clearResults();
+    }
+
+    //******** Reader terms search panel end ************
     
 }
 
@@ -1806,29 +1851,45 @@ class TermsPanel extends LeftSidePanel {
 
     private createResultItem(page: PageDescription): HTMLLIElement {
         var resultItemListElement = document.createElement("li");
-        resultItemListElement.innerHTML = `[${page.PageName}]`;
 
-        $(resultItemListElement).click(() => {
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(() => {
             this.parentReader.moveToPage(page.PageXmlId, true);
         });
+
+        var textSpanElement = document.createElement("span");
+        textSpanElement.innerHTML = `[${page.PageName}]`;
+        
+        $(hrefElement).append(textSpanElement);
+
+        $(resultItemListElement).append(hrefElement);
 
         return resultItemListElement;
     }
 
     private createTermItem(xmlId: string, text: string): HTMLLIElement {
         var termItemListElement = document.createElement("li");
-        termItemListElement.innerHTML = `[${text}]`;
 
-        $(termItemListElement).click(() => {
-            
+        var hrefElement = document.createElement("a");
+        hrefElement.href = "#";
+        $(hrefElement).click(() => {
+            //TODO move to old grammar search and search this term in searchText
         });
+
+        var textSpanElement = document.createElement("span");
+        textSpanElement.innerHTML = `[${text}]`;
+
+        $(hrefElement).append(textSpanElement);
+
+        $(termItemListElement).append(hrefElement);
 
         return termItemListElement;
     }
 
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        var page = this.parentReader.pages[pageIndex];
+        var page = this.parentReader.getPageByIndex(pageIndex);
         this.loadTermsOnPage(page);
     }
 
@@ -1847,25 +1908,31 @@ class TermsPanel extends LeftSidePanel {
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                $(this.termsResultItemsLoadDiv).hide();
-                $(this.termsResultItemsDiv).show();
 
-                var terms = response["terms"];
-                for (var i = 0; i < terms.length; i++) {
-                    var term = terms[i];
-                    this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
-                }
+                if (page.xmlId === this.parentReader.getActualPage().xmlId) {
 
-                if (terms.length === 0) {
-                    $(this.termsOrderedList).addClass("no-items");
-                    $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                    $(this.termsResultItemsLoadDiv).hide();
+                    $(this.termsResultItemsDiv).show();
+
+                    var terms = response["terms"];
+                    for (var i = 0; i < terms.length; i++) {
+                        var term = terms[i];
+                        this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
+                    }
+
+                    if (terms.length === 0) {
+                        $(this.termsOrderedList).addClass("no-items");
+                        $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
+                    }
                 }
             },
             error: (response) => {
-                $(this.termsResultItemsLoadDiv).hide();
-                $(this.termsResultItemsDiv).show();
-                $(this.termsOrderedList).addClass("no-items");
-                $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                if (page.xmlId === this.parentReader.getActualPage().xmlId) {
+                    $(this.termsResultItemsLoadDiv).hide();
+                    $(this.termsResultItemsDiv).show();
+                    $(this.termsOrderedList).addClass("no-items");
+                    $(this.termsOrderedList).append("Chyba při načítání témat na stránce '" + page.text + "'");
+                }
             }
         });
     }

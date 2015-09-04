@@ -31,6 +31,9 @@
 
         if (typeof text === "undefined" || text === null || text === "") return;
 
+        readerPlugin.termsPanelClearResults();
+        readerPlugin.termsPanelShowLoading();
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -40,7 +43,9 @@
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", text);
-                //TODO
+
+                readerPlugin.termsPanelRemoveLoading();
+                readerPlugin.showSearchInTermsPanel(convertSearchResults(response["results"]));
             }
         });
 
