@@ -40,7 +40,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         Cover = 1,
 
-        EditoralComment = 2,
+        Content = 2,
 
         Bibliography = 3,
     }
