@@ -366,15 +366,46 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
+        //[Transaction(TransactionMode.Requires)]
+        //public virtual IList<TermResult> GetBooksTermResults(SearchCriteriaQueryCreator creator, string termMatchQuery, int? start, int? count)
+        //{
+        //    using (var session = GetSession())
+        //    {
+        //        var queryString = creator.GetQueryStringForTermResults(termMatchQuery, start, count);
+        //        var query = session.CreateQuery(queryString);
+        //        creator.SetParameters(query);
+        //        var result = query.SetResultTransformer(Transformers.AliasToBean<TermResult>()).List<TermResult>();
+
+        //        return result;
+        //    }
+        //}
+
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<TermResult> GetBooksTermResults(SearchCriteriaQueryCreator creator, string termMatchQuery, int? start, int? count)
+        public virtual IList<TermResult> GetBooksTermResults(List<string> bookGuidList, TermCriteriaQueryCreator queryCreator, int? start, int? count)
         {
             using (var session = GetSession())
             {
-                var queryString = creator.GetQueryStringForTermResults(termMatchQuery, start, count);
-                var query = session.CreateQuery(queryString);
-                creator.SetParameters(query);
-                var result = query.SetResultTransformer(Transformers.AliasToBean<TermResult>()).List<TermResult>();
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookPage bookPageAlias = null;
+                Term termAlias = null;
+                TermResult termResultAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookPages, () => bookPageAlias)
+                    .JoinQueryOver(x => x.Terms, () => termAlias)
+                    .Select(Projections.Distinct(Projections.ProjectionList()
+                        .Add(Projections.Property(() => bookAlias.Id).WithAlias(() => termResultAlias.BookId))
+                        .Add(Projections.Property(() => bookPageAlias.Text).WithAlias(() => termResultAlias.PageName))
+                        .Add(Projections.Property(() => bookPageAlias.XmlId).WithAlias(() => termResultAlias.PageXmlId))))
+                        //.OrderBy(x => bookPageAlias.Position).Asc
+                    .WhereRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .And(queryCreator.GetCondition())
+                    .TransformUsing(Transformers.AliasToBean<TermResult>())
+                    //.Skip(start)
+                    //.Take(count)
+                    .List<TermResult>();
 
                 return result;
             }

@@ -5,11 +5,11 @@ using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database
 {
-    public class HeadwordCriteriaQueryCreator
+    public abstract class ConcreteCriteriaQueryCreatorBase
     {
-        private readonly List<ConjunctionCriteria> m_criteriaList;
+        protected readonly List<ConjunctionCriteria> m_criteriaList;
 
-        public HeadwordCriteriaQueryCreator()
+        protected ConcreteCriteriaQueryCreatorBase()
         {
             m_criteriaList = new List<ConjunctionCriteria>();
         }
@@ -22,10 +22,21 @@ namespace ITJakub.DataEntities.Database
             }
         }
 
+        protected class ConjunctionCriteria
+        {
+            public ConjunctionCriteria()
+            {
+                Disjunctions = new List<string>();
+            }
+
+            public List<string> Disjunctions { get; private set; }
+        }
+
+
         public void AddCriteria(SearchCriteriaContract contract)
         {
             var wordListCriteria = contract as WordListCriteriaContract;
-            if (contract.Key != CriteriaKey.Headword || wordListCriteria == null)
+            if (contract.Key != GetCriteriaKey() || wordListCriteria == null)
                 return;
 
             var newCriteria = new ConjunctionCriteria();
@@ -39,7 +50,6 @@ namespace ITJakub.DataEntities.Database
 
         public Conjunction GetCondition()
         {
-            BookHeadword bookHeadwordAlias = null;
             var conjunction = new Conjunction();
 
             foreach (var criteria in m_criteriaList)
@@ -47,8 +57,7 @@ namespace ITJakub.DataEntities.Database
                 var disjunction = new Disjunction();
                 foreach (var conditionString in criteria.Disjunctions)
                 {
-                    disjunction.Add(new LikeExpression(Projections.Property(() => bookHeadwordAlias.Headword),
-                        conditionString, MatchMode.Exact));
+                    disjunction.Add(GetConditionCriterion(conditionString));
                 }
                 conjunction.Add(disjunction);
             }
@@ -56,14 +65,36 @@ namespace ITJakub.DataEntities.Database
             return conjunction;
         }
 
-        private class ConjunctionCriteria
-        {
-            public ConjunctionCriteria()
-            {
-                Disjunctions = new List<string>();
-            }
+        public abstract ICriterion GetConditionCriterion(string conditionString);
+        protected abstract CriteriaKey GetCriteriaKey();
+    }
 
-            public List<string> Disjunctions { get; private set; }
+
+    public class HeadwordCriteriaQueryCreator : ConcreteCriteriaQueryCreatorBase
+    {
+        protected override CriteriaKey GetCriteriaKey()
+        {
+            return CriteriaKey.Headword;
+        }
+
+        public override ICriterion GetConditionCriterion(string conditionString)
+        {
+            BookHeadword bookHeadwordAlias = null;
+            return new LikeExpression(Projections.Property(() => bookHeadwordAlias.Headword), conditionString, MatchMode.Exact);
+        }
+    }
+
+    public class TermCriteriaQueryCreator : ConcreteCriteriaQueryCreatorBase
+    {
+        protected override CriteriaKey GetCriteriaKey()
+        {
+            return CriteriaKey.Term;
+        }
+
+        public override ICriterion GetConditionCriterion(string conditionString)
+        {
+            Term termAlias = null;
+            return new LikeExpression(Projections.Property(() => termAlias.Text), conditionString, MatchMode.Exact);
         }
     }
 }
