@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xdb="http://exist-db.org/ant" basedir="." name="eXistDbDevelopment" default="clean-data-collection">
+<project xmlns:xdb="http://exist-db.org/ant" basedir="." name="eXistDbDevelopment" default="extract-resources-to-disk">
 	<property file="local.properties"/>
 	<path id="classpath.core">
 		<fileset dir="${exist-home}/lib/core">

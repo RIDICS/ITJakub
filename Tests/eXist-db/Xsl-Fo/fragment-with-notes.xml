@@ -1,140 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<root xmlns="http://www.w3.org/1999/XSL/Format">
-	<layout-master-set>
-		<simple-page-master master-name="simple1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body margin-bottom="24pt" margin-top="24pt"/>
-			<region-before extent="14pt"/>
-			<region-after extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="left1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-left" extent="14pt"/>
-			<region-after region-name="xsl-region-after-left" extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="right1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-right" extent="14pt"/>
-			<region-after region-name="xsl-region-after-right" extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="first1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-first" extent="14pt"/>
-			<region-after region-name="xsl-region-after-first" extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="simple2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/>
-			<region-before extent="14pt"/>
-			<region-after extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="left2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-left" extent="14pt"/>
-			<region-after region-name="xsl-region-after-left" extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="right2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-right" extent="14pt"/>
-			<region-after region-name="xsl-region-after-right" extent="14pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="first2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/>
-			<region-before region-name="xsl-region-before-first" extent="14pt"/>
-			<region-after region-name="xsl-region-after-first" extent="14pt"/>
-		</simple-page-master>
-		<page-sequence-master master-name="twoside1nofirst">
-			<repeatable-page-master-alternatives>
-				<conditional-page-master-reference master-reference="right1" odd-or-even="odd"/>
-				<conditional-page-master-reference master-reference="left1" odd-or-even="even"/>
-			</repeatable-page-master-alternatives>
-		</page-sequence-master>
-		<page-sequence-master master-name="twoside1">
-			<repeatable-page-master-alternatives>
-				<conditional-page-master-reference master-reference="first1" page-position="first"/>
-				<conditional-page-master-reference master-reference="right1" odd-or-even="odd"/>
-				<conditional-page-master-reference master-reference="left1" odd-or-even="even"/>
-			</repeatable-page-master-alternatives>
-		</page-sequence-master>
-		<page-sequence-master master-name="oneside1">
-			<repeatable-page-master-alternatives>
-				<conditional-page-master-reference master-reference="first1" page-position="first"/>
-				<conditional-page-master-reference master-reference="simple1"/>
-			</repeatable-page-master-alternatives>
-		</page-sequence-master>
-		<page-sequence-master master-name="twoside2">
-			<repeatable-page-master-alternatives>
-				<conditional-page-master-reference master-reference="first2" page-position="first"/>
-				<conditional-page-master-reference master-reference="right2" odd-or-even="odd"/>
-				<conditional-page-master-reference master-reference="left2" odd-or-even="even"/>
-			</repeatable-page-master-alternatives>
-		</page-sequence-master>
-		<page-sequence-master master-name="oneside2">
-			<repeatable-page-master-alternatives>
-				<conditional-page-master-reference master-reference="first2" page-position="first"/>
-				<conditional-page-master-reference master-reference="simple2"/>
-			</repeatable-page-master-alternatives>
-		</page-sequence-master>
-		<simple-page-master master-name="obalka" page-width="211mm" page-height="297mm" margin-top="0pt" margin-bottom="0pt" margin-left="0pt" margin-right="0pt">
-			<region-body column-count="1" margin-bottom="0pt" margin-top="0pt"/>
-			<region-before region-name="xsl-region-before-first" extent="0pt"/>
-			<region-after region-name="xsl-region-after-first" extent="0pt"/>
-		</simple-page-master>
-		<simple-page-master master-name="uvod1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt">
-			<region-body margin-bottom="24pt" margin-top="24pt"/>
-			<region-before extent="14pt"/>
-			<region-after extent="14pt"/>
-		</simple-page-master>
-		<page-sequence-master master-name="zacatek1">
-			<single-page-master-reference master-reference="uvod1"/>
-		</page-sequence-master>
-	</layout-master-set>
-	<page-sequence format="1" text-align="justify" hyphenate="false" language="cs" initial-page-number="1" master-reference="simple1">
-		<static-content flow-name="xsl-region-before">
-			<block color="gray" height="14pt" font-family="FreeSans" font-size="7pt" text-align="center" overflow="hidden"><inline/></block>
-		</static-content>
-		<static-content flow-name="xsl-region-after">
-			<block color="gray" font-family="FreeSans" font-size="7pt" text-align-last="justify"><inline>– <page-number/> –</inline></block>
-		</static-content>
-		<static-content flow-name="xsl-region-before-first">
-			<block/>
-		</static-content>
-		<static-content flow-name="xsl-region-after-first">
-			<block color="gray" font-family="FreeSans" font-size="7pt" text-align="center"/>
-		</static-content>
-		<static-content flow-name="xsl-footnote-separator">
-			<block><leader color="#383C98" leader-length="20%" leader-pattern="rule" rule-style="solid" rule-thickness="0.5pt"/></block>
-		</static-content>
-		<flow flow-name="xsl-region-body" font-family="FreeSerif" font-size="12pt">
-
-			<block keep-with-next.within-page="always" id="t-1.body-1.div-1" text-align="left" font-family="FreeSerif" hyphenate="false" color="#383C98" font-size="16pt"
-				font-weight="bold" space-after.optimum="3pt" space-after.maximum="6pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>
-
-			<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1" text-align="left" font-family="FreeSerif" color="#383C98" font-size="14pt" space-after.optimum="5pt"
-				space-after.maximum="7pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>
-
-			<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1.div-2" text-align="left" font-family="FreeSerif" color="#383C98" font-size="12pt" font-weight="normal"
-				space-after.maximum="4pt" space-after.optimum="2pt" space-before.maximum="8pt" space-before.optimum="6pt" text-indent="0em"/>
-
-			<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1.div-2.div-1" text-align="left" font-family="FreeSerif" font-size="10pt" font-style="italic"
-				space-after="0pt" space-before.optimum="4pt" text-indent="0em"/>
-			<block line-height="1.2"><block> ale ne též přirození v tobě a v ní. Nebo cožkoli sem já tobě učinil, za vděk s’ to přijal. A když sem všel do tvé síni, znamenitě polepšil s’
-					se. Ale když mě macecha uzří, pohorší se. Budu li s ní mluviti, v bolesti se zaže. Dotknu li se jí, bez ní bude. A protož nic více neprospívá nemocným, než léčenu od toho
-					býti, jehož milují a jeho žádají.“ A tak takými duovody odbyl nechuti otcovy a umřela jest macecha.</block></block>
-			<block line-height="1.2" text-indent="1em" space-before.optimum="3pt" space-before.maximum="6pt"><block>Najmilejší! Tento císař móž řečen býti Adam, prvý otec náš, jenž říši
-					mějíše, totižto ráj<footnote color="black">
-						<inline font-size="9pt" vertical-align="super" font-style="normal" font-weight="normal">a</inline>
-						<footnote-body>
-							<block end-indent="0pt" font-size="8pt" font-style="normal" font-weight="normal" start-indent="0pt" text-align="start" text-indent="0pt"
-								id="t-1.body-1.div-1.div-1.div-2.div-1.p-3.note-1"><inline font-size="9pt" vertical-align="super">a</inline>
-								<inline font-style="italic">ráj</inline><inline font-size="9pt">] </inline> Rug </block>
-						</footnote-body>
-					</footnote>. V němžto měl chválu i čest a pána všeho světa jej ustavil Hospodin podlé Davidova písma: „Chválou i ctí korunoval si jej, Hospodine, na dílu rukú tvých.“ Ten
-					císař pojal sobě pěknú ženu, totižto duši k obrazu božímu stvořenú, z nížto porodil syna, totižto našeho Pána Jezukrista, z svého těla vyvedeného, totižto z člověčenství
-					k obrazu božímu stvořeného. Ale žena, totižto duše, umře sprostně mluvíce pro hřích, jehož se dopustil. Ihned jinú ženu pojal sobě, totižto zlost, skrze kerúž z ráje
-				</block></block>
-
-
-
-
-		</flow>
-	</page-sequence>
-</root>
+<root xmlns="http://www.w3.org/1999/XSL/Format"><layout-master-set><simple-page-master master-name="simple1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body margin-bottom="24pt" margin-top="24pt"/><region-before extent="14pt"/><region-after extent="14pt"/></simple-page-master><simple-page-master master-name="left1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-left" extent="14pt"/><region-after region-name="xsl-region-after-left" extent="14pt"/></simple-page-master><simple-page-master master-name="right1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-right" extent="14pt"/><region-after region-name="xsl-region-after-right" extent="14pt"/></simple-page-master><simple-page-master master-name="first1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-first" extent="14pt"/><region-after region-name="xsl-region-after-first" extent="14pt"/></simple-page-master><simple-page-master master-name="simple2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/><region-before extent="14pt"/><region-after extent="14pt"/></simple-page-master><simple-page-master master-name="left2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-left" extent="14pt"/><region-after region-name="xsl-region-after-left" extent="14pt"/></simple-page-master><simple-page-master master-name="right2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-right" extent="14pt"/><region-after region-name="xsl-region-after-right" extent="14pt"/></simple-page-master><simple-page-master master-name="first2" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body column-count="1" margin-bottom="24pt" margin-top="24pt"/><region-before region-name="xsl-region-before-first" extent="14pt"/><region-after region-name="xsl-region-after-first" extent="14pt"/></simple-page-master><page-sequence-master master-name="twoside1nofirst"><repeatable-page-master-alternatives><conditional-page-master-reference master-reference="right1" odd-or-even="odd"/><conditional-page-master-reference master-reference="left1" odd-or-even="even"/></repeatable-page-master-alternatives></page-sequence-master><page-sequence-master master-name="twoside1"><repeatable-page-master-alternatives><conditional-page-master-reference master-reference="first1" page-position="first"/><conditional-page-master-reference master-reference="right1" odd-or-even="odd"/><conditional-page-master-reference master-reference="left1" odd-or-even="even"/></repeatable-page-master-alternatives></page-sequence-master><page-sequence-master master-name="oneside1"><repeatable-page-master-alternatives><conditional-page-master-reference master-reference="first1" page-position="first"/><conditional-page-master-reference master-reference="simple1"/></repeatable-page-master-alternatives></page-sequence-master><page-sequence-master master-name="twoside2"><repeatable-page-master-alternatives><conditional-page-master-reference master-reference="first2" page-position="first"/><conditional-page-master-reference master-reference="right2" odd-or-even="odd"/><conditional-page-master-reference master-reference="left2" odd-or-even="even"/></repeatable-page-master-alternatives></page-sequence-master><page-sequence-master master-name="oneside2"><repeatable-page-master-alternatives><conditional-page-master-reference master-reference="first2" page-position="first"/><conditional-page-master-reference master-reference="simple2"/></repeatable-page-master-alternatives></page-sequence-master><simple-page-master master-name="obalka" page-width="211mm" page-height="297mm" margin-top="0pt" margin-bottom="0pt" margin-left="0pt" margin-right="0pt"><region-body column-count="1" margin-bottom="0pt" margin-top="0pt"/><region-before region-name="xsl-region-before-first" extent="0pt"/><region-after region-name="xsl-region-after-first" extent="0pt"/></simple-page-master><simple-page-master master-name="uvod1" page-width="211mm" page-height="297mm" margin-top="50pt" margin-bottom="50pt" margin-left="80pt" margin-right="80pt"><region-body margin-bottom="24pt" margin-top="24pt"/><region-before extent="14pt"/><region-after extent="14pt"/></simple-page-master><page-sequence-master master-name="zacatek1"><single-page-master-reference master-reference="uvod1"/></page-sequence-master></layout-master-set><page-sequence format="1" text-align="justify" hyphenate="false" language="cs" initial-page-number="1" master-reference="simple1"><static-content flow-name="xsl-region-before"><block color="gray" height="14pt" font-family="FreeSans" font-size="7pt" text-align="center" overflow="hidden"><inline/></block></static-content><static-content flow-name="xsl-region-after"><block color="gray" font-family="FreeSans" font-size="7pt" text-align-last="justify"><inline>– <page-number/> –</inline></block></static-content><static-content flow-name="xsl-region-before-first"><block/></static-content><static-content flow-name="xsl-region-after-first"><block color="gray" font-family="FreeSans" font-size="7pt" text-align="center"/></static-content><static-content flow-name="xsl-footnote-separator"><block><leader color="#383C98" leader-length="20%" leader-pattern="rule" rule-style="solid" rule-thickness="0.5pt"/></block></static-content><flow flow-name="xsl-region-body" font-family="FreeSerif" font-size="12pt">
+			
+<block keep-with-next.within-page="always" id="t-1.body-1.div-1" text-align="left" font-family="FreeSerif" hyphenate="false" color="#383C98" font-size="16pt" font-weight="bold" space-after.optimum="3pt" space-after.maximum="6pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>
+				
+<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1" text-align="left" font-family="FreeSerif" color="#383C98" font-size="14pt" space-after.optimum="5pt" space-after.maximum="7pt" space-before.optimum="9pt" space-before.maximum="12pt" text-indent="0em"/>
+					
+<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1.div-2" text-align="left" font-family="FreeSerif" color="#383C98" font-size="12pt" font-weight="normal" space-after.maximum="4pt" space-after.optimum="2pt" space-before.maximum="8pt" space-before.optimum="6pt" text-indent="0em"/>
+						
+<block keep-with-next.within-page="auto" id="t-1.body-1.div-1.div-1.div-2.div-1" text-align="left" font-family="FreeSerif" font-size="10pt" font-style="italic" space-after="0pt" space-before.optimum="4pt" text-indent="0em"/>
+							<block line-height="1.2"><block>
+								ale ne též přirození v tobě a v ní. Nebo cožkoli sem já tobě učinil, za vděk s’ to přijal. A když sem všel do tvé síni, znamenitě polepšil s’ se. Ale když mě macecha uzří, pohorší se. Budu li s ní mluviti, v bolesti se zaže. Dotknu li se jí, bez ní bude. A protož nic více neprospívá nemocným, než léčenu od toho býti, jehož milují a jeho žádají.“ A tak takými duovody odbyl nechuti otcovy a umřela jest macecha.</block></block>
+							<block line-height="1.2" text-indent="1em" space-before.optimum="3pt" space-before.maximum="6pt"><block>Najmilejší! Tento císař móž řečen býti Adam, prvý otec náš, jenž říši mějíše, totižto ráj<footnote color="black"><inline font-size="9pt" vertical-align="super" font-style="normal" font-weight="normal">a</inline><footnote-body><block end-indent="0pt" font-size="8pt" font-style="normal" font-weight="normal" start-indent="0pt" text-align="start" text-indent="0pt" id="t-1.body-1.div-1.div-1.div-2.div-1.p-3.note-1"><inline font-size="9pt" vertical-align="super">a</inline> 
+								
+									<inline font-style="italic">ráj</inline><inline font-size="9pt">] </inline>
+									Rug
+								
+							</block></footnote-body></footnote>. V němžto měl chválu i čest a pána všeho světa jej ustavil Hospodin podlé Davidova písma: „Chválou i ctí korunoval si jej, Hospodine, na dílu rukú tvých.“ Ten císař pojal sobě pěknú ženu, totižto duši k obrazu božímu stvořenú, z nížto porodil syna, totižto našeho Pána Jezukrista, z svého těla vyvedeného, totižto z člověčenství k obrazu božímu stvořeného. Ale žena, totižto duše, umře sprostně mluvíce pro hřích, jehož se dopustil. Ihned jinú ženu pojal sobě, totižto zlost, skrze kerúž z ráje </block></block>
+						
+					
+				
+			
+		</flow></page-sequence></root>
