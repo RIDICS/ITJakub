@@ -640,6 +640,33 @@ namespace ITJakub.Web.Hub
                 throw;
             }
         }
+        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType,
+            IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            try
+            {
+                return Channel.GetTypeaheadTermsByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTermsByBookType failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTermsByBookType failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadTermsByBookType timeouted with: {0}", ex);
+                throw;
+            }
+        }
 
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {

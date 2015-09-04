@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -439,6 +440,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetLastTermsByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
+        {
+            using (var session = GetSession())
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -478,6 +488,15 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return dbQuery
                     .Take(recordCount)
                     .List<string>();
+            }
+        }
+               
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                throw new NotImplementedException();
             }
         }
 

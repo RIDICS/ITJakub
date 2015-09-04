@@ -1,9 +1,13 @@
-﻿function initGrammarReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
+﻿function initGrammarReader(bookId: number, bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
     function readerPageChangedCallback(pageXmlId: string) {
         updateQueryStringParameter("page", pageXmlId);
     }
+
+    function hideTypeahead() {
+        $(".twitter-typeahead").find(".tt-menu").hide();
+    };
 
     var readerPanels = [ReaderPanelEnum.ImagePanel, ReaderPanelEnum.TermsPanel];
     var leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
@@ -28,7 +32,7 @@
     }
 
     function basicSearch(text: string) {
-
+        hideTypeahead();
         if (typeof text === "undefined" || text === null || text === "") return;
 
         readerPlugin.termsPanelClearResults();
@@ -61,6 +65,15 @@
     disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
     disabledOptions.push(SearchTypeEnum.Title);
     search.makeSearch(disabledOptions);
+
+    var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
+    typeaheadSearchBox.addDataSet("Term", "Téma", `selectedBookIds=${bookId}`);
+    typeaheadSearchBox.create();
+    typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+
+    $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
+        typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
+    });
 
     if (typeof searchedText !== "undefined" && searchedText !== null) {
         var decodedText = decodeURIComponent(searchedText);

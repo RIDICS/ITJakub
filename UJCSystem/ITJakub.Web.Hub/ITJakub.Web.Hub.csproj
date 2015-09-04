@@ -234,7 +234,7 @@
     <Compile Include="Areas\Editions\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
     <Compile Include="Areas\Dictionaries\DictionariesAreaRegistration.cs" />
-    <Compile Include="Areas\Editions\Models\BookListingModel.cs" />
+    <Compile Include="Models\BookListingModel.cs" />
     <Compile Include="Areas\Editions\RouteConfig.cs" />
     <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
@@ -721,6 +721,7 @@
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
+    <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Models\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />

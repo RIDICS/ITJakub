@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Shared.Contracts;
 
-namespace ITJakub.Web.Hub.Areas.Editions.Models
+namespace ITJakub.Web.Hub.Models
 {
     public class BookListingModel
     {
+        public long BookId { get; set; }
         public string BookXmlId { get; set; }
         public string VersionXmlId { get; set; }
         public string BookTitle { get; set; }

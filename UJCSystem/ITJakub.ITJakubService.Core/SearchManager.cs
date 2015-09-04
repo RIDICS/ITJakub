@@ -325,6 +325,17 @@ namespace ITJakub.ITJakubService.Core
             query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadTitlesByBookType(query, bookType, bookIdList, PrefetchRecordCount);
         }
+        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookTypeContract, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            var bookIdList = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
+            if (string.IsNullOrWhiteSpace(query))
+                return m_bookRepository.GetLastTermsByBookType(PrefetchRecordCount, bookType, bookIdList);
+
+            query = PrepareQuery(query);
+            return m_bookRepository.GetTypeaheadTermsByBookType(query, bookType, bookIdList, PrefetchRecordCount);
+        }
 
         public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {

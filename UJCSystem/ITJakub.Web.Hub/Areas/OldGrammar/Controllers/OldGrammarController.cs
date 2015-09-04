@@ -7,7 +7,6 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
-using ITJakub.Web.Hub.Areas.Editions.Models;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -85,6 +84,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return
                 View(new BookListingModel
                 {
+                    BookId = book.BookId,
                     BookXmlId = book.BookXmlId,
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
@@ -92,6 +92,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SearchText = searchText,
                     InitPageXmlId = page
                 });
+        }
+
+        public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)
