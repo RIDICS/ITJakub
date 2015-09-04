@@ -154,8 +154,7 @@ namespace ITJakub.ITJakubService.Core
                     //var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
                     bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName,PageXmlId = x.PageXmlId}).ToDictionary(x=>x.Key, x => x.ToList());
 
-                    var termWhereClause = "";
-                    var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(queryCreator, termWhereClause);
+                    var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidListRestriction, termQueryCreator);
                     bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
                 }
 
@@ -196,14 +195,13 @@ namespace ITJakub.ITJakubService.Core
                 termQueryCreator.AddCriteria(filteredCriterias.MetadataCriterias);
 
                 var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidList, termQueryCreator, termSettings.Start, termSettings.Count);
-
-                var termWhereClause = CreateWhereClauseForTerms(searchCriteriaContracts);
-
                 //var booksTermResults = m_bookVersionRepository.GetBooksTermResults(queryCreator, termWhereClause, termSettings.Start, termSettings.Count);
                 bookTermResults = booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName, PageXmlId = x.PageXmlId }).ToDictionary(x => x.Key, x => x.ToList());
 
-                var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(queryCreator, termWhereClause);
+                var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidList, termQueryCreator);
                 bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
+
+
             }
 
             var searchResultFullContext = new List<SearchResultContract>();

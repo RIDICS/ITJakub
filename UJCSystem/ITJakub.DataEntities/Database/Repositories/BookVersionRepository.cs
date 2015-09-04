@@ -412,13 +412,28 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<TermCountResult> GetBooksTermResultsCount(SearchCriteriaQueryCreator creator, string termMatchQuery)
+        public virtual IList<TermCountResult> GetBooksTermResultsCount(List<string> bookGuidList, TermCriteriaQueryCreator queryCreator)
         {
             using (var session = GetSession())
             {
-                var query = session.CreateQuery(creator.GetQueryStringForTermResultsCount(termMatchQuery));
-                creator.SetParameters(query);
-                var result = query.SetResultTransformer(Transformers.AliasToBean<TermCountResult>()).List<TermCountResult>();
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookPage bookPageAlias = null;
+                Term termAlias = null;
+                TermCountResult termResultAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookPages, () => bookPageAlias)
+                    .JoinQueryOver(x => x.Terms, () => termAlias)
+                    .Select(Projections.ProjectionList()
+                        .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => termResultAlias.BookId))
+                        .Add(Projections.CountDistinct(() => bookPageAlias.Id).WithAlias(() => termResultAlias.PagesCount))
+                    )
+                    .WhereRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .And(queryCreator.GetCondition())
+                    .TransformUsing(Transformers.AliasToBean<TermCountResult>())
+                    .List<TermCountResult>();
 
                 return result;
             }
