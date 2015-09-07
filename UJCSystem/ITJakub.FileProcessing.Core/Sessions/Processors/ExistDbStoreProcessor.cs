@@ -12,13 +12,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class ExistDbStoreProcessor : IResourceProcessor
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly SearchServiceClient m_searchServiceClient;
-
-        public ExistDbStoreProcessor(SearchServiceClient searchServiceClient)
-        {
-            m_searchServiceClient = searchServiceClient;
-        }
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);        
+        
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
@@ -36,50 +31,40 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 {
                     m_log.ErrorFormat("Resource of type {0} and path {1} does not have fileName", resource.ResourceType,
                         resource.FullPath);
-                    continue; //TODO maybe throw exception?
+                    continue;
                 }
 
                 using (var dataStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
                 {
-                    if (resource.ResourceType == ResourceType.Transformation)
+                    var resourceUploadContract = GetVersionResourceUploadContract(resource, resourceDirector, dataStream);
+
+                    switch (resource.ResourceType)
                     {
-                        
-                    }
-                    else
-                    {
-                        var resourceUploadContract = GetVersionResourceUploadContract(resource, resourceDirector, dataStream);
+                        case ResourceType.BibliographyDocument:
+                            UploadBibliographyFile(resourceUploadContract);
+                            break;
 
-                        switch (resource.ResourceType)
-                        {
-                            case ResourceType.BibliographyDocument:
-                                UploadBibliographyFile(resourceUploadContract);
-                                break;
+                        case ResourceType.Book:
+                            UploadResourceToBookVersion(resourceUploadContract);
+                            break;
 
-                            case ResourceType.Book:
-                                UploadResourceToBookVersion(resourceUploadContract);                                
-                                break;
+                        case ResourceType.Transformation:
+                            UploadTransformationResource(resourceUploadContract);
+                            break;
 
-                            case ResourceType.Transformation:
-                                UploadTransformationResource(resourceDirector, resource, dataStream);
-                                break;
-
-                            default:
-                                throw new ArgumentException($"ResourceType: '{resource.ResourceType}' not meant for ExistDb upload");
-                        }
+                        default:
+                            throw new ArgumentException($"ResourceType: '{resource.ResourceType}' not meant for ExistDb upload");
                     }
                 }
             }
         }
 
-        private void UploadTransformationResource(ResourceSessionDirector resourceDirector, Resource resource, FileStream dataStream)
+        private void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract)
         {
-            m_searchServiceClient.UploadBookFile(new BookResourceUploadContract
+            using (var ssc = new SearchServiceClient())
             {
-                BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
-                FileName = resource.FileName,
-                ResourceType = resource.ResourceType,
-                DataStream = dataStream
-            });
+                ssc.UploadBookFile(resourceUploadContract);
+            }
         }
 
         private void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract)

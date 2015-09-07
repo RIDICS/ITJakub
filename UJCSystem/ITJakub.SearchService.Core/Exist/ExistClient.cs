@@ -68,6 +68,15 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
+
+            //var message = new HttpRequestMessage(HttpMethod.Post, uri);
+
+            //message.Properties.Add("alsdkjaslkdjl", "ssaasda");
+            //message.Properties.Add("alsdkjaslkasddddddddjl", "sasdasdassaasda");
+            //message.Properties.Add("alsddddddjl", "sasdasdassaaasdasdsda");
+            //message.Properties.Add("alddddddjl", "sasdasdassaasda");
+
+            //Task.Run(() => m_httpClient.SendAsync(message)).Wait();
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
