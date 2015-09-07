@@ -22,6 +22,8 @@
             </ResourceDictionary.MergedDictionaries>
             
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
+            <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
             <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
             <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
             <converter1:BooleanToDoubleConverter x:Key="BooleanToDoubleConverter" />
@@ -38,7 +40,8 @@
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="150" />
+            <ColumnDefinition Width="{Binding IsTextDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
+                              MinWidth="{Binding IsTextDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="{Binding IsPhotoDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
                               MinWidth="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
@@ -92,7 +95,7 @@
         <controls:CustomGridSplitter
             Grid.Row="0"
             Grid.Column="1"
-            Visibility="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Visibility="{Binding IsTextAndPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
             Margin="7,0,7,53"
             Width="26"
             Background="#90000000" />
@@ -156,7 +159,13 @@
                           IsOn="{Binding IsPhotoDisplayed, Mode=TwoWay}"
                           OnContent="Zapnuto"
                           OffContent="Vypnuto" />
-            
+
+            <ToggleSwitch Header="Skrýt text"
+                          Margin="10,0,0,0"
+                          IsOn="{Binding IsTextDisplayed, Mode=TwoWay, Converter={StaticResource BooleanNegationConverter}}"
+                          OnContent="Zapnuto"
+                          OffContent="Vypnuto" />
+
             <StackPanel Orientation="Vertical"
                         Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             
@@ -165,17 +174,45 @@
                               IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
                               OnContent="Zapnuto"
                               OffContent="Vypnuto" />
-            
-                <Slider Header="Vodorovná korekce ukazatele"
-                        Margin="10,0,5,0"
-                        Minimum="-50"
-                        Maximum="50"
-                        x:Name="HorizontalCalibrationSlider" />
-                <Slider Header="Svislá korekce ukazatele"
-                        Margin="10,0,5,0"
-                        Minimum="-50"
-                        Maximum="50"
-                        x:Name="VerticalCalibrationSlider" />
+
+                <Border BorderBrush="#40000000"
+                        BorderThickness="2"
+                        Margin="10,0,-10,0">
+                    <StackPanel Orientation="Vertical">
+                        <ToggleButton BorderThickness="0"
+                                      x:Name="CursorCorrectionButton">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Upravit pozici kurzoru" />
+                                <!--Arrow down:-->
+                                <TextBlock Text="&#xE019;"
+                                           FontFamily="Segoe UI Symbol"
+                                           Margin="3,0,0,0"
+                                           Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
+                                <!--Arrow up:-->
+                                <TextBlock Text="&#xE018;"
+                                           FontFamily="Segoe UI Symbol"
+                                           Margin="3,0,0,0"
+                                           Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                </StackPanel>
+                        </ToggleButton>
+                
+                        <Slider Header="Vodorovně"
+                                Margin="10,0,10,0"
+                                Minimum="-50"
+                                Maximum="50"
+                                Width="150"
+                                Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                x:Name="HorizontalCalibrationSlider" />
+                        <Slider Header="Svisle"
+                                Margin="10,0,10,0"
+                                Minimum="-50"
+                                Maximum="50"
+                                Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                x:Name="VerticalCalibrationSlider" />
+
+                    </StackPanel>
+                </Border>
+                
                 <ToggleSwitch Header="Posouvání a přibližování fotografie"
                               Margin="10,0,0,0"
                               OnContent="Zapnuto"
