@@ -15,6 +15,10 @@
 
     var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
+    readerPlugin.setTermPanelCallback((xmlId: string, text: string) => {
+        window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
+    });
+
     var search: Search;
     
     function convertSearchResults(responseResults: Array<Object>): PageDescription[]{

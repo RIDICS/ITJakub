@@ -48,25 +48,8 @@ namespace ITJakub.DataEntities.Database
             m_criteriaList.Add(newCriteria);
         }
 
-        public Conjunction GetCondition()
-        {
-            var conjunction = new Conjunction();
-
-            foreach (var criteria in m_criteriaList)
-            {
-                var disjunction = new Disjunction();
-                foreach (var conditionString in criteria.Disjunctions)
-                {
-                    disjunction.Add(GetConditionCriterion(conditionString));
-                }
-                conjunction.Add(disjunction);
-            }
-
-            return conjunction;
-        }
-
-        public abstract ICriterion GetConditionCriterion(string conditionString);
         protected abstract CriteriaKey GetCriteriaKey();
+        public abstract ICriterion GetCondition();
     }
 
 
@@ -77,10 +60,22 @@ namespace ITJakub.DataEntities.Database
             return CriteriaKey.Headword;
         }
 
-        public override ICriterion GetConditionCriterion(string conditionString)
+        public override ICriterion GetCondition()
         {
+            var conjunction = new Conjunction();
             BookHeadword bookHeadwordAlias = null;
-            return new LikeExpression(Projections.Property(() => bookHeadwordAlias.Headword), conditionString, MatchMode.Exact);
+
+            foreach (var criteria in m_criteriaList)
+            {
+                var disjunction = new Disjunction();
+                foreach (var conditionString in criteria.Disjunctions)
+                {
+                    disjunction.Add(new LikeExpression(Projections.Property(() => bookHeadwordAlias.Headword), conditionString, MatchMode.Exact));
+                }
+                conjunction.Add(disjunction);
+            }
+
+            return conjunction;
         }
     }
 
@@ -91,10 +86,22 @@ namespace ITJakub.DataEntities.Database
             return CriteriaKey.Term;
         }
 
-        public override ICriterion GetConditionCriterion(string conditionString)
+        public override ICriterion GetCondition()
         {
+            var parentDisjunction = new Disjunction();
             Term termAlias = null;
-            return new LikeExpression(Projections.Property(() => termAlias.Text), conditionString, MatchMode.Exact);
+
+            foreach (var criteria in m_criteriaList)
+            {
+                var disjunction = new Disjunction();
+                foreach (var conditionString in criteria.Disjunctions)
+                {
+                    disjunction.Add(new LikeExpression(Projections.Property(() => termAlias.Text), conditionString, MatchMode.Exact));
+                }
+                parentDisjunction.Add(disjunction);
+            }
+
+            return parentDisjunction;
         }
     }
 }

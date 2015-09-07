@@ -172,6 +172,15 @@ $(document).ready(() => {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
+
+    var searchedText = getQueryStringParameterByName("search");
+
+    if (typeof searchedText !== "undefined" && searchedText !== null) {
+        var decodedText = decodeURIComponent(searchedText);
+        decodedText = replaceSpecialChars(decodedText);
+        search.processSearchQuery(decodedText);
+    }
+
 });
 
 

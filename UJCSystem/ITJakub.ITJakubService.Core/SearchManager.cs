@@ -157,6 +157,9 @@ namespace ITJakub.ITJakubService.Core
 
 
                 var resultContractList = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
+
+
+
                 foreach (var resultContract in resultContractList)
                 {
                     resultContract.PageCount = pageCounts[resultContract.BookId];
@@ -164,8 +167,9 @@ namespace ITJakub.ITJakubService.Core
                     if (bookTermResults != null)
                     {
                         List<PageDescriptionContract> pageDescriptionContracts;
+                        long termResultsCount;
                         resultContract.TermsPageHits = bookTermResults.TryGetValue(resultContract.BookId, out pageDescriptionContracts) ? pageDescriptionContracts : new List<PageDescriptionContract>();
-                        resultContract.TermsPageHitsCount = Convert.ToInt32(bookTermResultsCount[resultContract.BookId]);
+                        resultContract.TermsPageHitsCount = bookTermResultsCount.TryGetValue(resultContract.BookId, out termResultsCount) ? Convert.ToInt32(termResultsCount) : 0;
                     }
                 }
 
@@ -199,6 +203,8 @@ namespace ITJakub.ITJakubService.Core
 
             var searchResultFullContext = new List<SearchResultContract>();
 
+
+
             foreach (var searchResult in searchResults.SearchResults)
             {
                 var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookXmlId]);
@@ -209,8 +215,9 @@ namespace ITJakub.ITJakubService.Core
                 if (bookTermResults != null)
                 {
                     List<PageDescriptionContract> pageDescriptionContracts;
+                    long termResultsCount;
                     localResult.TermsPageHits = bookTermResults.TryGetValue(localResult.BookId, out pageDescriptionContracts) ? pageDescriptionContracts : new List<PageDescriptionContract>();
-                    localResult.TermsPageHitsCount = Convert.ToInt32(bookTermResultsCount[localResult.BookId]);
+                    localResult.TermsPageHitsCount = bookTermResultsCount.TryGetValue(localResult.BookId, out termResultsCount) ? Convert.ToInt32(termResultsCount) : 0;
                 }
 
                 searchResultFullContext.Add(localResult);

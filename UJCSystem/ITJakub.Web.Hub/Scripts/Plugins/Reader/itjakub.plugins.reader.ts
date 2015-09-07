@@ -938,6 +938,10 @@ class ReaderModule {
         return this.termsPanel;
     }
 
+    setTermPanelCallback(callback: (xmlId:string, text: string) => void) {
+        this.getTermsPanel().setTermClickedCallback(callback);
+    }
+
     termsPanelShowLoading() {
         this.getTermsPanel().showLoading();
 
@@ -1748,6 +1752,8 @@ class TermsPanel extends LeftSidePanel {
     private termsResultItemsLoadDiv: HTMLDivElement;
     private searchResultItemsLoadDiv: HTMLDivElement;
 
+    private termClickedCallback: (xmlId: string, text: string) => void;
+
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
     }
@@ -1849,6 +1855,10 @@ class TermsPanel extends LeftSidePanel {
         }
     }
 
+    setTermClickedCallback(callback: (xmlId:string, text: string)=>void) {
+        this.termClickedCallback = callback;
+    }
+
     private createResultItem(page: PageDescription): HTMLLIElement {
         var resultItemListElement = document.createElement("li");
 
@@ -1874,7 +1884,7 @@ class TermsPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            //TODO move to old grammar search and search this term in searchText
+            this.termClickedCallback(xmlId, text);
         });
 
         var textSpanElement = document.createElement("span");
