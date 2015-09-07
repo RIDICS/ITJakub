@@ -95,6 +95,17 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 });
         }
 
+        public ActionResult GetListConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json");
+            return File(fullPath, "application/json", fullPath);
+        }
+        public ActionResult GetSearchConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json");
+            return File(fullPath, "application/json", fullPath);
+        }
+
         public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var result = m_mainServiceClient.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
