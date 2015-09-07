@@ -639,6 +639,8 @@
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />

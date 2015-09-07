@@ -50,6 +50,17 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 });
         }
 
+        public ActionResult GetListConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/list_configuration.json");
+            return File(fullPath, "application/json", fullPath);
+        }
+        public ActionResult GetSearchConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/search_configuration.json");
+            return File(fullPath, "application/json", fullPath);
+        }
+
         public FileResult GetBookImage(string bookId, int position)
         {
             var imageDataStream = m_mainServiceClient.GetBookPageImage(bookId, position);
