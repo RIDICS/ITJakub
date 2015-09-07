@@ -19,7 +19,7 @@
                             <Grid VerticalAlignment="Top">
                                 <control:BindableRichEditBox
                                     x:Name="RichEditBox"
-                                    Padding="10,3,20,5"
+                                    Padding="10,3,23,5"
                                     ScrollViewer.HorizontalScrollMode="Disabled"
                                     ScrollViewer.VerticalScrollMode="Disabled"
                                     ScrollViewer.ZoomMode="Disabled"

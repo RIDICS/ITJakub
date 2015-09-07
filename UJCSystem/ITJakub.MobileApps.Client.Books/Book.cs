@@ -60,7 +60,7 @@ namespace ITJakub.MobileApps.Client.Books
             m_taskCompletition.SetResult(message.SelectedBookPage);
         }
 
-        private void StartReader(string bookGuid)
+        private async Task StartReader(string bookGuid)
         {
             m_dataService.SetMode(ReaderMode.ReadBook);
             m_dataService.SetCurrentBook(new BookViewModel {Guid = bookGuid});
@@ -69,6 +69,8 @@ namespace ITJakub.MobileApps.Client.Books
             m_popup.IsOpen = true;
 
             Window.Current.SizeChanged += UpdatePageSize;
+
+            await m_taskCompletition.Task;
         }
 
         public static async Task<BookPageViewModel> SelectBookAsync()
@@ -82,10 +84,10 @@ namespace ITJakub.MobileApps.Client.Books
             get { return Container.Current.Resolve<IDataService>(); }
         }
 
-        public static void ShowReader(string bookGuid)
+        public static async void ShowReader(string bookGuid)
         {
             var book = new Book();
-            book.StartReader(bookGuid);
+            await book.StartReader(bookGuid);
         }
     }
 }

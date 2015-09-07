@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:ITJakub.MobileApps.Client.Books.View.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Books.View.Control"
+    xmlns:controls="using:WinRTXamlToolkit.Controls"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -110,7 +111,7 @@
                     Margin="0,10,0,0"
                     Content="Vybrat"
                     MinWidth="130"
-                    Visibility="{Binding ShowSubmitButton}"
+                    Visibility="{Binding ShowSubmitButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                     IsEnabled="{Binding CanSubmit}"
                     Command="{Binding SelectCommand}" />
 
@@ -126,105 +127,113 @@
 
             <Grid Grid.Row="2"
                   Grid.Column="0"
-                  DataContext="{Binding PageTextViewModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="53" />
-                </Grid.RowDefinitions>
+                  Grid.ColumnSpan="3">
                 
-                <Border Background="White"
-                        BorderBrush="#30000000"
-                        BorderThickness="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" MinWidth="150" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="2*" MinWidth="150" />
+                </Grid.ColumnDefinitions>
+                
+                <Grid Grid.Column="0"
+                      DataContext="{Binding PageTextViewModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="53" />
+                    </Grid.RowDefinitions>
+                
+                    <Border Background="White"
+                            BorderBrush="#30000000"
+                            BorderThickness="2">
+
+                        <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
+                                                             IsReadOnly="True"
+                                                             Padding="10,3,24,5"
+                                                             ScrollViewer.HorizontalScrollMode="Disabled"
+                                                             ScrollViewer.VerticalScrollMode="Enabled"
+                                                             ScrollViewer.ZoomMode="Disabled"
+                                                             Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
+                    </Border>
+
+                    <Grid Grid.Row="0"
+                          Margin="40,20,40,20"
+                          Background="#20000000"
+                          VerticalAlignment="Center">
                     
-                    <ScrollViewer HorizontalScrollMode="Enabled"
-                                  VerticalScrollMode="Enabled"
-                                  ZoomMode="Enabled"
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="Zvolená strana nebyla nalezena."
+                                   TextWrapping="Wrap"
+                                   Foreground="DarkRed"
+                                   FontSize="17"
+                                   Margin="3"
+                                   Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
+
+                    <control:ZoomBarControl Grid.Row="1"
+                                            CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                            Minimum="-7"
+                                            Maximum="17" />
+                </Grid>
+                <ProgressRing Grid.Column="0"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsActive="{Binding PageTextViewModel.Loading}"
+                              Width="{StaticResource ProgressRingSize}"
+                              Height="{StaticResource ProgressRingSize}"
+                              Foreground="DarkBlue" />
+
+                <controls:CustomGridSplitter
+                    Grid.Column="1"
+                    Margin="10,0,10,53"
+                    Background="#90000000" />
+
+                <Grid Grid.Column="2"
+                      DataContext="{Binding PagePhotoViewModel}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="53" />
+                    </Grid.RowDefinitions>
+                
+                    <ScrollViewer Background="#30000000"
+                                  HorizontalScrollMode="Enabled"
                                   HorizontalScrollBarVisibility="Visible"
                                   control:ScrollViewerHelper.IsExternalZoomEnabled="True"
                                   control:ScrollViewerHelper.Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}">
-                        
-                            <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
-                                                         IsReadOnly="True"
-                                                         Margin="0,0,20,0"
-                                                         ScrollViewer.HorizontalScrollMode="Disabled"
-                                                         ScrollViewer.VerticalScrollMode="Disabled"
-                                                         ScrollViewer.ZoomMode="Disabled"
-                                                         VerticalAlignment="Top" />
+            
+                        <Image VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Stretch="Uniform"
+                               Source="{Binding PagePhoto}" />
                     </ScrollViewer>
-                </Border>
 
-                <Grid Grid.Row="0"
-                      Margin="40,20,40,20"
-                      Background="#20000000"
-                      VerticalAlignment="Center">
+                    <Grid Grid.Row="0"
+                          Margin="40,20,40,20"
+                          Background="#AAFFFFFF"
+                          VerticalAlignment="Center">
                     
-                    <TextBlock HorizontalAlignment="Center"
-                               Text="Zvolená strana nebyla nalezena."
-                               Foreground="DarkRed"
-                               FontSize="17"
-                               Margin="3"
-                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                </Grid>
+                        <TextBlock HorizontalAlignment="Center"
+                                   Text="Fotografie této strany nebyla nalezena."
+                                   TextWrapping="Wrap"
+                                   Foreground="DarkRed"
+                                   FontSize="17"
+                                   Margin="3"
+                                   Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    </Grid>
 
-                <control:ZoomBarControl Grid.Row="1"
-                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                        Minimum="-7"
-                                        Maximum="17" />
-            </Grid>
-            <ProgressRing Grid.Row="2"
-                          Grid.Column="0"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          IsActive="{Binding PageTextViewModel.Loading}"
-                          Width="{StaticResource ProgressRingSize}"
-                          Height="{StaticResource ProgressRingSize}"
-                          Foreground="DarkBlue" />
-
-            <Grid Grid.Row="2" Grid.Column="2"
-                  DataContext="{Binding PagePhotoViewModel}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="53" />
-                </Grid.RowDefinitions>
+                    <control:ZoomBarControl Grid.Row="1"
+                                            Visibility="{Binding IsShowEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
                 
-                <ScrollViewer Background="#30000000"
-                              HorizontalScrollMode="Enabled"
-                              HorizontalScrollBarVisibility="Visible"
-                              control:ScrollViewerHelper.IsExternalZoomEnabled="True"
-                              control:ScrollViewerHelper.Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}">
-            
-                    <Image VerticalAlignment="Center"
-                           HorizontalAlignment="Center"
-                           Stretch="Uniform"
-                           Source="{Binding PagePhoto}" />
-                </ScrollViewer>
-
-                <Grid Grid.Row="0"
-                      Margin="40,20,40,20"
-                      Background="#AAFFFFFF"
-                      VerticalAlignment="Center">
-                    
-                    <TextBlock HorizontalAlignment="Center"
-                               Text="Fotografie této strany nebyla nalezena."
-                               Foreground="DarkRed"
-                               FontSize="17"
-                               Margin="3"
-                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </Grid>
-
-                <control:ZoomBarControl Grid.Row="1"
-                                        Visibility="{Binding IsShowEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                        CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
-                
-            </Grid>
             
-            <ProgressRing Grid.Row="2"
-                          Grid.Column="2"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          IsActive="{Binding PagePhotoViewModel.Loading}"
-                          Width="{StaticResource ProgressRingSize}"
-                          Height="{StaticResource ProgressRingSize}" />
+                <ProgressRing Grid.Column="2"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              IsActive="{Binding PagePhotoViewModel.Loading}"
+                              Width="{StaticResource ProgressRingSize}"
+                              Height="{StaticResource ProgressRingSize}" />
+
+            </Grid>
 
             <Grid Grid.Row="1"
                   Grid.Column="0">
@@ -233,15 +242,19 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                
+
                 <Button Grid.Column="0"
-                        Padding="6,4,6,4"
+                        Padding="6,4,6,5"
+                        Margin="-3,-3,0,0"
+                        VerticalAlignment="Top"
                         Command="{Binding GoToPreviousCommand}">
                     <SymbolIcon Symbol="Back" />
                 </Button>
 
                 <Button Grid.Column="2"
-                        Padding="6,4,6,4"
+                        Padding="6,4,6,5"
+                        Margin="0,-3,-3,0"
+                        VerticalAlignment="Top"
                         Command="{Binding GoToNextCommand}">
                     <SymbolIcon Symbol="Forward" />
                 </Button>
@@ -266,7 +279,7 @@
                                 <TextBlock Text="{Binding Name}"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center">
-                                
+
                                 </TextBlock>
                             </Grid>
                         </DataTemplate>

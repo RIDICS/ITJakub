@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.Graphics.Display;
@@ -212,7 +211,6 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             if (m_richEditBox != null)
             {
                 m_richEditBox.SelectionChanged += OnSelectionChanged;
-                m_richEditBox.DocumentLoaded += OnDocumentLoaded;
             }
 
             OnModeChanged(this, null);
@@ -291,12 +289,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var delta = properties.MouseWheelDelta;
             m_scrollViewer.ChangeView(null, m_scrollViewer.VerticalOffset - delta, null);
         }
-
-        private void OnDocumentLoaded(object sender, EventArgs e)
-        {
-            //m_richEditBox.Document.GetDefaultCharacterFormat().
-        }
-
+        
         private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var readerRichEditBox = d as ReaderRichEditBox;
@@ -304,15 +297,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
                 return;
 
             var richEditBox = readerRichEditBox.m_richEditBox;
-
-            var defaultFormat = richEditBox.Document.GetDefaultCharacterFormat();
-            var textRange = richEditBox.Document.GetRange(0, richEditBox.Document.Selection.StoryLength);
-
-            var isReadOnly = richEditBox.IsReadOnly;
-            richEditBox.IsReadOnly = false;
-            textRange.CharacterFormat.Size = (float) (defaultFormat.Size*readerRichEditBox.Zoom);
-            richEditBox.IsReadOnly = isReadOnly;
-
+            richEditBox.Zoom = readerRichEditBox.Zoom;
+            
             // TODO improve logic
             OnCursorPositionChanged(d, null);
         }

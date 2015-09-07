@@ -135,6 +135,7 @@
     <Compile Include="ViewModel\Reading\ReadingViewModel.cs" />
     <Compile Include="View\Control\ReaderImage.cs" />
     <Compile Include="View\Control\ReaderRichEditBox.cs" />
+    <Compile Include="View\Converter\BooleanToDoubleConverter.cs" />
     <Compile Include="View\Converter\BooleanToGridVisibility.cs" />
     <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />
@@ -169,6 +170,10 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRTXamlToolkit, Version=1.6.1.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WinRTXamlToolkit.1.6.1.3\lib\netcore451\WinRTXamlToolkit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

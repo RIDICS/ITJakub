@@ -10,6 +10,7 @@
     xmlns:reading="using:ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading"
     xmlns:controlBooks="using:ITJakub.MobileApps.Client.Books.View.Control"
     xmlns:control1="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:controls="using:WinRTXamlToolkit.Controls"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance d:Type=reading:ReadingViewModel}"
     x:Name="RootElement">
@@ -23,6 +24,7 @@
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
             <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
+            <converter1:BooleanToDoubleConverter x:Key="BooleanToDoubleConverter" />
             <converter1:RangeToZoomFactorConverter x:Key="RangeToZoomFactorConverter" />
             <x:Double x:Key="ProgressRingSize">50</x:Double>
         </ResourceDictionary>
@@ -36,8 +38,10 @@
         </Grid.RowDefinitions>
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToGridVisibility}}" />
+            <ColumnDefinition Width="*" MinWidth="150" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToGridVisibility}}"
+                              MinWidth="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
@@ -66,6 +70,7 @@
 
                     <TextBlock HorizontalAlignment="Center"
                                Text="Zvolená strana nebyla nalezena."
+                               TextWrapping="Wrap"
                                Foreground="DarkRed"
                                FontSize="17"
                                Margin="3"
@@ -83,10 +88,18 @@
                                          Minimum="-7"
                                          Maximum="17" />
         </Grid>
+
+        <controls:CustomGridSplitter
+            Grid.Row="0"
+            Grid.Column="1"
+            Visibility="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Margin="7,0,7,53"
+            Width="26"
+            Background="#90000000" />
         
         <Grid Grid.Row="0"
-              Grid.Column="1"
-              Margin="20,0,0,0"
+              Grid.Column="2"
+              Margin="0,0,0,0"
               DataContext="{Binding ImageReaderViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -110,6 +123,7 @@
 
                 <TextBlock HorizontalAlignment="Center"
                             Text="Fotografie této strany nebyla nalezena."
+                            TextWrapping="Wrap"
                             Foreground="DarkRed"
                             FontSize="17"
                             Margin="3"
@@ -126,7 +140,7 @@
         </Grid>
         
         <StackPanel Grid.Row="0"
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Orientation="Vertical"
                     Width="200">
             <TextBlock Margin="15,5,0,20"
@@ -180,7 +194,7 @@
         
         <Grid Grid.Row="1"
               Grid.Column="0"
-              Grid.ColumnSpan="2"
+              Grid.ColumnSpan="3"
               Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -232,7 +246,7 @@
         </Grid>
         
         <StackPanel Grid.Row="1"
-                    Grid.Column="2"
+                    Grid.Column="3"
                     Margin="10,-6,0,6"
                     Orientation="Vertical"
                     Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">

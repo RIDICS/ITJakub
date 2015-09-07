@@ -69,9 +69,9 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         private void LoadAllBookInfo(BookViewModel bookViewModel)
         {
+            Book = bookViewModel;
             if (bookViewModel.Title != null)
             {
-                Book = bookViewModel;
                 return;
             }
 

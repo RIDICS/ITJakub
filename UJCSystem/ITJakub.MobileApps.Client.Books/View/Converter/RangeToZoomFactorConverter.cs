@@ -9,7 +9,7 @@ namespace ITJakub.MobileApps.Client.Books.View.Converter
 
         public object Convert(object value, Type targetType, object parameter, string language)
         {
-            if (targetType != typeof(float))
+            if (targetType != typeof(float) && targetType != typeof(double))
                 throw new InvalidOperationException("The target must be a float");
 
             var percent = (double) value;
