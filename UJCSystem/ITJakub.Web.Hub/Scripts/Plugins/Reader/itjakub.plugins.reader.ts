@@ -1884,7 +1884,9 @@ class TermsPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.termClickedCallback(xmlId, text);
+            if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
+                this.termClickedCallback(xmlId, text);   
+            }
         });
 
         var textSpanElement = document.createElement("span");
