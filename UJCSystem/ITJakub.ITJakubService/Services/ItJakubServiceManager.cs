@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.ITJakubService.DataContracts.AudioBooks;
+using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -25,7 +25,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;        
-        private readonly AudioBookManager m_audioBookManager;
+ 
 
         public ItJakubServiceManager()
         {            
@@ -36,7 +36,7 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
-            m_audioBookManager = m_container.Resolve<AudioBookManager>();
+         
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -69,10 +69,7 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookContent(bookGuid);
         }
 
-        public void AddResource(UploadResourceContract resourceInfoSkeleton)
-        {
-            m_resourceManager.AddResource(resourceInfoSkeleton);
-        }
+        
 
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
@@ -201,15 +198,14 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.SearchCriteriaResultsCount(searchCriterias);
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
-            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat, bookType);
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
-            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat, bookType);
         }
 
         public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -259,15 +255,7 @@ namespace ITJakub.ITJakubService.Services
         }
       
 
-        public FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract)
-        {
-            return m_audioBookManager.DownloadWholeAudioBook(requestContract);
-        }
-
-        public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
-        {
-            return m_audioBookManager.DownloadAudioBookTrack(requestContract);
-        }
+        
 
         public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;

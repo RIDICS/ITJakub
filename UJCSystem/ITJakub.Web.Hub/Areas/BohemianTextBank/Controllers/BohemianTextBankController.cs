@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -143,7 +144,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult TextSearchPaged(string text, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -160,6 +161,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 },
                 new ResultCriteriaContract
                 {
+                    Start = start,
+                    Count = count,
                     Sorting = (SortEnum) sortingEnum,
                     Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                     HitSettingsContract = new HitSettingsContract
@@ -260,13 +263,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(new { count }, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult AdvancedSearchPaged(string json, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
             listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
+                Start = start,
+                Count = count,
                 Sorting = (SortEnum)sortingEnum,
                 Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                 HitSettingsContract = new HitSettingsContract

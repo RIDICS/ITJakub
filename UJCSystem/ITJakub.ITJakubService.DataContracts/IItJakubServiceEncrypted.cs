@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ServiceModel;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 

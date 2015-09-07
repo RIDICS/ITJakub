@@ -124,15 +124,39 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinAlias( t => t.BookType, () => bookTypeAlias)
                     .Where( t => t.OutputFormat == outputFormat && bookVersionAlias.Id == bookVersion.Id && bookTypeAlias.Type == requestedBookType)
                     .SingleOrDefault<Transformation>();
+                
+                if (transformation == null)
+                {
+                    transformation = session.QueryOver<Transformation>()
+                        .JoinAlias(x => x.BookType, () => bookTypeAlias)
+                        .Where(x => x.OutputFormat == outputFormat && x.IsDefaultForBookType && bookTypeAlias.Type == requestedBookType )
+                        .SingleOrDefault<Transformation>();
+                }
+                
+                return transformation;
+            }
+        }
 
-                //TODO could be looked up for specific book transformation (shared between version)
+        [Transaction(TransactionMode.Requires)]
+        public virtual Transformation FindDefaultTransformation(BookVersion bookVersion, OutputFormat outputFormat)
+        {
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+
+            using (var session = GetSession())
+            {
+                var transformation = session.QueryOver<Transformation>()
+                    .JoinAlias(t => t.BookVersions, () => bookVersionAlias)
+                    .JoinAlias(t => t.BookType, () => bookTypeAlias)
+                    .Where(t => t.OutputFormat == outputFormat && bookVersionAlias.Id == bookVersion.Id && bookTypeAlias.Id == bookVersion.DefaultBookType.Id)
+                    .SingleOrDefault<Transformation>();
 
                 if (transformation == null)
                 {
                     transformation = session.QueryOver<Transformation>()
                         .Where(
                             t =>
-                                t.OutputFormat == outputFormat && t.BookType.Id == bookVersion.DefaultBookType.Id && t.IsDefaultForBookType)
+                                t.OutputFormat == outputFormat && t.IsDefaultForBookType && bookTypeAlias.Id == bookVersion.DefaultBookType.Id)
                         .SingleOrDefault<Transformation>();
                 }
 

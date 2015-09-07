@@ -2,6 +2,7 @@ using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles

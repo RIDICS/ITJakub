@@ -491,8 +491,8 @@ class RegExConditionListItem {
         var metadataOptGroup = HtmlItemsFactory.createOptionGroup("Metadata");
         searchDestinationSelect.appendChild(metadataOptGroup);
 
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
         metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Téma", SearchTypeEnum.Term.toString()));
@@ -540,7 +540,8 @@ class RegExConditionListItem {
         this.setClickableDelimeter();
         this.html = conditionsDiv;
 
-        $(searchDestinationSelect).val(SearchTypeEnum.Fulltext.toString());
+        var defaultValue = $(this.searchDestinationSelect).find("option").first().val();
+        $(searchDestinationSelect).val(defaultValue);
         $(searchDestinationSelect).change();
     }
 

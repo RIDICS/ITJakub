@@ -2,6 +2,7 @@
 using AutoMapper;
 using ITJakub.CardFile.Core.DataContractEntities;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Castle.MicroKernel;
+using ITJakub.FileProcessing.Core.Sessions.ResourceTypeResolvers;
 using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.FileProcessing.Core.Sessions
@@ -37,90 +38,5 @@ namespace ITJakub.FileProcessing.Core.Sessions
             var fileExtension = extension.ToLowerInvariant();
             return m_resolversDictionary[fileExtension];
         }
-    }
-
-    public abstract class ResourceTypeResolverBase
-    {
-        protected ResourceTypeResolverBase(string[] fileExtensions)
-        {
-            FileExtensions = fileExtensions;
-        }
-
-        public abstract ResourceType ResolveResourceType { get; }
-
-        public string[] FileExtensions { get; private set; }
-    }
-
-    public class SourceDocumentTypeResolver : ResourceTypeResolverBase
-    {
-        public SourceDocumentTypeResolver(string[] fileExtensions) : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType
-        {
-            get { return ResourceType.SourceDocument; }
-        }
-    }
-    
-    public class MetadataTypeResolver : ResourceTypeResolverBase
-    {
-        public MetadataTypeResolver(string[] fileExtensions)
-            : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType
-        {
-            get { return ResourceType.UploadedMetadata; }
-        }
-    }
-
-    public class ImageTypeResolver : ResourceTypeResolverBase
-    {
-        public ImageTypeResolver(string[] fileExtensions)
-            : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType
-        {
-            get { return ResourceType.Image; }
-        }
-    }
-
-    public class TransformationTypeResolver : ResourceTypeResolverBase
-    {
-        public TransformationTypeResolver(string[] fileExtensions)
-            : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType
-        {
-            get { return ResourceType.Transformation; }
-        }
-    }
-
-    public class AudioTypeResolver : ResourceTypeResolverBase
-    {
-        public AudioTypeResolver(string[] fileExtensions)
-            : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType
-        {
-            get { return ResourceType.Audio; }
-        }
-    }
-
-    public class ExtractableArchiveTypeResolver:ResourceTypeResolverBase
-    {
-        public ExtractableArchiveTypeResolver(string[] fileExtensions) : base(fileExtensions)
-        {
-        }
-
-        public override ResourceType ResolveResourceType { get {return ResourceType.ExtractableArchive;} }
     }
 }

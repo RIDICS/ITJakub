@@ -1,6 +1,8 @@
 ﻿@item-background-color:#84CED7;
 @background-color:#E5E5E5;
 @text-color:#AFDEE4;
+@white-color:white;
+@loader-bright-color:white;
 
 @icon-chevron: url("Images/glyphicons_chevron.png");
 @icon-chevron-green: url("Images/glyphicons_chevron_green.png");
@@ -8,8 +10,9 @@
 @max-body-width: 1100px;
 
 
+
 .white-link {
-    color: white;
+    color: @white-color;
     text-decoration: none;
 }
 
@@ -67,7 +70,7 @@ body {
 
 
 .content-container {
-    background-color: white;
+    background-color: @white-color;
     padding: 15px;
     padding-top: 5px;
     min-height: 77vh;
@@ -99,5 +102,5 @@ div.container {
 .style-button {
     border-radius: 0;
     background-color: @item-background-color;
-    color: white;
+    color: @white-color;
 }

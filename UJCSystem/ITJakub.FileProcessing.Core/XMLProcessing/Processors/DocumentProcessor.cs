@@ -3,6 +3,7 @@ using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header;
@@ -46,7 +47,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
                     Container.Resolve<PagesProcessor>(),
                     Container.Resolve<TermsProcessor>(),
                     Container.Resolve<TracksProcessor>(),
-                    Container.Resolve<HeadwordsTableProcessor>()
+                    Container.Resolve<HeadwordsTableProcessor>(),
+                    Container.Resolve<AccessoriesProcessor>(),
                 };
             }
         }
