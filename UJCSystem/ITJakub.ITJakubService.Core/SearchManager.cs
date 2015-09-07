@@ -219,42 +219,6 @@ namespace ITJakub.ITJakubService.Core
             return searchResultFullContext;
         }
 
-        private string CreateWhereClauseForTerms(IEnumerable<SearchCriteriaContract> searchCriterias)
-        {
-
-            var termCriterias = searchCriterias.Where(x => x.Key == CriteriaKey.Term);
-
-            var queryDisjunctionList = new List<string>();
-
-            foreach (var termCriteria in termCriterias)
-            {
-                var wordListCriteria = (WordListCriteriaContract)termCriteria;
-                var termCriteriaBuilder = new StringBuilder();
-
-                foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
-                {
-                    if (termCriteriaBuilder.Length > 0)
-                        termCriteriaBuilder.Append(" or");
-
-                    termCriteriaBuilder.AppendFormat(" t1.Text like (:{0})", CriteriaConditionBuilder.Create(wordCriteria));
-                }
-
-                queryDisjunctionList.Add(termCriteriaBuilder.ToString());
-            }
-
-            var whereBuilder = new StringBuilder();
-
-            foreach (var criteriaQuery in queryDisjunctionList)
-            {
-                
-                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : "");
-
-                whereBuilder.Append(" (").Append(criteriaQuery).Append(')');
-            }
-
-            return whereBuilder.ToString();
-        }
-
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
@@ -331,10 +295,10 @@ namespace ITJakub.ITJakubService.Core
 
             var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
             if (string.IsNullOrWhiteSpace(query))
-                return m_bookRepository.GetLastTermsByBookType(PrefetchRecordCount, bookType, bookIdList);
+                return m_bookRepository.GetTermsByBookType(PrefetchRecordCount, bookType, bookIdList);
 
             query = PrepareQuery(query);
-            return m_bookRepository.GetTypeaheadTermsByBookType(query, bookType, bookIdList, PrefetchRecordCount);
+            return m_bookRepository.GetTermsByBookType(query, bookType, bookIdList, PrefetchRecordCount);
         }
 
         public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)

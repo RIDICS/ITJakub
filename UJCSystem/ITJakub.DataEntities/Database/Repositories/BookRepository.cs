@@ -440,11 +440,33 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<string> GetLastTermsByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
+        public virtual IList<string> GetTermsByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
         {
             using (var session = GetSession())
             {
-                throw new NotImplementedException();
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+                BookPage pageAlias = null;
+                Term termAlias = null;
+
+                var query = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinQueryOver(x => bookVersionAlias.BookPages, () => pageAlias)
+                    .JoinQueryOver(x => pageAlias.Terms, () => termAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => termAlias.Text)))
+                    .Where(x => bookTypeAlias.Type == bookType);
+
+                if (bookIdList != null)
+                    query.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
+
+                return query
+                    .OrderBy(() => termAlias.Position).Asc
+                    .Take(recordCount)
+                    .List<string>();
             }
         }
 
@@ -492,11 +514,33 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
                
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
+        public virtual IList<string> GetTermsByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
         {
             using (var session = GetSession())
             {
-                throw new NotImplementedException();
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+                BookPage pageAlias = null;
+                Term termAlias = null;
+
+                var dbQuery = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinQueryOver(x => bookVersionAlias.BookPages, () => pageAlias)
+                    .JoinQueryOver(x => pageAlias.Terms, () => termAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => termAlias.Text)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => termAlias.Text).IsInsensitiveLike(query);
+
+                if (bookIdList != null)
+                    dbQuery.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
+
+                return dbQuery
+                    .Take(recordCount)
+                    .List<string>();
             }
         }
 
