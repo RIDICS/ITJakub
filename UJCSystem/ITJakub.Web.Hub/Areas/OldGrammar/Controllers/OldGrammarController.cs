@@ -375,6 +375,36 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AdvancedSearchInBook(string json, string bookXmlId, string versionXmlId)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            {
+                Start = 0,
+                Count = 1
+            });
+
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId } }
+            });
+
+            if (!string.IsNullOrWhiteSpace(json))
+            {
+                listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
+            }
+
+            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+            if (result != null)
+            {
+                return Json(new { results = result.TermsPageHits }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
     }

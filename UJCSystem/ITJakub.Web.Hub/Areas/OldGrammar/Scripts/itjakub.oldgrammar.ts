@@ -52,10 +52,32 @@
                 readerPlugin.showSearchInTermsPanel(convertSearchResults(response["results"]));
             }
         });
-
     }
 
-    search = new Search(<any>$("#SearchDiv")[0], null, basicSearch);
+    function advancedSearch(json: string) {
+        hideTypeahead();
+        if (typeof json === "undefined" || json === null || json === "") return;
+
+        readerPlugin.termsPanelClearResults();
+        readerPlugin.termsPanelShowLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchInBook",
+            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            dataType: 'json',
+            contentType: 'application/json',
+            success: response => {
+                updateQueryStringParameter("searchText", json);
+
+                readerPlugin.termsPanelRemoveLoading();
+                readerPlugin.showSearchInTermsPanel(convertSearchResults(response["results"]));
+            }
+        });
+    }
+
+    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
     var disabledOptions = new Array<SearchTypeEnum>();
     disabledOptions.push(SearchTypeEnum.Author);
     disabledOptions.push(SearchTypeEnum.Dating);
@@ -64,6 +86,10 @@
     disabledOptions.push(SearchTypeEnum.HeadwordDescription);
     disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
     disabledOptions.push(SearchTypeEnum.Title);
+    disabledOptions.push(SearchTypeEnum.Fulltext);
+    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    disabledOptions.push(SearchTypeEnum.Sentence);
+    disabledOptions.push(SearchTypeEnum.Heading);
     search.makeSearch(disabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");

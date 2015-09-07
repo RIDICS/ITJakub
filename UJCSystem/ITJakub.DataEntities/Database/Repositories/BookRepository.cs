@@ -464,7 +464,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                     query.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
 
                 return query
-                    .OrderBy(() => termAlias.Position).Asc
                     .Take(recordCount)
                     .List<string>();
             }
