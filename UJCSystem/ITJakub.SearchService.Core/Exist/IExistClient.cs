@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Net.Http;
 using System.ServiceModel;
 using ITJakub.SearchService.Core.Exist.Attributes;
 using ITJakub.Shared.Contracts;
@@ -35,6 +37,10 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Shared)]
         void UploadSharedFile(string fileName, Stream dataStream);
+
+        [OperationContract]
+        [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Bibliography)]
+        void UploadBibliographyFile(string bookId, string bookVersionId, string fileName, Stream dataStream);
 
         [OperationContract]
         [ExistQuery(XqueryName = "get-entry.xquery")]

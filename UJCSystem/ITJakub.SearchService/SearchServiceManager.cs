@@ -119,5 +119,10 @@ namespace ITJakub.SearchService
         {
             return m_existManager.GetCorpusSearchResults(searchCriterias);
         }
+
+        public void UploadBibliographyFile(VersionResourceUploadContract bibliographyResource)
+        {
+            m_existManager.UploadBibliographyFile(bibliographyResource.BookId, bibliographyResource.BookVersionId, bibliographyResource.FileName, bibliographyResource.DataStream);
+        }
     }
 }

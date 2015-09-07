@@ -19,9 +19,20 @@ namespace ITJakub.SearchService.Core.Exist
             m_uriCache = uriCache;
             var clientHandler = new HttpClientHandler
             {
-                Credentials = new NetworkCredential(connectionSettings.DBUser, connectionSettings.DBPassword)
+                Credentials = new NetworkCredential(connectionSettings.DbUser, connectionSettings.DbPassword)
             };
             m_httpClient = new HttpClient(clientHandler);
+        }
+
+        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+
+            var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            {
+                Content = new StreamContent(dataStream)
+            })).Wait();
         }
 
         public void UploadVersionFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
@@ -43,21 +54,20 @@ namespace ITJakub.SearchService.Core.Exist
                     bookVersionId);
         }
 
-        public void UploadBookFile(string bookId, string fileName, Stream dataStream)
+        public void UploadSharedFile(string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-
-            var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
+            var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
             })).Wait();
         }
 
-        public void UploadSharedFile(string fileName, Stream dataStream)
+        public void UploadBibliographyFile(string bookId, string bookVersionId, string fileName, Stream dataStream)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
+            var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
             Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
             {
                 Content = new StreamContent(dataStream)
@@ -93,6 +103,74 @@ namespace ITJakub.SearchService.Core.Exist
         public string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat)
         {
             return GetPageByXmlId(bookId, versionId, pageXmlId, outputFormat, null);
+        }
+
+        public string ListSearchEditionsResults(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public string ListSearchDictionariesResults(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public int ListSearchDictionariesResultsCount(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
+        }
+
+        public int GetSearchCriteriaResultsCount(string serializedSearchCriterias)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriterias);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
+        }
+
+        public string GetSearchEditionsPageList(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat)
+        {
+            return GetEditionPageFromSearch(serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat, null);
+        }
+
+        public string GetSearchCorpus(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return result;
+        }
+
+        public int GetSearchCorpusCount(string serializedSearchCriteria)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
+            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
+
+            return int.Parse(result);
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat,
@@ -133,11 +211,13 @@ namespace ITJakub.SearchService.Core.Exist
             var completeUri = GetCompleteUri(commInfo, xslPath, bookId, versionId, pageXmlId, outputFormat);
 
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId, versionId, outputFormat);
-            
+                m_log.DebugFormat("Start HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId,
+                    versionId, outputFormat);
+
             var pageText = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId, versionId, outputFormat);
+                m_log.DebugFormat("End HTTPclient get page xmlId '{0}' of book '{1}' and version '{2}' and outputFormat '{3}'", pageXmlId, bookId, versionId,
+                    outputFormat);
 
             return pageText;
         }
@@ -152,7 +232,8 @@ namespace ITJakub.SearchService.Core.Exist
             return entryResult;
         }
 
-        public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat, string xslPath)
+        public string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat,
+            string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, xmlEntryId, outputFormat);
@@ -161,75 +242,8 @@ namespace ITJakub.SearchService.Core.Exist
             return entryResult;
         }
 
-        public string ListSearchEditionsResults(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return result;
-        }
-
-        public string ListSearchDictionariesResults(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return result;
-        }
-
-        public int ListSearchDictionariesResultsCount(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return int.Parse(result);
-        }
-        public int GetSearchCriteriaResultsCount(string serializedSearchCriterias)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriterias);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return int.Parse(result);
-        }
-
-
-        public string GetSearchEditionsPageList(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return result;
-        }
-
-        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat)
-        {
-            return GetEditionPageFromSearch(serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat, null);
-        }
-
-        public string GetSearchCorpus(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return result;
-        }
-
-        public int GetSearchCorpusCount(string serializedSearchCriteria)
-        {
-            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
-            var completeUri = GetCompleteUri(commInfo, null, serializedSearchCriteria);
-            var result = Task.Run(() => m_httpClient.GetStringAsync(completeUri)).Result;
-
-            return int.Parse(result);
-        }
-
-        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat, string xslPath)
+        public string GetEditionPageFromSearch(string serializedSearchCriteria, string bookId, string versionId, string pageXmlId, string outputFormat,
+            string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var completeUri = GetCompleteUri(commInfo, xslPath, serializedSearchCriteria, bookId, versionId, pageXmlId, outputFormat);
@@ -261,7 +275,5 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
         #endregion
-
-        
     }
 }

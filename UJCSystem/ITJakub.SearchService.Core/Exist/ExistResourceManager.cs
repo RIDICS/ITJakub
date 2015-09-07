@@ -20,8 +20,28 @@ namespace ITJakub.SearchService.Core.Exist
                     return GetBookResourceUriTemplate();
                 case ResourceLevelEnumContract.Shared:
                     return GetSharedResourceUriTemplate();
+                case ResourceLevelEnumContract.Bibliography:
+                    return GetBibliographyResourceUriTemplate();
                 default:
                     return GetVersionResourceUriTemplate();
+            }
+        }
+  
+
+        public string GetTransformationUri(string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel,
+            string bookGuid, string bookVersion)
+        {
+            switch (transformationLevel)
+            {
+                case ResourceLevelEnumContract.Book:
+                    return string.Format("{0}{1}/{2}", m_existSettings.BooksRelativeUri, Uri.EscapeUriString(bookGuid), transformationName);
+                case ResourceLevelEnumContract.Version:
+                    return string.Format("{0}{1}/{2}/{3}", m_existSettings.BooksRelativeUri, Uri.EscapeUriString(bookGuid), bookVersion,
+                        transformationName);
+                case ResourceLevelEnumContract.Shared:
+                    return string.Format("{0}{1}", m_existSettings.TransformationRelativeUri, transformationName);                
+                default:
+                    return "";
             }
         }
 
@@ -33,35 +53,22 @@ namespace ITJakub.SearchService.Core.Exist
 
         private string GetVersionResourceUriTemplate()
         {
-            return string.Format("{0}{1}/{{0}}/{{1}}/{{2}}", m_existSettings.BaseUri,
-                m_existSettings.ResourceRelativeUri);
+            return string.Format("{0}{1}/{{0}}/{{1}}/{{2}}", m_existSettings.BaseUri,m_existSettings.BooksRelativeUri);
+        }
+
+        private string GetBibliographyResourceUriTemplate()
+        {
+            return string.Format("{0}{1}/{{0}}/{{1}}/{{2}}", m_existSettings.BaseUri,m_existSettings.BibliographyRelativeUri);
         }
 
         private string GetBookResourceUriTemplate()
         {
-            return string.Format("{0}{1}/{{0}}/{{1}}", m_existSettings.BaseUri,
-                m_existSettings.ResourceRelativeUri);
+            return string.Format("{0}{1}/{{0}}/{{1}}", m_existSettings.BaseUri,m_existSettings.BooksRelativeUri);
         }
 
         private string GetSharedResourceUriTemplate()
         {
-            return string.Format("{0}{1}/{{0}}", m_existSettings.BaseUri,
-                m_existSettings.ResourceRelativeUri);
-        }
-
-        public string GetTransformationUri(string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel, string bookGuid, string bookVersion)
-        {
-            switch (transformationLevel)
-            {
-                case ResourceLevelEnumContract.Book:
-                    return string.Format("{0}{1}/{2}", m_existSettings.ResourceRelativeUri, Uri.EscapeUriString(bookGuid), transformationName);
-                case ResourceLevelEnumContract.Version:
-                    return string.Format("{0}{1}/{2}/{3}", m_existSettings.ResourceRelativeUri, Uri.EscapeUriString(bookGuid), bookVersion, transformationName);
-                case ResourceLevelEnumContract.Shared:
-                    return string.Format("{0}{1}", m_existSettings.TransformationRelativeUri, transformationName);
-                default:
-                    return "";
-            }
+            return string.Format("{0}{1}/{{0}}", m_existSettings.BaseUri,m_existSettings.BooksRelativeUri);
         }
     }
 }
