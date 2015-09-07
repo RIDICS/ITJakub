@@ -40,7 +40,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150" />
             <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToGridVisibility}}"
+            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
                               MinWidth="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
@@ -100,6 +100,7 @@
         <Grid Grid.Row="0"
               Grid.Column="2"
               Margin="0,0,0,0"
+              Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
               DataContext="{Binding ImageReaderViewModel}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -113,8 +114,7 @@
                                  PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
                                  PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
                                  CurrentZoomFactor="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
-                                 IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}"
-                                 Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                 IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}" />
 
             <Grid Grid.Row="0"
                     Margin="40,20,40,20"

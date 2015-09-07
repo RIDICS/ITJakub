@@ -42,6 +42,8 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             richEditBox.Document.SetText(TextSetOptions.FormatRtf, richEditBox.DocumentRtf);
             richEditBox.IsReadOnly = oldIsReadonlyState;
             richEditBox.OnDocumentLoad();
+
+            OnZoomChanged(richEditBox, null);
         }
 
         private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

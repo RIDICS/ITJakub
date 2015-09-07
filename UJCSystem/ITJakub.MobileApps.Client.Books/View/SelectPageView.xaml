@@ -147,12 +147,12 @@
                             BorderThickness="2">
 
                         <control:BindableRichEditBox DocumentRtf="{Binding RtfText}"
-                                                             IsReadOnly="True"
-                                                             Padding="10,3,24,5"
-                                                             ScrollViewer.HorizontalScrollMode="Disabled"
-                                                             ScrollViewer.VerticalScrollMode="Enabled"
-                                                             ScrollViewer.ZoomMode="Disabled"
-                                                             Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
+                                                     IsReadOnly="True"
+                                                     Padding="10,3,24,5"
+                                                     ScrollViewer.HorizontalScrollMode="Disabled"
+                                                     ScrollViewer.VerticalScrollMode="Enabled"
+                                                     ScrollViewer.ZoomMode="Disabled"
+                                                     Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
                     </Border>
 
                     <Grid Grid.Row="0"
