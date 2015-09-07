@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using Jewelery;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -33,7 +34,7 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, bookVersionId, fileName);
-            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri)
             {
                 Content = new StreamContent(dataStream)
             })).Wait();
@@ -48,7 +49,7 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
-            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri)
             {
                 Content = new StreamContent(dataStream)
             })).Wait();
@@ -58,7 +59,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = SetParamsToUri(commInfo.UriTemplate, fileName);
-            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri)
             {
                 Content = new StreamContent(dataStream)
             })).Wait();
