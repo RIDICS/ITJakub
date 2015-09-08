@@ -15,6 +15,7 @@
         <x:Double x:Key="LabelFontSize">14</x:Double>
         <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -34,9 +35,15 @@
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
                     Orientation="Vertical">
-            <TextBlock Text="Název zadání:"
+            <TextBlock Text="Název zadání"
                        FontSize="{StaticResource LabelFontSize}" />
             <TextBox Text="{Binding TaskName, Mode=TwoWay}" />
+
+            <TextBlock Text="Popis (zobrazovaný studentům)"
+                       Margin="0,8,0,0"
+                       FontSize="{StaticResource LabelFontSize}" />
+            <TextBox Text="{Binding TaskDescription, Mode=TwoWay}" />
+            
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -106,6 +113,10 @@
                                FontSize="{StaticResource LabelFontSize}"
                                Foreground="{StaticResource ErrorColorBrush}"
                                Visibility="{Binding ErrorNameMissing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="Vyplňte popis zadání."
+                               FontSize="{StaticResource LabelFontSize}"
+                               Foreground="{StaticResource ErrorColorBrush}"
+                               Visibility="{Binding ErrorDescriptionMissing, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock Text="Prázdá strana není povolena."
                                FontSize="{StaticResource LabelFontSize}"
                                Foreground="{StaticResource ErrorColorBrush}"
@@ -141,6 +152,7 @@
 
         <Grid Grid.Row="1"
               Grid.Column="2"
+              Margin="0,-50,0,0"
               Background="#10000000"
               DataContext="{Binding OptionsEditorViewModel}">
             <Grid Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -246,11 +258,18 @@
             </Grid>
         </Grid>
 
-        <CheckBox Grid.Row="2"
-                  Grid.Column="0"
-                  IsThreeState="False"
-                  IsChecked="{Binding IsTextEditingEnabled, Mode=TwoWay}">
-            <TextBlock Text="Zapnout editaci textu (odstraní všechny vyplněné možnosti)" />
-        </CheckBox>
+        <StackPanel Grid.Row="2"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+
+            <RadioButton GroupName="EditText"
+                         IsChecked="{Binding IsTextEditingEnabled, Mode=TwoWay}">
+                <TextBlock Text="Editovat text (odstraní všechny vyplněné možnosti)" />
+            </RadioButton>
+            <RadioButton GroupName="EditText"
+                         IsChecked="{Binding IsTextEditingEnabled, Converter={StaticResource BooleanNegationConverter}}">
+                <TextBlock Text="Vyplňovat možné odpovědi" />
+            </RadioButton>
+        </StackPanel>
     </Grid>
 </Page>

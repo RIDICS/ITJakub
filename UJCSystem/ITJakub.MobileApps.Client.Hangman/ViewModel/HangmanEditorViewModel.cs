@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_errorAnswerListEmpty;
         private bool m_errorSomeAnswerEmpty;
         private bool m_isSaveFlyoutOpen;
+        private bool m_errorTaskDescriptionEmpty;
 
         public HangmanEditorViewModel(IHangmanDataService dataService)
         {
@@ -38,6 +39,8 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public string TaskName { get; set; }
 
+        public string TaskDescription { get; set; }
+
         public bool IsAnswerListEmpty
         {
             get { return AnswerList.Count == 0; }
@@ -49,6 +52,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_errorTaskNameEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ErrorTaskDescriptionEmpty
+        {
+            get { return m_errorTaskDescriptionEmpty; }
+            set
+            {
+                m_errorTaskDescriptionEmpty = value;
                 RaisePropertyChanged();
             }
         }
@@ -119,6 +132,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool IsSomeError()
         {
             ErrorTaskNameEmpty = false;
+            ErrorTaskDescriptionEmpty = false;
             ErrorAnswerListEmpty = false;
             ErrorSomeAnswerEmpty = false;
 
@@ -127,6 +141,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             if (string.IsNullOrWhiteSpace(TaskName))
             {
                 ErrorTaskNameEmpty = true;
+                anyError = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(TaskDescription))
+            {
+                ErrorTaskDescriptionEmpty = true;
                 anyError = true;
             }
 
