@@ -8,7 +8,7 @@ using ITJakub.Shared.Contracts;
 namespace ITJakub.SearchService.Core.Exist
 {
     [ServiceContract]
-    public interface IExistClient
+    public interface IExistCommunicationManager
     {
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-pages.xquery")]
@@ -19,7 +19,7 @@ namespace ITJakub.SearchService.Core.Exist
         string GetPageByName(string bookId, string versionId, string start, string outputFormat);
 
         [OperationContract]
-        [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-pages.xquery")]
+        [ExistQuery(Method = HttpMethodType.Post, XqueryName = "get-pages.xquery")]
         string GetPageByXmlId(string bookId, string versionId, string pageXmlId, string outputFormat);
 
         [OperationContract]
