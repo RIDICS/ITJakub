@@ -36,7 +36,17 @@ namespace ITJakub.MobileApps.Core
         {
             return m_userManager.LoginUser(providerContract, providerToken, email);
         }
-        
+
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            return m_groupManager.GetMembershipGroups(userId);
+        }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            return m_groupManager.GetOwnedGroups(userId);
+        }
+
         public UserGroupsContract GetGroupsByUser(long userId)
         {
             return m_groupManager.GetGroupByUser(userId);

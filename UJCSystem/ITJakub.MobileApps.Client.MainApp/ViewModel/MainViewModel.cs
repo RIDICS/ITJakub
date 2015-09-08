@@ -1,6 +1,6 @@
 using GalaSoft.MvvmLight;
 
-namespace ITJakub.BatchImport.Client.ViewModel
+namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.

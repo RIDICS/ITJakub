@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -16,7 +17,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
 {
     public class DesignDataService : IDataService
     {
-
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             callback(true, null);
@@ -32,7 +32,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci", UserRole = UserRoleContract.Teacher});
         }
 
-        public void LogOut() { }
+        public void LogOut()
+        {
+        }
 
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
         {
@@ -76,7 +78,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     MemberCount = 5,
                     GroupName = "Group B",
                     State = GroupStateContract.Running,
-                    Task = new TaskViewModel{Application = ApplicationType.SampleApp}
+                    Task = new TaskViewModel {Application = ApplicationType.SampleApp}
                 },
                 new GroupInfoViewModel
                 {
@@ -98,7 +100,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     GroupName = "Skupina C",
                     State = GroupStateContract.Paused
                 }
-
             };
             callback(result, null);
         }
@@ -134,6 +135,38 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 {
                     LoginProviderType = AuthProvidersContract.Google,
                     Name = "Google"
+                }
+            }, null);
+        }
+
+        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            callback(new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    CreateTime = DateTime.Now,
+                    GroupCode = "ABCDE",
+                    GroupId = 124,
+                    GroupName = "Moje skupinka",
+                    State = GroupStateContract.Created,
+                    Task = new TaskViewModel {CreateTime = DateTime.Now, Name = "testzadani"}
+                }
+            }, null);
+        }
+
+        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            callback( new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    CreateTime = DateTime.Now,
+                    GroupCode = "ABCDE",
+                    GroupId = 124,
+                    GroupName = "Moje skupinka",
+                    State = GroupStateContract.Created,
+                    Task = new TaskViewModel {CreateTime = DateTime.Now, Name = "testzadani"}
                 }
             }, null);
         }
@@ -182,19 +215,27 @@ namespace ITJakub.MobileApps.Client.Core.Service
             {
                 new TaskViewModel
                 {
-                    Application = ApplicationType.Hangman, Name = "Nazev 1", CreateTime = DateTime.Now
+                    Application = ApplicationType.Hangman,
+                    Name = "Nazev 1",
+                    CreateTime = DateTime.Now
                 },
                 new TaskViewModel
                 {
-                    Application = ApplicationType.Fillwords, Name = "Nazev 2", CreateTime = DateTime.Now.AddMinutes(-29)
+                    Application = ApplicationType.Fillwords,
+                    Name = "Nazev 2",
+                    CreateTime = DateTime.Now.AddMinutes(-29)
                 },
                 new TaskViewModel
                 {
-                    Application = ApplicationType.Fillwords, Name = "Nazev 3", CreateTime = DateTime.Now
+                    Application = ApplicationType.Fillwords,
+                    Name = "Nazev 3",
+                    CreateTime = DateTime.Now
                 },
                 new TaskViewModel
                 {
-                    Application = ApplicationType.Crosswords, Name = "Nazev 4", CreateTime = DateTime.Now
+                    Application = ApplicationType.Crosswords,
+                    Name = "Nazev 4",
+                    CreateTime = DateTime.Now
                 }
             };
             callback(taskList, null);
@@ -205,11 +246,17 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(null);
         }
 
-        public void SetCurrentGroup(long groupId, GroupType groupType) { }
+        public void SetCurrentGroup(long groupId, GroupType groupType)
+        {
+        }
 
-        public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback) { }
+        public void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback)
+        {
+        }
 
-        public void RemoveGroup(long groupId, Action<Exception> callback) { }
+        public void RemoveGroup(long groupId, Action<Exception> callback)
+        {
+        }
 
         public void GetCurrentGroupId(Action<long, GroupType> callback)
         {

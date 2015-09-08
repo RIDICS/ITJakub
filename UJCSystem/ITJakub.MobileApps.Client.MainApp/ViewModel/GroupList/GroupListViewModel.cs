@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -33,7 +34,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly HashSet<long> m_ownedGroupIds;
         private GroupInfoViewModel m_selectedGroup;
         private ObservableCollection<GroupInfoViewModel> m_groups;
-        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_groupList;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_myGroupList;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_ownedGroupList;
         private SortGroupItem.SortType m_selectedSortType;
         private GroupStateContract? m_currentFilter;
         private UserRoleContract m_userRole;
@@ -46,7 +48,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_canStartSelected;
         private bool m_isGroupListEmpty;
 
-        public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
+        public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService,
+            IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
@@ -56,7 +59,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_ownedGroupIds = new HashSet<long>();
             m_selectedGroups = new List<GroupInfoViewModel>();
             m_userRole = UserRoleContract.Student;
-            
+
             Messenger.Default.Register<LogOutMessage>(this, message =>
             {
                 m_pollingService.UnregisterAll();
@@ -86,16 +89,27 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand<object> FilterCommand { get; private set; }
 
-        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> GroupList
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> MyMyGroupList
         {
-            get { return m_groupList; }
+            get { return m_myGroupList; }
             set
             {
-                m_groupList = value;
+                m_myGroupList = value;
                 RaisePropertyChanged();
-                IsGroupListEmpty = m_groupList.Count == 0;
+                IsGroupListEmpty = m_myGroupList.Count == 0;
             }
         }
+    public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> OwnedGroupList
+        {
+            get { return m_ownedGroupList; }
+            set
+            {
+                m_ownedGroupList = value;
+                RaisePropertyChanged();
+                IsGroupListEmpty = m_ownedGroupList.Count == 0;
+            }
+        }
+
 
         public bool IsCommandBarOpen
         {
@@ -255,11 +269,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
-            OpenMyTaskListCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
+            OpenMyTaskListCommand = new RelayCommand(() => Navigate(typeof (OwnedTaskListView)));
             CreateTaskCommand = new RelayCommand(CreateNewTask);
             FilterCommand = new RelayCommand<object>(Filter);
         }
-        
+
         private void InitViewModels()
         {
             ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData, m_errorService);
@@ -282,35 +296,63 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_navigationService.GoBack();
         }
 
-        private void LoadData()
+        private async void LoadData()
         {
             m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
             Loading = true;
-
-            m_dataService.GetGroupList((groupList, exception) =>
-            {
-                Loading = false;
-                if (exception != null)
+         
+                m_dataService.GetGroupsForCurrentUser((result, ex) =>
                 {
-                    m_errorService.ShowConnectionError();
-                    return;
-                }
+                    if (ex != null)
+                    {
+                        m_errorService.ShowConnectionError();
+                        Loading = false;
+                    }
 
-                m_groups = groupList;
-                DisplayGroupList(m_groups);
-                CreateOwnedGroupSet();
+                    MyMyGroupList = DisplayGroupList(result);
+                });
 
-                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
-            });
+                m_dataService.GetOwnedGroupsForCurrentUser((result, ex) =>
+                {
+                    if (ex != null)
+                    {
+                        m_errorService.ShowConnectionError();
+                        Loading = false;
+                    }
+                    m_groups = result;
+                    OwnedGroupList = DisplayGroupList(m_groups);
+                    Loading = false;
+                });
 
-            m_dataService.GetLoggedUserInfo(false, info =>
-            {
-                m_userRole = info.UserRole;
-                RaisePropertyChanged(() => IsTeacherMode);
-                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
-            });
+
+             
+
+
+            
+            //m_dataService.GetGroupList((groupList, exception) =>
+            //{
+            //    Loading = false;
+            //    if (exception != null)
+            //    {
+            //        m_errorService.ShowConnectionError();
+            //        return;
+            //    }
+
+            //    m_groups = groupList;
+            //    DisplayGroupList(m_groups);
+            //    CreateOwnedGroupSet();
+
+            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
+            //});
+
+            //m_dataService.GetLoggedUserInfo(false, info =>
+            //{
+            //    m_userRole = info.UserRole;
+            //    RaisePropertyChanged(() => IsTeacherMode);
+            //    RaisePropertyChanged(() => IsTeacherAndGroupSelected);
+            //});
         }
-        
+
         private void GroupUpdate(Exception exception)
         {
             m_errorService.ShowConnectionWarning();
@@ -392,19 +434,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        private void DisplayGroupList(ObservableCollection<GroupInfoViewModel> groupList)
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> DisplayGroupList(ObservableCollection<GroupInfoViewModel> groupList)
         {
             if (groupList == null)
-                return;
+                return null;
 
             IEnumerable<GroupInfoViewModel> filteredList = groupList;
+
             if (CurrentFilter != null)
                 filteredList = groupList.Where(group => group.State == CurrentFilter);
 
             filteredList = GetSortedGroupList(filteredList);
 
             var groupedList = filteredList.GroupBy(group => group.GroupType).OrderBy(group => group.Key);
-            GroupList = new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
+            return new ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>>(groupedList);
         }
 
         private void Filter(object state)

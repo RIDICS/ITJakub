@@ -50,11 +50,11 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public UserGroupsContract GetGroupsByUser(long userId)
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
         {
             try
             {
-                return m_serviceManager.GetGroupsByUser(userId);
+                return m_serviceManager.GetMembershipGroups(userId);
             }
             catch (WebFaultException ex)
             {
@@ -64,6 +64,36 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetOwnedGroups(userId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        //public UserGroupsContract GetGroupsByUser(long userId)
+        //{
+        //    try
+        //    {
+        //        return m_serviceManager.GetGroupsByUser(userId);
+        //    }
+        //    catch (WebFaultException ex)
+        //    {
+        //        if (m_log.IsErrorEnabled)
+        //            m_log.ErrorFormat(ex.Message);
+
+        //        throw;
+        //    }
+        //}
 
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {

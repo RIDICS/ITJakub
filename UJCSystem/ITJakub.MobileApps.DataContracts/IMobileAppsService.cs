@@ -16,9 +16,17 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
+        //[OperationContract]
+        //[AuthorizedMethod(UserRoleContract.Student)]
+        //UserGroupsContract GetGroupsByUser(long userId);
+
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
-        UserGroupsContract GetGroupsByUser(long userId);
+        List<GroupInfoContract> GetMembershipGroups(long userId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        List<OwnedGroupInfoContract> GetOwnedGroups(long userId);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]

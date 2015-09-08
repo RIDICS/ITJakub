@@ -39,6 +39,8 @@
                     <Run Text="{Binding FirstName}" />
                     <Run Text="{Binding LastName}" />
                 </TextBlock>
+
+
             </Grid>
 
         </Button>

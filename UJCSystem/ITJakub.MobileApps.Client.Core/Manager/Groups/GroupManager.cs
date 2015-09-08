@@ -42,63 +42,146 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             m_defaultUserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/user-32.png"));
         }
 
-        public async void GetGroupForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+
+        //public async void GetGroupForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        //{
+        //    try
+        //    {
+        //        var userId = m_authManager.GetCurrentUserId();
+        //        if (!userId.HasValue)
+        //        {
+        //            callback(null, new ArgumentException("No logged user"));
+        //            return;
+        //        }
+
+        //        var response = await m_serviceClient.GetMembershipGroups(userId.Value);
+        //        var list = new ObservableCollection<GroupInfoViewModel>();
+
+        //        foreach (var groupDetails in response.MemberOfGroup)
+        //        {
+        //            var newGroup = new GroupInfoViewModel
+        //            {
+        //                GroupName = groupDetails.Name,
+        //                GroupId = groupDetails.Id,
+        //                GroupType = GroupType.Member,
+        //                State = groupDetails.State,
+        //                CreateTime = groupDetails.CreateTime,
+        //                Members = new ObservableCollection<GroupMemberViewModel>(),
+        //                Task = new TaskViewModel()
+        //            };
+        //            FillGroupMembers(newGroup, groupDetails.Members);
+        //            list.Add(newGroup);
+        //        }
+
+        //        foreach (var groupDetails in response.OwnedGroups)
+        //        {
+        //            var newGroup = new GroupInfoViewModel
+        //            {
+        //                GroupName = groupDetails.Name,
+        //                GroupId = groupDetails.Id,
+        //                GroupType = GroupType.Owner,
+        //                State = groupDetails.State,
+        //                GroupCode = groupDetails.EnterCode,
+        //                CreateTime = groupDetails.CreateTime,
+        //                Members = new ObservableCollection<GroupMemberViewModel>(),
+        //                Task = new TaskViewModel()
+        //            };
+        //            FillGroupMembers(newGroup, groupDetails.Members);
+        //            list.Add(newGroup);
+        //        }
+
+        //        callback(list, null);
+        //    }
+        //    catch (InvalidServerOperationException exception)
+        //    {
+        //        callback(null, exception);
+        //    }
+        //    catch (ClientCommunicationException exception)
+        //    {
+        //        callback(null, exception);
+        //    }
+        //}
+
+        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
-            try
+            var userId = m_authManager.GetCurrentUserId();
+            if (!userId.HasValue)
             {
-                var userId = m_authManager.GetCurrentUserId();
-                if (!userId.HasValue)
-                {
-                    callback(null, new ArgumentException("No logged user"));
-                    return;
-                }
+                throw new ArgumentException("No logged user");
+            }
 
-                var response = await m_serviceClient.GetGroupsByUserAsync(userId.Value);
-                var list = new ObservableCollection<GroupInfoViewModel>();
-
-                foreach (var groupDetails in response.MemberOfGroup)
+            Task.Factory.StartNew(() =>
+            {
+                var client = new MobileAppsServiceClient();
+                var membershipGroups = client.GetMembershipGroups(userId.Value);
+                var result = new ObservableCollection<GroupInfoViewModel>();
+                foreach (var groupDetails in membershipGroups)
                 {
-                    var newGroup = new GroupInfoViewModel
+                    try
                     {
-                        GroupName = groupDetails.Name,
-                        GroupId = groupDetails.Id,
-                        GroupType = GroupType.Member,
-                        State = groupDetails.State,
-                        CreateTime = groupDetails.CreateTime,
-                        Members = new ObservableCollection<GroupMemberViewModel>(),
-                        Task = new TaskViewModel()
-                    };
-                    FillGroupMembers(newGroup, groupDetails.Members);
-                    list.Add(newGroup);
-                }
-
-                foreach (var groupDetails in response.OwnedGroups)
-                {
-                    var newGroup = new GroupInfoViewModel
+                        var newGroup = new GroupInfoViewModel
+                        {
+                            GroupName = groupDetails.Name,
+                            GroupId = groupDetails.Id,
+                            GroupType = GroupType.Member,
+                            State = groupDetails.State,
+                            CreateTime = groupDetails.CreateTime,
+                            Members = new ObservableCollection<GroupMemberViewModel>(),
+                            Task = new TaskViewModel()
+                        };
+                        FillGroupMembers(newGroup, groupDetails.Members);
+                        result.Add(newGroup);
+                        callback(result, null);
+                    }
+                    catch (ClientCommunicationException ex)
                     {
-                        GroupName = groupDetails.Name,
-                        GroupId = groupDetails.Id,
-                        GroupType = GroupType.Owner,
-                        State = groupDetails.State,
-                        GroupCode = groupDetails.EnterCode,
-                        CreateTime = groupDetails.CreateTime,
-                        Members = new ObservableCollection<GroupMemberViewModel>(),
-                        Task = new TaskViewModel()
-                    };
-                    FillGroupMembers(newGroup, groupDetails.Members);
-                    list.Add(newGroup);
+                        callback(null, ex);
+                    }
                 }
 
-                callback(list, null);
-            }
-            catch (InvalidServerOperationException exception)
+                return result;
+            });
+        }
+
+        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            var userId = m_authManager.GetCurrentUserId();
+            if (!userId.HasValue)
             {
-                callback(null, exception);
+                throw new ArgumentException("No logged user");
             }
-            catch (ClientCommunicationException exception)
+
+            Task.Factory.StartNew(() =>
             {
-                callback(null, exception);
-            }
+                try
+                {
+                    var client = new MobileAppsServiceClient();
+                    var ownedGroups = client.GetOwnedGroups(userId.Value);
+                    var result = new ObservableCollection<GroupInfoViewModel>();
+                    foreach (var groupDetails in ownedGroups)
+                    {
+                        var newGroup = new GroupInfoViewModel
+                        {
+                            GroupName = groupDetails.Name,
+                            GroupId = groupDetails.Id,
+                            GroupType = GroupType.Owner,
+                            State = groupDetails.State,
+                            GroupCode = groupDetails.EnterCode,
+                            CreateTime = groupDetails.CreateTime,
+                            Members = new ObservableCollection<GroupMemberViewModel>(),
+                            Task = new TaskViewModel()
+                        };
+                        FillGroupMembers(newGroup, groupDetails.Members);
+                        result.Add(newGroup);
+                    }
+
+                    callback(result, null);
+                }
+                catch (ClientCommunicationException ex)
+                {
+                    callback(null, ex);
+                }
+            });
         }
 
         private void FillGroupMembers(GroupInfoViewModel group, IEnumerable<GroupMemberContract> members)
@@ -114,7 +197,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 };
 
                 group.Members.Add(memberViewModel);
-                
+
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
                 LoadMemberAvatar(memberViewModel);
             }
@@ -157,7 +240,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-
                 var userId = m_authManager.GetCurrentUserId();
                 if (!userId.HasValue)
                 {
@@ -212,7 +294,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         CreateTime = task.CreateTime
                     };
                 }
-                
+
                 FillGroupMembers(group, groupInfo.Members);
                 callback(group, null);
             }
@@ -225,7 +307,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 callback(null, exception);
             }
         }
-        
+
         private async void LoadMemberAvatar(GroupMemberViewModel member)
         {
             member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);

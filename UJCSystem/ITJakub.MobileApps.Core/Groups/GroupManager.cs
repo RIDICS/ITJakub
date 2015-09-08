@@ -46,6 +46,28 @@ namespace ITJakub.MobileApps.Core.Groups
             return result;
         }
 
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            User user = m_usersRepository.GetUserWithGroups(userId);//TODO more optimized query ?
+            if (user == null)
+                throw new FaultException("User not found.");
+            
+            return Mapper.Map<IEnumerable<Group>, List<GroupInfoContract>>(user.MemberOfGroups);
+        }
+
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+         
+            User user = m_usersRepository.GetUserWithGroups(userId);//TODO more optimized query ?
+            if (user == null)
+                throw new FaultException("User not found.");
+            
+            return Mapper.Map<IEnumerable<Group>, List<OwnedGroupInfoContract>>(user.CreatedGroups);
+        }
+
+
+
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
             User user = m_usersRepository.Load<User>(userId);
@@ -176,5 +198,6 @@ namespace ITJakub.MobileApps.Core.Groups
 
             return Mapper.Map<GroupState,GroupStateContract>(group.State);
         }
+
     }
 }

@@ -15,8 +15,8 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
     {
-        private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        //private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
 
         private readonly ClientMessageInspector m_clientMessageInspector;
@@ -88,32 +88,6 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<UserGroupsContract> GetGroupsByUserAsync(long userId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    return Channel.GetGroupsByUser(userId);
-                }
-                catch (FaultException ex)
-                {
-                    throw new InvalidServerOperationException(ex);
-                }
-                catch (CommunicationException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-                catch (TimeoutException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-                catch (ObjectDisposedException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-            });
-        }
 
         public Task<CreateGroupResponse> CreateGroupAsync(long userId, string groupName)
         {
@@ -141,6 +115,55 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
             });
         }
+
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            try
+            {
+                return Channel.GetMembershipGroups(userId);
+            }
+            catch (FaultException ex)
+            {
+                throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (TimeoutException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+        }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            try
+            {
+                return Channel.GetOwnedGroups(userId);
+            }
+            catch (FaultException ex)
+            {
+                throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (TimeoutException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+        }
+
 
         public Task AddUserToGroupAsync(string groupAccessCode, long userId)
         {
@@ -303,7 +326,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
             });
         }
-        
+
         public Task AssignTaskToGroupAsync(long groupId, long taskId)
         {
             return Task.Run(() =>
@@ -575,6 +598,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
         }
 
         #region enpoint settings
+
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
@@ -610,6 +634,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
         {
             return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
+
         #endregion
     }
 }

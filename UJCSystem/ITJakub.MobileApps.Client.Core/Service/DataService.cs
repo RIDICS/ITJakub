@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -49,11 +50,16 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             m_applicationManager.GetAllApplicationsByTypes(types, callback);
         }
-
-        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
-            m_groupManager.GetGroupForCurrentUser(callback);
+            m_groupManager.GetOwnedGroupsForCurrentUser(callback);
         }
+
+        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            m_groupManager.GetGroupsForCurrentUser(callback);
+        }
+
 
         public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
@@ -145,6 +151,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             m_applicationStateManager.SelectApplicationTarget = target;
         }
+
+       
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
