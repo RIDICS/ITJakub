@@ -39,11 +39,12 @@ namespace ITJakub.SearchService.Core.Exist
         void UploadSharedFile(string fileName, Stream dataStream);
 
         [OperationContract]
-        [ExistResource(Method = "PUT", Type = ResourceLevelEnumContract.Bibliography)]
+        [ExistResource(Method = HttpMethodType.Put, Type = ResourceLevelEnumContract.Bibliography)]
         void UploadBibliographyFile(string bookId, string bookVersionId, string fileName, Stream dataStream);
 
-        [OperationContract]        
-        [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-entry.xquery")]        string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat);
+        [OperationContract]
+        [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-entry.xquery")]
+        string GetDictionaryEntryByXmlId(string bookId, string versionId, string xmlEntryId, string outputFormat);
 
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-entry-from-search.xquery")]
@@ -82,6 +83,5 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Get, XqueryName = "get-search-corpus-count.xquery")]
         int GetSearchCorpusCount(string serializedSearchCriteria);
-
     }
 }

@@ -45,10 +45,15 @@ namespace ITJakub.SearchService.Core.Exist
             }
         }
 
-        public string GetQueryUriTemplate(string xqueryName, string queryStringParams)
+        public string GetQueryUriWithParams(string xqueryName, string queryStringParams)
         {
-            return string.Format("{0}{1}{2}{3}", m_existSettings.BaseUri, m_existSettings.XQueriesRelativeUri,
-                xqueryName, queryStringParams);
+            return string.Format("{0}?{1}", GetQueryUri(xqueryName), queryStringParams);
+        }
+
+        public string GetQueryUri(string xqueryName)
+        {
+            return string.Format("{0}{1}{2}", m_existSettings.BaseUri, m_existSettings.XQueriesRelativeUri,
+                xqueryName);
         }
 
         private string GetVersionResourceUriTemplate()

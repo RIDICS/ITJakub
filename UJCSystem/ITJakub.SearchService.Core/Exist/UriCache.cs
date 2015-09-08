@@ -47,5 +47,6 @@ namespace ITJakub.SearchService.Core.Exist
     {
         public HttpMethodType Method { get; set; }
         public string UriTemplate { get; set; }
+        public string ContentTemplate { get; set; }
     }
 }

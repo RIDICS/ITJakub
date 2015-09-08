@@ -30,7 +30,7 @@ namespace ITJakub.SearchService.Core.Exist
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
 
             var uri = SetParamsToUri(commInfo.UriTemplate, bookId, fileName);
-            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method), uri)
+            Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri)
             {
                 Content = new StreamContent(dataStream)
             })).Wait();
@@ -259,6 +259,10 @@ namespace ITJakub.SearchService.Core.Exist
             var uriString = string.Format(uriTemplate, args);
             return new Uri(uriString);
         }
+        private static string SetParamsToStringTemplate(string template, params object[] args)
+        {
+            return string.Format(template, args);
+        }
 
         private static string AddXslParam(string uriTemplate, string xslPath)
         {
@@ -273,6 +277,11 @@ namespace ITJakub.SearchService.Core.Exist
                 uriTemplate = AddXslParam(uriTemplate, xslPath);
             }
             return SetParamsToUri(uriTemplate, args);
+        }
+        private static string GetContentKeyValuePairString(CommunicationInfo commInfo, params object[] args)
+        {
+            var contentTemplate = commInfo.ContentTemplate;
+            return SetParamsToStringTemplate(contentTemplate, args);
         }
 
         #endregion
