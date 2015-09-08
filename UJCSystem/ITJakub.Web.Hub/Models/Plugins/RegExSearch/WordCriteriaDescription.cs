@@ -7,5 +7,6 @@ namespace ITJakub.Web.Hub.Models.Plugins.RegExSearch
         public string StartsWith { get; set; }
         public IList<string> Contains { get; set; }
         public string EndsWith { get; set; }
+        public string ExactMatch { get; set; }
     }
 }

@@ -16,7 +16,7 @@ $(document).ready(() => {
         $(".twitter-typeahead").find(".tt-menu").hide();
     };
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition, "Editions/Editions/GetListConfiguration");
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
         hideTypeahead();

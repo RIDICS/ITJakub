@@ -132,5 +132,11 @@ namespace ITJakub.ITJakubService.Core
 
             return dictionaryEntryText;
         }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)
+        {
+            var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
+            return Mapper.Map<IList<TermContract>>(terms);
+        }
     }
 }

@@ -16,7 +16,7 @@ $(document).ready(() => {
         $(".twitter-typeahead").find(".tt-menu").hide();
     };
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Grammar,"OldGrammar/OldGrammar/GetListConfiguration");
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Grammar, "OldGrammar/OldGrammar/GetSearchConfiguration");
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
         hideTypeahead();
@@ -58,7 +58,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",
+            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchFulltextPaged",
             data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -87,7 +87,7 @@ $(document).ready(() => {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchCount",
+            url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchFulltextCount",
             data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
             dataType: 'json',
             contentType: 'application/json',
@@ -133,11 +133,11 @@ $(document).ready(() => {
     search.makeSearch(disabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
-    typeaheadSearchBox.addDataSet("Title", "Název");
+    typeaheadSearchBox.addDataSet("Term", "Téma");
     typeaheadSearchBox.create();
     typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
-    var editionsSelector: DropDownSelect2;
+    var grammarSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -154,25 +154,32 @@ $(document).ready(() => {
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         typeaheadSearchBox.clearAndDestroy();
-        typeaheadSearchBox.addDataSet("Title", "Název", parametersUrl);
+        typeaheadSearchBox.addDataSet("Term", "Téma", parametersUrl);
         typeaheadSearchBox.create();
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
     callbackDelegate.dataLoadedCallback = () => {
-        var selectedIds = editionsSelector.getSelectedIds();
+        var selectedIds = grammarSelector.getSelectedIds();
         bookIds = selectedIds.selectedBookIds;
         categoryIds = selectedIds.selectedCategoryIds;
-        search.processSearchQuery("%"); //search for all by default criteria (title)
-        search.writeTextToTextField("");
     };
 
-    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories", true, callbackDelegate);
-    editionsSelector.makeDropdown();
+    grammarSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories", true, callbackDelegate);
+    grammarSelector.makeDropdown();
 
 
     $(".searchbar-input.tt-input").change(() => {        //prevent clearing input value on blur() 
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
+
+
+    var searchedText = getQueryStringParameterByName("search");
+
+    if (typeof searchedText !== "undefined" && searchedText !== null) {
+        var decodedText = decodeURIComponent(searchedText);
+        decodedText = replaceSpecialChars(decodedText);
+        search.processSearchQuery(decodedText);
+    }
 
 });
 

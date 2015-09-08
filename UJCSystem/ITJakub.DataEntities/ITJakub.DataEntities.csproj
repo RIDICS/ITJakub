@@ -82,6 +82,8 @@
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\Entities\SelectResults\BookVersionDetails.cs" />
+    <Compile Include="Database\Entities\SelectResults\TermCountResult.cs" />
+    <Compile Include="Database\Entities\SelectResults\TermResult.cs" />
     <Compile Include="Database\Entities\Term.cs" />
     <Compile Include="Database\Entities\TermCategory.cs" />
     <Compile Include="Database\Entities\Track.cs" />

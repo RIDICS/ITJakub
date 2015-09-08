@@ -11,7 +11,7 @@ $(document).ready(() => {
         search.processSearch();
     }
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition,"Editions/Editions/GetSearchConfiguration");
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
 
