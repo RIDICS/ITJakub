@@ -15,7 +15,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_rightArmVisible;
         private bool m_leftLegVisible;
         private bool m_rightLegVisible;
-        private bool m_faceVisible;
+        private bool m_leftEyeVisible;
+        private bool m_rightEyeVisible;
+        private bool m_mouthVisible;
         private int m_lives;
 
         public int Lives
@@ -29,19 +31,20 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         private void LivesUpdate(int lives)
         {
-            RightLegVisible = lives < 1;
-            LeftLegVisible = lives < 2;
-            RightArmVisible = lives < 3;
-            LeftArmVisible = lives < 4;
-            BodyVisible = lives < 5;
-            HeadVisible = lives < 6;
-            RopeVisible = lives < 7;
-            Construction3Visible = lives < 8;
-            Construction2Visible = lives < 9;
-            Construction1Visible = lives < 10;
-            BaseVisible = lives < 11;
-
-            FaceVisible = lives == 0;
+            MouthVisible = lives == 0;
+            RightEyeVisible = lives < 2;
+            LeftEyeVisible = lives < 3;
+            RightLegVisible = lives < 4;
+            LeftLegVisible = lives < 5;
+            RightArmVisible = lives < 6;
+            LeftArmVisible = lives < 7;
+            BodyVisible = lives < 8;
+            HeadVisible = lives < 9;
+            RopeVisible = lives < 10;
+            Construction3Visible = lives < 11;
+            Construction2Visible = lives < 12;
+            Construction1Visible = lives < 13;
+            BaseVisible = lives < 14;
         }
 
         public bool Construction1Visible
@@ -154,12 +157,32 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public bool FaceVisible
+        public bool LeftEyeVisible
         {
-            get { return m_faceVisible; }
+            get { return m_leftEyeVisible; }
             set
             {
-                m_faceVisible = value;
+                m_leftEyeVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool RightEyeVisible
+        {
+            get { return m_rightEyeVisible; }
+            set
+            {
+                m_rightEyeVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool MouthVisible
+        {
+            get { return m_mouthVisible; }
+            set
+            {
+                m_mouthVisible = value;
                 RaisePropertyChanged();
             }
         }

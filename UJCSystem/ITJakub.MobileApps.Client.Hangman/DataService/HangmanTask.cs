@@ -6,7 +6,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 {
     public class HangmanTask
     {
-        private const int FullLiveCount = 11;
+        private const int FullLiveCount = 14;
 
         private readonly string[] m_specifiedWords;
         private readonly HashSet<char> m_guessedLetterSet;
