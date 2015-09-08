@@ -18,13 +18,23 @@ namespace ITJakub.SearchService.Core.Exist.AttributeResolver
         public CommunicationInfo Resolve(ExistAttribute attribute, MethodInfo methodInfo)
         {
             var att = (ExistQuery) attribute;
-            string queryStringParams = GetQueryStringTemplateFromMethodInfo(methodInfo);
-            var commInfo = new CommunicationInfo
+            string queryStringParams = GetQueryKeyValuePairTemplateFromMethodInfo(methodInfo);
+
+            if (att.Method.Equals(HttpMethodType.Post))
             {
-                UriTemplate = m_existResourceManager.GetQueryUriTemplate(att.XqueryName, queryStringParams),
+                return new CommunicationInfo
+                {
+                    UriTemplate = m_existResourceManager.GetQueryUri(att.XqueryName),
+                    ContentTemplate = queryStringParams,
+                    Method = att.Method,
+                };
+            }
+
+            return new CommunicationInfo
+            {
+                UriTemplate = m_existResourceManager.GetQueryUriWithParams(att.XqueryName, queryStringParams),
                 Method = att.Method
             };
-            return commInfo;
         }
 
         public Type ResolvingAttributeType()
@@ -32,10 +42,9 @@ namespace ITJakub.SearchService.Core.Exist.AttributeResolver
             return typeof (ExistQuery);
         }
 
-        private string GetQueryStringTemplateFromMethodInfo(MethodInfo mInfo)
+        private string GetQueryKeyValuePairTemplateFromMethodInfo(MethodInfo mInfo)
         {
             var stringBuilder = new StringBuilder();
-            stringBuilder.Append("?");
             for (int index = 0; index < mInfo.GetParameters().Length; index++)
             {
                 if (index != 0) stringBuilder.Append("&");

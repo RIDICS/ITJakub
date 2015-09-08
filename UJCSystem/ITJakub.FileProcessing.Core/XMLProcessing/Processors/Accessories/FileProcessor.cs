@@ -50,10 +50,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories
         {
             switch (typeString)
             {
+                case "content":
+                    return AccessoryType.Content;
                 case "cover":
                     return AccessoryType.Cover;
-                case "editorial-comment":
-                    return AccessoryType.EditoralComment;
                 case "bibliography":
                     return AccessoryType.Bibliography;
 

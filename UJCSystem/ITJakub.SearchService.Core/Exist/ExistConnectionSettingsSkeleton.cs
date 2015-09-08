@@ -4,27 +4,38 @@
     {
         public ExistConnectionSettingsSkeleton(string baseUri, string viewsCollection, string resourcesCollection,
             string dbUser, string dbPassword, string xQueriesRelativeUri, string transformationRelativeUri,
-            int dbMaxResults, string resourceRelativeUri)
+            int dbMaxResults, string booksRelativeUri, string bibliographyRelativeUri)
         {
             BaseUri = baseUri;
             ViewsCollection = viewsCollection;
             ResourcesCollection = resourcesCollection;
-            DBUser = dbUser;
-            DBPassword = dbPassword;
+            DbUser = dbUser;
+            DbPassword = dbPassword;
             XQueriesRelativeUri = xQueriesRelativeUri;
             TransformationRelativeUri = transformationRelativeUri;
             DbMaxResults = dbMaxResults;
-            ResourceRelativeUri = resourceRelativeUri;
+            BooksRelativeUri = booksRelativeUri;
+            BibliographyRelativeUri = bibliographyRelativeUri;
         }
 
         public string BaseUri { get; private set; }
+
         public string ViewsCollection { get; private set; }
+
         public string ResourcesCollection { get; private set; }
+
         public string XQueriesRelativeUri { get; private set; }
+
         public string TransformationRelativeUri { get; private set; }
+
         public int DbMaxResults { get; set; }
-        public string ResourceRelativeUri { get; set; }
-        public string DBUser { get; private set; }
-        public string DBPassword { get; private set; }
+
+        public string BooksRelativeUri { get; set; }
+
+        public string BibliographyRelativeUri { get; set; }
+
+        public string DbUser { get; private set; }
+
+        public string DbPassword { get; private set; }
     }
 }
