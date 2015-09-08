@@ -31,13 +31,12 @@
             </Grid.RowDefinitions>
 
             <TextBlock TextAlignment="Center"
-                       FontFamily="Segoe Print"
+                       VerticalAlignment="Center"
                        FontSize="40"
-                       FontWeight="Bold"
                        Text="Tabulka pořadí:" />
 
             <ListView Grid.Row="1"
-                      Margin="10,30,10,10"
+                      Margin="10,10,10,10"
                       ItemsSource="{Binding PlayerRanking}"
                       SelectionMode="None">
                 <ListView.ItemTemplate>
@@ -57,7 +56,6 @@
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
-                                           FontFamily="Segoe Print"
                                            FontSize="16"
                                            Margin="3,0,3,3" />
                             </Grid>

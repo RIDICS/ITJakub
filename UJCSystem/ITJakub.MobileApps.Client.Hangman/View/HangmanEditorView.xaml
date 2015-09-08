@@ -145,12 +145,12 @@
 
                     <TextBlock Grid.Column="0"
                                Margin="0,10,0,8"
-                               Text="Nápodvěda"
+                               Text="Nápověda"
                                Style="{StaticResource SubheaderTextBlockStyle}" />
                     
                     <TextBlock Grid.Column="1"
                                Margin="0,10,0,8"
-                               Text="Odpověď"
+                               Text="Řešení"
                                Style="{StaticResource SubheaderTextBlockStyle}" />
             </Grid>
 

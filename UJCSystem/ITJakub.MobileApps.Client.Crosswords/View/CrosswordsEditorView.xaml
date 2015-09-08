@@ -153,7 +153,7 @@
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
-                    Content="Přidat odpověď"
+                    Content="Přidat řádek"
                     Command="{Binding AddAnswerCommand}" />
 
             <Grid Grid.Row="3"
@@ -166,11 +166,11 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBlock Grid.Column="0"
-                           Text="Otázka"
+                           Text="Nápověda"
                            Style="{StaticResource SubheaderTextBlockStyle}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="Odpověď"
+                           Text="Řešení"
                            Style="{StaticResource SubheaderTextBlockStyle}" />
                 
                 <Button Grid.Column="2"
@@ -278,7 +278,7 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock Grid.Column="0"
-                       Text="Sloupec s výsledkem:"
+                       Text="Sloupec s tajenkou:"
                        VerticalAlignment="Center"
                        FontWeight="Light"
                        FontSize="18" />

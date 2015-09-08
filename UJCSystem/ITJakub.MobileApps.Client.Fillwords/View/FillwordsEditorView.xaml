@@ -139,6 +139,7 @@
                 BorderThickness="2">
             
             <control1:EditorRichEditBox
+                x:Name="EditorRichEditBox"
                 IsSelectedTextHighlighted="{Binding OptionsEditorViewModel.SetSelectedTextHighlighted, Mode=TwoWay}"
                 IsEditingEnabled="{Binding IsTextEditingEnabled}"
                 SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
@@ -258,18 +259,44 @@
             </Grid>
         </Grid>
 
-        <StackPanel Grid.Row="2"
-                    Grid.Column="0"
-                    Orientation="Vertical">
-
-            <RadioButton GroupName="EditText"
+        <Grid Grid.Row="2"
+              Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" MinWidth="200" />
+            </Grid.ColumnDefinitions>
+            
+            <RadioButton Grid.Column="0"
+                         Grid.Row="0"
+                         GroupName="EditText"
                          IsChecked="{Binding IsTextEditingEnabled, Mode=TwoWay}">
                 <TextBlock Text="Editovat text (odstraní všechny vyplněné možnosti)" />
             </RadioButton>
-            <RadioButton GroupName="EditText"
+            <RadioButton Grid.Column="0"
+                         Grid.Row="1"
+                         GroupName="EditText"
                          IsChecked="{Binding IsTextEditingEnabled, Converter={StaticResource BooleanNegationConverter}}">
                 <TextBlock Text="Vyplňovat možné odpovědi" />
             </RadioButton>
-        </StackPanel>
+        
+            <Button Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    IsEnabled="{Binding IsTextEditingEnabled}"
+                    Click="PasteButton_OnClick">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Paste" />
+                    <TextBlock Text="Vložit"
+                               VerticalAlignment="Center"
+                               Margin="5,0,0,0" />
+                </StackPanel>
+            </Button>
+        </Grid>
     </Grid>
 </Page>
