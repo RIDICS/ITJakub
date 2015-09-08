@@ -62,7 +62,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             };
         }
         
-        public abstract void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
+        public abstract void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
 
         public void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback)
         {

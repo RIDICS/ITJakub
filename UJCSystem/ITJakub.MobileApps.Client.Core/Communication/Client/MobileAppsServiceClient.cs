@@ -385,13 +385,13 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task CreateTaskAsync(long userId, int applicationId, string name, string data)
+        public Task CreateTaskAsync(long userId, int applicationId, string name, string description, string data)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    Channel.CreateTask(userId, applicationId, name, data);
+                    Channel.CreateTask(userId, applicationId, name, data, description);
                 }
                 catch (FaultException ex)
                 {

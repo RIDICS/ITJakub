@@ -116,7 +116,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 return;
 
             Saving = true;
-            m_dataService.SaveTask(TaskName, AnswerList, exception =>
+            m_dataService.SaveTask(TaskName, TaskDescription, AnswerList, exception =>
             {
                 Saving = false;
                 if (exception != null)

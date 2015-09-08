@@ -47,6 +47,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_currentTask;
         private bool m_isClosed;
         private bool m_isCommunicationStopped;
+        private string m_taskDescription;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -245,6 +246,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 return;
             }
 
+            TaskDescription = m_currentTask.Description;
             ApplicationViewModel.SetTask(m_currentTask.Data);
             ApplicationViewModel.InitializeCommunication();
             
@@ -260,6 +262,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_applicationName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TaskDescription
+        {
+            get { return m_taskDescription; }
+            set
+            {
+                m_taskDescription = value;
                 RaisePropertyChanged();
             }
         }

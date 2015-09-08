@@ -15,7 +15,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback);
         void StopPolling();
         void GetIsWin(Action<bool> callback);
-        void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback);
+        void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback);
         void ResetLastRequestTime();
     }
 
@@ -65,9 +65,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             m_crosswordManager.IsWin(callback);
         }
 
-        public void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
+        public void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
         {
-            m_crosswordManager.SaveTask(taskName, answerList, answerColumn, callback);
+            m_crosswordManager.SaveTask(taskName, taskDescription, answerList, answerColumn, callback);
         }
 
         public void ResetLastRequestTime()

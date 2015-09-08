@@ -215,7 +215,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
+            m_dataService.CreateTask(TaskName, TaskDescription, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
             {
                 Saving = false;
                 if (exception != null)

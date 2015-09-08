@@ -99,9 +99,9 @@ namespace ITJakub.MobileApps.Core
             return m_taskManager.GetTasksByAuthor(userId);
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
-            m_taskManager.CreateTask(userId, applicationId, name, data);
+            m_taskManager.CreateTask(userId, applicationId, name, data, description);
         }
 
         public TaskDataContract GetTask(long taskId)

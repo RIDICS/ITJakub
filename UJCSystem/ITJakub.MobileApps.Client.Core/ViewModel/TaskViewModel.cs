@@ -8,6 +8,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public DateTime CreateTime { get; set; }
         public string Data { get; set; }
         public UserInfo Author { get; set; }

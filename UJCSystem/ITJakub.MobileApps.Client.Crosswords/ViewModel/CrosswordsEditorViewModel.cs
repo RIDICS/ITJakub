@@ -209,7 +209,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
 
             Saving = true;
-            m_dataService.SaveTask(TaskName, AnswerList, AnswerColumn, exception =>
+            m_dataService.SaveTask(TaskName, TaskDescription, AnswerList, AnswerColumn, exception =>
             {
                 Saving = false;
 

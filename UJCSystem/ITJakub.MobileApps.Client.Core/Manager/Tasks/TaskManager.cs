@@ -40,6 +40,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Id = task.Id,
                     Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
+                    Description = task.Description,
                     CreateTime = task.CreateTime,
                     Author = new UserInfo
                     {
@@ -91,6 +92,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 {
                     Application = await m_applicationIdManager.GetApplicationType(result.ApplicationId),
                     Id = result.Id,
+                    Description = result.Description,
                     Data = result.Data
                 };
                 callback(task, null);
@@ -120,6 +122,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                     Id = task.Id,
                     Application = m_applicationIdManager.GetApplicationType(task.ApplicationId).Result, // all IDs are loaded -> no communication with server
                     Name = task.Name,
+                    Description = task.Description,
                     CreateTime = task.CreateTime,
                     Author = new UserInfo
                     {
@@ -154,6 +157,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 {
                     Application = await m_applicationIdManager.GetApplicationType(result.ApplicationId),
                     Id = result.Id,
+                    Description = result.Description,
                     Data = result.Data
                 };
                 callback(task, null);

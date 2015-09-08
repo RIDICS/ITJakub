@@ -291,7 +291,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 return;
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, m_defaultPageId, exception =>
+            m_dataService.CreateTask(TaskName, TaskDescription, m_defaultPageId, exception =>
             {
                 Saving = false;
                 if (exception != null)

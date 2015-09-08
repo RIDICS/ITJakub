@@ -231,11 +231,11 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
             try
             {
-                m_serviceManager.CreateTask(userId, applicationId, name, data);
+                m_serviceManager.CreateTask(userId, applicationId, name, data, description);
             }
             catch (WebFaultException ex)
             {
