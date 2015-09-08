@@ -4,7 +4,7 @@ declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0";
 
-declare variable $coll:collection-path := "apps/jacob/data/";
+declare variable $coll:collection-path := "apps/jacob/books/";
 
 declare function coll:getDocument($document-id as xs:string, $document-version-id as xs:string?)
     as node() {
