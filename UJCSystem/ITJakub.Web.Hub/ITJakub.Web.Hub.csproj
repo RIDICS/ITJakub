@@ -234,7 +234,7 @@
     <Compile Include="Areas\Editions\BundleConfig.cs" />
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
     <Compile Include="Areas\Dictionaries\DictionariesAreaRegistration.cs" />
-    <Compile Include="Areas\Editions\Models\BookListingModel.cs" />
+    <Compile Include="Models\BookListingModel.cs" />
     <Compile Include="Areas\Editions\RouteConfig.cs" />
     <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
     <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
@@ -261,8 +261,6 @@
     <Compile Include="Identity\ApplicationUserManager.cs" />
     <Compile Include="Identity\ApplicationUserStore.cs" />
     <Compile Include="Identity\EmailService.cs" />
-    <Compile Include="ItJakubServiceClient.cs" />
-    <Compile Include="ItJakubServiceEncryptedClient.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Converters\ConditionCriteriaDescriptionConverter.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionTypeEnum.cs" />
@@ -638,6 +636,11 @@
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
     <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
+    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
@@ -720,6 +723,7 @@
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
+    <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Models\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
@@ -747,6 +751,8 @@
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionaries.search.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesFavoriteHeadwords.ts" />
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
+    <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.search.ts" />
+    <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />

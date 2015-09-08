@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
-using ITJakub.ITJakubService.DataContracts.AudioBooks;
+using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
@@ -25,10 +26,7 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         IEnumerable<BookContentItemContract> GetBookContent(string bookGuid);
 
-        #region Resource Import
-
-        [OperationContract]
-        void AddResource(UploadResourceContract uploadFileInfoSkeleton);
+        #region Resource Import     
 
         [OperationContract]
         bool ProcessSession(string resourceSessionId, string uploadMessage);
@@ -37,7 +35,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<SearchResultContract> Search(string term); // TODO probably remove
-        
+
         [OperationContract]
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
@@ -52,7 +50,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
-        
+
         #region CardFile methods
 
         [OperationContract]
@@ -94,6 +92,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+     
+        [OperationContract]
+        IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         #endregion
 
@@ -111,13 +112,13 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
-        
+
         [OperationContract]
         int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
 
         [OperationContract]
         CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
-        
+
         [OperationContract]
         int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
@@ -125,10 +126,10 @@ namespace ITJakub.ITJakubService.DataContracts
         int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
-        
+        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
+
         [OperationContract]
-        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat);
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
         PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -160,11 +161,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #region AudioBooks
 
-        [OperationContract]
-        FileDataContract DownloadWholeAudiobook(DownloadWholeBookContract requestContract);
-
-        [OperationContract]
-        AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract);
+   
 
         [OperationContract]
         AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -174,6 +171,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-
+        [OperationContract]
+        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
     }
 }

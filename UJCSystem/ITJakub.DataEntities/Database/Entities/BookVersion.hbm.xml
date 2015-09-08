@@ -67,14 +67,17 @@
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
     </bag>
+    
     <bag name="Keywords" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
+    
     <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
+    
     <bag name="BookPages" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
@@ -118,6 +121,11 @@
     <bag name="FullBookRecordings" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion"/>
       <one-to-many class="FullBookRecording"/>
+    </bag>   
+    
+    <bag name="Accessories" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion"/>
+      <one-to-many class="BookAccessory"/>
     </bag>
     
   </class>

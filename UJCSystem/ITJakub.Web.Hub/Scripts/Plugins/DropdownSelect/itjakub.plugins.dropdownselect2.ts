@@ -113,7 +113,7 @@
             }
         });
     }
-
+    
     private processDownloadedData(result: IDropDownRequestResult) {
         this.books = {};
         this.categories = {};

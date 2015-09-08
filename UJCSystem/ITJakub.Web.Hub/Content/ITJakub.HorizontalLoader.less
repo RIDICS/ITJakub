@@ -1,17 +1,25 @@
 ﻿@import "ITJakub.DefaultTheme.less";
 
-.loader:before,
-.loader:after,
-.loader {
+
+
+.loaderBaseThisBeforeAfter{
   border-radius: 50%;
   width: 1.5em;
   height: 1.5em;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
+           }
+.loaderBaseBefore{
+    left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
 }
-.loader {
+
+.loaderAfter{
+    left:3.5em;
+}
+
+.loaderBase{
   font-size: 10px;
   margin: 40px auto;
   position: relative;
@@ -22,19 +30,85 @@
   -webkit-animation-delay: -0.16s;
   animation-delay: -0.16s;
 }
+
+.loaderBaseBeforeAfter{
+     content: '';
+  position: absolute;
+  top: 0;
+}
+
+
+
+
+
+
+.loaderWhite:before,
+.loaderWhite:after,
+.loaderWhite {
+    .loaderBaseThisBeforeAfter;  
+  -webkit-animation: load7Bright 1.8s infinite ease-in-out;
+  animation: load7Bright 1.8s infinite ease-in-out;
+}
+
+.loaderWhite {
+    .loaderBase
+}
+.loaderWhite:before {
+    .loaderBaseBefore
+}
+.loaderWhite:after {
+  .loaderAfter
+}
+.loaderWhite:before,
+.loaderWhite:after {
+  .loaderBaseBeforeAfter
+}
+@-webkit-keyframes load7Bright {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em @loader-bright-color;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0 @loader-bright-color;
+  }
+}
+@keyframes load7Bright {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em @loader-bright-color;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0 @loader-bright-color;
+  }
+}
+
+
+
+
+
+
+.loader:before,
+.loader:after,
+.loader {
+    .loaderBaseThisBeforeAfter;  
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+
+.loader {
+    .loaderBase
+}
 .loader:before {
-  left: -3.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
+    .loaderBaseBefore
 }
 .loader:after {
-  left: 3.5em;
+  .loaderAfter
 }
 .loader:before,
 .loader:after {
-  content: '';
-  position: absolute;
-  top: 0;
+  .loaderBaseBeforeAfter
 }
 @-webkit-keyframes load7 {
   0%,
@@ -56,3 +130,6 @@
     box-shadow: 0 2.5em 0 0 @item-background-color;
   }
 }
+
+
+

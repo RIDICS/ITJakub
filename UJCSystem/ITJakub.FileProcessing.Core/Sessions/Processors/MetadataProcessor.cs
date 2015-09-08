@@ -49,13 +49,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             {
                 foreach (var page in bookVersion.BookPages)
                 {
-                    var pageResource = new Resource
+                    if (!string.IsNullOrWhiteSpace(page.XmlResource))
                     {
-                        FileName = page.XmlResource,
-                        FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
-                        ResourceType = ResourceType.Page
-                    };
-                    resourceSessionDirector.Resources.Add(pageResource);
+                        var pageResource = new Resource
+                        {
+                            FileName = page.XmlResource,
+                            FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
+                            ResourceType = ResourceType.Page
+                        };
+                        resourceSessionDirector.Resources.Add(pageResource);
+                    }
                 }
             }
                         

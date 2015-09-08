@@ -5,7 +5,10 @@
         updateQueryStringParameter("page", pageXmlId);
     }
 
-    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback);
+    var readerPanels = [ReaderPanelEnum.TextPanel, ReaderPanelEnum.ImagePanel, ReaderPanelEnum.ContentPanel, ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel];
+    var panelButtons = [PanelButtonEnum.Close, PanelButtonEnum.Pin, PanelButtonEnum.ToNewWindow];
+
+    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, panelButtons, panelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
 
@@ -168,7 +171,7 @@
     }
 }
 
-function listBook(target) {
+function listBookReadClicked(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
     if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
         window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
@@ -176,4 +179,9 @@ function listBook(target) {
         window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId;
     }
     
+}
+
+function searchBookReadClicked(target) {
+    var bookId = $(target).parents("li.list-item").attr("data-bookid");
+    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
 }

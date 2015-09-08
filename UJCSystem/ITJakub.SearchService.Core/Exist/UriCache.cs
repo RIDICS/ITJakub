@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using ITJakub.SearchService.Core.Exist.Attributes;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -44,7 +45,7 @@ namespace ITJakub.SearchService.Core.Exist
 
     public class CommunicationInfo
     {
-        public string Method { get; set; }
+        public HttpMethodType Method { get; set; }
         public string UriTemplate { get; set; }
     }
 }

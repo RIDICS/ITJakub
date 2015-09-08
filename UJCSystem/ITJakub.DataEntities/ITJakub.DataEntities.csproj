@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
+    <Compile Include="Database\Entities\BookAccessory.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackCategoryEnum.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackSortEnum.cs" />
@@ -81,8 +82,13 @@
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
     <Compile Include="Database\Entities\SelectResults\BookVersionDetails.cs" />
+    <Compile Include="Database\Entities\SelectResults\TermCountResult.cs" />
+    <Compile Include="Database\Entities\SelectResults\TermResult.cs" />
+    <Compile Include="Database\Entities\Term.cs" />
+    <Compile Include="Database\Entities\TermCategory.cs" />
     <Compile Include="Database\Entities\Track.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Repositories\TermRepository.cs" />
     <Compile Include="Database\Repositories\FeedbackRepository.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
@@ -177,12 +183,25 @@
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
+      <Name>Jewelery</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\Track.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\RecordingBase.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Term.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\BookAccessory.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\TermCategory.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

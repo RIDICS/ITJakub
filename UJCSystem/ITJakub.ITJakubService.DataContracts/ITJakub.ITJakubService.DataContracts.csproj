@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -41,32 +44,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioBooks\AudioTypeContract.cs" />
-    <Compile Include="AudioBooks\DownloadAudioBookTrackContract.cs" />
-    <Compile Include="AudioBooks\DownloadWholeBookContract.cs" />
-    <Compile Include="AuthorDetailContract.cs" />
-    <Compile Include="AuthProviderEnumContract.cs" />
-    <Compile Include="BookInfoWithPagesContract.cs" />
-    <Compile Include="BucketContract.cs" />
-    <Compile Include="CardShortContract.cs" />
-    <Compile Include="AudioBooks\FileDataContract.cs" />
-    <Compile Include="HeadwordBookmarkContract.cs" />
-    <Compile Include="ImageSizeEnumContract.cs" />
-    <Compile Include="ImageContract.cs" />
-    <Compile Include="CardContract.cs" />
-    <Compile Include="BucketShortContract.cs" />
-    <Compile Include="CardFileContract.cs" />
+    <Compile Include="Clients\ItJakubServiceStreamedClient.cs" />
+    <Compile Include="Contracts\AudioBooks\AudioTypeContract.cs" />
+    <Compile Include="Contracts\AudioBooks\DownloadAudioBookTrackContract.cs" />
+    <Compile Include="Contracts\AudioBooks\DownloadWholeBookContract.cs" />
+    <Compile Include="Contracts\AuthorDetailContract.cs" />
+    <Compile Include="Contracts\AuthProviderEnumContract.cs" />
+    <Compile Include="Contracts\BookInfoWithPagesContract.cs" />
+    <Compile Include="Contracts\BucketContract.cs" />
+    <Compile Include="Contracts\CardShortContract.cs" />
+    <Compile Include="Contracts\AudioBooks\FileDataContract.cs" />
+    <Compile Include="Clients\ItJakubServiceClient.cs" />
+    <Compile Include="Clients\ItJakubServiceEncryptedClient.cs" />
+    <Compile Include="Contracts\HeadwordBookmarkContract.cs" />
+    <Compile Include="Contracts\ImageSizeEnumContract.cs" />
+    <Compile Include="Contracts\ImageContract.cs" />
+    <Compile Include="Contracts\CardContract.cs" />
+    <Compile Include="Contracts\BucketShortContract.cs" />
+    <Compile Include="Contracts\CardFileContract.cs" />
+    <Compile Include="Contracts\SelectedCategoriesContract.cs" />
+    <Compile Include="Contracts\UserDetailContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
-    <Compile Include="LoginUserContract.cs" />
-    <Compile Include="CreateUserContract.cs" />
-    <Compile Include="LoginUserResultContract.cs" />
-    <Compile Include="CreateUserResultContract.cs" />
+    <Compile Include="Contracts\LoginUserContract.cs" />
+    <Compile Include="Contracts\CreateUserContract.cs" />
+    <Compile Include="Contracts\LoginUserResultContract.cs" />
+    <Compile Include="Contracts\CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
-    <Compile Include="PageBookmarkContract.cs" />
-    <Compile Include="ProcessedFileInfoContract.cs" />
+    <Compile Include="Contracts\PageBookmarkContract.cs" />
+    <Compile Include="Contracts\ProcessedFileInfoContract.cs" />
+    <Compile Include="IITJakubServiceStreamed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectedCategoriesContract.cs" />
-    <Compile Include="UserDetailContract.cs" />
+    <Compile Include="TermContract.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
