@@ -245,6 +245,10 @@ namespace ITJakub.SearchService.Core.Exist
             var uriString = string.Format(uriTemplate, args);
             return new Uri(uriString);
         }
+        private static string SetParamsToStringTemplate(string template, params object[] args)
+        {
+            return string.Format(template, args);
+        }
 
         private static string AddXslParam(string uriTemplate, string xslPath)
         {
@@ -259,6 +263,11 @@ namespace ITJakub.SearchService.Core.Exist
                 uriTemplate = AddXslParam(uriTemplate, xslPath);
             }
             return SetParamsToUri(uriTemplate, args);
+        }
+        private static string GetContentKeyValuePairString(CommunicationInfo commInfo, params object[] args)
+        {
+            var contentTemplate = commInfo.ContentTemplate;
+            return SetParamsToStringTemplate(contentTemplate, args);
         }
 
         #endregion
