@@ -30,18 +30,16 @@
             </Grid.RowDefinitions>
             
             <TextBlock TextAlignment="Center"
-                       FontFamily="Segoe Print"
+                       VerticalAlignment="Center"
                        FontSize="40"
-                       FontWeight="Bold"
                        Foreground="LimeGreen"
                        Text="Výhra!"
                        Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
             <TextBlock Grid.Row="0"
                        TextAlignment="Center"
-                       FontFamily="Segoe Print"
+                       VerticalAlignment="Center"
                        FontSize="40"
-                       FontWeight="Bold"
                        Foreground="Brown"
                        Text="Prohra!"
                        Visibility="{Binding Loss, Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -51,14 +51,35 @@
                 <ColumnDefinition Width="160" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       FontSize="{StaticResource LabelFontSize}"
-                       Text="Název zadání" />
+            <StackPanel Grid.Row="0"
+                        Grid.Column="0"
+                        Orientation="Vertical">
+                
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Text="Název zadání" />
 
-            <Button Grid.Row="1"
+                <TextBox Margin="0,0,20,0"
+                         FontSize="16"
+                         Text="{Binding TaskName, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="0,8,0,0"
+                        Orientation="Vertical">
+
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Text="Popis (zobrazovaný studentům)" />
+
+                <TextBox Margin="0,0,20,0"
+                         FontSize="16"
+                         Text="{Binding TaskDescription, Mode=TwoWay}" />
+            </StackPanel>
+
+            <Button Grid.Row="0"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
                     x:Name="SaveButton">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Save"
@@ -95,12 +116,6 @@
                 </Button.Flyout>
             </Button>
 
-            <TextBox Grid.Row="1"
-                     Grid.Column="0"
-                     Margin="0,0,20,0"
-                     FontSize="16"
-                     Text="{Binding TaskName, Mode=TwoWay}" />
-
             <StackPanel Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -112,6 +127,11 @@
                            FontWeight="Bold"
                            Visibility="{Binding ErrorTaskNameEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Text="Vyplňte název zadání." />
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
+                           Visibility="{Binding ErrorTaskDescriptionEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Vyplňte popis zadání." />
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource ErrorColorBrush}"
                            FontWeight="Bold"
@@ -133,7 +153,7 @@
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Bottom"
-                    Content="Přidat odpověď"
+                    Content="Přidat řádek"
                     Command="{Binding AddAnswerCommand}" />
 
             <Grid Grid.Row="3"
@@ -146,11 +166,11 @@
                 </Grid.ColumnDefinitions>
                 
                 <TextBlock Grid.Column="0"
-                           Text="Otázka"
+                           Text="Nápověda"
                            Style="{StaticResource SubheaderTextBlockStyle}" />
 
                 <TextBlock Grid.Column="1"
-                           Text="Odpověď"
+                           Text="Řešení"
                            Style="{StaticResource SubheaderTextBlockStyle}" />
                 
                 <Button Grid.Column="2"
@@ -245,7 +265,7 @@
                    Text="Žádná odpověď"
                    FontSize="15"
                    FontWeight="Light"
-                   Margin="0,22,0,0"
+                   Margin="90,22,0,0"
                    Visibility="{Binding IsAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
         
         <Grid Grid.Row="2"
@@ -258,7 +278,7 @@
             </Grid.ColumnDefinitions>
             
             <TextBlock Grid.Column="0"
-                       Text="Sloupec s výsledkem:"
+                       Text="Sloupec s tajenkou:"
                        VerticalAlignment="Center"
                        FontWeight="Light"
                        FontSize="18" />

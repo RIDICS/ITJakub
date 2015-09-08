@@ -14,7 +14,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         void StopPolling();
         void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback);
         void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
-        void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
+        void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
         void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback);
     }
 
@@ -62,9 +62,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_guessManager.SetTask(data, callback);
         }
 
-        public void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
+        public void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
         {
-            m_guessManager.SaveTask(taskName, answerList, callback);
+            m_guessManager.SaveTask(taskName, taskDescription, answerList, callback);
         }
 
         public void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback)

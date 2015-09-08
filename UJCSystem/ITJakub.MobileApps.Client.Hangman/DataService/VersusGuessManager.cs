@@ -67,7 +67,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             SendLetterInfo(letter, wordOrder, callback);
         }
 
-        public override async void SaveTask(string taskName, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
+        public override async void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
         {
             var specialLettersGenerator = new SpecialLettersGenerator();
             var wordArray = answerList.Select(model => model.Answer.ToLower()).ToArray();
@@ -83,7 +83,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
             try
             {
-                await m_synchronizeCommunication.CreateTaskAsync(ApplicationType.Hangman, taskName, serializedContract);
+                await m_synchronizeCommunication.CreateTaskAsync(ApplicationType.Hangman, taskName, taskDescription, serializedContract);
                 callback(null);
             }
             catch (ClientCommunicationException exception)

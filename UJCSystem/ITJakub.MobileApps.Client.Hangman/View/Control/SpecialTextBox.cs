@@ -11,10 +11,11 @@ namespace ITJakub.MobileApps.Client.Hangman.View.Control
     {
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof (string), typeof (SpecialTextBox), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty KeyboardLettersProperty = DependencyProperty.Register("KeyboardLetters", typeof (string), typeof (SpecialTextBox), new PropertyMetadata(string.Empty, OnKeyboardLettersChanged));
+        public static readonly DependencyProperty PlaceholderTextProperty = DependencyProperty.Register("PlaceholderText", typeof(string), typeof(SpecialTextBox), new PropertyMetadata(string.Empty));
         private NoLostFocusTextBox m_textBox;
         private GridView m_gridView;
         private Button m_showKeyboardButton;
-        
+
         public SpecialTextBox()
         {
             DefaultStyleKey = typeof(SpecialTextBox);
@@ -30,6 +31,12 @@ namespace ITJakub.MobileApps.Client.Hangman.View.Control
         {
             get { return (string) GetValue(KeyboardLettersProperty); }
             set { SetValue(KeyboardLettersProperty, value); }
+        }
+
+        public string PlaceholderText
+        {
+            get { return (string) GetValue(PlaceholderTextProperty); }
+            set { SetValue(PlaceholderTextProperty, value); }
         }
 
         protected override void OnApplyTemplate()

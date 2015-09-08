@@ -14,6 +14,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         private bool m_errorAnswerColumn;
         private int m_answerColumn;
         private bool m_errorAnswerRowEmpty;
+        private bool m_errorTaskDescriptionEmpty;
 
         public CrosswordsEditorViewModel(ICrosswordsDataService dataService)
         {
@@ -56,6 +57,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public string TaskName { get; set; }
 
+        public string TaskDescription { get; set; }
+
         public bool IsSaveFlyoutOpen
         {
             get { return m_isSaveFlyoutOpen; }
@@ -72,6 +75,16 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             set
             {
                 m_errorTaskNameEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ErrorTaskDescriptionEmpty
+        {
+            get { return m_errorTaskDescriptionEmpty; }
+            set
+            {
+                m_errorTaskDescriptionEmpty = value;
                 RaisePropertyChanged();
             }
         }
@@ -137,6 +150,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         {
             var anyError = false;
             ErrorTaskNameEmpty = false;
+            ErrorTaskDescriptionEmpty = false;
             ErrorAnswerListEmpty = false;
             ErrorAnswerRowEmpty = false;
             ErrorAnswerColumn = false;
@@ -144,6 +158,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             if (string.IsNullOrWhiteSpace(TaskName))
             {
                 ErrorTaskNameEmpty = true;
+                anyError = true;
+            }
+
+            if (string.IsNullOrWhiteSpace(TaskDescription))
+            {
+                ErrorTaskDescriptionEmpty = true;
                 anyError = true;
             }
 
@@ -189,7 +209,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             }
 
             Saving = true;
-            m_dataService.SaveTask(TaskName, AnswerList, AnswerColumn, exception =>
+            m_dataService.SaveTask(TaskName, TaskDescription, AnswerList, AnswerColumn, exception =>
             {
                 Saving = false;
 

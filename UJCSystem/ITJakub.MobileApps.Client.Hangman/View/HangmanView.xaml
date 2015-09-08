@@ -46,7 +46,6 @@
                        TextWrapping="Wrap">
                 <Run Text="{Binding GuessedLetterCount}"
                      FontWeight="Bold"
-                     FontFamily="Segoe Print"
                      Foreground="{Binding GameOverViewModel.Win, Converter={StaticResource WinToColorConverter}}"/>
                 <Run Text="{Binding GuessedLetterCount, Converter={StaticResource GuessedLettersTextConverter}}" />
             </TextBlock>
@@ -105,7 +104,6 @@
                                   Margin="0,0,5,0"
                                   Background="White" >
                                 <TextBlock FontSize="17"
-                                           FontFamily="Segoe Print"
                                            Text="{Binding Letter}"
                                            Foreground="Black"
                                            HorizontalAlignment="Center"
@@ -155,7 +153,6 @@
                         </Viewbox>
                         
                         <TextBlock FontSize="18"
-                                   FontFamily="Segoe Print"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Top"
                                    Margin="0,0,15,0"

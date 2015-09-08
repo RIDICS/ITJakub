@@ -13,9 +13,15 @@
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanEditorViewModel}">
 
     <UserControl.Resources>
-        <x:Double x:Key="LabelFontSize">14</x:Double>
-        <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ResourceDictionary>
+            <x:Double x:Key="LabelFontSize">14</x:Double>
+            <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
+            <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
@@ -38,14 +44,33 @@
                 <ColumnDefinition Width="160" />
             </Grid.ColumnDefinitions>
             
-            <TextBlock Grid.Row="0"
-                       Grid.Column="0"
-                       FontSize="{StaticResource LabelFontSize}"
-                       Text="Název zadání" />
-            
-            <Button Grid.Row="1"
+            <StackPanel Grid.Column="0"
+                        Grid.Row="0"
+                        Orientation="Vertical">
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Text="Název zadání" />
+
+                <TextBox Margin="0,0,20,0"
+                         FontSize="16"
+                         Text="{Binding TaskName, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="0"
+                        Grid.Row="1"
+                        Margin="0,8,0,0"
+                        Orientation="Vertical">
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Text="Popis (zobrazovaný studentům)" />
+
+                <TextBox Margin="0,0,20,0"
+                         FontSize="16"
+                         Text="{Binding TaskDescription, Mode=TwoWay}" />
+            </StackPanel>
+
+            <Button Grid.Row="0"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
+                    VerticalAlignment="Bottom"
                     x:Name="SaveButton">
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon Symbol="Save"
@@ -82,12 +107,6 @@
                 </Button.Flyout>
             </Button>
             
-            <TextBox Grid.Row="1"
-                     Grid.Column="0"
-                     Margin="0,0,20,0"
-                     FontSize="16"
-                     Text="{Binding TaskName, Mode=TwoWay}" />
-
             <StackPanel Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
@@ -102,6 +121,11 @@
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
                            Foreground="{StaticResource ErrorColorBrush}"
                            FontWeight="Bold"
+                           Visibility="{Binding ErrorTaskDescriptionEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="Vyplňte popis zadání." />
+                <TextBlock FontSize="{StaticResource LabelFontSize}"
+                           Foreground="{StaticResource ErrorColorBrush}"
+                           FontWeight="Bold"
                            Visibility="{Binding ErrorAnswerListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Text="Vytvořte alespoň jednu odpověď." />
                 <TextBlock FontSize="{StaticResource LabelFontSize}"
@@ -110,14 +134,26 @@
                            Visibility="{Binding ErrorSomeAnswerEmpty, Converter={StaticResource BooleanToVisibilityConverter}}"
                            Text="Žádná odpověď nesmí být prázdná." />
             </StackPanel>
-            
-            
-            <TextBlock Grid.Row="3"
-                       Grid.Column="0"
-                       Margin="0,20,0,0"
-                       Text="Seznam odpovědí"
-                       Style="{StaticResource SubheaderTextBlockStyle}" />
-            
+
+            <Grid Grid.Row="3"
+                  Grid.Column="0"
+                  Margin="0,0,-100,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Margin="0,10,0,8"
+                               Text="Nápověda"
+                               Style="{StaticResource SubheaderTextBlockStyle}" />
+                    
+                    <TextBlock Grid.Column="1"
+                               Margin="0,10,0,8"
+                               Text="Řešení"
+                               Style="{StaticResource SubheaderTextBlockStyle}" />
+            </Grid>
+
             <Button Grid.Row="3"
                     Grid.Column="1"
                     HorizontalAlignment="Stretch"
@@ -130,31 +166,37 @@
         <ListView Grid.Row="1"
                   SelectionMode="None"
                   ItemsSource="{Binding AnswerList}"
+                  ItemContainerStyle="{StaticResource NoMarginListViewItemStyle}"
                   CanReorderItems="True"
                   AllowDrop="True">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                </Style>
-            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="60" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         
-                        <control1:SpecialTextBox Grid.Column="1"
-                                             Margin="0,0,10,0"
-                                             VerticalAlignment="Center"
-                                             FontSize="16"
-                                             Text="{Binding Answer, Mode=TwoWay}"
-                                             KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
+                        <control1:SpecialTextBox
+                            Grid.Column="1"
+                            Margin="0,0,20,0"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Text="{Binding Hint, Mode=TwoWay}"
+                            KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
                         
-                        <Button Grid.Column="2"
+                        <control1:SpecialTextBox
+                            Grid.Column="2"
+                            Margin="0,0,10,0"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Text="{Binding Answer, Mode=TwoWay}"
+                            KeyboardLetters="äāąćèľłḿǫṕŕſüūźъь" />
+                        
+                        <Button Grid.Column="3"
                                 Command="{Binding ElementName=RootElement, Path=DataContext.DeleteAnswerCommand}"
                                 CommandParameter="{Binding}">
                             <SymbolIcon Symbol="Delete" />

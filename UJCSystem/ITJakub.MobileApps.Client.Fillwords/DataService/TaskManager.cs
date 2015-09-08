@@ -30,7 +30,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             m_pollingService = applicationCommunication.PollingService;
         }
         
-        public async void CreateTask(string taskName, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
+        public async void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
         {
             var taskContract = new FillwordsTaskContract
             {
@@ -46,7 +46,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
 
             try
             {
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, data);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, taskDescription, data);
                 callback(null);
             }
             catch (ClientCommunicationException exception)

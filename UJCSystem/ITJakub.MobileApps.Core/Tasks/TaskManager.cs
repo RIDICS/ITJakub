@@ -20,7 +20,7 @@ namespace ITJakub.MobileApps.Core.Tasks
             m_azureTableTaskDao = azureTableTaskDao;
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
             var now = DateTime.UtcNow;
 
@@ -31,7 +31,8 @@ namespace ITJakub.MobileApps.Core.Tasks
                 Application = application,
                 Author = user,
                 CreateTime = now,
-                Name = name
+                Name = name,
+                Description = description
             };
 
             var taskId = m_usersRepository.Create(task);

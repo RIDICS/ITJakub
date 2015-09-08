@@ -111,4 +111,45 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="ListViewItem" x:Key="NoMarginListViewItemStyle">
+        <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+        <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="TabNavigation" Value="Local" />
+        <Setter Property="IsHoldingEnabled" Value="True" />
+        <Setter Property="Margin" Value="0,0,0,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <ListViewItemPresenter
+                    ContentTransitions="{TemplateBinding ContentTransitions}"
+                    Padding="{TemplateBinding Padding}"
+                    SelectionCheckMarkVisualEnabled="True"
+                    CheckHintBrush="{ThemeResource ListViewItemCheckHintThemeBrush}"
+                    CheckSelectingBrush="{ThemeResource ListViewItemCheckSelectingThemeBrush}"
+                    CheckBrush="{ThemeResource ListViewItemCheckThemeBrush}"
+                    DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}"
+                    DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}"
+                    FocusBorderBrush="{ThemeResource ListViewItemFocusBorderThemeBrush}"
+                    PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}"
+                    PointerOverBackground="{ThemeResource ListViewItemPointerOverBackgroundThemeBrush}"
+                    SelectedBorderThickness="{ThemeResource ListViewItemCompactSelectedBorderThemeThickness}"
+                    SelectedBackground="{ThemeResource ListViewItemSelectedBackgroundThemeBrush}"
+                    SelectedForeground="{ThemeResource ListViewItemSelectedForegroundThemeBrush}"
+                    SelectedPointerOverBackground="{ThemeResource ListViewItemSelectedPointerOverBackgroundThemeBrush}"
+                    SelectedPointerOverBorderBrush="{ThemeResource ListViewItemSelectedPointerOverBorderThemeBrush}"
+                    DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                    DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}"
+                    ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
+                    HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                    PointerOverBackgroundMargin="1"
+                    ContentMargin="0,0,20,0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -7,8 +7,13 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 {
     public class BindableRichEditBox : RichEditBox
     {
+        private bool m_recoverSelection;
+        private int m_recoverSelectionStart;
+        private int m_recoverSelectionEnd;
+
         public BindableRichEditBox()
         {
+            m_recoverSelection = false;
             IsReadOnly = true;
         }
 
@@ -41,8 +46,15 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
             richEditBox.IsReadOnly = false;
             richEditBox.Document.SetText(TextSetOptions.FormatRtf, richEditBox.DocumentRtf);
             richEditBox.IsReadOnly = oldIsReadonlyState;
-            richEditBox.OnDocumentLoad();
 
+            if (richEditBox.m_recoverSelection)
+            {
+                richEditBox.Document.Selection.StartPosition = richEditBox.m_recoverSelectionStart;
+                richEditBox.Document.Selection.EndPosition = richEditBox.m_recoverSelectionEnd;
+                richEditBox.m_recoverSelection = false;
+            }
+            
+            richEditBox.OnDocumentLoad();
             OnZoomChanged(richEditBox, null);
         }
 
@@ -65,6 +77,10 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 
         protected override void OnLostFocus(RoutedEventArgs e)
         {
+            m_recoverSelectionStart = Document.Selection.StartPosition;
+            m_recoverSelectionEnd = Document.Selection.EndPosition;
+            m_recoverSelection = true;
+
             string text;
             Document.GetText(TextGetOptions.FormatRtf, out text);
             if (!IsReadOnly && text != DocumentRtf)

@@ -154,7 +154,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             callback(m_task.Win);
         }
 
-        public async void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
+        public async void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
         {
             try
             {
@@ -188,7 +188,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 };
 
                 var serializedTask = JsonConvert.SerializeObject(taskContract, Formatting.None, serializerSettings);
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, serializedTask);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, taskDescription, serializedTask);
 
                 callback(null);
             }

@@ -33,9 +33,15 @@
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
                     Orientation="Vertical">
-            <TextBlock Text="Název zadání:"
+            <TextBlock Text="Název zadání"
                        FontSize="{StaticResource LabelFontSize}" />
             <TextBox Text="{Binding TaskName, Mode=TwoWay}" />
+
+            <TextBlock Text="Popis (zobrazovaný studentům)"
+                       Margin="0,8,0,0"
+                       FontSize="{StaticResource LabelFontSize}" />
+            <TextBox Text="{Binding TaskDescription, Mode=TwoWay}" />
+
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -106,6 +112,10 @@
                                FontSize="{StaticResource LabelFontSize}"
                                Foreground="{StaticResource ErrorColorBrush}"
                                Visibility="{Binding ErrorTaskNameMissing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <TextBlock Text="Vyplňte popis zadání."
+                               FontSize="{StaticResource LabelFontSize}"
+                               Foreground="{StaticResource ErrorColorBrush}"
+                               Visibility="{Binding ErrorTaskDescriptionMissing, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <TextBlock Text="Vyberte nějakou knihu."
                                FontSize="{StaticResource LabelFontSize}"
                                Foreground="{StaticResource ErrorColorBrush}"
