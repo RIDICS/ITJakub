@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using ITJakub.SearchService.Core.Exist.Attributes;
 using Jewelery;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -23,10 +24,14 @@ namespace ITJakub.SearchService.Core.Exist
 
         public Task<HttpContent> SendRequest(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return Task.Run(() => m_httpClient.SendAsync(new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri)
+            var httpRequestMessage = new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri);
+
+            if(commInfo.Method.Equals(HttpMethodType.Post) || commInfo.Method.Equals(HttpMethodType.Put))
             {
-                Content = content
-            })).ContinueWith(task => task.Result.Content);
+                httpRequestMessage.Content = content;
+            }
+
+            return Task.Run(() => m_httpClient.SendAsync(httpRequestMessage)).ContinueWith(task => task.Result.Content);
         }
 
         public Task<string> SendRequestGetResponseAsString(CommunicationInfo commInfo, Uri uri, HttpContent content)

@@ -16,6 +16,8 @@ namespace ITJakub.SearchService.Core.Exist.Attributes
         [StringValue("PUT")]
         Put = 1,
         [StringValue("POST")]
-        Post = 2
+        Post = 2,
+        [StringValue("DELETE")]
+        Delete = 3
     }
 }
