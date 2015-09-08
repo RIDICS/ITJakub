@@ -39,7 +39,7 @@ namespace ITJakub.SearchService.Core.Exist
                     return string.Format("{0}{1}/{2}/{3}", m_existSettings.BooksRelativeUri, Uri.EscapeUriString(bookGuid), bookVersion,
                         transformationName);
                 case ResourceLevelEnumContract.Shared:
-                    return string.Format("{0}{1}", m_existSettings.TransformationRelativeUri, transformationName);                
+                    return string.Format("{0}/{1}", m_existSettings.TransformationRelativeUri, transformationName);                
                 default:
                     return "";
             }
@@ -52,7 +52,7 @@ namespace ITJakub.SearchService.Core.Exist
 
         public string GetQueryUri(string xqueryName)
         {
-            return string.Format("{0}{1}{2}", m_existSettings.BaseUri, m_existSettings.XQueriesRelativeUri,
+            return string.Format("{0}{1}/{2}", m_existSettings.BaseUri, m_existSettings.XQueriesRelativeUri,
                 xqueryName);
         }
 

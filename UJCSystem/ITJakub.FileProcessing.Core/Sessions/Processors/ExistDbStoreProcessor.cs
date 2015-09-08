@@ -48,9 +48,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                             UploadResourceToBookVersion(resourceUploadContract);
                             break;
 
+                        case ResourceType.Page:
+                            UploadResourceToBookVersion(resourceUploadContract);
+                            break;
+
                         case ResourceType.Transformation:
                             UploadTransformationResource(resourceUploadContract);
                             break;
+
+                        
 
                         default:
                             throw new ArgumentException($"ResourceType: '{resource.ResourceType}' not meant for ExistDb upload");
