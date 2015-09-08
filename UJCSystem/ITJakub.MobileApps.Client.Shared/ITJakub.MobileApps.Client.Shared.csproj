@@ -109,6 +109,7 @@
     <Compile Include="Control\ErrorBarView.xaml.cs">
       <DependentUpon>ErrorBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\Expander.cs" />
     <Compile Include="Control\FocusableBehavior.cs" />
     <Compile Include="Converter\BooleanNegationToVisibilityConverter.cs" />
     <Compile Include="Enum\SynchronizationType.cs" />
@@ -163,6 +164,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Control\ErrorBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

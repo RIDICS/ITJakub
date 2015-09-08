@@ -246,7 +246,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
             var point = e.GetCurrentPoint(m_richEditBox).Position;
 
-            point.X -= PointerCorrectionLeft + PointerCalibrationX;
+            point.X -= PointerCorrectionLeft - PointerCalibrationX;
             point.Y -= PointerCorrectionTop + PointerCalibrationY;
 
             // HACK get unscaled point coordinates for RichEditBox

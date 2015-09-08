@@ -22,8 +22,6 @@
             </ResourceDictionary.MergedDictionaries>
             
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
-            <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
             <converter1:UserInfoToStringConverter x:Key="UserInfoToStringConverter" />
             <converter1:BooleanToGridVisibility x:Key="BooleanToGridVisibility" />
             <converter1:BooleanToDoubleConverter x:Key="BooleanToDoubleConverter" />
@@ -31,40 +29,42 @@
             <x:Double x:Key="ProgressRingSize">50</x:Double>
         </ResourceDictionary>
     </UserControl.Resources>
-    
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-    <Grid Margin="120,0,30,40">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="{Binding IsTextDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
-                              MinWidth="{Binding IsTextDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="{Binding IsPhotoDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
-                              MinWidth="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
 
-        <Grid Grid.Row="0"
-              Grid.Column="0"
-              DataContext="{Binding TextReaderViewModel}">
-            
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid Margin="120,0,30,40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="53" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            
-            <control:ReaderRichEditBox DocumentRtf="{Binding DocumentRtf}"
-                                       SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-                                       SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
-                                       CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
-                                       Mode="{Binding CurrentMode}"
-                                       PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
-                                       PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
-                                       Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="{Binding IsTextDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
+                    MinWidth="{Binding IsTextDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition
+                    Width="{Binding IsPhotoDisplayed, Mode=TwoWay, Converter={StaticResource BooleanToGridVisibility}}"
+                    MinWidth="{Binding IsPhotoDisplayed, Converter={StaticResource BooleanToDoubleConverter}, ConverterParameter=150.0}" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0"
+                  Grid.Column="0"
+                  DataContext="{Binding TextReaderViewModel}">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="53" />
+                </Grid.RowDefinitions>
+
+                <control:ReaderRichEditBox DocumentRtf="{Binding DocumentRtf}"
+                                           SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                                           SelectionLength="{Binding SelectionLength, Mode=TwoWay}"
+                                           CursorPosition="{Binding CursorPosition, Mode=TwoWay}"
+                                           Mode="{Binding CurrentMode}"
+                                           PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
+                                           PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                                           Zoom="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}" />
 
                 <Grid Grid.Row="0"
                       Margin="40,20,40,20"
@@ -81,235 +81,230 @@
                 </Grid>
 
                 <ProgressRing Grid.Row="0"
-                          Width="{StaticResource ProgressRingSize}"
-                          Height="{StaticResource ProgressRingSize}"
-                          IsActive="{Binding Loading}"
-                          Foreground="DarkBlue" />
+                              Width="{StaticResource ProgressRingSize}"
+                              Height="{StaticResource ProgressRingSize}"
+                              IsActive="{Binding Loading}"
+                              Foreground="DarkBlue" />
 
-            <controlBooks:ZoomBarControl Grid.Row="1"
-                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
-                                         Minimum="-7"
-                                         Maximum="17" />
-        </Grid>
-
-        <controls:CustomGridSplitter
-            Grid.Row="0"
-            Grid.Column="1"
-            Visibility="{Binding IsTextAndPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
-            Margin="7,0,7,53"
-            Width="26"
-            Background="#90000000" />
-        
-        <Grid Grid.Row="0"
-              Grid.Column="2"
-              Margin="0,0,0,0"
-              Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
-              DataContext="{Binding ImageReaderViewModel}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="53" />
-            </Grid.RowDefinitions>
-            
-            <control:ReaderImage PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
-                                 PointerPositionY="{Binding PointerPositionY, Mode=TwoWay}"
-                                 Mode="{Binding CurrentMode}"
-                                 ImageSource="{Binding Photo}"
-                                 PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
-                                 PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
-                                 CurrentZoomFactor="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
-                                 IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}" />
-
-            <Grid Grid.Row="0"
-                    Margin="40,20,40,20"
-                    Background="#AAFFFFFF"
-                    VerticalAlignment="Center">
-
-                <TextBlock HorizontalAlignment="Center"
-                            Text="Fotografie této strany nebyla nalezena."
-                            TextWrapping="Wrap"
-                            Foreground="DarkRed"
-                            FontSize="17"
-                            Margin="3"
-                            Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <controlBooks:ZoomBarControl Grid.Row="1"
+                                             CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}"
+                                             Minimum="-7"
+                                             Maximum="17" />
             </Grid>
 
-            <ProgressRing Grid.Row="0"
-                          Width="{StaticResource ProgressRingSize}"
-                          Height="{StaticResource ProgressRingSize}"
-                          IsActive="{Binding Loading}" />
-            
-            <controlBooks:ZoomBarControl Grid.Row="1"
-                                         CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
-        </Grid>
-        
-        <StackPanel Grid.Row="0"
-                    Grid.Column="3"
-                    Orientation="Vertical"
-                    Width="200">
-            <TextBlock Margin="15,5,0,20"
-                       FontSize="17">
-                <Run Text="Nyní čte:" />
-                <LineBreak />
-                <Run Text="{Binding CurrentReader, Converter={StaticResource UserInfoToStringConverter}}"
-                     FontWeight="Bold" />
-            </TextBlock>
-            
-            <ToggleSwitch Header="Zobrazit fotografii"
-                          Margin="10,0,0,0"
-                          IsOn="{Binding IsPhotoDisplayed, Mode=TwoWay}"
-                          OnContent="Zapnuto"
-                          OffContent="Vypnuto" />
+            <controls:CustomGridSplitter
+                Grid.Row="0"
+                Grid.Column="1"
+                Visibility="{Binding IsTextAndPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Margin="7,0,7,53"
+                Width="26"
+                Background="#90000000" />
 
-            <ToggleSwitch Header="Skrýt text"
-                          Margin="10,0,0,0"
-                          IsOn="{Binding IsTextDisplayed, Mode=TwoWay, Converter={StaticResource BooleanNegationConverter}}"
-                          OnContent="Zapnuto"
-                          OffContent="Vypnuto" />
+            <Grid Grid.Row="0"
+                  Grid.Column="2"
+                  Margin="0,0,0,0"
+                  Visibility="{Binding ElementName=RootElement, Path=DataContext.IsPhotoDisplayed, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  DataContext="{Binding ImageReaderViewModel}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="53" />
+                </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Vertical"
-                        Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
-            
-                <ToggleSwitch Header="Výběr textu"
-                              Margin="10,0,0,0"
-                              IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
-                              OnContent="Zapnuto"
-                              OffContent="Vypnuto" />
+                <control:ReaderImage PointerPositionX="{Binding PointerPositionX, Mode=TwoWay}"
+                                     PointerPositionY="{Binding PointerPositionY, Mode=TwoWay}"
+                                     Mode="{Binding CurrentMode}"
+                                     ImageSource="{Binding Photo}"
+                                     PointerCalibrationX="{Binding ElementName=HorizontalCalibrationSlider, Path=Value}"
+                                     PointerCalibrationY="{Binding ElementName=VerticalCalibrationSlider, Path=Value}"
+                                     CurrentZoomFactor="{Binding CurrentZoom, Mode=TwoWay, Converter={StaticResource RangeToZoomFactorConverter}}"
+                                     IsScrollingEnabled="{Binding ElementName=ScrollingEnabledSwitch, Path=IsOn, Mode=TwoWay}" />
 
-                <Border BorderBrush="#40000000"
-                        BorderThickness="2"
-                        Margin="10,0,-10,0">
+                <Grid Grid.Row="0"
+                      Margin="40,20,40,20"
+                      Background="#AAFFFFFF"
+                      VerticalAlignment="Center">
+
+                    <TextBlock HorizontalAlignment="Center"
+                               Text="Fotografie této strany nebyla nalezena."
+                               TextWrapping="Wrap"
+                               Foreground="DarkRed"
+                               FontSize="17"
+                               Margin="3"
+                               Visibility="{Binding IsLoadError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </Grid>
+
+                <ProgressRing Grid.Row="0"
+                              Width="{StaticResource ProgressRingSize}"
+                              Height="{StaticResource ProgressRingSize}"
+                              IsActive="{Binding Loading}" />
+
+                <controlBooks:ZoomBarControl Grid.Row="1"
+                                             CurrentZoom="{Binding CurrentZoom, Mode=TwoWay}" />
+            </Grid>
+
+            <StackPanel Grid.Row="0"
+                        Grid.Column="3"
+                        Orientation="Vertical"
+                        Width="200">
+                <TextBlock Margin="15,5,0,20"
+                           FontSize="17">
+                    <Run Text="Nyní čte:" />
+                    <LineBreak />
+                    <Run Text="{Binding CurrentReader, Converter={StaticResource UserInfoToStringConverter}}"
+                         FontWeight="Bold" />
+                </TextBlock>
+
+                <control1:Expander
+                    BorderBrush="#40000000"
+                    BorderThickness="2"
+                    Margin="10,0,-10,6"
+                    Header="Zobrazit">
                     <StackPanel Orientation="Vertical">
-                        <ToggleButton BorderThickness="0"
-                                      x:Name="CursorCorrectionButton">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Upravit pozici kurzoru" />
-                                <!--Arrow down:-->
-                                <TextBlock Text="&#xE019;"
-                                           FontFamily="Segoe UI Symbol"
-                                           Margin="3,0,0,0"
-                                           Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
-                                <!--Arrow up:-->
-                                <TextBlock Text="&#xE018;"
-                                           FontFamily="Segoe UI Symbol"
-                                           Margin="3,0,0,0"
-                                           Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                </StackPanel>
-                        </ToggleButton>
-                
-                        <Slider Header="Vodorovně"
-                                Margin="10,0,10,0"
-                                Minimum="-50"
-                                Maximum="50"
-                                Width="150"
-                                Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                x:Name="HorizontalCalibrationSlider" />
-                        <Slider Header="Svisle"
-                                Margin="10,0,10,0"
-                                Minimum="-50"
-                                Maximum="50"
-                                Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                x:Name="VerticalCalibrationSlider" />
 
+                        <ToggleSwitch Header="Zobrazit fotografii"
+                                      Margin="10,0,0,0"
+                                      IsOn="{Binding IsPhotoDisplayed, Mode=TwoWay}"
+                                      Visibility="{Binding ElementName=DisplayButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      OnContent="Zapnuto"
+                                      OffContent="Vypnuto" />
+
+                        <ToggleSwitch Header="Zobrazit text"
+                                      Margin="10,0,0,0"
+                                      IsOn="{Binding IsTextDisplayed, Mode=TwoWay}"
+                                      Visibility="{Binding ElementName=DisplayButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                      OnContent="Zapnuto"
+                                      OffContent="Vypnuto" />
                     </StackPanel>
-                </Border>
-                
-                <ToggleSwitch Header="Posouvání a přibližování fotografie"
-                              Margin="10,0,0,0"
-                              OnContent="Zapnuto"
-                              OffContent="Vypnuto"
-                              x:Name="ScrollingEnabledSwitch"
-                              IsEnabled="{Binding IsPhotoDisplayed}">
-                    <ToggleSwitch.HeaderTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}" TextWrapping="Wrap" />
-                        </DataTemplate>
-                    </ToggleSwitch.HeaderTemplate>
-                </ToggleSwitch>
-                
+                </control1:Expander>
+
+                <StackPanel Orientation="Vertical"
+                            Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                    <control1:Expander
+                        BorderBrush="#40000000"
+                        BorderThickness="2"
+                        Margin="10,0,-10,0"
+                        Header="Upravit pozici kurzoru">
+                        <StackPanel Orientation="Vertical">
+
+                            <Slider Header="Vodorovně"
+                                    Margin="10,0,10,0"
+                                    Minimum="-50"
+                                    Maximum="50"
+                                    Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    x:Name="HorizontalCalibrationSlider" />
+                            <Slider Header="Svisle"
+                                    Margin="10,0,10,0"
+                                    Minimum="-50"
+                                    Maximum="50"
+                                    Visibility="{Binding ElementName=CursorCorrectionButton, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    x:Name="VerticalCalibrationSlider" />
+
+                        </StackPanel>
+                    </control1:Expander>
+
+                    <ToggleSwitch Header="Výběr textu"
+                                  Margin="10,0,0,0"
+                                  IsOn="{Binding IsSelectionModeEnabled, Mode=TwoWay}"
+                                  IsEnabled="{Binding IsTextDisplayed}"
+                                  OnContent="Zapnuto"
+                                  OffContent="Vypnuto" />
+
+                    <ToggleSwitch Header="Posouvání a přibližování fotografie"
+                                  Margin="10,0,0,0"
+                                  OnContent="Zapnuto"
+                                  OffContent="Vypnuto"
+                                  x:Name="ScrollingEnabledSwitch"
+                                  IsEnabled="{Binding IsPhotoDisplayed}">
+                        <ToggleSwitch.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                            </DataTemplate>
+                        </ToggleSwitch.HeaderTemplate>
+                    </ToggleSwitch>
+
+                </StackPanel>
             </StackPanel>
-        </StackPanel>
-        
-        <Grid Grid.Row="1"
-              Grid.Column="0"
-              Grid.ColumnSpan="3"
-              Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            
-            <Button Grid.Column="0"
-                    Command="{Binding PreviousPageCommand}">
-                <SymbolIcon Symbol="Back" />
-            </Button>
 
-            <GridView Grid.Column="1"
-                      Margin="0,5,0,0"
-                      SelectionMode="Single"
-                      HorizontalAlignment="Center"
-                      HorizontalContentAlignment="Center"
-                      controlBooks:GridViewBehaviors.IsScrollToSelection="True"
-                      ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
-                      ItemsSource="{Binding PageList}"
-                      SelectedItem="{Binding SelectedPage, Mode=TwoWay}">
-                <GridView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </GridView.ItemsPanel>
-                <GridView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid MinWidth="20">
-                            <TextBlock Text="{Binding PageName}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Center">
-
-                            </TextBlock>
-                        </Grid>
-                    </DataTemplate>
-                </GridView.ItemTemplate>
-            </GridView>
-            
-            <ProgressRing Grid.Column="1"
-                          Width="35"
-                          Height="35"
-                          IsActive="{Binding LoadingPageList}" />
-            
-            <Button Grid.Column="2"
-                    Command="{Binding NextPageCommand}">
-                <SymbolIcon Symbol="Forward" />
-            </Button>
-        </Grid>
-        
-        <StackPanel Grid.Row="1"
-                    Grid.Column="3"
-                    Margin="10,-6,0,6"
-                    Orientation="Vertical"
-                    Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <TextBlock Text="Přejít na stranu:" />
-            
-            <Grid>
+            <Grid Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="3"
+                  Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <control1:SubmitTextBox Text="{Binding GoToPageText, Mode=TwoWay}"
-                                        EnterCommand="{Binding GoToPageCommand}"/>
-                
-                <Button Grid.Column="1"
-                        Content="Přejít"
-                        Command="{Binding GoToPageCommand}"/>
+                <Button Grid.Column="0"
+                        Command="{Binding PreviousPageCommand}">
+                    <SymbolIcon Symbol="Back" />
+                </Button>
+
+                <GridView Grid.Column="1"
+                          Margin="0,5,0,0"
+                          SelectionMode="Single"
+                          HorizontalAlignment="Center"
+                          HorizontalContentAlignment="Center"
+                          controlBooks:GridViewBehaviors.IsScrollToSelection="True"
+                          ItemContainerStyle="{StaticResource NoBorderGridViewItemStyle}"
+                          ItemsSource="{Binding PageList}"
+                          SelectedItem="{Binding SelectedPage, Mode=TwoWay}">
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MinWidth="20">
+                                <TextBlock Text="{Binding PageName}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Center" />
+                            </Grid>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+
+                <ProgressRing Grid.Column="1"
+                              Width="35"
+                              Height="35"
+                              IsActive="{Binding LoadingPageList}" />
+
+                <Button Grid.Column="2"
+                        Command="{Binding NextPageCommand}">
+                    <SymbolIcon Symbol="Forward" />
+                </Button>
             </Grid>
-            
-            <TextBlock Text="Strana nenalezena"
-                       Margin="0,0,0,-14"
-                       Foreground="Orange"
-                       Visibility="{Binding IsPageNotFoundError, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        </StackPanel>
-    </Grid>
-        
+
+            <StackPanel Grid.Row="1"
+                        Grid.Column="3"
+                        Margin="10,-6,0,6"
+                        Orientation="Vertical"
+                        Visibility="{Binding CurrentReader.IsMe, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <TextBlock Text="Přejít na stranu:" />
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <control1:SubmitTextBox Text="{Binding GoToPageText, Mode=TwoWay}"
+                                            EnterCommand="{Binding GoToPageCommand}" />
+
+                    <Button Grid.Column="1"
+                            Content="Přejít"
+                            Command="{Binding GoToPageCommand}" />
+                </Grid>
+
+                <TextBlock Text="Strana nenalezena"
+                           Margin="0,0,0,-14"
+                           Foreground="Orange"
+                           Visibility="{Binding IsPageNotFoundError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </StackPanel>
+        </Grid>
+
         <Grid Background="#60000000"
               Visibility="{Binding IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid Background="White"
@@ -318,7 +313,7 @@
                 <TextBlock Text="Aplikace byla ukončena"
                            Foreground="Black"
                            FontSize="30"
-                           Margin="80,40"/>
+                           Margin="80,40" />
             </Grid>
         </Grid>
     </Grid>

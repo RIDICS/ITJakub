@@ -173,7 +173,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             
             var point = e.GetCurrentPoint(m_sourceImage).Position;
             var zoom = m_scrollViewer.ZoomFactor;
-            var x = (point.X - (PointerCorrectionX + PointerCalibrationX)/zoom) / m_sourceImage.ActualWidth;
+            var x = (point.X - (PointerCorrectionX - PointerCalibrationX)/zoom) / m_sourceImage.ActualWidth;
             var y = (point.Y - (PointerCorrectionY + PointerCalibrationY)/zoom) / m_sourceImage.ActualHeight;
 
             var pointerPositionX = x < 0 ? 0 : x;

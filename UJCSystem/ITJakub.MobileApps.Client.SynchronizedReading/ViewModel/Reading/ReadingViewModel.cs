@@ -286,7 +286,20 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         public RelayCommand NextPageCommand { get; private set; }
 
         public RelayCommand GoToPageCommand { get; private set; }
-        
+
+
+        private bool IsTextUpdateNew(UpdateViewModel update)
+        {
+            return TextReaderViewModel.SelectionStart != update.SelectionStart ||
+                   TextReaderViewModel.SelectionLength != update.SelectionLength ||
+                   TextReaderViewModel.CursorPosition != update.CursorPosition;
+        }
+
+        private bool IsPhotoUpdateNew(UpdateViewModel update)
+        {
+            return !ImageReaderViewModel.PointerPositionX.Equals(update.ImageCursorPositionX) ||
+                   !ImageReaderViewModel.PointerPositionY.Equals(update.ImageCursorPositionY);
+        }
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
@@ -296,11 +309,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 return;
             }
 
-            TextReaderViewModel.SelectionStart = update.SelectionStart;
-            TextReaderViewModel.SelectionLength = update.SelectionLength;
-            TextReaderViewModel.CursorPosition = update.CursorPosition;
-
-            if (update.ContainsImageUpdate)
+            if (IsTextUpdateNew(update))
+            {
+                TextReaderViewModel.SelectionStart = update.SelectionStart;
+                TextReaderViewModel.SelectionLength = update.SelectionLength;
+                TextReaderViewModel.CursorPosition = update.CursorPosition;
+                IsTextDisplayed = true;
+            }
+            
+            if (update.ContainsImageUpdate && IsPhotoUpdateNew(update))
             {
                 ImageReaderViewModel.PointerPositionX = update.ImageCursorPositionX;
                 ImageReaderViewModel.PointerPositionY = update.ImageCursorPositionY;
