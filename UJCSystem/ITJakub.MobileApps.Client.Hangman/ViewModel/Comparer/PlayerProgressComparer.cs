@@ -9,8 +9,8 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel.Comparer
             if (y.LetterCount != x.LetterCount)
                 return y.LetterCount - x.LetterCount;
 
-            if (y.Lives != x.Lives)
-                return y.Lives - x.Lives;
+            if (y.LivesRemain != x.LivesRemain)
+                return y.LivesRemain - x.LivesRemain;
 
             var timeX = x.Time - x.FirstUpdateTime;
             var timeY = y.Time - y.FirstUpdateTime;

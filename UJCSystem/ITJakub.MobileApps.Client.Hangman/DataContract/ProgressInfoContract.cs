@@ -4,8 +4,14 @@ namespace ITJakub.MobileApps.Client.Hangman.DataContract
 {
     public class ProgressInfoContract
     {
-        [JsonProperty("Lives")]
-        public int Lives { get; set; }
+        [JsonProperty("HangmanCount")]
+        public int HangmanCount { get; set; }
+
+        [JsonProperty("LivesRemain")]
+        public int LivesRemain { get; set; }
+
+        [JsonProperty("WordCount")]
+        public int GuessedWordCount { get; set; }
 
         [JsonProperty("LetterCount")]
         public int LetterCount { get; set; }

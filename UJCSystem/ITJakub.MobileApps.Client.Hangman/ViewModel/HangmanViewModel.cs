@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Hangman.DataService;
-using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
@@ -13,14 +12,14 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private readonly IHangmanDataService m_dataService;
         private int m_lives;
         private bool m_opponentProgressVisible;
-        private bool m_guessHistoryVisible;
         private int m_guessedLetterCount;
         private bool m_isAppStopped;
+        private string m_currentHint;
+        private int m_guessedWordCount;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
             m_dataService = dataService;
-            GuessHistory = new ObservableCollection<GuessViewModel>();
             OpponentProgress = new ObservableCollection<ProgressInfoViewModel>();
             HangmanPictureViewModel = new HangmanPictureViewModel();
             WordViewModel = new WordViewModel();
@@ -29,9 +28,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
             KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
         }
-
-        public ObservableCollection<GuessViewModel> GuessHistory { get; set; }
-
+        
         public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
 
         public WordViewModel WordViewModel { get; set; }
@@ -63,6 +60,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public int GuessedWordCount
+        {
+            get { return m_guessedWordCount; }
+            set
+            {
+                m_guessedWordCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool OpponentProgressVisible
         {
             get { return m_opponentProgressVisible; }
@@ -73,18 +80,19 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public bool GuessHistoryVisible
+        public string CurrentHint
         {
-            get { return m_guessHistoryVisible; }
+            get { return m_currentHint; }
             set
             {
-                m_guessHistoryVisible = value;
+                m_currentHint = value;
                 RaisePropertyChanged();
             }
         }
 
         public override void InitializeCommunication()
         {
+            //TODO remove guesses and rename to GetTaskInfo
             m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
             {
                 if (exception != null)
@@ -93,7 +101,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     return;
                 }
 
-                ProcessNewLetters(guesses);
                 ProcessTaskInfo(taskInfo);
                 SetDataLoaded();
             });
@@ -112,13 +119,11 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public override void SetTask(string data)
         {
-            // TODO get correct application mode from method parameter
-            m_dataService.SetTaskAndGetConfiguration(data, GuessManager.VersusMode, (taskSettings, taskInfo) =>
+            m_dataService.SetTaskAndGetConfiguration(data, (taskSettings, taskInfo) =>
             {
                 if (taskSettings.SpecialLetters != null)
                     KeyboardViewModel.SetSpecialLetters(taskSettings.SpecialLetters);
 
-                GuessHistoryVisible = taskSettings.GuessHistoryVisible;
                 OpponentProgressVisible = taskSettings.OpponentProgressVisible;
                 ProcessTaskInfo(taskInfo);
             });
@@ -139,53 +144,30 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         {
             get { return new ActionViewModel[0]; }
         }
-
-        private void ProcessNewLetters(IEnumerable<GuessViewModel> guesses)
+        
+        private void ProcessTaskInfo(TaskProgressInfoViewModel taskProgressInfo)
         {
-            var wordIndex = 0;
-            var lastViewModel = GuessHistory.LastOrDefault();
-            if (lastViewModel != null)
-                wordIndex = lastViewModel.WordOrder;
+            WordViewModel.Word = taskProgressInfo.Word;
+            CurrentHint = taskProgressInfo.Hint;
+            Lives = taskProgressInfo.Lives;
+            GuessedLetterCount = taskProgressInfo.GuessedLetterCount;
+            GuessedWordCount = taskProgressInfo.GuessedWordCount;
 
-            foreach (var guessViewModel in guesses)
-            {
-                if (guessViewModel.WordOrder > wordIndex)
-                {
-                    GuessHistory.Add(new GuessViewModel
-                    {
-                        Letter = '-',
-                        WordOrder = wordIndex,
-                        Author = new UserInfo()
-                    });
-                    wordIndex = guessViewModel.WordOrder;
-                }
-
-                GuessHistory.Add(guessViewModel);
-                KeyboardViewModel.DeactivateKey(guessViewModel.Letter);
-            }
-        }
-
-        private void ProcessTaskInfo(TaskInfoViewModel taskInfo)
-        {
-            WordViewModel.Word = taskInfo.Word;
-            Lives = taskInfo.Lives;
-            GuessedLetterCount = taskInfo.GuessedLetterCount;
-
-            if (taskInfo.Win)
+            if (taskProgressInfo.Win)
             {
                 GameOverViewModel.Win = true;
             }
             else
             {
-                GameOverViewModel.Loss = m_isAppStopped || taskInfo.Lives == 0;
+                GameOverViewModel.Loss = m_isAppStopped || taskProgressInfo.Lives == 0;
             }
 
-            if (taskInfo.IsNewWord)
+            if (taskProgressInfo.IsNewWord)
             {
                 KeyboardViewModel.ReactivateAllKeys();
             }
         }
-
+        
         private void ProcessOpponentProgress(ICollection<ProgressInfoViewModel> progressUpdate)
         {
             foreach (var progressInfo in progressUpdate)
@@ -200,7 +182,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
                 if (viewModel != null)
                 {
-                    viewModel.Lives = progressInfo.Lives;
+                    viewModel.HangmanCount = progressInfo.HangmanCount;
+                    viewModel.LivesRemain = progressInfo.LivesRemain;
+                    viewModel.GuessedWordCount = progressInfo.GuessedWordCount;
                     viewModel.LetterCount = progressInfo.LetterCount;
                     viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;

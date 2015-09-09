@@ -8,7 +8,8 @@
     xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
     mc:Ignorable="d"
     d:DesignHeight="300"
-    d:DesignWidth="400">
+    d:DesignWidth="400"
+    DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -16,7 +17,7 @@
         <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
     </UserControl.Resources>
 
-    <ListView ItemsSource="{Binding PlayerRanking, Mode=TwoWay}"
+    <ListView ItemsSource="{Binding ItemsSource, Mode=TwoWay}"
               SelectionMode="None">
         <ListView.ItemTemplate>
             <DataTemplate>
@@ -31,19 +32,33 @@
                         <Image Source="../../Icon/olympic_medal-26.png"
                                Grid.Column="0"
                                Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <TextBlock Text="{Binding LetterCount}"
-                                   Grid.Column="1"
+                        <TextBlock Grid.Column="1"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Center"
                                    FontSize="16"
-                                   Margin="3,0,3,3" />
+                                   Margin="3,0,3,3">
+                            <Run Text="{Binding LetterCount}" />
+                            <Run Text="|" />
+                            <Run Text="{Binding GuessedWordCount}" />
+                        </TextBlock>
                     </Grid>
                     <StackPanel Orientation="Horizontal"
                                 Background="Red"
                                 Width="50"
                                 Margin="5,0,0,0">
+                        <Image Source="../../Icon/thriller_filled-26.png" />
+                        <TextBlock Text="{Binding HangmanCount}"
+                                   VerticalAlignment="Center"
+                                   Foreground="White"
+                                   FontSize="16"
+                                   Margin="3" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Background="Red"
+                                Width="50"
+                                Margin="5,0,0,0">
                         <Image Source="../../Icon/hearts-26.png" />
-                        <TextBlock Text="{Binding Lives}"
+                        <TextBlock Text="{Binding LivesRemain}"
                                    VerticalAlignment="Center"
                                    Foreground="White"
                                    FontSize="16"

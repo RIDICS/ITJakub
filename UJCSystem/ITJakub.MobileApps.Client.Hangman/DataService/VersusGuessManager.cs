@@ -33,13 +33,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             {
                 return new TaskSettingsViewModel
                 {
-                    GuessHistoryVisible = false,
                     OpponentProgressVisible = true
                 };
             }
         }
 
-        public override void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
+        public override void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback)
         {
             GetGuessHistory(callback);
         }
@@ -55,7 +54,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_pollingService.UnregisterForSynchronizedObjects(ProgressPollingInterval, ProcessNewProgressUpdate);
         }
 
-        public override void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback)
+        public override void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback)
         {
             var wordOrder = MyTask.WordOrder;
             MyTask.Guess(letter);
@@ -70,8 +69,13 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public override async void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
         {
             var specialLettersGenerator = new SpecialLettersGenerator();
-            var wordArray = answerList.Select(model => model.Answer.ToLower()).ToArray();
-            var specialLetters = specialLettersGenerator.GetSpecialLettersWithRandom(wordArray).ToArray();
+            var wordArray = answerList.Select(x => new HangmanTaskContract.WordContract
+            {
+                Answer = x.Answer,
+                Hint = x.Hint
+            }).ToArray();
+            var answerArray = wordArray.Select(x => x.Answer);
+            var specialLetters = specialLettersGenerator.GetSpecialLettersWithRandom(answerArray).ToArray();
 
             var taskContract = new HangmanTaskContract
             {
@@ -92,12 +96,14 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void SendProgressInfo(Action<TaskInfoViewModel, Exception> callback)
+        private async void SendProgressInfo(Action<TaskProgressInfoViewModel, Exception> callback)
         {
             var progressUpdate = new ProgressInfoContract
             {
                 LetterCount = MyTask.GuessedLetterCount,
-                Lives = MyTask.Lives,
+                GuessedWordCount = MyTask.WordOrder,
+                HangmanCount = MyTask.HangmanCount,
+                LivesRemain = MyTask.LivesRemain,
                 Win = MyTask.Win
             };
             var serializedProgressInfo = JsonConvert.SerializeObject(progressUpdate);
@@ -112,7 +118,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void SendLetterInfo(char letter, int wordOrder, Action<TaskInfoViewModel, Exception> callback)
+        private async void SendLetterInfo(char letter, int wordOrder, Action<TaskProgressInfoViewModel, Exception> callback)
         {
             var guessLetterContract = new GuessLetterContract
             {
@@ -131,7 +137,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void GetGuessHistory(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
+        private async void GetGuessHistory(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback)
         {
             try
             {
@@ -180,8 +186,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 var progressUpdate = JsonConvert.DeserializeObject<ProgressInfoContract>(objectDetails.Data);
                 var viewModel = new ProgressInfoViewModel
                 {
+                    GuessedWordCount = progressUpdate.GuessedWordCount,
                     LetterCount = progressUpdate.LetterCount,
-                    Lives = progressUpdate.Lives,
+                    HangmanCount = progressUpdate.HangmanCount,
+                    LivesRemain = progressUpdate.LivesRemain,
                     Win = progressUpdate.Win,
                     UserInfo = objectDetails.Author,
                     Time = objectDetails.CreateTime

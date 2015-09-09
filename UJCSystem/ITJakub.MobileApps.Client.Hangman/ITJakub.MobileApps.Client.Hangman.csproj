@@ -114,7 +114,6 @@
     <Compile Include="DataContract\GuessLetterContract.cs" />
     <Compile Include="DataContract\HangmanTaskContract.cs" />
     <Compile Include="DataContract\ProgressInfoContract.cs" />
-    <Compile Include="DataService\CooperationGuessManager.cs" />
     <Compile Include="DataService\GuessManager.cs" />
     <Compile Include="DataService\HangmanDataService.cs" />
     <Compile Include="DataService\HangmanTask.cs" />
@@ -130,13 +129,14 @@
     <Compile Include="ViewModel\Comparer\PlayerProgressComparer.cs" />
     <Compile Include="ViewModel\ProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskLevelDetailViewModel.cs" />
-    <Compile Include="ViewModel\TaskInfoViewModel.cs" />
+    <Compile Include="ViewModel\TaskProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\GuessViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
     <Compile Include="View\Control\ResultTableControl.xaml.cs">
       <DependentUpon>ResultTableControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Converter\GuessedWordsTextConverter.cs" />
     <Compile Include="View\Converter\TotalTimeConverter.cs" />
     <Compile Include="View\Converter\WinToColorConverter.cs" />
     <Compile Include="View\Control\GameOverControl.xaml.cs">
@@ -234,10 +234,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Icon\checkmark-26.png" />
     <Content Include="Icon\hearts-26.png" />
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\olympic_medal-26.png" />
     <Content Include="Icon\scythe-128.png" />
+    <Content Include="Icon\thriller_filled-26.png" />
     <Content Include="Icon\time-26.png" />
   </ItemGroup>
   <ItemGroup>

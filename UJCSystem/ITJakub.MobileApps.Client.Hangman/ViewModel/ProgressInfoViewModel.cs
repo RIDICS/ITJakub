@@ -6,23 +6,45 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class ProgressInfoViewModel : ViewModelBase
     {
-        private int m_lives;
+        private int m_livesRemain;
         private int m_letterCount;
         private bool m_win;
         private DateTime m_time;
+        private int m_guessedWordCount;
+        private int m_hangmanCount;
 
         public ProgressInfoViewModel()
         {
             PictureViewModel = new HangmanPictureViewModel();
         }
 
-        public int Lives
+        public int GuessedWordCount
         {
-            get { return m_lives; }
+            get { return m_guessedWordCount; }
             set
             {
-                m_lives = value;
-                PictureViewModel.Lives = m_lives;
+                m_guessedWordCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int LivesRemain
+        {
+            get { return m_livesRemain; }
+            set
+            {
+                m_livesRemain = value;
+                PictureViewModel.Lives = m_livesRemain;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int HangmanCount
+        {
+            get { return m_hangmanCount; }
+            set
+            {
+                m_hangmanCount = value;
                 RaisePropertyChanged();
             }
         }

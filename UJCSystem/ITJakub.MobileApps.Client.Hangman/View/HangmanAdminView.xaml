@@ -63,7 +63,7 @@
                                 <Run Text="(písmen:" /><Run Text="{Binding LetterCount}" /><Run Text=")" />
                                 <LineBreak />
                                 <Run Text="Zbývá životů:" />
-                                <Run Text="{Binding Lives}" />
+                                <Run Text="{Binding LivesRemain}" />
                             </TextBlock>
                             
                             <control:WordControl Grid.Row="1"

@@ -9,11 +9,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     public interface IHangmanDataService
     {
         IErrorService ErrorService { get; }
-        void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback);
+        void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback);
         void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
         void StopPolling();
-        void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback);
-        void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback);
+        void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback);
+        void SetTaskAndGetConfiguration(string data, Action<TaskSettingsViewModel, TaskProgressInfoViewModel> callback);
         void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
         void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback);
     }
@@ -21,14 +21,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     public class HangmanDataService : IHangmanDataService
     {
         private readonly ISynchronizeCommunication m_applicationCommunication;
-        private GuessManager m_guessManager;
+        private readonly GuessManager m_guessManager;
 
         public HangmanDataService(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
-
-            // manager with default mode
-            m_guessManager = GuessManager.GetInstance(string.Empty, applicationCommunication);
+            m_guessManager = new VersusGuessManager(applicationCommunication);
         }
 
         public IErrorService ErrorService
@@ -36,7 +34,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             get { return m_applicationCommunication.ErrorService; }
         }
 
-        public void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskInfoViewModel, Exception> callback)
+        public void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback)
         {
             m_guessManager.StartPollingLetters(callback);
         }
@@ -51,14 +49,13 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             m_guessManager.StopPolling();
         }
 
-        public void GuessLetter(char letter, Action<TaskInfoViewModel, Exception> callback)
+        public void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback)
         {
             m_guessManager.GuessLetter(letter, callback);
         }
 
-        public void SetTaskAndGetConfiguration(string data, string appMode, Action<TaskSettingsViewModel, TaskInfoViewModel> callback)
+        public void SetTaskAndGetConfiguration(string data, Action<TaskSettingsViewModel, TaskProgressInfoViewModel> callback)
         {
-            m_guessManager = GuessManager.GetInstance(appMode, m_applicationCommunication);
             m_guessManager.SetTask(data, callback);
         }
 
