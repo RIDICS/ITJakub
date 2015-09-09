@@ -96,4 +96,15 @@
 		</xdb:store>
 		
 	</target>
+
+	<target name="clean-data-collection">
+		<echo message="Removing collection data" />
+		<xdb:remove xmlns:xdb="http://exist-db.org/ant"
+			uri="${uri}" collection="data"/>
+	
+	<echo message="Creating collection data" />
+		<xdb:create xmlns:xdb="http://exist-db.org/ant"
+		uri="${uri}" collection="data"/>
+</target>
+
 </project>

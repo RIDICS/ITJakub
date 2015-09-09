@@ -416,7 +416,10 @@ declare function search:get-document-search-hits-by-fragments($document as node(
 								</PageResultContext>
 (:	return $hits:)
 	
-		let $selected-matches := subsequence($all-matches, $kwic-start, $kwic-count)
+		let $selected-matches := if ($kwic-count = 0) then
+				subsequence($all-matches, $kwic-start)
+			else
+				subsequence($all-matches, $kwic-start, $kwic-count)
 		
 		return 
 			(<Results xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
@@ -424,6 +427,64 @@ declare function search:get-document-search-hits-by-fragments($document as node(
 			</Results>,
 			<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{count($all-matches)} </TotalHitCount>)
 	
+	} ;
+	
+	declare function search:get-document-search-matches-by-fragments($document as node()?, 
+	$queries as item()?, 
+	$kwic-start as xs:double,
+	$kwic-count as xs:double,
+	$kwic-context-length as xs:int) as element()* {
+	
+	let $root := $document
+		let $document-id := string($document/tei:TEI/@n)
+		let $version-id := substring-after($document/tei:TEI/@change, '#')
+		let $uri := document-uri($root)
+		let $collection-path := substring-before($uri, $version-id) || $version-id
+		let $collection := collection($collection-path)
+		let $hits := search:get-document-fragments-with-hits($collection, $queries)
+		let $kwic-options := <config width="{$kwic-context-length}" />
+		let $match-position := 0
+	
+	
+		let $all-matches :=
+			for $hit in $hits
+				let $pb := $hit//tei:pb[1]
+				let $expanded := kwic:expand($hit)
+				let $matches := kwic:get-matches($hit)
+				let $matches-count := count($matches)
+				let $match-position := $match-position + $matches-count
+				let $summary := kwic:summarize($hit, $kwic-options)
+				let $content := search:get-kwic-summary-as-xml-content-structure($summary)
+(:			for $match in $matches:)
+(:		return <result> {( <count>{$matches-count}</count>, <position>{$match-position}</position>, $matches)} </result>:)
+				for $content-item in $content
+				let $verse := 
+				<VerseResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								<VerseXmlId>{string($pb/@xml:id)}</VerseXmlId>
+								<VerseName>{string('17')}</VerseName>
+								</VerseResultContext>
+				return (<PageResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								{ ($content-item)}
+								<PageName>{string($pb/@n)}</PageName>
+								<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
+								</PageResultContext>,
+								$verse)
+(:	return $hits:)
+	
+(:	<VerseXmlId>{string($pb/l[1]/position())}</VerseXmlId>
+								<VerseName>{string($pb/l[1]/@xml:id)}</VerseName>:)
+		let $selected-matches := if ($kwic-count = 0) then
+				subsequence($all-matches, $kwic-start)
+			else
+				subsequence($all-matches, $kwic-start, $kwic-count)
+		
+		return
+			$selected-matches
+			(:(<Results xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+			{$selected-matches}
+			</Results>,
+			<TotalHitCount xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{count($all-matches)} </TotalHitCount>)
+:)	
 	} ;
 
 declare function search:get-hits-from-fragments() as element()* {
@@ -587,6 +648,13 @@ $result-start as xs:double, $result-count as xs:double) as item()* {
 } ;
 
 
+(:declare function search:get-documents-search-hits($collection as node()*, 
+$queries as element()?) {
+
+	let $hits := search:get-hits-from-fragments()
+
+}:)
+
 declare function search:get-document-fragment-with-matches($fragment as node()*, $queries as element()?) {
 	let $fulltext-query := $queries/query[@type='Fulltext']
 	let $matches := $fragment/tei:TEI//(tei:l | tei:p) [ft:query(., $fulltext-query, $search:query-options)]
@@ -601,6 +669,13 @@ declare function search:get-queries-from-search-criteria-string($search-criteria
 	let $query-criteria := util:parse($search-criteria) (: ve vyšších verzích parse-xml :)
 	return search:get-queries-from-search-criteria($query-criteria)
 } ;
+
+(:~ spočíta počet výskytů nalezených dokladů ve vyhledaných elementech :)
+declare function search:get-match-count($hits as node()*) as xs:int {
+	let $hits-expanded := util:expand($hits)
+	return count($hits-expanded//exist:match)
+} ;
+
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
 declare function search:get-queries-from-search-criteria($search-criteria  as node()*) as element() {
 	let $xslt :=

@@ -12,8 +12,12 @@ declare namespace i="http://www.w3.org/2001/XMLSchema-instance";
 declare namespace b="http://schemas.microsoft.com/2003/10/Serialization/Arrays";
 declare namespace sc="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria";
 
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 
 declare option exist:serialize "highlight-matches=elements";
+
+
+declare option output:cdata-section-elements "*:Notes *:Before *:After *:string";
 
 	
 	declare function local:get-search-result-for-corpus($result-documents as node()*, $queries as element(), 
@@ -25,19 +29,11 @@ let $all-hits :=
 for $document in $result-documents
 	let $hits := search:get-document-search-matches-by-fragments($document, $queries, 1, 0, $kwic-context-length)
 	for $hit at $pos in $hits
-		return <SearchResultContract>
+		return <CorpusSearchResultContract>
 					<BookXmlId>{string($document/tei:TEI/@n)}</BookXmlId>
-					{
-						if ($pos mod 3 eq 0) then
-						<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-							<a:string><span class="superscript">{$pos}</span> poznámka textová</a:string>
-							<a:string><span class="superscript">ac</span> <span class="italic">cestu</span>] cěstú </a:string>
-						</Notes>
-						else ()
-					}
 					{$hit}
 					<VersionXmlId>{$document/tei:TEI/substring-after(@change, '#')}</VersionXmlId>
-				</SearchResultContract>
+				</CorpusSearchResultContract>
 	return if ($kwic-count = 0) then
 			subsequence($all-hits, $kwic-start)
 		else
@@ -47,6 +43,23 @@ for $document in $result-documents
 </SearchResults>
 </CorpusSearchResultContractList>
 	} ;
+	
+	declare function local:make-cdata($node-set  as node()*) as xs:string {
+		"<" || "![CDATA[" ||  $node-set || "]]>"
+	};
+	
+	declare function local:make-notes() as node()* 
+	{
+						if ($pos mod 3 eq 0) then
+						<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+							<a:string>{util:serialize(<div><![CDATA[<span><b></span>]]></div>, 'method=xml')}</a:string>
+							<a:string>{util:serialize(<span><span class="superscript">{$pos}</span> poznámka textová</span>, 'method=xml')} </a:string>
+							<a:string>{util:serialize(<span><span class="superscript">{$pos}</span> poznámka textová</span>, 'method=xml')} </a:string>
+							<a:string><![CDATA[<span class="superscript">ac</span> <span class="italic">cestu</span>] cěstú]]></a:string>
+						</Notes>
+						else ()
+					
+	};
 
 
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
