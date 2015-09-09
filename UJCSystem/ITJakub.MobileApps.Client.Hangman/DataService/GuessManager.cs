@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using ITJakub.MobileApps.Client.Hangman.DataContract;
 using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using Newtonsoft.Json;
@@ -40,6 +39,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 Word = MyTask.GuessedLetters,
                 Hint = MyTask.CurrentHint,
                 Lives = MyTask.LivesRemain,
+                HangmanCount = MyTask.HangmanCount,
                 Win = MyTask.Win,
                 GuessedWordCount = MyTask.WordOrder,
                 GuessedLetterCount = MyTask.GuessedLetterCount,

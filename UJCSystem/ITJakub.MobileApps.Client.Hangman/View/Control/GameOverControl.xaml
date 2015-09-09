@@ -54,7 +54,7 @@
             <control:ResultTableControl
                       Grid.Row="1"
                       Margin="10,30,10,10"
-                      ItemsSource="{Binding PlayerRanking}"
+                      PlayerRanking="{Binding PlayerRanking}"
                       Visibility="{Binding ShowTable, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Grid>

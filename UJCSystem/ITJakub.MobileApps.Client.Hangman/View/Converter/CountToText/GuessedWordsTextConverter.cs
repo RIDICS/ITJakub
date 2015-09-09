@@ -1,7 +1,7 @@
 using System;
 using Windows.UI.Xaml.Data;
 
-namespace ITJakub.MobileApps.Client.Hangman.View.Converter
+namespace ITJakub.MobileApps.Client.Hangman.View.Converter.CountToText
 {
     public class GuessedWordsTextConverter : IValueConverter
     {

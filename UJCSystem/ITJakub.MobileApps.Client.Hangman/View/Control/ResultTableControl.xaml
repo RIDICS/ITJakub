@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    d:DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -17,70 +17,90 @@
         <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
     </UserControl.Resources>
 
-    <ListView ItemsSource="{Binding ItemsSource, Mode=TwoWay}"
+    <ListView ItemsSource="{Binding PlayerRanking, Mode=TwoWay}"
               SelectionMode="None">
+        <ListView.ItemContainerStyle>
+            <Style TargetType="ListViewItem">
+                <Setter Property="MinHeight" Value="38" />
+                <Setter Property="Padding" Value="0,0,0,0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+        </ListView.ItemContainerStyle>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <Grid Background="LightGray"
-                          MinWidth="45">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal">
+                        <Grid Background="LightGray"
+                              MinWidth="45">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                        <Image Source="../../Icon/olympic_medal-26.png"
-                               Grid.Column="0"
-                               Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                        <TextBlock Grid.Column="1"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"
-                                   FontSize="16"
-                                   Margin="3,0,3,3">
-                            <Run Text="{Binding LetterCount}" />
-                            <Run Text="|" />
-                            <Run Text="{Binding GuessedWordCount}" />
-                        </TextBlock>
-                    </Grid>
-                    <StackPanel Orientation="Horizontal"
-                                Background="Red"
-                                Width="50"
-                                Margin="5,0,0,0">
-                        <Image Source="../../Icon/thriller_filled-26.png" />
-                        <TextBlock Text="{Binding HangmanCount}"
-                                   VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontSize="16"
-                                   Margin="3" />
+                            <Image Source="../../Icon/olympic_medal-26.png"
+                                   Grid.Column="0"
+                                   Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                            <TextBlock Grid.Column="1"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       Margin="3,0,3,3">
+                                <Run Text="{Binding LetterCount}" />
+                                <Run Text="|" />
+                                <Run Text="{Binding GuessedWordCount}" />
+                            </TextBlock>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal"
+                                    Background="Red"
+                                    Width="50"
+                                    Margin="5,0,0,0">
+                            <Image Source="../../Icon/thriller_filled-26.png" />
+                            <TextBlock Text="{Binding HangmanCount}"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       Margin="3" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Background="Red"
+                                    Width="50"
+                                    Margin="5,0,0,0">
+                            <Image Source="../../Icon/hearts-26.png" />
+                            <TextBlock Text="{Binding LivesRemain}"
+                                       VerticalAlignment="Center"
+                                       Foreground="White"
+                                       FontSize="16"
+                                       Margin="3" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    Background="LightBlue"
+                                    Margin="5,0,0,0">
+                            <Image Source="../../Icon/time-26.png" />
+                            <TextBlock Text="{Binding Converter={StaticResource TotalTimeConverter}}"
+                                       VerticalAlignment="Center"
+                                       FontSize="16"
+                                       Margin="3" />
+                        </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                Background="Red"
-                                Width="50"
-                                Margin="5,0,0,0">
-                        <Image Source="../../Icon/hearts-26.png" />
-                        <TextBlock Text="{Binding LivesRemain}"
-                                   VerticalAlignment="Center"
-                                   Foreground="White"
-                                   FontSize="16"
-                                   Margin="3" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                Background="LightBlue"
-                                Margin="5,0,0,0">
-                        <Image Source="../../Icon/time-26.png" />
-                        <TextBlock Text="{Binding Converter={StaticResource TotalTimeConverter}}"
-                                   VerticalAlignment="Center"
-                                   FontSize="16"
-                                   Margin="3" />
-                    </StackPanel>
-                    <TextBlock FontSize="16"
+                    
+                    <TextBlock Grid.Column="1"
+                               FontSize="16"
                                VerticalAlignment="Center"
                                Margin="5,0,0,0"
+                               TextWrapping="Wrap"
+                               MaxLines="2"
+                               TextTrimming="WordEllipsis"
                                FontWeight="{Binding UserInfo.IsMe, Converter={StaticResource HighlightMeConverter}}">
                         <Run Text="{Binding UserInfo.FirstName}" />
                         <Run Text="{Binding UserInfo.LastName}" />
                     </TextBlock>
-                </StackPanel>
+                </Grid>
             </DataTemplate>
         </ListView.ItemTemplate>
     </ListView>

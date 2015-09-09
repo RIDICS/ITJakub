@@ -136,13 +136,14 @@
     <Compile Include="View\Control\ResultTableControl.xaml.cs">
       <DependentUpon>ResultTableControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Converter\GuessedWordsTextConverter.cs" />
+    <Compile Include="View\Converter\CountToText\GuessedWordsTextConverter.cs" />
+    <Compile Include="View\Converter\CountToText\HangmanCountTextConverter.cs" />
     <Compile Include="View\Converter\TotalTimeConverter.cs" />
     <Compile Include="View\Converter\WinToColorConverter.cs" />
     <Compile Include="View\Control\GameOverControl.xaml.cs">
       <DependentUpon>GameOverControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Converter\GuessedLettersTextConverter.cs" />
+    <Compile Include="View\Converter\CountToText\GuessedLettersTextConverter.cs" />
     <Compile Include="View\HangmanAdminView.xaml.cs">
       <DependentUpon>HangmanAdminView.xaml</DependentUpon>
     </Compile>

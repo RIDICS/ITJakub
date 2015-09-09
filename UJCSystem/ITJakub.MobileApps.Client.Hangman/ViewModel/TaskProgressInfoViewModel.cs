@@ -5,6 +5,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public string Word { get; set; }
         public string Hint { get; set; }
         public int Lives { get; set; }
+        public int HangmanCount { get; set; }
         public bool Win { get; set; }
         public int GuessedWordCount { get; set; }
         public int GuessedLetterCount { get; set; }

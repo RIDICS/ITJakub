@@ -9,6 +9,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel.Comparer
             if (y.LetterCount != x.LetterCount)
                 return y.LetterCount - x.LetterCount;
 
+            if (y.HangmanCount != x.HangmanCount)
+                return x.HangmanCount - y.HangmanCount;
+
             if (y.LivesRemain != x.LivesRemain)
                 return y.LivesRemain - x.LivesRemain;
 

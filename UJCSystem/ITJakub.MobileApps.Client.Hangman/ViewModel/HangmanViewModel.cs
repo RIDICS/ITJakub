@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_isAppStopped;
         private string m_currentHint;
         private int m_guessedWordCount;
+        private int m_hangmanCount;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -47,6 +48,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 m_lives = value;
                 RaisePropertyChanged();
                 HangmanPictureViewModel.Lives = m_lives;
+            }
+        }
+
+        public int HangmanCount
+        {
+            get { return m_hangmanCount; }
+            set
+            {
+                m_hangmanCount = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -150,6 +161,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             WordViewModel.Word = taskProgressInfo.Word;
             CurrentHint = taskProgressInfo.Hint;
             Lives = taskProgressInfo.Lives;
+            HangmanCount = taskProgressInfo.HangmanCount;
             GuessedLetterCount = taskProgressInfo.GuessedLetterCount;
             GuessedWordCount = taskProgressInfo.GuessedWordCount;
 
