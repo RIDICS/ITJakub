@@ -38,9 +38,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        public override void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback)
+        public override void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
         {
-            GetGuessHistory(callback);
+            GetAndProcessGuessHistory(callback);
         }
 
         public override void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback)
@@ -137,38 +137,28 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void GetGuessHistory(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback)
+        private async void GetAndProcessGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
         {
             try
             {
                 var result = await m_synchronizeCommunication.GetObjectsAsync(ApplicationType.Hangman, new DateTime(1970, 1, 1), LetterObjectType);
                 var myObjects = result.Where(details => details.Author.IsMe);
-
-                var list = new ObservableCollection<GuessViewModel>();
-
+                
                 foreach (var details in myObjects)
                 {
                     var guessLetterContract = JsonConvert.DeserializeObject<GuessLetterContract>(details.Data);
                     MyTask.Guess(guessLetterContract);
 
-                    list.Add(new GuessViewModel
-                    {
-                        Author = details.Author,
-                        Letter = Char.ToUpper(guessLetterContract.Letter),
-                        WordOrder = guessLetterContract.WordOrder
-                    });
-
                     if (MyTask.IsNewWord)
                     {
-                        callback(list, GetCurrentTaskInfo(), null);
-                        list = new ObservableCollection<GuessViewModel>();
+                        callback(GetCurrentTaskInfo(), null);
                     }
                 }
-                callback(list, GetCurrentTaskInfo(), null);
+                callback(GetCurrentTaskInfo(), null);
             }
             catch (ClientCommunicationException exception)
             {
-                callback(null, null, exception);
+                callback(null, exception);
             }
         }
 

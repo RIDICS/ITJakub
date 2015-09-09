@@ -20,7 +20,7 @@
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="140"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
@@ -31,27 +31,24 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Margin="39,59,39,0"
-                    Command="{Binding GoBackCommand}"
+            <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle"
-                       Text="Náhled"
+            <TextBlock Text="Náhled"
                        Style="{StaticResource HeaderTextBlockStyle}"
                        Grid.Column="1"
                        IsHitTestVisible="false"
                        TextWrapping="NoWrap"
-                       VerticalAlignment="Bottom"
-                       Margin="0,0,30,40"/>
-
+                       VerticalAlignment="Center"/>
             
             <TextBlock Grid.Column="2"
                        Style="{StaticResource SubheaderTextBlockStyle}"
                        VerticalAlignment="Center"
-                       Margin="0,0,0,0">
+                       Margin="40,-8,0,0">
                 <Run>Aplikace:</Run>
                 <Run Text="{Binding AppName}" />
                 <LineBreak />

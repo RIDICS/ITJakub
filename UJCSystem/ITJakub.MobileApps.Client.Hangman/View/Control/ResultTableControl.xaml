@@ -21,21 +21,22 @@
               SelectionMode="None">
         <ListView.ItemContainerStyle>
             <Style TargetType="ListViewItem">
-                <Setter Property="MinHeight" Value="38" />
+                <Setter Property="MinHeight" Value="34" />
                 <Setter Property="Padding" Value="0,0,0,0" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             </Style>
         </ListView.ItemContainerStyle>
         <ListView.ItemTemplate>
             <DataTemplate>
-                <Grid>
+                <Grid MinHeight="40">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     
                     <StackPanel Grid.Column="0"
-                                Orientation="Horizontal">
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
                         <Grid Background="LightGray"
                               MinWidth="45">
                             <Grid.ColumnDefinitions>

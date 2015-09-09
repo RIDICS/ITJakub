@@ -28,9 +28,18 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public override void InitializeCommunication()
         {
-            
-        }
+            m_dataService.StartPollingProgress((progressList, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
+                    return;
+                }
 
+                ProcessUserProgress(progressList);
+            });
+        }
+        
         public override void UpdateGroupMembers(IEnumerable<UserInfo> members)
         {
             foreach (var memberInfo in members.Where(x => !m_memberProgress.ContainsKey(x.Id)))
@@ -43,6 +52,38 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 PlayerRanking.Add(newProgressInfo);
             }
 
+            SortPlayers();
+        }
+
+        private void ProcessUserProgress(ObservableCollection<ProgressInfoViewModel> progressList)
+        {
+            foreach (var progressInfo in progressList)
+            {
+                ProgressInfoViewModel viewModel;
+                if (m_memberProgress.TryGetValue(progressInfo.UserInfo.Id, out viewModel))
+                {
+                    viewModel.HangmanCount = progressInfo.HangmanCount;
+                    viewModel.LivesRemain = progressInfo.LivesRemain;
+                    viewModel.GuessedWordCount = progressInfo.GuessedWordCount;
+                    viewModel.LetterCount = progressInfo.LetterCount;
+                    viewModel.Win = progressInfo.Win;
+                    viewModel.Time = progressInfo.Time;
+                }
+                else
+                {
+                    progressInfo.FirstUpdateTime = progressInfo.Time;
+                    PlayerRanking.Add(progressInfo);
+                    m_memberProgress.Add(progressInfo.UserInfo.Id, progressInfo);
+                }
+            }
+            if (progressList.Count > 0)
+            {
+                SortPlayers();
+            }
+        }
+
+        private void SortPlayers()
+        {
             PlayerRanking = new ObservableCollection<ProgressInfoViewModel>(PlayerRanking.OrderBy(x => x, new PlayerProgressComparer()));
         }
 

@@ -13,7 +13,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public abstract TaskSettingsViewModel TaskSettings { get; }
 
-        public abstract void StartPollingLetters(Action<ObservableCollection<GuessViewModel>, TaskProgressInfoViewModel, Exception> callback);
+        public abstract void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback);
 
         public abstract void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
 

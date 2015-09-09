@@ -103,8 +103,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public override void InitializeCommunication()
         {
-            //TODO remove guesses and rename to GetTaskInfo
-            m_dataService.StartPollingLetters((guesses, taskInfo, exception) =>
+            m_dataService.GetTaskInfoWithGuessHistory((taskInfo, exception) =>
             {
                 if (exception != null)
                 {
