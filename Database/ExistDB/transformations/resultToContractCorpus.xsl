@@ -5,12 +5,13 @@
                 <xd:b>Created on:</xd:b> Aug 27, 2015</xd:p>
             <xd:p>
                 <xd:b>Author:</xd:b> lehecka</xd:p>
-            <xd:p/>
+            <xd:p>Transformace interního formátu s korpusovými výskty do podoby kontraktu</xd:p>
         </xd:desc>
     </xd:doc>
 	
 	
-    <xsl:output cdata-section-elements="a:string" method="xml"/>
+    <xsl:strip-space elements="*"/>
+    <xsl:output method="xml" indent="yes"/>
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -19,37 +20,21 @@
             <xsl:apply-templates select="node()|@*"/>
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="a:string">
-        <xsl:copy>
-            <xsl:apply-templates select="@*"/>
-            <xsl:apply-templates mode="serialize"/>
-        </xsl:copy>
+    <xsl:template match="c:BookXmlId">
+        <xsl:copy-of select="parent::c:CorpusSearchResultContract/c:BibleVerseResultContext"/>
+        <xsl:copy-of select="*"/>
     </xsl:template>
-    <xsl:template match="*" mode="serialize">
-        <xsl:text>&lt;</xsl:text>
-        <xsl:value-of select="name()"/>
-        <xsl:apply-templates select="@*" mode="serialize"/>
-        <xsl:choose>
-            <xsl:when test="node()">
-                <xsl:text>&gt;</xsl:text>
-                <xsl:apply-templates mode="serialize"/>
-                <xsl:text>&lt;/</xsl:text>
-                <xsl:value-of select="name()"/>
-                <xsl:text>&gt;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text> /&gt;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:template match="c:HitResultContext">
+        <xsl:copy-of select="c:Notes"/>
+        <PageResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+            <xsl:copy-of select="@*"/>
+            <ContextStructure>
+                <xsl:apply-templates select="*"/>
+            </ContextStructure>
+            <xsl:copy-of select="parent::c:CorpusSearchResultContract/c:PageResultContext/*"/>
+        </PageResultContext>
     </xsl:template>
-    <xsl:template match="@*" mode="serialize">
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="name()"/>
-        <xsl:text>="</xsl:text>
-        <xsl:value-of select="."/>
-        <xsl:text>"</xsl:text>
-    </xsl:template>
-    <xsl:template match="text()" mode="serialize">
-        <xsl:value-of select="."/>
-    </xsl:template>
+    <xsl:template match="c:PageResultContext"/>
+    <xsl:template match="c:Notes"/>
+    <xsl:template match="c:BibleVerseResultContext"/>
 </xsl:stylesheet>
