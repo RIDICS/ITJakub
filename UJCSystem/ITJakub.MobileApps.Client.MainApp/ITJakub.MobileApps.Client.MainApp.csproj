@@ -107,7 +107,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
       <DependentUpon>AdminHostView.xaml</DependentUpon>
     </Compile>

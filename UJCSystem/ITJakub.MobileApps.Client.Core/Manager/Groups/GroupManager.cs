@@ -146,10 +146,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             var userId = m_authManager.GetCurrentUserId();
+            
             if (!userId.HasValue)
             {
                 throw new ArgumentException("No logged user");
             }
+            if (m_authManager.UserLoginInfo == null || m_authManager.UserLoginInfo.UserRole != UserRoleContract.Teacher)
+                return;
 
             Task.Factory.StartNew(() =>
             {

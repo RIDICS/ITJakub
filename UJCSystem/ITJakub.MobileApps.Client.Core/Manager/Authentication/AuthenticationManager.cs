@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly MobileAppsServiceClient m_serviceClient;
 
-        private UserLoginSkeleton UserLoginInfo { get; set; }
+        public UserLoginSkeleton UserLoginInfo { get; set; }
 
         public AuthenticationManager(IUnityContainer container)
         {
