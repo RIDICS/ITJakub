@@ -33,6 +33,21 @@ declare function coll:getDocumentMetadata($document-id as xs:string)
     return $document[1] (: get first version :)
 };
 
+declare function coll:get-latest-document-version-metadata($document-id as xs:string)
+	as node()? {
+		let $document-id-string := util:unescape-uri($document-id,"UTF-8")
+	  let $collection := collection($coll:collection-path || $document-id)
+	  
+	  
+    let $documents := $collection//tei:TEI[@n eq $document-id-string]
+    
+    let $documents := for $document in $documents
+    	order by $document[count(/tei:teiHeader/tei:revisionDesc/tei:change)] (: get first version :)
+    	return $document 
+    return $documents[1]
+
+};
+
 declare function coll:getDocumentVersionMetadata($document-id as xs:string, $document-version-id as xs:string)
     as node() { 
     let $collection := collection($coll:collection-path)
