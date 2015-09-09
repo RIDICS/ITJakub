@@ -19,10 +19,19 @@ class CorpusList {
     }
 
     create() {
-        var disabledOptions = new Array<SearchTypeEnum>();
+        var enabledOptions = new Array<SearchTypeEnum>();
+        enabledOptions.push(SearchTypeEnum.Title);
+        enabledOptions.push(SearchTypeEnum.Author);
+        enabledOptions.push(SearchTypeEnum.Editor);
+        enabledOptions.push(SearchTypeEnum.Dating);
+        enabledOptions.push(SearchTypeEnum.Fulltext);
+        enabledOptions.push(SearchTypeEnum.Heading);
+        enabledOptions.push(SearchTypeEnum.Sentence);
+        enabledOptions.push(SearchTypeEnum.Term);
+        enabledOptions.push(SearchTypeEnum.TokenDistance);
 
         this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) });
-        this.search.makeSearch(disabledOptions);
+        this.search.makeSearch(enabledOptions);
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "BohemianTextBank/BohemianTextBank");
         this.typeaheadSearchBox.addDataSet("Title", "Název");

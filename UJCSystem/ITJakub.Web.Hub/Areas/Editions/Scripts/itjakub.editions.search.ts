@@ -114,13 +114,18 @@ $(document).ready(() => {
         });
     }
 
-    //var disabledOptions = new Array<SearchTypeEnum>();
-    //disabledOptions.push(SearchTypeEnum.Headword);
-    //disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    //disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Title);
+    enabledOptions.push(SearchTypeEnum.Author);
+    enabledOptions.push(SearchTypeEnum.Editor);
+    enabledOptions.push(SearchTypeEnum.Dating);
+    enabledOptions.push(SearchTypeEnum.Fulltext);
+    enabledOptions.push(SearchTypeEnum.TokenDistance);
+    enabledOptions.push(SearchTypeEnum.Heading);
+    enabledOptions.push(SearchTypeEnum.Sentence);
 
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
-    search.makeSearch();
+    search.makeSearch(enabledOptions);
 
     var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
