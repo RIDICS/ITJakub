@@ -2,6 +2,7 @@ xquery version "3.0";
 import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 import module namespace coll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
+import module namespace trans = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/transformation" at "../modules/transformation.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
@@ -29,30 +30,105 @@ declare function local:get-matches-mock($hits as node()*,
 	let $kwic-options := <config width="{$kwic-context-length}" />
 	
 	let $relevant-hits := subsequence($hits, $kwic-start, $kwic-count)
-	
-	for $hit in $relevant-hits
+	return 
+	<CorpusSearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"
+		xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+		<SearchResults> {
+	for $hit at $position in $relevant-hits
 		let $xml-id := string($hit/ancestor::tei:TEI/@n)
 		let $version-id := substring-after($hit/ancestor::tei:TEI/@change, '#')
 		
 		let $matches := kwic:summarize($hit, $kwic-options)
 			return 
-				<Hit>
-					<XmlId>{$xml-id}</XmlId>
-					<VersionId>{$version-id}</VersionId>
+				<CorpusSearchResultContract  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+					<BookXmlId>{$xml-id}</BookXmlId>
 					{for $match in $matches[1]
-						return 	<Context>{local:prepare-match($match)}</Context>
+						let $pb := local:prepare-pb($hit)
+						let $l := local:prepare-l($hit)
+						let $bible := local:prepare-bible($hit)
+						(:return 	(<Context>{local:prepare-match($match)}</Context>, $pb, $l):)
+						
+						return if($position mod 3 eq 0) then
+									local:get-match-with-notes-mock($match, $pb, $l, $bible)
+								else
+								(<HitResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								{local:prepare-match($match)}</HitResultContext>, $pb, $l, $bible)
 					}
-				</Hit>
+					<VersionId>{$version-id}</VersionId>
+				</CorpusSearchResultContract>
+		}
+		</SearchResults>
+		</CorpusSearchResultContractList>
 	};
+	
+	declare function local:get-match-with-notes-mock($match, $pb, $l, $bible) {
+		let $new-match := 
+		<HitResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+			<After>tvój. Protož<span class="superscript">1</span> konečně pravím to, že nikakež ode...</After>
+			<Before> touto strašitedlnú nemocí<span class="superscript">ac</span> a ranou ostříhati a brániti a své svaté</Before>
+			<Match>slovo</Match>
+			<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+				<a:string><span class="superscript">1</span> poznámka textová</a:string>
+				<a:string><span class="superscript">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
+			</Notes>
+		</HitResultContext>
+		
+		return
+		($new-match, $pb, $l, $bible)
+	};
+
+
+declare function local:prepare-bible($hit as node()?) as node()? {
+	let $book := $hit//tei:anchor[@type='bible'][@subtype='book'][1]
+	let $chapter := $hit//tei:anchor[@type='bible'][@subtype='chapter'][1]
+	let $verse := $hit//tei:anchor[@type='bible'][@subtype='verse'][1]
+	
+	
+	
+	return if ($book) then
+	<BibleVerseResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<BibleBook>{string($book/@n)}</BibleBook>
+		<BibleChapter>{string($chapter/@n)}</BibleChapter>
+		<BibleVerse>{string($verse/@n)}</BibleVerse>
+	</BibleVerseResultContext>
+	else ()
+};
+
+
+declare function local:prepare-pb($hit as node()?) as node()? {
+	let $element := $hit//tei:pb[1]
+	let $element := if ($element) then
+			$element
+		else
+			(:$hit/parent::*//tei:pb[1]:)
+			$hit/preceding::tei:pb[1]
+	return if ($element) then
+	<PageResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<PageName>{string($element/@n)}</PageName>
+		<PageXmlId>{string($element/@xml:id)}</PageXmlId>
+	</PageResultContext>
+	else ()
+};
+
+declare function local:prepare-l($hit as node()?) as node()? {
+	let $element := $hit/self::tei:l
+	return if ($element and $element/@n) then
+	<VerseResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<VerseName>{string($element/@n)}</VerseName>
+		<VerseXmlId>{string($element/@xml:id)}</VerseXmlId>
+	</VerseResultContext>
+	else ()
+};
 
 declare function local:prepare-match($match as element(p)) as node()* {
 	let $before := $match/span[@class='previous']/text()
 	let $hit := $match/span[@class='hi']/text()
 	let $after := $match/span[@class='following']/text()
 	return
-		(<After>{$after}</After>,
-		<Before>{$before}</Before>,
-		<Match>{$hit}</Match>)
+		(<After xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$after}</After>,
+		<Before xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$before}</Before>,
+		<Match xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">{$hit}</Match>)
 };
 
 
@@ -246,9 +322,9 @@ let $result-start := if($result-params/sc:Start) then
 (:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
 let $result-count := if($result-params/sc:Count) then
 	if($result-params/sc:Count[@i:nil='true']) then
-			1
+			25
 	else xs:int($result-params/sc:Count) else 
-			20
+			25
 
 (:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
 let $kwic-start := if($result-params/sc:HitSettingsContract/sc:Start) then xs:int($result-params/sc:HitSettingsContract/sc:Start) else 1
@@ -310,6 +386,16 @@ let $matches := local:get-search-result-for-corpus($hits, $summary-sequence, $kw
 let $result := ($matches, $summary)
 :)
 
-let $result := $matches
+let $xslt-path := $trans:transformation-path || "resultToContractCorpus.xsl"
+let $template := doc(escape-html-uri($xslt-path))
+let $step := transform:transform($matches, $template, ())
+(:let $step := trans:transform-document($matches, "Html", $xslt-path):)
+
+(:let $result := $step:)
+
+let $xslt-path2 := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
+(:let $result := $xslt-path:)
+let $result := trans:transform-document($step, "Html", $xslt-path2)
+(:let $result := $matches:)
 return
  	$result
