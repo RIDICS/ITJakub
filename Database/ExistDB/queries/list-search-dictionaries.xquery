@@ -1,5 +1,6 @@
 xquery version "3.0";
 import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
+import module namespace coll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
@@ -95,7 +96,7 @@ let $book-version-ids := $books/a:VersionId/concat('#', text())
 
 let $result := <itj:result></itj:result>
 (:~ relativní cesta k prohledávané kolekci :)
-let $collection-path := "/apps/jacob/data/"
+let $collection-path := $coll:collection-path
 (:~ výchozí kolekce prohledávaných dokumentů :)
 let $collection := collection($collection-path)
 
