@@ -15,4 +15,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public DateTime EstimatedExpirationTime { get; set; }
         public UserRoleContract UserRole { get; set; }
     }
+
+    public class UserLoginSkeletonWithPassword : UserLoginSkeleton
+    {
+        public string Password { get; set; }
+        public string Salt { get; set; }
+    }
 }

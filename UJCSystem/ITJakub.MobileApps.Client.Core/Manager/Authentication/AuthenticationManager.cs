@@ -79,19 +79,34 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         private async Task CreateUserItJakubAsync(AuthProvidersContract loginProviderType,
             UserLoginSkeleton loginSkeleton)
         {
-            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, new UserDetailContract
+            UserDetailContract userDetail;
+            if (loginSkeleton is UserLoginSkeletonWithPassword)
             {
-                Email = loginSkeleton.Email,
-                FirstName = loginSkeleton.FirstName,
-                LastName = loginSkeleton.LastName
-            });
+                var loginSkeletonWithPassword = (UserLoginSkeletonWithPassword) loginSkeleton;
+
+                userDetail = new PasswordUserDetailContract
+                {
+                    PasswordHash = loginSkeletonWithPassword.Password,
+                    PasswordSalt = loginSkeletonWithPassword.Salt
+                };
+            }
+            else
+            {
+                userDetail = new UserDetailContract();
+            }
+
+            userDetail.Email = loginSkeleton.Email;
+            userDetail.FirstName = loginSkeleton.FirstName;
+            userDetail.LastName = loginSkeleton.LastName;
+
+            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, userDetail);
 
             await LoginItJakubAsync(loginProviderType);
         }
 
         private async Task<UserLoginSkeleton> CreateUserAsync(AuthProvidersContract loginProviderType)
         {
-            UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginAsync();
+            UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginForCreateUserAsync();
             UserLoginInfo = loginSkeleton;
 
             if (!loginSkeleton.Success)

@@ -1,22 +1,73 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Windows.Security.Cryptography;
+using Windows.Security.Cryptography.Core;
+using ITJakub.MobileApps.Client.Core.Communication.Client;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class ItJakubProvider : ILoginProvider
     {
-        public Task<UserLoginSkeleton> LoginAsync()
-        {
-            LocalAuthenticationBroker.LocalAuthenticationBroker.CreateUserAsync();
-            return Task.Run(() => new UserLoginSkeleton
-            {
-                Success = false
-            });
+        private readonly MobileAppsServiceClient m_serviceClient;
 
-            // TODO ITJ login
+        public ItJakubProvider(MobileAppsServiceClient serviceClient)
+        {
+            m_serviceClient = serviceClient;
         }
 
         public string AccountName { get { return "It Jakub"; } }
+
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.ItJakub; } }
+
+        public async Task<UserLoginSkeleton> LoginAsync()
+        {
+            var userLoginSkeleton = await LocalAuthentication.LocalAuthenticationBroker.LoginAsync();
+            if (!userLoginSkeleton.Success)
+                return userLoginSkeleton;
+
+            //TODO get salt from server
+
+            var newLoginSkeleton = new UserLoginSkeleton
+            {
+                AccessToken = "", //todo
+                Email = userLoginSkeleton.Email,
+                Success = true
+            };
+
+            return newLoginSkeleton;
+        }
+
+        public async Task<UserLoginSkeleton> LoginForCreateUserAsync()
+        {
+            var userLoginSkeleton = await LocalAuthentication.LocalAuthenticationBroker.CreateUserAsync();
+            if (!userLoginSkeleton.Success)
+                return userLoginSkeleton;
+
+            var newSalt = GenerateSalt();
+            var passwordHash = GetPasswordHash(userLoginSkeleton.Password, newSalt);
+
+            userLoginSkeleton.Password = passwordHash;
+            userLoginSkeleton.Salt = newSalt;
+
+            return userLoginSkeleton;
+        }
+
+        private string GetPasswordHash(string password, string salt)
+        {
+            var passwordWithSalt = string.Format("{0}{1}", password, salt);
+
+            var hashAlgorithm = HashAlgorithmProvider.OpenAlgorithm("SHA256");
+            var binary = CryptographicBuffer.ConvertStringToBinary(passwordWithSalt, BinaryStringEncoding.Utf8);
+            var hashed = hashAlgorithm.HashData(binary);
+            var resultHash = CryptographicBuffer.EncodeToHexString(hashed);
+
+            return resultHash;
+        }
+
+        private string GenerateSalt()
+        {
+            return Guid.NewGuid().ToString();
+        }
     }
 }

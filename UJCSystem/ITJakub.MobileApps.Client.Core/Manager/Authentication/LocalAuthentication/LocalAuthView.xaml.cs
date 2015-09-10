@@ -1,4 +1,4 @@
-﻿namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticationBroker
+﻿namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthentication
 {
     public sealed partial class LocalAuthView
     {
