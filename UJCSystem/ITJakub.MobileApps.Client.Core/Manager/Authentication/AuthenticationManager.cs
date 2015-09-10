@@ -15,14 +15,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
     public class AuthenticationManager
     {
         private readonly Dictionary<AuthProvidersContract, ILoginProvider> m_loginProviders = new Dictionary<AuthProvidersContract, ILoginProvider>();
-        private readonly UserAvatarCache m_userAvatarCache;
-        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly UserAvatarCache m_userAvatarCache;        
+        private readonly MobileAppsServiceClientManager m_serviceClientManager;
 
         public UserLoginSkeleton UserLoginInfo { get; set; }
 
         public AuthenticationManager(IUnityContainer container)
-        {
-            m_serviceClient = container.Resolve<MobileAppsServiceClient>();
+        {            
+            m_serviceClientManager = container.Resolve<MobileAppsServiceClientManager>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
             LoadLoginProviders(container.ResolveAll<ILoginProvider>());
         }
@@ -44,7 +44,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
         private async Task LoginItJakubAsync(AuthProvidersContract loginProviderType)
         {
-            var response = await m_serviceClient.LoginUserAsync(loginProviderType, UserLoginInfo.AccessToken, UserLoginInfo.Email);
+            var client = m_serviceClientManager.GetClient();
+
+            var response = await client.LoginUserAsync(loginProviderType, UserLoginInfo.AccessToken, UserLoginInfo.Email);
             
             UserLoginInfo.CommunicationToken = response.CommunicationToken;
             UserLoginInfo.EstimatedExpirationTime = response.EstimatedExpirationTime;
@@ -55,7 +57,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             UserLoginInfo.LastName = response.LastName;
             
             m_userAvatarCache.AddAvatarUrl(response.UserId, response.ProfilePictureUrl);
-            m_serviceClient.UpdateCommunicationToken(response.CommunicationToken);
+            m_serviceClientManager.UpdateCommunicationToken(response.CommunicationToken);
         }
 
         private async Task<UserLoginSkeleton> LoginAsync(AuthProvidersContract loginProviderType)
@@ -102,7 +104,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             userDetail.FirstName = loginSkeleton.FirstName;
             userDetail.LastName = loginSkeleton.LastName;
 
-            await m_serviceClient.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, userDetail);
+
+            var client = m_serviceClientManager.GetClient();
+
+            await client.CreateUserAsync(loginProviderType, loginSkeleton.AccessToken, userDetail);
 
             await LoginItJakubAsync(loginProviderType);
         }
@@ -123,7 +128,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         public void LogOut()
         {
             UserLoginInfo = null;
-            m_serviceClient.UpdateCommunicationToken(string.Empty);
+            m_serviceClientManager.Logout();
         }
 
         public async void LoginByProvider(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)

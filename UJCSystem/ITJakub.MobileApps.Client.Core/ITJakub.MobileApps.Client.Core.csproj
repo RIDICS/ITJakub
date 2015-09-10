@@ -119,6 +119,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Communication\Client\MobileAppsServiceClientManager.cs" />
     <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthCompletedMessage.cs" />
     <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthenticationBroker.cs" />
     <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthView.xaml.cs">

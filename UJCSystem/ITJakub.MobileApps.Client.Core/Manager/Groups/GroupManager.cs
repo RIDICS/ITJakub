@@ -19,13 +19,13 @@ using Microsoft.Practices.Unity;
 namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 {
     public class GroupManager
-    {
-        private readonly MobileAppsServiceClient m_serviceClient;
+    {        
         private readonly AuthenticationManager m_authManager;
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly BitmapImage m_defaultUserAvatar;
         private readonly ApplicationIdManager m_applicationIdManager;
         private GroupDetailContract m_currentGroupInfoModel;
+        private readonly MobileAppsServiceClientManager m_serviceClientManager;
 
         public long CurrentGroupId { get; set; }
         public GroupType CurrentGroupType { get; set; }
@@ -34,7 +34,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
         public GroupManager(IUnityContainer container)
         {
-            m_serviceClient = container.Resolve<MobileAppsServiceClient>();
+            //m_serviceClient = container.Resolve<MobileAppsServiceClient>();
+            m_serviceClientManager = container.Resolve<MobileAppsServiceClientManager>();
             m_authManager = container.Resolve<AuthenticationManager>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
             m_applicationIdManager = container.Resolve<ApplicationIdManager>();
@@ -112,7 +113,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
             Task.Factory.StartNew(() =>
             {
-                var client = new MobileAppsServiceClient();
+                var client = m_serviceClientManager.GetClient();
                 var membershipGroups = client.GetMembershipGroups(userId.Value);
                 var result = new ObservableCollection<GroupInfoViewModel>();
                 foreach (var groupDetails in membershipGroups)
@@ -158,7 +159,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             {
                 try
                 {
-                    var client = new MobileAppsServiceClient();
+                    var client = m_serviceClientManager.GetClient();
                     var ownedGroups = client.GetOwnedGroups(userId.Value);
                     var result = new ObservableCollection<GroupInfoViewModel>();
                     foreach (var groupDetails in ownedGroups)
@@ -219,8 +220,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     callback(null, new ArgumentException("No logged user"));
                     return;
                 }
-
-                var result = await m_serviceClient.CreateGroupAsync(userId.Value, groupName);
+                var client = m_serviceClientManager.GetClient();
+                var result = await client.CreateGroupAsync(userId.Value, groupName);
                 var viewModel = new CreatedGroupViewModel
                 {
                     EnterCode = result.EnterCode,
@@ -249,8 +250,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     callback(new ArgumentException("No logged user"));
                     return;
                 }
-
-                await m_serviceClient.AddUserToGroupAsync(code, userId.Value);
+                var client = m_serviceClientManager.GetClient();
+                await client.AddUserToGroupAsync(code, userId.Value);
                 callback(null);
             }
             catch (InvalidServerOperationException exception)
@@ -271,8 +272,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
                 if (!RestoreLastState)
                 {
+                    var client = m_serviceClientManager.GetClient();
                     m_currentGroupInfoModel = null;
-                    m_currentGroupInfoModel = await m_serviceClient.GetGroupDetailsAsync(groupId);
+                    m_currentGroupInfoModel = await client.GetGroupDetailsAsync(groupId);
                 }
 
                 var groupInfo = m_currentGroupInfoModel;
@@ -327,7 +329,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     MemberIds = group.Members.Select(x => x.Id).ToList()
                 }).ToList();
 
-                var result = await m_serviceClient.GetGroupsUpdateAsync(oldGroupInfo);
+                var client = m_serviceClientManager.GetClient();
+
+                var result = await client.GetGroupsUpdateAsync(oldGroupInfo);
                 if (result.Count == 0)
                     return;
 
@@ -356,7 +360,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                await m_serviceClient.UpdateGroupStateAsync(groupId, newState);
+                var client = m_serviceClientManager.GetClient();
+                await client.UpdateGroupStateAsync(groupId, newState);
                 callback(null);
             }
             catch (InvalidServerOperationException exception)
@@ -373,7 +378,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                await m_serviceClient.RemoveGroupAsync(groupId);
+                var client = m_serviceClientManager.GetClient();
+                await client.RemoveGroupAsync(groupId);
                 callback(null);
             }
             catch (InvalidServerOperationException exception)
@@ -390,7 +396,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         {
             try
             {
-                var state = await m_serviceClient.GetGroupStateAsync(groupId);
+                var client = m_serviceClientManager.GetClient();
+                var state = await client.GetGroupStateAsync(groupId);
                 callback(state, null);
             }
             catch (InvalidServerOperationException exception)

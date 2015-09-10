@@ -9,11 +9,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 {
     public class ItJakubProvider : ILoginProvider
     {
-        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly MobileAppsServiceClientManager m_serviceClientManager;
 
-        public ItJakubProvider(MobileAppsServiceClient serviceClient)
+        public ItJakubProvider(MobileAppsServiceClientManager serviceClientManager)
         {
-            m_serviceClient = serviceClient;
+            m_serviceClientManager = serviceClientManager;
         }
 
         public string AccountName { get { return "It Jakub"; } }
@@ -26,7 +26,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             if (!userLoginSkeleton.Success)
                 return userLoginSkeleton;
 
-            var salt = await m_serviceClient.GetSaltByUserEmail(userLoginSkeleton.Email);
+
+            var client = m_serviceClientManager.GetClient();
+            var salt = await client.GetSaltByUserEmail(userLoginSkeleton.Email);
+
             var passwordHash = GetPasswordHash(userLoginSkeleton.Password, salt);
 
             var newLoginSkeleton = new UserLoginSkeleton

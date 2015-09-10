@@ -49,7 +49,8 @@ namespace ITJakub.MobileApps.Client.Core
             RegisterLoginProviders(container);
             container.RegisterType<ApplicationManager>(WithLifetime.ContainerControlled(typeof(ApplicationManager)));
             container.RegisterType<AuthenticationManager>(WithLifetime.ContainerControlled(typeof(AuthenticationManager)));
-            container.RegisterType<MobileAppsServiceClient>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceClient)));
+            container.RegisterType<MobileAppsServiceClientManager>(WithLifetime.ContainerControlled(typeof (MobileAppsServiceClientManager)));            
+            //container.RegisterType<MobileAppsServiceClient>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceClient)));
             container.RegisterType<UserAvatarCache>(WithLifetime.ContainerControlled(typeof(UserAvatarCache)));
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
             container.RegisterType<ApplicationIdManager>(WithLifetime.ContainerControlled(typeof (ApplicationIdManager)));
@@ -68,7 +69,7 @@ namespace ITJakub.MobileApps.Client.Core
         {
             container.RegisterType<ILoginProvider, FacebookProvider>(WithName.TypeName(typeof(FacebookProvider)));
             container.RegisterType<ILoginProvider, GoogleProvider>(WithName.TypeName(typeof(GoogleProvider)));
-            container.RegisterType<ILoginProvider, LiveIdProvider>(WithName.TypeName(typeof(LiveIdProvider)));
+            //container.RegisterType<ILoginProvider, LiveIdProvider>(WithName.TypeName(typeof(LiveIdProvider)));
             container.RegisterType<ILoginProvider, ItJakubProvider>(WithName.TypeName(typeof(ItJakubProvider)));
 
             //container.RegisterTypes(

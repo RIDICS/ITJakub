@@ -18,20 +18,13 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
         private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
+        
 
-        private readonly ClientMessageInspector m_clientMessageInspector;
-
-        public MobileAppsServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
-        {
-            m_clientMessageInspector = new ClientMessageInspector();
-            var endpointBehavior = new CustomEndpointBehavior(m_clientMessageInspector);
+        public MobileAppsServiceClient(ClientMessageInspector communicationTokenInspector) : base(GetDefaultBinding(), GetDefaultEndpointAddress())
+        {            
+            var endpointBehavior = new CustomEndpointBehavior(communicationTokenInspector);
             Endpoint.EndpointBehaviors.Add(endpointBehavior);
-        }
-
-        public void UpdateCommunicationToken(string communicationToken)
-        {
-            m_clientMessageInspector.CommunicationToken = communicationToken;
-        }
+        }   
 
         public Task CreateUserAsync(AuthProvidersContract providerContract, string providerToken,
             UserDetailContract userDetail)

@@ -17,11 +17,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     public class SynchronizeManager : ISynchronizeCommunication
     {
         private readonly AuthenticationManager m_authenticationManager;
-        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly MobileAppsServiceClientManager m_serviceClient;
         private readonly ApplicationIdManager m_applicationIdManager;
         private readonly GroupManager m_groupManager;
 
-        public SynchronizeManager(AuthenticationManager authenticationManager, MobileAppsServiceClient serviceClient, ApplicationIdManager applicationIdManager, GroupManager groupManager)
+        public SynchronizeManager(AuthenticationManager authenticationManager, MobileAppsServiceClientManager serviceClient,
+            ApplicationIdManager applicationIdManager, GroupManager groupManager)
         {
             m_authenticationManager = authenticationManager;
             m_serviceClient = serviceClient;
@@ -40,7 +41,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             }
             return SynchronizationTypeContract.HistoryTrackingObject;
         }
-        
+
         public async Task SendObjectAsync(ApplicationType applicationType, string objectType, string objectValue, SynchronizationType synchronizationType)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
@@ -53,10 +54,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                 Data = objectValue,
                 SynchronizationType = ConvertSynchronizationType(synchronizationType)
             };
-            
+
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
-            await m_serviceClient.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
+
+            var client = m_serviceClient.GetClient();
+            await client.CreateSynchronizedObjectAsync(appId, groupId, userId.Value, synchronizedObject);
         }
 
         public async Task<IList<ObjectDetails>> GetObjectsAsync(ApplicationType applicationType, DateTime since, string objectType = null)
@@ -67,13 +70,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
-            var objectList = await m_serviceClient.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
+            var client = m_serviceClient.GetClient();
+            var objectList = await client.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
 
             var outputList = objectList.Select(objectDetails => new ObjectDetails
             {
                 Author = new UserInfo
                 {
-
                     Email = objectDetails.Author.Email,
                     FirstName = objectDetails.Author.FirstName,
                     LastName = objectDetails.Author.LastName,
@@ -94,7 +97,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
-            var latestObject = await m_serviceClient.GetLatestSynchronizedObjectAsync(groupId, appId, objectType, since);
+            var client = m_serviceClient.GetClient();
+            var latestObject = await client.GetLatestSynchronizedObjectAsync(groupId, appId, objectType, since);
 
             if (latestObject == null)
                 return null;
@@ -130,7 +134,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             var userId = m_authenticationManager.GetCurrentUserId();
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             if (userId != null)
-                await m_serviceClient.CreateTaskAsync(userId.Value, appId, name, description, data);
+            {
+                var client = m_serviceClient.GetClient();
+                await client.CreateTaskAsync(userId.Value, appId, name, description, data);
+            }
         }
 
         public Task<UserInfo> GetCurrentUserInfo()
