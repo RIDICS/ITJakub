@@ -33,12 +33,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly List<GroupInfoViewModel> m_selectedGroups;
         private readonly HashSet<long> m_ownedGroupIds;
         private GroupInfoViewModel m_selectedGroup;
-        private ObservableCollection<GroupInfoViewModel> m_groups;
+        private ObservableCollection<GroupInfoViewModel> m_ownedGroups;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_myGroupList;
         private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_ownedGroupList;
         private SortGroupItem.SortType m_selectedSortType;
         private GroupStateContract? m_currentFilter;
         private UserRoleContract m_userRole;
+
         private bool m_isCommandBarOpen;
         private bool m_loading;
         private bool m_isOneItemSelected;
@@ -240,8 +241,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_selectedSortType = value;
                 RaisePropertyChanged();
 
-                if (m_groups != null)
-                    DisplayGroupList(m_groups);
+                if (m_ownedGroups != null)
+                    DisplayGroupList(m_ownedGroups);
             }
         }
 
@@ -265,8 +266,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(GoBack);
+
             GroupClickCommand = new RelayCommand<ItemClickEventArgs>(GroupClick);
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
+
             ConnectCommand = new RelayCommand(() => OpenGroup(SelectedGroup));
             RefreshListCommand = new RelayCommand(LoadData);
             OpenMyTaskListCommand = new RelayCommand(() => Navigate(typeof (OwnedTaskListView)));
@@ -309,7 +312,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                         Loading = false;
                     }
 
+                    m_myGroups = result;
                     MyMyGroupList = DisplayGroupList(result);
+                    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
                 });
 
                 m_dataService.GetOwnedGroupsForCurrentUser((result, ex) =>
@@ -319,15 +324,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                         m_errorService.ShowConnectionError();
                         Loading = false;
                     }
-                    m_groups = result;
-                    OwnedGroupList = DisplayGroupList(m_groups);
+                    m_ownedGroups = result;
+                    OwnedGroupList = DisplayGroupList(m_ownedGroups);
                     Loading = false;
+                    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
                 });
 
 
              
 
-
+            
             
             //m_dataService.GetGroupList((groupList, exception) =>
             //{
@@ -338,11 +344,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             //        return;
             //    }
 
-            //    m_groups = groupList;
-            //    DisplayGroupList(m_groups);
+            //    m_ownedGroups = groupList;
+            //    DisplayGroupList(m_ownedGroups);
             //    CreateOwnedGroupSet();
 
-            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_groups, GroupUpdate);
+            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
             //});
 
             //m_dataService.GetLoggedUserInfo(false, info =>
@@ -425,10 +431,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 case SortGroupItem.SortType.CreateTime:
                     return list.OrderByDescending(model => model.CreateTime);
+
                 case SortGroupItem.SortType.Name:
                     return list.OrderBy(model => model.GroupName);
+
                 case SortGroupItem.SortType.State:
                     return list.OrderBy(model => model.State);
+
                 default:
                     return list;
             }
@@ -463,7 +472,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 CurrentFilter = (GroupStateContract) Convert.ToInt16(state);
             }
 
-            DisplayGroupList(m_groups);
+            DisplayGroupList(m_ownedGroups);
         }
 
         private void CreateNewTask()
@@ -475,7 +484,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void CreateOwnedGroupSet()
         {
             m_ownedGroupIds.Clear();
-            foreach (var groupInfoViewModel in m_groups.Where(x => x.GroupType == GroupType.Owner))
+            foreach (var groupInfoViewModel in m_ownedGroups.Where(x => x.GroupType == GroupType.Owner))
             {
                 m_ownedGroupIds.Add(groupInfoViewModel.GroupId);
             }
