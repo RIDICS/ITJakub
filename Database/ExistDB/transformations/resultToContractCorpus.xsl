@@ -22,7 +22,9 @@
     </xsl:template>
     <xsl:template match="c:BookXmlId">
         <xsl:copy-of select="parent::c:CorpusSearchResultContract/c:BibleVerseResultContext"/>
-        <xsl:copy-of select="*"/>
+        <xsl:copy>
+            <xsl:apply-templates/>
+        </xsl:copy>
     </xsl:template>
     <xsl:template match="c:HitResultContext">
         <xsl:copy-of select="c:Notes"/>

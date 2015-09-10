@@ -322,7 +322,7 @@ let $result-start := if($result-params/sc:Start) then
 (:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
 let $result-count := if($result-params/sc:Count) then
 	if($result-params/sc:Count[@i:nil='true']) then
-			25
+			0
 	else xs:int($result-params/sc:Count) else 
 			25
 
@@ -365,14 +365,15 @@ let $kwic-config := <config width="{$kwic-context-length}" preserve-space="yes" 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
 let $documents := search:get-query-documents-matches($collection, $queries)
-let $documents := for $document in $documents 
-	order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]
+let $sorted-documents := for $document in $documents 
+	order by number($document/tei:TEI/tei:teiHeader//tei:origDate/@notBefore),
+		number($document/tei:TEI/tei:teiHeader//tei:origDate/@notAfter) 
 	return $document
 	
 let $result-documents := if($result-count = 0) then
-		subsequence($documents, $result-start)
+		subsequence($sorted-documents, $result-start)
 	else
-		subsequence($documents, $result-start, $result-count)
+		subsequence($sorted-documents, $result-start, $result-count)
 
 
 let $hits := search:get-query-document-hits($result-documents, $queries)
@@ -389,13 +390,27 @@ let $result := ($matches, $summary)
 let $xslt-path := $trans:transformation-path || "resultToContractCorpus.xsl"
 let $template := doc(escape-html-uri($xslt-path))
 let $step := transform:transform($matches, $template, ())
-(:let $step := trans:transform-document($matches, "Html", $xslt-path):)
 
 (:let $result := $step:)
 
 let $xslt-path2 := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
 (:let $result := $xslt-path:)
 let $result := trans:transform-document($step, "Html", $xslt-path2)
+
 (:let $result := $matches:)
+(:let $result := $step:)
+
+(:let $result := <dates xmlns="http://www.tei-c.org/ns/1.0">
+	{for $document in $sorted-documents
+		return $document/tei:TEI/tei:teiHeader//tei:origDate}
+</dates>
+:)
+(:{for $document in $documents 
+	order by number($document/tei:TEI/tei:teiHeader//tei:origDate/@notBefore),
+		number($document/tei:TEI/tei:teiHeader//tei:origDate/@notAfter) 
+	return $document/tei:TEI/tei:teiHeader//tei:origDate
+	}:)
+(:	{$sorted-documents/tei:TEI/tei:teiHeader//tei:origDate}:)
+
 return
  	$result
