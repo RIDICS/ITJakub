@@ -10,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
     {
         private string m_textError;
         private bool m_isError;
-        private bool m_showLoginButton;
+        private bool m_showLoginControls;
         private bool m_showCreateControls;
 
         public LocalAuthViewModel()
@@ -20,7 +20,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             CancelCommand = new RelayCommand(Cancel);
             SubmitCommand = new RelayCommand(() =>
             {
-                if (ShowLoginButton)
+                if (ShowLoginControls)
                     Login();
                 else
                     CreateUser();
@@ -65,12 +65,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             }
         }
 
-        public bool ShowLoginButton
+        public bool ShowLoginControls
         {
-            get { return m_showLoginButton; }
+            get { return m_showLoginControls; }
             set
             {
-                m_showLoginButton = value;
+                m_showLoginControls = value;
                 RaisePropertyChanged();
             }
         }
@@ -190,6 +190,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             {
                 TextError = errorStringBuilder.ToString();
             }
+        }
+
+        public void ShowAuthenticationError()
+        {
+            IsError = true;
+            TextError = ShowLoginControls ? "Nesprávný e-mail nebo heslo\n" : "Uživatel s tímto e-mailem již existuje\n";
         }
     }
 }

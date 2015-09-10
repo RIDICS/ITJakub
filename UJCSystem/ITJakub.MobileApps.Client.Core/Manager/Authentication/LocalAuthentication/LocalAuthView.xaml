@@ -39,11 +39,17 @@
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         HorizontalAlignment="Center" />
 
-                <TextBlock Grid.Column="1"
-                           FontSize="26"
-                           VerticalAlignment="Center"
-                           Text="Přihlášení ITJakub"
-                           Margin="0,5,0,0" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,5,0,0">
+                    <TextBlock FontSize="26"
+                               Visibility="{Binding ShowLoginControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Text="Přihlášení" />
+                    <TextBlock FontSize="26"
+                               Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Text="Registrace" />
+                </StackPanel>
             </Grid>
             
             <Grid Grid.Row="1"
@@ -157,7 +163,7 @@
                         Grid.Column="1"
                         Content="Přihlásit se"
                         HorizontalAlignment="Stretch"
-                        Visibility="{Binding ShowLoginButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Visibility="{Binding ShowLoginControls, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Command="{Binding LoginCommand}" />
             </Grid>
         </Grid>

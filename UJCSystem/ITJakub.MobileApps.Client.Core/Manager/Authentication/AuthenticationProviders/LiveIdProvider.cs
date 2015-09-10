@@ -20,6 +20,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         
         public string AccountName { get { return "Microsoft"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.LiveId; } }
+        public Task<UserLoginSkeleton> ReopenWithErrorAsync()
+        {
+            throw new InvalidOperationException("Cannot open Live ID authentication window with error and filled fields");
+        }
 
         public Task<UserLoginSkeleton> LoginForCreateUserAsync()
         {

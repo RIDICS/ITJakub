@@ -25,6 +25,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             get { return AuthProvidersContract.Facebook; }
         }
 
+        public Task<UserLoginSkeleton> ReopenWithErrorAsync()
+        {
+            throw new InvalidOperationException("Cannot open Facebook authentication window with error and filled fields");
+        }
+
         public Task<UserLoginSkeleton> LoginForCreateUserAsync()
         {
             return LoginAsync();

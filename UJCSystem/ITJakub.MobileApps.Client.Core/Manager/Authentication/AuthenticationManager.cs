@@ -61,21 +61,47 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         private async Task<UserLoginSkeleton> LoginAsync(AuthProvidersContract loginProviderType)
         {
             UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginAsync();
-            UserLoginInfo = loginSkeleton;
 
-            if (!loginSkeleton.Success)
+            while (true)
+            {
+                var isUserNotRegisteredError = false;
+                var isItjLoginError = false;
+                UserLoginInfo = loginSkeleton;
+
+                if (!loginSkeleton.Success)
+                    return UserLoginInfo;
+
+                try
+                {
+                    await LoginItJakubAsync(loginProviderType);
+                }
+                catch (UserNotRegisteredException)
+                {
+                    isUserNotRegisteredError = true;
+                    if (loginProviderType == AuthProvidersContract.ItJakub)
+                        isItjLoginError = true;
+                }
+
+                if (isUserNotRegisteredError)
+                {
+                    if (isItjLoginError)
+                    {
+                        loginSkeleton = await m_loginProviders[loginProviderType].ReopenWithErrorAsync();
+                        continue;
+                    }
+
+                    try
+                    {
+                        await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
+                    }
+                    catch (UserAlreadyRegisteredException ex)
+                    {
+                        throw new ClientCommunicationException(ex);
+                    }
+                }
+
                 return UserLoginInfo;
-
-            try
-            {
-                await LoginItJakubAsync(loginProviderType);
             }
-            catch (UserNotRegisteredException)
-            {
-                await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
-            }
-
-            return UserLoginInfo;
         }
 
 
@@ -110,14 +136,35 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         private async Task<UserLoginSkeleton> CreateUserAsync(AuthProvidersContract loginProviderType)
         {
             UserLoginSkeleton loginSkeleton = await m_loginProviders[loginProviderType].LoginForCreateUserAsync();
-            UserLoginInfo = loginSkeleton;
+            
+            while (true)
+            {
+                var isItjCreateUserError = false;
+                UserLoginInfo = loginSkeleton;
 
-            if (!loginSkeleton.Success)
+                if (!loginSkeleton.Success)
+                    return UserLoginInfo;
+                
+                try
+                {
+                    await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
+                }
+                catch (UserAlreadyRegisteredException)
+                {
+                    if (loginProviderType != AuthProvidersContract.ItJakub)
+                        throw;
+
+                    isItjCreateUserError = true;
+                }
+
+                if (isItjCreateUserError)
+                {
+                    loginSkeleton = await m_loginProviders[loginProviderType].ReopenWithErrorAsync();
+                    continue;
+                }
+
                 return UserLoginInfo;
-
-            await CreateUserItJakubAsync(loginProviderType, loginSkeleton);
-
-            return UserLoginInfo;
+            }
         }
 
         public void LogOut()
@@ -138,10 +185,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
                 callback(false, exception);
             }
             catch (ClientCommunicationException exception)
-            {
-                callback(false, exception);
-            }
-            catch (UserAlreadyRegisteredException exception) //because of trying register user
             {
                 callback(false, exception);
             }
