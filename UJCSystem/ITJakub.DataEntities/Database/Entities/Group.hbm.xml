@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Group" table="[Group]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name">
+      <column name="Name" sql-type="varchar" not-null="true" />
+    </property>    
+    
+    <property name="Description">
+      <column name="Description" sql-type="varchar" not-null="false" />
+    </property>
+    
+    <bag name="Users" table="User_Group" lazy="true">
+      <key column="Group" />
+      <many-to-many class="User" column="User" />
+    </bag>
+    
+  </class>
+</hibernate-mapping>

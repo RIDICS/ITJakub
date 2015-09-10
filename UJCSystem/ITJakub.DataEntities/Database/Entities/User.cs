@@ -31,6 +31,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string AvatarUrl { get; set; }
 
         public virtual IList<FavoriteBase> FavoriteItems { get; set; }
+
+        public virtual IList<Group> Groups { get; set; }
         
 
         public virtual bool Equals(User other)

@@ -54,5 +54,11 @@
       <key column="User" />
       <one-to-many class="FavoriteBase" />
     </bag>
+
+    <bag name="Groups" table="User_Group"  lazy="true">
+      <key column="User" />
+      <many-to-many class="Group" column="Group" />
+    </bag>
+    
   </class>
 </hibernate-mapping>
