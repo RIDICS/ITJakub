@@ -18,6 +18,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             CreateUserCommand = new RelayCommand(CreateUser);
             LoginCommand = new RelayCommand(Login);
             CancelCommand = new RelayCommand(Cancel);
+            SubmitCommand = new RelayCommand(() =>
+            {
+                if (ShowLoginButton)
+                    Login();
+                else
+                    CreateUser();
+            });
         }
         
         public string FirstName { get; set; }
@@ -33,6 +40,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
         public RelayCommand CreateUserCommand { get; private set; }
 
         public RelayCommand LoginCommand { get; private set; }
+
+        public RelayCommand SubmitCommand { get; private set; }
 
         public RelayCommand CancelCommand { get; private set; }
 
@@ -75,7 +84,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
                 RaisePropertyChanged();
             }
         }
-
+        
         private void Login()
         {
             IsError = false;

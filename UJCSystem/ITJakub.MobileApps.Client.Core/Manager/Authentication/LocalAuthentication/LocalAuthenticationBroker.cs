@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
@@ -10,7 +11,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
         private readonly TaskCompletionSource<bool> m_taskCompletion;
         private UserLoginSkeletonWithPassword m_userLoginSkeleton;
         private Popup m_popup;
-        
+        private LocalAuthView m_view;
+
         public LocalAuthenticationBroker()
         {
             m_taskCompletion = new TaskCompletionSource<bool>();
@@ -35,7 +37,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
                 ShowCreateControls = createNewUser,
                 ShowLoginButton = !createNewUser
             };
-            var view = new LocalAuthView
+            m_view = new LocalAuthView
             {
                 DataContext = viewModel,
                 Width = Window.Current.Bounds.Width,
@@ -45,10 +47,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             {
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Stretch,
-                Child = view
+                Child = m_view
             };
 
-            //TODO add event listeners for showing keyboard
+            InputPane.GetForCurrentView().Showing += KeyboardShowing;
+            InputPane.GetForCurrentView().Hiding += KeyboardHiding;
 
             Messenger.Default.Register<LocalAuthCompletedMessage>(this, OnLocalAuthCompleted);
             m_popup.IsOpen = true;
@@ -56,7 +59,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             await m_taskCompletion.Task;
             return m_userLoginSkeleton;
         }
-
+        
         private void OnLocalAuthCompleted(LocalAuthCompletedMessage message)
         {
             m_popup.IsOpen = false;
@@ -64,6 +67,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
             m_userLoginSkeleton = message.UserLoginSkeleton;
             m_taskCompletion.SetResult(true);
             Messenger.Default.Unregister(this);
+
+            InputPane.GetForCurrentView().Hiding -= KeyboardHiding;
+            InputPane.GetForCurrentView().Showing -= KeyboardShowing;
+        }
+
+        private void KeyboardShowing(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            m_view.Height = Window.Current.Bounds.Height - args.OccludedRect.Height;
+        }
+
+        private void KeyboardHiding(InputPane sender, InputPaneVisibilityEventArgs args)
+        {
+            m_view.Height = Window.Current.Bounds.Height;
         }
     }
 }

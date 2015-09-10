@@ -1,5 +1,8 @@
 using System.Windows.Input;
+using Windows.System;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
 
 namespace ITJakub.MobileApps.Client.Shared.Control
 {
@@ -7,7 +10,7 @@ namespace ITJakub.MobileApps.Client.Shared.Control
     {
         public static readonly DependencyProperty EnterCommandProperty =
              DependencyProperty.RegisterAttached("EnterCommand", typeof(ICommand),
-                 typeof(FocusableBehavior), new PropertyMetadata(false, OnIsFocusPropertyChanged));
+                 typeof(PasswordBoxBehaviors), new PropertyMetadata(null, OnEnterCommandPropertyChanged));
 
         public static void SetEnterCommand(DependencyObject d, ICommand value)
         {
@@ -19,15 +22,39 @@ namespace ITJakub.MobileApps.Client.Shared.Control
             return (ICommand)d.GetValue(EnterCommandProperty);
         }
 
-        private static void OnIsFocusPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnEnterCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            //var isFocus = (bool)e.NewValue;
-            var passwordBox = d as Windows.UI.Xaml.Controls.PasswordBox;
+            var passwordBox = d as PasswordBox;
 
             if (passwordBox == null)
                 return;
 
+            if (e.NewValue == null)
+            {
+                passwordBox.KeyUp -= OnPasswordBoxKeyUp;
+            }
+            else
+            {
+                passwordBox.KeyUp += OnPasswordBoxKeyUp;
+            }
+        }
+
+        private static void OnPasswordBoxKeyUp(object sender, KeyRoutedEventArgs e)
+        {
+            var passwordBox = (PasswordBox)sender;
+            var enterCommand = GetEnterCommand(passwordBox);
+
+            if (e.Key != VirtualKey.Enter || enterCommand == null)
+                return;
             
+            var passwordBindingExpression = passwordBox.GetBindingExpression(PasswordBox.PasswordProperty);
+            if (passwordBindingExpression == null)
+                return;
+
+            passwordBindingExpression.UpdateSource();
+
+            if (enterCommand.CanExecute(null))
+                enterCommand.Execute(null);
         }
     }
 }
