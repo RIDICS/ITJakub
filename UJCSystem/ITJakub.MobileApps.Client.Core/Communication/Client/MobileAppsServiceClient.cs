@@ -574,6 +574,34 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
+        public Task<string> GetSaltByUserEmail(string email)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetSaltByUserEmail(email);
+                }
+                catch (FaultException ex)
+                {
+                    throw new UserNotRegisteredException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+
         #region enpoint settings
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {

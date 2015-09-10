@@ -35,6 +35,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public string GetSaltByUserEmail(string email)
+        {
+            try
+            {
+                return m_serviceManager.GetSaltByUserEmail(email);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             try

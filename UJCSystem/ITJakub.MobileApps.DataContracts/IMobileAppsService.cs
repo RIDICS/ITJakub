@@ -14,6 +14,9 @@ namespace ITJakub.MobileApps.DataContracts
         void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
 
         [OperationContract]
+        string GetSaltByUserEmail(string email);
+
+        [OperationContract]
         LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
         [OperationContract]

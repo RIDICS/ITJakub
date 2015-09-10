@@ -26,11 +26,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             if (!userLoginSkeleton.Success)
                 return userLoginSkeleton;
 
-            //TODO get salt from server
+            var salt = await m_serviceClient.GetSaltByUserEmail(userLoginSkeleton.Email);
+            var passwordHash = GetPasswordHash(userLoginSkeleton.Password, salt);
 
             var newLoginSkeleton = new UserLoginSkeleton
             {
-                AccessToken = "", //todo
+                AccessToken = passwordHash,
                 Email = userLoginSkeleton.Email,
                 Success = true
             };
@@ -47,6 +48,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             var newSalt = GenerateSalt();
             var passwordHash = GetPasswordHash(userLoginSkeleton.Password, newSalt);
 
+            userLoginSkeleton.AccessToken = passwordHash;
             userLoginSkeleton.Password = passwordHash;
             userLoginSkeleton.Salt = newSalt;
 

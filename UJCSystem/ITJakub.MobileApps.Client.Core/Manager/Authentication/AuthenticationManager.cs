@@ -50,7 +50,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             UserLoginInfo.EstimatedExpirationTime = response.EstimatedExpirationTime;
             UserLoginInfo.UserId = response.UserId;
             UserLoginInfo.UserRole = response.UserRole;
-
+            UserLoginInfo.Email = response.Email;
+            UserLoginInfo.FirstName = response.FirstName;
+            UserLoginInfo.LastName = response.LastName;
+            
             m_userAvatarCache.AddAvatarUrl(response.UserId, response.ProfilePictureUrl);
             m_serviceClient.UpdateCommunicationToken(response.CommunicationToken);
         }
