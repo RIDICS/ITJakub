@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
@@ -366,6 +367,64 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermResult> GetBooksTermResults(List<string> bookGuidList, TermCriteriaQueryCreator queryCreator)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookPage bookPageAlias = null;
+                Term termAlias = null;
+                TermResult termResultAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookPages, () => bookPageAlias)
+                    .JoinQueryOver(x => x.Terms, () => termAlias)
+                    .SelectList(list => list
+                        .Select(() => bookAlias.Id).WithAlias(() => termResultAlias.BookId)
+                        .Select(() => bookPageAlias.Text).WithAlias(() => termResultAlias.PageName)
+                        .Select(() => bookPageAlias.XmlId).WithAlias(() => termResultAlias.PageXmlId))
+                        .OrderBy(()=> bookAlias.Id).Asc
+                        .OrderBy(()=> bookPageAlias.Position).Asc
+                    .WhereRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .And(queryCreator.GetCondition())
+                    .TransformUsing(Transformers.AliasToBean<TermResult>())
+                    .List<TermResult>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermCountResult> GetBooksTermResultsCount(List<string> bookGuidList, TermCriteriaQueryCreator queryCreator)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                BookPage bookPageAlias = null;
+                Term termAlias = null;
+                TermCountResult termResultAlias = null;
+
+                var result = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.BookPages, () => bookPageAlias)
+                    .JoinQueryOver(x => x.Terms, () => termAlias)
+                    .Select(Projections.ProjectionList()
+                        .Add(Projections.Group(() => bookAlias.Id).WithAlias(() => termResultAlias.BookId))
+                        .Add(Projections.CountDistinct(() => bookPageAlias.Id).WithAlias(() => termResultAlias.PagesCount))
+                    )
+                    .WhereRestrictionOn(() => bookAlias.Guid).IsInG(bookGuidList)
+                    .And(queryCreator.GetCondition())
+                    .TransformUsing(Transformers.AliasToBean<TermCountResult>())
+                    .List<TermCountResult>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual int GetHeadwordCount(IList<long> selectedBookIds = null)
         {
             Book bookAlias = null;
@@ -656,6 +715,27 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SingleOrDefault();
 
                 return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Term> GetTermsOnPage(string bookXmlId, string pageXmlId)
+        {
+            using (var session = GetSession())
+            {
+                Term term = null;
+                BookPage page = null;
+                BookVersion version = null;
+
+                var terms = session.QueryOver(() => term)
+                    .JoinQueryOver(x => term.ReferencedFrom, () => page)
+                    .JoinQueryOver(x => page.BookVersion, () => version)
+                    .JoinQueryOver(x => version.Book)
+                    .Where(book => book.Guid == bookXmlId && version.Id == book.LastVersion.Id && page.XmlId == pageXmlId)
+                    .OrderBy(() => term.Position).Asc
+                    .List<Term>();
+
+                return terms;
             }
         }
     }

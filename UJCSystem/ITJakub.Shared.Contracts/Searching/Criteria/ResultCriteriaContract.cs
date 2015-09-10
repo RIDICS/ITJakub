@@ -21,6 +21,9 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
         public HitSettingsContract HitSettingsContract { get; set; }
 
         [DataMember]
+        public TermsSettingsContract TermsSettingsContract { get; set; }
+
+        [DataMember]
         public SortEnum? Sorting { get; set; }
 
         [DataMember]

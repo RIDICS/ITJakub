@@ -11,7 +11,6 @@ using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
-using ITJakub.Web.Hub.Areas.Editions.Models;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -41,6 +40,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return
                 View(new BookListingModel
                 {
+                    BookId = book.BookId,
                     BookXmlId = book.BookXmlId,
                     VersionXmlId = book.LastVersionXmlId,
                     BookTitle = book.Title,
@@ -48,6 +48,17 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SearchText = searchText,
                     InitPageXmlId = page
                 });
+        }
+
+        public ActionResult GetListConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/list_configuration.json");
+            return File(fullPath, "application/json", fullPath);
+        }
+        public ActionResult GetSearchConfiguration()
+        {
+            string fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/search_configuration.json");
+            return File(fullPath, "application/json", fullPath);
         }
 
         public FileResult GetBookImage(string bookId, int position)

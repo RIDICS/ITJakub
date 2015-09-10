@@ -92,6 +92,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+     
+        [OperationContract]
+        IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
         #endregion
 
@@ -167,5 +170,8 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         #endregion
+
+        [OperationContract]
+        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
     }
 }

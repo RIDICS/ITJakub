@@ -23,19 +23,10 @@ namespace ITJakub.DataEntities.Database
         {
             var queryString =
                 "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
-            var joinBuilder = new StringBuilder();
-            var whereBuilder = new StringBuilder();
-            foreach (var criteriaQuery in m_conjunctionQuery)
-            {
-                if (!string.IsNullOrEmpty(criteriaQuery.Join))
-                    joinBuilder.Append(' ').Append(criteriaQuery.Join);
 
-                whereBuilder.Append(whereBuilder.Length > 0 ? " and" : " where");
+            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
 
-                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
-            }
-
-            queryString = string.Format("{0}{1}{2} group by b.Guid", queryString, joinBuilder, whereBuilder);
+            queryString = string.Format("{0}{1} group by b.Guid", queryString, whereClause);
 
             return queryString;
         }
@@ -44,9 +35,19 @@ namespace ITJakub.DataEntities.Database
         {
             var queryString =
                 "select b.Id from Book b inner join b.LastVersion bv";
+
+            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
+
+            queryString = string.Format("{0}{1} group by b.Id", queryString, whereClause);
+
+            return queryString;
+        }
+
+        private string CreateWhereClauseForQueryString(List<SearchCriteriaQuery> conjunctionQuery)
+        {
             var joinBuilder = new StringBuilder();
             var whereBuilder = new StringBuilder();
-            foreach (var criteriaQuery in m_conjunctionQuery)
+            foreach (var criteriaQuery in conjunctionQuery)
             {
                 if (!string.IsNullOrEmpty(criteriaQuery.Join))
                     joinBuilder.Append(' ').Append(criteriaQuery.Join);
@@ -56,9 +57,7 @@ namespace ITJakub.DataEntities.Database
                 whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
             }
 
-            queryString = string.Format("{0}{1}{2} group by b.Id", queryString, joinBuilder, whereBuilder);
-
-            return queryString;
+            return string.Format("{0}{1}", joinBuilder, whereBuilder);
         }
 
         public string GetQueryStringForHeadwordCount()

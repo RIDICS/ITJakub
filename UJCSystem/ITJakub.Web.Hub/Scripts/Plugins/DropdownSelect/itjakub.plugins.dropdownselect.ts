@@ -265,7 +265,7 @@ class DropDownSelect {
 
     protected downloadData(dropDownItemsDiv: HTMLDivElement) {
         var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("loaderWhite");
+        $(loadDiv).addClass("loading");
         $(dropDownItemsDiv).append(loadDiv);
         var self = this;
 
@@ -281,7 +281,7 @@ class DropDownSelect {
                 var categories = this.getCategories(response);
                 var items = this.getLeafItems(response);
 
-                $(dropDownItemsDiv).children("div.loaderWhite").remove();
+                $(dropDownItemsDiv).children("div.loading").remove();
 
                 this.makeTreeStructure(categories, items, dropDownItemsDiv);
 

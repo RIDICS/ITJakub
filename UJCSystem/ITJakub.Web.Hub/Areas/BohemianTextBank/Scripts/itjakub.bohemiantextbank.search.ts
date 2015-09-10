@@ -204,8 +204,19 @@ function initSearch() {
         });
     }
 
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Title);
+    enabledOptions.push(SearchTypeEnum.Author);
+    enabledOptions.push(SearchTypeEnum.Editor);
+    enabledOptions.push(SearchTypeEnum.Dating);
+    enabledOptions.push(SearchTypeEnum.Fulltext);
+    enabledOptions.push(SearchTypeEnum.Heading);
+    enabledOptions.push(SearchTypeEnum.Sentence);
+    enabledOptions.push(SearchTypeEnum.Term);
+    enabledOptions.push(SearchTypeEnum.TokenDistance);
+
     search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
-    search.makeSearch();
+    search.makeSearch(enabledOptions);
 
     var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();

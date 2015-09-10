@@ -27,7 +27,7 @@ namespace Jewelery
 
             // Return the first if there was a match.
             return attribs != null && attribs.Length > 0 ? attribs[0].StringValue : null;
-        }
+        }        
 
 
         /// <summary>

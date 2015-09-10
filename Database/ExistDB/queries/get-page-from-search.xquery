@@ -28,7 +28,7 @@ let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $
 let $queries := search:get-queries-from-search-criteria-string($query-criteria-param)
 
 
-let $collection := coll:get-collection("/db/apps/jacob/data", $document-id, $document-version-id)
+let $collection := coll:get-collection($coll:collection-path, $document-id, $document-version-id)
 (:let $page := $collection/id($page-xml-id)/parent::vw:fragment:)
 let $page := $collection[vw:fragment[.//tei:pb[@xml:id = $page-xml-id]]]
 

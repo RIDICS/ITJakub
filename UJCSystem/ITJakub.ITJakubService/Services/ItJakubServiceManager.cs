@@ -157,6 +157,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
+        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            return m_searchManager.GetTypeaheadTermsByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
+        }
 
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
@@ -261,6 +265,11 @@ namespace ITJakub.ITJakubService.Services
         public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
+        }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
+        {
+            return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
         }
     }
 }

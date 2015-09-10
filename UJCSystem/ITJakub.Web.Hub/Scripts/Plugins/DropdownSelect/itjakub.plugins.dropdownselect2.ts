@@ -92,7 +92,7 @@
         this.books = {};
 
         var loadDiv = document.createElement("div");
-        $(loadDiv).addClass("loaderWhite");
+        $(loadDiv).addClass("loading");
         $(dropDownItemsDiv).append(loadDiv);
 
         $.ajax({
@@ -103,7 +103,7 @@
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                $(dropDownItemsDiv).children("div.loaderWhite").remove();
+                $(dropDownItemsDiv).children("div.loading").remove();
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
@@ -113,7 +113,7 @@
             }
         });
     }
-
+    
     private processDownloadedData(result: IDropDownRequestResult) {
         this.books = {};
         this.categories = {};

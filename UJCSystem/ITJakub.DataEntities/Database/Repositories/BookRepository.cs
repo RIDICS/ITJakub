@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
@@ -463,6 +464,36 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTermsByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+                BookPage pageAlias = null;
+                Term termAlias = null;
+
+                var query = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinQueryOver(x => bookVersionAlias.BookPages, () => pageAlias)
+                    .JoinQueryOver(x => pageAlias.Terms, () => termAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => termAlias.Text)))
+                    .Where(x => bookTypeAlias.Type == bookType);
+
+                if (bookIdList != null)
+                    query.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
+
+                return query
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -495,6 +526,37 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Select(x => bookVersionAlias.Title)
                     .Where(x => bookTypeAlias.Type == bookType)
                     .AndRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query);
+
+                if (bookIdList != null)
+                    dbQuery.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
+
+                return dbQuery
+                    .Take(recordCount)
+                    .List<string>();
+            }
+        }
+               
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetTermsByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Category categoryAlias = null;
+                BookType bookTypeAlias = null;
+                BookPage pageAlias = null;
+                Term termAlias = null;
+
+                var dbQuery = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
+                    .JoinQueryOver(x => x.Categories, () => categoryAlias)
+                    .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
+                    .JoinQueryOver(x => bookVersionAlias.BookPages, () => pageAlias)
+                    .JoinQueryOver(x => pageAlias.Terms, () => termAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => termAlias.Text)))
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .AndRestrictionOn(() => termAlias.Text).IsInsensitiveLike(query);
 
                 if (bookIdList != null)
                     dbQuery.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);

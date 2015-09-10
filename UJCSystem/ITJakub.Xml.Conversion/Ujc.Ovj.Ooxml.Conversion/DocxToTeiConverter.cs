@@ -175,20 +175,24 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					File.Delete(docxToXmlOutput);
 			}
 
-			List<VersionInfoSkeleton> versions = settings.GetVersionList(_documentId);//TODO tady dodelat nacitani novych verzi.
+			List<VersionInfoSkeleton> versions = settings.GetVersionList(_documentId);
 
 			_currentVersionInfoSkeleton = versions.Last();
 
 
 			WriteListChange(finalOutputFileName, versions, _currentVersionInfoSkeleton);
-			File.Copy(finalOutputFileName, settings.OutputFilePath, true);
+		    string xmlFinalOutputPath = Path.Combine(settings.OutputDirectoryPath, xmlOutpuFileName);
+
+
+
+            File.Copy(finalOutputFileName, xmlFinalOutputPath, true);
 			_result.MetadataFilePath = settings.OutputMetadataFilePath;
                 //GetConversionMetadataFileFullPath(settings.OutputFilePath);
 
 			SplittingResult splittingResult = null;
-			if (settings.SplitDocumentByPageBreaks)
+		    if (settings.SplitDocumentByPageBreaks)
 			{
-				splittingResult = SplitDocumentByPageBreaks(settings.OutputFilePath, fileNameWithoutExtension);
+				splittingResult = SplitDocumentByPageBreaks(xmlFinalOutputPath, fileNameWithoutExtension);
 				if (!splittingResult.IsSplitted)
 				{
 					_result.IsConverted = false;
@@ -198,11 +202,12 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			TableOfContentResult tocResult = null;
 			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
-			tocBuilder.XmlFile = settings.OutputFilePath;
+			tocBuilder.XmlFile = xmlFinalOutputPath;
 			tocBuilder.StartingElement = "body";
 			tocResult = tocBuilder.MakeTableOfContent();
 
-			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, settings.OutputFilePath, settings.OutputMetadataFilePath);
+			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, 
+                xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
 
 			if (!settings.Debug)
 			{
@@ -241,9 +246,9 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (settings.InputFilePath == null) return;
 			FileInfo fileInfo = new FileInfo(settings.InputFilePath);
 			DirectoryInfo directoryInfo = new DirectoryInfo(fileInfo.DirectoryName);
-			if (settings.OutputFilePath == null)
-				settings.OutputFilePath = Path.Combine(directoryInfo.FullName, Path.GetFileNameWithoutExtension(fileInfo.FullName) +
-					XmlExtension);
+			//if (settings.OutputFilePath == null)
+			//	settings.OutputFilePath = Path.Combine(directoryInfo.FullName, Path.GetFileNameWithoutExtension(fileInfo.FullName) +
+			//		XmlExtension);
 			if (settings.TempDirectoryPath == null)
 			{
 				string tempDirectory = Path.Combine(directoryInfo.FullName, "Temp");
@@ -255,17 +260,18 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		//private void GenerateConversionMetadataFile(SplittingResult splittingResult,
 		//	string documentType,
-		//	string finalOutputFileName)
+		//	string finalOutputFileFullPath)
 		//{
-		//	GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileName);
+		//	GenerateConversionMetadataFile(splittingResult, new TableOfContentResult(), documentType, finalOutputFileFullPath);
 		//}
 
-		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, string documentType, string finalOutputFileName, string finalOutputMetadataFileName)
+		private void GenerateConversionMetadataFile(SplittingResult splittingResult, TableOfContentResult tableOfContentResult, 
+            string documentType, string finalOutputFileFullPath, string finalOutputFileName, string finalOutputMetadataFileName)
 		{
 
 			XDocument metada = new XDocument();
 
-			XDocument teiDocument = XDocument.Load(finalOutputFileName);
+			XDocument teiDocument = XDocument.Load(finalOutputFileFullPath);
 
 			metada.Add(new XElement(nsItj + "document",
 				new XAttribute("doctype", documentType),
@@ -285,7 +291,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XElement toc = GenerateToc(tableOfContentResult);
 			XElement hws = GenerateHwList(tableOfContentResult);
 			XElement hwt = GenerateHwTable(hws);
-
+            XElement accessories = new XElement(nsItj + "accessories", 
+                new XElement(nsItj + "file", new XAttribute("type", "content"), new XAttribute("name", finalOutputFileName)));
 
 			if (splittingResult != null) //generovat pouze v případě, že k rozdělení na strany došlo
 			{
@@ -304,6 +311,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			metada.Root.Add(toc);
 			metada.Root.Add(hwt);
 			metada.Root.Add(hws);
+            metada.Root.Add(accessories);
 			metada.Save(finalOutputMetadataFileName);
 
 		}

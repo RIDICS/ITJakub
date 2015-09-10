@@ -42,5 +42,14 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SingleOrDefault<Term>();
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual TermCategory GetTermCategoryByName(string termCategory)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<TermCategory>().Where(x => x.Name == termCategory).SingleOrDefault<TermCategory>();                               
+            }
+        }
     }
 }

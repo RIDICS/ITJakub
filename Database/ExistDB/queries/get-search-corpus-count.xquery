@@ -1,5 +1,6 @@
 xquery version "3.0";
 import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/search" at "../modules/searching.xqm";
+import module namespace coll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
@@ -14,6 +15,10 @@ declare namespace sc="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Con
 
 
 declare option exist:serialize "highlight-matches=elements";
+
+declare function local:get-match-count-mock($hits as node()*) as xs:int {
+	count($hits)
+};
 
 (:let $query-criteria-param := if (system:function-available(request:get-parameter, 2)) then
 	request:get-parameter("serializedSearchCriteria", "")
@@ -54,7 +59,7 @@ let $book-ids := $books/a:Guid/text()
 let $book-version-ids := $books/a:VersionId/concat('#', text())
 
 (:~ relativní cesta k prohledávané kolekci :)
-let $collection-path := "/apps/jacob/data/"
+let $collection-path := $coll:collection-path
 (:~ výchozí kolekce prohledávaných dokumentů :)
 let $collection := collection($collection-path)
 let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
@@ -65,6 +70,8 @@ let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version
 
 let $hits := search:get-query-document-hits($collection, $queries)
 
-let $hits-count := search:get-match-count($hits)
+(:let $hits-count := search:get-match-count($hits):)
+
+let $hits-count := local:get-match-count-mock($hits)
 
 return $hits-count

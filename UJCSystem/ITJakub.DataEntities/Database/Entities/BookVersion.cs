@@ -61,6 +61,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<FullBookRecording> FullBookRecordings { get; set; }
 
+        public virtual IList<BookAccessory> Accessories { get; set; }
 
         public virtual bool Equals(BookVersion other)
         {
