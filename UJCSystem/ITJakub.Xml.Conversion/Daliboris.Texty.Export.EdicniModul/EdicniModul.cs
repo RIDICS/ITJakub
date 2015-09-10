@@ -163,6 +163,7 @@ namespace Daliboris.Texty.Export
 
 					lsup.Add(EdicniModulUpravy.PresunoutMezeryVneTagu);
 					lsup.Add(EdicniModulUpravy.PridatMezeryZaTagyPoInterpunkci);
+                    lsup.Add(EdicniModulUpravy.RozdelitNaSlova);
 					//lsup.Add(Upravy.UpravitTextTypograficky);
 					EdicniModulUpravy eu = ekup as EdicniModulUpravy;
 					strVystup = ekup.ProvedUpravy(prepis, afterCombineFile, lsup);

@@ -5,7 +5,7 @@ namespace ITJakub.DataEntities.Database.Entities
     public abstract class RecordingBase : IEquatable<RecordingBase>
     {
         public virtual long Id { get; set; }
-        
+
         public virtual string FileName { get; set; }
 
         public virtual AudioType AudioType { get; set; }
@@ -33,8 +33,6 @@ namespace ITJakub.DataEntities.Database.Entities
         }
     }
 
-
-
     public class TrackRecording : RecordingBase
     {
         public virtual TimeSpan? Length { get; set; }
@@ -47,12 +45,14 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual BookVersion BookVersion { get; set; }
     }
 
-    public enum AudioType :byte
+    public enum AudioType : byte
     {
         Unknown = 0,
         Mp3 = 1,
         Ogg = 2,
         Wav = 3,
-        
     }
+
+
+    
 }

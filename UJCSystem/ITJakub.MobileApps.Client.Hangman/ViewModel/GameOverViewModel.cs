@@ -77,7 +77,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 };
                 AddPlayerViewModel(m_myProgressInfo);
             }
-            m_myProgressInfo.Lives = progressInfo.Lives;
+            m_myProgressInfo.HangmanCount = progressInfo.HangmanCount;
+            m_myProgressInfo.LivesRemain = progressInfo.LivesRemain;
+            m_myProgressInfo.GuessedWordCount = progressInfo.GuessedWordCount;
             m_myProgressInfo.LetterCount = progressInfo.LetterCount;
             m_myProgressInfo.Win = progressInfo.Win;
             m_myProgressInfo.Time = progressInfo.Time;

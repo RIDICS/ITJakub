@@ -48,14 +48,17 @@ class DictionarySearch {
     }
 
     create() {
-        var disabledOptions = new Array<SearchTypeEnum>();
-        disabledOptions.push(SearchTypeEnum.Fulltext);
-        disabledOptions.push(SearchTypeEnum.TokenDistance);
-        disabledOptions.push(SearchTypeEnum.Sentence);
-        disabledOptions.push(SearchTypeEnum.Heading);
+        var enabledOptions = new Array<SearchTypeEnum>();
+        enabledOptions.push(SearchTypeEnum.Headword);
+        enabledOptions.push(SearchTypeEnum.HeadwordDescription);
+        enabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+        enabledOptions.push(SearchTypeEnum.Author);
+        enabledOptions.push(SearchTypeEnum.Dating);
+        enabledOptions.push(SearchTypeEnum.Editor);
+        enabledOptions.push(SearchTypeEnum.Title);
 
         this.dictionarySelector.makeDropdown();
-        this.search.makeSearch(disabledOptions);
+        this.search.makeSearch(enabledOptions);
 
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
         this.typeaheadSearchBox.create();

@@ -2,14 +2,17 @@
 {
     public enum ResourceType
     {
-        SourceDocument = 0,
-        Book = 1,
-        UploadedMetadata = 2,
-        ConvertedMetadata = 3,
-        Page = 4,
-        Transformation = 5,
-        Image = 6,
-        Audio = 7,
-        ExtractableArchive = 8,
+        UnknownResourceFile = 0,
+        SourceDocument = 1,
+        Book = 2,
+        UploadedMetadata = 3,
+        ConvertedMetadata = 4,
+        Page = 5,
+        Transformation = 6,
+        Image = 7,
+        Audio = 8,
+        ExtractableArchive = 9,
+        UnknownXmlFile = 10,
+        BibliographyDocument = 11,
     }
 }

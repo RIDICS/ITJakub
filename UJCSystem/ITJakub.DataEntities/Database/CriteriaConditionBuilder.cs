@@ -9,6 +9,12 @@ namespace ITJakub.DataEntities.Database
         public static string Create(WordCriteriaContract word)
         {
             var stringBuilder = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(word.ExactMatch))
+            {
+                stringBuilder.Append(word.ExactMatch);
+            }
+
             if (!string.IsNullOrEmpty(word.StartsWith))
             {
                 stringBuilder.Append(word.StartsWith).Append("%");

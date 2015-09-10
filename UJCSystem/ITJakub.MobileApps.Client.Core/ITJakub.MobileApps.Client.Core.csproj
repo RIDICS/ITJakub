@@ -119,12 +119,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\Authentication\LocalAuthenticationBroker\LocalAuthCompletedMessage.cs" />
-    <Compile Include="Manager\Authentication\LocalAuthenticationBroker\LocalAuthenticationBroker.cs" />
-    <Compile Include="Manager\Authentication\LocalAuthenticationBroker\LocalAuthView.xaml.cs">
+    <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthCompletedMessage.cs" />
+    <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthenticationBroker.cs" />
+    <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthView.xaml.cs">
       <DependentUpon>LocalAuthView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Manager\Authentication\LocalAuthenticationBroker\LocalAuthViewModel.cs" />
+    <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthViewModel.cs" />
     <Compile Include="Template\AdminTemplateSelector.cs" />
     <Compile Include="Template\DataTemplateCreator.cs" />
     <Compile Include="Template\EditorTemplateSelector.cs" />
@@ -226,7 +226,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Manager\Authentication\LocalAuthenticationBroker\LocalAuthView.xaml">
+    <Page Include="Manager\Authentication\LocalAuthentication\LocalAuthView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

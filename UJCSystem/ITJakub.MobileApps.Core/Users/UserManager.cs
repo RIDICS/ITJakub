@@ -55,13 +55,22 @@ namespace ITJakub.MobileApps.Core.Users
                 CommunicationToken = user.CommunicationToken,
                 EstimatedExpirationTime = m_tokenManager.GetExpirationTime(user.CommunicationTokenCreateTime),
                 ProfilePictureUrl = user.AvatarUrl,
-                UserRole = GetUserRoleForUser(user)
+                UserRole = GetUserRoleForUser(user),
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName
             };
         }
 
         private UserRoleContract GetUserRoleForUser(User user)
         {
             return user.Institution == null ? UserRoleContract.Student : UserRoleContract.Teacher;
+        }
+
+        public string GetSaltByUserEmail(string email)
+        {
+            var user = m_userRepository.FindByEmailAndProvider(email, AuthenticationProviders.ItJakub);
+            return user == null ? null : user.PasswordSalt;
         }
     }
 }

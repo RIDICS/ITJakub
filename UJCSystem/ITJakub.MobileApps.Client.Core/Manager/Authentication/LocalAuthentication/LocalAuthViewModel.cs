@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 
-namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticationBroker
+namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthentication
 {
     public class LocalAuthViewModel : ViewModelBase
     {
@@ -80,17 +80,43 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
         {
             IsError = false;
             CheckLoginInputs();
+
+            if (!IsError)
+                SubmitForm();
         }
 
         private void CreateUser()
         {
             IsError = false;
             CheckCreateUserInputs();
+
+            if (!IsError)
+                SubmitForm();
+        }
+
+        private void SubmitForm()
+        {
+            var userLoginSkeleton = new UserLoginSkeletonWithPassword
+            {
+                Email = Email,
+                FirstName = FirstName,
+                LastName = LastName,
+                Password = Password,
+                Success = true
+            };
+
+            Messenger.Default.Send(new LocalAuthCompletedMessage
+            {
+                UserLoginSkeleton = userLoginSkeleton
+            });
         }
 
         private void Cancel()
         {
-            Messenger.Default.Send(new LocalAuthCompletedMessage());
+            Messenger.Default.Send(new LocalAuthCompletedMessage
+            {
+                UserLoginSkeleton = new UserLoginSkeletonWithPassword { Success = false }
+            });
         }
 
         private void CheckLoginInputs()

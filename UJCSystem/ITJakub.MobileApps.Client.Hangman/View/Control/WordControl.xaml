@@ -31,11 +31,11 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
 
-                            <Border BorderThickness="0,0,0,10"
+                            <Border BorderThickness="0,0,0,7"
                                     Margin="5,0,5,0"
                                     BorderBrush="Black"
                                     Width="40"
-                                    Height="50"
+                                    Height="47"
                                     x:Name="Border">
 
                                 <TextBlock Text="{Binding}"

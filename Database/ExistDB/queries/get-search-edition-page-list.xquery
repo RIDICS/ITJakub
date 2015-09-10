@@ -60,7 +60,7 @@ let $document-version-id := $books[1]/a:VersionId/text()
 
 (:return ($query-criteria, $queries, $books, $document-id, $document-version-id):)
 
-let $collection := coll:get-collection("/db/apps/jacob/data", $document-id, $document-version-id)
+let $collection := coll:get-collection($coll:collection-path, $document-id, $document-version-id)
 
 
 (:~ dokumenty, které obsahují hledaný výraz :)

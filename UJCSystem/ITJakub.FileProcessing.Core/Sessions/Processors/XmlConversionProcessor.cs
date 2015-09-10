@@ -41,21 +41,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             }
 
-
-
             var metaDataResource = new Resource
             {
                 FileName = metaDataFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, metaDataFileName),
                 ResourceType = ResourceType.ConvertedMetadata
-            };
-
-            var bookFileName = string.Format("{0}.xml", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
-            var bookResource = new Resource
-            {
-                FileName = bookFileName,
-                FullPath = Path.Combine(resourceSessionDirector.SessionPath, bookFileName),
-                ResourceType = ResourceType.Book
             };
 
             var tmpDirPath = Path.Combine(resourceSessionDirector.SessionPath, "tmp");
@@ -75,7 +65,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 Debug = false,
                 InputFilePath = inputFileResource.FullPath,
                 MetadataFilePath = m_conversionMetadataPath,
-                OutputFilePath = bookResource.FullPath,
+                OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
                 GetVersionList = versionProviderHelper.GetVersionsByBookId,
@@ -88,14 +78,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             if (conversionResult.IsConverted)
             {
-                resourceSessionDirector.Resources.Add(metaDataResource);
-                resourceSessionDirector.Resources.Add(bookResource);
+                resourceSessionDirector.Resources.Add(metaDataResource);                
             }
             else
             {
                 throw new ConversionException(
-                    string.Format("Soubor se nepodařilo konvertovat. Viz vnitřní výjimka : '{0}'",
-                        conversionResult.Errors.FirstOrDefault()));
+                    string.Format("File was not converted sucessfully. See InnerException : '{0}'", conversionResult.Errors.FirstOrDefault()));
             }
             
         }

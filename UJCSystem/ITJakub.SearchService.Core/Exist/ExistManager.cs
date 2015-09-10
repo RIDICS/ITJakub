@@ -12,30 +12,36 @@ namespace ITJakub.SearchService.Core.Exist
 {
     public class ExistManager
     {
-        private readonly ExistClient m_client;
+        private readonly ExistCommunicationManager m_communicationManager;
         private readonly IExistResourceManager m_existResourceManager;
         private readonly FulltextSearchCriteriaDirector m_searchCriteriaDirector;
 
-        public ExistManager(ExistClient existClient, IExistResourceManager existResourceManager, FulltextSearchCriteriaDirector searchCriteriaDirector)
+        public ExistManager(ExistCommunicationManager existCommunicationManager, IExistResourceManager existResourceManager, FulltextSearchCriteriaDirector searchCriteriaDirector)
         {
-            m_client = existClient;
+            m_communicationManager = existCommunicationManager;
             m_existResourceManager = existResourceManager;
             m_searchCriteriaDirector = searchCriteriaDirector;
         }
 
         public void UploadBookFile(string bookId, string fileName, Stream dataStream)
         {
-            m_client.UploadBookFile(bookId, fileName, dataStream);
+            m_communicationManager.UploadBookFile(bookId, fileName, dataStream);
         }
 
-        public void UploadVersionFile(string bookId, string versionId, string fileName, Stream filStream)
+        public void UploadVersionFile(string bookId, string versionId, string fileName, Stream fileStream)
         {
-            m_client.UploadVersionFile(bookId, versionId, fileName, filStream);
+            m_communicationManager.UploadVersionFile(bookId, versionId, fileName, fileStream);
         }
 
         public void UploadSharedFile(string fileName, Stream filStream)
         {
-            m_client.UploadSharedFile(fileName, filStream);
+            m_communicationManager.UploadSharedFile(fileName, filStream);
+        }
+
+
+        public void UploadBibliographyFile(string bookId, string versionId, string fileName, Stream dataStream)
+        {
+            m_communicationManager.UploadBibliographyFile(bookId, versionId, fileName, dataStream);
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition,
@@ -44,7 +50,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                 transformationLevel, bookId, versionId);
-            return m_client.GetPageByPositionFromStart(bookId, versionId, pagePosition,
+            return m_communicationManager.GetPageByPositionFromStart(bookId, versionId, pagePosition,
                 Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -53,7 +59,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                 transformationLevel, bookId, versionId);
-            return m_client.GetPageByName(bookId, versionId, pageName,
+            return m_communicationManager.GetPageByName(bookId, versionId, pageName,
                 Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -63,7 +69,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                 transformationLevel, bookId, versionId);
-            return m_client.GetPagesByName(bookId, versionId, start, end,
+            return m_communicationManager.GetPagesByName(bookId, versionId, start, end,
                 Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -72,7 +78,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                 transformationLevel, bookId, versionId);
-            return m_client.GetPageByXmlId(bookId, versionId, pageXmlId,
+            return m_communicationManager.GetPageByXmlId(bookId, versionId, pageXmlId,
                 Enum.GetName(typeof (OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -82,7 +88,7 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                transformationLevel, bookId, versionId);
-            return m_client.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId,
+            return m_communicationManager.GetDictionaryEntryByXmlId(bookId, versionId, xmlEntryId,
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -96,7 +102,7 @@ namespace ITJakub.SearchService.Core.Exist
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                transformationLevel, bookId, versionId);
             
-            return m_client.GetDictionaryEntryFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, xmlEntryId,
+            return m_communicationManager.GetDictionaryEntryFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, xmlEntryId,
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -140,7 +146,7 @@ namespace ITJakub.SearchService.Core.Exist
 
             AdjustStartIndexes(filteredCriterias.ResultSpecifications);
 
-            return SearchResultContractList.FromXml(m_client.ListSearchEditionsResults(filteredCriterias.ToXml()));
+            return SearchResultContractList.FromXml(m_communicationManager.ListSearchEditionsResults(filteredCriterias.ToXml()));
         }
 
         private void AdjustStartIndexes(ResultCriteriaContract resultCriteriaContract)
@@ -167,7 +173,7 @@ namespace ITJakub.SearchService.Core.Exist
 
             AdjustStartIndexes(resultSearchCriteria.ResultSpecifications);
 
-            var stringResult = m_client.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
+            var stringResult = m_communicationManager.ListSearchDictionariesResults(resultSearchCriteria.ToXml());
             return HeadwordListContract.FromXml(stringResult);
         }
 
@@ -177,7 +183,7 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultSearchCriteria.ResultBooks == null)
                 return 0;
 
-            var result = m_client.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
+            var result = m_communicationManager.ListSearchDictionariesResultsCount(resultSearchCriteria.ToXml());
             return result;
         }
 
@@ -187,7 +193,7 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultSearchCriteria.ResultBooks == null)
                 return 0;
 
-            return m_client.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
+            return m_communicationManager.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
         }
 
         public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
@@ -196,7 +202,7 @@ namespace ITJakub.SearchService.Core.Exist
             if (filteredCriterias.ResultBooks == null)
                 return null;
 
-            return PageListContract.FromXml(m_client.GetSearchEditionsPageList(filteredCriterias.ToXml()));
+            return PageListContract.FromXml(m_communicationManager.GetSearchEditionsPageList(filteredCriterias.ToXml()));
         }
 
         public string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookId, string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
@@ -208,7 +214,7 @@ namespace ITJakub.SearchService.Core.Exist
 
             var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
                 transformationLevel, bookId, versionId);
-            return m_client.GetEditionPageFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, pageXmlId,
+            return m_communicationManager.GetEditionPageFromSearch(resultSearchConjunctions.ToXml(), bookId, versionId, pageXmlId,
                 Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
 
@@ -221,7 +227,7 @@ namespace ITJakub.SearchService.Core.Exist
 
             AdjustStartIndexes(resultSearchCriteria.ResultSpecifications);
 
-            var stringResult = m_client.GetSearchCorpus(resultSearchCriteria.ToXml());
+            var stringResult = m_communicationManager.GetSearchCorpus(resultSearchCriteria.ToXml());
             return CorpusSearchResultContractList.FromXml(stringResult);
         }
 
@@ -231,8 +237,11 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultSearchCriteria.ResultBooks == null)
                 return 0;
 
-            var result = m_client.GetSearchCorpusCount(resultSearchCriteria.ToXml());
+            var result = m_communicationManager.GetSearchCorpusCount(resultSearchCriteria.ToXml());
             return result;
         }
+
+
+      
     }
 }

@@ -25,9 +25,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         private const string TokenUrl = "https://accounts.google.com/o/oauth2/token";
         private const string TokenInfoUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token={0}";
         private const string UserInfoUrl = "https://www.googleapis.com/plus/v1/people/me";
-
+        
         public string AccountName { get { return "Google"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
+
+        public Task<UserLoginSkeleton> LoginForCreateUserAsync()
+        {
+            return LoginAsync();
+        }
 
         public async Task<UserLoginSkeleton> LoginAsync()
         {

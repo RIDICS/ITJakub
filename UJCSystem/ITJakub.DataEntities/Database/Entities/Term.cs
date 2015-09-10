@@ -5,8 +5,6 @@ namespace ITJakub.DataEntities.Database.Entities
 {
     public class Term : IEquatable<Term>
     {
-
-
         public virtual int Id { get; set; }
 
         public virtual string XmlId { get; set; }
@@ -16,6 +14,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual long Position { get; set; }
 
         public virtual IList<BookPage> ReferencedFrom { get; set; }
+
+        public virtual TermCategory TermCategory { get; set; }
 
 
         public virtual bool Equals(Term other)

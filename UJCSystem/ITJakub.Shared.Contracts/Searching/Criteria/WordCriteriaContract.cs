@@ -14,5 +14,8 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
 
         [DataMember]
         public string EndsWith { get; set; }
+
+        [DataMember]
+        public string ExactMatch { get; set; }
     }
 }

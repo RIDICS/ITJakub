@@ -32,6 +32,11 @@ namespace ITJakub.MobileApps.Core
             m_userManager.CreateUser(providerContract, providerToken, userDetail);
         }
 
+        public string GetSaltByUserEmail(string email)
+        {
+            return m_userManager.GetSaltByUserEmail(email);
+        }
+
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             return m_userManager.LoginUser(providerContract, providerToken, email);

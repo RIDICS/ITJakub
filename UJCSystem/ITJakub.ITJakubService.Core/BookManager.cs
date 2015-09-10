@@ -7,6 +7,7 @@ using ITJakub.Core;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
@@ -138,6 +139,12 @@ namespace ITJakub.ITJakubService.Core
             var bookVersion = m_bookVersionRepository.GetBookVersionWithAuthorsByGuid(bookGuid);
             var bookContract = Mapper.Map<BookContract>(bookVersion);
             return bookContract;
+        }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)
+        {
+            var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
+            return Mapper.Map<IList<TermContract>>(terms);
         }
     }
 }

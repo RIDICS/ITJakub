@@ -247,4 +247,36 @@ namespace ITJakub.ITJakubService.Core.Search
             };
         }
     }
+
+    public class TermCriteriaImplementation : ICriteriaImplementationBase
+    {
+        public CriteriaKey CriteriaKey
+        {
+            get { return CriteriaKey.Term; }
+        }
+
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
+        {
+            var wordListCriteria = (WordListCriteriaContract)searchCriteriaContract;
+            var pageAlias = string.Format("pa{0}", Guid.NewGuid().ToString("N"));
+            var termAlias = string.Format("ta{0}", Guid.NewGuid().ToString("N"));
+            var whereBuilder = new StringBuilder();
+
+            foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
+            {
+                if (whereBuilder.Length > 0)
+                    whereBuilder.Append(" or");
+
+                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                whereBuilder.AppendFormat(" {0}.Text like (:{1})", termAlias, uniqueParameterName);
+                metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
+            }
+
+            return new SearchCriteriaQuery
+            {
+                Join = string.Format("inner join bv.BookPages {0} inner join {0}.Terms {1}", pageAlias, termAlias),
+                Where = whereBuilder.ToString(),
+            };
+        }
+    }
 }

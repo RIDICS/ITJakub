@@ -9,10 +9,16 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanAdminViewModel}">
     
-    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="HangmanCountColor" Color="Salmon" />
+        <SolidColorBrush x:Key="GuessedColor" Color="LawnGreen" />
+    </UserControl.Resources>
+    
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
+          Margin="100,0,40,40">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="400" />
+            <ColumnDefinition Width="470" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,17 +27,19 @@
         
         <TextBlock Grid.Column="0"
                    Grid.Row="0"
+                   Margin="20,0,0,0"
                    Text="Aktuální stav"
                    Style="{StaticResource SubheaderTextBlockStyle}" />
 
         <TextBlock Grid.Column="1"
                    Grid.Row="0"
+                   Margin="10,0,0,0"
                    Text="Výsledné pořadí"
                    Style="{StaticResource SubheaderTextBlockStyle}" />
         
         <ListView Grid.Row="1"
                   Grid.Column="0"
-                  Margin="0,30,10,10"
+                  Margin="0,10,10,10"
                   ItemsSource="{Binding PlayerRanking}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -53,21 +61,31 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-                            
+
                             <TextBlock>
-                                <Run Text="{Binding UserInfo.FirstName}" />
-                                <Run Text="{Binding UserInfo.LastName}" />
+                                <Run Text="{Binding UserInfo.FirstName}"
+                                     FontWeight="Bold" />
+                                <Run Text="{Binding UserInfo.LastName}"
+                                     FontWeight="Bold" />
                                 <LineBreak />
                                 <Run Text="Uhádnuto slov:" />
-                                <Run Text="{Binding LetterCount}" />
-                                <Run Text="(písmen:" /><Run Text="{Binding LetterCount}" /><Run Text=")" />
+                                <Run Text="{Binding GuessedWordCount}"
+                                     Foreground="{StaticResource GuessedColor}"
+                                     FontWeight="Bold" />
+                                <Run Text="(písmen: " /><!--
+                             --><Run Text="{Binding LetterCount}" Foreground="{StaticResource GuessedColor}" FontWeight="Bold" /><!--
+                             --><Run Text=")" />
                                 <LineBreak />
-                                <Run Text="Zbývá životů:" />
-                                <Run Text="{Binding Lives}" />
+                                <Run Text="Počet oběšenců:" />
+                                <Run Text="{Binding HangmanCount}"
+                                     Foreground="{StaticResource HangmanCountColor}"
+                                     FontWeight="Bold" />
+                                <LineBreak />
+                                <Run Text="Aktualnímu oběšenci zbývá životů:" />
+                                <Run Text="{Binding LivesRemain}"
+                                     Foreground="{StaticResource HangmanCountColor}"
+                                     FontWeight="Bold" />
                             </TextBlock>
-                            
-                            <control:WordControl Grid.Row="1"
-                                                  /><!--TODO add WordViewModel as datacontext-->
                         </Grid>
                     </Grid>
                 </DataTemplate>
@@ -77,7 +95,7 @@
         <control:ResultTableControl
                 Grid.Row="1"
                 Grid.Column="1"
-                Margin="10,30,10,10"
-                ItemsSource="{Binding PlayerRanking}" />
+                Margin="10,10,10,10"
+                PlayerRanking="{Binding PlayerRanking}" />
     </Grid>
 </UserControl>
