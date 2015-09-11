@@ -63,6 +63,7 @@
     <Compile Include="AutoMapperProfiles\CorpusSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\DictionaryContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\FeedbackProfile.cs" />
+    <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardShortContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BucketContractProfile.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\TermProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="PermissionManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />

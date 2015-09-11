@@ -90,6 +90,7 @@
     <Compile Include="Database\Entities\Track.cs" />
     <Compile Include="Database\Entities\Permission.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Repositories\PermissionRepository.cs" />
     <Compile Include="Database\Repositories\TermRepository.cs" />
     <Compile Include="Database\Repositories\FeedbackRepository.cs" />
     <Compile Include="Database\SearchCriteriaQuery.cs" />
@@ -206,7 +207,7 @@
     <EmbeddedResource Include="Database\Entities\TermCategory.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Database\Entities\Group.hbm.xml"/>
+    <EmbeddedResource Include="Database\Entities\Group.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />

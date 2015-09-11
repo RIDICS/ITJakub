@@ -14,6 +14,14 @@
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="false" />
     </property>
+
+    <property name="CreateTime">
+      <column name="CreateTime" sql-type="datetime" not-null="true" />
+    </property>
+
+    <many-to-one name="CreatedBy" lazy="proxy">
+      <column name="CreatedBy" sql-type="bigint" not-null="true" />
+    </many-to-one>
     
     <bag name="Users" table="User_Group" lazy="true">
       <key column="Group" />

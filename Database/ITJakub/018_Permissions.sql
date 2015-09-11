@@ -6,7 +6,9 @@ BEGIN TRAN;
 	CREATE TABLE [dbo].[Group](
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Group(Id)] PRIMARY KEY,
 		[Name] varchar(255) NOT NULL,
-		[Description] varchar(500) NULL
+		[Description] varchar(500) NULL,
+		[CreateTime] datetime NOT NULL,
+		[CreatedBy] int NOT NULL CONSTRAINT [FK_Group(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
 	);
 
 	CREATE TABLE [dbo].[User_Group](

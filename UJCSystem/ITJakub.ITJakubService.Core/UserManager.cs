@@ -1,16 +1,20 @@
 ﻿using System;
+using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
+using log4net;
 
 namespace ITJakub.ITJakubService.Core
 {
     public class UserManager
     {
         private readonly UserRepository m_userRepository;
+
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public UserManager(UserRepository userRepository)
         {
@@ -38,6 +42,15 @@ namespace ITJakub.ITJakubService.Core
 
         public UserContract FindByUserName(string userName)
         {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                string message = "Username could not be empty";
+
+                if (m_log.IsWarnEnabled)
+                    m_log.Warn(message);
+                throw new ArgumentException(message);
+            }
+
             var dbUser = m_userRepository.FindByUserName(userName);
             if (dbUser == null) return null;
             var user = Mapper.Map<UserContract>(dbUser);

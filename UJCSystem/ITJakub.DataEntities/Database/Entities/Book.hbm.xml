@@ -16,5 +16,11 @@
       <key column="Book" />
       <one-to-many class="BookVersion" />
     </bag>
+    
+    <bag name="Permissions" inverse="true">
+      <key column="Book" />
+      <one-to-many class="Permission" />
+    </bag>
+    
   </class>
 </hibernate-mapping>
