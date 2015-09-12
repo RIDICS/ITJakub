@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -71,6 +73,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
 
             InputPane.GetForCurrentView().Showing += KeyboardShowing;
             InputPane.GetForCurrentView().Hiding += KeyboardHiding;
+            Window.Current.SizeChanged += UpdatePageSize;
 
             Messenger.Default.Register<LocalAuthCompletedMessage>(this, OnLocalAuthCompleted);
             m_popup.IsOpen = true;
@@ -87,6 +90,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
 
             InputPane.GetForCurrentView().Hiding -= KeyboardHiding;
             InputPane.GetForCurrentView().Showing -= KeyboardShowing;
+            Window.Current.SizeChanged -= UpdatePageSize;
         }
 
         private void KeyboardShowing(InputPane sender, InputPaneVisibilityEventArgs args)
@@ -97,6 +101,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthenticat
         private void KeyboardHiding(InputPane sender, InputPaneVisibilityEventArgs args)
         {
             m_view.Height = Window.Current.Bounds.Height;
+        }
+
+        private void UpdatePageSize(object sender, WindowSizeChangedEventArgs e)
+        {
+            var page = m_popup.Child as Page;
+            if (page == null)
+                return;
+
+            page.Width = Window.Current.Bounds.Width;
+            page.Height = Window.Current.Bounds.Height;
         }
     }
 }
