@@ -111,6 +111,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 AdminViewModel = currentApplication.AdminViewModel;
                 IsChatSupported = currentApplication.IsChatSupported;
+
+                if (AdminViewModel == null)
+                {
+                    m_errorService.ShowError("Tato aplikace nemá vlastní učitelský pohled.", "Neexistující učitelský pohled", GoBack);
+                    return;
+                }
+
                 AdminViewModel.SetTask(data);
                 AdminViewModel.InitializeCommunication();
 
@@ -119,7 +126,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ChatApplicationViewModel = chatApplication.ApplicationViewModel as SupportAppBaseViewModel;
                     if (ChatApplicationViewModel != null)
                     {
-                        ChatApplicationViewModel.InitializeCommunication();
+                        ChatApplicationViewModel.InitializeCommunication(true);
                     }
                 }
 

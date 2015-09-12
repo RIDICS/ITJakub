@@ -101,7 +101,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetTaskInfoWithGuessHistory((taskInfo, exception) =>
             {

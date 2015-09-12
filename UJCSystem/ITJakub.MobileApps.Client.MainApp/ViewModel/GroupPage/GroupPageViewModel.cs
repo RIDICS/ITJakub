@@ -414,7 +414,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void OpenAdminView()
         {
-            Navigate<AdminHostView>();
+            var taskInfo = m_groupInfo.Task;
+            if (taskInfo == null)
+            {
+                Navigate<AdminHostView>();
+                return;
+            }
+
+            m_dataService.GetApplication(taskInfo.Application, (appInfo, exception) =>
+            {
+                if (appInfo != null && appInfo.AdminDataTemplate == null)
+                {
+                    Navigate<ApplicationHostView>();
+                }
+                else
+                {
+                    Navigate<AdminHostView>();
+                }
+            });
         }
     }
 }

@@ -228,7 +228,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
                     if (ChatApplicationViewModel != null)
                     {
-                        ChatApplicationViewModel.InitializeCommunication();
+                        ChatApplicationViewModel.InitializeCommunication(IsOwnerMode);
                     }
                 }
 
@@ -248,7 +248,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             TaskDescription = m_currentTask.Description;
             ApplicationViewModel.SetTask(m_currentTask.Data);
-            ApplicationViewModel.InitializeCommunication();
+            ApplicationViewModel.InitializeCommunication(IsOwnerMode);
             
             m_isAppStarted = true;
             GroupStateUpdate();
