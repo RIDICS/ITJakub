@@ -7,6 +7,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using ITJakub.MobileApps.Client.Books.View.Control;
+using ITJakub.MobileApps.Client.Shared.Control;
 
 namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 {

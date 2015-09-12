@@ -14,6 +14,7 @@ using Windows.UI.Xaml.Media;
 using ITJakub.MobileApps.Client.Books.View.Control;
 using ITJakub.MobileApps.Client.Fillwords.View.Converter;
 using ITJakub.MobileApps.Client.Fillwords.ViewModel;
+using ITJakub.MobileApps.Client.Shared.Control;
 
 namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 {
@@ -209,7 +210,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 var positionLeft = point.X + m_richEditBoxControl.Padding.Left + m_richEditBoxControl.BorderThickness.Left;
                 var positionTop = point.Y;
                 comboBoxItem.ComboBox.Margin = new Thickness(positionLeft, positionTop, 0, 0);
-                comboBoxItem.ComboBox.Width = width - 3;
+                comboBoxItem.ComboBox.Width = width; // For Windows 8.1 is suitable use correction -3, but Windows detection is requiered
             }
         }
 
