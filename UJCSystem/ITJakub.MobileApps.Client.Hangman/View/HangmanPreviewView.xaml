@@ -35,9 +35,13 @@
 
                         <control:WordControl
                             Grid.Column="1"
-                            Margin="10,0,0,0"
+                            Margin="10,6,0,0"
                             HorizontalAlignment="Left"
                             HorizontalContentAlignment="Center"
+                            FontSize="20"
+                            LetterWidth="30"
+                            LetterHeight="32"
+                            LineHeight="4"
                             DataContext="{Binding ResultWord}" />
                     </Grid>
                 </DataTemplate>

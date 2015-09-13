@@ -94,6 +94,10 @@
             <control1:WordControl
                 Grid.Row="1"
                 DataContext="{Binding WordViewModel}"
+                FontSize="30"
+                LetterWidth="40"
+                LetterHeight="47"
+                LineHeight="7"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center" />
 

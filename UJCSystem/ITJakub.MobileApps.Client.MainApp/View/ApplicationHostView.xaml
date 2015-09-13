@@ -133,6 +133,7 @@
                        />
 
             <ScrollViewer Grid.Column="2"
+                          VerticalScrollBarVisibility="Auto"
                           HorizontalScrollMode="Disabled"
                           ZoomMode="Disabled"
                           Margin="30,0,10,0">
