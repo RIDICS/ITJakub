@@ -19,18 +19,13 @@ using Microsoft.Practices.Unity;
 namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 {
     public class GroupManager
-    {        
-        private readonly AuthenticationManager m_authManager;
-        private readonly UserAvatarCache m_userAvatarCache;
-        private readonly BitmapImage m_defaultUserAvatar;
+    {
         private readonly ApplicationIdManager m_applicationIdManager;
-        private GroupDetailContract m_currentGroupInfoModel;
+        private readonly AuthenticationManager m_authManager;
+        private readonly BitmapImage m_defaultUserAvatar;
         private readonly MobileAppsServiceClientManager m_serviceClientManager;
-
-        public long CurrentGroupId { get; set; }
-        public GroupType CurrentGroupType { get; set; }
-
-        public bool RestoreLastState { get; set; }
+        private readonly UserAvatarCache m_userAvatarCache;
+        private GroupDetailContract m_currentGroupInfoModel;
 
         public GroupManager(IUnityContainer container)
         {
@@ -43,6 +38,9 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             m_defaultUserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/user-32.png"));
         }
 
+        public long CurrentGroupId { get; set; }
+        public GroupType CurrentGroupType { get; set; }
+        public bool RestoreLastState { get; set; }
 
         //public async void GetGroupForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         //{
@@ -147,7 +145,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             var userId = m_authManager.GetCurrentUserId();
-            
+
             if (!userId.HasValue)
             {
                 throw new ArgumentException("No logged user");
@@ -185,6 +183,76 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 {
                     callback(null, ex);
                 }
+            });
+        }
+
+        public Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync()
+        {
+            var userId = m_authManager.GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                throw new ArgumentException("No logged user");
+            }
+
+            return Task.Factory.StartNew(() =>
+            {
+                var client = m_serviceClientManager.GetClient();
+                var membershipGroups = client.GetMembershipGroups(userId.Value);
+                var result = new ObservableCollection<GroupInfoViewModel>();
+                foreach (var groupDetails in membershipGroups)
+                {
+                    var newGroup = new GroupInfoViewModel
+                    {
+                        GroupName = groupDetails.Name,
+                        GroupId = groupDetails.Id,
+                        GroupType = GroupType.Member,
+                        State = groupDetails.State,
+                        CreateTime = groupDetails.CreateTime,
+                        Members = new ObservableCollection<GroupMemberViewModel>(),
+                        Task = new TaskViewModel()
+                    };
+                    FillGroupMembers(newGroup, groupDetails.Members);
+                    result.Add(newGroup);
+                }
+
+                return result;
+            });
+        }
+
+        public Task<ObservableCollection<GroupInfoViewModel>> GetOwnedGroupsForCurrentUserAsync()
+        {
+            var userId = m_authManager.GetCurrentUserId();
+
+            if (!userId.HasValue)
+            {
+                throw new ArgumentException("No logged user");
+            }
+            if (m_authManager.UserLoginInfo == null || m_authManager.UserLoginInfo.UserRole != UserRoleContract.Teacher)
+                return null;
+
+            return Task.Factory.StartNew(() =>
+            {
+                var client = m_serviceClientManager.GetClient();
+                var ownedGroups = client.GetOwnedGroups(userId.Value);
+                var result = new ObservableCollection<GroupInfoViewModel>();
+                foreach (var groupDetails in ownedGroups)
+                {
+                    var newGroup = new GroupInfoViewModel
+                    {
+                        GroupName = groupDetails.Name,
+                        GroupId = groupDetails.Id,
+                        GroupType = GroupType.Owner,
+                        State = groupDetails.State,
+                        GroupCode = groupDetails.EnterCode,
+                        CreateTime = groupDetails.CreateTime,
+                        Members = new ObservableCollection<GroupMemberViewModel>(),
+                        Task = new TaskViewModel()
+                    };
+                    FillGroupMembers(newGroup, groupDetails.Members);
+                    result.Add(newGroup);
+                }
+
+                return result;
             });
         }
 
@@ -285,7 +353,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     GroupName = groupInfo.Name,
                     CreateTime = groupInfo.CreateTime,
                     GroupCode = groupInfo.EnterCode,
-                    State = groupInfo.State,
+                    State = groupInfo.State
                 };
 
                 var task = groupInfo.Task;

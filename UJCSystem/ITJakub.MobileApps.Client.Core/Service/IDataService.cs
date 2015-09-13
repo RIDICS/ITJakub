@@ -59,7 +59,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void GetCurrentApplication(Action<ApplicationType> callback);
 
-
         void SetRestoringLastGroupState(bool restore);
 
         void GetAppSelectionTarget(Action<SelectApplicationTarget> callback);
@@ -68,6 +67,17 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
 
-         void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
+        Task<ObservableCollection<GroupInfoViewModel>> GetOwnedGroupsForCurrentUserAsync();
+
+        void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
+
+        Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync();
+
+
+        Task<ObservableCollection<string>> GetAllNews();
+
+        
+
+        
     }
 }

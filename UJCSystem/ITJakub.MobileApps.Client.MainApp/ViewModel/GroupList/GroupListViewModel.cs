@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -24,30 +23,29 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
     public class GroupListViewModel : ViewModelBase
     {
         private const PollingInterval UpdatePollingInterval = PollingInterval.Medium;
-
         private readonly IDataService m_dataService;
-        private readonly INavigationService m_navigationService;
-        private readonly IMainPollingService m_pollingService;
         private readonly IErrorService m_errorService;
-
-        private readonly List<GroupInfoViewModel> m_selectedGroups;
+        private readonly INavigationService m_navigationService;
         private readonly HashSet<long> m_ownedGroupIds;
-        private GroupInfoViewModel m_selectedGroup;
-        private ObservableCollection<GroupInfoViewModel> m_ownedGroups;
-        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_myGroupList;
-        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_ownedGroupList;
-        private SortGroupItem.SortType m_selectedSortType;
-        private GroupStateContract? m_currentFilter;
+        private readonly IMainPollingService m_pollingService;
+        private readonly List<GroupInfoViewModel> m_selectedGroups;
         private UserRoleContract m_userRole;
-
-        private bool m_isCommandBarOpen;
-        private bool m_loading;
-        private bool m_isOneItemSelected;
-        private bool m_isFilter;
-        private bool m_canRemoveSelected;
         private bool m_canPauseSelected;
+        private bool m_canRemoveSelected;
         private bool m_canStartSelected;
+        private GroupStateContract? m_currentFilter;
+        private bool m_isCommandBarOpen;
+        private bool m_isFilter;
         private bool m_isGroupListEmpty;
+        private bool m_isOneItemSelected;
+        private bool m_loadingMembershipGroups;
+        private bool m_loadingMyGroups;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_myGroupList;
+        private ObservableCollection<GroupInfoViewModel> m_myGroups;
+        private ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> m_ownedGroupList;
+        private ObservableCollection<GroupInfoViewModel> m_ownedGroups;
+        private GroupInfoViewModel m_selectedGroup;
+        private SortGroupItem.SortType m_selectedSortType;
 
         public GroupListViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService,
             IErrorService errorService)
@@ -71,197 +69,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             InitCommands();
             LoadData();
         }
-
-        #region Properties
-
-        public RelayCommand GoBackCommand { get; private set; }
-
-        public RelayCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; private set; }
-
-        public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; private set; }
-
-        public RelayCommand RefreshListCommand { get; private set; }
-
-        public RelayCommand ConnectCommand { get; private set; }
-
-        public RelayCommand OpenMyTaskListCommand { get; private set; }
-
-        public RelayCommand CreateTaskCommand { get; private set; }
-
-        public RelayCommand<object> FilterCommand { get; private set; }
-
-        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> MyMyGroupList
-        {
-            get { return m_myGroupList; }
-            set
-            {
-                m_myGroupList = value;
-                RaisePropertyChanged();
-                IsGroupListEmpty = m_myGroupList.Count == 0;
-            }
-        }
-    public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> OwnedGroupList
-        {
-            get { return m_ownedGroupList; }
-            set
-            {
-                m_ownedGroupList = value;
-                RaisePropertyChanged();
-                IsGroupListEmpty = m_ownedGroupList.Count == 0;
-            }
-        }
-
-
-        public bool IsCommandBarOpen
-        {
-            get { return m_isCommandBarOpen; }
-            set
-            {
-                m_isCommandBarOpen = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public GroupInfoViewModel SelectedGroup
-        {
-            get { return m_selectedGroup; }
-            set
-            {
-                m_selectedGroup = value;
-                IsCommandBarOpen = value != null;
-                DeleteGroupViewModel.SelectedGroup = value;
-
-                RaisePropertyChanged();
-                RaisePropertyChanged(() => IsGroupSelected);
-                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
-            }
-        }
-
-        public bool IsGroupSelected
-        {
-            get { return SelectedGroup != null; }
-        }
-
-        public bool IsTeacherAndGroupSelected
-        {
-            get { return m_userRole == UserRoleContract.Teacher && SelectedGroup != null; }
-        }
-
-        public bool IsTeacherMode
-        {
-            get { return m_userRole == UserRoleContract.Teacher; }
-        }
-
-        public bool IsGroupListEmpty
-        {
-            get { return m_isGroupListEmpty; }
-            set
-            {
-                m_isGroupListEmpty = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Loading
-        {
-            get { return m_loading; }
-            set
-            {
-                m_loading = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsOneItemSelected
-        {
-            get { return m_isOneItemSelected; }
-            set
-            {
-                m_isOneItemSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool CanRemoveSelected
-        {
-            get { return m_canRemoveSelected; }
-            set
-            {
-                m_canRemoveSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool CanPauseSelected
-        {
-            get { return m_canPauseSelected; }
-            set
-            {
-                m_canPauseSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool CanStartSelected
-        {
-            get { return m_canStartSelected; }
-            set
-            {
-                m_canStartSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-
-        public bool IsFilter
-        {
-            get { return m_isFilter; }
-            set
-            {
-                m_isFilter = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public GroupStateContract? CurrentFilter
-        {
-            get { return m_currentFilter; }
-            set
-            {
-                m_currentFilter = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public SortGroupItem.SortType SelectedSortType
-        {
-            get { return m_selectedSortType; }
-            set
-            {
-                m_selectedSortType = value;
-                RaisePropertyChanged();
-
-                if (m_ownedGroups != null)
-                    DisplayGroupList(m_ownedGroups);
-            }
-        }
-
-        public int DefaultIndex
-        {
-            get { return 0; }
-        }
-
-        public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
-
-        public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
-
-        public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
-
-        public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
-
-        public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
-
-        #endregion
 
         private void InitCommands()
         {
@@ -299,42 +106,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_navigationService.GoBack();
         }
 
-        private async void LoadData()
+        private void LoadData()
         {
             m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
-            Loading = true;
-         
-                m_dataService.GetGroupsForCurrentUser((result, ex) =>
-                {
-                    if (ex != null)
-                    {
-                        m_errorService.ShowConnectionError();
-                        Loading = false;
-                    }
+            //Loading = true;
 
-                    m_myGroups = result;
-                    MyMyGroupList = DisplayGroupList(result);
-                    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
-                });
-
-                m_dataService.GetOwnedGroupsForCurrentUser((result, ex) =>
-                {
-                    if (ex != null)
-                    {
-                        m_errorService.ShowConnectionError();
-                        Loading = false;
-                    }
-                    m_ownedGroups = result;
-                    OwnedGroupList = DisplayGroupList(m_ownedGroups);
-                    Loading = false;
-                    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
-                });
+            LoadMyGroups();
+            LoadMembershipGroups();
 
 
-             
-
-            
-            
             //m_dataService.GetGroupList((groupList, exception) =>
             //{
             //    Loading = false;
@@ -351,11 +131,84 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
             //});
 
-            //m_dataService.GetLoggedUserInfo(false, info =>
+            m_dataService.GetLoggedUserInfo(false, info =>
+            {
+                m_userRole = info.UserRole;
+                RaisePropertyChanged(() => IsTeacherMode);
+                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
+            });
+        }
+
+        public async void LoadMyGroups()
+        {
+            LoadingMyGroups = true;
+            try
+            {
+                var result = await m_dataService.GetOwnedGroupsForCurrentUserAsync();
+
+                m_ownedGroups = result;
+                OwnedGroupList = DisplayGroupList(m_ownedGroups);
+                LoadingMyGroups = false;
+                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
+            }
+            catch (Exception ex)
+            {
+                m_errorService.ShowConnectionError();
+            }
+            finally
+            {
+                LoadingMyGroups = false;
+            }
+
+            //m_dataService.GetOwnedGroupsForCurrentUser((result, ex) =>
             //{
-            //    m_userRole = info.UserRole;
-            //    RaisePropertyChanged(() => IsTeacherMode);
-            //    RaisePropertyChanged(() => IsTeacherAndGroupSelected);
+            //    if (ex != null)
+            //    {
+            //        m_errorService.ShowConnectionError();
+            //        LoadingMyGroups = false;
+            //        return;
+            //    }
+            //    m_ownedGroups = result;
+            //    OwnedGroupList = DisplayGroupList(m_ownedGroups);
+            //    LoadingMyGroups = false;
+            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
+            //});
+        }
+
+        public async void LoadMembershipGroups()
+        {
+            LoadingMembershipGroups = true;
+            try
+            {
+                var result = await m_dataService.GetGroupForCurrentUserAsync();
+                m_myGroups = result;
+                MyMyGroupList = DisplayGroupList(result);
+                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
+                LoadingMyGroups = false;
+            }
+            catch (Exception ex)
+            {
+                m_errorService.ShowConnectionError();
+            }
+            finally
+            {
+                LoadingMembershipGroups = false;
+            }
+
+
+            //m_dataService.GetGroupsForCurrentUser((result, ex) =>
+            //{
+            //    if (ex != null)
+            //    {
+            //        m_errorService.ShowConnectionError();
+            //        LoadingMyGroups = false;
+            //        return;
+            //    }
+
+            //    m_myGroups = result;
+            //    MyMyGroupList = DisplayGroupList(result);
+            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
+            //    LoadingMyGroups = false;
             //});
         }
 
@@ -489,5 +342,207 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_ownedGroupIds.Add(groupInfoViewModel.GroupId);
             }
         }
+
+        #region Properties
+
+        public RelayCommand GoBackCommand { get; private set; }
+
+        public RelayCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; private set; }
+
+        public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; private set; }
+
+        public RelayCommand RefreshListCommand { get; private set; }
+
+        public RelayCommand ConnectCommand { get; private set; }
+
+        public RelayCommand OpenMyTaskListCommand { get; private set; }
+
+        public RelayCommand CreateTaskCommand { get; private set; }
+
+        public RelayCommand<object> FilterCommand { get; private set; }
+
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> MyMyGroupList
+        {
+            get { return m_myGroupList; }
+            set
+            {
+                m_myGroupList = value;
+                RaisePropertyChanged();
+                IsGroupListEmpty = m_myGroupList.Count == 0;
+            }
+        }
+
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> OwnedGroupList
+        {
+            get { return m_ownedGroupList; }
+            set
+            {
+                m_ownedGroupList = value;
+                RaisePropertyChanged();
+                IsGroupListEmpty = m_ownedGroupList.Count == 0;
+            }
+        }
+
+
+        public bool IsCommandBarOpen
+        {
+            get { return m_isCommandBarOpen; }
+            set
+            {
+                m_isCommandBarOpen = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public GroupInfoViewModel SelectedGroup
+        {
+            get { return m_selectedGroup; }
+            set
+            {
+                m_selectedGroup = value;
+                IsCommandBarOpen = value != null;
+                DeleteGroupViewModel.SelectedGroup = value;
+
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsGroupSelected);
+                RaisePropertyChanged(() => IsTeacherAndGroupSelected);
+            }
+        }
+
+        public bool IsGroupSelected
+        {
+            get { return SelectedGroup != null; }
+        }
+
+        public bool IsTeacherAndGroupSelected
+        {
+            get { return m_userRole == UserRoleContract.Teacher && SelectedGroup != null; }
+        }
+
+        public bool IsTeacherMode
+        {
+            get { return m_userRole == UserRoleContract.Teacher; }
+        }
+
+        public bool IsGroupListEmpty
+        {
+            get { return m_isGroupListEmpty; }
+            set
+            {
+                m_isGroupListEmpty = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool LoadingMyGroups
+        {
+            get { return m_loadingMyGroups; }
+            set
+            {
+                m_loadingMyGroups = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool LoadingMembershipGroups
+        {
+            get { return m_loadingMembershipGroups; }
+            set
+            {
+                m_loadingMembershipGroups = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsOneItemSelected
+        {
+            get { return m_isOneItemSelected; }
+            set
+            {
+                m_isOneItemSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanRemoveSelected
+        {
+            get { return m_canRemoveSelected; }
+            set
+            {
+                m_canRemoveSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanPauseSelected
+        {
+            get { return m_canPauseSelected; }
+            set
+            {
+                m_canPauseSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool CanStartSelected
+        {
+            get { return m_canStartSelected; }
+            set
+            {
+                m_canStartSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public bool IsFilter
+        {
+            get { return m_isFilter; }
+            set
+            {
+                m_isFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public GroupStateContract? CurrentFilter
+        {
+            get { return m_currentFilter; }
+            set
+            {
+                m_currentFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public SortGroupItem.SortType SelectedSortType
+        {
+            get { return m_selectedSortType; }
+            set
+            {
+                m_selectedSortType = value;
+                RaisePropertyChanged();
+
+                if (m_ownedGroups != null)
+                    DisplayGroupList(m_ownedGroups);
+            }
+        }
+
+        public int DefaultIndex
+        {
+            get { return 0; }
+        }
+
+        public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
+
+        public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
+
+        public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
+
+        public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
+
+        public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
+
+        #endregion
     }
 }

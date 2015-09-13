@@ -21,6 +21,7 @@ using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.News;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -69,6 +70,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public GroupListViewModel GroupListViewModel
         {
             get { return Container.Current.Resolve<GroupListViewModel>(); }
+        }
+
+        public NewsViewModel NewsViewModel
+        {
+            get { return Container.Current.Resolve<NewsViewModel>(); }
         }
 
         public ApplicationHostViewModel ApplicationHostViewModel

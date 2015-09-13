@@ -5,6 +5,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.Client.Core.Manager.News;
 using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
@@ -48,11 +49,12 @@ namespace ITJakub.MobileApps.Client.Core
 
             RegisterLoginProviders(container);
             container.RegisterType<ApplicationManager>(WithLifetime.ContainerControlled(typeof(ApplicationManager)));
-            container.RegisterType<AuthenticationManager>(WithLifetime.ContainerControlled(typeof(AuthenticationManager)));
+            container.RegisterType<AuthenticationManager>(WithLifetime.ContainerControlled(typeof(AuthenticationManager)));            
             container.RegisterType<MobileAppsServiceClientManager>(WithLifetime.ContainerControlled(typeof (MobileAppsServiceClientManager)));            
             //container.RegisterType<MobileAppsServiceClient>(WithLifetime.ContainerControlled(typeof(MobileAppsServiceClient)));
             container.RegisterType<UserAvatarCache>(WithLifetime.ContainerControlled(typeof(UserAvatarCache)));
             container.RegisterType<GroupManager>(WithLifetime.ContainerControlled(typeof(GroupManager)));
+            container.RegisterType<NewsManager>(WithLifetime.ContainerControlled(typeof(NewsManager)));
             container.RegisterType<ApplicationIdManager>(WithLifetime.ContainerControlled(typeof (ApplicationIdManager)));
             container.RegisterType<TaskManager>(WithLifetime.ContainerControlled(typeof (TaskManager)));
             container.RegisterType<SynchronizeManager>(WithLifetime.ContainerControlled(typeof (SynchronizeManager)));

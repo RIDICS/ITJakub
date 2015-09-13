@@ -12,6 +12,7 @@
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
     xmlns:groups="using:ITJakub.MobileApps.DataContracts.Groups"
+    xmlns:news="using:ITJakub.MobileApps.Client.MainApp.View.News"
     DataContext="{Binding GroupListViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
@@ -416,7 +417,6 @@
 
         <Hub Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="2" Margin="0,-40,0,0">
             <Hub.Header>
-                <!-- Back button and page title -->
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -448,18 +448,17 @@
                     </ComboBox>
                 </Grid>
             </Hub.Header>
-            <HubSection>
-                <HubSection.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock FontSize="20" FontWeight="Light" Foreground="LightYellow"                                
-                                   FontFamily="Global User Interface">
-                            <Run Text="Moje Skupiny" />
-                        </TextBlock>
-                    </DataTemplate>
-                </HubSection.HeaderTemplate>
+            <HubSection Header="Novinky">
+                <DataTemplate>
+                    <news:NewsTileView />
+                </DataTemplate>
+            </HubSection>
+            <HubSection Header="Skupiny">
                 <DataTemplate>
                     <StackPanel>
-
+                        
+                        <ProgressRing Width="100" Height="100" Visibility="{Binding LoadingMembershipGroups, Converter= {StaticResource BooleanToVisibilityConverter}}"/>
+                        
                         <TextBlock FontSize="20" FontWeight="Light" Foreground="LightYellow"
                                    Visibility="{Binding IsFilter, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    FontFamily="Global User Interface">
@@ -467,167 +466,170 @@
                             <Run Text="{Binding CurrentFilter, Converter={StaticResource GroupStateToNameConverter}}" />
                         </TextBlock>
 
+                        <GridView
+                            Padding="120,0,50,70"
+                            IsItemClickEnabled="True"
+                            SelectionMode="Multiple"
+                            ItemsSource="{Binding Source={StaticResource OwnedGroupList}}"
+                            SelectedItem="{Binding SelectedGroup, Mode=TwoWay}">
 
-                 
+                            <interactivity:Interaction.Behaviors>
+                                <core:EventTriggerBehavior EventName="ItemClick">
+                                    <core:InvokeCommandAction Command="{Binding GroupClickCommand}" />
+                                </core:EventTriggerBehavior>
+                                <core:EventTriggerBehavior EventName="SelectionChanged">
+                                    <core:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
+                                </core:EventTriggerBehavior>
+                            </interactivity:Interaction.Behaviors>
 
-                    <GridView
-                        Padding="120,0,50,70"
-                        IsItemClickEnabled="True"
-                        SelectionMode="Multiple"
-                        ItemsSource="{Binding Source={StaticResource OwnedGroupList}}"
-                        SelectedItem="{Binding SelectedGroup, Mode=TwoWay}">
+                            <GridView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid GroupPadding="0,0,20,0" />
+                                </ItemsPanelTemplate>
+                            </GridView.ItemsPanel>
 
-                        <interactivity:Interaction.Behaviors>
-                            <core:EventTriggerBehavior EventName="ItemClick">
-                                <core:InvokeCommandAction Command="{Binding GroupClickCommand}" />
-                            </core:EventTriggerBehavior>
-                            <core:EventTriggerBehavior EventName="SelectionChanged">
-                                <core:InvokeCommandAction Command="{Binding SelectionChangedCommand}" />
-                            </core:EventTriggerBehavior>
-                        </interactivity:Interaction.Behaviors>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Width="400"
+                                                Margin="4"
+                                                Orientation="Horizontal">
+                                        <Grid Width="64"
+                                              Height="64">
+                                            <Image Source="../Icon/group-64.png" />
 
-                        <GridView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <ItemsWrapGrid GroupPadding="0,0,20,0" />
-                            </ItemsPanelTemplate>
-                        </GridView.ItemsPanel>
+                                            <Grid Width="32"
+                                                  Height="32"
+                                                  Margin="0,0,-3,-3"
+                                                  VerticalAlignment="Bottom"
+                                                  HorizontalAlignment="Right">
 
-                        <GridView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Width="400"
-                                            Margin="4"
-                                            Orientation="Horizontal">
-                                    <Grid Width="64"
-                                          Height="64">
-                                        <Image Source="../Icon/group-64.png" />
+                                                <Ellipse Fill="#000070" />
+                                                <SymbolIcon Symbol="{Binding State, Converter={StaticResource GroupStateToSymbolConverter}}"
+                                                            Foreground="White"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            Margin="0,0,0,1" />
 
-                                        <Grid Width="32"
-                                              Height="32"
-                                              Margin="0,0,-3,-3"
-                                              VerticalAlignment="Bottom"
-                                              HorizontalAlignment="Right">
-
-                                            <Ellipse Fill="#000070" />
-                                            <SymbolIcon Symbol="{Binding State, Converter={StaticResource GroupStateToSymbolConverter}}"
-                                                        Foreground="White"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Margin="0,0,0,1" />
+                                            </Grid>
 
                                         </Grid>
+                                        <StackPanel Width="270"
+                                                    Margin="10,0,0,0"
+                                                    Orientation="Vertical">
+                                            <TextBlock Text="{Binding GroupName}"
+                                                       FontWeight="Bold" />
+                                            <TextBlock>
+                                                <Run Text="Počet členů: " />
+                                                <Run Text="{Binding MemberCount}" />
+                                            </TextBlock>
+                                            <ListView SelectionMode="None"
+                                                      ItemsSource="{Binding Members}"
+                                                      IsItemClickEnabled="False"
+                                                      Margin="0,0,10,0"
+                                                      Style="{StaticResource HorizontalListViewNoSpace}"
+                                                      Height="32"
+                                                      IsHitTestVisible="False"
+                                                      IsSwipeEnabled="False"
+                                                      IsTapEnabled="False">
 
-                                    </Grid>
-                                    <StackPanel Width="270"
-                                                Margin="10,0,0,0"
-                                                Orientation="Vertical">
-                                        <TextBlock Text="{Binding GroupName}"
-                                                   FontWeight="Bold" />
-                                        <TextBlock>
-                                            <Run Text="Počet členů: " />
-                                            <Run Text="{Binding MemberCount}" />
-                                        </TextBlock>
-                                        <ListView SelectionMode="None"
-                                                  ItemsSource="{Binding Members}"
-                                                  IsItemClickEnabled="False"
-                                                  Margin="0,0,10,0"
-                                                  Style="{StaticResource HorizontalListViewNoSpace}"
-                                                  Height="32"
-                                                  IsHitTestVisible="False"
-                                                  IsSwipeEnabled="False"
-                                                  IsTapEnabled="False">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Image Width="30"
+                                                               Height="30"
+                                                               Source="{Binding UserAvatar}" />
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </StackPanel>
+                                        <Button Style="{StaticResource CircleButtonStyle}"
+                                                VerticalAlignment="Center">
+                                            <SymbolIcon Symbol="List" />
 
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Image Width="30"
-                                                           Height="30"
-                                                           Source="{Binding UserAvatar}" />
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
+                                            <Button.Flyout>
+                                                <Flyout Placement="Right">
+                                                    <Grid MinHeight="250">
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="Auto" />
+                                                            <RowDefinition Height="*" />
+                                                        </Grid.RowDefinitions>
+
+                                                        <TextBlock FontWeight="Bold"
+                                                                   FontSize="16"
+                                                                   Grid.Row="1">
+                                                            <Run Text="Seznam členů skupiny (" /><Run Text="{Binding MemberCount}" /><Run Text="):" />
+                                                        </TextBlock>
+
+                                                        <SearchBox Grid.Row="0"
+                                                                   HorizontalAlignment="Right"
+                                                                   Width="170"
+                                                                   Margin="0,0,0,10"
+                                                                   SearchHistoryEnabled="False"
+                                                                   QueryText="{Binding SearchText, Mode=TwoWay}">
+                                                            <interactivity:Interaction.Behaviors>
+                                                                <core:EventTriggerBehavior EventName="QueryChanged">
+                                                                    <core:InvokeCommandAction Command="{Binding SearchCommand}" />
+                                                                </core:EventTriggerBehavior>
+                                                            </interactivity:Interaction.Behaviors>
+                                                        </SearchBox>
+
+                                                        <TextBlock Text="V této skupině nejsou žádní členové."
+                                                                   Visibility="{Binding NoMembersVisibility}"
+                                                                   HorizontalAlignment="Center"
+                                                                   Grid.Row="2"
+                                                                   Margin="0,15,0,0" />
+
+                                                        <ListView SelectionMode="None"
+                                                                  ItemsSource="{Binding FilteredMembers}"
+                                                                  Width="300"
+                                                                  VerticalAlignment="Stretch"
+                                                                  Grid.Row="2" FontFamily="Global User Interface">
+                                                            <ListView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <Image Source="{Binding UserAvatar}"
+                                                                               Width="30"
+                                                                               Height="30" />
+                                                                        <TextBlock VerticalAlignment="Center"
+                                                                                   Margin="5,0,0,0">
+                                                                            <Run Text="{Binding FirstName}" FontFamily="Global User Interface" />
+                                                                            <Run Text="{Binding LastName}" />
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+                                                                </DataTemplate>
+                                                            </ListView.ItemTemplate>
+                                                        </ListView>
+                                                    </Grid>
+                                                </Flyout>
+                                            </Button.Flyout>
+                                        </Button>
                                     </StackPanel>
-                                    <Button Style="{StaticResource CircleButtonStyle}"
-                                            VerticalAlignment="Center">
-                                        <SymbolIcon Symbol="List" />
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
 
-                                        <Button.Flyout>
-                                            <Flyout Placement="Right">
-                                                <Grid MinHeight="250">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-
-                                                    <TextBlock FontWeight="Bold"
-                                                               FontSize="16"
-                                                               Grid.Row="1">
-                                                        <Run Text="Seznam členů skupiny (" /><Run Text="{Binding MemberCount}" /><Run Text="):" />
-                                                    </TextBlock>
-
-                                                    <SearchBox Grid.Row="0"
-                                                               HorizontalAlignment="Right"
-                                                               Width="170"
-                                                               Margin="0,0,0,10"
-                                                               SearchHistoryEnabled="False"
-                                                               QueryText="{Binding SearchText, Mode=TwoWay}">
-                                                        <interactivity:Interaction.Behaviors>
-                                                            <core:EventTriggerBehavior EventName="QueryChanged">
-                                                                <core:InvokeCommandAction Command="{Binding SearchCommand}" />
-                                                            </core:EventTriggerBehavior>
-                                                        </interactivity:Interaction.Behaviors>
-                                                    </SearchBox>
-
-                                                    <TextBlock Text="V této skupině nejsou žádní členové."
-                                                               Visibility="{Binding NoMembersVisibility}"
-                                                               HorizontalAlignment="Center"
-                                                               Grid.Row="2"
-                                                               Margin="0,15,0,0" />
-
-                                                    <ListView SelectionMode="None"
-                                                              ItemsSource="{Binding FilteredMembers}"
-                                                              Width="300"
-                                                              VerticalAlignment="Stretch"
-                                                              Grid.Row="2" FontFamily="Global User Interface">
-                                                        <ListView.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <StackPanel Orientation="Horizontal">
-                                                                    <Image Source="{Binding UserAvatar}"
-                                                                           Width="30"
-                                                                           Height="30" />
-                                                                    <TextBlock VerticalAlignment="Center"
-                                                                               Margin="5,0,0,0">
-                                                                        <Run Text="{Binding FirstName}" FontFamily="Global User Interface" />
-                                                                        <Run Text="{Binding LastName}" />
-                                                                    </TextBlock>
-                                                                </StackPanel>
-                                                            </DataTemplate>
-                                                        </ListView.ItemTemplate>
-                                                    </ListView>
-                                                </Grid>
-                                            </Flyout>
-                                        </Button.Flyout>
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-
-                        <GridView.GroupStyle>
-                            <GroupStyle HidesIfEmpty="True">
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Key, Converter={StaticResource GroupTypeToNameConverter}}"
-                                                   Style="{StaticResource SubheaderTextBlockStyle}" />
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-                            </GroupStyle>
-                        </GridView.GroupStyle>
-                    </GridView>
+                            <GridView.GroupStyle>
+                                <GroupStyle HidesIfEmpty="True">
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Key, Converter={StaticResource GroupTypeToNameConverter}}"
+                                                       Style="{StaticResource SubheaderTextBlockStyle}" />
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </GridView.GroupStyle>
+                        </GridView>
                     </StackPanel>
                 </DataTemplate>
 
             </HubSection>
 
-            <HubSection />
+            <HubSection Header="Administrace skupin" />
+
+            <HubSection Header="Listování knihou">
+                <DataTemplate>
+                    <Button MinWidth="300" MinHeight="300" Background="BlueViolet" FontSize="50">Listovat</Button>
+                </DataTemplate>
+            </HubSection>
         </Hub>
 
 
@@ -636,16 +638,16 @@
                            VerticalAlignment="Stretch"
                            Margin="0,0,30,0" Canvas.ZIndex="10" />
 
-        <ProgressBar Grid.Row="0" Grid.Column="0"
+        <!--<ProgressBar Grid.Row="0" Grid.Column="0"
                      Grid.ColumnSpan="2"
                      VerticalAlignment="Top"
                      IsIndeterminate="True"
-                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" Canvas.ZIndex="10" />
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" Canvas.ZIndex="10" />-->
 
-        <TextBlock Grid.Row="1" Grid.Column="0"
+        <!--<TextBlock Grid.Row="1" Grid.Column="0"
                    Margin="120,20,0,0"
                    Text="Nejsou dostupné žádné skupiny."
                    Style="{StaticResource SubheaderTextBlockStyle}"
-                   Visibility="{Binding IsGroupListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                   Visibility="{Binding IsGroupListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />-->
     </Grid>
 </Page>

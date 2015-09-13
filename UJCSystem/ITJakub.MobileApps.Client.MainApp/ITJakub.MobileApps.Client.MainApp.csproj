@@ -107,6 +107,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\News\NewsViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
       <DependentUpon>AdminHostView.xaml</DependentUpon>
     </Compile>
@@ -161,6 +162,9 @@
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
     <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
+    <Compile Include="View\News\NewsTileView.xaml.cs">
+      <DependentUpon>NewsTileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectApplicationView.xaml.cs">
       <DependentUpon>SelectApplicationView.xaml</DependentUpon>
     </Compile>
@@ -261,6 +265,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="View\News\NewsTileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SelectApplicationView.xaml">
       <SubType>Designer</SubType>
@@ -381,6 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModel\TaskList\" />
+    <Folder Include="View\Groups\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
+using ITJakub.MobileApps.Client.Core.Manager.News;
 using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -25,6 +26,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         private readonly TaskManager m_taskManager;
         private readonly IMainPollingService m_mainPollingService;
         private readonly ApplicationStateManager m_applicationStateManager;
+        private readonly NewsManager m_newsManager;
 
         public DataService(IUnityContainer container)
         {
@@ -34,6 +36,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_taskManager = container.Resolve<TaskManager>();
             m_mainPollingService = container.Resolve<IMainPollingService>();
             m_applicationStateManager = container.Resolve<ApplicationStateManager>();
+            m_newsManager = container.Resolve<NewsManager>();
         }
 
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
@@ -55,9 +58,24 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.GetOwnedGroupsForCurrentUser(callback);
         }
 
+        public Task<ObservableCollection<GroupInfoViewModel>> GetOwnedGroupsForCurrentUserAsync()
+        {
+            return m_groupManager.GetOwnedGroupsForCurrentUserAsync();
+        }
+
         public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             m_groupManager.GetGroupsForCurrentUser(callback);
+        }
+
+        public Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync()
+        {
+            return m_groupManager.GetGroupForCurrentUserAsync();
+        }
+
+        public async Task<ObservableCollection<string>> GetAllNews()
+        {
+            return await m_newsManager.GetAllNews();
         }
 
 

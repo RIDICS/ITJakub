@@ -51,59 +51,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(new Dictionary<ApplicationType, ApplicationBase>(), null);
         }
 
-        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
-        {
-            var result = new ObservableCollection<GroupInfoViewModel>
-            {
-                new GroupInfoViewModel
-                {
-                    GroupCode = "123546",
-                    MemberCount = 5,
-                    GroupName = "Group A",
-                    State = GroupStateContract.Created,
-                    Task = new TaskViewModel {Application = ApplicationType.Hangman},
-                    Members = new ObservableCollection<GroupMemberViewModel>
-                    {
-                        new GroupMemberViewModel
-                        {
-                            FirstName = "Name",
-                            LastName = "Surname",
-                            UserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png"))
-                        }
-                    }
-                },
-                new GroupInfoViewModel
-                {
-                    GroupCode = "123546",
-                    MemberCount = 5,
-                    GroupName = "Group B",
-                    State = GroupStateContract.Running,
-                    Task = new TaskViewModel {Application = ApplicationType.SampleApp}
-                },
-                new GroupInfoViewModel
-                {
-                    GroupName = "Skupina C",
-                    State = GroupStateContract.WaitingForStart
-                },
-                new GroupInfoViewModel
-                {
-                    GroupName = "Skupina C",
-                    State = GroupStateContract.AcceptMembers
-                },
-                new GroupInfoViewModel
-                {
-                    GroupName = "Skupina C",
-                    State = GroupStateContract.Closed
-                },
-                new GroupInfoViewModel
-                {
-                    GroupName = "Skupina C",
-                    State = GroupStateContract.Paused
-                }
-            };
-            callback(result, null);
-        }
-
         public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {
             callback(new GroupInfoViewModel
@@ -155,9 +102,25 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }, null);
         }
 
+        public Task<ObservableCollection<GroupInfoViewModel>> GetOwnedGroupsForCurrentUserAsync()
+        {
+            return Task.Factory.StartNew(() => new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    CreateTime = DateTime.Now,
+                    GroupCode = "ABCDE",
+                    GroupId = 124,
+                    GroupName = "Moje skupinka",
+                    State = GroupStateContract.Created,
+                    Task = new TaskViewModel {CreateTime = DateTime.Now, Name = "testzadani"}
+                }
+            });
+        }
+
         public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
-            callback( new ObservableCollection<GroupInfoViewModel>
+            callback(new ObservableCollection<GroupInfoViewModel>
             {
                 new GroupInfoViewModel
                 {
@@ -169,6 +132,27 @@ namespace ITJakub.MobileApps.Client.Core.Service
                     Task = new TaskViewModel {CreateTime = DateTime.Now, Name = "testzadani"}
                 }
             }, null);
+        }
+
+        public Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync()
+        {
+            return Task.Factory.StartNew(() => new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    CreateTime = DateTime.Now,
+                    GroupCode = "ABCDE",
+                    GroupId = 124,
+                    GroupName = "Moje skupinka",
+                    State = GroupStateContract.Created,
+                    Task = new TaskViewModel {CreateTime = DateTime.Now, Name = "testzadani"}
+                }
+            });
+        }
+
+        public Task<ObservableCollection<string>> GetAllNews()
+        {
+            return Task.Factory.StartNew(() => new ObservableCollection<string> {"Nove kolekce zadany", "Jungmanuv slovnik pridan", "Atd."});
         }
 
         public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
@@ -283,6 +267,59 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         public void SetAppSelectionTarget(SelectApplicationTarget target)
         {
+        }
+
+        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        {
+            var result = new ObservableCollection<GroupInfoViewModel>
+            {
+                new GroupInfoViewModel
+                {
+                    GroupCode = "123546",
+                    MemberCount = 5,
+                    GroupName = "Group A",
+                    State = GroupStateContract.Created,
+                    Task = new TaskViewModel {Application = ApplicationType.Hangman},
+                    Members = new ObservableCollection<GroupMemberViewModel>
+                    {
+                        new GroupMemberViewModel
+                        {
+                            FirstName = "Name",
+                            LastName = "Surname",
+                            UserAvatar = new BitmapImage(new Uri("ms-appx:///Icon/facebook-128.png"))
+                        }
+                    }
+                },
+                new GroupInfoViewModel
+                {
+                    GroupCode = "123546",
+                    MemberCount = 5,
+                    GroupName = "Group B",
+                    State = GroupStateContract.Running,
+                    Task = new TaskViewModel {Application = ApplicationType.SampleApp}
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.WaitingForStart
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.AcceptMembers
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.Closed
+                },
+                new GroupInfoViewModel
+                {
+                    GroupName = "Skupina C",
+                    State = GroupStateContract.Paused
+                }
+            };
+            callback(result, null);
         }
     }
 }
