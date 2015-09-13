@@ -2,11 +2,13 @@
 using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -27,6 +29,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatDisplayed;
         private SupportAppBaseViewModel m_chatApplicationViewModel;
         private GroupInfoViewModel m_groupInfo;
+        private TaskViewModel m_taskInfo;
+        private bool m_loadingGroupInfo;
+        private bool m_loadingTask;
         private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         public AdminHostViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
@@ -42,8 +47,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(GoBack);
+            ShowTaskCommand = new RelayCommand(ShowTask);
         }
-
+        
         private void GoBack()
         {
             m_pollingService.UnregisterAll();
@@ -66,8 +72,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupType = GroupType.Owner
             };
 
+            LoadingGroupInfo = true;
             m_dataService.GetGroupDetails(groupId, (groupInfo, exception) =>
             {
+                LoadingGroupInfo = false;
                 if (exception != null)
                 {
                     m_errorService.ShowConnectionError();
@@ -77,14 +85,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupName = groupInfo.GroupName;
             });
 
+            LoadingTask = true;
             m_dataService.GetTaskForGroup(groupId, (taskInfo, exception) =>
             {
+                LoadingTask = false;
                 if (exception != null)
                 {
                     m_errorService.ShowConnectionError(GoBack);
                     return;
                 }
 
+                m_taskInfo = taskInfo;
                 LoadApps(taskInfo.Application, taskInfo.Data);
             });
         }
@@ -152,7 +163,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        private void ShowTask()
+        {
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage { TaskViewModel = m_taskInfo });
+        }
+
         public RelayCommand GoBackCommand { get; private set; }
+
+        public RelayCommand ShowTaskCommand { get; private set; }
 
         public string GroupName
         {
@@ -211,6 +230,33 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_isChatDisplayed = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loadingGroupInfo && m_loadingTask; }
+        }
+
+        public bool LoadingGroupInfo
+        {
+            get { return m_loadingGroupInfo; }
+            set
+            {
+                m_loadingGroupInfo = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Loading);
+            }
+        }
+
+        public bool LoadingTask
+        {
+            get { return m_loadingTask; }
+            set
+            {
+                m_loadingTask = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Loading);
             }
         }
     }

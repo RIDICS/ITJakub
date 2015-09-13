@@ -13,10 +13,15 @@
         <template:AdminTemplateSelector x:Key="AdminTemplateSelector" />
         <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
 
     <Page.BottomAppBar>
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
+            <AppBarButton Icon="Preview"
+                          Label="Zobrazit správné řešení"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}"
+                          Command="{Binding ShowTaskCommand}"/>
             <AppBarToggleButton Icon="Comment" 
                                 Label="Chat" 
                                 IsEnabled="{Binding IsChatSupported}"
@@ -35,7 +40,12 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid>
+        <ProgressBar Grid.Row="0"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
                 <ColumnDefinition Width="*" />

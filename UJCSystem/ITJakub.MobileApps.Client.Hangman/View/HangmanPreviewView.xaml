@@ -30,6 +30,7 @@
                         <TextBlock Grid.Column="0"
                                    Margin="5,10,5,10"
                                    FontSize="20"
+                                   TextWrapping="Wrap"
                                    Text="{Binding Hint}" />
 
                         <control:WordControl

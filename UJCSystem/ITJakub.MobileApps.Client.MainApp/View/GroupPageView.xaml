@@ -45,6 +45,10 @@
                           Icon="Forward"
                           Command="{Binding ConnectToGroupCommand}"
                           IsEnabled="{Binding CanConnectToGroup}" />
+            <AppBarButton Icon="Preview"
+                          Label="Zobrazit zvolenou úlohu"
+                          IsEnabled="{Binding IsTaskSelected}"
+                          Command="{Binding ShowTaskCommand}"/>
             <AppBarButton Label="Zobrazit aplikaci jako student"
                           Icon="NewWindow"
                           Command="{Binding OpenApplicationCommand}"
