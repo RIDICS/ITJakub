@@ -10,7 +10,7 @@
         <Setter Property="Foreground" Value="Black" />
         <Setter Property="Background" Value="White" />
         <Setter Property="BorderBrush" Value="{ThemeResource ComboBoxBorderThemeBrush}" />
-        <Setter Property="BorderThickness" Value="{ThemeResource ComboBoxBorderThemeThickness}" />
+        <Setter Property="BorderThickness" Value="0" />
         <Setter Property="TabNavigation" Value="Once" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
@@ -232,7 +232,7 @@
                                    Grid.Row="1"
                                    Grid.Column="1"
                                    IsHitTestVisible="False"
-                                   Margin="0,0,6,4"
+                                   Margin="0,-4,6,2"
                                    Foreground="{ThemeResource ComboBoxArrowForegroundThemeBrush}"
                                    FontWeight="Bold"
                                    FontSize="{ThemeResource ComboBoxArrowThemeFontSize}"
@@ -281,6 +281,7 @@
                                   VerticalScrollMode="Enabled">
                         <Grid>
                             <control:BindableRichEditBox DocumentRtf="{TemplateBinding DocumentRtf}"
+                                                         Padding="10,3,23,5"
                                                          BorderBrush="#80ffffff"
                                                          Background="#80ffffff"
                                                          IsReadOnly="True"

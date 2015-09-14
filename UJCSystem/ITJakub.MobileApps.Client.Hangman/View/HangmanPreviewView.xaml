@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanTaskPreviewViewModel}">
     
-    <Grid Margin="30,0,40,30">
+    <Grid Margin="30,10,40,30">
         <ListView SelectionMode="None"
                   ItemsSource="{Binding TaskLevelList}">
             

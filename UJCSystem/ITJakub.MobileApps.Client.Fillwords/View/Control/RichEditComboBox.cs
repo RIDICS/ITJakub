@@ -114,6 +114,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             var oldIsReadonlyState = m_richEditBoxControl.IsReadOnly;
             m_richEditBoxControl.IsReadOnly = false;
             m_richEditBoxControl.Document.SetText(TextSetOptions.FormatRtf, DocumentRtf);
+            var fulltTextRange = m_richEditBoxControl.Document.GetRange(0, m_richEditBoxControl.Document.Selection.StoryLength);
+            fulltTextRange.ParagraphFormat.SetLineSpacing(LineSpacingRule.Multiple, 1.25f);
 
             m_comboBoxList.Clear();
             m_canvas.Children.Clear();
@@ -144,7 +146,6 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 
                 // replace selected word with character sequence
                 textRange.SetText(TextSetOptions.None, characterSequence);
-                textRange.ParagraphFormat.SetLineSpacing(LineSpacingRule.Multiple, 1.5f);
 
                 // create ComboBox
                 var optionList = new List<string>(wordList) { optionsViewModel.CorrectAnswer };
@@ -192,6 +193,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
 
         private void UpdateComboBoxProperties()
         {
+            const double comboBoxHeight = 26.0;
             foreach (var comboBoxItem in m_comboBoxList)
             {
                 Rect rect;
@@ -204,11 +206,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                     return;
 
                 // HACK scale values from RichEditBox
-                var point = ScaleHelper.ScalePoint(false, rect.Left, rect.Top);
+                var point = ScaleHelper.ScalePoint(false, rect.Left, rect.Bottom);
                 var width = ScaleHelper.ScaleValue(false, rect.Width);
 
                 var positionLeft = point.X + m_richEditBoxControl.Padding.Left + m_richEditBoxControl.BorderThickness.Left;
-                var positionTop = point.Y;
+                var positionTop = point.Y - comboBoxHeight + 3.0;
                 comboBoxItem.ComboBox.Margin = new Thickness(positionLeft, positionTop, 0, 0);
                 comboBoxItem.ComboBox.Width = width; // For Windows 8.1 is suitable use correction -3, but Windows detection is requiered
             }
