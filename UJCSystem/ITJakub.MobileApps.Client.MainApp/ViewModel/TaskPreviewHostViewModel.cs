@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_taskName;
         private TaskPreviewBaseViewModel m_taskPreviewHostViewModel;
         private bool m_loading;
+        private string m_taskDescription;
 
         public TaskPreviewHostViewModel(IDataService dataService, IErrorService errorService, NavigationService navigationService)
         {
@@ -45,6 +46,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 AppName = appInfo.Name;
                 TaskName = task.Name;
+                TaskDescription = task.Description;
                 TaskPreviewViewModel = appInfo.TaskPreviewViewModel;
 
                 LoadTask(task.Id);
@@ -85,6 +87,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_taskName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TaskDescription
+        {
+            get { return m_taskDescription; }
+            set
+            {
+                m_taskDescription = value;
                 RaisePropertyChanged();
             }
         }

@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -83,6 +84,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public RelayCommand OpenMyTaskListCommand { get; private set; }
 
         public RelayCommand CreateTaskCommand { get; private set; }
+
+        public RelayCommand OpenBookReaderCommand { get; private set; }
 
         public RelayCommand<object> FilterCommand { get; private set; }
 
@@ -245,7 +248,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToPauseViewModel { get; set; }
 
         public SwitchGroupStateViewModel SwitchToRunningViewModel { get; set; }
-
+        
         #endregion
 
         private void InitCommands()
@@ -257,6 +260,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             RefreshListCommand = new RelayCommand(LoadData);
             OpenMyTaskListCommand = new RelayCommand(() => Navigate(typeof(OwnedTaskListView)));
             CreateTaskCommand = new RelayCommand(CreateNewTask);
+            OpenBookReaderCommand = new RelayCommand(Book.OpenLibrary);
             FilterCommand = new RelayCommand<object>(Filter);
         }
         

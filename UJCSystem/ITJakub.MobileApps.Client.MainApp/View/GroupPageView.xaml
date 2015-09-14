@@ -46,7 +46,7 @@
                           Command="{Binding ConnectToGroupCommand}"
                           IsEnabled="{Binding CanConnectToGroup}" />
             <AppBarButton Icon="Preview"
-                          Label="Zobrazit zvolenou úlohu"
+                          Label="Zobrazit zvolené zadání"
                           IsEnabled="{Binding IsTaskSelected}"
                           Command="{Binding ShowTaskCommand}"/>
             <AppBarButton Label="Zobrazit aplikaci jako student"
@@ -118,7 +118,7 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Vertical"
-                        Margin="120,0,0,0">
+                        Margin="40,0,20,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource MyLabelStyle}"
                                 IsTextSelectionEnabled="True">
@@ -397,7 +397,7 @@
             </StackPanel>
             
             <Grid Grid.Column="1"
-                  Margin="0,0,120,0"
+                  Margin="0,0,40,0"
                   DataContext="{Binding GroupInfo}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
