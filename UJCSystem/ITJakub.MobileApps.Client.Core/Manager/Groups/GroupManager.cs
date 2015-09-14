@@ -384,7 +384,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
         private async void LoadMemberAvatar(GroupMemberViewModel member)
         {
-            member.UserAvatar = await m_userAvatarCache.GetUserAvatar(member.Id);
+            var avatar = await m_userAvatarCache.GetUserAvatar(member.Id);
+            DispatcherHelper.CheckBeginInvokeOnUI(()=> member.UserAvatar = avatar);
         }
 
         public async Task UpdateGroupsMembersAsync(IList<GroupInfoViewModel> groups, Action<Exception> callback)

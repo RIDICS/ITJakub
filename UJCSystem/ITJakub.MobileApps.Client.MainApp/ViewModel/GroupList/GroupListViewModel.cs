@@ -182,7 +182,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 var result = await m_dataService.GetGroupForCurrentUserAsync();
                 m_myGroups = result;
-                MyMyGroupList = DisplayGroupList(result);
+                MyGroupList = DisplayGroupList(result);
                 m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
                 LoadingMyGroups = false;
             }
@@ -361,7 +361,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         public RelayCommand<object> FilterCommand { get; private set; }
 
-        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> MyMyGroupList
+        public ObservableCollection<IGrouping<GroupType, GroupInfoViewModel>> MyGroupList
         {
             get { return m_myGroupList; }
             set
