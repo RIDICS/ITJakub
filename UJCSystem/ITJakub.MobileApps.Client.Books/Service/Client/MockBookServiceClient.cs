@@ -8,7 +8,7 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public class MockServiceClient : IServiceClient
+    public class MockBookServiceClient : IBookServiceClient
     {
         public Task<IList<BookContract>> GetBookListAsync(BookTypeContract category)
         {

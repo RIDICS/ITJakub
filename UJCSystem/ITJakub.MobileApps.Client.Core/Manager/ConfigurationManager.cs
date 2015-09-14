@@ -1,4 +1,6 @@
-﻿using Windows.Storage;
+﻿using System.Threading.Tasks;
+using Windows.Storage;
+using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Core.Communication.Client;
 
 namespace ITJakub.MobileApps.Client.Core.Manager
@@ -7,11 +9,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager
     {
         private readonly MobileAppsServiceClient m_serviceClient;
         private readonly ApplicationDataContainer m_localSettings;
+        private bool m_isBookLibraryAddressUpdated;
 
         public ConfigurationManager(MobileAppsServiceClient serviceClient)
         {
             m_serviceClient = serviceClient;
             m_localSettings = ApplicationData.Current.LocalSettings;
+            m_isBookLibraryAddressUpdated = false;
 
             Init();
         }
@@ -32,6 +36,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager
                 m_localSettings.Values["EndpointAddress"] = value;
                 m_serviceClient.UpdateEndpointAddress(value);
             }
+        }
+
+        public async Task UpdateBookLibraryEndpointAddress()
+        {
+            if (m_isBookLibraryAddressUpdated)
+                return;
+            
+            var address = await m_serviceClient.GetBookLibraryEndpointAddressAsync();
+            Book.UpdateEndpointAddress(address);
+            m_isBookLibraryAddressUpdated = true;
         }
     }
 }

@@ -5,7 +5,7 @@ using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Service.Client
 {
-    public interface IServiceClient
+    public interface IBookServiceClient
     {
         Task<IList<BookContract>> GetBookListAsync(BookTypeContract category);
 

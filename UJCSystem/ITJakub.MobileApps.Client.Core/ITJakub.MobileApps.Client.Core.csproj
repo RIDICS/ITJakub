@@ -105,6 +105,10 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Books\ITJakub.MobileApps.Client.Books.csproj">
+      <Project>{c30689fe-a72c-42ec-aaf3-63a08d019c2c}</Project>
+      <Name>ITJakub.MobileApps.Client.Books</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj">
       <Project>{A6F66019-70E7-4177-9389-554D1E73C437}</Project>
       <Name>ITJakub.MobileApps.Client.DataContracts</Name>

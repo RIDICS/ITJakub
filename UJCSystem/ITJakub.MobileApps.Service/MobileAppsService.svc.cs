@@ -20,6 +20,21 @@ namespace ITJakub.MobileApps.Service
             m_serviceManager = Container.Current.Resolve<IMobileAppsService>();
         }
 
+        public string GetBookLibraryEndpointAddress()
+        {
+            try
+            {
+                return m_serviceManager.GetBookLibraryEndpointAddress();
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
         {
             try

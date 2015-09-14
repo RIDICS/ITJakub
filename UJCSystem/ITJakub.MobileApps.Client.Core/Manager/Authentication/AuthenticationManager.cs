@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         private readonly Dictionary<AuthProvidersContract, ILoginProvider> m_loginProviders = new Dictionary<AuthProvidersContract, ILoginProvider>();
         private readonly UserAvatarCache m_userAvatarCache;
         private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly ConfigurationManager m_configurationManager;
 
         private UserLoginSkeleton UserLoginInfo { get; set; }
 
@@ -24,6 +25,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             m_serviceClient = container.Resolve<MobileAppsServiceClient>();
             m_userAvatarCache = container.Resolve<UserAvatarCache>();
+            m_configurationManager = container.Resolve<ConfigurationManager>();
             LoadLoginProviders(container.ResolveAll<ILoginProvider>());
         }
         
@@ -177,10 +179,15 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
+                await m_configurationManager.UpdateBookLibraryEndpointAddress();
                 UserLoginSkeleton userDetail = await LoginAsync(loginProviderType);
                 callback(userDetail.Success, null);
             }
             catch (UserNotRegisteredException exception)
+            {
+                callback(false, exception);
+            }
+            catch (InvalidServerOperationException exception)
             {
                 callback(false, exception);
             }
@@ -194,10 +201,15 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
         {
             try
             {
+                await m_configurationManager.UpdateBookLibraryEndpointAddress();
                 UserLoginSkeleton userLoginSkeleton = await CreateUserAsync(loginProviderType);
                 callback(userLoginSkeleton.Success, null);
             }
             catch (UserAlreadyRegisteredException exception)
+            {
+                callback(false, exception);
+            }
+            catch (InvalidServerOperationException exception)
             {
                 callback(false, exception);
             }

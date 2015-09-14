@@ -5,9 +5,9 @@ namespace ITJakub.MobileApps.Client.Books.Manager.Cache
 {
     public class DocumentCache : CacheBase<string>
     {
-        private readonly IServiceClient m_serviceClient;
+        private readonly IBookServiceClient m_serviceClient;
 
-        public DocumentCache(IServiceClient serviceClient, int maxSize) : base(maxSize)
+        public DocumentCache(IBookServiceClient serviceClient, int maxSize) : base(maxSize)
         {
             m_serviceClient = serviceClient;
         }

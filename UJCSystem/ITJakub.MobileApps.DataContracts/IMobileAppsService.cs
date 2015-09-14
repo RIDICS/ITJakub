@@ -11,6 +11,9 @@ namespace ITJakub.MobileApps.DataContracts
     public interface IMobileAppsService
     {
         [OperationContract]
+        string GetBookLibraryEndpointAddress();
+
+        [OperationContract]
         void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
 
         [OperationContract]

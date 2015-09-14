@@ -89,5 +89,11 @@ namespace ITJakub.MobileApps.Client.Books
             var book = new Book();
             await book.StartReader(bookGuid);
         }
+
+        public static void UpdateEndpointAddress(string address)
+        {
+            var dataService = Container.Current.Resolve<IDataService>();
+            dataService.UpdateEndpointAddress(address);
+        }
     }
 }

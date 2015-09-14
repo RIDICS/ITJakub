@@ -38,6 +38,33 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             Endpoint.Address = new EndpointAddress(newEndpointAddress ?? EndpointAddress);
         }
 
+        public Task<string> GetBookLibraryEndpointAddressAsync()
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetBookLibraryEndpointAddress();
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
         public Task CreateUserAsync(AuthProvidersContract providerContract, string providerToken,
             UserDetailContract userDetail)
         {
