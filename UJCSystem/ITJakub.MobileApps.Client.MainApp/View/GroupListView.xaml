@@ -24,7 +24,7 @@
         <converter:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
         <SolidColorBrush Color="DarkRed" x:Key="FlyoutErrorColor" />
         <SolidColorBrush Color="Gray" x:Key="FlyoutProgressColor" />
-        <CollectionViewSource x:Name="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
+        <CollectionViewSource x:Key="GroupList" Source="{Binding GroupList}" IsSourceGrouped="True" />
     </Page.Resources>
 
     <Page.BottomAppBar>

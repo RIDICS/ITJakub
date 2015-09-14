@@ -134,5 +134,19 @@ namespace ITJakub.MobileApps.Client.Books.Service.Client
                 return await file.OpenStreamForReadAsync();
             });
         }
+
+        public Task<BookContract> GetBookInfo(string bookGuid)
+        {
+            return Task.Run(() =>
+            {
+                return new BookContract
+                {
+                    Authors = new List<AuthorContract>(),
+                    Guid = "XmlId",
+                    PublishDate = "2015",
+                    Title = "Název knihy"
+                };
+            });
+        }
     }
 }

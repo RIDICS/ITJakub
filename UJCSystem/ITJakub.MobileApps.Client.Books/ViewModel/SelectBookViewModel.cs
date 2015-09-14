@@ -3,9 +3,7 @@ using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Books.Enum;
-using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 using ITJakub.MobileApps.Client.Books.View;
 using ITJakub.MobileApps.Client.Books.ViewModel.ComboBoxItem;
@@ -168,7 +166,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
                 {
                     new CategoryItem{Category = BookTypeContract.Edition, Name = "Edice"},
                     new CategoryItem{Category = BookTypeContract.Grammar, Name = "Mluvnice"},
-                    new CategoryItem{Category = BookTypeContract.Dictionary, Name = "Slovníky"},
                     new CategoryItem{Category = BookTypeContract.ProfessionalLiterature, Name = "Odborná literatura"},
                 };
             }
@@ -208,7 +205,6 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel
         private void GoBack()
         {
             m_navigationService.GoBack();
-            Messenger.Default.Send(new SelectedPageMessage());
         }
 
         private void BookClick(ItemClickEventArgs args)

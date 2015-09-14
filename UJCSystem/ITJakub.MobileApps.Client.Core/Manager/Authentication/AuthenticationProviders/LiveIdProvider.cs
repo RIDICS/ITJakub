@@ -5,6 +5,7 @@ using Windows.Foundation;
 using Windows.Security.Authentication.Web;
 using Windows.Web.Http;
 using ITJakub.MobileApps.Client.DataContracts.Json;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using Newtonsoft.Json;
 
@@ -16,9 +17,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         private const string StartUri = "https://login.live.com/oauth20_authorize.srf?client_id={0}&scope=wl.basic%20wl.emails&response_type=token";
         private const string RedirectUri = "http://b2191704-17ad-43e2-9e49-ecf66c89ed23.apps.dev.live.com/";
         private const string UserInfoUrl = "https://apis.live.net/v5.0/me?access_token={0}";
-
+        
         public string AccountName { get { return "Microsoft"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.LiveId; } }
+
+        public Task<UserLoginSkeleton> LoginForCreateUserAsync()
+        {
+            return LoginAsync();
+        }
 
         public async Task<UserLoginSkeleton> LoginAsync()
         {
@@ -87,7 +93,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             catch (ArgumentException)
             {
                 //parameter "access_token" doesn't exists
-                return null;
+                throw new ClientCommunicationException("Parsing LiveID result string error");
             }
         }
 

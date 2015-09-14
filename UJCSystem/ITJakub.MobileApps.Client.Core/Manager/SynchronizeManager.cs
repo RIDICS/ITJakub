@@ -125,12 +125,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             get { return Container.Current.Resolve<IErrorService>(); }
         }
 
-        public async Task CreateTaskAsync(ApplicationType applicationType, string name, string data)
+        public async Task CreateTaskAsync(ApplicationType applicationType, string name, string description, string data)
         {
             var userId = m_authenticationManager.GetCurrentUserId();
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             if (userId != null)
-                await m_serviceClient.CreateTaskAsync(userId.Value, appId, name, data);
+                await m_serviceClient.CreateTaskAsync(userId.Value, appId, name, description, data);
         }
 
         public Task<UserInfo> GetCurrentUserInfo()

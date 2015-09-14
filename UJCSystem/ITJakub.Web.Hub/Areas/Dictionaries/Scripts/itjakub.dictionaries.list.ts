@@ -20,17 +20,14 @@ class DictionariesList {
     }
 
     create() {
-        var disabledOptions = new Array<SearchTypeEnum>();
-        disabledOptions.push(SearchTypeEnum.Fulltext);
-        disabledOptions.push(SearchTypeEnum.TokenDistance);
-        disabledOptions.push(SearchTypeEnum.Sentence);
-        disabledOptions.push(SearchTypeEnum.Heading);
-        disabledOptions.push(SearchTypeEnum.Headword);
-        disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-        disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+        var enabledOptions = new Array<SearchTypeEnum>();
+        enabledOptions.push(SearchTypeEnum.Title);
+        enabledOptions.push(SearchTypeEnum.Author);
+        enabledOptions.push(SearchTypeEnum.Editor);
+        enabledOptions.push(SearchTypeEnum.Dating);
 
         this.search = new Search(<any>$("#listSearchDiv")[0], this.advancedSearch.bind(this), this.basicSearch.bind(this));
-        this.search.makeSearch(disabledOptions);
+        this.search.makeSearch(enabledOptions);
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         this.typeaheadSearchBox.addDataSet("Title", "Název");

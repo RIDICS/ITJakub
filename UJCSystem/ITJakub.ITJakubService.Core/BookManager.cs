@@ -13,6 +13,7 @@ using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -131,6 +132,13 @@ namespace ITJakub.ITJakubService.Core
             var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
+        }
+
+        public BookContract GetBookInfoMobile(string bookGuid)
+        {
+            var bookVersion = m_bookVersionRepository.GetBookVersionWithAuthorsByGuid(bookGuid);
+            var bookContract = Mapper.Map<BookContract>(bookVersion);
+            return bookContract;
         }
 
         public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)

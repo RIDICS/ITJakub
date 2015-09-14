@@ -4,6 +4,7 @@ using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -49,6 +50,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             RefreshListCommand = new RelayCommand(LoadTasks);
             SearchCommand = new RelayCommand(Search);
             CancelSearchCommand = new RelayCommand(CancelSearch);
+            PreviewTaskCommand = new RelayCommand<TaskViewModel>(ShowTaskPreview);
         }
         
         private void LoadData()
@@ -101,6 +103,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand SearchCommand { get; private set; }
 
         public RelayCommand CancelSearchCommand { get; private set; }
+
+        public RelayCommand<TaskViewModel> PreviewTaskCommand { get; private set; }
 
         public ObservableCollection<IGrouping<bool, TaskViewModel>> GroupedTaskList
         {
@@ -243,6 +247,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             GroupedTaskList =
                 new ObservableCollection<IGrouping<bool, TaskViewModel>>(
                     tasks.GroupBy(task => task.Author.IsMe).OrderByDescending(taskGroup => taskGroup.Key));
+        }
+
+        private void ShowTaskPreview(TaskViewModel taskViewModel)
+        {
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage { TaskViewModel = taskViewModel });
         }
     }
 }

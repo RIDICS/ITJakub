@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Message;
 using ITJakub.MobileApps.Client.Books.Service;
 
@@ -17,6 +18,8 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private bool m_loading;
         private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
+        private string m_pageTitle;
+        private bool m_showSubmitButton;
 
         public SelectPageViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
@@ -28,17 +31,30 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService, PageLoadedCallback);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
+            GoToPreviousCommand = new RelayCommand(GoToPreviousPage);
+            GoToNextCommand = new RelayCommand(GoToNextPage);
 
             m_dataService.GetCurrentBook(LoadData);
         }
-        
+
         private void LoadData(BookViewModel bookViewModel)
         {
-            Book = bookViewModel;
-            MessengerInstance.Unregister(this);
+            m_dataService.GetMode(readerMode =>
+            {
+                switch (readerMode)
+                {
+                    case ReaderMode.ReadBook:
+                        LoadInReaderMode();
+                        break;
+                    default:
+                        LoadInSelectionMode();
+                        break;
+                }
+            });
 
             Loading = true;
-            m_dataService.GetPageList(Book.Guid, (list, exception) =>
+            LoadAllBookInfo(bookViewModel);
+            m_dataService.GetPageList(bookViewModel.Guid, (list, exception) =>
             {
                 Loading = false;
                 if (exception != null)
@@ -50,6 +66,39 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 PageList = list;
             });
         }
+
+        private void LoadAllBookInfo(BookViewModel bookViewModel)
+        {
+            Book = bookViewModel;
+            if (bookViewModel.Title != null)
+            {
+                return;
+            }
+
+            m_dataService.GetBookInfo(bookViewModel.Guid, (bookInfo, exception) =>
+            {
+                if (exception != null)
+                {
+                    Book = bookViewModel;
+                    m_errorService.ShowCommunicationWarning();
+                    return;
+                }
+
+                Book = bookInfo;
+            });
+        }
+
+        private void LoadInSelectionMode()
+        {
+            PageTitle = "Vyberte stranu";
+            ShowSubmitButton = true;
+        }
+
+        private void LoadInReaderMode()
+        {
+            PageTitle = "Listování knihou";
+            ShowSubmitButton = false;
+        }
         
         private void OpenPage(PageViewModel page)
         {
@@ -58,10 +107,26 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             PagePhotoViewModel.OpenPagePhoto(page);
         }
 
+        private void GoToNextPage()
+        {
+            if (CurrentPageNumber < PageCount)
+                CurrentPageNumber++;
+        }
+
+        private void GoToPreviousPage()
+        {
+            if (CurrentPageNumber > 1)
+                CurrentPageNumber--;
+        }
+        
 
         public RelayCommand GoBackCommand { get; private set; }
         
         public RelayCommand SelectCommand { get; private set; }
+
+        public RelayCommand GoToPreviousCommand { get; private set; }
+
+        public RelayCommand GoToNextCommand { get; private set; }
 
         public PageTextViewModel PageTextViewModel { get; set; }
 
@@ -91,6 +156,26 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 RaisePropertyChanged(() => FirstPage);
 
                 MessengerInstance.Send(new PageListMessage(m_pageList));
+            }
+        }
+
+        public string PageTitle
+        {
+            get { return m_pageTitle; }
+            set
+            {
+                m_pageTitle = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool ShowSubmitButton
+        {
+            get { return m_showSubmitButton; }
+            set
+            {
+                m_showSubmitButton = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -145,7 +230,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         {
             get { return SelectedPage != null && PageTextViewModel.RtfText != null && !PageTextViewModel.Loading; }
         }
-
+        
         private void PageLoadedCallback()
         {
             RaisePropertyChanged(() => CanSubmit);
@@ -171,7 +256,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                 PagePhoto = PagePhotoViewModel.PagePhoto,
                 RtfText = PageTextViewModel.RtfText
             };
-            Messenger.Default.Send(new SelectedPageMessage {BookPage = pageDetails});
+            Messenger.Default.Send(new CloseBookSelectAppMessage {SelectedBookPage = pageDetails});
         }
     }
 }

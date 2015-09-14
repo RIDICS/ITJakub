@@ -13,9 +13,10 @@
 
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
         <converter:TimeSpanToStringConverter x:Key="TimeSpanToStringConverter" />
+        <converter:HighlightMeConverter x:Key="HighlightMeConverter" />
     </UserControl.Resources>
+    
     <Grid Background="#22000000">
         <Grid VerticalAlignment="Stretch"
               HorizontalAlignment="Center"
@@ -30,13 +31,12 @@
             </Grid.RowDefinitions>
 
             <TextBlock TextAlignment="Center"
-                       FontFamily="Segoe Print"
+                       VerticalAlignment="Center"
                        FontSize="40"
-                       FontWeight="Bold"
                        Text="Tabulka pořadí:" />
-            
+
             <ListView Grid.Row="1"
-                      Margin="10,30,10,10"
+                      Margin="10,10,10,10"
                       ItemsSource="{Binding PlayerRanking}"
                       SelectionMode="None">
                 <ListView.ItemTemplate>
@@ -52,23 +52,23 @@
                                 <Image Source="../Icon/olympic_medal-26.png"
                                        Grid.Column="0"
                                        Visibility="{Binding Win, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                <TextBlock Text="{Binding LetterCount}"
+                                <TextBlock Text="{Binding CorrectAnswers}"
                                            Grid.Column="1"
                                            VerticalAlignment="Center"
                                            HorizontalAlignment="Center"
-                                           FontFamily="Segoe Print"
                                            FontSize="16"
                                            Margin="3,0,3,3" />
                             </Grid>
-                            
+
                             <StackPanel Orientation="Horizontal"
                                         Background="LightBlue"
                                         Margin="5,0,0,0">
                                 <Image Source="../Icon/time-26.png" />
-                                <TextBlock Text="{Binding GameTime, Converter={StaticResource TimeSpanToStringConverter}}"
-                                           VerticalAlignment="Center"
-                                           FontSize="16"
-                                           Margin="3" />
+                                <TextBlock
+                                    Text="{Binding GameTime, Converter={StaticResource TimeSpanToStringConverter}}"
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Margin="3" />
                             </StackPanel>
                             <TextBlock FontSize="16"
                                        VerticalAlignment="Center"

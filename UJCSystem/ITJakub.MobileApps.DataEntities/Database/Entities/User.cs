@@ -25,7 +25,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
 
         public virtual DateTime CreateTime { get; set; }
 
-        public virtual DateTime CommunicationTokenCreateTime { get; set; } //TODO add to DB
+        public virtual DateTime CommunicationTokenCreateTime { get; set; }
 
         public virtual string PasswordHash { get; set; }
 

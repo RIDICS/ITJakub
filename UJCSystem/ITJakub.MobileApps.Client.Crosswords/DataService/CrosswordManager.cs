@@ -28,7 +28,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             m_pollingService = m_applicationCommunication.PollingService;
         }
 
-        public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback)
+        public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers)
         {
             var taskContract = JsonConvert.DeserializeObject<CrosswordTaskContract>(data);
             var crosswordRows = new ObservableCollection<CrosswordRowViewModel>();
@@ -36,9 +36,19 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             var rowIndex = 0;
             foreach (var row in taskContract.RowList)
             {
-                crosswordRows.Add(row.Answer != null && row.StartPosition != null
-                    ? new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition.Value, taskContract.AnswerPosition, rowIndex++)
-                    : new CrosswordRowViewModel());
+                CrosswordRowViewModel crosswordRow;
+                if (row.Answer != null && row.StartPosition != null)
+                {
+                    crosswordRow = new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition.Value, taskContract.AnswerPosition, rowIndex++);
+
+                    if (fillAnswers)
+                        crosswordRow.UpdateWord(row.Answer);
+                }
+                else
+                {
+                    crosswordRow = new CrosswordRowViewModel();
+                }
+                crosswordRows.Add(crosswordRow);
             }
             m_task = new CrosswordTask(taskContract);
 
@@ -78,7 +88,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         {
             try
             {
-                m_lastDateTime = new DateTime(1975, 1, 1);
+                ResetLastRequestTime();
                 var syncObjList = await m_applicationCommunication.GetObjectsAsync(ApplicationType.Crosswords, m_lastDateTime, ProgressMessage);
                 var progressUpdateList = ProcessProgressUpdate(syncObjList);
 
@@ -144,7 +154,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             callback(m_task.Win);
         }
 
-        public async void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
+        public async void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
         {
             try
             {
@@ -178,7 +188,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 };
 
                 var serializedTask = JsonConvert.SerializeObject(taskContract, Formatting.None, serializerSettings);
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, serializedTask);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Crosswords, taskName, taskDescription, serializedTask);
 
                 callback(null);
             }
@@ -186,6 +196,11 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             {
                 callback(exception);
             }
+        }
+
+        public void ResetLastRequestTime()
+        {
+            m_lastDateTime = new DateTime(1975, 1, 1);
         }
     }
 }

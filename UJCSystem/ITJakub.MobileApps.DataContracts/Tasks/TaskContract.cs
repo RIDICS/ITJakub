@@ -13,6 +13,9 @@ namespace ITJakub.MobileApps.DataContracts.Tasks
         
         [DataMember]
         public int ApplicationId { get; set; }
+
+        [DataMember]
+        public string Description { get; set; }
     }
 
     [DataContract]

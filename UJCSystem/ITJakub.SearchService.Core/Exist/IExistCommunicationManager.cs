@@ -48,8 +48,7 @@ namespace ITJakub.SearchService.Core.Exist
 
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Post, XqueryName = "get-entry-from-search.xquery")]
-        string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId,
-            string xmlEntryId, string outputFormat);
+        string GetDictionaryEntryFromSearch(string serializedSearchCriteria, string bookId, string versionId, string xmlEntryId, string outputFormat);
 
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Post, XqueryName = "list-search-editions.xquery")]

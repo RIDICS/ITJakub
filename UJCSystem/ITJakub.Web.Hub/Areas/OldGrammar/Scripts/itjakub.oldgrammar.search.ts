@@ -120,17 +120,15 @@ $(document).ready(() => {
     }
 
 
-    var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.Heading);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Title);
+    enabledOptions.push(SearchTypeEnum.Author);
+    enabledOptions.push(SearchTypeEnum.Editor);
+    enabledOptions.push(SearchTypeEnum.Dating);
+    enabledOptions.push(SearchTypeEnum.Term);
 
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
-    search.makeSearch(disabledOptions);
+    search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
     typeaheadSearchBox.addDataSet("Term", "Téma");

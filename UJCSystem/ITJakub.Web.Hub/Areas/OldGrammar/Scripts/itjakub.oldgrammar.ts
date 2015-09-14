@@ -81,20 +81,11 @@
         });
     }
 
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Term);
+
     search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
-    var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Author);
-    disabledOptions.push(SearchTypeEnum.Dating);
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Title);
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.Heading);
-    search.makeSearch(disabledOptions);
+    search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
     typeaheadSearchBox.addDataSet("Term", "Téma", `selectedBookIds=${bookId}`);

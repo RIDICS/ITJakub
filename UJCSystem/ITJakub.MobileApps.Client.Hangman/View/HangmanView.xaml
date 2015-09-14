@@ -4,18 +4,22 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:view="using:ITJakub.MobileApps.Client.Hangman.View"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
-    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
+    xmlns:control1="using:ITJakub.MobileApps.Client.Hangman.View.Control"
+    xmlns:countToText="using:ITJakub.MobileApps.Client.Hangman.View.Converter.CountToText"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <converter1:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
+        <countToText:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
+        <countToText:GuessedWordsTextConverter x:Key="GuessedWordsTextConverter" />
+        <countToText:HangmanCountTextConverter x:Key="HangmanCountTextConverter" />
         <converter1:WinToColorConverter x:Key="WinToColorConverter" />
+        <SolidColorBrush x:Key="HangmanCountColor" Color="LightSalmon" />
+        <SolidColorBrush x:Key="GuessedColor" Color="GreenYellow" />
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -27,7 +31,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Row="0"
@@ -46,16 +50,27 @@
                        TextWrapping="Wrap">
                 <Run Text="{Binding GuessedLetterCount}"
                      FontWeight="Bold"
-                     FontFamily="Segoe Print"
                      Foreground="{Binding GameOverViewModel.Win, Converter={StaticResource WinToColorConverter}}"/>
                 <Run Text="{Binding GuessedLetterCount, Converter={StaticResource GuessedLettersTextConverter}}" />
+                
+                <LineBreak />
+                <Run Text="{Binding GuessedWordCount}"
+                     FontWeight="Bold"
+                     Foreground="{Binding GameOverViewModel.Win, Converter={StaticResource WinToColorConverter}}"/>
+                <Run Text="{Binding GuessedWordCount, Converter={StaticResource GuessedWordsTextConverter}}" />
+                
+                <LineBreak />
+                <Run Text="{Binding HangmanCount}"
+                     FontWeight="Bold"
+                     Foreground="{StaticResource HangmanCountColor}"/>
+                <Run Text="{Binding HangmanCount, Converter={StaticResource HangmanCountTextConverter}}" />
             </TextBlock>
 
             <Viewbox Grid.Row="1"
-                     VerticalAlignment="Top"
+                     VerticalAlignment="Center"
                      Margin="0,10,0,25"
                      MinWidth="100">
-                <view:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
+                <control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
                                             Margin="25,0,25,0" />
             </Viewbox>
         </Grid>
@@ -63,76 +78,33 @@
         <Grid Grid.Row="0"
               Grid.Column="1">
             <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
                 <RowDefinition Height="200" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <view:WordControl DataContext="{Binding WordViewModel}"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Center" />
+            <TextBlock Grid.Row="0"
+                       FontSize="20"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       TextAlignment="Center"
+                       Text="{Binding CurrentHint}"
+                       TextWrapping="Wrap" />
+            
+            <control1:WordControl
+                Grid.Row="1"
+                DataContext="{Binding WordViewModel}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
 
-            <ScrollViewer Grid.Row="1"
+            <ScrollViewer Grid.Row="2"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollMode="Disabled"
                           ZoomMode="Disabled">
-                <view:KeyboardControl DataContext="{Binding KeyboardViewModel}"
-                                      MaxWidth="800" />
+                <control1:KeyboardControl
+                    DataContext="{Binding KeyboardViewModel}"
+                    MaxWidth="800" />
             </ScrollViewer>
-        </Grid>
-        
-        <Grid Grid.Row="0"
-              Grid.Column="2"
-              Visibility="{Binding GuessHistoryVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            
-            <TextBlock Text="Historie hádání:"
-                       FontSize="20"
-                       FontWeight="Light"
-                       Margin="0,10,0,10"
-                       Grid.Row="0" />
-            
-            <control:AutoScrollListView Grid.Row="1"
-                      IsItemClickEnabled="False"
-                      ItemsSource="{Binding GuessHistory}" >
-                <control:AutoScrollListView.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Grid Width="20"
-                                  Height="20"
-                                  Margin="0,0,5,0"
-                                  Background="White" >
-                                <TextBlock FontSize="17"
-                                           FontFamily="Segoe Print"
-                                           Text="{Binding Letter}"
-                                           Foreground="Black"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center" />
-                            </Grid>
-                            
-                            <TextBlock FontSize="15"
-                                       Foreground="White">
-                                <Run Text="{Binding Author.FirstName}" />
-                                <Run Text="{Binding Author.LastName}" />
-                            </TextBlock>
-                        </StackPanel>
-                    </DataTemplate>
-                </control:AutoScrollListView.ItemTemplate>
-                
-                <control:AutoScrollListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <ListViewItemPresenter ContentMargin="0,0,0,0" />
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </control:AutoScrollListView.ItemContainerStyle>
-            </control:AutoScrollListView>
         </Grid>
         
         <GridView Grid.Row="1"
@@ -147,36 +119,60 @@
                             Width="130"
                             BorderThickness="2"
                             BorderBrush="#22FFFFFF">
-                    <Grid>
-                        <Viewbox>
-                            <view:HangmanPictureControl DataContext="{Binding PictureViewModel}"
-                                                        HorizontalAlignment="Center"
-                                                        Margin="0,15,0,20" />
-                        </Viewbox>
+                        <Grid>
+                            <Viewbox Margin="10,30,10,20">
+                                <control1:HangmanPictureControl
+                                    DataContext="{Binding PictureViewModel}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,15,0,20" />
+                            </Viewbox>
                         
-                        <TextBlock FontSize="18"
-                                   FontFamily="Segoe Print"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Top"
-                                   Margin="0,0,15,0"
-                                   Foreground="{Binding Win, Converter={StaticResource WinToColorConverter}}"
-                                   Text="{Binding LetterCount}" />
-                        
-                        <TextBlock FontSize="14"
-                                   VerticalAlignment="Bottom"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="NoWrap"
-                                   TextTrimming="CharacterEllipsis">
-                            <Run Text="{Binding UserInfo.FirstName}" />
-                            <Run Text="{Binding UserInfo.LastName}" />
-                        </TextBlock>
-                    </Grid>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top">
+
+                                <Image Source="../Icon/checkmark-26.png"
+                                       Stretch="None"/>
+
+                                <TextBlock FontSize="16"
+                                           Margin="3,0,3,0"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource GuessedColor}">
+                                    <Run Text="{Binding LetterCount}" />
+                                    <Run Text="|" />
+                                    <Run Text="{Binding GuessedWordCount}" />
+                                </TextBlock>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top">
+
+                                <Image Source="../Icon/thriller_filled-26.png"
+                                       Stretch="None" />
+
+                                <TextBlock FontSize="16"
+                                           Margin="3,0,0,0"
+                                           VerticalAlignment="Center"
+                                           Foreground="{StaticResource HangmanCountColor}"
+                                           Text="{Binding HangmanCount}" />
+                            </StackPanel>
+
+                            <TextBlock FontSize="14"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Center"
+                                       TextWrapping="NoWrap"
+                                       TextTrimming="CharacterEllipsis">
+                                <Run Text="{Binding UserInfo.FirstName}" />
+                                <Run Text="{Binding UserInfo.LastName}" />
+                            </TextBlock>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
         
-        <view:GameOverControl Grid.Row="0"
+        <control1:GameOverControl Grid.Row="0"
                               Grid.Column="0"
                               Grid.RowSpan="2"
                               Grid.ColumnSpan="3"

@@ -38,6 +38,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_canOpenApplication;
         private bool m_isGlobalFocus;
         private long m_groupId;
+        private bool m_canOpenAdmin;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -68,7 +69,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             GoBackCommand = new RelayCommand(GoBack);
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
-            OpenApplicationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
+            OpenApplicationCommand = new RelayCommand(Navigate<ApplicationHostView>);
+            OpenAdminCommand = new RelayCommand(OpenAdminView);
             ReloadCommand = new RelayCommand(LoadData);
         }
 
@@ -161,6 +163,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void UpdateCanConnectToGroup()
         {
+            CanOpenAdmin = GroupInfo.State >= GroupStateContract.Running;
             CanConnectToGroup = GroupInfo.State >= GroupStateContract.AcceptMembers && !GroupInfo.ContainsMember(m_currentUserId);
             CanOpenApplication = GroupInfo.State >= GroupStateContract.Running && GroupInfo.ContainsMember(m_currentUserId);
         }
@@ -288,6 +291,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             }
         }
 
+        public bool CanOpenAdmin
+        {
+            get { return m_canOpenAdmin; }
+            set
+            {
+                m_canOpenAdmin = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool IsGlobalFocus
         {
             get { return m_isGlobalFocus; }
@@ -321,6 +334,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public RelayCommand OpenApplicationCommand { get; private set; }
 
         public RelayCommand ReloadCommand { get; private set; }
+
+        public RelayCommand OpenAdminCommand { get; private set; }
+
 
         private void SelectAppAndTask()
         {
@@ -394,6 +410,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                         m_errorService.ShowConnectionError();
                 }
             });
+        }
+
+        private void OpenAdminView()
+        {
+            Navigate<AdminHostView>();
         }
     }
 }

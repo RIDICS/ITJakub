@@ -9,8 +9,6 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Crosswords.View.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d"
-    d:DesignHeight="300"
-    d:DesignWidth="400"
     d:DataContext="{d:DesignInstance d:Type=viewModel:SimpleCrosswordsViewModel}">
     
     <UserControl.Resources>

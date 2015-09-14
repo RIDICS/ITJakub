@@ -32,6 +32,11 @@ namespace ITJakub.MobileApps.Core
             m_userManager.CreateUser(providerContract, providerToken, userDetail);
         }
 
+        public string GetSaltByUserEmail(string email)
+        {
+            return m_userManager.GetSaltByUserEmail(email);
+        }
+
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             return m_userManager.LoginUser(providerContract, providerToken, email);
@@ -99,9 +104,14 @@ namespace ITJakub.MobileApps.Core
             return m_taskManager.GetTasksByAuthor(userId);
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
-            m_taskManager.CreateTask(userId, applicationId, name, data);
+            m_taskManager.CreateTask(userId, applicationId, name, data, description);
+        }
+
+        public TaskDataContract GetTask(long taskId)
+        {
+            return m_taskManager.GetTask(taskId);
         }
 
         public TaskDataContract GetTaskForGroup(long groupId)

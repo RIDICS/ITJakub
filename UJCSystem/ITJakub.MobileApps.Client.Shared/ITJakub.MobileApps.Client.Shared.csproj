@@ -109,11 +109,14 @@
     <Compile Include="Control\ErrorBarView.xaml.cs">
       <DependentUpon>ErrorBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\Expander.cs" />
     <Compile Include="Control\FocusableBehavior.cs" />
+    <Compile Include="Control\PasswordBoxBehaviors.cs" />
     <Compile Include="Converter\BooleanNegationToVisibilityConverter.cs" />
     <Compile Include="Enum\SynchronizationType.cs" />
     <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="Message\AppActionFinishedMessage.cs" />
+    <Compile Include="ViewModel\AdminBaseViewModel.cs" />
     <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />
@@ -138,6 +141,7 @@
     <Compile Include="MobileApplicationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ErrorBarViewModel.cs" />
+    <Compile Include="ViewModel\TaskPreviewBaseViewModel.cs" />
     <Compile Include="ViewModel\SupportAppBaseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Control\ErrorBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

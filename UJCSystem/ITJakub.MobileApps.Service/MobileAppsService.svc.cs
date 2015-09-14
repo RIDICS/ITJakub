@@ -35,6 +35,21 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public string GetSaltByUserEmail(string email)
+        {
+            try
+            {
+                return m_serviceManager.GetSaltByUserEmail(email);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             try
@@ -231,11 +246,26 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
             try
             {
-                m_serviceManager.CreateTask(userId, applicationId, name, data);
+                m_serviceManager.CreateTask(userId, applicationId, name, data, description);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public TaskDataContract GetTask(long taskId)
+        {
+            try
+            {
+                return m_serviceManager.GetTask(taskId);
             }
             catch (WebFaultException ex)
             {

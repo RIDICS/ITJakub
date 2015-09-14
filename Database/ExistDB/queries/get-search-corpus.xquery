@@ -30,11 +30,15 @@ declare function local:get-matches-mock($hits as node()*,
 	let $kwic-options := <config width="{$kwic-context-length}" />
 	
 	let $relevant-hits := subsequence($hits, $kwic-start, $kwic-count)
+<<<<<<< HEAD
 	return 
 	<CorpusSearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"
 		xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
 		xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 		<SearchResults> {
+=======
+	return <SearchResults  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"> {
+>>>>>>> master
 	for $hit at $position in $relevant-hits
 		let $xml-id := string($hit/ancestor::tei:TEI/@n)
 		let $version-id := substring-after($hit/ancestor::tei:TEI/@change, '#')
@@ -59,6 +63,7 @@ declare function local:get-matches-mock($hits as node()*,
 				</CorpusSearchResultContract>
 		}
 		</SearchResults>
+<<<<<<< HEAD
 		</CorpusSearchResultContractList>
 	};
 	
@@ -76,7 +81,69 @@ declare function local:get-matches-mock($hits as node()*,
 		
 		return
 		($new-match, $pb, $l, $bible)
+=======
+>>>>>>> master
 	};
+	
+	declare function local:get-match-with-notes-mock($match, $pb, $l, $bible) {
+		let $new-match := 
+		<HitResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+			<After>tvój.Protož<span class="superscript">1</span> konečně pravím to, že nikakež ode...</After>
+			<Before> touto strašitedlnú nemocí<span class="superscript">ac</span> a ranou ostříhati a brániti a své svaté</Before>
+			<Match>slovo</Match>
+			<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+				<a:string><span class="superscript">1</span> poznámka textová</a:string>
+				<a:string><span class="superscript">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
+			</Notes>
+		</HitResultContext>
+		
+		return
+		(<HitResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								{$new-match}</HitResultContext>, $pb, $l, $bible)
+	};
+
+
+declare function local:prepare-bible($hit as node()?) as node()? {
+	let $book := $hit//tei:anchor[@type='bible'][@subtype='book'][1]
+	let $chapter := $hit//tei:anchor[@type='bible'][@subtype='chapter'][1]
+	let $verse := $hit//tei:anchor[@type='bible'][@subtype='verse'][1]
+	
+	
+	
+	return if ($book) then
+	<BibleVerseResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<BibleBook>{string($book/@n)}</BibleBook>
+		<BibleChapter>{string($chapter/@n)}</BibleChapter>
+		<BibleVerse>{string($verse/@n)}</BibleVerse>
+	</BibleVerseResultContext>
+	else ()
+};
+
+
+declare function local:prepare-pb($hit as node()?) as node()? {
+	let $element := $hit//tei:pb[1]
+	let $element := if ($element) then
+			$element
+		else
+			(:$hit/parent::*//tei:pb[1]:)
+			$hit/preceding::tei:pb[1]
+	return if ($element) then
+	<PageResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<PageName>{string($element/@n)}</PageName>
+		<PageXmlId>{string($element/@xml:id)}</PageXmlId>
+	</PageResultContext>
+	else ()
+};
+
+declare function local:prepare-l($hit as node()?) as node()? {
+	let $element := $hit/self::tei:l
+	return if ($element and $element/@n) then
+	<VerseResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+		<VerseName>{string($element/@n)}</VerseName>
+		<VerseXmlId>{string($element/@xml:id)}</VerseXmlId>
+	</VerseResultContext>
+	else ()
+};
 
 
 declare function local:prepare-bible($hit as node()?) as node()? {
@@ -388,6 +455,7 @@ let $result := ($matches, $summary)
 :)
 
 let $xslt-path := $trans:transformation-path || "resultToContractCorpus.xsl"
+<<<<<<< HEAD
 let $template := doc(escape-html-uri($xslt-path))
 let $step := transform:transform($matches, $template, ())
 
@@ -412,5 +480,14 @@ let $result := trans:transform-document($step, "Html", $xslt-path2)
 	}:)
 (:	{$sorted-documents/tei:TEI/tei:teiHeader//tei:origDate}:)
 
+=======
+
+let $step := trans:transform-document($matches, "Html", $xslt-path)
+
+let $xslt-path := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
+(:let $result := $xslt-path:)
+let $result := trans:transform-document($step, "Html", $xslt-path)
+let $result := $matches
+>>>>>>> master
 return
  	$result

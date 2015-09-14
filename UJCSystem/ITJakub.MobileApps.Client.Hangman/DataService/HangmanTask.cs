@@ -1,52 +1,65 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ITJakub.MobileApps.Client.Hangman.DataContract;
 
 namespace ITJakub.MobileApps.Client.Hangman.DataService
 {
     public class HangmanTask
     {
-        private const int FullLiveCount = 11;
+        private const int FullLiveCount = 14;
 
         private readonly string[] m_specifiedWords;
+        private readonly string[] m_specifiedHints;
         private readonly HashSet<char> m_guessedLetterSet;
         private char[] m_guessedLetters;
-        private int m_lives;
-        private int m_currentWordIndex;
-
-        public HangmanTask(string[] specifiedWords)
+        private int m_livesRemain;
+        private int m_currentLevel;
+        
+        public HangmanTask(HangmanTaskContract.WordContract[] specifiedWords)
         {
-            m_specifiedWords = specifiedWords;
-            m_currentWordIndex = -1;
+            m_specifiedWords = specifiedWords.Select(x => x.Answer).ToArray();
+            m_specifiedHints = specifiedWords.Select(x => x.Hint).ToArray();
+            m_currentLevel = -1;
 
-            Lives = FullLiveCount;
+            LivesRemain = FullLiveCount;
             GuessedLetterCount = 0;
             m_guessedLetterSet = new HashSet<char>();
 
             PrepareNewWord();
         }
 
-        public int Lives
+        public int LivesRemain
         {
-            get { return m_lives; }
+            get { return m_livesRemain; }
             private set
             {
-                m_lives = value;
-                if (m_lives == 0)
-                    m_guessedLetters = m_specifiedWords[m_currentWordIndex].ToCharArray();
+                m_livesRemain = value;
+                if (m_livesRemain == 0)
+                {
+                    HangmanCount++;
+                    m_livesRemain = FullLiveCount;
+                }
             }
         }
+
+        public int HangmanCount { get; private set; }
 
         public string GuessedLetters
         {
             get { return new string(m_guessedLetters); }
         }
 
+        public string CurrentHint
+        {
+            get { return m_currentLevel < m_specifiedHints.Length ? m_specifiedHints[m_currentLevel] : string.Empty; }
+        }
+
         public bool Win { get; private set; }
 
-        public bool Loss { get { return m_lives == 0; } }
+        public bool Loss { get { return m_livesRemain == 0; } }
 
-        public int WordOrder { get { return m_currentWordIndex; } }
+        public int WordOrder { get { return m_currentLevel; } }
 
         public int GuessedLetterCount { get; set; }
 
@@ -54,16 +67,16 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         private void PrepareNewWord()
         {
-            m_currentWordIndex++;
-            if (m_currentWordIndex >= m_specifiedWords.Length)
+            m_currentLevel++;
+            if (m_currentLevel >= m_specifiedWords.Length)
             {
                 Win = true;
                 return;
             }
 
             // Convert current word to upper case (for comparing with guessed letters)
-            m_specifiedWords[m_currentWordIndex] = m_specifiedWords[m_currentWordIndex].ToUpper();
-            var currentWord = m_specifiedWords[m_currentWordIndex];
+            m_specifiedWords[m_currentLevel] = m_specifiedWords[m_currentLevel].ToUpper();
+            var currentWord = m_specifiedWords[m_currentLevel];
 
             m_guessedLetterSet.Clear();
             m_guessedLetters = new char[currentWord.Length];
@@ -77,12 +90,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void Guess(char letter)
         {
             IsNewWord = false;
-            letter = Char.ToUpper(letter);
+            letter = char.ToUpper(letter);
             if (m_guessedLetterSet.Contains(letter) || Loss || Win)
                 return;
 
             m_guessedLetterSet.Add(letter);
-            var currentWord = m_specifiedWords[m_currentWordIndex];
+            var currentWord = m_specifiedWords[m_currentLevel];
             var containsLetter = false;
             var containsNonGuessedLetter = false;
 
@@ -101,7 +114,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
 
             if (!containsLetter)
-                Lives--;
+                LivesRemain--;
 
             if (!containsNonGuessedLetter)
                 PrepareNewWord();
@@ -110,7 +123,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void Guess(GuessLetterContract guessLetterObject)
         {
             // If user guessing letter in old word (word has been guessed)
-            if (guessLetterObject.WordOrder < m_currentWordIndex)
+            if (guessLetterObject.WordOrder < m_currentLevel)
                 return;
 
             Guess(guessLetterObject.Letter);

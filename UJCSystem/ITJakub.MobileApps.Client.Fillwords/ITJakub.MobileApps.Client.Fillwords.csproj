@@ -114,7 +114,10 @@
     <Compile Include="DataService\ProgressManager.cs" />
     <Compile Include="DataService\TaskManager.cs" />
     <Compile Include="ViewModel\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\Comparer\UserInfoNameComparer.cs" />
     <Compile Include="ViewModel\Enum\AnswerState.cs" />
+    <Compile Include="ViewModel\FillwordsAdminViewModel.cs" />
+    <Compile Include="ViewModel\FillwordsTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\TaskFinishedViewModel.cs" />
     <Compile Include="View\Control\OpaqueComboBox.cs" />
     <Compile Include="View\Control\RichEditComboBox.cs" />
@@ -132,8 +135,14 @@
     <Compile Include="View\FillwordsEditorView.xaml.cs">
       <DependentUpon>FillwordsEditorView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\FillwordsPreviewView.xaml.cs">
+      <DependentUpon>FillwordsPreviewView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FillwordsView.xaml.cs">
       <DependentUpon>FillwordsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FillwordsAdminView.xaml.cs">
+      <DependentUpon>FillwordsAdminView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +174,7 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +190,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\FillwordsPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FillwordsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FillwordsAdminView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

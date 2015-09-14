@@ -45,5 +45,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetBookPageImage(bookGuid, pageId);
         }
+
+        public BookContract GetBookInfo(string bookGuid)
+        {
+            return m_bookManager.GetBookInfoMobile(bookGuid);
+        }
     }
 }

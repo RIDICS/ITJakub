@@ -14,6 +14,9 @@ namespace ITJakub.MobileApps.DataContracts
         void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
 
         [OperationContract]
+        string GetSaltByUserEmail(string email);
+
+        [OperationContract]
         LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
         [OperationContract]
@@ -68,7 +71,11 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
-        void CreateTask(long userId, int applicationId, string name, string data);
+        void CreateTask(long userId, int applicationId, string name, string data, string description);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        TaskDataContract GetTask(long taskId);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]

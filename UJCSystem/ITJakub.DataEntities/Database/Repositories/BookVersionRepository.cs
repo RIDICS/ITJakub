@@ -701,6 +701,24 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetBookVersionWithAuthorsByGuid(string bookGuid)
+        {
+            Book bookAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<BookVersion>()
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(x => x.Id == bookAlias.LastVersion.Id && bookAlias.Guid == bookGuid)
+                    .Fetch(x => x.Authors).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<Term> GetTermsOnPage(string bookXmlId, string pageXmlId)
         {
             using (var session = GetSession())

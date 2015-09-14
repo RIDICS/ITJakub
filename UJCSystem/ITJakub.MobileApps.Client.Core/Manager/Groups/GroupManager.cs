@@ -209,6 +209,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         Application = await m_applicationIdManager.GetApplicationType(task.ApplicationId),
                         Id = task.Id,
                         Name = task.Name,
+                        Description = task.Description,
                         CreateTime = task.CreateTime
                     };
                 }

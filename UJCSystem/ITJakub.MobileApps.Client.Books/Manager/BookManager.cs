@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using Windows.UI.Xaml.Media.Imaging;
+using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.Manager.Cache;
 using ITJakub.MobileApps.Client.Books.Service.Client;
 using ITJakub.MobileApps.Client.Books.ViewModel;
@@ -43,6 +44,8 @@ namespace ITJakub.MobileApps.Client.Books.Manager
             }
             set { m_currentBook = value; }
         }
+
+        public ReaderMode ReaderMode { get; set; }
 
         private string GetAuthorStringFromList(IEnumerable<AuthorContract> authors)
         {
@@ -150,6 +153,30 @@ namespace ITJakub.MobileApps.Client.Books.Manager
                 var photo = await m_photoCache.Get(bookGuid, pageId);
                 callback(photo, null);
 
+            }
+            catch (NotFoundException exception)
+            {
+                callback(null, exception);
+            }
+            catch (MobileCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+        public async void GetBookInfo(string bookGuid, Action<BookViewModel, Exception> callback)
+        {
+            try
+            {
+                var bookInfo = await m_serviceClient.GetBookInfo(bookGuid);
+                var bookViewModel = new BookViewModel
+                {
+                    Authors = GetAuthorStringFromList(bookInfo.Authors),
+                    Guid = bookInfo.Guid,
+                    Title = bookInfo.Title,
+                    PublishDate = bookInfo.PublishDate
+                };
+                callback(bookViewModel, null);
             }
             catch (NotFoundException exception)
             {

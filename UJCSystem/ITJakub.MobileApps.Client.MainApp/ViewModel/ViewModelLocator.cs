@@ -110,5 +110,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<UserAccountSettingsViewModel>(); }
         }
+
+        public TaskPreviewHostViewModel TaskPreviewHostViewModel
+        {
+            get { return Container.Current.Resolve<TaskPreviewHostViewModel>(); }
+        }
+
+        public AdminHostViewModel AdminHostViewModel
+        {
+            get { return Container.Current.Resolve<AdminHostViewModel>(); }
+        }
     }
 }

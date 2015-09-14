@@ -104,9 +104,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             return m_bookManager.BookGuid;
         }
 
-        public void CreateTask(string taskName, string defaultPageId, Action<Exception> callback)
+        public void CreateTask(string taskName, string taskDescription, string defaultPageId, Action<Exception> callback)
         {
-            m_taskManager.CreateTask(taskName, defaultPageId, callback);
+            m_taskManager.CreateTask(taskName, taskDescription, defaultPageId, callback);
+        }
+
+        public void GetBookInfo(Action<BookInfoViewModel, Exception> callback)
+        {
+            m_bookManager.GetBookInfo(callback);
         }
     }
 }

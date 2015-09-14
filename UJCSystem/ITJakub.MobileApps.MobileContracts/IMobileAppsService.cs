@@ -21,5 +21,8 @@ namespace ITJakub.MobileApps.MobileContracts
 
         [OperationContract]
         Stream GetPagePhoto(string bookGuid, string pageId);
+
+        [OperationContract]
+        BookContract GetBookInfo(string bookGuid);
     }
 }

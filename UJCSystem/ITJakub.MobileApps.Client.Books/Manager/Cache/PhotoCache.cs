@@ -24,6 +24,9 @@ namespace ITJakub.MobileApps.Client.Books.Manager.Cache
                     await stream.CopyToAsync(memoryStream);
                     memoryStream.Position = 0;
 
+                    if (memoryStream.Length == 0)
+                        throw new NotFoundException(null);
+
                     var bitmapImage = new BitmapImage();
                     bitmapImage.SetSource(memoryStream.AsRandomAccessStream());
 

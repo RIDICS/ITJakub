@@ -15,9 +15,9 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
     {
-        //private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
+        //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
 
         private readonly ClientMessageInspector m_clientMessageInspector;
 
@@ -385,17 +385,44 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task CreateTaskAsync(long userId, int applicationId, string name, string data)
+        public Task CreateTaskAsync(long userId, int applicationId, string name, string description, string data)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    Channel.CreateTask(userId, applicationId, name, data);
+                    Channel.CreateTask(userId, applicationId, name, data, description);
                 }
                 catch (FaultException ex)
                 {
                     throw new ClientCommunicationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<TaskDataContract> GetTaskAsync(long taskId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetTask(taskId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
                 }
                 catch (CommunicationException ex)
                 {
@@ -546,6 +573,34 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
             });
         }
+
+        public Task<string> GetSaltByUserEmail(string email)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetSaltByUserEmail(email);
+                }
+                catch (FaultException ex)
+                {
+                    throw new UserNotRegisteredException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
 
         #region enpoint settings
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
