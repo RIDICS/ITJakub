@@ -39,6 +39,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             if (textRange.Length == 0)
             {
                 SelectionStart = -1;
+                SelectionEnd = -1;
                 SelectedText = null;
                 IsSelectedTextHighlighted = false;
             }
@@ -47,6 +48,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
                 Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
                 SelectedText = textRange.Text.Trim();
                 SelectionStart = textRange.StartPosition;
+                SelectionEnd = textRange.EndPosition;
                 IsSelectedTextHighlighted = Document.Selection.CharacterFormat.BackgroundColor.Equals(BackgroundColorHighlight);
             }
             
@@ -72,6 +74,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             typeof (string), typeof (EditorRichEditBox), new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SelectionStartProperty = DependencyProperty.Register("SelectionStart", typeof(int), typeof(EditorRichEditBox), new PropertyMetadata(0));
+
+        public static readonly DependencyProperty SelectionEndProperty = DependencyProperty.Register("SelectionEnd", typeof(int), typeof(EditorRichEditBox), new PropertyMetadata(0));
         
         public static readonly DependencyProperty IsEditingEnabledProperty = DependencyProperty.Register("IsEditingEnabled", typeof (bool), typeof (EditorRichEditBox), new PropertyMetadata(false, IsEditingEnabledChanged));
 
@@ -114,6 +118,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
             set { SetValue(SelectionStartProperty, value); }
         }
 
+        public int SelectionEnd
+        {
+            get { return (int)GetValue(SelectionEndProperty); }
+            set { SetValue(SelectionEndProperty, value); }
+        }
+
         public ICommand SelectionChangedCommand
         {
             get { return (ICommand) GetValue(SelectionChangedCommandProperty); }
@@ -139,13 +149,15 @@ namespace ITJakub.MobileApps.Client.Fillwords.View.Control
         private static void OnSelectedTextHighlightChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var editBox = d as EditorRichEditBox;
-            if (editBox == null)
+            if (editBox == null || editBox.SelectionStart < 0 || editBox.SelectionEnd < 0)
                 return;
 
             var isHighlight = (bool) e.NewValue;
             var color = isHighlight ? editBox.BackgroundColorHighlight : editBox.m_defaultBackgroundColor;
             var readOnlyState = editBox.IsReadOnly;
             editBox.IsReadOnly = false;
+            editBox.Document.Selection.StartPosition = editBox.SelectionStart;
+            editBox.Document.Selection.EndPosition = editBox.SelectionEnd;
             editBox.Document.Selection.CharacterFormat.BackgroundColor = color;
             editBox.IsReadOnly = readOnlyState;
 
