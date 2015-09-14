@@ -158,21 +158,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             finally
             {
                 LoadingMyGroups = false;
-            }
-
-            //m_dataService.GetOwnedGroupsForCurrentUser((result, ex) =>
-            //{
-            //    if (ex != null)
-            //    {
-            //        m_errorService.ShowConnectionError();
-            //        LoadingMyGroups = false;
-            //        return;
-            //    }
-            //    m_ownedGroups = result;
-            //    OwnedGroupList = DisplayGroupList(m_ownedGroups);
-            //    LoadingMyGroups = false;
-            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_ownedGroups, GroupUpdate);
-            //});
+            }            
         }
 
         public async void LoadMembershipGroups()
@@ -193,23 +179,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             finally
             {
                 LoadingMembershipGroups = false;
-            }
-
-
-            //m_dataService.GetGroupsForCurrentUser((result, ex) =>
-            //{
-            //    if (ex != null)
-            //    {
-            //        m_errorService.ShowConnectionError();
-            //        LoadingMyGroups = false;
-            //        return;
-            //    }
-
-            //    m_myGroups = result;
-            //    MyMyGroupList = DisplayGroupList(result);
-            //    m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_myGroups, GroupUpdate);
-            //    LoadingMyGroups = false;
-            //});
+            }         
         }
 
         private void GroupUpdate(Exception exception)

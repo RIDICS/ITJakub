@@ -10,9 +10,10 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
     {
         void RegisterForGetGroupState(PollingInterval interval, long groupId, Action<GroupStateContract, Exception> callback);
 
-        void Unregister(PollingInterval interval, Action<GroupStateContract, Exception> action);
-
         void RegisterForGroupsUpdate(PollingInterval interval, IList<GroupInfoViewModel> groupList, Action<Exception> callback);
+
+        void Unregister(PollingInterval interval, Action<GroupStateContract, Exception> action);
+        
 
         void Unregister(PollingInterval interval, Action<Exception> action);
 

@@ -159,16 +159,22 @@ namespace ITJakub.MobileApps.Client.Core.Service.Polling
         private class PollingObjectsParameters
         {
             public ApplicationType ApplicationType { get; set; }
+
             public string ObjectType { get; set; }
+
             public DateTime Since { get; set; }
+
             public Action<IList<ObjectDetails>, Exception> Callback { get; set; }
         }
 
         private class PollingObjectParameters
         {
             public ApplicationType ApplicationType { get; set; }
+
             public string ObjectType { get; set; }
+
             public DateTime Since { get; set; }
+
             public Action<ObjectDetails, Exception> Callback { get; set; }
         }
     }
