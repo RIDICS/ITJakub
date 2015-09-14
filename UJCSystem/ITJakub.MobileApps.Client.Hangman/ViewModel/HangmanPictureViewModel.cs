@@ -19,6 +19,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_rightEyeVisible;
         private bool m_mouthVisible;
         private int m_lives;
+        private bool m_noseVisible;
 
         public int Lives
         {
@@ -32,21 +33,22 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private void LivesUpdate(int lives)
         {
             MouthVisible = lives == 0;
-            RightEyeVisible = lives < 2;
-            LeftEyeVisible = lives < 3;
-            RightLegVisible = lives < 4;
-            LeftLegVisible = lives < 5;
-            RightArmVisible = lives < 6;
-            LeftArmVisible = lives < 7;
-            BodyVisible = lives < 8;
-            HeadVisible = lives < 9;
-            RopeVisible = lives < 10;
-            Construction3Visible = lives < 11;
-            Construction2Visible = lives < 12;
-            Construction1Visible = lives < 13;
-            BaseVisible = lives < 14;
+            NoseVisible = lives < 2;
+            RightEyeVisible = lives < 3;
+            LeftEyeVisible = lives < 4;
+            RightLegVisible = lives < 5;
+            LeftLegVisible = lives < 6;
+            RightArmVisible = lives < 7;
+            LeftArmVisible = lives < 8;
+            BodyVisible = lives < 9;
+            HeadVisible = lives < 10;
+            RopeVisible = lives < 11;
+            Construction3Visible = lives < 12;
+            Construction2Visible = lives < 13;
+            Construction1Visible = lives < 14;
+            BaseVisible = lives < 15;
         }
-
+        
         public bool Construction1Visible
         {
             get { return m_construction1Visible; }
@@ -173,6 +175,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_rightEyeVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool NoseVisible
+        {
+            get { return m_noseVisible; }
+            set
+            {
+                m_noseVisible = value;
                 RaisePropertyChanged();
             }
         }

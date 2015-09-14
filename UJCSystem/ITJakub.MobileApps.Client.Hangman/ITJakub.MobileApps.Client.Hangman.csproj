@@ -132,6 +132,7 @@
     <Compile Include="ViewModel\TaskProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\Control\HangmanPicture\HangmanPictureTemplateSelector.cs" />
     <Compile Include="View\Control\ResultTableControl.xaml.cs">
       <DependentUpon>ResultTableControl.xaml</DependentUpon>
     </Compile>
@@ -177,6 +178,34 @@
     <Page Include="View\Control\GameOverControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman6.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman7.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Control\ResultTableControl.xaml">
       <SubType>Designer</SubType>
