@@ -20,6 +20,8 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var group = session.QueryOver<Group>()
+                    .Fetch(g => g.Users).Eager
+                    .Fetch(g => g.CreatedBy).Eager
                     .Where(g => g.Id == groupId)
                     .SingleOrDefault();
 

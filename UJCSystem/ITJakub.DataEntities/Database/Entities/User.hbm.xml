@@ -56,8 +56,8 @@
     </bag>
 
     <bag name="Groups" table="User_Group"  lazy="true">
-      <key column="User" />
-      <many-to-many class="Group" column="Group" />
+      <key column="[User]" />
+      <many-to-many class="Group" column="[Group]" />
     </bag>
     
   </class>

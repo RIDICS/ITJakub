@@ -37,7 +37,7 @@ namespace ITJakub.ITJakubService.Core
                 CommunicationTokenCreateTime = now
             };
             var userId = m_userRepository.Create(dbUser);
-            return FindById(userId);
+            return GetUserDetail(userId);
         }
 
         public UserContract FindByUserName(string userName)
@@ -57,7 +57,7 @@ namespace ITJakub.ITJakubService.Core
             return user;
         }
 
-        public UserContract FindById(int userId)
+        public UserContract GetUserDetail(int userId)
         {
             var dbUser = m_userRepository.FindById(userId);
             if (dbUser == null) return null;

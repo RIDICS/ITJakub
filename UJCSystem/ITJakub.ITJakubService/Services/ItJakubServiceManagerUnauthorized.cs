@@ -24,7 +24,7 @@ namespace ITJakub.ITJakubService.Services
 
         public UserContract FindUserById(int userId)
         {
-            return m_userManager.FindById(userId);
+            return m_userManager.GetUserDetail(userId);
         }
 
         public UserContract FindUserByUserName(string userName)
