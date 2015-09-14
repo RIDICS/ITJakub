@@ -44,5 +44,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void SetRestoringLastGroupState(bool restore);
         void GetAppSelectionTarget(Action<SelectApplicationTarget> callback);
         void SetAppSelectionTarget(SelectApplicationTarget target);
+        void UpdateEndpointAddress(string address);
     }
 }

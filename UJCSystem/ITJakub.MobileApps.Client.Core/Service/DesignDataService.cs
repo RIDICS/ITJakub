@@ -237,5 +237,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void SetAppSelectionTarget(SelectApplicationTarget target)
         {
         }
+
+        public void UpdateEndpointAddress(string address)
+        {
+        }
     }
 }

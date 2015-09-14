@@ -33,6 +33,11 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             m_clientMessageInspector.CommunicationToken = communicationToken;
         }
 
+        public void UpdateEndpointAddress(string newEndpointAddress)
+        {
+            Endpoint.Address = new EndpointAddress(newEndpointAddress ?? EndpointAddress);
+        }
+
         public Task CreateUserAsync(AuthProvidersContract providerContract, string providerToken,
             UserDetailContract userDetail)
         {

@@ -120,5 +120,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<AdminHostViewModel>(); }
         }
+
+        public SettingViewModel SettingViewModel
+        {
+            get { return Container.Current.Resolve<SettingViewModel>(); }
+        }
     }
 }

@@ -125,6 +125,7 @@
       <DependentUpon>LocalAuthView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthViewModel.cs" />
+    <Compile Include="Manager\ConfigurationManager.cs" />
     <Compile Include="Template\AdminTemplateSelector.cs" />
     <Compile Include="Template\DataTemplateCreator.cs" />
     <Compile Include="Template\EditorTemplateSelector.cs" />

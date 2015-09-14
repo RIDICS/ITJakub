@@ -107,6 +107,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
       <DependentUpon>AdminHostView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +196,9 @@
     </Compile>
     <Compile Include="View\SelectTaskView.xaml.cs">
       <DependentUpon>SelectTaskView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SettingFlyout.xaml.cs">
+      <DependentUpon>SettingFlyout.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TaskPreviewHostView.xaml.cs">
       <DependentUpon>TaskPreviewHostView.xaml</DependentUpon>
@@ -295,6 +299,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SelectTaskView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SettingFlyout.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
