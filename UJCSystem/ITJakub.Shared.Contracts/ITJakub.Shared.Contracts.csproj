@@ -48,6 +48,7 @@
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
     <Compile Include="GroupContract.cs" />
+    <Compile Include="GroupDetailContract.cs" />
     <Compile Include="Notes\FeedbackCategoryEnumContract.cs" />
     <Compile Include="Notes\FeedbackContract.cs" />
     <Compile Include="Notes\FeedbackCriteriaContract.cs" />

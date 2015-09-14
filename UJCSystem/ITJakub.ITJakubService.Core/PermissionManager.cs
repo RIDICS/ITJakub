@@ -52,7 +52,7 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<List<UserContract>>(users);
         }
 
-        public GroupContract CreateGroup(int founderUserId, string groupName, string description)
+        public GroupDetailContract CreateGroup(int founderUserId, string groupName, string description)
         {
             var user = m_userRepository.FindById(founderUserId);
 
@@ -68,11 +68,11 @@ namespace ITJakub.ITJakubService.Core
             return GetGroupDetail(groupId);
         }
 
-        public GroupContract GetGroupDetail(int groupId)
+        public GroupDetailContract GetGroupDetail(int groupId)
         {
             var group = m_permissionRepository.FindGroupById(groupId);
             if (group == null) return null;
-            var groupContract = Mapper.Map<GroupContract>(group);
+            var groupContract = Mapper.Map<GroupDetailContract>(group);
             return groupContract;
         }
 
