@@ -9,10 +9,12 @@
     xmlns:converter1="using:ITJakub.MobileApps.Client.Hangman.View.Converter"
     xmlns:control1="using:ITJakub.MobileApps.Client.Hangman.View.Control"
     xmlns:countToText="using:ITJakub.MobileApps.Client.Hangman.View.Converter.CountToText"
+    xmlns:hangmanPicture="using:ITJakub.MobileApps.Client.Hangman.View.Control.HangmanPicture"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
     <UserControl.Resources>
+        <hangmanPicture:HangmanPictureTemplateSelector x:Key="HangmanPictureTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <countToText:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
         <countToText:GuessedWordsTextConverter x:Key="GuessedWordsTextConverter" />
@@ -70,8 +72,11 @@
                      VerticalAlignment="Center"
                      Margin="0,10,0,25"
                      MinWidth="100">
-                <control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
-                                            Margin="25,0,25,0" />
+                <ContentControl Content="{Binding CurrentHangmanPicture}"
+                                ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}" />
+                
+                <!--<control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
+                                            Margin="25,0,25,0" />-->
             </Viewbox>
         </Grid>
            

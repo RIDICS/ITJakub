@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private string m_currentHint;
         private int m_guessedWordCount;
         private int m_hangmanCount;
+        private int m_currentHangmanPicture;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -28,6 +29,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             GameOverViewModel = new GameOverViewModel();
 
             KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
+            CurrentHangmanPicture = 1;
         }
         
         public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
@@ -97,6 +99,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_currentHint = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int CurrentHangmanPicture
+        {
+            get { return m_currentHangmanPicture; }
+            set
+            {
+                m_currentHangmanPicture = value;
                 RaisePropertyChanged();
             }
         }

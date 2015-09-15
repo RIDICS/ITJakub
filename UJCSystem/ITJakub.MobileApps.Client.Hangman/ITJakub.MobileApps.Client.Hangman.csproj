@@ -132,6 +132,27 @@
     <Compile Include="ViewModel\TaskProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\Control\HangmanPicture\Hangman1.xaml.cs">
+      <DependentUpon>Hangman1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman2.xaml.cs">
+      <DependentUpon>Hangman2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman3.xaml.cs">
+      <DependentUpon>Hangman3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman4.xaml.cs">
+      <DependentUpon>Hangman4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman5.xaml.cs">
+      <DependentUpon>Hangman5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman6.xaml.cs">
+      <DependentUpon>Hangman6.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman7.xaml.cs">
+      <DependentUpon>Hangman7.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Control\HangmanPicture\HangmanPictureTemplateSelector.cs" />
     <Compile Include="View\Control\ResultTableControl.xaml.cs">
       <DependentUpon>ResultTableControl.xaml</DependentUpon>
