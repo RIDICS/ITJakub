@@ -28,16 +28,18 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public override void InitializeCommunication()
         {
-            m_dataService.StartPollingProgress((progressList, exception) =>
-            {
-                if (exception != null)
+            m_dataService.GetTaskHistoryAndStartPollingProgress(
+                (taskInfo, exception) => { },
+                (progressList, exception) =>
                 {
-                    m_dataService.ErrorService.ShowConnectionWarning();
-                    return;
-                }
+                    if (exception != null)
+                    {
+                        m_dataService.ErrorService.ShowConnectionWarning();
+                        return;
+                    }
 
-                ProcessUserProgress(progressList);
-            });
+                    ProcessUserProgress(progressList);
+                });
         }
         
         public override void UpdateGroupMembers(IEnumerable<UserInfo> members)
@@ -68,6 +70,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     viewModel.LetterCount = progressInfo.LetterCount;
                     viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;
+                    viewModel.HangmanPicture = progressInfo.HangmanPicture;
                 }
                 else
                 {

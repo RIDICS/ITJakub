@@ -17,7 +17,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private string m_currentHint;
         private int m_guessedWordCount;
         private int m_hangmanCount;
-        private int m_currentHangmanPicture;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -29,7 +28,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             GameOverViewModel = new GameOverViewModel();
 
             KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
-            CurrentHangmanPicture = 1;
         }
         
         public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
@@ -103,40 +101,30 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public int CurrentHangmanPicture
-        {
-            get { return m_currentHangmanPicture; }
-            set
-            {
-                m_currentHangmanPicture = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public override void InitializeCommunication(bool isUserOwner)
         {
-            m_dataService.GetTaskInfoWithGuessHistory((taskInfo, exception) =>
-            {
-                if (exception != null)
+            m_dataService.GetTaskHistoryAndStartPollingProgress(
+                (taskInfo, exception) =>
                 {
-                    m_dataService.ErrorService.ShowConnectionError(GoBack);
-                    return;
-                }
+                    if (exception != null)
+                    {
+                        m_dataService.ErrorService.ShowConnectionError(GoBack);
+                        return;
+                    }
 
-                ProcessTaskInfo(taskInfo);
-                SetDataLoaded();
-            });
-
-            m_dataService.StartPollingProgress((progressInfo, exception) =>
-            {
-                if (exception != null)
+                    ProcessTaskInfo(taskInfo);
+                    SetDataLoaded();
+                },
+                (progressInfo, exception) =>
                 {
-                    m_dataService.ErrorService.ShowConnectionWarning();
-                    return;
-                }
+                    if (exception != null)
+                    {
+                        m_dataService.ErrorService.ShowConnectionWarning();
+                        return;
+                    }
 
-                ProcessOpponentProgress(progressInfo);
-            });
+                    ProcessOpponentProgress(progressInfo);
+                });
         }
 
         public override void SetTask(string data)
@@ -175,6 +163,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             HangmanCount = taskProgressInfo.HangmanCount;
             GuessedLetterCount = taskProgressInfo.GuessedLetterCount;
             GuessedWordCount = taskProgressInfo.GuessedWordCount;
+            HangmanPictureViewModel.CurrentHangmanPicture = taskProgressInfo.HangmanPicture;
 
             if (taskProgressInfo.Win)
             {
@@ -211,6 +200,8 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     viewModel.LetterCount = progressInfo.LetterCount;
                     viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;
+
+                    viewModel.HangmanPicture = progressInfo.HangmanPicture;
                 }
                 else
                 {

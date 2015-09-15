@@ -12,6 +12,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private DateTime m_time;
         private int m_guessedWordCount;
         private int m_hangmanCount;
+        private int m_hangmanPicture;
 
         public ProgressInfoViewModel()
         {
@@ -76,6 +77,17 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             {
                 m_time = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        public int HangmanPicture
+        {
+            get { return m_hangmanPicture; }
+            set
+            {
+                m_hangmanPicture = value;
+                RaisePropertyChanged();
+                PictureViewModel.CurrentHangmanPicture = m_hangmanPicture;
             }
         }
 

@@ -7,17 +7,23 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 {
     public class HangmanTask
     {
-        private const int FullLiveCount = 14;
+        private const int FullLiveCount = 15;
+        private const int TotalHangmanPictureCount = 7;
 
+        private readonly Random m_randomGenerator;
         private readonly string[] m_specifiedWords;
         private readonly string[] m_specifiedHints;
         private readonly HashSet<char> m_guessedLetterSet;
+        private HashSet<int> m_usedHangmanPictures;
         private char[] m_guessedLetters;
         private int m_livesRemain;
         private int m_currentLevel;
-        
+        private bool m_isGuessFromHistory;
+
         public HangmanTask(HangmanTaskContract.WordContract[] specifiedWords)
         {
+            //TODO generate new random default hangman
+            m_randomGenerator = new Random();
             m_specifiedWords = specifiedWords.Select(x => x.Answer).ToArray();
             m_specifiedHints = specifiedWords.Select(x => x.Hint).ToArray();
             m_currentLevel = -1;
@@ -39,11 +45,14 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 {
                     HangmanCount++;
                     m_livesRemain = FullLiveCount;
+                    GenerateNewRandomHangmanPicture();
                 }
             }
         }
 
         public int HangmanCount { get; private set; }
+
+        public int HangmanPicture { get; private set; }
 
         public string GuessedLetters
         {
@@ -120,13 +129,56 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 PrepareNewWord();
         }
 
-        public void Guess(GuessLetterContract guessLetterObject)
+        public void Guess(ProgressInfoContract progressInfoObject)
         {
             // If user guessing letter in old word (word has been guessed)
-            if (guessLetterObject.WordOrder < m_currentLevel)
+            if (progressInfoObject.WordOrder < m_currentLevel)
                 return;
 
-            Guess(guessLetterObject.Letter);
+            m_isGuessFromHistory = true;
+            Guess(progressInfoObject.Letter);
+            SetHangmanPicture(progressInfoObject.HangmanPicture);
+            m_isGuessFromHistory = false;
+        }
+
+        private void SetHangmanPicture(int picture)
+        {
+            if (m_usedHangmanPictures == null)
+            {
+                m_usedHangmanPictures = new HashSet<int> {picture};
+                HangmanPicture = picture;
+                return;
+            }
+
+            if (HangmanPicture == picture)
+                return;
+
+            if (m_usedHangmanPictures.Count == TotalHangmanPictureCount)
+            {
+                m_usedHangmanPictures.Clear();
+                m_usedHangmanPictures.Add(picture);
+                HangmanPicture = picture;
+            }
+        }
+
+        private void GenerateNewRandomHangmanPicture()
+        {
+            if (m_isGuessFromHistory)
+                return;
+
+            if (m_usedHangmanPictures.Count == TotalHangmanPictureCount)
+                m_usedHangmanPictures.Clear();
+            
+            while (true)
+            {
+                var newRandom = m_randomGenerator.Next(TotalHangmanPictureCount);
+                if (!m_usedHangmanPictures.Contains(newRandom))
+                {
+                    m_usedHangmanPictures.Add(newRandom);
+                    HangmanPicture = newRandom;
+                    break;
+                }
+            }
         }
     }
 }

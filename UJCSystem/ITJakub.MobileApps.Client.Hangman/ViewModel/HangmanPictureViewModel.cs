@@ -20,6 +20,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_mouthVisible;
         private int m_lives;
         private bool m_noseVisible;
+        private int m_currentHangmanPicture;
 
         public int Lives
         {
@@ -48,7 +49,17 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             Construction1Visible = lives < 14;
             BaseVisible = lives < 15;
         }
-        
+
+        public int CurrentHangmanPicture
+        {
+            get { return m_currentHangmanPicture; }
+            set
+            {
+                m_currentHangmanPicture = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool Construction1Visible
         {
             get { return m_construction1Visible; }

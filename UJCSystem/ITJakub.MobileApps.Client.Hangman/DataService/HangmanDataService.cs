@@ -9,8 +9,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     public interface IHangmanDataService
     {
         IErrorService ErrorService { get; }
-        void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback);
-        void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
+        void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback);
         void StopPolling();
         void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback);
         void SetTaskAndGetConfiguration(string data, Action<TaskSettingsViewModel, TaskProgressInfoViewModel> callback);
@@ -34,16 +33,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             get { return m_applicationCommunication.ErrorService; }
         }
 
-        public void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
+        public void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback)
         {
-            m_guessManager.GetTaskInfoWithGuessHistory(callback);
+            m_guessManager.GetTaskHistoryAndStartPollingProgress(callback, pollingCallback);
         }
-
-        public void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback)
-        {
-            m_guessManager.StartPollingProgress(callback);
-        }
-
+        
         public void StopPolling()
         {
             m_guessManager.StopPolling();

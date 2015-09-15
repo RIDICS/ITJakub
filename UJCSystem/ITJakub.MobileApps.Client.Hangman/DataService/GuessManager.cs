@@ -13,10 +13,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public abstract TaskSettingsViewModel TaskSettings { get; }
 
-        public abstract void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback);
-
-        public abstract void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
-
+        public abstract void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback);
+        
         public abstract void StopPolling();
 
         public abstract void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback);
@@ -43,7 +41,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 Win = MyTask.Win,
                 GuessedWordCount = MyTask.WordOrder,
                 GuessedLetterCount = MyTask.GuessedLetterCount,
-                IsNewWord = MyTask.IsNewWord
+                IsNewWord = MyTask.IsNewWord,
+                HangmanPicture = MyTask.HangmanPicture
             };
         }
         
