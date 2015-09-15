@@ -18,26 +18,43 @@
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
 
             <!-- Section 1 header -->
-            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                       Text="{StaticResource AppName}" />
-
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}">
+                <Run Text="{StaticResource AppName}" />
+                <Run Text=" - autoři:"></Run>
+            </TextBlock>
+            
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                <Run Text="Vladimír Pokorný" />
+                <LineBreak />
+                <Run Text="Martin Mudra" />
+            </TextBlock>
         </StackPanel>
 
         <!-- Define more Content Sections below as necessary -->
 
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
-            <TextBlock Text="Icons8"
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}">
+            <Run Text="Obrázky oběšenců a šibenice:"></Run>
+            </TextBlock>
+
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                <Run Text="Anna Mudrová" />
+            </TextBlock>
+        </StackPanel>
+        
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
+            <TextBlock Text="Sada ikon a symbolů:"
                        Style="{StaticResource TitleTextBlockStyle}"/>
             <TextBlock Style="{StaticResource BodyTextBlockStyle}">
-                <Run Text="Sada ikon použitých v této aplikaci: " />
-            </TextBlock>
-            <TextBlock Style="{StaticResource BodyTextBlockStyle}">
+                <Run Text="Název: Icons8" />
+                <LineBreak />
+                <Run Text="Odkaz: " />
                 <Hyperlink NavigateUri="http://icons8.com/">
                     <Run Text="http://icons8.com/" />
                 </Hyperlink>
             </TextBlock>
             <TextBlock Style="{StaticResource BodyTextBlockStyle}">
-                <Run Text="Tyto ikony jsou licencovány pod " />
+                <Run Text="Licence: " />
                 <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nd/3.0/">
                     <Run Text="Creative Commons Attribution-NoDerivs 3.0 Unported" />
                 </Hyperlink>
