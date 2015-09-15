@@ -8,10 +8,11 @@
     @Styles.Render("~/Content/dropzonescss")
     @Styles.Render("~/Content/jqueryuicss")
     @Styles.Render("~/Content/itjakub")
+    @Styles.Render("~/Content/cookiescss")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", false)
 </head>
-<body>
+<body class="eupopup eupopup-fixedtop eupopup-color-inverse">
 
 <div class="container page-body-content">
 
@@ -291,6 +292,7 @@
 @Scripts.Render("~/bundles/dropzonescripts")
 @Scripts.Render("~/bundles/typeahead")
 @Scripts.Render("~/bundles/jqueryappear")
+@Scripts.Render("~/bundles/cookies")
 @RenderSection("scripts", false)
 @*main page content*@
 <div class="container module-content">
@@ -332,12 +334,12 @@
                                                   var now = DateTime.Now;
                                                   var releaseDate = new DateTime(2015, 1, 1);
                                                   var difference = now - releaseDate;
-                                                  DateTime age = DateTime.MinValue + difference;    //Min value is 1.1. 0001
-                                                  
+                                                  DateTime age = DateTime.MinValue + difference; //Min value is 1.1. 0001
+
                                                   int years = age.Year - 1;
                                                   int months = age.Month - 1;
                                                   int days = age.Day - 1;
-                                                  
+
                                                   @: @years lety, @months měsíci a @days dny
                                               }
         </div>

@@ -24,6 +24,8 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                 "~/Scripts/modernizr-*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cookies").Include("~/Scripts/cookies/jquery-eu-cookie-law-popup.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/respond.js"));
@@ -56,6 +58,8 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/site.css"));
+
+            bundles.Add(new StyleBundle("~/Content/cookiescss").Include("~/Scripts/cookies/css/jquery-eu-cookie-law-popup.css"));
 
             bundles.Add(new StyleBundle("~/Content/itjakub").Include("~/Content/ITJakub.css"));
 
