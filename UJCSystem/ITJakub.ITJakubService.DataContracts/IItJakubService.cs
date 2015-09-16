@@ -4,6 +4,7 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -92,7 +93,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
-     
+
         [OperationContract]
         IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
@@ -129,7 +130,8 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
-        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
         PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -137,7 +139,6 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
-
 
         #region Feedback
 
@@ -158,10 +159,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-
         #region AudioBooks
-
-   
 
         [OperationContract]
         AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -173,5 +171,12 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
+
+        #region News
+
+        [OperationContract]
+        List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count);
+
+        #endregion
     }
 }

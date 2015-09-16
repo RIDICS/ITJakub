@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.DataContracts
@@ -51,5 +52,15 @@ namespace ITJakub.ITJakubService.DataContracts
         void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
 
         #endregion
+
+        #region News
+
+     
+
+        [OperationContract]
+        void CreateNewsSyndicationItem(string title, string content, string url, string username);
+
+        #endregion
+
     }
 }
