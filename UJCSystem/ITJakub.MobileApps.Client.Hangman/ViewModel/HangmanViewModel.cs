@@ -191,6 +191,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             {
                 KeyboardViewModel.ReactivateAllKeys();
             }
+            else if (taskProgressInfo.DeactivatedKeys != null)
+            {
+                KeyboardViewModel.DeactivateKeys(taskProgressInfo.DeactivatedKeys);
+            }
         }
         
         private void ProcessOpponentProgress(ICollection<ProgressInfoViewModel> progressUpdate)

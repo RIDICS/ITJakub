@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class TaskProgressInfoViewModel
@@ -11,5 +13,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public int GuessedLetterCount { get; set; }
         public bool IsNewWord { get; set; }
         public int HangmanPicture { get; set; }
+        public IList<char> DeactivatedKeys { get; set; }
     }
 }

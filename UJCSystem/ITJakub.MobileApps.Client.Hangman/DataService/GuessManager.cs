@@ -45,6 +45,13 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 HangmanPicture = MyTask.HangmanPicture
             };
         }
+
+        protected TaskProgressInfoViewModel GetCurrentTaskWithKeyboardInfo()
+        {
+            var taskInfo = GetCurrentTaskInfo();
+            taskInfo.DeactivatedKeys = MyTask.GuessAttemptLetters;
+            return taskInfo;
+        }
         
         public abstract void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
 

@@ -64,6 +64,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             get { return m_currentLevel < m_specifiedHints.Length ? m_specifiedHints[m_currentLevel] : string.Empty; }
         }
 
+        public IList<char> GuessAttemptLetters
+        {
+            get { return m_guessedLetterSet.Select(x => x).ToList(); }
+        }
+
         public bool Win { get; private set; }
 
         public bool Loss { get { return m_livesRemain == 0; } }

@@ -141,7 +141,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                     callback(GetCurrentTaskInfo(), null);
                 }
             }
-            callback(GetCurrentTaskInfo(), null);
+            callback(GetCurrentTaskWithKeyboardInfo(), null);
         }
 
         private void ProcessNewProgressUpdate(IList<ObjectDetails> objectList, Exception exception)
