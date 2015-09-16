@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
@@ -19,6 +20,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             m_firstUpdate = true;
             Crossword = new ObservableCollection<CrosswordRowViewModel>();
             OpponentProgress = new ObservableCollection<ProgressViewModel>();
+            ShowResultsCommand = new RelayCommand(() => PlayerRankingViewModel.IsResultTableVisible = true);
         }
         
         public Action GoBack { get; set; }
@@ -38,7 +40,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
         public ObservableCollection<ProgressViewModel> OpponentProgress { get; set; }
 
         public PlayerRankingViewModel PlayerRankingViewModel { get; set; }
-        
+
+        public RelayCommand ShowResultsCommand { get; private set; }
+
         private void SetSubmitCallbacks(IEnumerable<CrosswordRowViewModel> crosswordRows)
         {
             foreach (CrosswordRowViewModel rowViewModel in crosswordRows)
