@@ -23,7 +23,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         public override void SetTask(string data)
         {
-            
+            m_dataService.Reset();
         }
 
         public override void InitializeCommunication()

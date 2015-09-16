@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Hangman.DataService;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
 
@@ -9,6 +11,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 {
     public class HangmanViewModel : ApplicationBaseViewModel
     {
+        private const int ShowCompleteAnswerDelay = 3000;
         private readonly IHangmanDataService m_dataService;
         private int m_lives;
         private bool m_opponentProgressVisible;
@@ -186,8 +189,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         
         private void ProcessTaskInfo(TaskProgressInfoViewModel taskProgressInfo)
         {
-            WordViewModel.Word = taskProgressInfo.Word;
-            CurrentHint = taskProgressInfo.Hint;
             Lives = taskProgressInfo.Lives;
             HangmanCount = taskProgressInfo.HangmanCount;
             GuessedLetterCount = taskProgressInfo.GuessedLetterCount;
@@ -203,11 +204,34 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 GameOverViewModel.Loss = m_isAppStopped || taskProgressInfo.Lives == 0;
             }
 
-            if (taskProgressInfo.IsNewWord)
+            if (taskProgressInfo.IsNewWord && taskProgressInfo.LastGuessedWord != null)
             {
-                KeyboardViewModel.ReactivateAllKeys();
+                if (taskProgressInfo.UseDelay)
+                {
+                    KeyboardViewModel.IsEnabled = false;
+                    WordViewModel.Word = taskProgressInfo.LastGuessedWord;
+                    Task.Delay(ShowCompleteAnswerDelay).ContinueWith(task => DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                    {
+                        WordViewModel.Word = taskProgressInfo.Word;
+                        CurrentHint = taskProgressInfo.Hint;
+                        KeyboardViewModel.IsEnabled = true;
+                        KeyboardViewModel.ReactivateAllKeys();
+                    }));
+                }
+                else
+                {
+                    WordViewModel.Word = taskProgressInfo.Word;
+                    CurrentHint = taskProgressInfo.Hint;
+                    KeyboardViewModel.ReactivateAllKeys();
+                }
             }
-            else if (taskProgressInfo.DeactivatedKeys != null)
+            else
+            {
+                WordViewModel.Word = taskProgressInfo.Word;
+                CurrentHint = taskProgressInfo.Hint;
+            }
+            
+            if (taskProgressInfo.DeactivatedKeys != null)
             {
                 KeyboardViewModel.DeactivateKeys(taskProgressInfo.DeactivatedKeys);
             }

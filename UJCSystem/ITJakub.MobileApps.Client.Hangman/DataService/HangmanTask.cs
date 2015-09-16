@@ -54,6 +54,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public int HangmanPicture { get; private set; }
 
+        public string LastGuessedLetters { get; private set; }
+
         public string GuessedLetters
         {
             get { return new string(m_guessedLetters); }
@@ -81,6 +83,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         private void PrepareNewWord()
         {
+            if (m_guessedLetters != null)
+                LastGuessedLetters = new string(m_guessedLetters);
+
             m_currentLevel++;
             if (m_currentLevel >= m_specifiedWords.Length)
             {

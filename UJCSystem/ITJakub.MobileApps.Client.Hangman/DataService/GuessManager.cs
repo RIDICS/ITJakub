@@ -35,6 +35,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             return new TaskProgressInfoViewModel
             {
                 Word = MyTask.GuessedLetters,
+                LastGuessedWord = MyTask.LastGuessedLetters,
                 Hint = MyTask.CurrentHint,
                 Lives = MyTask.LivesRemain,
                 HangmanCount = MyTask.HangmanCount,
@@ -42,7 +43,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 GuessedWordCount = MyTask.WordOrder,
                 GuessedLetterCount = MyTask.GuessedLetterCount,
                 IsNewWord = MyTask.IsNewWord,
-                HangmanPicture = MyTask.HangmanPicture
+                HangmanPicture = MyTask.HangmanPicture,
             };
         }
 
@@ -72,6 +73,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
 
             callback(taskLevelList);
+        }
+
+        public void Reset()
+        {
+            MyTask = null;
         }
     }
 }

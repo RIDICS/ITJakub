@@ -15,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         void SetTaskAndGetConfiguration(string data, Action<TaskSettingsViewModel, TaskProgressInfoViewModel> callback);
         void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
         void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback);
+        void Reset();
     }
 
     public class HangmanDataService : IHangmanDataService
@@ -61,6 +62,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback)
         {
             m_guessManager.GetTaskDetail(data, callback);
+        }
+
+        public void Reset()
+        {
+            m_guessManager.Reset();
         }
     }
 }

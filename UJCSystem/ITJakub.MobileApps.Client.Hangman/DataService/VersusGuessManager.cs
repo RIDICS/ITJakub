@@ -68,6 +68,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             MyTask.Guess(letter);
             
             var taskInfo = GetCurrentTaskInfo();
+            taskInfo.UseDelay = true;
             callback(taskInfo, null);
 
             SendProgressInfo(letter, wordOrder, callback);
@@ -129,6 +130,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         private void ProcessGuessHistory(IList<ObjectDetails> syncObjectList, Action<TaskProgressInfoViewModel, Exception> callback)
         {
+            if (MyTask == null)
+                return;
+
             var myObjects = syncObjectList.Where(details => details.Author.IsMe);
                 
             foreach (var details in myObjects)
