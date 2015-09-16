@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private string m_currentHint;
         private int m_guessedWordCount;
         private int m_hangmanCount;
+        private int m_currentHangmanPicture;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -101,6 +102,18 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
+        public int CurrentHangmanPicture
+        {
+            get { return m_currentHangmanPicture; }
+            set
+            {
+                m_currentHangmanPicture = value;
+                HangmanPictureViewModel.CurrentHangmanPicture = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => HangmanPictureViewModel);
+            }
+        }
+
         public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetTaskHistoryAndStartPollingProgress(
@@ -163,7 +176,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             HangmanCount = taskProgressInfo.HangmanCount;
             GuessedLetterCount = taskProgressInfo.GuessedLetterCount;
             GuessedWordCount = taskProgressInfo.GuessedWordCount;
-            HangmanPictureViewModel.CurrentHangmanPicture = taskProgressInfo.HangmanPicture;
+            CurrentHangmanPicture = taskProgressInfo.HangmanPicture;
 
             if (taskProgressInfo.Win)
             {
@@ -200,7 +213,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     viewModel.LetterCount = progressInfo.LetterCount;
                     viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;
-
                     viewModel.HangmanPicture = progressInfo.HangmanPicture;
                 }
                 else

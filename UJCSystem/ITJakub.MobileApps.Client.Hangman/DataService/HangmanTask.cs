@@ -22,7 +22,6 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public HangmanTask(HangmanTaskContract.WordContract[] specifiedWords)
         {
-            //TODO generate new random default hangman
             m_randomGenerator = new Random();
             m_specifiedWords = specifiedWords.Select(x => x.Answer).ToArray();
             m_specifiedHints = specifiedWords.Select(x => x.Hint).ToArray();
@@ -30,6 +29,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
             LivesRemain = FullLiveCount;
             GuessedLetterCount = 0;
+            HangmanPicture = m_randomGenerator.Next(TotalHangmanPictureCount);
             m_guessedLetterSet = new HashSet<char>();
 
             PrepareNewWord();
@@ -143,9 +143,9 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         private void SetHangmanPicture(int picture)
         {
-            if (m_usedHangmanPictures == null)
+            if (m_usedHangmanPictures == null) // init
             {
-                m_usedHangmanPictures = new HashSet<int> {picture};
+                m_usedHangmanPictures = new HashSet<int>();
                 HangmanPicture = picture;
                 return;
             }
@@ -153,12 +153,12 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             if (HangmanPicture == picture)
                 return;
 
-            if (m_usedHangmanPictures.Count == TotalHangmanPictureCount)
-            {
+            if (m_usedHangmanPictures.Count + 1 == TotalHangmanPictureCount)
                 m_usedHangmanPictures.Clear();
-                m_usedHangmanPictures.Add(picture);
-                HangmanPicture = picture;
-            }
+            else
+                m_usedHangmanPictures.Add(HangmanPicture);
+
+            HangmanPicture = picture;
         }
 
         private void GenerateNewRandomHangmanPicture()
@@ -166,17 +166,29 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             if (m_isGuessFromHistory)
                 return;
 
-            if (m_usedHangmanPictures.Count == TotalHangmanPictureCount)
+            if (m_usedHangmanPictures == null) // init
+            {
+                m_usedHangmanPictures = new HashSet<int>();
+            }
+
+            if (m_usedHangmanPictures.Count + 1 == TotalHangmanPictureCount)
                 m_usedHangmanPictures.Clear();
+            else
+                m_usedHangmanPictures.Add(HangmanPicture);
             
+            var newRandom = GetRandomUnusedHangman();
+            m_usedHangmanPictures.Add(HangmanPicture);
+            HangmanPicture = newRandom;
+        }
+
+        private int GetRandomUnusedHangman()
+        {
             while (true)
             {
                 var newRandom = m_randomGenerator.Next(TotalHangmanPictureCount);
-                if (!m_usedHangmanPictures.Contains(newRandom))
+                if (!m_usedHangmanPictures.Contains(newRandom) && HangmanPicture != newRandom)
                 {
-                    m_usedHangmanPictures.Add(newRandom);
-                    HangmanPicture = newRandom;
-                    break;
+                    return newRandom;
                 }
             }
         }

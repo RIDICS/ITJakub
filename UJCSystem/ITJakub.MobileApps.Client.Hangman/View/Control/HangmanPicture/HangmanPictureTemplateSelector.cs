@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using ITJakub.MobileApps.Client.Hangman.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Template;
 
 namespace ITJakub.MobileApps.Client.Hangman.View.Control.HangmanPicture
 {
     public class HangmanPictureTemplateSelector : DataTemplateSelector
     {
-        private readonly Type[] m_hangmanTypeArray;
         private List<DataTemplate> m_hangmanDataTemplates;
 
         public HangmanPictureTemplateSelector()
         {
-            m_hangmanTypeArray = new []
+            var hangmanTypeArray = new []
             {
                 typeof(Hangman1),
                 typeof(Hangman2),
@@ -24,14 +24,14 @@ namespace ITJakub.MobileApps.Client.Hangman.View.Control.HangmanPicture
                 typeof(Hangman7),
             };
             
-            LoadAllDataTemplates();
+            LoadAllDataTemplates(hangmanTypeArray);
         }
 
-        private void LoadAllDataTemplates()
+        private void LoadAllDataTemplates(Type[] hangmanTypeArray)
         {
             var templateCreator = new DataTemplateCreator();
             m_hangmanDataTemplates = new List<DataTemplate>();
-            foreach (var hangmanPictureType in m_hangmanTypeArray)
+            foreach (var hangmanPictureType in hangmanTypeArray)
             {
                 var dataTemplate = templateCreator.CreateDataTemplate(hangmanPictureType);
                 m_hangmanDataTemplates.Add(dataTemplate);
@@ -40,10 +40,11 @@ namespace ITJakub.MobileApps.Client.Hangman.View.Control.HangmanPicture
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
-            if (!(item is int))
+            var viewModel = item as HangmanPictureViewModel;
+            if (viewModel == null)
                 return m_hangmanDataTemplates[0];
 
-            var selectedPictureIndex = (int) item;
+            var selectedPictureIndex = viewModel.CurrentHangmanPicture;
             if (selectedPictureIndex >= 0 && selectedPictureIndex < m_hangmanDataTemplates.Count)
                 return m_hangmanDataTemplates[selectedPictureIndex];
 

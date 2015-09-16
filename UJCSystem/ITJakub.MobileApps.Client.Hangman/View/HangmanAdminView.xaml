@@ -53,11 +53,10 @@
 
                         <Viewbox Height="100"
                                  Margin="20,0,20,0">
-                            <ContentControl Content="{Binding CurrentHangmanPicture}"
-                                                ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}"
-                                                DataContext="{Binding PictureViewModel}"
-                                                HorizontalAlignment="Center"
-                                                Margin="0,15,0,20" />
+                            <ContentControl Content="{Binding PictureViewModel}"
+                                            ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}"
+                                            HorizontalAlignment="Center"
+                                            Margin="0,15,0,20" />
                         </Viewbox>
                         
                         <Grid Grid.Column="1">

@@ -86,8 +86,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             set
             {
                 m_hangmanPicture = value;
-                RaisePropertyChanged();
                 PictureViewModel.CurrentHangmanPicture = m_hangmanPicture;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => PictureViewModel);
             }
         }
 

@@ -71,6 +71,9 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                     viewModel.Win = progressInfo.Win;
                     viewModel.Time = progressInfo.Time;
                     viewModel.HangmanPicture = progressInfo.HangmanPicture;
+
+                    if (viewModel.FirstUpdateTime.ToBinary() == 0)
+                        viewModel.FirstUpdateTime = viewModel.Time;
                 }
                 else
                 {

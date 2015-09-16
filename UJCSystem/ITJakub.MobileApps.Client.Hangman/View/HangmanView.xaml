@@ -72,7 +72,7 @@
                      VerticalAlignment="Center"
                      Margin="0,10,0,25"
                      MinWidth="100">
-                <ContentControl Content="{Binding HangmanPictureViewModel.CurrentHangmanPicture}"
+                <ContentControl Content="{Binding HangmanPictureViewModel}"
                                 ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}" />
                 
                 <!--<control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
@@ -130,9 +130,8 @@
                             BorderBrush="#22FFFFFF">
                         <Grid>
                             <Viewbox Margin="10,30,10,20">
-                                <ContentControl Content="{Binding CurrentHangmanPicture}"
+                                <ContentControl Content="{Binding PictureViewModel}"
                                                 ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}"
-                                                DataContext="{Binding PictureViewModel}"
                                                 HorizontalAlignment="Center"
                                                 Margin="0,15,0,20" />
                             </Viewbox>
