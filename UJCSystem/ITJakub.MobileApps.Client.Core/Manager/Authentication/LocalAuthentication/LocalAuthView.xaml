@@ -111,6 +111,7 @@
                 <control:SubmitTextBox
                     Grid.Row="2"
                     Grid.Column="1"
+                    InputScope="EmailSmtpAddress"
                     EnterCommand="{Binding SubmitCommand}"
                     Text="{Binding Email, Mode=TwoWay}"
                     Margin="{StaticResource TextBoxMargin}" />

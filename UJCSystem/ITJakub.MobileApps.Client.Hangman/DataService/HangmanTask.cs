@@ -41,10 +41,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             private set
             {
                 m_livesRemain = value;
-                if (m_livesRemain == 0)
+                if (m_livesRemain < 0)
                 {
                     HangmanCount++;
-                    m_livesRemain = FullLiveCount;
+                    m_livesRemain = FullLiveCount - 1;
                     GenerateNewRandomHangmanPicture();
                 }
             }
@@ -72,9 +72,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         }
 
         public bool Win { get; private set; }
-
-        public bool Loss { get { return m_livesRemain == 0; } }
-
+        
         public int WordOrder { get { return m_currentLevel; } }
 
         public int GuessedLetterCount { get; set; }
@@ -110,7 +108,7 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         {
             IsNewWord = false;
             letter = char.ToUpper(letter);
-            if (m_guessedLetterSet.Contains(letter) || Loss || Win)
+            if (m_guessedLetterSet.Contains(letter) || Win)
                 return;
 
             m_guessedLetterSet.Add(letter);

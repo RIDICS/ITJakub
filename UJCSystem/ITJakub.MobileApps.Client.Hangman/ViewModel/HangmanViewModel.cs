@@ -201,7 +201,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
             else
             {
-                GameOverViewModel.Loss = m_isAppStopped || taskProgressInfo.Lives == 0;
+                GameOverViewModel.Loss = m_isAppStopped;
             }
 
             if (taskProgressInfo.IsNewWord && taskProgressInfo.LastGuessedWord != null)

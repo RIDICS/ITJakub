@@ -24,6 +24,7 @@
 
             <!-- Section 1 body -->
             <TextBox Margin="0,4,0,0"
+                     InputScope="Url"
                      Text="{Binding Address, Mode=TwoWay}" />
 
             <StackPanel Orientation="Horizontal">
