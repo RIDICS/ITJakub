@@ -18,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private int m_guessedWordCount;
         private int m_hangmanCount;
         private int m_currentHangmanPicture;
+        private HangmanPictureViewModel m_hangmanPictureViewModel;
 
         public HangmanViewModel(IHangmanDataService dataService)
         {
@@ -31,8 +32,6 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             KeyboardViewModel.ClickCommand = new RelayCommand<char>(Guess);
         }
         
-        public HangmanPictureViewModel HangmanPictureViewModel { get; set; }
-
         public WordViewModel WordViewModel { get; set; }
 
         public KeyboardViewModel KeyboardViewModel { get; set; }
@@ -40,6 +39,16 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public GameOverViewModel GameOverViewModel { get; set; }
 
         public ObservableCollection<ProgressInfoViewModel> OpponentProgress { get; set; }
+
+        public HangmanPictureViewModel HangmanPictureViewModel
+        {
+            get { return m_hangmanPictureViewModel; }
+            set
+            {
+                m_hangmanPictureViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int Lives
         {
@@ -107,10 +116,17 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             get { return m_currentHangmanPicture; }
             set
             {
+                if (m_currentHangmanPicture == value)
+                    return;
+
                 m_currentHangmanPicture = value;
-                HangmanPictureViewModel.CurrentHangmanPicture = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => HangmanPictureViewModel);
+
+                HangmanPictureViewModel = new HangmanPictureViewModel
+                {
+                    CurrentHangmanPicture = value,
+                    Lives = Lives
+                };
             }
         }
 

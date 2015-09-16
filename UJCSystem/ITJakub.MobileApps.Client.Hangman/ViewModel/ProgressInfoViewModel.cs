@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private int m_guessedWordCount;
         private int m_hangmanCount;
         private int m_hangmanPicture;
+        private HangmanPictureViewModel m_pictureViewModel;
 
         public ProgressInfoViewModel()
         {
@@ -85,16 +86,31 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             get { return m_hangmanPicture; }
             set
             {
+                if (m_hangmanPicture == value)
+                    return;
+                
                 m_hangmanPicture = value;
-                PictureViewModel.CurrentHangmanPicture = m_hangmanPicture;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => PictureViewModel);
+
+                PictureViewModel = new HangmanPictureViewModel
+                {
+                    CurrentHangmanPicture = value,
+                    Lives = LivesRemain
+                };
+            }
+        }
+
+        public HangmanPictureViewModel PictureViewModel
+        {
+            get { return m_pictureViewModel; }
+            set
+            {
+                m_pictureViewModel = value;
+                RaisePropertyChanged();
             }
         }
 
         public UserInfo UserInfo { get; set; }
-
-        public HangmanPictureViewModel PictureViewModel { get; private set; }
 
         public DateTime FirstUpdateTime { get; set; }
     }
