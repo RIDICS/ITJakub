@@ -12,6 +12,6 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
         }
 
         [DataMember]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
     }
 }
