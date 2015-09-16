@@ -54,8 +54,8 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
                 richEditBox.m_recoverSelection = false;
             }
             
-            richEditBox.OnDocumentLoad();
             OnZoomChanged(richEditBox, null);
+            richEditBox.OnDocumentLoad();
         }
 
         private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

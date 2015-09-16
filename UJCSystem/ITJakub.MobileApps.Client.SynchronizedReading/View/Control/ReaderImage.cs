@@ -266,6 +266,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
 
             if (zoom > 0.001 && zoom < 1.0)
                 readerImage.CurrentZoomFactor = zoom;
+
+            OnPointerPositionChanged(d, null);
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using Windows.Foundation;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
@@ -197,6 +198,19 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             }
         }
 
+        private void OnDocumentLoaded(object sender, EventArgs e)
+        {
+            if (Mode == Modes.Pointer || Mode == Modes.Selector)
+            {
+                SelectionStart = 0;
+                SelectionLength = 0;
+                CursorPosition = 0;
+                return;
+            }
+            OnSelectionPropertyChanged(this, null);
+            OnCursorPositionChanged(this, null);
+        }
+
         protected override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
@@ -210,6 +224,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             if (m_richEditBox != null)
             {
                 m_richEditBox.SelectionChanged += OnSelectionChanged;
+                m_richEditBox.DocumentLoaded += OnDocumentLoaded;
             }
 
             OnModeChanged(this, null);
