@@ -17,15 +17,18 @@ namespace ITJakub.ITJakubService.Core
 
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly FileSystemManager m_fileSystemManager;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public AudioBookManager(BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager)
+        public AudioBookManager(BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager mAuthorizationManager)
         {
             m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;
+            m_authorizationManager = mAuthorizationManager;
         }
 
         public FileDataContract DownloadWholeAudioBook(DownloadWholeBookContract requestContract)
         {
+            m_authorizationManager.AuthorizeBook(requestContract.BookId);
             var audioType = (AudioType)requestContract.RequestedAudioType;
             var book = m_bookVersionRepository.GetBookWithLastVersion(requestContract.BookId);
             
@@ -51,7 +54,7 @@ namespace ITJakub.ITJakubService.Core
 
         public AudioTrackContract DownloadAudioBookTrack(DownloadAudioBookTrackContract requestContract)
         {
-
+            m_authorizationManager.AuthorizeBook(requestContract.BookId);
             var audioType = (AudioType) requestContract.RequestedAudioType;
             var book = m_bookVersionRepository.GetBookWithLastVersion(requestContract.BookId);
 

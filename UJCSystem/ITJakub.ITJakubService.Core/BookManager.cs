@@ -22,14 +22,16 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly FileSystemManager m_fileSystemManager;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
-        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager)
+        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager mAuthorizationManager)
         {
             m_searchServiceClient = searchServiceClient;
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;
+            m_authorizationManager = mAuthorizationManager;
         }
 
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
@@ -37,6 +39,8 @@ namespace ITJakub.ITJakubService.Core
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId,
                     bookGuid);
+
+            m_authorizationManager.AuthorizeBook(bookGuid);
 
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
@@ -65,6 +69,7 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<BookPageContract> GetBookPagesList(string bookGuid)
         {
+            m_authorizationManager.AuthorizeBook(bookGuid);
             var pages = m_bookVersionRepository.GetLastVersionPageList(bookGuid);
             return Mapper.Map<IList<BookPageContract>>(pages);
         }
@@ -77,6 +82,7 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<BookContentItemContract> GetBookContent(string bookGuid)
         {
+            m_authorizationManager.AuthorizeBook(bookGuid);
             var bookContentItems = m_bookVersionRepository.GetRootBookContentItemsWithPagesAndAncestors(bookGuid);
             var contentItemsContracts = Mapper.Map<IList<BookContentItemContract>>(bookContentItems);
             return contentItemsContracts;
@@ -84,12 +90,15 @@ namespace ITJakub.ITJakubService.Core
 
         public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
         {
+            m_authorizationManager.AuthorizeBook(bookGuid);
             var bookVersion = m_bookRepository.GetLastVersionForBookWithPages(bookGuid);
             return Mapper.Map<BookInfoWithPagesContract>(bookVersion);
         }
 
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
+            m_authorizationManager.AuthorizeBook(bookXmlId);
+
             var bookPage = m_bookVersionRepository.FindBookPageByXmlIdAndPosition(bookXmlId, position);
 
             if (bookPage.Image != null)
@@ -112,11 +121,14 @@ namespace ITJakub.ITJakubService.Core
 
         public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
+            m_authorizationManager.AuthorizeBook(bookXmlId);
             return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
+            m_authorizationManager.AuthorizeBook(bookGuid);
+
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -135,6 +147,7 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)
         {
+            m_authorizationManager.AuthorizeBook(bookXmlId);
             var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
             return Mapper.Map<IList<TermContract>>(terms);
         }

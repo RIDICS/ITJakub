@@ -279,4 +279,23 @@ namespace ITJakub.ITJakubService.Core.Search
             };
         }
     }
+
+    public class AuthorizationCriteriaImplementation : ICriteriaImplementationBase
+    {
+        public CriteriaKey CriteriaKey
+        {
+            get { return CriteriaKey.Authorization; }
+        }
+
+        public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
+        {
+            var authorizationCriteria = (AuthorizationCriteriaContract)searchCriteriaContract;
+
+            return new SearchCriteriaQuery
+            {
+                Join = string.Format(""), //TODO HACK implement join which shrink out unauthorized books
+                Where = string.Empty,
+            };
+        }
+    }
 }

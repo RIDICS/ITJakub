@@ -91,5 +91,17 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return (int) session.Save(group);
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<string> GetFilteredBookXmlIdListByUserPermissions(int userId, IList<string> bookXmlIds)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetFilteredBookIdListByUserPermissions(int userId, IList<long> bookIds)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\TermProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="AuthorizationManager.cs" />
     <Compile Include="PermissionManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />

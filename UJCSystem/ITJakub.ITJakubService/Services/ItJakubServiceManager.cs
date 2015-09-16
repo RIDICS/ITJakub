@@ -5,10 +5,8 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 
@@ -17,19 +15,17 @@ namespace ITJakub.ITJakubService.Services
     public class ItJakubServiceManager : IItJakubService
     {
         private readonly WindsorContainer m_container = Container.Current;
-
-        private readonly UserManager m_userManager;
+        
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
-        private readonly FeedbackManager m_feedbackManager;        
- 
+        private readonly FeedbackManager m_feedbackManager;
+
 
         public ItJakubServiceManager()
         {            
-            m_userManager = m_container.Resolve<UserManager>();
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();

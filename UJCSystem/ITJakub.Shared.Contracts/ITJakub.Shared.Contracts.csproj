@@ -54,6 +54,7 @@
     <Compile Include="Notes\FeedbackCriteriaContract.cs" />
     <Compile Include="Notes\FeedbackSortCriteriaContract.cs" />
     <Compile Include="Notes\FeedbackSortEnum.cs" />
+    <Compile Include="Searching\Criteria\AuthorizationCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\TermsSettingsContract.cs" />
     <Compile Include="Searching\Results\AudioBookSearchResultContract.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
