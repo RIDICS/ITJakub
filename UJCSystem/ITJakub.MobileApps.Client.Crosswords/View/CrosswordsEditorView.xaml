@@ -21,7 +21,6 @@
             <Color x:Key="TextBoxBackgroundColor">#AAFFFFFF</Color>
             <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
             <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-            <converter1:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
             <converter1:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
 
             <ResourceDictionary.MergedDictionaries>
@@ -183,7 +182,7 @@
         <Grid Grid.Row="1"
               Margin="290,5,0,5"
               HorizontalAlignment="Left">
-            <Grid Margin="{Binding AnswerColumn, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
+            <Grid Margin="{Binding ElementName=StepSlider, Path=ArrowMargin}"
                   Background="Orange"
                   Width="{StaticResource InnerColumnWidth}"/>
         </Grid>
@@ -228,8 +227,9 @@
                               Background="{Binding IsAnswer, Converter={StaticResource BooleanToBackgroundConverter}, ConverterParameter={StaticResource TextBoxBackgroundColor}}">
 
                             <view:CrosswordTextBoxControl
+                                    x:Name="CrosswordTextBoxControl"
                                     Style="{StaticResource EditorCrosswordTextBoxStyle}"
-                                    Margin="{Binding Shift, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter={StaticResource InnerColumnWidth}}"
+                                    Shift="{Binding Shift, Mode=TwoWay}"
                                     VerticalAlignment="Center"
                                     Height="{StaticResource ColumnWidth}"
                                     FontSize="16"
@@ -284,8 +284,9 @@
                        FontSize="18" />
 
             <view:StepSlider Grid.Column="1"
+                             x:Name="StepSlider"
                              Step="{Binding AnswerColumn, Mode=TwoWay}"
-                             StepWidth="{StaticResource InnerColumnWidth}"
+                             StepWidth="{StaticResource ColumnWidth}"
                              Foreground="Orange"
                              Margin="0,0,130,0"/>
             

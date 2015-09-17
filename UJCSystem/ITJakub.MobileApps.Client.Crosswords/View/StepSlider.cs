@@ -18,7 +18,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
         public static readonly DependencyProperty StepProperty = DependencyProperty.Register("Step", typeof(int), typeof(StepSlider), new PropertyMetadata(default(int), OnStepChanged));
         public static readonly DependencyProperty StepWidthProperty = DependencyProperty.Register("StepWidth", typeof(double), typeof(StepSlider), new PropertyMetadata(20));
         public static readonly DependencyProperty SymbolProperty = DependencyProperty.Register("Symbol", typeof (Symbol), typeof (StepSlider), new PropertyMetadata(Symbol.Up));
-        
+        public static readonly DependencyProperty ArrowMarginProperty = DependencyProperty.Register("ArrowMargin", typeof (Thickness), typeof (StepSlider), new PropertyMetadata(new Thickness(0)));
+
 
         public int Step
         {
@@ -38,6 +39,12 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
             set { SetValue(SymbolProperty, value); }
         }
 
+        public Thickness ArrowMargin
+        {
+            get { return (Thickness) GetValue(ArrowMarginProperty); }
+            set { SetValue(ArrowMarginProperty, value); }
+        }
+
         private static void OnStepChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var stepSlider = d as StepSlider;
@@ -45,8 +52,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.View
                 return;
 
             var newValue = (int) e.NewValue;
-            
-            stepSlider.m_innerGrid.Margin = new Thickness(newValue * stepSlider.StepWidth, 0, 0, 0);
+            stepSlider.ArrowMargin = new Thickness(newValue*stepSlider.m_innerGrid.ActualWidth, 0, 0, 0);
         }
 
         protected override void OnApplyTemplate()
