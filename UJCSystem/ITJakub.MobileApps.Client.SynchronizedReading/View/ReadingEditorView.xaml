@@ -141,6 +141,7 @@
             <control1:BindableRichEditBox
                 DocumentRtf="{Binding PageRtfText}"
                 IsReadOnly="True"
+                Padding="10,3,23,5"
                 ScrollViewer.HorizontalScrollMode="Disabled" />
             
         </Border>

@@ -14,17 +14,41 @@ using ITJakub.MobileApps.DataContracts.Tasks;
 namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
-    {
-        private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
-        
+    {       
 
-        public MobileAppsServiceClient(ClientMessageInspector communicationTokenInspector) : base(GetDefaultBinding(), GetDefaultEndpointAddress())
-        {            
+        public MobileAppsServiceClient(ClientMessageInspector communicationTokenInspector, EndpointAddress endpointAddress) :
+            base(GetDefaultBinding(), endpointAddress)
+        {
             var endpointBehavior = new CustomEndpointBehavior(communicationTokenInspector);
             Endpoint.EndpointBehaviors.Add(endpointBehavior);
-        }   
+        }
+
+        public Task<string> GetBookLibraryEndpointAddressAsync()
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetBookLibraryEndpointAddress();
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
 
         public Task CreateUserAsync(AuthProvidersContract providerContract, string providerToken,
             UserDetailContract userDetail)
@@ -633,27 +657,12 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             }
             throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
                 endpointConfiguration));
-        }
-
-        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
-        {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
-            {
-                return new EndpointAddress(EndpointAddress);
-            }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
-        }
+        }        
 
         private static Binding GetDefaultBinding()
         {
             return
                 GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
-        }
-
-        private static EndpointAddress GetDefaultEndpointAddress()
-        {
-            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
 
         #endregion

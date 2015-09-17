@@ -1,5 +1,4 @@
 ﻿<Page
-    x:Name="pageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.TaskPreviewHostView"
     DataContext="{Binding TaskPreviewHostViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -7,11 +6,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <template:TaskPreviewTemplateSelector x:Key="TaskPreviewTemplateSelector" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
+    
+    <Page.BottomAppBar>
+        <CommandBar>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
@@ -21,11 +27,17 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <ProgressBar Grid.Row="0"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        
         <!-- Back button and page title -->
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="Auto"/>
@@ -57,7 +69,16 @@
             </TextBlock>
         </Grid>
 
-        <ContentControl Grid.Row="1"
+        <TextBlock Grid.Row="1"
+                   FontSize="20"
+                   FontWeight="Light"
+                   TextWrapping="Wrap"
+                   Margin="120,0,40,3">
+            <Run Text="Popis (zobrazovaný studentům): " />
+            <Run Text="{Binding TaskDescription}" />
+        </TextBlock>
+        
+        <ContentControl Grid.Row="2"
                         Content="{Binding TaskPreviewViewModel}"
                         ContentTemplateSelector="{StaticResource TaskPreviewTemplateSelector}"
                         VerticalContentAlignment="Stretch"

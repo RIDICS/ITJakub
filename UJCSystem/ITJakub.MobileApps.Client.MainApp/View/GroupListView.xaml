@@ -85,6 +85,10 @@
                           Label="Aktualizovat seznam"
                           Command="{Binding RefreshListCommand}" />
 
+            <AppBarButton Icon="Library"
+                          Label="Čtečka knih"
+                          Command="{Binding OpenBookReaderCommand}" />
+            
             <AppBarButton Icon="Page"
                           Label="Moje zadání"
                           Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}"

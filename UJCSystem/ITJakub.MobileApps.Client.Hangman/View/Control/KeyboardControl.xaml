@@ -18,6 +18,7 @@
     
     <Grid>
         <ItemsControl ItemsSource="{Binding Keys}"
+                      IsEnabled="{Binding IsEnabled}"
                       VerticalAlignment="Center"
                       HorizontalAlignment="Center">
             <ItemsControl.ItemsPanel>

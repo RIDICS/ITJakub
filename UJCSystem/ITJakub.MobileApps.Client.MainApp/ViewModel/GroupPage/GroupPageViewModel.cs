@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -39,6 +40,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_isGlobalFocus;
         private long m_groupId;
         private bool m_canOpenAdmin;
+        private bool m_isTaskSelected;
 
         public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -72,8 +74,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             OpenApplicationCommand = new RelayCommand(Navigate<ApplicationHostView>);
             OpenAdminCommand = new RelayCommand(OpenAdminView);
             ReloadCommand = new RelayCommand(LoadData);
+            ShowTaskCommand = new RelayCommand(ShowTask);
         }
-
+        
         private void LoadData()
         {
             Loading = true;
@@ -176,6 +179,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 m_groupInfo = value;
                 RaisePropertyChanged();
                 UpdateCanConnectToGroup();
+                IsTaskSelected = m_groupInfo.Task != null;
             }
         }
 
@@ -311,6 +315,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             }
         }
 
+        public bool IsTaskSelected
+        {
+            get { return m_isTaskSelected; }
+            set
+            {
+                m_isTaskSelected = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool CanChangeTask
         {
             get { return GroupInfo.State < GroupStateContract.Running; }
@@ -337,6 +351,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         public RelayCommand OpenAdminCommand { get; private set; }
 
+        public RelayCommand ShowTaskCommand { get; private set; }
+        
 
         private void SelectAppAndTask()
         {
@@ -414,7 +430,30 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         private void OpenAdminView()
         {
-            Navigate<AdminHostView>();
+            var taskInfo = m_groupInfo.Task;
+            if (taskInfo == null)
+            {
+                Navigate<AdminHostView>();
+                return;
+            }
+
+            m_dataService.GetApplication(taskInfo.Application, (appInfo, exception) =>
+            {
+                if (appInfo != null && appInfo.AdminDataTemplate == null)
+                {
+                    Navigate<ApplicationHostView>();
+                }
+                else
+                {
+                    Navigate<AdminHostView>();
+                }
+            });
+        }
+
+        private void ShowTask()
+        {
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage { TaskViewModel = m_groupInfo.Task });
         }
     }
 }

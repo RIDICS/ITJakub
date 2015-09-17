@@ -32,6 +32,7 @@
 
         <TextBlock Grid.Column="0"
                    Grid.Row="0"
+                   Margin="40,0,0,0"
                    Text="Aktuální stav"
                    Style="{StaticResource SubheaderTextBlockStyle}" />
 
@@ -42,7 +43,7 @@
 
         <ListView Grid.Row="1"
                   Grid.Column="0"
-                  Margin="0,30,10,10"
+                  Margin="20,30,10,10"
                   ItemsSource="{Binding PlayerRanking}">
             <ListView.ItemTemplate>
                 <DataTemplate>

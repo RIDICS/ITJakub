@@ -84,7 +84,7 @@ namespace ITJakub.MobileApps.Client.Hangman
         {
             get
             {
-                var uri = new Uri(BaseUri, "Icon/scythe-128.png");
+                var uri = new Uri(BaseUri, "Icon/hangman-icon.png");
                 return new BitmapImage(uri);
             }
         }

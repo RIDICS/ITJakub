@@ -8,7 +8,7 @@ namespace ITJakub.MobileApps.Client.Shared.ViewModel
     {
         private bool m_dataLoaded;
 
-        public abstract void InitializeCommunication();
+        public abstract void InitializeCommunication(bool isUserOwner);
         public abstract void SetTask(string data);
         public abstract void EvaluateAndShowResults();
         public abstract void StopCommunication();

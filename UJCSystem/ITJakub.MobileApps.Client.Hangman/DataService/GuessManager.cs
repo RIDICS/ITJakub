@@ -13,10 +13,8 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
 
         public abstract TaskSettingsViewModel TaskSettings { get; }
 
-        public abstract void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback);
-
-        public abstract void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
-
+        public abstract void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback);
+        
         public abstract void StopPolling();
 
         public abstract void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback);
@@ -37,14 +35,23 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             return new TaskProgressInfoViewModel
             {
                 Word = MyTask.GuessedLetters,
+                LastGuessedWord = MyTask.LastGuessedLetters,
                 Hint = MyTask.CurrentHint,
                 Lives = MyTask.LivesRemain,
                 HangmanCount = MyTask.HangmanCount,
                 Win = MyTask.Win,
                 GuessedWordCount = MyTask.WordOrder,
                 GuessedLetterCount = MyTask.GuessedLetterCount,
-                IsNewWord = MyTask.IsNewWord
+                IsNewWord = MyTask.IsNewWord,
+                HangmanPicture = MyTask.HangmanPicture,
             };
+        }
+
+        protected TaskProgressInfoViewModel GetCurrentTaskWithKeyboardInfo()
+        {
+            var taskInfo = GetCurrentTaskInfo();
+            taskInfo.DeactivatedKeys = MyTask.GuessAttemptLetters;
+            return taskInfo;
         }
         
         public abstract void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
@@ -66,6 +73,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
 
             callback(taskLevelList);
+        }
+
+        public void Reset()
+        {
+            MyTask = null;
         }
     }
 }

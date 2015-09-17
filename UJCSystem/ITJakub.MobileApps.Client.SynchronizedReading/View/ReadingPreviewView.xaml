@@ -15,7 +15,7 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     
-    <Grid>
+    <Grid Margin="40,5,40,30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -65,6 +65,7 @@
             <control:BindableRichEditBox
                 DocumentRtf="{Binding PageRtfText}"
                 IsReadOnly="True"
+                Padding="10,3,23,5"
                 ScrollViewer.HorizontalScrollMode="Disabled" />
 
         </Border>

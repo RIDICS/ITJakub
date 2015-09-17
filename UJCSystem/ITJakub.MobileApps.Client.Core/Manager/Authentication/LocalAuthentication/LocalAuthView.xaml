@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:localAuthentication="using:ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthentication"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=localAuthentication:LocalAuthViewModel}">
 
@@ -38,11 +39,17 @@
                         Style="{StaticResource NavigationBackButtonNormalStyle}"
                         HorizontalAlignment="Center" />
 
-                <TextBlock Grid.Column="1"
-                           FontSize="26"
-                           VerticalAlignment="Center"
-                           Text="Přihlášení ITJakub"
-                           Margin="0,5,0,0" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            Margin="0,5,0,0">
+                    <TextBlock FontSize="26"
+                               Visibility="{Binding ShowLoginControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Text="Přihlášení" />
+                    <TextBlock FontSize="26"
+                               Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                               Text="Registrace" />
+                </StackPanel>
             </Grid>
             
             <Grid Grid.Row="1"
@@ -70,11 +77,13 @@
                            Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
                            FontSize="{StaticResource FontSize}" />
 
-                <TextBox Grid.Row="0"
-                         Grid.Column="1"
-                         Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         Text="{Binding FirstName, Mode=TwoWay}"
-                         Margin="{StaticResource TextBoxMargin}" />
+                <control:SubmitTextBox
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    EnterCommand="{Binding SubmitCommand}"
+                    Text="{Binding FirstName, Mode=TwoWay}"
+                    Margin="{StaticResource TextBoxMargin}" />
 
                 <TextBlock Grid.Row="1"
                            Grid.Column="0"
@@ -84,11 +93,13 @@
                            Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
                            FontSize="{StaticResource FontSize}" />
 
-                <TextBox Grid.Row="1"
-                         Grid.Column="1"
-                         Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
-                         Text="{Binding LastName, Mode=TwoWay}"
-                         Margin="{StaticResource TextBoxMargin}" />
+                <control:SubmitTextBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    EnterCommand="{Binding SubmitCommand}"
+                    Text="{Binding LastName, Mode=TwoWay}"
+                    Margin="{StaticResource TextBoxMargin}" />
 
                 <TextBlock Grid.Row="2"
                            Grid.Column="0"
@@ -97,10 +108,13 @@
                            Text="E-mail"
                            FontSize="{StaticResource FontSize}" />
 
-                <TextBox Grid.Row="2"
-                         Grid.Column="1"
-                         Text="{Binding Email, Mode=TwoWay}"
-                         Margin="{StaticResource TextBoxMargin}" />
+                <control:SubmitTextBox
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    InputScope="EmailSmtpAddress"
+                    EnterCommand="{Binding SubmitCommand}"
+                    Text="{Binding Email, Mode=TwoWay}"
+                    Margin="{StaticResource TextBoxMargin}" />
 
                 <TextBlock Grid.Row="3"
                            Grid.Column="0"
@@ -111,6 +125,7 @@
 
                 <PasswordBox Grid.Row="3"
                              Grid.Column="1"
+                             control:PasswordBoxBehaviors.EnterCommand="{Binding SubmitCommand}"
                              Password="{Binding Password, Mode=TwoWay}"
                              Margin="{StaticResource TextBoxMargin}" />
 
@@ -125,6 +140,7 @@
                 <PasswordBox Grid.Row="4"
                              Grid.Column="1"
                              Visibility="{Binding ShowCreateControls, Converter={StaticResource BooleanToVisibilityConverter}}"
+                             control:PasswordBoxBehaviors.EnterCommand="{Binding SubmitCommand}"
                              Password="{Binding PasswordConfirm, Mode=TwoWay}"
                              Margin="{StaticResource TextBoxMargin}" />
 
@@ -148,7 +164,7 @@
                         Grid.Column="1"
                         Content="Přihlásit se"
                         HorizontalAlignment="Stretch"
-                        Visibility="{Binding ShowLoginButton, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Visibility="{Binding ShowLoginControls, Converter={StaticResource BooleanToVisibilityConverter}}"
                         Command="{Binding LoginCommand}" />
             </Grid>
         </Grid>

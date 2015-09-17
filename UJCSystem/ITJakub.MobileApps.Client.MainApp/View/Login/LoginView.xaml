@@ -69,6 +69,7 @@
                   HorizontalAlignment="Center"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
+                  IsSwipeEnabled="False"
                   Style="{StaticResource HorizontalListView}"
                   IsEnabled="{Binding LoggingIn, Converter={StaticResource BooleanNegationConverter}}"
                   ItemsSource="{Binding LoginProviders}">

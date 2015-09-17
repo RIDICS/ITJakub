@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetGuessHistory((list, exception) =>
             {

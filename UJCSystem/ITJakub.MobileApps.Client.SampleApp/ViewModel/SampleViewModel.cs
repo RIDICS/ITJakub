@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Client.SampleApp.ViewModel
             set { m_testString = value; RaisePropertyChanged();}
         }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             //Load data from server and use IPollingService for getting synchronized objects
             m_dataService.GetData((data, exception) =>

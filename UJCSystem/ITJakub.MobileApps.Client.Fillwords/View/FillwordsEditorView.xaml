@@ -140,6 +140,7 @@
             
             <control1:EditorRichEditBox
                 x:Name="EditorRichEditBox"
+                Padding="10,3,23,5"
                 IsSelectedTextHighlighted="{Binding OptionsEditorViewModel.SetSelectedTextHighlighted, Mode=TwoWay}"
                 IsEditingEnabled="{Binding IsTextEditingEnabled}"
                 SelectedText="{Binding OptionsEditorViewModel.SelectedText, Mode=TwoWay}"
@@ -280,7 +281,7 @@
                          Grid.Row="1"
                          GroupName="EditText"
                          IsChecked="{Binding IsTextEditingEnabled, Converter={StaticResource BooleanNegationConverter}}">
-                <TextBlock Text="Vyplňovat možné odpovědi" />
+                <TextBlock Text="Vytvářet zadání" />
             </RadioButton>
         
             <Button Grid.Row="0"

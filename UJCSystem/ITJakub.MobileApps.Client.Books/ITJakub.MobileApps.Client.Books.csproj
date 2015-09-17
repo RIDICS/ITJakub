@@ -136,14 +136,14 @@
     <Compile Include="Message\PageListMessage.cs" />
     <Compile Include="Manager\Cache\BookPageKey.cs" />
     <Compile Include="Service\Client\EndpointConfiguration.cs" />
-    <Compile Include="Service\Client\IServiceClient.cs" />
+    <Compile Include="Service\Client\IBookServiceClient.cs" />
     <Compile Include="Service\Client\NotFoundException.cs" />
     <Compile Include="Service\ErrorService.cs" />
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\INavigationService.cs" />
     <Compile Include="Service\Client\MobileCommunicationException.cs" />
-    <Compile Include="Service\Client\MockServiceClient.cs" />
+    <Compile Include="Service\Client\MockBookServiceClient.cs" />
     <Compile Include="Service\Client\BookServiceClient.cs" />
     <Compile Include="Manager\Cache\PhotoCache.cs" />
     <Compile Include="ViewModel\BookPageViewModel.cs" />

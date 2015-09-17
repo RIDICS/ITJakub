@@ -28,6 +28,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         
         public string AccountName { get { return "Google"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
+        public Task<UserLoginSkeleton> ReopenWithErrorAsync()
+        {
+            throw new InvalidOperationException("Cannot open Google authentication window with error and filled fields");
+        }
 
         public Task<UserLoginSkeleton> LoginForCreateUserAsync()
         {

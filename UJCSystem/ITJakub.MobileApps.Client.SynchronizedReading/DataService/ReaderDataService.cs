@@ -113,5 +113,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             m_bookManager.GetBookInfo(callback);
         }
+
+        public void SetUserIsOwner(bool isUserOwner)
+        {
+            m_synchronizationManager.IsUserOwner = isUserOwner;
+        }
     }
 }

@@ -68,6 +68,7 @@
                   Padding="15,40,0,40"
                   SelectionMode="None"
                   IsItemClickEnabled="True"
+                  IsSwipeEnabled="False"
                   Style="{StaticResource HorizontalListView}"
                   HorizontalAlignment="Center"
                   ItemsSource="{Binding LoginProviders}"

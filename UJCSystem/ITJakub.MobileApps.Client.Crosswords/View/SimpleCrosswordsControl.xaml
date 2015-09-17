@@ -13,11 +13,16 @@
     
     <UserControl.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/Style.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
             <converter:StartPositionToMarginConverter x:Key="StartPositionToMarginConverter" />
             <converter:BooleanToBackgroundConverter x:Key="BooleanToBackgroundConverter" />
             <converter:AnswerToCellBackgroundConverter x:Key="AnswerToCellBackgroundConverter" />
             <converter:LengthToWidthConverter x:Key="LengthToWidthConverter" />
             <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
             <Color x:Key="AnswerCellBackgroundColor">SandyBrown</Color>
             <Color x:Key="TransparentAnswerCellBackgroundColor">#BBF4A460</Color>
             <Color x:Key="FilledCellBackgroundColor">DarkRed</Color>
@@ -26,7 +31,7 @@
             <DataTemplate x:Key="CrosswordRowDataTemplate">
                 <Grid d:DataContext="{d:DesignInstance d:Type=viewModel:CrosswordRowViewModel}">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="280" />
+                        <ColumnDefinition Width="330" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
@@ -84,7 +89,7 @@
             <view:CrosswordRowDataTemplateSelector x:Key="CrosswordRowDataTemplateSelector"
                                                    RowDataTemplate="{StaticResource CrosswordRowDataTemplate}"
                                                    SpaceDataTemplate="{StaticResource CrosswordSpaceDataTemplate}" />
-        </ResourceDictionary>        
+        </ResourceDictionary> 
     </UserControl.Resources>
     
     <Grid>
@@ -92,11 +97,26 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
 
+        <Button Grid.Row="0"
+                Grid.Column="1"
+                Style="{StaticResource CircleButtonStyle}"
+                Visibility="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Command="{Binding ShowResultsCommand}"
+                Margin="10,10,10,10">
+            <SymbolIcon Symbol="ShowResults" />
+        </Button>
+        
         <ScrollViewer Grid.Row="0"
+                      Grid.Column="0"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Crossword}"
+                          IsEnabled="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanNegationConverter}}"
                           Margin="20"
                           HorizontalAlignment="Center"
                           VerticalAlignment="Center"
@@ -104,8 +124,11 @@
         </ScrollViewer>
         
         <GridView Grid.Row="1"
+                  Grid.Column="0"
+                  Grid.ColumnSpan="2"
                   Height="200"
-                  ItemsSource="{Binding OpponentProgress}">
+                  ItemsSource="{Binding OpponentProgress}"
+                  ItemContainerStyle="{StaticResource GridViewWithoutMarkItemStyle}">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Border Height="170"
@@ -171,8 +194,10 @@
         </GridView>
         
         <view:PlayerRankingControl Grid.Row="0"
+                                   Grid.Column="0"
                                    Grid.RowSpan="2"
+                                   Grid.ColumnSpan="2"
                                    DataContext="{Binding PlayerRankingViewModel}"
-                                   Visibility="{Binding IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                   Visibility="{Binding IsResultTableVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>

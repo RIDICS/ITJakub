@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Data;
 
@@ -12,7 +13,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.View.Converter
                 throw new InvalidOperationException("The target must be a Thickness");
 
             var startPosition = (int) value;
-            var marginValue = int.Parse(parameter.ToString());
+            var marginValue = double.Parse(parameter.ToString(), CultureInfo.InvariantCulture);
 
             return new Thickness(startPosition*marginValue, 0, 0, 0);
         }

@@ -321,5 +321,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
             };
             callback(result, null);
         }
+		public void UpdateEndpointAddress(string address)
+        {
+        }
     }
 }

@@ -112,8 +112,10 @@
     <Compile Include="Control\Expander.cs" />
     <Compile Include="Control\FocusableBehavior.cs" />
     <Compile Include="Control\PasswordBoxBehaviors.cs" />
+    <Compile Include="Control\ScaleHelper.cs" />
     <Compile Include="Converter\BooleanNegationToVisibilityConverter.cs" />
     <Compile Include="Enum\SynchronizationType.cs" />
+    <Compile Include="Template\DataTemplateCreator.cs" />
     <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="Message\AppActionFinishedMessage.cs" />
     <Compile Include="ViewModel\AdminBaseViewModel.cs" />

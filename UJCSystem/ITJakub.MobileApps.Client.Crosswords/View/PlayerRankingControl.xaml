@@ -34,6 +34,13 @@
                        VerticalAlignment="Center"
                        FontSize="40"
                        Text="Tabulka pořadí:" />
+            
+            <Button Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Command="{Binding CloseResultsCommand}">
+                <SymbolIcon Symbol="Cancel" />
+            </Button>
 
             <ListView Grid.Row="1"
                       Margin="10,10,10,10"

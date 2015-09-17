@@ -52,7 +52,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             GoToPageCommand = new RelayCommand(GoToPage);
         }
         
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             UpdateMode();
             SetDataLoaded();
@@ -76,6 +76,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 LoadPage(); // don't wait for control update
             });
 
+            m_dataService.SetUserIsOwner(isUserOwner);
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
                 if (exception != null)

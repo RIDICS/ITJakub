@@ -91,7 +91,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 
         public RelayCommand CancelCommand { get; private set; }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetTaskResults((taskFinished, exception) =>
             {

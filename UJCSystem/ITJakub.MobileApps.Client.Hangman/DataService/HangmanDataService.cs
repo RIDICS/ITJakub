@@ -9,13 +9,13 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     public interface IHangmanDataService
     {
         IErrorService ErrorService { get; }
-        void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback);
-        void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback);
+        void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback);
         void StopPolling();
         void GuessLetter(char letter, Action<TaskProgressInfoViewModel, Exception> callback);
         void SetTaskAndGetConfiguration(string data, Action<TaskSettingsViewModel, TaskProgressInfoViewModel> callback);
         void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback);
         void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback);
+        void Reset();
     }
 
     public class HangmanDataService : IHangmanDataService
@@ -34,16 +34,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             get { return m_applicationCommunication.ErrorService; }
         }
 
-        public void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
+        public void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback)
         {
-            m_guessManager.GetTaskInfoWithGuessHistory(callback);
+            m_guessManager.GetTaskHistoryAndStartPollingProgress(callback, pollingCallback);
         }
-
-        public void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback)
-        {
-            m_guessManager.StartPollingProgress(callback);
-        }
-
+        
         public void StopPolling()
         {
             m_guessManager.StopPolling();
@@ -67,6 +62,11 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         public void GetTaskDetail(string data, Action<ObservableCollection<TaskLevelDetailViewModel>> callback)
         {
             m_guessManager.GetTaskDetail(data, callback);
+        }
+
+        public void Reset()
+        {
+            m_guessManager.Reset();
         }
     }
 }

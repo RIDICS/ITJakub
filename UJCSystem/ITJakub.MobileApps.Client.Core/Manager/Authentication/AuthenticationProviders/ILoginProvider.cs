@@ -12,5 +12,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         string AccountName { get; }
 
         AuthProvidersContract ProviderType { get; }
+
+        Task<UserLoginSkeleton> ReopenWithErrorAsync();
     }
 }

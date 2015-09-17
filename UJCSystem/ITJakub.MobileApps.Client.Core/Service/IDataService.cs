@@ -79,5 +79,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
         
 
         
+        void UpdateEndpointAddress(string address);
     }
 }

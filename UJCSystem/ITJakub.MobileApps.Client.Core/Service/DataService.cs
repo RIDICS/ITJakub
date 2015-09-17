@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using ITJakub.MobileApps.Client.Core.Manager;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -27,6 +28,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         private readonly IMainPollingService m_mainPollingService;
         private readonly ApplicationStateManager m_applicationStateManager;
         private readonly NewsManager m_newsManager;
+        private readonly ConfigurationManager m_configurationManager;
 
         public DataService(IUnityContainer container)
         {
@@ -37,6 +39,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_mainPollingService = container.Resolve<IMainPollingService>();
             m_applicationStateManager = container.Resolve<ApplicationStateManager>();
             m_newsManager = container.Resolve<NewsManager>();
+            m_configurationManager = container.Resolve<ConfigurationManager>();
         }
 
         public void GetAllApplications(Action<Dictionary<ApplicationType, ApplicationBase>, Exception> callback)
@@ -170,7 +173,10 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_applicationStateManager.SelectApplicationTarget = target;
         }
 
-       
+        public void UpdateEndpointAddress(string address)
+        {
+            m_configurationManager.EndpointAddress = address;
+        }
 
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {

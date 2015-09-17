@@ -23,5 +23,6 @@ namespace ITJakub.MobileApps.Client.Books.Service
         void GetCurrentBook(Action<BookViewModel> callback);
         void SetMode(ReaderMode readerMode);
         void GetMode(Action<ReaderMode> callback);
+        void UpdateEndpointAddress(string address);
     }
 }

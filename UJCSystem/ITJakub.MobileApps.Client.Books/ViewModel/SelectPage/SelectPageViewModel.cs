@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private bool m_loading;
         private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
-        private string m_pageTitle;
+        private string m_viewTitle;
         private bool m_showSubmitButton;
 
         public SelectPageViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
@@ -90,13 +90,13 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         private void LoadInSelectionMode()
         {
-            PageTitle = "Vyberte stranu";
+            ViewTitle = "Vyberte stranu";
             ShowSubmitButton = true;
         }
 
         private void LoadInReaderMode()
         {
-            PageTitle = "Listování knihou";
+            ViewTitle = "Listování knihou";
             ShowSubmitButton = false;
         }
         
@@ -159,12 +159,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             }
         }
 
-        public string PageTitle
+        public string ViewTitle
         {
-            get { return m_pageTitle; }
+            get { return m_viewTitle; }
             set
             {
-                m_pageTitle = value;
+                m_viewTitle = value;
                 RaisePropertyChanged();
             }
         }
