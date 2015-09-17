@@ -20,6 +20,9 @@ namespace ITJakub.Shared.Contracts.News
         public string Url { get; set; }
 
         [DataMember]
+        public NewsTypeContract ItemType { get; set; }
+
+        [DataMember]
         public DateTime CreateDate { get; set; }
 
         [DataMember]
@@ -30,5 +33,19 @@ namespace ITJakub.Shared.Contracts.News
 
         [DataMember]
         public string UserLastName { get; set; }
+    }
+
+    [DataContract]
+    public enum NewsTypeContract
+    {
+        [EnumMember]
+        Combined,
+
+        [EnumMember]
+        Web,
+
+        [EnumMember]
+        MobileApps,
+
     }
 }

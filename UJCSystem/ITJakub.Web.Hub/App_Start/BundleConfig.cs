@@ -53,6 +53,7 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
                 "~/Scripts/Home/itjakub.home.js"));
+            bundles.Add(new ScriptBundle("~/itjakub/news/javascript").Include("~/Scripts/News/itjakub.news.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

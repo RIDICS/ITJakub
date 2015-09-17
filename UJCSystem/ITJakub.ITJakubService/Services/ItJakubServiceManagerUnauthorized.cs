@@ -95,14 +95,14 @@ namespace ITJakub.ITJakubService.Services
 
         #region News
 
-        public List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count)
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
         {
-            return m_newsManager.GetNewsSyndicationItems(start, count);
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
         }
 
-        public void CreateNewsSyndicationItem(string title, string content, string url, string username)
+        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
-            m_newsManager.CreateNewSyndicationItem(title, content, url, username);
+            m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
         }
 
         #endregion

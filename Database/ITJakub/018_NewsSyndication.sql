@@ -9,6 +9,7 @@ BEGIN TRAN;
 							 [CreateDate] DATETIME NOT NULL,
 							 [Text] varchar(2000) NOT NULL,
 							 [Url] varchar(max) NOT NULL,
+							 [ItemType] smallint NOT NULL,
 							 [User] INT NULL CONSTRAINT [FK_NewsSyndicationItem(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User]( Id )
 							 );
     INSERT INTO [dbo].[DatabaseVersion]

@@ -230,7 +230,7 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
-    <Compile Include="Models\NewsSyndicationItemModel.cs" />
+    <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -274,6 +274,7 @@
     <Compile Include="Models\Plugins\RegExSearch\WordListCriteriaDescription.cs" />
     <Compile Include="Models\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\AtomResult.cs" />
     <Compile Include="Results\RssResult.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -761,6 +762,7 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
+    <TypeScriptCompile Include="Scripts\News\itjakub.news.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

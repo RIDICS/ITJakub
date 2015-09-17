@@ -18,14 +18,19 @@ namespace ITJakub.ITJakubService.Core
             m_userRepository = userRepository;
         }
 
-        public List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count)
-        {
-            var syndicationItems = m_repository.GetNews(start, count);
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {            
+            var syndicationItems = m_repository.GetWebNews(start, count);
             return Mapper.Map<List<NewsSyndicationItemContract>>(syndicationItems);
         }
 
+        public int GetWebNewsSyndicationItemCount()
+        {
+            var syndicationItemCount = m_repository.GetWebNewsSyndicationItemCount();
+            return syndicationItemCount;
+        }
 
-        public void CreateNewSyndicationItem(string title, string content, string url, string username)
+        public void CreateNewSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username is empty, cannot add bookmark");
@@ -40,10 +45,13 @@ namespace ITJakub.ITJakubService.Core
                 Title = title,
                 Url = url,
                 Text = content,
+                ItemType = Mapper.Map<SyndicationItemType>(itemType),
                 User = user,
             };
 
             m_repository.Save(syndicationItem);
         }
+
+        
     }
 }

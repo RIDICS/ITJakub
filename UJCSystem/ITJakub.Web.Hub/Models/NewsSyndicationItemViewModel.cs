@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Http.Results;
+using ITJakub.Shared.Contracts.News;
 
 namespace ITJakub.Web.Hub.Models
 {
-    public class NewsSyndicationItemModel
+    public class NewsSyndicationItemViewModel
     {
         [DataType(DataType.Text)]
         [Required]
@@ -21,5 +22,12 @@ namespace ITJakub.Web.Hub.Models
         [DataType(DataType.Url)]
         [Display(Name = "Url: ")]        
         public string Url { get; set; }    
+        
+        [EnumDataType(typeof(NewsTypeContract))]
+        [Required]
+        [Display(Name="Type: ")]
+        public NewsTypeContract ItemType { get; set; }
     }
+
+   
 }

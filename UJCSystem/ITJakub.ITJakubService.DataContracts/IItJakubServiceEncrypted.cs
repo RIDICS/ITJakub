@@ -58,7 +58,7 @@ namespace ITJakub.ITJakubService.DataContracts
      
 
         [OperationContract]
-        void CreateNewsSyndicationItem(string title, string content, string url, string username);
+        void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
 
         #endregion
 

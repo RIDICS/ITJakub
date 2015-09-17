@@ -1214,11 +1214,37 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count)
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
         {
             try
             {
-                return Channel.GetNewsSyndicationItems(start, count);
+                return Channel.GetWebNewsSyndicationItems(start, count);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            try
+            {
+                return Channel.GetWebNewsSyndicationItemCount();
             }
             catch (CommunicationException ex)
             {

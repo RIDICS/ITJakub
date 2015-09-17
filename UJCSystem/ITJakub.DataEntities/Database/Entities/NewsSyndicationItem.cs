@@ -20,6 +20,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual DateTime CreateDate { get; set; }
 
+        public virtual SyndicationItemType ItemType { get; set; }
+
         public virtual bool Equals(NewsSyndicationItem other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -39,5 +41,12 @@ namespace ITJakub.DataEntities.Database.Entities
         {
             return Id.GetHashCode();
         }
+    }
+    public enum SyndicationItemType
+    {       
+        Combined,
+        Web,
+        MobileApps,
+
     }
 }

@@ -12,6 +12,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(m => m.Text, opt => opt.MapFrom(src => src.Text))
                 .ForMember(m => m.Url, opt => opt.MapFrom(src => src.Url))
+                .ForMember(m => m.ItemType, opt => opt.MapFrom(src => src.ItemType))
                 .ForMember(m => m.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
                 .ForMember(m => m.UserEmail, opt => opt.MapFrom(src => src.User.Email))
                 .ForMember(m => m.UserFirstName, opt => opt.MapFrom(src => src.User.FirstName))

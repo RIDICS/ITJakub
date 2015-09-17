@@ -275,9 +275,14 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
         }
 
-        public List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count)
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
         {
-            return m_newsManager.GetNewsSyndicationItems(start, count);
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
+        }
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            return m_newsManager.GetWebNewsSyndicationItemCount();
         }
     }
 }

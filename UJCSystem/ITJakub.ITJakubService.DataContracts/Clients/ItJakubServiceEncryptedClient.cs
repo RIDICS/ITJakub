@@ -288,11 +288,11 @@ namespace ITJakub.Web.Hub
 
        
 
-        public void CreateNewsSyndicationItem(string title, string content, string url, string username)
+        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
             try
             {
-                Channel.CreateNewsSyndicationItem(title, content, url, username);
+                Channel.CreateNewsSyndicationItem(title, content, url, itemType, username);
             }
             catch (CommunicationException ex)
             {

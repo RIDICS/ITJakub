@@ -175,7 +175,10 @@ namespace ITJakub.ITJakubService.DataContracts
         #region News
 
         [OperationContract]
-        List<NewsSyndicationItemContract> GetNewsSyndicationItems(int start, int count);
+        List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count);
+
+        [OperationContract]
+        int GetWebNewsSyndicationItemCount();
 
         #endregion
     }

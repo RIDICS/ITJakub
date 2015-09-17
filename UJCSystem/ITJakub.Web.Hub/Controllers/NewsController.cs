@@ -5,6 +5,7 @@ using System.ServiceModel.Syndication;
 using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
@@ -26,22 +27,25 @@ namespace ITJakub.Web.Hub.Controllers
         
         [HttpGet]
         [AllowAnonymous]
-        public virtual ActionResult Feed(string feedType)
+        public virtual ActionResult Feed(string feedType, string feedCount = "10")
         {            
-
-            
-
             FeedType ft;
             if (!Enum.TryParse(feedType, true, out ft))
             {
                 throw new ArgumentException("Unknown feed type");
             }
+            int count = Convert.ToInt32(feedCount);
+            if (count <= 0)
+            {
+                throw new ArgumentException("Invalid feed count");
+            }
+
 
             var items = new List<SyndicationItem>();
 
             using (var client = new ItJakubServiceClient())
             {
-                var feeds = client.GetNewsSyndicationItems(0, 10);
+                var feeds = client.GetWebNewsSyndicationItems(0, count);
                 foreach (var feed in feeds)
                 {
                     var syndicationItem = new SyndicationItem(feed.Title, feed.Text, new Uri(feed.Url));
@@ -58,7 +62,31 @@ namespace ITJakub.Web.Hub.Controllers
 
             return new AtomResult("Vokabular feed", items);
         }
-       
+
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual ActionResult GetSyndicationItems(int start, int count)
+        {      
+            using (var client = new ItJakubServiceClient())
+            {
+                List<NewsSyndicationItemContract> feeds = client.GetWebNewsSyndicationItems(start, count);
+                return Json(feeds, JsonRequestBehavior.AllowGet);
+            }         
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public virtual ActionResult GetSyndicationItemCount()
+        {
+            using (var client = new ItJakubServiceClient())
+            {
+                int feedCount = client.GetWebNewsSyndicationItemCount();
+                return Json(feedCount, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
 
         public ActionResult Add()
         {
@@ -69,12 +97,12 @@ namespace ITJakub.Web.Hub.Controllers
 
         [HttpPost]        
         [ValidateAntiForgeryToken]
-        public ActionResult Add(NewsSyndicationItemModel model)
+        public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
-            
+            var username = HttpContext.User.Identity.Name;            
+
                 using(var client = new ItJakubServiceEncryptedClient())
-                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, username);
+                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url,model.ItemType, username);
 
 
             return Json(new { });
