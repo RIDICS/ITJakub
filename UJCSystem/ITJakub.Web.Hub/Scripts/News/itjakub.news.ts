@@ -59,9 +59,9 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("message");
 
-
+        var date = convertDate(item.CreateDate);
         var dateHeader = document.createElement("h2");
-        dateHeader.innerHTML = item.CreateDate;
+        dateHeader.innerHTML = date.toLocaleDateString();
 
         itemDiv.appendChild(dateHeader);
 
