@@ -26,28 +26,35 @@ namespace ITJakub.SearchService.Core.Exist
         {
             var httpRequestMessage = new HttpRequestMessage(new HttpMethod(commInfo.Method.GetStringValue()), uri);
 
-            if(commInfo.Method.Equals(HttpMethodType.Post) || commInfo.Method.Equals(HttpMethodType.Put))
+            if (commInfo.Method.Equals(HttpMethodType.Post) || commInfo.Method.Equals(HttpMethodType.Put))
             {
                 httpRequestMessage.Content = content;
             }
 
-            return Task.Run(() => m_httpClient.SendAsync(httpRequestMessage)).ContinueWith(task => task.Result.Content);
+
+            return Task.Run(() => m_httpClient.SendAsync(httpRequestMessage))
+                .ContinueWith(task =>
+                {
+                    task.Result.EnsureSuccessStatusCode();
+                    return task.Result.Content;
+                });
         }
 
         public Task<string> SendRequestGetResponseAsString(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStringAsync());
+            return
+                Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStringAsync());
         }
 
         public Task<Stream> SendRequestGetResponseAsStream(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
-            return Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStreamAsync());
+            return
+                Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsStreamAsync());
         }
 
         public Task<byte[]> SendRequestGetResponseAsByteArray(CommunicationInfo commInfo, Uri uri, HttpContent content)
         {
             return Task.Run(() => SendRequest(commInfo, uri, content).Result.ReadAsByteArrayAsync());
         }
-
     }
 }

@@ -21,7 +21,7 @@ namespace ITJakub.ITJakubService.Core
             m_userRepository = userRepository;
             m_feedbackRepository = feedbackRepository;
             m_bookVersionRepository = bookVersionRepository;
-        }        
+        }
 
         public void CreateFeedback(string note, string username, FeedbackCategoryEnumContract feedbackCategory)
         {
@@ -32,13 +32,20 @@ namespace ITJakub.ITJakubService.Core
             if (user == null)
                 throw new ArgumentException(string.Format("Cannot locate user by username: '{0}'", username));
 
-            Feedback entity = new Feedback {CreateDate = DateTime.UtcNow, Text = note, User = user, Category = (FeedbackCategoryEnum)feedbackCategory };
+            Feedback entity = new Feedback {CreateDate = DateTime.UtcNow, Text = note, User = user, Category = (FeedbackCategoryEnum) feedbackCategory};
             m_feedbackRepository.Save(entity);
         }
 
         public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            Feedback entity = new Feedback { CreateDate = DateTime.UtcNow, Text = feedback, Name = name, Email = email, Category = (FeedbackCategoryEnum)feedbackCategory };
+            Feedback entity = new Feedback
+            {
+                CreateDate = DateTime.UtcNow,
+                Text = feedback,
+                Name = name,
+                Email = email,
+                Category = (FeedbackCategoryEnum) feedbackCategory
+            };
             m_feedbackRepository.Save(entity);
         }
 
@@ -69,8 +76,9 @@ namespace ITJakub.ITJakubService.Core
 
             BookHeadword headwordEntity = m_bookVersionRepository.GetFirstHeadwordInfo(bookXmlId, entryXmlId, versionXmlId);
             if (headwordEntity == null)
-                throw new ArgumentException(string.Format("Cannot find headword with bookId: {0}, versionId: {1}, entryXmlId: {2}", bookXmlId, versionXmlId, entryXmlId));
-            
+                throw new ArgumentException(string.Format("Cannot find headword with bookId: {0}, versionId: {1}, entryXmlId: {2}", bookXmlId, versionXmlId,
+                    entryXmlId));
+
             HeadwordFeedback entity = new HeadwordFeedback
             {
                 CreateDate = DateTime.UtcNow,
@@ -86,13 +94,14 @@ namespace ITJakub.ITJakubService.Core
         {
             var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
             var sortCriteria = feedbackSearchCriteria.SortCriteria;
-            var feedbacks = m_feedbackRepository.GetFeedbacks(categories,(FeedbackSortEnum)sortCriteria.SortByField,sortCriteria.SortAsc, feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
+            var feedbacks = m_feedbackRepository.GetFeedbacks(categories, (FeedbackSortEnum) sortCriteria.SortByField, sortCriteria.SortAsc,
+                feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
             return Mapper.Map<List<FeedbackContract>>(feedbacks);
         }
 
         public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum)category).ToList();
+            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
             return m_feedbackRepository.GetFeedbacksCount(categories);
         }
 

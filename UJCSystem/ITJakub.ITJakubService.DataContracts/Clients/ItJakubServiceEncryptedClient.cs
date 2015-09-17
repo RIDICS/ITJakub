@@ -6,6 +6,7 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using log4net;
 
@@ -106,7 +107,7 @@ namespace ITJakub.Web.Hub
         {
             try
             {
-                Channel.AddPageBookmark(bookId,pageName, userName);
+                Channel.AddPageBookmark(bookId, pageName, userName);
             }
             catch (CommunicationException ex)
             {
@@ -132,7 +133,7 @@ namespace ITJakub.Web.Hub
         {
             try
             {
-                Channel.RemovePageBookmark(bookId,pageName, userName);
+                Channel.RemovePageBookmark(bookId, pageName, userName);
             }
             catch (CommunicationException ex)
             {
@@ -263,6 +264,35 @@ namespace ITJakub.Web.Hub
             try
             {
                 Channel.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+
+       
+
+        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
+        {
+            try
+            {
+                Channel.CreateNewsSyndicationItem(title, content, url, itemType, username);
             }
             catch (CommunicationException ex)
             {

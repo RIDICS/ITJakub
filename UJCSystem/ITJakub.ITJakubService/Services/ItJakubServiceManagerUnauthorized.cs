@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services
@@ -14,12 +16,14 @@ namespace ITJakub.ITJakubService.Services
         private readonly UserManager m_userManager;
         private readonly FavoriteManager m_favoriteManager;
         private readonly FeedbackManager m_feedbackManager;
+        private readonly NewsManager m_newsManager;
 
         public ItJakubServiceAuthenticatedManager()
         {
             m_userManager = m_container.Resolve<UserManager>();
             m_favoriteManager = m_container.Resolve<FavoriteManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
+            m_newsManager = m_container.Resolve<NewsManager>();
         }
 
         public UserContract FindUserById(int userId)
@@ -84,6 +88,24 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
         }
 
+
+
         #endregion
+
+
+        #region News
+
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
+        }
+
+        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
+        {
+            m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
+        }
+
+        #endregion
+
     }
 }
