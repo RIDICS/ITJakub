@@ -82,6 +82,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<string> GetTypeaheadAuthors(string query);
 
         [OperationContract]
+        IList<UserContract> GetTypeaheadUsers(string query);
+
+        [OperationContract]
         IList<string> GetTypeaheadTitles(string query);
 
         [OperationContract]

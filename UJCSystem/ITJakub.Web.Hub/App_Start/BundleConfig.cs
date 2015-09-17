@@ -52,6 +52,13 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
                 "~/Scripts/Home/itjakub.home.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/permission/javascript").Include(
+                "~/Scripts/Permission/itjakub.permission.js",
+                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+
+
+            bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
+                "~/Content/Permission/itjakub.permission.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",

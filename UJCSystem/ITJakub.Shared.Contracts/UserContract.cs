@@ -16,9 +16,6 @@ namespace ITJakub.Shared.Contracts
         public string UserName { get; set; }
 
         [DataMember]
-        public string PasswordHash { get; set; }
-
-        [DataMember]
         public string FirstName { get; set; }
 
         [DataMember]
@@ -26,5 +23,8 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public DateTime CreateTime { get; set; }
+
+        [DataMember]
+        public string PasswordHash { get; set; }
     }
 }

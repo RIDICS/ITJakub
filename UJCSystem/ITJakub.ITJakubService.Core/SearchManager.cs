@@ -26,17 +26,19 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly UserRepository m_userRepository;
         private readonly MetadataSearchCriteriaDirector m_searchCriteriaDirector;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
         public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository,
-            CategoryRepository categoryRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
+            CategoryRepository categoryRepository, UserRepository mUserRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
             AuthorizationManager mAuthorizationManager, SearchServiceClient searchServiceClient)
         {
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_categoryRepository = categoryRepository;
+            m_userRepository = mUserRepository;
             m_searchCriteriaDirector = searchCriteriaDirector;
             m_authorizationManager = mAuthorizationManager;
             m_searchServiceClient = searchServiceClient;
@@ -271,6 +273,24 @@ namespace ITJakub.ITJakubService.Core
 
             query = PrepareQuery(query);
             return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
+        }
+
+        public IList<UserContract> GetTypeaheadUsers(string query)
+        {
+            IList<User> users = null;
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                users = m_userRepository.GetLastUsers(PrefetchRecordCount);
+            }
+            else
+            {
+                query = PrepareQuery(query);
+                users = m_userRepository.GetTypeaheadUsers(query, PrefetchRecordCount);
+            }
+
+            var userContracts = Mapper.Map<IList<UserContract>>(users);
+            return userContracts;
         }
 
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)

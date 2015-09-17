@@ -227,6 +227,7 @@
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
@@ -659,6 +660,7 @@
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
     <Content Include="Content\Plugins\ITJakub.Pagination.less" />
+    <Content Include="Content\Permission\itjakub.permission.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -711,6 +713,7 @@
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\Permission\UserPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -755,6 +758,8 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

@@ -22,6 +22,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;
+        private readonly PermissionManager m_permissionManager;
 
 
         public ItJakubServiceManager()
@@ -32,6 +33,7 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_permissionManager = m_container.Resolve<PermissionManager>();
          
         }
 
@@ -132,6 +134,11 @@ namespace ITJakub.ITJakubService.Services
         public IList<string> GetTypeaheadAuthors(string query)
         {
             return m_searchManager.GetTypeaheadAuthors(query);
+        }    
+            
+        public IList<UserContract> GetTypeaheadUsers(string query)
+        {
+            return m_searchManager.GetTypeaheadUsers(query);
         }
 
         public IList<string> GetTypeaheadTitles(string query)

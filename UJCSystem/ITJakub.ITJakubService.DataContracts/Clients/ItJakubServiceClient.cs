@@ -512,6 +512,32 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+        public IList<UserContract> GetTypeaheadUsers(string query)
+        {
+            try
+            {
+                return Channel.GetTypeaheadUsers(query);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadUsers failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadUsers failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetTypeaheadUsers timeouted with: {0}", ex);
+                throw;
+            }
+        }
 
         public IList<string> GetTypeaheadTitles(string query)
         {

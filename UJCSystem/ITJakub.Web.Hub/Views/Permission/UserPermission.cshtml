@@ -1,0 +1,135 @@
+﻿@{
+    ViewBag.Title = "Práva";
+}
+@section styles{
+    @Styles.Render("~/itjakub/permission/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/permission/javascript")
+}
+
+<h2>Práva</h2>
+
+<div>
+    <div class="permission-main-buttons">
+        <button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>
+        <button id="createUserButton" class="btn btn-default permission-button hidden">+</button>
+    </div>
+    <div class="permission-search">
+        <input type="text" class="form-control permission-search-input" id="mainSearchInput"/>
+    </div>
+</div>
+<div class="content hidden">
+    <div>
+        <span>Uživatelské jméno: </span>
+        <span id="specificUserUsername"></span>
+    </div>
+    <div>
+        <span>E-mail: </span>
+        <span id="specificUserEmail"></span>
+    </div>
+</div>
+
+
+<div id="newTokenDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nový token</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="new-token" class="col-md-3 control-label">Token</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="new-token" name="new-text" type="text" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-token-description" class="col-md-3 control-label">Popis</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="new-token-description" name="new-text" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-token">Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="newHyperCanonicalFormDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nová hyperkanonická forma</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab2-select-existing" data-toggle="tab">Výběr existující</a>
+                    </li>
+                    <li>
+                        <a href="#tab2-create-new" data-toggle="tab">Vytvoření nové</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="tab2-select-existing" class="tab-pane active">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="new-hyper-existing-type" class="col-md-3 control-label">Typ</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="new-hyper-existing-type"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-hyper-existing-input" class="col-md-3 control-label">Vyberte existující</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-hyper-existing-input" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-hyper-existing-description" class="col-md-3 control-label">Popis</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="new-hyper-existing-description" disabled="disabled"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab2-create-new" class="tab-pane">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="new-hyper" class="col-md-3 control-label">Kanonická forma</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-hyper" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-hyper-type" class="col-md-3 control-label">Typ</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" id="new-hyper-type"></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-hyper-description" class="col-md-3 control-label">Popis</label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" id="new-hyper-description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default lemmatization-button" id="save-hyper">Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,8 +1,8 @@
-﻿using Castle.Facilities.NHibernateIntegration;
+﻿using System.Collections.Generic;
+using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
-using NHibernate;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -17,7 +17,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User FindByUserName(string userName)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return session.QueryOver<User>()
                     .Where(user => user.UserName == userName)
@@ -28,21 +28,44 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionMode.Requires)]
         public virtual User FindById(int userId)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return session.QueryOver<User>()
                     .Where(user => user.Id == userId)
                     .SingleOrDefault<User>();
             }
         }
-        
-        
+
         [Transaction(TransactionMode.Requires)]
         public virtual int Create(User user)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
                 return (int) base.Create(user);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<User> GetLastUsers(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>()
+                    .OrderBy(x => x.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<User> GetTypeaheadUsers(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>()
+                    .WhereRestrictionOn(x => x.UserName).IsInsensitiveLike(query)
+                    .Take(recordCount)
+                    .List<User>();
             }
         }
     }
