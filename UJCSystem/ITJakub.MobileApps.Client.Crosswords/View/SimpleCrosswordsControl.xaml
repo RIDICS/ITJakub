@@ -127,7 +127,8 @@
                   Grid.Column="0"
                   Grid.ColumnSpan="2"
                   Height="200"
-                  ItemsSource="{Binding OpponentProgress}">
+                  ItemsSource="{Binding OpponentProgress}"
+                  ItemContainerStyle="{StaticResource GridViewWithoutMarkItemStyle}">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Border Height="170"

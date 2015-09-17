@@ -14,14 +14,20 @@
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanViewModel }">
     
     <UserControl.Resources>
-        <hangmanPicture:HangmanPictureTemplateSelector x:Key="HangmanPictureTemplateSelector" />
-        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <countToText:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
-        <countToText:GuessedWordsTextConverter x:Key="GuessedWordsTextConverter" />
-        <countToText:HangmanCountTextConverter x:Key="HangmanCountTextConverter" />
-        <converter1:WinToColorConverter x:Key="WinToColorConverter" />
-        <SolidColorBrush x:Key="HangmanCountColor" Color="LightSalmon" />
-        <SolidColorBrush x:Key="GuessedColor" Color="GreenYellow" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <hangmanPicture:HangmanPictureTemplateSelector x:Key="HangmanPictureTemplateSelector" />
+            <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <countToText:GuessedLettersTextConverter x:Key="GuessedLettersTextConverter" />
+            <countToText:GuessedWordsTextConverter x:Key="GuessedWordsTextConverter" />
+            <countToText:HangmanCountTextConverter x:Key="HangmanCountTextConverter" />
+            <converter1:WinToColorConverter x:Key="WinToColorConverter" />
+            <SolidColorBrush x:Key="HangmanCountColor" Color="LightSalmon" />
+            <SolidColorBrush x:Key="GuessedColor" Color="GreenYellow" />
+        </ResourceDictionary>
     </UserControl.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -74,9 +80,6 @@
                      MinWidth="100">
                 <ContentControl Content="{Binding HangmanPictureViewModel}"
                                 ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}" />
-                
-                <!--<control1:HangmanPictureControl DataContext="{Binding HangmanPictureViewModel}"
-                                            Margin="25,0,25,0" />-->
             </Viewbox>
         </Grid>
            
@@ -84,7 +87,7 @@
               Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
-                <RowDefinition Height="200" />
+                <RowDefinition Height="190" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -115,13 +118,14 @@
                     MaxWidth="800" />
             </ScrollViewer>
         </Grid>
-        
+
         <GridView Grid.Row="1"
                   Grid.Column="0"
                   Grid.ColumnSpan="3"
                   Height="200"
                   ItemsSource="{Binding OpponentProgress}"
-                  Visibility="{Binding OpponentProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                  Visibility="{Binding OpponentProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                  ItemContainerStyle="{StaticResource GridViewWithoutMarkItemStyle}">
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Border Height="170"
