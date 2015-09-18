@@ -219,7 +219,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon\pagePhotoMock.jpg" />
     <Content Include="Icon\book-48.png" />
     <Content Include="Icon\license.txt" />
   </ItemGroup>
