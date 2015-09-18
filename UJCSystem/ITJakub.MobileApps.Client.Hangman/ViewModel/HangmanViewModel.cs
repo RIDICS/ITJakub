@@ -154,6 +154,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                         m_dataService.ErrorService.ShowConnectionWarning();
                         return;
                     }
+                    m_dataService.ErrorService.HideWarning();
 
                     ProcessOpponentProgress(progressInfo);
                 });

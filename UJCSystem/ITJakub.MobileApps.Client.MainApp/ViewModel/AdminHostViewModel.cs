@@ -159,7 +159,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     FirstName = x.FirstName,
                     LastName = x.LastName
                 });
-                DispatcherHelper.CheckBeginInvokeOnUI(() => AdminViewModel.UpdateGroupMembers(members));
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    AdminViewModel.UpdateGroupMembers(members);
+                    m_errorService.HideWarning();
+                });
             }
         }
 

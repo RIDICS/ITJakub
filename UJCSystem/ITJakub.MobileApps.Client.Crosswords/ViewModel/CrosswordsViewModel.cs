@@ -45,6 +45,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     m_dataService.ErrorService.ShowConnectionWarning();
                     return;
                 }
+                m_dataService.ErrorService.HideWarning();
 
                 SimpleCrosswordsViewModel.UpdateProgress(list);
                 m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));

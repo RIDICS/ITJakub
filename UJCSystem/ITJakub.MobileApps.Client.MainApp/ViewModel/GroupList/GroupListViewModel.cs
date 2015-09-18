@@ -6,6 +6,7 @@ using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Books;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -317,7 +318,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         
         private void GroupUpdate(Exception exception)
         {
-            m_errorService.ShowConnectionWarning();
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+            else
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    m_errorService.HideWarning();
+                });
         }
 
         private void GroupClick(ItemClickEventArgs args)

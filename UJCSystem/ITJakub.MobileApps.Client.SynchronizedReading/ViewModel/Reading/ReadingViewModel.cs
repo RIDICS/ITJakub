@@ -85,6 +85,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     return;
                 }
 
+                m_dataService.ErrorService.HideWarning();
                 CurrentReader = model.ReaderUser;
                 LoadPage();
             });
@@ -309,6 +310,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 m_dataService.ErrorService.ShowConnectionWarning();
                 return;
             }
+            m_dataService.ErrorService.HideWarning();
 
             if (IsTextUpdateNew(update))
             {
