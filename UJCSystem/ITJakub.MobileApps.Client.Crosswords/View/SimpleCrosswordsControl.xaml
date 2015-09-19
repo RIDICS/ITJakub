@@ -152,7 +152,7 @@
                                         <ItemsControl x:Name="RowItemsControl"
                                                       MinHeight="5"
                                                       ItemsSource="{Binding Cells}"
-                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=9}">
+                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=10}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Horizontal" />
@@ -160,8 +160,8 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Width="10"
-                                                            Height="10"
+                                                    <Border Width="11"
+                                                            Height="11"
                                                             BorderBrush="Black"
                                                             BorderThickness="1"
                                                             Margin="-0.5"
