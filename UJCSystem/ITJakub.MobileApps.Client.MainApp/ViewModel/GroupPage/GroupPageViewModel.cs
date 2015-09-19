@@ -4,6 +4,7 @@ using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -161,7 +162,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
             else
-                UpdateCanConnectToGroup();
+                DispatcherHelper.CheckBeginInvokeOnUI((() =>
+                {
+                    m_errorService.HideWarning();
+                    UpdateCanConnectToGroup();
+                }));
         }
 
         private void UpdateCanConnectToGroup()

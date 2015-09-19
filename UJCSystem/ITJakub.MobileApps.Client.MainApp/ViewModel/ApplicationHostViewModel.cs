@@ -112,7 +112,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
             else
-                DispatcherHelper.CheckBeginInvokeOnUI(() => MemberList = m_groupInfo.Members);
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    MemberList = m_groupInfo.Members;
+                    m_errorService.HideWarning();
+                });
         }
 
         private void StopCommunication()
@@ -146,7 +150,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_errorService.ShowConnectionWarning();
                 return;
             }
-
+            
             if (m_isCommunicationStopped)
             {
                 return;
@@ -154,6 +158,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
+                m_errorService.HideWarning();
                 m_groupInfo.State = state;
                 GroupStateUpdate();
             });

@@ -47,11 +47,10 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
                 display = "popup",
                 response_type = "token"
             });
-
-            //TODO switch to CustomWebAuthenticationBroker
+            
             try
             {
-                var webAuthenticationResult = await WebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
+                var webAuthenticationResult = await CustomWebAuthenticationBroker.AuthenticateAsync(WebAuthenticationOptions.None, loginUrl, redirectUri);
 
                 UserLoginSkeleton userLoginSkeleton = GetUserInfoFromResponse(fbClient, webAuthenticationResult);
                 return userLoginSkeleton;

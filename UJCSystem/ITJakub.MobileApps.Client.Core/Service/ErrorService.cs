@@ -37,7 +37,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_errorBar = new ErrorBar("Nelze kontaktovat server. Prosím zkontrolujte připojení k internetu.");
             m_errorBar.ClosedCommand = () =>
             {
-                Task.Delay(new TimeSpan(0, 1, 0)).ContinueWith(task => m_errorBar = null);
+                Task.Delay(new TimeSpan(0, 0, 30)).ContinueWith(task => m_errorBar = null);
             };
 
             DispatcherHelper.CheckBeginInvokeOnUI(m_errorBar.Show);
@@ -61,6 +61,12 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }));
 
             DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
+        }
+
+        public void HideWarning()
+        {
+            if (m_errorBar != null)
+                m_errorBar.Hide();
         }
     }
 }
