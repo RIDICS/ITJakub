@@ -111,7 +111,7 @@
         </Grid>
         
         <Grid Grid.Row="1"
-              Margin="0,20,0,0">
+              Margin="0,20,0,40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="2*" MaxWidth="550" />
