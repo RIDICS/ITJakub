@@ -8,6 +8,7 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
+    xmlns:control="using:ITJakub.MobileApps.Client.MainApp.View.Control"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
@@ -223,36 +224,24 @@
                             HorizontalContentAlignment="Stretch" />            
         </Grid>
 
-        <Grid Grid.Row="1"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Bottom"
-              Margin="0,0,30,30"
-              Width="250"
-              Height="80"
-              Visibility="{Binding IsChatNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Rectangle Fill="LightGoldenrodYellow"
-                       RadiusX="15"
-                       RadiusY="10"
-                       Stroke="#20000000"
-                       StrokeThickness="2" />
-            <Button Background="Transparent"
-                    Margin="8,4,8,4"
-                    Padding="4,0,4,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Top"
-                    BorderThickness="0"
-                    Command="{Binding ShowChatCommand}">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Upozornění"
-                               Foreground="Black"
-                               FontWeight="Bold" />
-                    <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
-                               TextWrapping="Wrap"
-                               Foreground="Black" />
-                </StackPanel>
-            </Button>
-        </Grid>
+        <control:NotificationControl
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,30,30"
+            Width="250"
+            Height="80"
+            IsVisible="{Binding IsChatNotificationVisible, Mode=TwoWay}"
+            Command="{Binding ShowChatCommand}">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Upozornění"
+                           Foreground="Black"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                           Foreground="Black"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </control:NotificationControl>
     </Grid>
 </Page>
