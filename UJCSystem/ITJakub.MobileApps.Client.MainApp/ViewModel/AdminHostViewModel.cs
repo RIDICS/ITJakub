@@ -32,6 +32,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_taskInfo;
         private bool m_loadingGroupInfo;
         private bool m_loadingTask;
+        private bool m_loadingData;
         private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         public AdminHostViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
@@ -58,6 +59,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData()
         {
+            LoadingData = true;
             m_dataService.GetCurrentGroupId((groupId, type) =>
             {
                 LoadGroupDetails(groupId);
@@ -129,6 +131,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     return;
                 }
 
+                AdminViewModel.DataLoadedCallback = () => LoadingData = false;
                 AdminViewModel.SetTask(data);
                 AdminViewModel.InitializeCommunication();
 
@@ -261,6 +264,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_loadingTask = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => Loading);
+            }
+        }
+
+        public bool LoadingData
+        {
+            get { return m_loadingData; }
+            set
+            {
+                m_loadingData = value;
+                RaisePropertyChanged();
             }
         }
     }

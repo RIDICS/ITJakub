@@ -29,7 +29,10 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         public override void InitializeCommunication()
         {
             m_dataService.GetTaskHistoryAndStartPollingProgress(
-                (taskInfo, exception) => { },
+                (taskInfo, exception) =>
+                {
+                    SetDataLoaded();
+                },
                 (progressList, exception) =>
                 {
                     if (exception != null)

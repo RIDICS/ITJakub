@@ -42,6 +42,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     return;
                 }
                 m_dataService.ErrorService.HideWarning();
+                SetDataLoaded();
 
                 UpdateProgress(progressUpdateList);
             });
