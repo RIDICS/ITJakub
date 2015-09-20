@@ -131,5 +131,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<SettingViewModel>(); }
         }
+
+        public ApplicationMenuPageViewModel ApplicationMenuPageViewModel
+        {
+            get { return Container.Current.Resolve<ApplicationMenuPageViewModel>(); }
+        }
     }
 }

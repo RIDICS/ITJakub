@@ -6,6 +6,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+using ITJakub.MobileApps.Client.Core.ViewModel.News;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
@@ -73,11 +74,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync();
 
-
-        Task<ObservableCollection<string>> GetAllNews();
-
-        
-
+        Task<List<SyndicationItemViewModel>> GetAllNews();
         
         void UpdateEndpointAddress(string address);
     }

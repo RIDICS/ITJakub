@@ -52,6 +52,11 @@ namespace ITJakub.ITJakubService.Core
             m_repository.Save(syndicationItem);
         }
 
-        
+
+        public IList<MobileApps.MobileContracts.News.NewsSyndicationItemContract> GetNewsForMobileApps(int start, int count)
+        {
+            var syndicationItems = m_repository.GetMobileAppsNews(start, count);
+            return Mapper.Map<List<MobileApps.MobileContracts.News.NewsSyndicationItemContract>>(syndicationItems);
+        }
     }
 }

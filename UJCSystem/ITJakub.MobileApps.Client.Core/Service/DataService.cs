@@ -11,6 +11,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Tasks;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+using ITJakub.MobileApps.Client.Core.ViewModel.News;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
@@ -22,13 +23,13 @@ namespace ITJakub.MobileApps.Client.Core.Service
     public class DataService : IDataService
     {
         private readonly ApplicationManager m_applicationManager;
-        private readonly AuthenticationManager m_authenticationManager;
-        private readonly GroupManager m_groupManager;
-        private readonly TaskManager m_taskManager;
-        private readonly IMainPollingService m_mainPollingService;
         private readonly ApplicationStateManager m_applicationStateManager;
-        private readonly NewsManager m_newsManager;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly ConfigurationManager m_configurationManager;
+        private readonly GroupManager m_groupManager;
+        private readonly IMainPollingService m_mainPollingService;
+        private readonly NewsManager m_newsManager;
+        private readonly TaskManager m_taskManager;
 
         public DataService(IUnityContainer container)
         {
@@ -56,6 +57,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
             m_applicationManager.GetAllApplicationsByTypes(types, callback);
         }
+
         public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
         {
             m_groupManager.GetOwnedGroupsForCurrentUser(callback);
@@ -76,11 +78,10 @@ namespace ITJakub.MobileApps.Client.Core.Service
             return m_groupManager.GetGroupForCurrentUserAsync();
         }
 
-        public async Task<ObservableCollection<string>> GetAllNews()
-        {
+        public async Task<List<SyndicationItemViewModel>> GetAllNews()
+        {            
             return await m_newsManager.GetAllNews();
         }
-
 
         public void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback)
         {

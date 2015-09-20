@@ -3,6 +3,7 @@ using System.IO;
 using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.MobileApps.MobileContracts;
+using ITJakub.MobileApps.MobileContracts.News;
 using ITJakub.Shared.Contracts;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 using OutputFormatEnumContract = ITJakub.Shared.Contracts.OutputFormatEnumContract;
@@ -14,11 +15,13 @@ namespace ITJakub.ITJakubService.Services
         private readonly BookManager m_bookManager;
         private readonly SearchManager m_searchManager;
         private readonly WindsorContainer m_container = Container.Current;
+        private readonly NewsManager m_newsManager;
 
         public MobileAppsServiceManager()
         {
             m_bookManager = m_container.Resolve<BookManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
+            m_newsManager = m_container.Resolve<NewsManager>();
         }
 
         public IList<BookContract> GetBookList(BookTypeContract category)
@@ -49,6 +52,11 @@ namespace ITJakub.ITJakubService.Services
         public BookContract GetBookInfo(string bookGuid)
         {
             return m_bookManager.GetBookInfoMobile(bookGuid);
+        }
+
+        public IList<NewsSyndicationItemContract> GetNewsForMobileApps(int start, int count)
+        {
+            return m_newsManager.GetNewsForMobileApps(start, count);
         }
     }
 }

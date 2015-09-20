@@ -3,6 +3,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using GalaSoft.MvvmLight.Command;
 
 namespace ITJakub.MobileApps.Client.Core.Service
 {
@@ -13,6 +14,13 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public NavigationService()
         {
             m_popup = new Popup();
+            InitCommands();
+        }
+
+        private void InitCommands()
+        {
+            GoBackCommand = new RelayCommand(GoBack, ()=>CanGoBack);
+            GoHomeCommand = new RelayCommand(GoHome);
         }
 
         public virtual bool CanGoBack
@@ -42,6 +50,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }
         }
 
+        public RelayCommand GoBackCommand { get; private set; }
+
         public virtual void GoForward()
         {
             var frame = ((Frame)Window.Current.Content);
@@ -63,6 +73,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 frame.ForwardStack.Clear();
             }
         }
+
+        public RelayCommand GoHomeCommand { get; private set; }
 
         public virtual void Navigate(Type sourcePageType)
         {

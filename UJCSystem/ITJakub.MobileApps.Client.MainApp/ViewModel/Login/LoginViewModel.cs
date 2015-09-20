@@ -30,7 +30,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
+            //RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationMenuPageView>());
         }
 
 

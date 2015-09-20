@@ -7,6 +7,7 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
+using ITJakub.MobileApps.Client.Core.ViewModel.News;
 using ITJakub.MobileApps.Client.Shared;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -150,9 +151,31 @@ namespace ITJakub.MobileApps.Client.Core.Service
             });
         }
 
-        public Task<ObservableCollection<string>> GetAllNews()
+        public Task<List<SyndicationItemViewModel>> GetAllNews()
         {
-            return Task.Factory.StartNew(() => new ObservableCollection<string> {"Nove kolekce zadany", "Jungmanuv slovnik pridan", "Atd."});
+            return Task.Factory.StartNew(() => new List<SyndicationItemViewModel>
+            {
+                new SyndicationItemViewModel
+                {
+                    CreateDate = DateTime.Now,
+                    Title = "Byla zveřejněna nová kniha",
+                    Text = "Byla zveřejněna nová kniha Jungmanův slovník pro uživatele mobilních aplikací",
+                    Url = "http://censeo2.felk.cvut.cz",
+                    UserEmail = "t@t.t",
+                    UserFirstName = "test",
+                    UserLastName = "testovaci"
+                },
+                new SyndicationItemViewModel
+                {
+                    CreateDate = DateTime.Now,
+                    Title = "Nové ikony pro hangmana",
+                    Text = "Nové ikony vytvořeny speciálně pro mobilní aplikaci staročeská šibenice",
+                    Url = "http://censeo2.felk.cvut.cz",
+                    UserEmail = "t@t.t",
+                    UserFirstName = "test",
+                    UserLastName = "testovaci"
+                }
+            });
         }
 
         public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)

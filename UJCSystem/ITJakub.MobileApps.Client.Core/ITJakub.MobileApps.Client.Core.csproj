@@ -106,7 +106,7 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Books\ITJakub.MobileApps.Client.Books.csproj">
-      <Project>{c30689fe-a72c-42ec-aaf3-63a08d019c2c}</Project>
+      <Project>{C30689FE-A72C-42EC-AAF3-63A08D019C2C}</Project>
       <Name>ITJakub.MobileApps.Client.Books</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj">
@@ -121,6 +121,10 @@
       <Project>{90f9d8dd-05d5-401f-8939-bd619adf5cdd}</Project>
       <Name>ITJakub.MobileApps.DataContracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
+      <Project>{67B4DDA0-4340-4D05-9A22-831DA43E70F8}</Project>
+      <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Communication\Client\MobileAppsServiceClientManager.cs" />
@@ -130,6 +134,8 @@
       <DependentUpon>LocalAuthView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Manager\Authentication\LocalAuthentication\LocalAuthViewModel.cs" />
+    <Compile Include="Manager\News\EndpointConfiguration.cs" />
+    <Compile Include="Manager\News\MobileAppsNewsClient.cs" />
     <Compile Include="Manager\News\NewsManager.cs" />
     <Compile Include="Manager\ConfigurationManager.cs" />
     <Compile Include="Template\AdminTemplateSelector.cs" />
@@ -145,6 +151,7 @@
     <Compile Include="Template\TaskPreviewTemplateSelector.cs" />
     <Compile Include="ViewModel\Comparer\GroupMemberComparer.cs" />
     <Compile Include="ViewModel\CreatedGroupViewModel.cs" />
+    <Compile Include="ViewModel\News\SyndicationItemViewModel.cs" />
     <Compile Include="ViewModel\TaskViewModel.cs" />
     <Compile Include="Service\Polling\IPollingTimer.cs" />
     <Compile Include="Service\Polling\ITimerService.cs" />

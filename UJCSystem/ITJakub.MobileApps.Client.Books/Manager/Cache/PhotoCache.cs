@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Service.Client;
+using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Manager.Cache
 {

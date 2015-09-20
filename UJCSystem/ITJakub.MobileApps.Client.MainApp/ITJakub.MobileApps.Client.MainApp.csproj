@@ -107,6 +107,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\ApplicationMenuPageView.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
@@ -134,6 +135,9 @@
     <Compile Include="ViewModel\UserAccountSettingsViewModel.cs" />
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ApplicationMenuPageView.xaml.cs">
+      <DependentUpon>ApplicationMenuPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
@@ -254,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ApplicationMenuPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

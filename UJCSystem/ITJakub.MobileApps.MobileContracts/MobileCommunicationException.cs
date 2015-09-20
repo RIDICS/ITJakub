@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITJakub.MobileApps.Client.Books.Service.Client
+namespace ITJakub.MobileApps.MobileContracts
 {
     public class MobileCommunicationException : Exception
     {

@@ -142,7 +142,6 @@
     <Compile Include="Service\IDataService.cs" />
     <Compile Include="Service\IErrorService.cs" />
     <Compile Include="Service\INavigationService.cs" />
-    <Compile Include="Service\Client\MobileCommunicationException.cs" />
     <Compile Include="Service\Client\MockBookServiceClient.cs" />
     <Compile Include="Service\Client\BookServiceClient.cs" />
     <Compile Include="Manager\Cache\PhotoCache.cs" />
