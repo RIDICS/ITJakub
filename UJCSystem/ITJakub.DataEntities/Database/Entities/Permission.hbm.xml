@@ -7,7 +7,7 @@
     </id>
 
     <many-to-one name="Group">
-      <column name="Group" not-null="true" />
+      <column name="[Group]" not-null="true" />
     </many-to-one>
     
     <many-to-one name="Book">

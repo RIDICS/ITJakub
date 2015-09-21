@@ -10,26 +10,33 @@
 
 <h2>Práva</h2>
 
-<div>
-    <div class="permission-main-buttons">
-        <button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>
-        <button id="createUserButton" class="btn btn-default permission-button hidden">+</button>
+<div class="permission-left-panel">
+    <div>
+        <div class="permission-main-buttons">
+            <button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>
+        </div>
+        <div class="permission-search">
+            <input type="text" class="form-control permission-search-input" id="mainSearchInput"/>
+        </div>
     </div>
-    <div class="permission-search">
-        <input type="text" class="form-control permission-search-input" id="mainSearchInput"/>
+    <div class="content hidden">
+        <div>
+            <span>Uživatelské jméno: </span>
+            <span id="specificUserUsername"></span>
+        </div>
+        <div>
+            <span>E-mail: </span>
+            <span id="specificUserEmail"></span>
+        </div>
     </div>
 </div>
-<div class="content hidden">
-    <div>
-        <span>Uživatelské jméno: </span>
-        <span id="specificUserUsername"></span>
-    </div>
-    <div>
-        <span>E-mail: </span>
-        <span id="specificUserEmail"></span>
-    </div>
+<div class="permission-right-panel">
+    Skupiny jichž je uživatel členem:
+    <ul class="user-groups">
+        <li>Prvni skupina</li>
+        <li>Druha skupina</li>
+    </ul>
 </div>
-
 
 <div id="newTokenDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">

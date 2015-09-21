@@ -302,7 +302,7 @@ namespace ITJakub.ITJakubService.Core.Search
             return new SearchCriteriaQuery
             {
                 Join = string.Format("inner join bv.Book {0} inner join {0}.Permissions {1} inner join {1}.Group {2} inner join {2}.Users {3}", bookAlias, permissionAlias, groupAlias, userAlias),
-                Where = string.Format("{0}.Id == (:{1})", userAlias, userUniqueParameterName),
+                Where = string.Format("{0}.Id = (:{1})", userAlias, userUniqueParameterName),
             };
         }
     }

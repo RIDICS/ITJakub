@@ -1,16 +1,16 @@
 ﻿
 class ConcreteInstanceSearchBox {
     private inputField: string;
-    private suggestionTemplate: (item: any) => string;
+    private itemToPrintableConverter: (item: any) => IPrintableItem;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
     private dataset: Twitter.Typeahead.Dataset;
     private bloodhound: Bloodhound<string>;
-    private currentItem: ITypeaheadConcreteInstanceItem;
+    private currentItem: any;
 
-    constructor(inputFieldElement: string, controllerName: string, suggestionTemplate: (item: any) => string) {
+    constructor(inputFieldElement: string, controllerName: string, itemToPrintableConverter: (item: any) => IPrintableItem) {
         this.inputField = inputFieldElement;
-        this.suggestionTemplate = suggestionTemplate;
+        this.itemToPrintableConverter = itemToPrintableConverter;
         this.urlWithController = getBaseUrl() + controllerName;
 
         this.options = {
@@ -24,7 +24,7 @@ class ConcreteInstanceSearchBox {
         $(this.inputField).typeahead('val', value);
     }
 
-    getValue(): ITypeaheadConcreteInstanceItem {
+    getValue(): any {
         return this.currentItem;
     }
 
@@ -104,7 +104,7 @@ class ConcreteInstanceSearchBox {
             remote: remoteOptions
         });
 
-        var suggestionTemplate = this.suggestionTemplate;
+        var suggestionTemplate = (item) => { return this.getDefaultSuggestionTemplate(item) };
 
         var dataset: Twitter.Typeahead.Dataset = {
             name: name,
@@ -119,10 +119,14 @@ class ConcreteInstanceSearchBox {
         this.bloodhound = bloodhound;
         this.dataset = dataset;
     }
+
+    private getDefaultSuggestionTemplate(item: any): string {
+        var printableItem = this.itemToPrintableConverter(item);
+        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + printableItem.Name + "</div><div class=\"description\">" + printableItem.Description + "</div></div>";
+    }
 }
 
-interface ITypeaheadConcreteInstanceItem {
-    Id: number;
-    Text: string;
-    Description: string;
+interface IPrintableItem {
+    Name: string,
+    Description:string,
 }

@@ -98,5 +98,9 @@
   {
     "outputFile": "Content/bootstrap/print.css",
     "inputFile": "Content/bootstrap/print.less"
+  },
+  {
+    "outputFile": "Content/Permission/itjakub.permission.css",
+    "inputFile": "Content/Permission/itjakub.permission.less"
   }
 ]

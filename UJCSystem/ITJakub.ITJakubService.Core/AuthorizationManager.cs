@@ -25,7 +25,13 @@ namespace ITJakub.ITJakubService.Core
         {
             //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
             var username = "testUser"; //TODO HACK
-            return m_userRepository.FindByUserName(username);
+            var user =  m_userRepository.FindByUserName(username);
+            if (user == null)
+            {
+                throw new AuthorizationException(string.Format("Cannot find user with username '{0}'. Probably does not exist.", username));
+            }
+
+            return user;
         }
 
         public void AuthorizeBook(string bookXmlId)
@@ -53,6 +59,12 @@ namespace ITJakub.ITJakubService.Core
         public void FilterBooks(ref IList<BookVersion> books)
         {
             var user = GetCurrentUser();
+
+            if (books == null || books.Count == 0)
+            {
+                return;
+            }
+
             var bookIds = books.Select(x => x.Id).ToList();
             var filteredBookIds = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, bookIds);
             var filteredBooks = books.Where(x => filteredBookIds.Contains(x.Id)).ToList();
@@ -82,6 +94,12 @@ namespace ITJakub.ITJakubService.Core
         public void FilterBookIdList(ref IList<long> bookIds)
         {
             var user = GetCurrentUser();
+
+            if (bookIds == null || bookIds.Count == 0)
+            {
+                return;
+            }
+
             var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, bookIds);
             bookIds = filtered;
         }
