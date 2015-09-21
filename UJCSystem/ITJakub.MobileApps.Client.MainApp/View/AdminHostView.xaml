@@ -7,6 +7,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.MainApp.View.Control"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -14,6 +16,7 @@
         <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
     </Page.Resources>
 
     <Page.BottomAppBar>
@@ -119,5 +122,25 @@
                 </Grid>
             </Grid>
         </Grid>
+
+        <control:NotificationControl
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,30,30"
+            Width="250"
+            Height="80"
+            IsVisible="{Binding IsChatNotificationVisible, Mode=TwoWay}"
+            Command="{Binding ShowChatCommand}">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Upozornění"
+                           Foreground="Black"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                           Foreground="Black"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </control:NotificationControl>
     </Grid>
 </Page>
