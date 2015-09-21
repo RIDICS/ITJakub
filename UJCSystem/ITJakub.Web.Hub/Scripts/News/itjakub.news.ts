@@ -60,10 +60,16 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         $(itemDiv).addClass("message");
 
         var date = convertDate(item.CreateDate);
-        var dateHeader = document.createElement("h2");
-        dateHeader.innerHTML = date.toLocaleDateString();
+        var titleHeader = document.createElement("h2");
+        titleHeader.innerText = item.Title;
 
-        itemDiv.appendChild(dateHeader);
+        itemDiv.appendChild(titleHeader);
+
+        var dateDiv = document.createElement("div");
+        $(dateDiv).addClass("news-date");
+        dateDiv.innerHTML = date.toLocaleDateString();
+
+        itemDiv.appendChild(dateDiv);
 
         var itemMessage = document.createElement("p");
         itemMessage.innerText = item.Text;

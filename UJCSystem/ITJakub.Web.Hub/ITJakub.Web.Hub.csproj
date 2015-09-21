@@ -358,6 +358,12 @@
     <Content Include="Content\bootstrap\print.min.css">
       <DependentUpon>print.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\Feeds\04.png" />
+    <Content Include="Content\Images\Feeds\07.png" />
+    <Content Include="Content\Images\Feeds\25.png" />
+    <Content Include="Content\Images\Feeds\26.png" />
+    <Content Include="Content\Images\Feeds\49.png" />
+    <Content Include="Content\Images\Feeds\50.png" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
