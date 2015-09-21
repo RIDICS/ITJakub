@@ -110,18 +110,39 @@
                 Margin="10,10,10,10">
             <SymbolIcon Symbol="ShowResults" />
         </Button>
-        
-        <ScrollViewer Grid.Row="0"
-                      Grid.Column="0"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Crossword}"
-                          IsEnabled="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanNegationConverter}}"
-                          Margin="20"
-                          HorizontalAlignment="Center"
-                          VerticalAlignment="Center"
-                          ItemTemplateSelector="{StaticResource CrosswordRowDataTemplateSelector}" />
-        </ScrollViewer>
+
+        <Grid Grid.Row="0"
+              Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <StackPanel Orientation="Horizontal"
+                        Visibility="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Margin="120,0,0,0">
+                <RadioButton GroupName="ShowResult"
+                             IsChecked="{Binding ShowCorrectResult, Converter={StaticResource BooleanNegationConverter}}">
+                    <TextBlock Text="Zobrazit moje řešení" />
+                </RadioButton>
+                <RadioButton GroupName="ShowResult"
+                             IsChecked="{Binding ShowCorrectResult, Mode=TwoWay}"
+                             Margin="25,0,0,0">
+                    <TextBlock Text="Zobrazit správné řešení" />
+                </RadioButton>
+            </StackPanel>
+            
+            <ScrollViewer Grid.Row="1"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Crossword}"
+                              IsEnabled="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanNegationConverter}}"
+                              Margin="20"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              ItemTemplateSelector="{StaticResource CrosswordRowDataTemplateSelector}" />
+            </ScrollViewer>
+        </Grid>
         
         <GridView Grid.Row="1"
                   Grid.Column="0"

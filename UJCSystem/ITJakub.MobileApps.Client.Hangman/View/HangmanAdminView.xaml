@@ -17,7 +17,7 @@
     </UserControl.Resources>
     
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-          Margin="100,0,40,40">
+          Margin="20,0,40,40">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="470" />

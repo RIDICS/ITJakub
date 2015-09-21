@@ -24,6 +24,7 @@
         <converter:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
         <Style x:Key="MyLabelStyle" TargetType="TextBlock">
             <Setter Property="Margin" Value="0,5,0,5" />
             <Setter Property="FontWeight" Value="Light" />
@@ -107,10 +108,12 @@
             <ProgressBar Grid.Column="0"
                          Grid.ColumnSpan="2"
                          VerticalAlignment="Top"
+                         IsIndeterminate="True"
                          Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
         
         <Grid Grid.Row="1"
+              Visibility="{Binding Loading, Converter={StaticResource BooleanNegationToVisibilityConverter}}"
               Margin="0,20,0,40">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />

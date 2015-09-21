@@ -9,7 +9,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
     public interface ICrosswordsDataService
     {
         IErrorService ErrorService { get; }
-        void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false);
+        void SetTask(string data);
+        void GetConfiguration(Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false);
         void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback);
         void GetGuessHistory(Action<List<ProgressUpdateViewModel>, Exception> callback);
         void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback);
@@ -35,9 +36,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             get { return m_errorService; }
         }
 
-        public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false)
+        public void SetTask(string data)
         {
-            m_crosswordManager.SetTaskAndGetConfiguration(data, callback, fillAnswers);
+            m_crosswordManager.SetTask(data);
+        }
+
+        public void GetConfiguration(Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false)
+        {
+            m_crosswordManager.GetConfiguration(callback, fillAnswers);
         }
 
         public void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback)
