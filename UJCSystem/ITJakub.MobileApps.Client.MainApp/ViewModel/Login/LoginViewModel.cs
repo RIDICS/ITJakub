@@ -30,8 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            //RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
-            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationMenuPageView>());
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
         }
 
 
@@ -94,7 +93,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 }
 
                 if (loginResult)
-                    m_navigationService.Navigate<GroupListView>();
+                    m_navigationService.Navigate<ApplicationMenuPageView>();
             });
         }
     }

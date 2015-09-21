@@ -108,6 +108,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ViewModel\ApplicationMenuPageView.cs" />
+    <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
@@ -167,6 +169,12 @@
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
     <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
+    <Compile Include="View\Groups\AdminGroupListView.xaml.cs">
+      <DependentUpon>AdminGroupListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\MyGroupListView.xaml.cs">
+      <DependentUpon>MyGroupListView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\News\NewsTileView.xaml.cs">
       <DependentUpon>NewsTileView.xaml</DependentUpon>
     </Compile>
@@ -227,6 +235,7 @@
     <Content Include="Icon\google_plus-128.png" />
     <Content Include="Icon\group-64.png" />
     <Content Include="Icon\license.txt" />
+    <Content Include="Icon\literature-128.png" />
     <Content Include="Icon\login-128.png" />
     <Content Include="Icon\LogoMobileApps_128x128.png" />
     <Content Include="Icon\user-32.png" />
@@ -277,6 +286,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
+    <Page Include="View\Groups\AdminGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\MyGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\News\NewsTileView.xaml">
       <SubType>Designer</SubType>
@@ -405,7 +422,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModel\TaskList\" />
-    <Folder Include="View\Groups\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

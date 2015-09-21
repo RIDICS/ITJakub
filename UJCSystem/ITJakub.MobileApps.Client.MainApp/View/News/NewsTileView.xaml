@@ -2,7 +2,6 @@
     x:Class="ITJakub.MobileApps.Client.MainApp.View.News.NewsTileView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:ITJakub.MobileApps.Client.MainApp.View.News"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:news="using:ITJakub.MobileApps.Client.MainApp.ViewModel.News"
@@ -16,7 +15,7 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </UserControl.Resources>
-    <Grid>
+    <Grid Background="#40FFFFFF">
         <ProgressRing Width="75" Height="75" IsActive="True" Visibility="{Binding Loading, Converter={ StaticResource BooleanToVisibilityConverter}}" />
         <ListView
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
@@ -42,7 +41,8 @@
                             <!--<TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0" Margin="0,10,0,0" TextWrapping="Wrap"
                                    Text="Lorem ipsum dolor sit nonumy sed consectetuer ising elit, sed diam" />-->
                             <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0" Margin="0,10,0,0" TextWrapping="Wrap"
-                                       Text="{Binding Path=Title}" />
+                                       Text="{Binding Path=Title}"
+                                       Foreground="White" />
                             <!--<TextBlock Style="{StaticResource TitleTextBlockStyle}" Grid.Row="1" Margin="0,10,0,0"
                                        Text="Description text:" />-->
 
@@ -50,7 +50,8 @@
                                    Text="Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper. Lorem ipsum dolor sit amet, consectetuer ising elit, sed diam nonummy nibh uismod tincidunt ut laoreet suscipit lobortis ni ut wisi quipexerci quis consequat minim veniam, quis nostrud exerci tation ullam corper. " />-->
 
                             <TextBlock Style="{StaticResource BodyTextBlockStyle}" Grid.Row="1"
-                                       Text="{Binding Text}" />
+                                       Text="{Binding Text}"
+                                       Foreground="White" />
 
                         </Grid>
                     </HyperlinkButton>

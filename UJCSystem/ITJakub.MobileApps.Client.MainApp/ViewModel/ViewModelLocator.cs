@@ -17,6 +17,7 @@ using System.Reflection;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Core;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.MainApp.View.Groups;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
@@ -135,6 +136,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public ApplicationMenuPageViewModel ApplicationMenuPageViewModel
         {
             get { return Container.Current.Resolve<ApplicationMenuPageViewModel>(); }
+        }
+
+        public AdminGroupListViewModel AdminGroupListViewModel
+        {
+            get { return Container.Current.Resolve<AdminGroupListViewModel>(); }
+        }
+
+        public MyGroupListViewModel MyGroupListViewModel
+        {
+            get { return Container.Current.Resolve<MyGroupListViewModel>(); }
         }
     }
 }
