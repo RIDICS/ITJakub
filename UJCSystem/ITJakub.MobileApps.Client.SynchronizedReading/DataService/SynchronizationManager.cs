@@ -232,5 +232,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 callback(exception);
             }
         }
+
+        public void Reset()
+        {
+            m_latestControlContract = null;
+            m_currentReaderInfo = null;
+        }
     }
 }

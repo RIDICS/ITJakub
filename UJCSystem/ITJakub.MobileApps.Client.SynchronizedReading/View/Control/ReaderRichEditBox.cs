@@ -179,10 +179,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var x = (rect.Left + rect.Right)/2;
             var y = rect.Top;
             var bottom = rect.Bottom;
+            var height = rect.Height;
 
             // HACK get scaled point coordinates for RichEditBox
             var point = ScaleHelper.ScalePoint(false, x, y);
             bottom = ScaleHelper.ScaleValue(false, bottom);
+            height = ScaleHelper.ScaleValue(false, height);
 
             var newMargin = new Thickness(point.X + CursorCorrectionLeft, bottom + CursorCorrectionTop, 0, 0);
             readerRichEditBox.m_cursorImage.Margin = newMargin;
@@ -190,11 +192,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
             var scrollOffset = readerRichEditBox.m_scrollViewer.VerticalOffset;
             if (point.Y < scrollOffset)
             {
-                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - ScaleHelper.ScaleValue(false, 20), null);
+                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - height, null);
             }
-            else if (bottom > scrollOffset + readerRichEditBox.ActualHeight - 60)
+            else if (bottom > scrollOffset + readerRichEditBox.ActualHeight - Math.Min(3.5*height, 100))
             {
-                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - readerRichEditBox.ActualHeight + 90, null);
+                readerRichEditBox.m_scrollViewer.ChangeView(null, point.Y - readerRichEditBox.ActualHeight + 4.5*height, null);
             }
         }
 

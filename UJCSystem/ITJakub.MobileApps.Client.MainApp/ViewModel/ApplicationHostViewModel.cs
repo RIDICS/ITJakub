@@ -397,7 +397,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public bool IsChatNotificationVisible
         {
-            get { return m_isChatNotificationVisible; }
+            get { return m_isChatNotificationVisible && m_isChatSupported; }
             set
             {
                 m_isChatNotificationVisible = value;
