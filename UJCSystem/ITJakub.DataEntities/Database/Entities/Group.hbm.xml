@@ -8,7 +8,7 @@
     </id>
     
     <property name="Name">
-      <column name="Name" sql-type="varchar" not-null="true" />
+      <column name="Name" sql-type="varchar" not-null="true" unique="true" />
     </property>    
     
     <property name="Description">

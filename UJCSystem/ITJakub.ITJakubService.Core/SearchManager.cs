@@ -27,20 +27,22 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
         private readonly UserRepository m_userRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly MetadataSearchCriteriaDirector m_searchCriteriaDirector;
         private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
         public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository,
-            CategoryRepository categoryRepository, UserRepository mUserRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
-            AuthorizationManager mAuthorizationManager, SearchServiceClient searchServiceClient)
+            CategoryRepository categoryRepository, UserRepository userRepository, PermissionRepository permissionRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
+            AuthorizationManager authorizationManager, SearchServiceClient searchServiceClient)
         {
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_categoryRepository = categoryRepository;
-            m_userRepository = mUserRepository;
+            m_userRepository = userRepository;
+            m_permissionRepository = permissionRepository;
             m_searchCriteriaDirector = searchCriteriaDirector;
-            m_authorizationManager = mAuthorizationManager;
+            m_authorizationManager = authorizationManager;
             m_searchServiceClient = searchServiceClient;
         }
 
@@ -291,6 +293,24 @@ namespace ITJakub.ITJakubService.Core
 
             var userContracts = Mapper.Map<IList<UserContract>>(users);
             return userContracts;
+        }
+
+        public IList<GroupContract> GetTypeaheadGroups(string query)
+        {
+            IList<Group> groups = null;
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                groups = m_permissionRepository.GetLastGroups(PrefetchRecordCount);
+            }
+            else
+            {
+                query = PrepareQuery(query);
+                groups = m_permissionRepository.GetTypeaheadGroups(query, PrefetchRecordCount);
+            }
+
+            var groupContracts = Mapper.Map<IList<GroupContract>>(groups);
+            return groupContracts;
         }
 
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)

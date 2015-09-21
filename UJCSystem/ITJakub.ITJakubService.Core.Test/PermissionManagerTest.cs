@@ -213,9 +213,9 @@ namespace ITJakub.ITJakubService.Core.Test
 
             m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
 
-            var groupsForFirstMember = m_permissionManager.GetGroupsByUser(firstMember.UserName);
+            var groupsForFirstMember = m_permissionManager.GetGroupsByUser(firstMember.Id);
 
-            var groupsForSecondMember = m_permissionManager.GetGroupsByUser(secondMember.UserName);
+            var groupsForSecondMember = m_permissionManager.GetGroupsByUser(secondMember.Id);
 
             Assert.IsNotNull(groupsForFirstMember);
             Assert.AreEqual(2, groupsForFirstMember.Count);

@@ -85,6 +85,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<UserContract> GetTypeaheadUsers(string query);
 
         [OperationContract]
+        IList<GroupContract> GetTypeaheadGroups(string query);
+
+        [OperationContract]
         IList<string> GetTypeaheadTitles(string query);
 
         [OperationContract]
@@ -176,5 +179,17 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
+
+        [OperationContract]
+        IList<GroupContract> GetGroupsByUser(int userId);
+
+        [OperationContract]
+        IList<UserContract> GetUsersByGroup(int groupId);
+
+        [OperationContract]
+        void AddUserToGroup(int userId, int groupId);
+
+        [OperationContract]
+        GroupContract CreateGroup(string name, string description);
     }
 }

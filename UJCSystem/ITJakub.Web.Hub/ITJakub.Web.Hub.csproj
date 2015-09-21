@@ -714,6 +714,7 @@
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\Permission\UserPermission.cshtml" />
+    <Content Include="Views\Permission\GroupPermission.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -758,8 +759,10 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.interfaces.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
-    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.group.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.user.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.search.ts" />

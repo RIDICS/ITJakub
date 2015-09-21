@@ -21,7 +21,7 @@ namespace ITJakub.ITJakubService.Core
             m_permissionRepository = mPermissionRepository;
         }
 
-        private User GetCurrentUser()
+        public User GetCurrentUser()
         {
             //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
             var username = "testUser"; //TODO HACK

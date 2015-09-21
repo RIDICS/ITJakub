@@ -5,71 +5,88 @@
     @Styles.Render("~/itjakub/permission/css")
 }
 @section scripts{
-    @Scripts.Render("~/itjakub/permission/javascript")
+    @Scripts.Render("~/itjakub/permission/user/javascript")
 }
 
-<h2>Práva</h2>
+<h2>Práva uživatele</h2>
 
 <div class="permission-left-panel">
     <div>
         <div class="permission-main-buttons">
-            <button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>
+            @*<button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>*@
         </div>
         <div class="permission-search">
             <input type="text" class="form-control permission-search-input" id="mainSearchInput"/>
         </div>
     </div>
-    <div class="content hidden">
-        <div>
-            <span>Uživatelské jméno: </span>
-            <span id="specificUserUsername"></span>
-        </div>
-        <div>
-            <span>E-mail: </span>
-            <span id="specificUserEmail"></span>
+    <div id="selected-item-div" class="content hidden">
+        <div class="item-details-title">Vybraný uživatel</div>
+        <div class="item-details">
+            <div class="detail-item">
+                <span class="detail-item-title">Křestní jméno: </span>
+                <span id="specificUserFirstName"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">Příjmení: </span>
+                <span id="specificUserLastName"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">Uživatelské jméno: </span>
+                <span id="specificUserUsername"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">E-mail: </span>
+                <span id="specificUserEmail"></span>
+            </div>
         </div>
     </div>
 </div>
-<div class="permission-right-panel">
-    Skupiny jichž je uživatel členem:
+<div id="right-panel" class="permission-right-panel hidden">
+    <div class="right-panel-title">Skupiny jichž je uživatel členem:</div>
     <ul class="user-groups">
-        <li>Prvni skupina</li>
-        <li>Druha skupina</li>
     </ul>
+
+    <div class="groups-buttons">
+        <button id="addGroupButton" class="btn btn-default permission-button">+</button>
+    </div>
 </div>
 
-<div id="newTokenDialog" class="modal fade" role="dialog">
+<div id="addToGroupDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nový token</h4>
+                <h4 class="modal-title">Přidělit skupinu</h4>
             </div>
             <div class="modal-body">
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="new-token" class="col-md-3 control-label">Token</label>
-                        <div class="col-md-8">
-                            <input class="form-control" id="new-token" name="new-text" type="text" disabled="disabled">
+                <div class="permission-search">
+                    <input type="text" class="form-control permission-search-input" id="groupSearchInput"/>
+                </div>
+
+                <div class="content">
+                    <div class="item-details-title">Vybraná skupina</div>
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <span class="detail-item-title">Název: </span>
+                            <span id="specificGroupName"></span>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="new-token-description" class="col-md-3 control-label">Popis</label>
-                        <div class="col-md-8">
-                            <input class="form-control" id="new-token-description" name="new-text" type="text">
+                        <div class="detail-item">
+                            <span class="detail-item-title">Popis: </span>
+                            <span id="specificGroupDescription"></span>
                         </div>
                     </div>
                 </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default lemmatization-button" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default lemmatization-button" id="save-token">Uložit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default" id="add-user-to-group">Přiřadit</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="newHyperCanonicalFormDialog" class="modal fade" role="dialog">
+@*<div id="newHyperCanonicalFormDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -139,4 +156,4 @@
             </div>
         </div>
     </div>
-</div>
+</div>*@

@@ -3,6 +3,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -63,7 +64,11 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 return session.QueryOver<User>()
-                    .WhereRestrictionOn(x => x.UserName).IsInsensitiveLike(query)
+                    .Where(Restrictions.Or(
+                        Restrictions.Or(
+                            Restrictions.On<User>(u => u.UserName).IsInsensitiveLike(query),
+                            Restrictions.On<User>(u => u.LastName).IsInsensitiveLike(query)),
+                        Restrictions.On<User>(u => u.Email).IsInsensitiveLike(query)))
                     .Take(recordCount)
                     .List<User>();
             }

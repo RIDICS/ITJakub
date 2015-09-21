@@ -126,7 +126,3 @@ class ConcreteInstanceSearchBox {
     }
 }
 
-interface IPrintableItem {
-    Name: string,
-    Description:string,
-}

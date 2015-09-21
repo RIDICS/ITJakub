@@ -13,30 +13,23 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly AuthorizationManager m_authorizationManager;
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        public PermissionManager(UserRepository userRepository, PermissionRepository permissionRepository)
+        public PermissionManager(UserRepository userRepository, PermissionRepository permissionRepository, AuthorizationManager authorizationManager)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
+            m_authorizationManager = authorizationManager;
         }
 
-        public List<GroupContract> GetGroupsByUser(string userName)
+        public List<GroupContract> GetGroupsByUser(int userId)
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                string message = "Username is empty, cannot get his groups";
-
-                if (m_log.IsWarnEnabled)
-                    m_log.Warn(message);
-                throw new ArgumentException(message);
-            }
-
-            User user = m_userRepository.FindByUserName(userName);
+            User user = m_userRepository.FindById(userId);
 
             if (user == null)
             {
-                string message = string.Format("Cannot locate user by username: '{0}'", userName);
+                string message = string.Format("Cannot locate user with id '{0}'", userId);
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
                 throw new ArgumentException(message);
@@ -52,9 +45,9 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<List<UserContract>>(users);
         }
 
-        public GroupDetailContract CreateGroup(int founderUserId, string groupName, string description)
+        public GroupDetailContract CreateGroup(string groupName, string description)
         {
-            var user = m_userRepository.FindById(founderUserId);
+            var user = m_authorizationManager.GetCurrentUser();
 
             var group = new Group
             {

@@ -141,6 +141,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadUsers(query);
         }
 
+        public IList<GroupContract> GetTypeaheadGroups(string query)
+        {
+            return m_searchManager.GetTypeaheadGroups(query);
+        }
+
         public IList<string> GetTypeaheadTitles(string query)
         {
             return m_searchManager.GetTypeaheadTitles(query);
@@ -256,9 +261,6 @@ namespace ITJakub.ITJakubService.Services
         {
             m_feedbackManager.DeleteFeedback(feedbackId);
         }
-      
-
-        
 
         public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
@@ -273,6 +275,26 @@ namespace ITJakub.ITJakubService.Services
         public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
         {
             return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
+        }
+
+        public IList<GroupContract> GetGroupsByUser(int userId)
+        {
+            return m_permissionManager.GetGroupsByUser(userId);
+        }
+
+        public IList<UserContract> GetUsersByGroup(int groupId)
+        {
+            return m_permissionManager.GetUsersByGroup(groupId);
+        }
+
+        public void AddUserToGroup(int userId, int groupId)
+        {
+            m_permissionManager.AddUserToGroup(userId, groupId);
+        }
+
+        public GroupContract CreateGroup(string name, string description)
+        {
+            return m_permissionManager.CreateGroup(name, description);
         }
     }
 }

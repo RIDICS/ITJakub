@@ -12,11 +12,41 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return View();
         }
+
+        public ActionResult GroupPermission()
+        {
+            return View();
+        }
         
         public ActionResult GetTypeaheadUser(string query)
         {
             var result = m_mainServiceClient.GetTypeaheadUsers(query);
             return Json(result, JsonRequestBehavior.AllowGet);
+        }        
+        public ActionResult GetTypeaheadGroup(string query)
+        {
+            var result = m_mainServiceClient.GetTypeaheadGroups(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddUserToGroup(int userId, int groupId)
+        {
+            m_mainServiceClient.AddUserToGroup(userId, groupId);
+            return Json(new {});
+        }
+
+        [HttpPost]
+        public ActionResult CreateGroup(string groupName, string groupDescription)
+        {
+            var group = m_mainServiceClient.CreateGroup(groupName, groupDescription);
+            return Json(new {group});
+        }
+
+        public ActionResult GetGroupsByUser(int userId)
+        {
+            var result = m_mainServiceClient.GetGroupsByUser(userId);
+            return Json(new { result }, JsonRequestBehavior.AllowGet);
         }
     }
 }

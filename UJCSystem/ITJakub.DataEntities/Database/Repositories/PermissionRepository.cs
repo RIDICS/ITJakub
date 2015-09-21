@@ -33,6 +33,30 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> GetLastGroups(int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Group>()
+                    .OrderBy(x => x.CreateTime).Desc
+                    .Take(recordCount)
+                    .List<Group>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> GetTypeaheadGroups(string query, int recordCount)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Group>()
+                    .Where(Restrictions.On<Group>(x => x.Name).IsInsensitiveLike(query))
+                    .Take(recordCount)
+                    .List<Group>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<Book> GetAllowedBooksByGroup(int groupId)
         {
 
