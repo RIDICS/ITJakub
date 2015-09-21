@@ -2,25 +2,25 @@ using System;
 using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.MobileApps.DataContracts.Applications;
-using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
-using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
+using ITJakub.MobileApps.DataEntities.ExternalEntities;
+using ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables;
 
 namespace ITJakub.MobileApps.Core.Applications
 {
     public class ApplicationManager
     {
         private readonly ApplicationRepository m_applicationRepository;
-        private readonly AzureTableSynchronizedObjectDao m_azureTableSynchronizedObjectDao;
+        private readonly ISynchronizedObjectDao m_synchronizedObjectDataProvider;
         private readonly UsersRepository m_usersRepository;
         private readonly AzureTableIdGenerator m_idGenerator;
 
-        public ApplicationManager(ApplicationRepository applicationRepository, UsersRepository usersRepository, AzureTableSynchronizedObjectDao azureTableSynchronizedObjectDao, AzureTableIdGenerator idGenerator)
+        public ApplicationManager(ApplicationRepository applicationRepository, UsersRepository usersRepository, ISynchronizedObjectDao synchronizedObjectDataProvider, AzureTableIdGenerator idGenerator)
         {
             m_applicationRepository = applicationRepository;
             m_usersRepository = usersRepository;
-            m_azureTableSynchronizedObjectDao = azureTableSynchronizedObjectDao;
+            m_synchronizedObjectDataProvider = synchronizedObjectDataProvider;
             m_idGenerator = idGenerator;
         }
 
@@ -39,7 +39,7 @@ namespace ITJakub.MobileApps.Core.Applications
         }
 
         private void CreateSingleSynchronizeObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject)
-        {
+        {            
             var syncObject = m_applicationRepository.GetLatestSynchronizedObject(groupId, applicationId, synchronizedObject.ObjectType, new DateTime(1975,1,1));
 
             var now = DateTime.UtcNow;
@@ -73,9 +73,9 @@ namespace ITJakub.MobileApps.Core.Applications
         private void CreateHistoryTrackingObject(int applicationId, long groupId, long userId, SynchronizedObjectContract synchronizedObject)
         {
             var group = m_usersRepository.Load<Group>(groupId);
+            var syncObjectEntity = m_synchronizedObjectDataProvider.GetNewEntity(groupId, synchronizedObject.Data);
 
-            var syncObjectEntity = new SynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), synchronizedObject.Data);
-            m_azureTableSynchronizedObjectDao.Create(syncObjectEntity);
+            m_synchronizedObjectDataProvider.Save(syncObjectEntity);
 
             var now = DateTime.UtcNow;
 
@@ -88,7 +88,7 @@ namespace ITJakub.MobileApps.Core.Applications
                 Author = user,
                 Group = @group,
                 CreateTime = now,
-                RowKey = syncObjectEntity.RowKey,
+                ObjectExternalId = syncObjectEntity.ExternalId,
                 ObjectType = synchronizedObject.ObjectType
             };
 
@@ -101,8 +101,8 @@ namespace ITJakub.MobileApps.Core.Applications
 
             foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {
-                SynchronizedObjectEntity syncObjEntity = m_azureTableSynchronizedObjectDao.FindByRowAndPartitionKey(syncObj.RowKey,
-                    Convert.ToString(syncObj.Group.Id));
+                ISynchronizedObjectEntity syncObjEntity = m_synchronizedObjectDataProvider.FindByObjectExternalIdAndGroup(syncObj.ObjectExternalId,
+                    syncObj.Group.Id);
 
                 syncObj.Data = syncObjEntity.Data;
             }
@@ -116,11 +116,11 @@ namespace ITJakub.MobileApps.Core.Applications
             return Mapper.Map<IList<ApplicationContract>>(apps);
         }
 
-        public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> rowKeys)
+        public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds)
         {
-            foreach (var rowKey in rowKeys)
+            foreach (var objectExternalId in externalIds)
             {
-                m_azureTableSynchronizedObjectDao.Delete(rowKey, Convert.ToString(groupId));
+                m_synchronizedObjectDataProvider.Delete(objectExternalId, groupId);
             }
         }
 

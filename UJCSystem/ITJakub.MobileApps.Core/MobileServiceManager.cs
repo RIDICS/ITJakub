@@ -14,24 +14,25 @@ namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
-        private const string BookLibraryEndpointAddress = "http://censeo2.felk.cvut.cz/ITJakub.ITJakubService/MobileApps.svc";
+        private readonly string m_bookLibraryEndpointAddress;
 
         private readonly UserManager m_userManager;
         private readonly GroupManager m_groupManager;
         private readonly ApplicationManager m_applicationManager;
         private readonly TaskManager m_taskManager;
 
-        public MobileServiceManager(IKernel container)
+        public MobileServiceManager(UserManager userManager, GroupManager groupManager, TaskManager taskManager, ApplicationManager applicationManager, string bookLibraryEndpointAddress)
         {
-            m_userManager = container.Resolve<UserManager>();
-            m_groupManager = container.Resolve<GroupManager>();
-            m_applicationManager = container.Resolve<ApplicationManager>();
-            m_taskManager = container.Resolve<TaskManager>();
+            m_bookLibraryEndpointAddress = bookLibraryEndpointAddress;
+            m_groupManager = groupManager;
+            m_applicationManager = applicationManager;
+            m_userManager = userManager;
+            m_taskManager = taskManager;       
         }
 
         public string GetBookLibraryEndpointAddress()
         {
-            return BookLibraryEndpointAddress;
+            return m_bookLibraryEndpointAddress;
         }
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)

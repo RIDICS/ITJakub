@@ -34,7 +34,7 @@
     </subclass>
 
     <subclass discriminator-value="0" name="SynchronizedObject">
-      <property name="RowKey" />
+      <property name="ObjectExternalId" />
     </subclass>
   
   </class>

@@ -129,7 +129,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Applications\ApplicationManager.cs" />
-    <Compile Include="Applications\AzureTableIdGenerator.cs" />
     <Compile Include="Authentication\AuthenticationManager.cs" />
     <Compile Include="Authentication\AuthInterceptor.cs" />
     <Compile Include="Authentication\Providers\AuthProviderDirector.cs" />

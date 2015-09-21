@@ -2,7 +2,7 @@
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace ITJakub.MobileApps.DataEntities.AzureTables
+namespace ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables
 {
     public class AzureTablesClient
     {
