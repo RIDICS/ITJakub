@@ -9,6 +9,9 @@
 
     <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="White"/>
 
+    <SolidColorBrush x:Key="FlyoutErrorColor" Color="DarkRed" />
+    <SolidColorBrush x:Key="FlyoutProgressColor" Color="Gray" />
+
 
     <Style x:Key="HorizontalListView" TargetType="ListView">
         <Setter Property="VerticalAlignment" Value="Center" />

@@ -87,8 +87,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void InitViewModels()
         {
-            ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, LoadData, m_errorService);
-            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, Navigate, m_errorService);
+            ConnectToGroupViewModel = new ConnectToGroupViewModel(m_dataService, m_errorService, LoadData);
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, m_errorService, () => Navigate(typeof (GroupPageView)));
             DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData, m_errorService);
 
             SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData, m_errorService);

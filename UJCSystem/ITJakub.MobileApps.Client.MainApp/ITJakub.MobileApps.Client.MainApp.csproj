@@ -172,6 +172,12 @@
     <Compile Include="View\Groups\AdminGroupListView.xaml.cs">
       <DependentUpon>AdminGroupListView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Groups\ConnectToGroupControl.xaml.cs">
+      <DependentUpon>ConnectToGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
+      <DependentUpon>CreateGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Groups\MyGroupListView.xaml.cs">
       <DependentUpon>MyGroupListView.xaml</DependentUpon>
     </Compile>
@@ -238,6 +244,7 @@
     <Content Include="Icon\literature-128.png" />
     <Content Include="Icon\login-128.png" />
     <Content Include="Icon\LogoMobileApps_128x128.png" />
+    <Content Include="Icon\group-100.png" />
     <Content Include="Icon\user-32.png" />
     <Content Include="Icon\windows8-128.png" />
     <None Include="ITJakub.MobileApps.Client.MainApp_StoreKey.pfx" />
@@ -288,6 +295,14 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="View\Groups\AdminGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\ConnectToGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\CreateGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

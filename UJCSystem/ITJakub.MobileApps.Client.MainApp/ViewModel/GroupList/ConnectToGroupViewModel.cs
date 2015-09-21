@@ -8,16 +8,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
     public class ConnectToGroupViewModel : FlyoutBaseViewModel
     {
         private readonly IDataService m_dataService;
-        private readonly Action m_refreshAction;
+        private readonly Action m_submitAction;
         private readonly IErrorService m_errorService;
         private string m_connectToGroupCode;
         private bool m_showCodeNotExistError;
         private bool m_showCodeEmptyError;
 
-        public ConnectToGroupViewModel(IDataService dataService, Action refreshAction, IErrorService errorService)
+        public ConnectToGroupViewModel(IDataService dataService, IErrorService errorService, Action submitAction = null)
         {
             m_dataService = dataService;
-            m_refreshAction = refreshAction;
+            m_submitAction = submitAction;
             m_errorService = errorService;
         }
 
@@ -82,7 +82,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
                 ConnectToGroupCode = string.Empty;
                 IsFlyoutOpen = false;
-                m_refreshAction();
+
+                if (m_submitAction != null)
+                    m_submitAction();
             });
         }
     }

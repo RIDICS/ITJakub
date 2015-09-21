@@ -5,6 +5,8 @@ using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Groups;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -16,13 +18,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         public INavigationService NavigationService { get; private set; }
         
-        public ApplicationMenuPageViewModel(IDataService dataService, INavigationService navigationService)
+        public ApplicationMenuPageViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             DataService = dataService;
             NavigationService = navigationService;
 
             LoadData();
             InitCommands();
+
+            ConnectToGroupViewModel = new ConnectToGroupViewModel(dataService, errorService, navigationService.Navigate<MyGroupListView>);
+            CreateNewGroupViewModel = new CreateGroupViewModel(dataService, errorService, navigationService.Navigate<GroupPageView>);
         }
         
         private void LoadData()
@@ -65,5 +70,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 RaisePropertyChanged();
             }
         }
+
+        public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
+
+        public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
     }
 }
