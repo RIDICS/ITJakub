@@ -37,6 +37,8 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
 
         public long GroupId { get; set; }
 
+        public long AuthorId { get; set; }
+
         public GroupType GroupType { get; set; }
 
         public DateTime CreateTime { get; set; }
