@@ -22,6 +22,14 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             m_errorService = errorService;
         }
 
+        public void OpenPagePhoto(PageViewModel page, bool showPagePhotoOverride)
+        {
+            if(!IsShowEnabled)
+                IsShowEnabled = showPagePhotoOverride;
+
+            OpenPagePhoto(page);
+        }
+
         public void OpenPagePhoto(PageViewModel page)
         {
             m_currentPage = page;
