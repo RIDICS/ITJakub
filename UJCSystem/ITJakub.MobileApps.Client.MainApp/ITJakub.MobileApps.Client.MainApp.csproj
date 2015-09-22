@@ -178,6 +178,9 @@
     <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
       <DependentUpon>CreateGroupControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Groups\GroupMemberListControl.xaml.cs">
+      <DependentUpon>GroupMemberListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Groups\MyGroupListView.xaml.cs">
       <DependentUpon>MyGroupListView.xaml</DependentUpon>
     </Compile>
@@ -303,6 +306,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Groups\CreateGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\GroupMemberListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
