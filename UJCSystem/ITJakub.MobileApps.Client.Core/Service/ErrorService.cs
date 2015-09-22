@@ -54,7 +54,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             
             m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
             {
-                Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(task => m_messageDialog = null);
+                Task.Delay(new TimeSpan(0, 0, 1)).ContinueWith(task => m_messageDialog = null);
                 
                 if (closeAction != null)
                     closeAction();

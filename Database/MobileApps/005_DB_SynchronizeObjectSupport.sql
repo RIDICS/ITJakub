@@ -34,5 +34,5 @@ INSERT INTO [dbo].[DatabaseVersion]
 		('005' )
 		-- DatabaseVersion - varchar
 
-ROLLBACK
---COMMIT
+--ROLLBACK
+COMMIT

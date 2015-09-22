@@ -12,6 +12,7 @@
     <Page.Resources>
         <template:TaskPreviewTemplateSelector x:Key="TaskPreviewTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
     </Page.Resources>
     
     <Page.BottomAppBar>
@@ -83,5 +84,9 @@
                         ContentTemplateSelector="{StaticResource TaskPreviewTemplateSelector}"
                         VerticalContentAlignment="Stretch"
                         HorizontalContentAlignment="Stretch" />
+        
+        <Grid Grid.Row="2"
+              Background="#20000000"
+              Visibility="{Binding IsLoaded, Converter={StaticResource BooleanNegationToVisibilityConverter}}"/>
     </Grid>
 </Page>

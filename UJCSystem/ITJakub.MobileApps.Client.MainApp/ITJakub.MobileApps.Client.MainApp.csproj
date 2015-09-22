@@ -141,7 +141,8 @@
     <Compile Include="View\ApplicationMenuPageView.xaml.cs">
       <DependentUpon>ApplicationMenuPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\NotificationControl.cs" />    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
+    <Compile Include="View\Control\NotificationControl.cs" />
+    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
