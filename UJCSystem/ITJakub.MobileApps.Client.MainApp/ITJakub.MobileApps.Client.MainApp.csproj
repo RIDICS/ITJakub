@@ -200,14 +200,10 @@
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ViewModel\GroupList\GroupListViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ApplicationHostView.xaml.cs">
       <DependentUpon>ApplicationHostView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\GroupListView.xaml.cs">
-      <DependentUpon>GroupListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GroupPageView.xaml.cs">
       <DependentUpon>GroupPageView.xaml</DependentUpon>
@@ -346,10 +342,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ApplicationHostView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\GroupListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

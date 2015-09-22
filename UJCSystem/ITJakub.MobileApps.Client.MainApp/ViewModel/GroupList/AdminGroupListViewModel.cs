@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml.Controls;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -17,6 +19,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IErrorService m_errorService;
+        private readonly IMainPollingService m_pollingService;
         private List<GroupInfoViewModel> m_selectedGroups;
         private bool m_isOneItemSelected;
         private bool m_canCloseSelected;
@@ -25,11 +28,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private bool m_canPauseSelected;
         private bool m_isAtLeastOneSelected;
         
-        public AdminGroupListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
+        public AdminGroupListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_errorService = errorService;
+            m_pollingService = pollingService;
 
             m_selectedGroups = new List<GroupInfoViewModel>();
             
@@ -40,15 +44,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
+            GoBackCommand = new RelayCommand(() =>
+            {
+                m_pollingService.UnregisterAll();
+                m_navigationService.GoBack();
+            });
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
-            OpenMyTaskListCommand = new RelayCommand(() => m_navigationService.Navigate<OwnedTaskListView>());
+            OpenMyTaskListCommand = new RelayCommand(Navigate<OwnedTaskListView>);
             CreateTaskCommand = new RelayCommand(CreateNewTask);
         }
 
         private void InitViewModels()
         {
-            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, m_errorService, m_navigationService.Navigate<GroupPageView>);
+            CreateNewGroupViewModel = new CreateGroupViewModel(m_dataService, m_errorService, Navigate<GroupPageView>);
             SwitchToRunningViewModel = new SwitchGroupStateViewModel(GroupStateContract.Running, m_dataService, m_selectedGroups, LoadData, m_errorService);
             SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData, m_errorService);
             SwitchToClosedViewModel = new SwitchGroupStateViewModel(GroupStateContract.Closed, m_dataService, m_selectedGroups, LoadData, m_errorService);
@@ -57,6 +65,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void LoadData()
         {
+            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+
             Loading = true;
             m_dataService.GetOwnedGroupsForCurrentUser((groupList, exception) =>
             {
@@ -69,7 +79,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
                 m_completeGroupList = groupList;
                 DisplayGroupList();
+
+                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_completeGroupList, GroupUpdate);
             });
+        }
+
+        private void Navigate<T>()
+        {
+            m_pollingService.UnregisterAll();
+            m_navigationService.Navigate<T>();
         }
 
         public RelayCommand GoBackCommand { get; private set; }
@@ -138,7 +156,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 return;
 
             m_dataService.SetCurrentGroup(group.GroupId, GroupType.Owner);
-            m_navigationService.Navigate<GroupPageView>();
+            Navigate<GroupPageView>();
         }
 
         public override bool IsTeacherView { get { return true; } }
@@ -179,8 +197,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void CreateNewTask()
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
-            m_navigationService.Navigate<SelectApplicationView>();
+            Navigate<SelectApplicationView>();
         }
-        
+
+        private void GroupUpdate(Exception exception)
+        {
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+            else
+                m_errorService.HideWarning();
+        }
     }
 }

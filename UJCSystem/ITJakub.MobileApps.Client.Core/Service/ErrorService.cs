@@ -79,7 +79,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void HideWarning()
         {
             if (m_errorBar != null)
-                m_errorBar.Hide();
+                DispatcherHelper.CheckBeginInvokeOnUI(() => m_errorBar.Hide());
         }
     }
 }
