@@ -107,7 +107,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ViewModel\ApplicationMenuPageView.cs" />
+    <Compile Include="ViewModel\ApplicationMenuPageViewModel.cs" />
     <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
     <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />

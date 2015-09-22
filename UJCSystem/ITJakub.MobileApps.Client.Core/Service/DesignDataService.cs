@@ -87,9 +87,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
             }, null);
         }
 
-        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetOwnedGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
-            callback(new ObservableCollection<GroupInfoViewModel>
+            callback(new List<GroupInfoViewModel>
             {
                 new GroupInfoViewModel
                 {
@@ -118,10 +118,10 @@ namespace ITJakub.MobileApps.Client.Core.Service
                 }
             });
         }
-
-        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        
+        public void GetGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
-            callback(new ObservableCollection<GroupInfoViewModel>
+            callback(new List<GroupInfoViewModel>
             {
                 new GroupInfoViewModel
                 {
@@ -292,9 +292,9 @@ namespace ITJakub.MobileApps.Client.Core.Service
         {
         }
 
-        public void GetGroupList(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetGroupList(Action<List<GroupInfoViewModel>, Exception> callback)
         {
-            var result = new ObservableCollection<GroupInfoViewModel>
+            var result = new List<GroupInfoViewModel>
             {
                 new GroupInfoViewModel
                 {

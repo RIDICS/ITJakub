@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight.Threading;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 {
@@ -62,8 +64,16 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
 
                 await enc.FlushAsync();
 
-                var bImg = new BitmapImage();
-                bImg.SetSource(result);
+                var initEvent = new AutoResetEvent(false);
+                BitmapImage bImg = null;
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    bImg = new BitmapImage();
+                    bImg.SetSource(result);
+                    initEvent.Set();
+                });
+
+                initEvent.WaitOne();
                 return bImg;
             }
             catch (Exception ex)
