@@ -36,6 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData(SelectedTaskMessage message)
         {
+            Messenger.Default.Unregister(this);
             var task = message.TaskViewModel;
             m_dataService.GetApplication(task.Application, (appInfo, exception) =>
             {
