@@ -94,22 +94,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             switch (m_groupState)
             {
                 case GroupStateContract.Running:
-                    InformationText = "Chystáte se zmìnit stav oznaèenıch skupin na Spuštìno.";
-                    ErrorText = "Nìkteré skupiny se nepodaøilo spustit.";
-                    ProgressText = "Probíhá spouštìní";
+                    InformationText = "ChystÃ¡te se zmÄ›nit stav oznaÄenÃ½ch skupin na SpuÅ¡tÄ›no.";
+                    ErrorText = "NÄ›kterÃ© skupiny se nepodaÅ™ilo spustit.";
+                    ProgressText = "ProbÃ­hÃ¡ spouÅ¡tÄ›nÃ­";
                     SubmitText = "Spustit";
                     break;
                 case GroupStateContract.Paused:
-                    InformationText = "Chystáte se zmìnit stav oznaèenıch skupin na Pozastaveno.";
-                    ErrorText = "Nìkteré skupiny se nepodaøilo pozastavit.";
-                    ProgressText = "Probíhá pozastavování";
+                    InformationText = "ChystÃ¡te se zmÄ›nit stav oznaÄenÃ½ch skupin na Pozastaveno.";
+                    ErrorText = "NÄ›kterÃ© skupiny se nepodaÅ™ilo pozastavit.";
+                    ProgressText = "ProbÃ­hÃ¡ pozastavovÃ¡nÃ­";
                     SubmitText = "Pozastavit";
                     break;
                 case GroupStateContract.Closed:
-                    InformationText = "Chystáte se zmìnit stav oznaèenıch skupin na Ukonèeno.";
-                    ErrorText = "Nìkteré skupiny se nepodaøilo ukonèit.";
-                    ProgressText = "Ukonèování";
-                    SubmitText = "Ukonèit skupinu";
+                    InformationText = "ChystÃ¡te se zmÄ›nit stav oznaÄenÃ½ch skupin na UkonÄeno.";
+                    ErrorText = "NÄ›kterÃ© skupiny se nepodaÅ™ilo ukonÄit.";
+                    ProgressText = "UkonÄovÃ¡nÃ­";
+                    SubmitText = "UkonÄit skupinu";
                     break;
             }
         }
