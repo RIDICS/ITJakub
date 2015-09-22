@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskPreviewBaseViewModel m_taskPreviewHostViewModel;
         private bool m_loading;
         private string m_taskDescription;
+        private bool m_isLoaded;
 
         public TaskPreviewHostViewModel(IDataService dataService, IErrorService errorService, NavigationService navigationService)
         {
@@ -35,6 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData(SelectedTaskMessage message)
         {
+            Messenger.Default.Unregister(this);
             var task = message.TaskViewModel;
             m_dataService.GetApplication(task.Application, (appInfo, exception) =>
             {
@@ -56,6 +58,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void LoadTask(long taskId)
         {
             Loading = true;
+            IsLoaded = false;
             m_dataService.GetTask(taskId, (task, exception) =>
             {
                 Loading = false;
@@ -66,6 +69,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 }
 
                 TaskPreviewViewModel.ShowTask(task.Data);
+                IsLoaded = true;
             });
         }
 
@@ -117,6 +121,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_loading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoaded
+        {
+            get { return m_isLoaded; }
+            set
+            {
+                m_isLoaded = value;
                 RaisePropertyChanged();
             }
         }

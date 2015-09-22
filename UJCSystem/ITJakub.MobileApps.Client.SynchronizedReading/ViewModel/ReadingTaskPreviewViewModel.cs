@@ -21,6 +21,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private bool m_loadingPage;
         private bool m_loadingImage;
         private string m_bookGuid;
+        private bool m_isLoaded;
 
         public ReadingTaskPreviewViewModel(ReaderDataService dataService)
         {
@@ -31,6 +32,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         
         public override void ShowTask(string data)
         {
+            IsLoaded = false;
             m_dataService.SetTask(data);
             m_dataService.GetBookInfo((bookInfo, exception) =>
             {
@@ -44,6 +46,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 BookName = bookInfo.Title;
                 BookAuthor = string.IsNullOrEmpty(bookInfo.Authors) ? "(nezadáno)" : bookInfo.Authors;
                 PublishDate = string.IsNullOrEmpty(bookInfo.PublishDate) ? "(nezadáno)" : bookInfo.PublishDate;
+                IsLoaded = true;
             });
 
             LoadingPage = true;
@@ -161,6 +164,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             set
             {
                 m_loadingImage = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoaded
+        {
+            get { return m_isLoaded; }
+            set
+            {
+                m_isLoaded = value;
                 RaisePropertyChanged();
             }
         }

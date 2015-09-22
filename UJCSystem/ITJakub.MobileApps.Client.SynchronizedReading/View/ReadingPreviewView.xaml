@@ -54,6 +54,7 @@
                 Grid.Column="2"
                 HorizontalAlignment="Right"
                 Content="Přejít do čtečky knih"
+                IsEnabled="{Binding IsLoaded}"
                 Command="{Binding ShowBookReaderCommand}" />
 
         <Border Grid.Row="1"

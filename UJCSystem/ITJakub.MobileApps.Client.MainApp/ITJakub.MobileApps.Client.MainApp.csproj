@@ -141,7 +141,8 @@
     <Compile Include="View\ApplicationMenuPageView.xaml.cs">
       <DependentUpon>ApplicationMenuPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\NotificationControl.cs" />    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
+    <Compile Include="View\Control\NotificationControl.cs" />
+    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
@@ -178,11 +179,17 @@
     <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
       <DependentUpon>CreateGroupControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Groups\FilterByStateMenuFlyout.xaml.cs">
+      <DependentUpon>FilterByStateMenuFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Groups\GroupMemberListControl.xaml.cs">
       <DependentUpon>GroupMemberListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Groups\MyGroupListView.xaml.cs">
       <DependentUpon>MyGroupListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\SwitchGroupStateControl.xaml.cs">
+      <DependentUpon>SwitchGroupStateControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\News\NewsTileView.xaml.cs">
       <DependentUpon>NewsTileView.xaml</DependentUpon>
@@ -313,11 +320,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Groups\FilterByStateMenuFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Groups\GroupMemberListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Groups\MyGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\SwitchGroupStateControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
