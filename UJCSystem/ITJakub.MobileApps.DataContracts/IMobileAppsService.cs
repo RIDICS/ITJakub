@@ -95,7 +95,7 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         GroupStateContract GetGroupState(long groupId);
-
+        
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         void UpdateGroupState(long groupId, GroupStateContract state);
@@ -103,5 +103,14 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         void RemoveGroup(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname);
+
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        string RegenerateGroupCode(long userId, long groupId);
     }
 }

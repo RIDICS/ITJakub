@@ -151,5 +151,16 @@ namespace ITJakub.MobileApps.Core
         {
             m_groupManager.RemoveGroup(groupId);
         }
+
+        public CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            return m_groupManager.DuplicateGroup(userId,  groupId, newGroupname);
+        }
+
+        public string RegenerateGroupCode(long userId, long groupId)
+        {
+            return m_groupManager.RenewGroupCode(userId, groupId);
+        }
+
     }
 }

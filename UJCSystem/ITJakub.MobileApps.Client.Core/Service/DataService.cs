@@ -179,6 +179,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_configurationManager.EndpointAddress = address;
         }
 
+        public void RenewCodeForGroup(long groupId, Action<string, Exception> callback)
+        {
+            m_groupManager.RenewCodeForGroup(groupId, callback);
+        }
+
         public void Login(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.LoginByProvider(loginProviderType, callback);

@@ -22,7 +22,7 @@ namespace ITJakub.MobileApps.Core.Groups
 
 
         public GroupManager(UsersRepository usersRepository,
-            EnterCodeGenerator enterCodeGenerator, 
+            EnterCodeGenerator enterCodeGenerator,
             ApplicationManager applicationManager,
             int maxAttemptsToSave)
         {
@@ -51,24 +51,22 @@ namespace ITJakub.MobileApps.Core.Groups
 
         public List<GroupInfoContract> GetMembershipGroups(long userId)
         {
-            User user = m_usersRepository.GetUserWithGroups(userId);//TODO more optimized query ?
+            User user = m_usersRepository.GetUserWithGroups(userId); //TODO more optimized query ?
             if (user == null)
                 throw new FaultException("User not found.");
-            
+
             return Mapper.Map<IEnumerable<Group>, List<GroupInfoContract>>(user.MemberOfGroups);
         }
 
 
         public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
         {
-         
-            User user = m_usersRepository.GetUserWithGroups(userId);//TODO more optimized query ?
+            User user = m_usersRepository.GetUserWithGroups(userId); //TODO more optimized query ?
             if (user == null)
                 throw new FaultException("User not found.");
-            
+
             return Mapper.Map<IEnumerable<Group>, List<OwnedGroupInfoContract>>(user.CreatedGroups);
         }
-
 
 
         public CreateGroupResponse CreateGroup(long userId, string groupName)
@@ -202,5 +200,85 @@ namespace ITJakub.MobileApps.Core.Groups
             return Mapper.Map<GroupState, GroupStateContract>(group.State);
         }
 
+        public CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            var oldGroup = m_usersRepository.GetGroupWithMembers(groupId);
+            if (oldGroup.State == GroupState.Created)
+                throw new FaultException("Can not duplicate group in create state");
+
+            var user = m_usersRepository.FindById<User>(userId);
+            if (!user.Equals(oldGroup.Author))
+            {
+                throw new FaultException("You can duplicate only your groups");
+            }
+
+            var newGroup = new Group {Author = oldGroup.Author, CreateTime = DateTime.UtcNow, Name = newGroupname, State = GroupState.Created, Members = new List<User>()};
+
+            foreach (var member in oldGroup.Members)
+            {
+                newGroup.Members.Add(member);
+            }
+
+
+            int attempt = 0;
+            while (attempt < MaxAttemptsToSave)
+            {
+                try
+                {
+                    newGroup.EnterCode = m_enterCodeGenerator.GenerateCode();
+                    m_usersRepository.Create(newGroup);
+                    return new CreateGroupResponse
+                    {
+                        EnterCode = newGroup.EnterCode,
+                        GroupId = newGroup.Id
+                    };
+                }
+                catch (CreateEntityFailedException ex)
+                {
+                    ++attempt;
+
+                    if (m_log.IsWarnEnabled)
+                        m_log.WarnFormat("Could not save Group to Database. AttemptCount: '{0}', EntryCode: '{1}'. Exception: '{2}'", attempt,
+                            newGroup.EnterCode, ex);
+                }
+            }
+
+            if (m_log.IsErrorEnabled)
+                m_log.ErrorFormat("Cannot create group, Maximum attemts to save exceeded");
+
+            return null;
+        }
+
+        public string RenewGroupCode(long userId, long groupId)
+        {
+            var group = m_usersRepository.FindById<Group>(groupId);
+            var user = m_usersRepository.FindById<User>(userId);
+
+            if (!user.Equals(group.Author))
+            {
+                throw new FaultException("You can change group input code only your groups");
+            }
+
+            int attempt = 0;
+            while (attempt < MaxAttemptsToSave)
+            {
+                try
+                {
+                    group.EnterCode = m_enterCodeGenerator.GenerateCode();
+                    m_usersRepository.Save(group);
+                    return group.EnterCode;
+                }
+                catch (CreateEntityFailedException ex)
+                {
+                    ++attempt;
+
+                    if (m_log.IsWarnEnabled)
+                        m_log.WarnFormat("Could not save Group to Database. AttemptCount: '{0}', EntryCode: '{1}'. Exception: '{2}'", attempt,
+                            group.EnterCode, ex);
+                }
+            }
+
+            throw new FaultException("Failed to renew code for group");
+        }
     }
 }

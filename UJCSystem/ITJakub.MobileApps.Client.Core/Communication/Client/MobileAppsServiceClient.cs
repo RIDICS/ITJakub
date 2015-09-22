@@ -591,6 +591,62 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
+
+        public Task<CreateGroupResponse> DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.DuplicateGroup(userId, groupId, newGroupname);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<string> RegenerateGroupCode(long userId, long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.RegenerateGroupCode(userId, groupId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+
         public Task<GroupStateContract> GetGroupStateAsync(long groupId)
         {
             return Task.Run(() =>

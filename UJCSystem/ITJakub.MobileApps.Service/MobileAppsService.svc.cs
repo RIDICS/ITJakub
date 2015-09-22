@@ -380,5 +380,35 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            try
+            {
+                return m_serviceManager.DuplicateGroup(userId, groupId, newGroupname);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public string RegenerateGroupCode(long userId, long groupId)
+        {
+            try
+            {
+                return m_serviceManager.RegenerateGroupCode(userId, groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }        
     }
 }

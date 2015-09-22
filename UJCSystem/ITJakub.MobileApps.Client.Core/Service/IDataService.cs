@@ -77,5 +77,6 @@ namespace ITJakub.MobileApps.Client.Core.Service
         Task<List<SyndicationItemViewModel>> GetAllNews();
         
         void UpdateEndpointAddress(string address);
+        void RenewCodeForGroup(long groupId, Action<string, Exception> callback);
     }
 }

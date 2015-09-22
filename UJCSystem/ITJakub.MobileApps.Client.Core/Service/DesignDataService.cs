@@ -347,5 +347,10 @@ namespace ITJakub.MobileApps.Client.Core.Service
 		public void UpdateEndpointAddress(string address)
         {
         }
+
+        public void RenewCodeForGroup(long groupId, Action<string, Exception> callback)
+        {
+            callback("1234654987", null);
+        }
     }
 }

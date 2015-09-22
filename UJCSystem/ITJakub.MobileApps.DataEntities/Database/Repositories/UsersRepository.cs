@@ -201,5 +201,18 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                     .SingleOrDefault();
             }
         }
+                
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group GetGroupWithMembers(long groupId)
+        {
+            using (var session = GetSession())
+            {
+                var group = session.QueryOver<Group>().Where(x => x.Id == groupId)
+                     .Fetch(x => x.Members).Eager
+                    .SingleOrDefault<Group>();
+
+                return group;
+            }
+        }
     }
 }

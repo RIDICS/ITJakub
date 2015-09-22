@@ -42,10 +42,18 @@
                           Icon="Refresh"
                           Command="{Binding ReloadCommand}"
                           IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}" />
+            
+            
             <AppBarButton Label="Připojit se"
                           Icon="Forward"
                           Command="{Binding ConnectToGroupCommand}"
                           IsEnabled="{Binding CanConnectToGroup}" />
+
+            <AppBarButton Label="Změna přístupového kódu" 
+                          Icon="Shuffle"
+                          Command="{Binding ReNewCodeForGroup}"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}" />
+            
             <AppBarButton Icon="Preview"
                           Label="Zobrazit zvolené zadání"
                           IsEnabled="{Binding IsTaskSelected}"
@@ -58,6 +66,8 @@
                           Icon="OtherUser"
                           Command="{Binding OpenAdminCommand}"
                           IsEnabled="{Binding CanOpenAdmin}" />
+            
+                        
 
             <!--TODO kick user function + UI-->
             <!--<CommandBar.SecondaryCommands>
@@ -79,8 +89,7 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
-            <RowDefinition Height="*" />
-            
+            <RowDefinition Height="*" />            
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -125,12 +134,23 @@
             <StackPanel Orientation="Vertical"
                         Margin="40,0,20,0">
                 <StackPanel Orientation="Horizontal">
+
+
+
                     <TextBlock Style="{StaticResource MyLabelStyle}"
                                 IsTextSelectionEnabled="True">
                         <Run Text="Kód skupiny:" />
                         <Run Text="{Binding GroupInfo.GroupCode}" />
                     </TextBlock>
-                    
+
+                    <TextBlock FontSize="14" Visibility="{Binding ShowRenewError, Converter={StaticResource BooleanToVisibilityConverter}}" Foreground="Cornsilk">
+                        <Run Text="Nepodařilo se vygenerovat nový kód"  />
+                    </TextBlock>
+
+                    <ProgressRing IsActive="True" 
+                                  Visibility="{Binding RenewCodeInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                  Width="30" Height="30" Margin="15,0,0,0"/>
+
                     <Button Margin="30,0,0,0"
                             Command="{Binding ConnectToGroupCommand}"
                             IsEnabled="{Binding CanConnectToGroup}">

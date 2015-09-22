@@ -309,6 +309,62 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             }
         }
 
+        public async void DuplicateGroup(long sourceGroupId, string newGroupName, Action<CreatedGroupViewModel, Exception> callback)
+        {
+            try
+            {
+                var userId = m_authManager.GetCurrentUserId();
+                if (!userId.HasValue)
+                {
+                    callback(null, new ArgumentException("No logged user"));
+                    return;
+                }
+                var client = m_serviceClientManager.GetClient();
+                var result = await client.DuplicateGroup(userId.Value, sourceGroupId, newGroupName);
+                var viewModel = new CreatedGroupViewModel
+                {
+                    EnterCode = result.EnterCode,
+                    GroupId = result.GroupId
+                };
+
+                callback(viewModel, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
+
+        public async void RenewCodeForGroup(long groupId, Action<string, Exception> callback)
+        {
+            try
+            {
+                var userId = m_authManager.GetCurrentUserId();
+                if (!userId.HasValue)
+                {
+                    callback(null, new ArgumentException("No logged user"));
+                    return;
+                }
+                var client = m_serviceClientManager.GetClient();
+                var result = await client.RegenerateGroupCode(userId.Value, groupId);             
+
+                callback(result, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(null, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+
         public async void ConnectToGroup(string code, Action<Exception> callback)
         {
             try
@@ -460,7 +516,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
             {
                 callback(exception);
             }
-        }
+        }     
 
         public async Task GetGroupStateAsync(long groupId, Action<GroupStateContract, Exception> callback)
         {
