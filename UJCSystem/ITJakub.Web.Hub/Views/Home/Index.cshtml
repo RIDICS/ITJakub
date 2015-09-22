@@ -1,4 +1,5 @@
-﻿@{
+﻿@using ITJakub.Web.Hub.Controllers
+@{
     ViewBag.Title = "Úvodní stránka";
 }
 @section scripts{
@@ -12,7 +13,7 @@
     });
 </script>
 
-<div class="top-offset-without-submenu">
+<div class="top-offset-main-site">
     <form role="form" class="form-horizontal">
         <div class="form-group searchbar">
             <div class="searchbar-buttons">
@@ -34,29 +35,24 @@
         <div class="content-container left-panel">
             <img src='@Url.Content("~/Content/Images/mlceni2.jpg")' alt="mlceni" class="centered" style="max-height: 100%; max-width: 100%;"/>
         </div>
-        <div class="content-container right-panel">            
+        <div class="content-container right-panel">
             <div id="news" class="news">
                 <h1>Aktuality</h1>
 
+                <div class="news-feeds">                    
+                    <a href="@Url.Action("Feed", "News", new {feedType = FeedType.Atom.ToString()})" class="news-feed-atom"></a>
+                    <a href="@Url.Action("Feed", "News", new {feedType = FeedType.Rss.ToString()})" class="news-feed-rss"></a>
+                </div>
+
                 <div id="news-container"></div>
 
-                @*<div class="message">
-                    <h2>14. Února 2013</h2>
-                    <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Vestibulum fermentum tortor id mi. Nulla est. Pellentesque ipsum. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Cras pede libero, dapibus nec, pretium sit amet, tempor quis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Aliquam id dolor. Nulla non arcu lacinia neque faucibus fringilla. Fusce consectetuer risus a nunc. Integer tempor. Nullam faucibus mi quis velit. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu.</p>
-
-                </div>
-                <div class="message">
-                    <h2>14. Února 2013</h2>
-                    <p> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nulla quis diam. Vestibulum fermentum tortor id mi. Nulla est. Pellentesque ipsum.</p>
-                </div>*@
-
                 <div id="news-paginator" class="feedbacks-paginator centered"></div>
+
             </div>
 
-           
+
         </div>
 
-      
 
     </div>
 </div>
