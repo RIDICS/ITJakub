@@ -20,6 +20,24 @@ namespace ITJakub.ITJakubService.Core.Test
         }
 
         [TestMethod]
+        public void CreateUserTest()
+        {
+            //var username = Guid.NewGuid().ToString();
+            var username = "testUser";
+
+            var newUserContract = new UserContract
+            {
+                FirstName = "Test",
+                LastName = "User",
+                Email = "test@test.test",
+                UserName = username
+            };
+
+            var user = m_userManager.CreateLocalUser(newUserContract);
+            Assert.IsNotNull(user);
+        }
+
+        [TestMethod]
         public void CreateGroupTest()
         {
             var newUserContract = new UserContract
@@ -31,7 +49,7 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup(user.Id, "TestGroup", "Just testing creating group");
+            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing creating group");
             Assert.IsNotNull(group);
         }
 
@@ -47,7 +65,7 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup(user.Id, "TestGroup", "Just testing group with member");
+            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -92,7 +110,7 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup(user.Id, "TestGroup", "Just testing group with member");
+            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -140,7 +158,7 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup(user.Id, "TestGroup", "Just testing group with member");
+            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -184,8 +202,8 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup(user.Id, "TestGroup", "Just testing group with member");
-            var group2 = m_permissionManager.CreateGroup(user.Id, "TestGroup2", "Just testing group with member");
+            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
+            var group2 = m_permissionManager.CreateGroup("TestGroup2", "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {

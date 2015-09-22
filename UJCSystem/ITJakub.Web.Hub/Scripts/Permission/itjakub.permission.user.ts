@@ -67,21 +67,44 @@ class UserPermissionEditor {
         });
 
         $("#add-user-to-group").click(() => {
-            
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: getBaseUrl() + "Permission/AddUserToGroup",
-                data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupId: this.groupSearchCurrentSelectedItem.Id }),
-                dataType: "json",
-                contentType: "application/json",
-                success: (response) => {
 
-                    $("#addToGroupDialog").modal('hide');
+            if ($("#tab2-select-existing").hasClass("active")) {
 
-                    this.loadUser(this.currentUserSelectedItem);
-                }
-            });
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    url: getBaseUrl() + "Permission/AddUserToGroup",
+                    data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupId: this.groupSearchCurrentSelectedItem.Id }),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: (response) => {
+
+                        $("#addToGroupDialog").modal('hide');
+
+                        this.loadUser(this.currentUserSelectedItem);
+                    }
+                });
+
+            } else {
+
+                var groupName = $("#new-group-name").val();
+                var groupDescription = $("#new-group-description").val();
+
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    url: getBaseUrl() + "Permission/CreateGroupWithUser",
+                    data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupName: groupName, groupDescription: groupDescription }),
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: (response) => {
+
+                        $("#addToGroupDialog").modal('hide');
+
+                        this.loadUser(this.currentUserSelectedItem);
+                    }
+                });
+            }
 
         });
     }

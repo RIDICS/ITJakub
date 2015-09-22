@@ -43,6 +43,14 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new {group});
         }
 
+        [HttpPost]
+        public ActionResult CreateGroupWithUser(int userId, string groupName, string groupDescription)
+        {
+            var group = m_mainServiceClient.CreateGroup(groupName, groupDescription);
+            m_mainServiceClient.AddUserToGroup(userId, group.Id);
+            return Json(new {group});
+        }
+
         public ActionResult GetGroupsByUser(int userId)
         {
             var result = m_mainServiceClient.GetGroupsByUser(userId);
