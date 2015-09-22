@@ -122,6 +122,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         {
                             GroupName = groupDetails.Name,
                             GroupId = groupDetails.Id,
+                            AuthorId = groupDetails.AuthorId,
                             GroupType = GroupType.Member,
                             State = groupDetails.State,
                             CreateTime = groupDetails.CreateTime,
@@ -165,6 +166,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         {
                             GroupName = groupDetails.Name,
                             GroupId = groupDetails.Id,
+                            AuthorId = groupDetails.AuthorId,
                             GroupType = GroupType.Owner,
                             State = groupDetails.State,
                             GroupCode = groupDetails.EnterCode,
@@ -204,6 +206,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     {
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
+                        AuthorId = groupDetails.AuthorId,
                         GroupType = GroupType.Member,
                         State = groupDetails.State,
                         CreateTime = groupDetails.CreateTime,
@@ -240,6 +243,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     {
                         GroupName = groupDetails.Name,
                         GroupId = groupDetails.Id,
+                        AuthorId = groupDetails.AuthorId,
                         GroupType = GroupType.Owner,
                         State = groupDetails.State,
                         GroupCode = groupDetails.EnterCode,
@@ -406,6 +410,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 var group = new GroupInfoViewModel
                 {
                     GroupId = groupInfo.Id,
+                    AuthorId = groupInfo.AuthorId,
                     Members = new ObservableCollection<GroupMemberViewModel>(),
                     GroupName = groupInfo.Name,
                     CreateTime = groupInfo.CreateTime,

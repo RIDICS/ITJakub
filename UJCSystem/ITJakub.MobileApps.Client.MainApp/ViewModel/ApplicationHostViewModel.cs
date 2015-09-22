@@ -78,7 +78,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_groupInfo = new GroupInfoViewModel
                 {
                     GroupId = groupId,
-                    GroupType = GroupType.Owner
+                    GroupType = groupType
                 };
 
                 m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);

@@ -65,11 +65,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             if (group == null)
                 return;
 
-            //var ownCurrentGroup = m_ownedGroupIds.Contains(group.GroupId);
-            //m_dataService.SetCurrentGroup(group.GroupId, ownCurrentGroup ? GroupType.Owner : GroupType.Member);
-            m_dataService.SetCurrentGroup(group.GroupId, GroupType.Member); // TODO determine type
+            m_dataService.GetLoggedUserInfo(false, user =>
+            {
+                var isUserGroupOwner = group.AuthorId == user.UserId;
+                var groupType = isUserGroupOwner ? GroupType.Owner : GroupType.Member;
 
-            m_navigationService.Navigate<ApplicationHostView>();
+                m_dataService.SetCurrentGroup(group.GroupId, groupType);
+                m_navigationService.Navigate<ApplicationHostView>();
+            });
         }
 
         public override bool IsTeacherView { get { return false; } }
