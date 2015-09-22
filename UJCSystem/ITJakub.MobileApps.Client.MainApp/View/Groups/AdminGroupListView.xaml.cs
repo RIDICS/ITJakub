@@ -7,6 +7,6 @@ namespace ITJakub.MobileApps.Client.MainApp.View.Groups
         public AdminGroupListView()
         {
             InitializeComponent();
-        }
+        }       
     }
 }
