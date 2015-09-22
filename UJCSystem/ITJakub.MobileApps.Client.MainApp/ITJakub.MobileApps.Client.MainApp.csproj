@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="ViewModel\ApplicationMenuPageViewModel.cs" />
     <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\GroupListViewModelBase.cs" />
     <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />

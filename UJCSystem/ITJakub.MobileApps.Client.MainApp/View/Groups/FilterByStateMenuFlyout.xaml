@@ -7,12 +7,13 @@
     xmlns:groups="using:ITJakub.MobileApps.DataContracts.Groups"
     xmlns:groupList="using:ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList"
     mc:Ignorable="d"
-    d:DataContext="{d:DesignInstance groupList:AdminGroupListViewModel}">
-
+    d:DataContext="{d:DesignInstance groupList:GroupListViewModelBase}">
+    
     <MenuFlyoutItem Text="Všechny"
                     Command="{Binding FilterCommand}" />
     <MenuFlyoutSeparator />
     <MenuFlyoutItem Text="Vytvořené"
+                    Visibility="{Binding TeacherControlVisibility}"
                     Command="{Binding FilterCommand}">
         <MenuFlyoutItem.CommandParameter>
             <groups:GroupStateContract>Created</groups:GroupStateContract>
