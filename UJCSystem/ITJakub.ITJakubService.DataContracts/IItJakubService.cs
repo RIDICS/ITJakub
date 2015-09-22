@@ -190,6 +190,15 @@ namespace ITJakub.ITJakubService.DataContracts
         void AddUserToGroup(int userId, int groupId);
 
         [OperationContract]
+        void RemoveUserFromGroup(int userId, int groupId);
+
+        [OperationContract]
         GroupContract CreateGroup(string name, string description);
+
+        [OperationContract]
+        UserDetailContract GetUserDetail(int userId);
+
+        [OperationContract]
+        GroupDetailContract GetGroupDetail(int groupId);
     }
 }

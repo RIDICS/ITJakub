@@ -1,6 +1,10 @@
 ﻿$(document).ready(() => {
     var permissionEditor = new GroupPermissionEditor("#mainContainer");
     permissionEditor.make();
+    var groupId = getQueryStringParameterByName("groupId");
+    if (typeof groupId !== "undefined" && groupId !== null) {
+        permissionEditor.loadGroupById(parseInt(groupId));
+    }
 });
 
 class GroupPermissionEditor {
@@ -87,6 +91,7 @@ class GroupPermissionEditor {
 
     private loadGroup(group: IGroup) {
         this.currentGroupSelectedItem = group;
+        updateQueryStringParameter("groupId", group.Id);
 
         $("#createGroupButton").addClass("hidden");
         $("#selected-item-div").removeClass("hidden");
@@ -94,5 +99,22 @@ class GroupPermissionEditor {
 
         $("#specificGroupName").text(group.Name);
         $("#specificGroupDescription").text(group.Description);
+    }
+
+    public loadGroupById(groupId: number) {
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetGroup",
+            data: { groupId: groupId },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+
+                this.loadGroup(response);
+
+            }
+        });
     }
 }

@@ -5,6 +5,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using log4net;
 
@@ -57,11 +58,11 @@ namespace ITJakub.ITJakubService.Core
             return user;
         }
 
-        public UserContract GetUserDetail(int userId)
+        public UserDetailContract GetUserDetail(int userId)
         {
-            var dbUser = m_userRepository.FindById(userId);
+            var dbUser = m_userRepository.FindByIdWithDetails(userId);
             if (dbUser == null) return null;
-            var user = Mapper.Map<UserContract>(dbUser);
+            var user = Mapper.Map<UserDetailContract>(dbUser);
             return user;
         }
     }

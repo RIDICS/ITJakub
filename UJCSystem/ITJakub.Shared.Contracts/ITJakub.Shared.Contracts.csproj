@@ -101,6 +101,7 @@
     <Compile Include="Searching\Results\SearchResultContractList.cs" />
     <Compile Include="Searching\Results\VerseResultContext.cs" />
     <Compile Include="UserContract.cs" />
+    <Compile Include="UserDetailContract.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

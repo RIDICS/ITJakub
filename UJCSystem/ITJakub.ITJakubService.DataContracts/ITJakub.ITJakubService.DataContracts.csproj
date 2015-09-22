@@ -63,7 +63,6 @@
     <Compile Include="Contracts\BucketShortContract.cs" />
     <Compile Include="Contracts\CardFileContract.cs" />
     <Compile Include="Contracts\SelectedCategoriesContract.cs" />
-    <Compile Include="Contracts\UserDetailContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="Contracts\LoginUserContract.cs" />
     <Compile Include="Contracts\CreateUserContract.cs" />

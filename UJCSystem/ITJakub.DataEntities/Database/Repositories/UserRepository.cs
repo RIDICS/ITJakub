@@ -38,6 +38,18 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual User FindByIdWithDetails(int userId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>()
+                    .Where(user => user.Id == userId)
+                    .Fetch(user => user.Groups).Eager
+                    .SingleOrDefault<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual int Create(User user)
         {
             using (var session = GetSession())

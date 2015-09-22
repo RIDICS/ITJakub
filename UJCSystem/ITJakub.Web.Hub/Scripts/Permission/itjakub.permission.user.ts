@@ -1,6 +1,10 @@
 ﻿$(document).ready(() => {
     var permissionEditor = new UserPermissionEditor("#mainContainer");
     permissionEditor.make();
+    var userId = getQueryStringParameterByName("userId");
+    if (typeof userId !== "undefined" && userId !== null) {
+        permissionEditor.loadUserById(parseInt(userId));
+    }
 });
 
 class UserPermissionEditor {
@@ -111,13 +115,15 @@ class UserPermissionEditor {
 
     private loadUser(user: IUser) {
         this.currentUserSelectedItem = user;
+        updateQueryStringParameter("userId", user.Id);
+
         $("#selected-item-div").removeClass("hidden");
         $("#specificUserFirstName").text(user.FirstName);
         $("#specificUserLastName").text(user.LastName);
         $("#specificUserUsername").text(user.UserName);
         $("#specificUserEmail").text(user.Email);
 
-        var groupsUl = $("ul.user-groups");
+        var groupsUl = $("ul.items-list");
         $(groupsUl).empty();
 
         $.ajax({
@@ -133,15 +139,114 @@ class UserPermissionEditor {
                  
                 for (var i = 0; i < results.length; i++) {
                     var group = results[i];
-
-                    var groupLi = document.createElement("li");
-                    groupLi.innerHTML = group["Name"];
-
-                    groupsUl.append(groupLi);
+                    var item = this.createListItem(group);
+                    groupsUl.append(item);
                 }
 
                 $("#right-panel").removeClass("hidden");
             }
         });
+    }
+
+    public loadUserById(userId: number) {
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetUser",
+            data: { userId: userId },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                
+                this.loadUser(response);
+
+            }
+        });
+    }
+
+    private createListItem(group: IGroup): HTMLLIElement {
+        var groupLi = document.createElement("li");
+        $(groupLi).addClass("list-item");
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("list-item-more");
+
+        $(moreSpan).click(function () {
+            var detailsDiv = $(this).closest(".list-item").find(".list-item-details");
+            if (detailsDiv.is(":hidden")) {
+                $(this).children().removeClass("glyphicon-chevron-down");
+                $(this).children().addClass("glyphicon-chevron-up");
+                detailsDiv.slideDown();
+            } else {
+                $(this).children().removeClass("glyphicon-chevron-up");
+                $(this).children().addClass("glyphicon-chevron-down");
+                detailsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+
+        groupLi.appendChild(moreSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = group.Name;
+
+        groupLi.appendChild(nameSpan);
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var removeSpan = document.createElement("span");
+        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
+
+        $(removeSpan).click(() => {
+            this.removeGroup(group.Id);
+        });
+
+        buttonsSpan.appendChild(removeSpan);
+
+        var editAnchor = document.createElement("a");
+        editAnchor.href = "/Permission/GroupPermission?groupId=" + group.Id;
+
+        var editSpan = document.createElement("span");
+        $(editSpan).addClass("glyphicon glyphicon-edit list-item-edit");
+
+        editAnchor.appendChild(editSpan);
+
+        buttonsSpan.appendChild(editAnchor);
+
+        groupLi.appendChild(buttonsSpan);
+
+        var detailsDiv = document.createElement("div");
+        $(detailsDiv).addClass("list-item-details");
+        detailsDiv.innerHTML = group.Description;
+
+        $(detailsDiv).hide();
+
+        groupLi.appendChild(detailsDiv);
+
+        return groupLi;
+    }
+
+    private removeGroup(groupId: number) {
+    
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Permission/RemoveUserFromGroup",
+            data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupId: groupId }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+
+                this.loadUser(this.currentUserSelectedItem);
+            }
+        });
+
     }
 }

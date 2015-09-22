@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
+    [KnownType(typeof(UserDetailContract))]
     public class UserContract
     {
         [DataMember]

@@ -23,6 +23,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;
         private readonly PermissionManager m_permissionManager;
+        private readonly UserManager m_userManager;
 
 
         public ItJakubServiceManager()
@@ -34,7 +35,7 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
             m_permissionManager = m_container.Resolve<PermissionManager>();
-         
+            m_userManager = m_container.Resolve<UserManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -292,9 +293,24 @@ namespace ITJakub.ITJakubService.Services
             m_permissionManager.AddUserToGroup(userId, groupId);
         }
 
+        public void RemoveUserFromGroup(int userId, int groupId)
+        {
+            m_permissionManager.RemoveUserFromGroup(userId, groupId);
+        }
+
         public GroupContract CreateGroup(string name, string description)
         {
             return m_permissionManager.CreateGroup(name, description);
+        }
+
+        public UserDetailContract GetUserDetail(int userId)
+        {
+            return m_userManager.GetUserDetail(userId);
+        }
+
+        public GroupDetailContract GetGroupDetail(int groupId)
+        {
+            return m_permissionManager.GetGroupDetail(groupId);
         }
     }
 }

@@ -22,10 +22,23 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var result = m_mainServiceClient.GetTypeaheadUsers(query);
             return Json(result, JsonRequestBehavior.AllowGet);
-        }        
+        }      
+          
         public ActionResult GetTypeaheadGroup(string query)
         {
             var result = m_mainServiceClient.GetTypeaheadGroups(query);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+         
+        public ActionResult GetUser(int userId)
+        {
+            var result = m_mainServiceClient.GetUserDetail(userId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetGroup(int groupId)
+        {
+            var result = m_mainServiceClient.GetGroupDetail(groupId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -49,6 +62,13 @@ namespace ITJakub.Web.Hub.Controllers
             var group = m_mainServiceClient.CreateGroup(groupName, groupDescription);
             m_mainServiceClient.AddUserToGroup(userId, group.Id);
             return Json(new {group});
+        }
+
+        [HttpPost]
+        public ActionResult RemoveUserFromGroup(int userId, int groupId)
+        {
+            m_mainServiceClient.RemoveUserFromGroup(userId, groupId);
+            return Json(new {});
         }
 
         public ActionResult GetGroupsByUser(int userId)
