@@ -13,6 +13,7 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -21,6 +22,8 @@
         <converter1:GroupStateToSymbolConverter x:Key="GroupStateToSymbolConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converter1:GroupCountToStringConverter x:Key="GroupCountToStringConverter" />
+        <converter1:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <converter1:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -31,6 +34,7 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -50,14 +54,32 @@
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock Text="Administrace skupin"
-                       Style="{StaticResource HeaderTextBlockStyle}"
-                       Grid.Column="1" 
-                       IsHitTestVisible="false"
-                       TextWrapping="NoWrap"
-                       VerticalAlignment="Center" />
-            <userMenu:UserMenu Grid.Row="0"
-                               Grid.Column="2"
+            
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal">
+                <TextBlock Text="Administrace skupin"
+                           Style="{StaticResource HeaderTextBlockStyle}"
+                           IsHitTestVisible="false"
+                           TextWrapping="NoWrap"
+                           VerticalAlignment="Center" />
+                <ComboBox Margin="30,15,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
+                          Style="{StaticResource TextComboBoxStyle}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Type"
+                          SelectedValue="{Binding SelectedSortType, Mode=TwoWay}"
+                          SelectedIndex="{Binding DefaultIndex}">
+                    <comboBoxItem:SortGroupItem Name="Seřadit od nejnovější"
+                                                Type="CreateTime" />
+                    <comboBoxItem:SortGroupItem Name="Seřadit podle názvu"
+                                                Type="Name" />
+                    <comboBoxItem:SortGroupItem Name="Seřadit podle stavu"
+                                                Type="State" />
+                </ComboBox>
+            </StackPanel>
+            
+            <userMenu:UserMenu Grid.Column="2"
                                VerticalAlignment="Center"
                                Margin="0,0,30,0" />
         </Grid>
@@ -67,10 +89,21 @@
                      VerticalAlignment="Top"
                      Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+        <TextBlock Grid.Row="1"
+                   FontSize="20"
+                   Margin="120,0,0,0"
+                   FontWeight="Light"
+                   Foreground="Yellow"
+                   Visibility="{Binding CurrentFilter, Converter={StaticResource NotNullToVisibilityConverter}}">
+            <Run Text="Vyfiltrovány pouze skupiny ve stavu" />
+            <Run Text="{Binding CurrentFilter, Converter={StaticResource GroupStateToNameConverter}}" />
+        </TextBlock>
+
         <GridView
-            Grid.Row="1"
+            x:Name="GroupGridView"
+            Grid.Row="2"
             IsItemClickEnabled="True"
-            SelectionMode="Single"
+            SelectionMode="Multiple"
             Padding="110,0,0,0"
             ItemsSource="{Binding Source={StaticResource GroupList}}">
 
@@ -172,7 +205,13 @@
             </GridView.GroupStyle>-->
         </GridView>
 
-        <CommandBar Grid.Row="2"
+        <TextBlock Grid.Row="2"
+                   Margin="120,30,0,0"
+                   Text="Nejsou dostupné žádné skupiny."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding IsGroupListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <CommandBar Grid.Row="3"
                     Style="{StaticResource FixedBottomCommandBar}">
             <CommandBar.PrimaryCommands>
                 <AppBarButton Icon="Filter"
@@ -211,12 +250,13 @@
             <CommandBar.SecondaryCommands>
                 <AppBarButton Icon="Forward"
                               Label="Otevřít"
-                              Command="{Binding ConnectCommand}"
-                              Visibility="{Binding IsGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Command="{Binding OpenGroupCommand}"
+                              CommandParameter="{Binding ElementName=GroupGridView, Path=SelectedItem}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               IsEnabled="{Binding IsOneItemSelected}" />
                 <AppBarButton Icon="Delete"
                               Label="Odstranit"
-                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               IsEnabled="{Binding CanRemoveSelected}"
                               x:Name="DeleteGroupButton">
                     <AppBarButton.Flyout>
@@ -297,7 +337,7 @@
                 <AppBarButton Icon="Stop"
                               Label="Přepnout na ukončeno"
                               IsEnabled="{Binding CanCloseSelected}"
-                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="CloseGroupButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=CloseGroupButton}"
@@ -311,7 +351,7 @@
                 <AppBarButton Icon="Pause"
                               Label="Přepnout na pozastaveno"
                               IsEnabled="{Binding CanPauseSelected}"
-                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PauseButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PauseButton}"
@@ -325,7 +365,7 @@
                 <AppBarButton Icon="Play"
                               Label="Přepnout na spuštěno"
                               IsEnabled="{Binding CanStartSelected}"
-                              Visibility="{Binding IsTeacherAndGroupSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
                               x:Name="PlayButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.Parent="{Binding ElementName=PlayButton}"

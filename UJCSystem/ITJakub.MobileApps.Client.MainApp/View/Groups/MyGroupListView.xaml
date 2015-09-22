@@ -13,12 +13,15 @@
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:groups="using:ITJakub.MobileApps.Client.MainApp.View.Groups"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
+    xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
     mc:Ignorable="d">
 
     <Page.Resources>
         <CollectionViewSource x:Key="GroupList" Source="{Binding GroupList}" IsSourceGrouped="False" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter1:GroupStateToSymbolConverter x:Key="GroupStateToSymbolConverter" />
+        <converter1:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter" />
+        <converter1:GroupStateToNameConverter x:Key="GroupStateToNameConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -29,6 +32,7 @@
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -47,12 +51,33 @@
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
                     AutomationProperties.ItemType="Navigation Button" />
-            <TextBlock Text="Seznam skupin"
-                       Style="{StaticResource HeaderTextBlockStyle}"
-                       Grid.Column="1" 
-                       IsHitTestVisible="false"
-                       TextWrapping="NoWrap"
-                       VerticalAlignment="Center" />
+            
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal">
+                
+                <TextBlock Text="Seznam skupin"
+                           Style="{StaticResource HeaderTextBlockStyle}"
+                           IsHitTestVisible="false"
+                           TextWrapping="NoWrap"
+                           VerticalAlignment="Center" />
+                
+                <ComboBox Margin="30,15,0,0"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
+                          Style="{StaticResource TextComboBoxStyle}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Type"
+                          SelectedValue="{Binding SelectedSortType, Mode=TwoWay}"
+                          SelectedIndex="{Binding DefaultIndex}">
+                    <comboBoxItem:SortGroupItem Name="Seřadit od nejnovější"
+                                                Type="CreateTime" />
+                    <comboBoxItem:SortGroupItem Name="Seřadit podle názvu"
+                                                Type="Name" />
+                    <comboBoxItem:SortGroupItem Name="Seřadit podle stavu"
+                                                Type="State" />
+                </ComboBox>
+            </StackPanel>
+            
             <userMenu:UserMenu Grid.Row="0"
                                Grid.Column="2"
                                VerticalAlignment="Center"
@@ -64,8 +89,19 @@
                      VerticalAlignment="Top"
                      Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+        <TextBlock Grid.Row="1"
+                   FontSize="20"
+                   Margin="120,0,0,0"
+                   FontWeight="Light"
+                   Foreground="Yellow"
+                   Visibility="{Binding CurrentFilter, Converter={StaticResource NotNullToVisibilityConverter}}">
+            <Run Text="Vyfiltrovány pouze skupiny ve stavu" />
+            <Run Text="{Binding CurrentFilter, Converter={StaticResource GroupStateToNameConverter}}" />
+        </TextBlock>
+        
         <GridView
-            Grid.Row="1"
+            x:Name="GroupGridView"
+            Grid.Row="2"
             IsItemClickEnabled="True"
             SelectionMode="Single"
             Padding="110,0,0,0"
@@ -156,10 +192,27 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
-        
-        <CommandBar Grid.Row="2"
+
+        <TextBlock Grid.Row="1"
+                   Margin="120,30,0,0"
+                   Text="Nejsou dostupné žádné skupiny."
+                   Style="{StaticResource SubheaderTextBlockStyle}"
+                   Visibility="{Binding IsGroupListEmpty, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <CommandBar Grid.Row="3"
                     Style="{StaticResource FixedBottomCommandBar}">
-            
+
+            <AppBarButton Icon="Filter"
+                          Label="Filtrovat">
+                <AppBarButton.Flyout>
+                    <groups:FilterByStateMenuFlyout />
+                </AppBarButton.Flyout>
+            </AppBarButton>
+
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+
             <AppBarButton Icon="AddFriend"
                           Label="Připojit se ke skupině"
                           x:Name="ConnectToGroupButton">
@@ -172,6 +225,14 @@
                     </Flyout>
                 </AppBarButton.Flyout>
             </AppBarButton>
+            
+            <CommandBar.SecondaryCommands>
+                <AppBarButton Icon="Forward"
+                              Label="Otevřít"
+                              Command="{Binding OpenGroupCommand}"
+                              CommandParameter="{Binding ElementName=GroupGridView, Path=SelectedItem}"
+                              Visibility="{Binding ElementName=GroupGridView, Path=SelectedItem, Converter={StaticResource NotNullToVisibilityConverter}}" />
+            </CommandBar.SecondaryCommands>
         </CommandBar>
     </Grid>
 </Page>

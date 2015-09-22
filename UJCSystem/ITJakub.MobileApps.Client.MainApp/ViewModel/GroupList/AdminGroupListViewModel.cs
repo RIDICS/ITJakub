@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
@@ -14,18 +12,19 @@ using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
-    public class AdminGroupListViewModel : ViewModelBase
+    public class AdminGroupListViewModel : GroupListViewModelBase
     {
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IErrorService m_errorService;
-        private ObservableCollection<GroupInfoViewModel> m_groupList;
         private List<GroupInfoViewModel> m_selectedGroups;
-        private bool m_isGroupListEmpty;
-        private bool m_loading;
         private bool m_isOneItemSelected;
-        private GroupStateContract? m_currentFilter;
-
+        private bool m_canCloseSelected;
+        private bool m_canStartSelected;
+        private bool m_canRemoveSelected;
+        private bool m_canPauseSelected;
+        private bool m_isAtLeastOneSelected;
+        
         public AdminGroupListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
             m_dataService = dataService;
@@ -42,12 +41,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
-            GroupClickCommand = new RelayCommand<ItemClickEventArgs>(OpenGroup);
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
-            RefreshListCommand = new RelayCommand(LoadData);
             OpenMyTaskListCommand = new RelayCommand(() => m_navigationService.Navigate<OwnedTaskListView>());
             CreateTaskCommand = new RelayCommand(CreateNewTask);
-            FilterCommand = new RelayCommand<object>(Filter);
         }
 
         private void InitViewModels()
@@ -71,24 +67,19 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                     return;
                 }
 
-                GroupList = new ObservableCollection<GroupInfoViewModel>(groupList);
+                m_completeGroupList = groupList;
+                DisplayGroupList();
             });
         }
 
         public RelayCommand GoBackCommand { get; private set; }
-
-        public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; set; }
-
+        
         public RelayCommand<SelectionChangedEventArgs> SelectionChangedCommand { get; set; }
-
-        public RelayCommand<object> FilterCommand { get; private set; }
-
-        public RelayCommand RefreshListCommand { get; private set; }
-
+        
         public RelayCommand OpenMyTaskListCommand { get; private set; }
 
         public RelayCommand CreateTaskCommand { get; private set; }
-
+        
 
         public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
 
@@ -99,38 +90,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToClosedViewModel { get; set; }
 
         public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
-
-        public ObservableCollection<GroupInfoViewModel> GroupList
-        {
-            get { return m_groupList; }
-            set
-            {
-                m_groupList = value;
-                RaisePropertyChanged();
-                IsGroupListEmpty = m_groupList.Count == 0;
-            }
-        }
-
-        public bool IsGroupListEmpty
-        {
-            get { return m_isGroupListEmpty; }
-            set
-            {
-                m_isGroupListEmpty = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool Loading
-        {
-            get { return m_loading; }
-            set
-            {
-                m_loading = value;
-                RaisePropertyChanged();
-            }
-        }
-
+        
         public bool IsOneItemSelected
         {
             get { return m_isOneItemSelected; }
@@ -141,26 +101,47 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        public GroupStateContract? CurrentFilter
+        public bool CanCloseSelected
         {
-            get { return m_currentFilter; }
-            set
-            {
-                m_currentFilter = value;
-                RaisePropertyChanged();
-            }
+            get { return m_canCloseSelected; }
+            set { m_canCloseSelected = value; RaisePropertyChanged(); }
+        }
+
+        public bool CanStartSelected
+        {
+            get { return m_canStartSelected; }
+            set { m_canStartSelected = value; RaisePropertyChanged(); }
+        }
+
+        public bool CanRemoveSelected
+        {
+            get { return m_canRemoveSelected; }
+            set { m_canRemoveSelected = value; RaisePropertyChanged(); }
+        }
+
+        public bool CanPauseSelected
+        {
+            get { return m_canPauseSelected; }
+            set { m_canPauseSelected = value; RaisePropertyChanged(); }
+        }
+
+        public bool IsAtLeastOneSelected
+        {
+            get { return m_isAtLeastOneSelected; }
+            set { m_isAtLeastOneSelected = value; RaisePropertyChanged(); }
         }
 
 
-        private void OpenGroup(ItemClickEventArgs args)
+        protected override void OpenGroup(GroupInfoViewModel group)
         {
-            var group = args.ClickedItem as GroupInfoViewModel;
             if (group == null)
                 return;
 
             m_dataService.SetCurrentGroup(group.GroupId, GroupType.Owner);
             m_navigationService.Navigate<GroupPageView>();
         }
+
+        public override bool IsTeacherView { get { return true; } }
 
         private void SelectionChanged(SelectionChangedEventArgs args)
         {
@@ -172,6 +153,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             {
                 m_selectedGroups.Add(addedItem as GroupInfoViewModel);
             }
+            IsAtLeastOneSelected = m_selectedGroups.Count > 0;
             IsOneItemSelected = m_selectedGroups.Count == 1;
             DeleteGroupViewModel.SelectedGroupCount = m_selectedGroups.Count;
 
@@ -180,46 +162,24 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void UpdateGroupStateActions()
         {
-            // Enable only appropriate group state change
-            //if (m_selectedGroups.Any(model => model.GroupType == GroupType.Member))
-            //{
-            //    CanPauseSelected = false;
-            //    CanStartSelected = false;
-            //    CanRemoveSelected = false;
-            //    return;
-            //}
+            var stateCount = m_selectedGroups.GroupBy(model => model.State).ToDictionary(models => models.Key, models => models.Count());
+            var totalCount = m_selectedGroups.Count();
 
-            //var stateCount = m_selectedGroups.GroupBy(model => model.State).ToDictionary(models => models.Key, models => models.Count());
-            //var totalCount = m_selectedGroups.Count();
-
-            //for (var state = GroupStateContract.Created; state <= GroupStateContract.Closed; state++)
-            //{
-            //    if (!stateCount.ContainsKey(state))
-            //        stateCount[state] = 0;
-            //}
-            //CanPauseSelected = stateCount[GroupStateContract.Running] == totalCount;
-            //CanRemoveSelected = stateCount[GroupStateContract.Created] + stateCount[GroupStateContract.Closed] == totalCount;
-            //CanStartSelected = stateCount[GroupStateContract.WaitingForStart] + stateCount[GroupStateContract.Paused] == totalCount;
+            for (var state = GroupStateContract.Created; state <= GroupStateContract.Closed; state++)
+            {
+                if (!stateCount.ContainsKey(state))
+                    stateCount[state] = 0;
+            }
+            CanPauseSelected = stateCount[GroupStateContract.Running] == totalCount;
+            CanRemoveSelected = stateCount[GroupStateContract.Created] + stateCount[GroupStateContract.Closed] == totalCount;
+            CanStartSelected = stateCount[GroupStateContract.WaitingForStart] + stateCount[GroupStateContract.Paused] == totalCount;
+            CanCloseSelected = stateCount[GroupStateContract.Running] + stateCount[GroupStateContract.Paused] == totalCount;
         }
-
+        
         private void CreateNewTask()
         {
             m_dataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
             m_navigationService.Navigate<SelectApplicationView>();
-        }
-
-        private void Filter(object state)
-        {
-            if (state == null)
-            {
-                CurrentFilter = null;
-            }
-            else
-            {
-                CurrentFilter = (GroupStateContract)Convert.ToInt16(state);
-            }
-
-            //DisplayGroupList(m_ownedGroups);
         }
         
     }
