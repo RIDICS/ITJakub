@@ -19,3 +19,14 @@ interface IGroup {
     Name: string;
     Description: string;
 }
+
+interface ICategory {
+    Id: number;
+    Description: string;
+}
+
+interface IBook {
+    Id: number;
+    Guid: string;
+    Title: string;
+}

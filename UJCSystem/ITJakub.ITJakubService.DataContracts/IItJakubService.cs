@@ -200,5 +200,17 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         GroupDetailContract GetGroupDetail(int groupId);
+
+        [OperationContract]
+        IList<CategoryContract> GetRootCategories();
+
+        [OperationContract]
+        CategoryContentContract GetCategoryContent(int categoryId);
+
+        [OperationContract]
+        CategoryContentContract GetAllCategoryContent(int categoryId);
+
+        [OperationContract]
+        void DeleteGroup(int groupId);
     }
 }

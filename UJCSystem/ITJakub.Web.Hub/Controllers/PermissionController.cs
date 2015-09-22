@@ -53,7 +53,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult CreateGroup(string groupName, string groupDescription)
         {
             var group = m_mainServiceClient.CreateGroup(groupName, groupDescription);
-            return Json(new {group});
+            return Json(group);
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var group = m_mainServiceClient.CreateGroup(groupName, groupDescription);
             m_mainServiceClient.AddUserToGroup(userId, group.Id);
-            return Json(new {group});
+            return Json(group);
         }
 
         [HttpPost]
@@ -74,7 +74,32 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult GetGroupsByUser(int userId)
         {
             var result = m_mainServiceClient.GetGroupsByUser(userId);
-            return Json(new { result }, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetRootCategories()
+        {
+            var result = m_mainServiceClient.GetRootCategories();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        
+        public ActionResult GetCategoryContent(int categoryId)
+        {
+            var result = m_mainServiceClient.GetCategoryContent(categoryId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }     
+           
+        public ActionResult GetAllCategoryContent(int categoryId)
+        {
+            var result = m_mainServiceClient.GetAllCategoryContent(categoryId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+                   
+        [HttpPost]
+        public ActionResult DeleteGroup(int groupId)
+        {
+            m_mainServiceClient.DeleteGroup(groupId);
+            return Json(new {});
         }
     }
 }

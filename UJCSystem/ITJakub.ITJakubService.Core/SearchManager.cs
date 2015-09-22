@@ -69,6 +69,37 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
+        public IList<CategoryContract> GetRootCategories()
+        {
+            var categories = m_categoryRepository.GetRootCategories();
+            return Mapper.Map<IList<CategoryContract>>(categories);
+        }
+
+        public CategoryContentContract GetCategoryContent(int categoryId)
+        {
+            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
+            m_authorizationManager.FilterBooks(ref books);
+            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
+
+            return new CategoryContentContract
+            {
+                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
+                Categories = Mapper.Map<IList<CategoryContract>>(categories)
+            };
+        }
+
+        public CategoryContentContract GetAllCategoryContent(int categoryId)
+        {
+            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
+            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
+
+            return new CategoryContentContract
+            {
+                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
+                Categories = Mapper.Map<IList<CategoryContract>>(categories)
+            };
+        }
+
         private string EscapeQuery(string query)
         {
             return query.Replace("[", "[[]");

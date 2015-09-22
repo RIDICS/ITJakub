@@ -133,9 +133,7 @@ class UserPermissionEditor {
             data: { userId: user.Id },
             dataType: "json",
             contentType: "application/json",
-            success: (response) => {
-
-                var results = response["result"];
+            success: (results) => {
                  
                 for (var i = 0; i < results.length; i++) {
                     var group = results[i];
@@ -201,15 +199,6 @@ class UserPermissionEditor {
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
 
-        var removeSpan = document.createElement("span");
-        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
-
-        $(removeSpan).click(() => {
-            this.removeGroup(group.Id);
-        });
-
-        buttonsSpan.appendChild(removeSpan);
-
         var editAnchor = document.createElement("a");
         editAnchor.href = "/Permission/GroupPermission?groupId=" + group.Id;
 
@@ -219,6 +208,15 @@ class UserPermissionEditor {
         editAnchor.appendChild(editSpan);
 
         buttonsSpan.appendChild(editAnchor);
+
+        var removeSpan = document.createElement("span");
+        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
+
+        $(removeSpan).click(() => {
+            this.removeGroup(group.Id);
+        });
+
+        buttonsSpan.appendChild(removeSpan);
 
         groupLi.appendChild(buttonsSpan);
 

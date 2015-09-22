@@ -53,6 +53,21 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
         }
 
+        public IList<CategoryContract> GetRootCategories()
+        {
+            return m_searchManager.GetRootCategories();
+        }
+
+        public CategoryContentContract GetCategoryContent(int categoryId)
+        {
+            return m_searchManager.GetCategoryContent(categoryId);
+        }
+
+        public CategoryContentContract GetAllCategoryContent(int categoryId)
+        {
+            return m_searchManager.GetAllCategoryContent(categoryId);
+        }
+
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat, bookTypeContract);
@@ -311,6 +326,11 @@ namespace ITJakub.ITJakubService.Services
         public GroupDetailContract GetGroupDetail(int groupId)
         {
             return m_permissionManager.GetGroupDetail(groupId);
+        }
+
+        public void DeleteGroup(int groupId)
+        {
+            m_permissionManager.DeleteGroup(groupId);
         }
     }
 }
