@@ -235,7 +235,7 @@
 
                 <AppBarButton Icon="Add"
                               Label="Vytvořit skupinu"
-                              x:Name="CreateGroupButton">
+                              x:Name="CreateGroupButton" Click="CreateGroupButton_Click">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
                                 control:FlyoutHelpers.Parent="{Binding ElementName=CreateGroupButton}">
@@ -306,14 +306,28 @@
                                                Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                Margin="5,0,0,0" />
 
-                                    <Button Grid.Column="2"
+
+
+                                    <AppBarButton Icon="Delete" Command="{Binding DeleteGroupCommand}" Label="Smazat skupiny" Grid.Column="2">
+                                        <interactivity:Interaction.Behaviors>
+                                            <control:CloseFlyoutBehavior/>
+                                        </interactivity:Interaction.Behaviors>
+                                    </AppBarButton>
+
+                                    <AppBarButton Icon="Cancel" Label="Zrušit"  Grid.Column="3">
+                                        <interactivity:Interaction.Behaviors>
+                                            <control:CloseFlyoutBehavior/>
+                                        </interactivity:Interaction.Behaviors>
+                                    </AppBarButton>
+
+                                    <!--<Button Grid.Column="2"
                                             Content="Zrušit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
                                             Command="{Binding CancelCommand}" />
                                     <Button Grid.Column="3"
                                             Content="Odstranit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding SubmitCommand}" />
+                                            Command="{Binding SubmitCommand}" />-->
                                 </Grid>
                             </StackPanel>
                         </Flyout>

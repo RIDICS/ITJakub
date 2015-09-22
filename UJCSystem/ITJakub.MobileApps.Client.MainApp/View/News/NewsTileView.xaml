@@ -10,7 +10,8 @@
     d:DesignHeight="400"
     d:DesignWidth="400"
     d:DataContext="{d:DesignInstance Type=news:NewsViewModel}"
-    DataContext="{Binding NewsViewModel, Source={StaticResource Locator}}">
+    DataContext="{Binding NewsViewModel, Source={StaticResource Locator}}"
+    Background="Black">
     <UserControl.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
