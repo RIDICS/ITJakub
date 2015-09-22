@@ -21,6 +21,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
         private CrosswordTask m_task;
         private Action<List<ProgressUpdateViewModel>, Exception> m_pollingCallback;
         private DateTime m_lastDateTime;
+        private CrosswordTaskContract m_taskContract;
 
         public CrosswordManager(ISynchronizeCommunication applicationCommunication)
         {
@@ -28,18 +29,23 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             m_pollingService = m_applicationCommunication.PollingService;
         }
 
-        public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers)
+        public void SetTask(string data)
         {
-            var taskContract = JsonConvert.DeserializeObject<CrosswordTaskContract>(data);
+            m_taskContract = JsonConvert.DeserializeObject<CrosswordTaskContract>(data);
+            m_task = new CrosswordTask(m_taskContract);
+        }
+
+        public void GetConfiguration(Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers)
+        {
             var crosswordRows = new ObservableCollection<CrosswordRowViewModel>();
 
             var rowIndex = 0;
-            foreach (var row in taskContract.RowList)
+            foreach (var row in m_taskContract.RowList)
             {
                 CrosswordRowViewModel crosswordRow;
                 if (row.Answer != null && row.StartPosition != null)
                 {
-                    crosswordRow = new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition.Value, taskContract.AnswerPosition, rowIndex++);
+                    crosswordRow = new CrosswordRowViewModel(row.Label, row.Answer.Length, row.StartPosition.Value, m_taskContract.AnswerPosition, rowIndex++);
 
                     if (fillAnswers)
                         crosswordRow.UpdateWord(row.Answer);
@@ -50,8 +56,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
                 }
                 crosswordRows.Add(crosswordRow);
             }
-            m_task = new CrosswordTask(taskContract);
-
+            
             callback(crosswordRows);
         }
 

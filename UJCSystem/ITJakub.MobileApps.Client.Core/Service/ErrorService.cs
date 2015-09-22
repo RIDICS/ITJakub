@@ -63,6 +63,19 @@ namespace ITJakub.MobileApps.Client.Core.Service
             DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
         }
 
+        public void ShowDialog(MessageDialog messageDialog)
+        {
+            if (m_messageDialog != null)
+                return;
+
+            m_messageDialog = messageDialog;
+            DispatcherHelper.CheckBeginInvokeOnUI(async () =>
+            {
+                await m_messageDialog.ShowAsync();
+                m_messageDialog = null;
+            });
+        }
+
         public void HideWarning()
         {
             if (m_errorBar != null)

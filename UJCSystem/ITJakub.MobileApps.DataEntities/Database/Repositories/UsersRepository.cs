@@ -185,7 +185,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 
                 session.Delete(group);
 
-                var rowKeys = group.SynchronizedObjects.OfType<SynchronizedObject>().Select(o => o.RowKey);
+                var rowKeys = group.SynchronizedObjects.OfType<SynchronizedObject>().Select(o => o.ObjectExternalId);
 
                 return rowKeys;
             }

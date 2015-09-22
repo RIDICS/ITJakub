@@ -54,9 +54,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void SetTask(string data)
         {
-            m_dataService.SetTaskAndGetConfiguration(data, crosswordRowViewModels =>
+            m_dataService.SetTask(data);
+            m_dataService.GetConfiguration(crosswordRowViewModels =>
             {
-                SimpleCrosswordsViewModel.Crossword = crosswordRowViewModels;
+                SimpleCrosswordsViewModel.SetCrossword(crosswordRowViewModels);
             });
         }
 

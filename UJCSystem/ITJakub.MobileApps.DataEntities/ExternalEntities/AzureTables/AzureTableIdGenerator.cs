@@ -1,6 +1,6 @@
 using System;
 
-namespace ITJakub.MobileApps.Core.Applications
+namespace ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables
 {
     public class AzureTableIdGenerator
     {
