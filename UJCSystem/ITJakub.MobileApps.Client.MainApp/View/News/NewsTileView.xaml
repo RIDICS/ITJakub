@@ -17,6 +17,7 @@
     </UserControl.Resources>
     <Grid Background="#40FFFFFF">
         <ProgressRing Width="75" Height="75" IsActive="True" Visibility="{Binding Loading, Converter={ StaticResource BooleanToVisibilityConverter}}" />
+        
         <ListView
             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
             HorizontalContentAlignment="Stretch"

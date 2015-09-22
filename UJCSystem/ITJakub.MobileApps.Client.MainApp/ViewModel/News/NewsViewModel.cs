@@ -24,7 +24,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
         public ObservableCollection<SyndicationItemViewModel> News
         {
             get { return m_news; }
-            set { m_news = value; RaisePropertyChanged(); }
+            set
+            {
+                m_news = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool Loading
@@ -40,12 +44,25 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
         private async void LoadData()
         {
             Loading = true;
-            var data = await m_dataService.GetAllNews();            
-            Loading = false;
-            foreach (var item in data)
+            try
             {
-                News.Add(item);
+                var data = await m_dataService.GetAllNews();
+
+                foreach (var item in data)
+                {
+                    News.Add(item);
+                }
             }
+            catch (Exception ex)
+            {
+
+            }
+            finally
+            {
+                Loading = false;
+            }
+
+
             //await Task.Run(() =>
             //{
             //    foreach (var item in data)
@@ -53,8 +70,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
             //        DispatcherHelper.CheckBeginInvokeOnUI(()=>News.Add(item));
             //    }
             //});
-
-            
         }
     }
 }

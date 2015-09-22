@@ -80,13 +80,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />                
             </Grid.ColumnDefinitions>
             <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -461,5 +463,28 @@
                            Margin="50,15,0,0" />
             </Grid>
         </Grid>
+        
+        <!--<StackPanel Grid.Row="2" Orientation="Horizontal">
+            <AppBarButton Label="Aktualizovat"
+                          Icon="Refresh"
+                          Command="{Binding ReloadCommand}"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}" />
+            <AppBarButton Label="Připojit se"
+                          Icon="Forward"
+                          Command="{Binding ConnectToGroupCommand}"
+                          IsEnabled="{Binding CanConnectToGroup}" />
+            <AppBarButton Icon="Preview"
+                          Label="Zobrazit zvolené zadání"
+                          IsEnabled="{Binding IsTaskSelected}"
+                          Command="{Binding ShowTaskCommand}"/>
+            <AppBarButton Label="Zobrazit aplikaci jako student"
+                          Icon="NewWindow"
+                          Command="{Binding OpenApplicationCommand}"
+                          IsEnabled="{Binding CanOpenApplication}" />
+            <AppBarButton Label="Zobrazit aplikaci jako učitel"
+                          Icon="OtherUser"
+                          Command="{Binding OpenAdminCommand}"
+                          IsEnabled="{Binding CanOpenAdmin}" />
+        </StackPanel>-->
     </Grid>
 </Page>
