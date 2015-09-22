@@ -1,6 +1,8 @@
+using System;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -12,13 +14,15 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         private readonly IDataService m_dataService;
         private readonly INavigationService m_navigationService;
         private readonly IErrorService m_errorService;
-        
+        private readonly IMainPollingService m_pollingService;
 
-        public MyGroupListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
+
+        public MyGroupListViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
             m_errorService = errorService;
+            m_pollingService = pollingService;
 
             InitCommands();
             InitViewModels();
@@ -27,7 +31,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void InitCommands()
         {
-            GoBackCommand = new RelayCommand(m_navigationService.GoBack);
+            GoBackCommand = new RelayCommand(() =>
+            {
+                m_pollingService.UnregisterAll();
+                m_navigationService.GoBack();
+            });
             RefreshListCommand = new RelayCommand(LoadData);
         }
 
@@ -38,6 +46,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
         private void LoadData()
         {
+            m_pollingService.Unregister(UpdatePollingInterval, GroupUpdate);
+
             Loading = true;
             m_dataService.GetGroupsForCurrentUser((groupList, exception) =>
             {
@@ -50,6 +60,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 
                 m_completeGroupList = groupList;
                 DisplayGroupList();
+
+                m_pollingService.RegisterForGroupsUpdate(UpdatePollingInterval, m_completeGroupList, GroupUpdate);
             });
         }
 
@@ -70,11 +82,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 var isUserGroupOwner = group.AuthorId == user.UserId;
                 var groupType = isUserGroupOwner ? GroupType.Owner : GroupType.Member;
 
+                m_pollingService.UnregisterAll();
                 m_dataService.SetCurrentGroup(group.GroupId, groupType);
                 m_navigationService.Navigate<ApplicationHostView>();
             });
         }
 
         public override bool IsTeacherView { get { return false; } }
+
+        private void GroupUpdate(Exception exception)
+        {
+            if (exception != null)
+                m_errorService.ShowConnectionWarning();
+            else
+                m_errorService.HideWarning();
+        }
     }
 }

@@ -261,8 +261,6 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
         private void FillGroupMembers(GroupInfoViewModel group, IEnumerable<GroupMemberContract> members)
         {
-            var memberList = new List<GroupMemberViewModel>();
-
             foreach (var member in members)
             {
                 var memberViewModel = new GroupMemberViewModel
@@ -273,14 +271,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     UserAvatar = m_defaultUserAvatar
                 };
 
-                memberList.Add(memberViewModel);
+                group.Members.Add(memberViewModel);
 
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
                 LoadMemberAvatar(memberViewModel);
             }
 
-            group.MemberCount = memberList.Count;
-            group.Members = new ObservableCollection<GroupMemberViewModel>(memberList.OrderBy(x => x, new GroupMemberComparer()));
+            group.MemberCount = group.Members.Count;
+            group.Members = new ObservableCollection<GroupMemberViewModel>(group.Members.OrderBy(x => x, new GroupMemberComparer()));
         }
 
         public async void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)

@@ -8,12 +8,14 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts.Groups;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
     public abstract class GroupListViewModelBase : ViewModelBase
     {
+        protected const PollingInterval UpdatePollingInterval = PollingInterval.Medium;
         private ObservableCollection<GroupInfoViewModel> m_groupList;
         protected List<GroupInfoViewModel> m_completeGroupList;
         private bool m_isGroupListEmpty;
