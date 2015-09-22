@@ -107,7 +107,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ViewModel\ApplicationMenuPageView.cs" />
+    <Compile Include="ViewModel\ApplicationMenuPageViewModel.cs" />
     <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
     <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />
@@ -177,6 +177,9 @@
     </Compile>
     <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
       <DependentUpon>CreateGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\GroupMemberListControl.xaml.cs">
+      <DependentUpon>GroupMemberListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Groups\MyGroupListView.xaml.cs">
       <DependentUpon>MyGroupListView.xaml</DependentUpon>
@@ -307,6 +310,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Groups\CreateGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\GroupMemberListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

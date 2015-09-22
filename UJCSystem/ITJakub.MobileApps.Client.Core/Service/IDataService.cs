@@ -66,11 +66,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void SetAppSelectionTarget(SelectApplicationTarget target);
 
-        void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
+        void GetOwnedGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback);
 
         Task<ObservableCollection<GroupInfoViewModel>> GetOwnedGroupsForCurrentUserAsync();
 
-        void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback);
+        void GetGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback);
 
         Task<ObservableCollection<GroupInfoViewModel>> GetGroupForCurrentUserAsync();
 

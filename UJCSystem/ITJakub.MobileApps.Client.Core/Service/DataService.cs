@@ -58,7 +58,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_applicationManager.GetAllApplicationsByTypes(types, callback);
         }
 
-        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetOwnedGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
             m_groupManager.GetOwnedGroupsForCurrentUser(callback);
         }
@@ -68,7 +68,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             return m_groupManager.GetOwnedGroupsForCurrentUserAsync();
         }
 
-        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
             m_groupManager.GetGroupsForCurrentUser(callback);
         }

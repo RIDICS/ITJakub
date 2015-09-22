@@ -7,10 +7,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:groups="using:ITJakub.MobileApps.Client.MainApp.View.Groups"
     mc:Ignorable="d">
 
     <Page.Resources>
-        
+        <CollectionViewSource x:Key="GroupList" Source="{Binding GroupList}" IsSourceGrouped="False" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter1:GroupStateToSymbolConverter x:Key="GroupStateToSymbolConverter" />
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -25,7 +32,7 @@
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>
@@ -49,5 +56,103 @@
                                VerticalAlignment="Center"
                                Margin="0,0,30,0" />
         </Grid>
+
+        <ProgressBar Grid.Row="0"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <GridView
+            Grid.Row="1"
+            IsItemClickEnabled="True"
+            SelectionMode="Single"
+            Padding="110,0,0,0"
+            ItemsSource="{Binding Source={StaticResource GroupList}}">
+
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding GroupClickCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
+
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid GroupPadding="0,0,20,0" />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Width="400"
+                                Margin="4"
+                                Orientation="Horizontal">
+                        <Grid Width="64"
+                              Height="64">
+                            <Viewbox>
+                                <SymbolIcon Symbol="People" />
+                            </Viewbox>
+
+                            <Grid Width="32"
+                                  Height="32"
+                                  Margin="0,0,-3,-3"
+                                  VerticalAlignment="Bottom"
+                                  HorizontalAlignment="Right">
+
+                                <Ellipse Fill="#000070" />
+                                <SymbolIcon
+                                    Symbol="{Binding State, Converter={StaticResource GroupStateToSymbolConverter}}"
+                                    Foreground="White"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,1" />
+
+                            </Grid>
+
+                        </Grid>
+                        <StackPanel Width="270"
+                                    Margin="10,0,0,0"
+                                    Orientation="Vertical">
+                            <TextBlock Text="{Binding GroupName}"
+                                       FontWeight="Bold" />
+                            <TextBlock>
+                                <Run Text="Počet členů: " />
+                                <Run Text="{Binding MemberCount}" />
+                            </TextBlock>
+                            <ItemsControl ItemsSource="{Binding Members}"
+                                          Margin="0,0,10,0"
+                                          Height="32"
+                                          IsHitTestVisible="False"
+                                          IsTapEnabled="False">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Image Width="30"
+                                               Height="30"
+                                               Margin="0,0,8,0"
+                                               Source="{Binding UserAvatar}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <Button Style="{StaticResource CircleButtonStyle}"
+                                VerticalAlignment="Center">
+                            <SymbolIcon Symbol="List" />
+
+                            <Button.Flyout>
+                                <Flyout Placement="Right">
+                                    <groups:GroupMemberListControl
+                                        DataContext="{Binding}" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
     </Grid>
 </Page>

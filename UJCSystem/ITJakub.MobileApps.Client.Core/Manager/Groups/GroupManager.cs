@@ -101,7 +101,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         //    }
         //}
 
-        public void GetGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
             var userId = m_authManager.GetCurrentUserId();
             if (!userId.HasValue)
@@ -111,12 +111,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
             Task.Factory.StartNew(() =>
             {
-                var client = m_serviceClientManager.GetClient();
-                var membershipGroups = client.GetMembershipGroups(userId.Value);
-                var result = new ObservableCollection<GroupInfoViewModel>();
-                foreach (var groupDetails in membershipGroups)
+                try
                 {
-                    try
+                    var client = m_serviceClientManager.GetClient();
+                    var membershipGroups = client.GetMembershipGroups(userId.Value);
+                    var result = new List<GroupInfoViewModel>();
+                    foreach (var groupDetails in membershipGroups)
                     {
                         var newGroup = new GroupInfoViewModel
                         {
@@ -130,19 +130,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         };
                         FillGroupMembers(newGroup, groupDetails.Members);
                         result.Add(newGroup);
-                        callback(result, null);
                     }
-                    catch (ClientCommunicationException ex)
-                    {
-                        callback(null, ex);
-                    }
-                }
 
-                return result;
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => callback(result, null));
+                }
+                catch (ClientCommunicationException ex)
+                {
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => callback(null, ex));
+                }
             });
         }
 
-        public void GetOwnedGroupsForCurrentUser(Action<ObservableCollection<GroupInfoViewModel>, Exception> callback)
+        public void GetOwnedGroupsForCurrentUser(Action<List<GroupInfoViewModel>, Exception> callback)
         {
             var userId = m_authManager.GetCurrentUserId();
 
@@ -159,7 +158,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                 {
                     var client = m_serviceClientManager.GetClient();
                     var ownedGroups = client.GetOwnedGroups(userId.Value);
-                    var result = new ObservableCollection<GroupInfoViewModel>();
+                    var result = new List<GroupInfoViewModel>();
                     foreach (var groupDetails in ownedGroups)
                     {
                         var newGroup = new GroupInfoViewModel
@@ -177,11 +176,11 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                         result.Add(newGroup);
                     }
 
-                    callback(result, null);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => callback(result, null));
                 }
                 catch (ClientCommunicationException ex)
                 {
-                    callback(null, ex);
+                    DispatcherHelper.CheckBeginInvokeOnUI(() => callback(null, ex));
                 }
             });
         }
@@ -258,6 +257,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
 
         private void FillGroupMembers(GroupInfoViewModel group, IEnumerable<GroupMemberContract> members)
         {
+            var memberList = new List<GroupMemberViewModel>();
+
             foreach (var member in members)
             {
                 var memberViewModel = new GroupMemberViewModel
@@ -268,14 +269,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
                     UserAvatar = m_defaultUserAvatar
                 };
 
-                group.Members.Add(memberViewModel);
+                memberList.Add(memberViewModel);
 
                 m_userAvatarCache.AddAvatarUrl(member.Id, member.AvatarUrl);
                 LoadMemberAvatar(memberViewModel);
             }
 
-            group.MemberCount = group.Members.Count;
-            group.Members = new ObservableCollection<GroupMemberViewModel>(group.Members.OrderBy(model => model, new GroupMemberComparer()));
+            group.MemberCount = memberList.Count;
+            group.Members = new ObservableCollection<GroupMemberViewModel>(memberList.OrderBy(x => x, new GroupMemberComparer()));
         }
 
         public async void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
@@ -385,7 +386,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Groups
         private async void LoadMemberAvatar(GroupMemberViewModel member)
         {
             var avatar = await m_userAvatarCache.GetUserAvatar(member.Id);
-            DispatcherHelper.CheckBeginInvokeOnUI(()=> member.UserAvatar = avatar);
+            DispatcherHelper.CheckBeginInvokeOnUI(() => member.UserAvatar = avatar);
         }
 
         public async Task UpdateGroupsMembersAsync(IList<GroupInfoViewModel> groups, Action<Exception> callback)
