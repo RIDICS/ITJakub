@@ -47,6 +47,7 @@ namespace ITJakub.MobileApps.DataEntities.ExternalEntities.SqlServer
 
         public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds)
         {
+            //no need to delete SynchronizedObjects data because of cascade settings in NHibernate
             return;
         }
     }
