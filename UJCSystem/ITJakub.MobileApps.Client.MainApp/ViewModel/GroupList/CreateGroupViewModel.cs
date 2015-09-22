@@ -51,7 +51,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 RaisePropertyChanged();
             }
         }
-        
+
         protected override void SubmitAction()
         {
             CreateNewGroup();

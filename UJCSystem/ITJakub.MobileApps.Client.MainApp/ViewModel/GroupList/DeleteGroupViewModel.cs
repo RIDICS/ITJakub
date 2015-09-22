@@ -25,6 +25,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_selectedGroups = selectedGroups;
             m_refreshAction = refreshAction;
             m_errorService = errorService;
+            DeleteGroupCommand = new RelayCommand(DeleteGroup);
         }
 
         public GroupInfoViewModel SelectedGroup

@@ -235,7 +235,7 @@
 
                 <AppBarButton Icon="Add"
                               Label="Vytvořit skupinu"
-                              x:Name="CreateGroupButton" Click="CreateGroupButton_Click">
+                              x:Name="CreateGroupButton">
                     <AppBarButton.Flyout>
                         <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
                                 control:FlyoutHelpers.Parent="{Binding ElementName=CreateGroupButton}">
@@ -260,8 +260,9 @@
                               IsEnabled="{Binding CanRemoveSelected}"
                               x:Name="DeleteGroupButton">
                     <AppBarButton.Flyout>
-                        <Flyout control:FlyoutHelpers.IsOpen="{Binding DeleteGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
-                                control:FlyoutHelpers.Parent="{Binding ElementName=DeleteGroupButton}">
+                        <Flyout>
+                            <!--control:FlyoutHelpers.IsOpen="{Binding DeleteGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                control:FlyoutHelpers.Parent="{Binding ElementName=DeleteGroupButton}"-->
                             <StackPanel Orientation="Vertical"
                                         DataContext="{Binding DeleteGroupViewModel}">
                                 <TextBlock MaxWidth="350"
