@@ -25,6 +25,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_navigationService = navigationService;
             m_errorService = errorService;
 
+            ConnectToGroupViewModel = new ConnectToGroupViewModel(dataService, errorService);
+
             InitCommands();
             LoadData();
         }
@@ -54,6 +56,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand<ItemClickEventArgs> GroupClickCommand { get; set; }
+
+        public ConnectToGroupViewModel ConnectToGroupViewModel { get; set; }
 
         public ObservableCollection<GroupInfoViewModel> GroupList
         {
@@ -86,6 +90,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
+        
         private void OpenGroup(ItemClickEventArgs args)
         {
             var group = args.ClickedItem as GroupInfoViewModel;

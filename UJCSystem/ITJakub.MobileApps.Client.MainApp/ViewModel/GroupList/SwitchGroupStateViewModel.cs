@@ -25,7 +25,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_selectedGroups = selectedGroups;
             m_refreshAction = refreshAction;
             m_errorService = errorService;
+
+            InitLabels();
         }
+        
+        public string InformationText { get; set; }
+        public string ErrorText { get; set; }
+        public string ProgressText { get; set; }
+        public string SubmitText { get; set; }
 
         public bool ShowError
         {
@@ -79,6 +86,31 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                         }
                     }
                 });
+            }
+        }
+
+        private void InitLabels()
+        {
+            switch (m_groupState)
+            {
+                case GroupStateContract.Running:
+                    InformationText = "Chystáte se zmìnit stav oznaèených skupin na Spuštìno.";
+                    ErrorText = "Nìkteré skupiny se nepodaøilo spustit.";
+                    ProgressText = "Probíhá spouštìní";
+                    SubmitText = "Spustit";
+                    break;
+                case GroupStateContract.Paused:
+                    InformationText = "Chystáte se zmìnit stav oznaèených skupin na Pozastaveno.";
+                    ErrorText = "Nìkteré skupiny se nepodaøilo pozastavit.";
+                    ProgressText = "Probíhá pozastavování";
+                    SubmitText = "Pozastavit";
+                    break;
+                case GroupStateContract.Closed:
+                    InformationText = "Chystáte se zmìnit stav oznaèených skupin na Ukonèeno.";
+                    ErrorText = "Nìkteré skupiny se nepodaøilo ukonèit.";
+                    ProgressText = "Ukonèování";
+                    SubmitText = "Ukonèit skupinu";
+                    break;
             }
         }
     }

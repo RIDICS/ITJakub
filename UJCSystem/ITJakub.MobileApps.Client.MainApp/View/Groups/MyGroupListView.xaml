@@ -12,6 +12,7 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:groups="using:ITJakub.MobileApps.Client.MainApp.View.Groups"
+    xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -29,6 +30,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
@@ -154,5 +156,22 @@
                 </DataTemplate>
             </GridView.ItemTemplate>
         </GridView>
+        
+        <CommandBar Grid.Row="2"
+                    Style="{StaticResource FixedBottomCommandBar}">
+            
+            <AppBarButton Icon="AddFriend"
+                          Label="Připojit se ke skupině"
+                          x:Name="ConnectToGroupButton">
+                <AppBarButton.Flyout>
+                    <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                            control:FlyoutHelpers.Parent="{Binding ElementName=ConnectToGroupButton}">
+
+                        <groups:ConnectToGroupControl
+                                DataContext="{Binding ConnectToGroupViewModel}" />
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </CommandBar>
     </Grid>
 </Page>
