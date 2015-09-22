@@ -18,17 +18,7 @@
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
-    
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Refresh"
-                          Label="Aktualizovat seznam"
-                          Command="{Binding RefreshListCommand}" />
-            <AppBarButton Icon="Add"
-                          Label="Vytvořit"
-                          Command="{Binding CreateNewTaskCommand}" />
-        </CommandBar>
-    </Page.BottomAppBar>
+
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
@@ -39,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <!-- Back button and page title -->
@@ -138,5 +129,14 @@
                    Text="Nemáte vytvořené žádné zadání."
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Visibility="{Binding NoTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <CommandBar Grid.Row="2" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+            <AppBarButton Icon="Add"
+                          Label="Vytvořit"
+                          Command="{Binding CreateNewTaskCommand}" />
+        </CommandBar>
     </Grid>
 </Page>

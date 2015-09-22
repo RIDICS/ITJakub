@@ -19,18 +19,6 @@
         <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
     </Page.Resources>
 
-    <Page.BottomAppBar>
-        <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
-            <AppBarButton Icon="Preview"
-                          Label="Zobrazit správné řešení"
-                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}"
-                          Command="{Binding ShowTaskCommand}"/>
-            <AppBarToggleButton Icon="Comment" 
-                                Label="Chat" 
-                                IsEnabled="{Binding IsChatSupported}"
-                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
-        </CommandBar>
-    </Page.BottomAppBar>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
@@ -41,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <ProgressBar Grid.Row="0"
@@ -142,5 +131,21 @@
                            TextWrapping="Wrap" />
             </StackPanel>
         </control:NotificationControl>
+
+
+
+        <CommandBar Grid.Row="2" IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Preview"
+                          Label="Zobrazit správné řešení"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}"
+                          Command="{Binding ShowTaskCommand}"/>
+            <AppBarToggleButton Icon="Comment" 
+                                Label="Chat" 
+                                IsEnabled="{Binding IsChatSupported}"
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
+        </CommandBar>
+
+
+
     </Grid>
 </Page>

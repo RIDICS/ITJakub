@@ -45,6 +45,7 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
@@ -216,5 +217,15 @@
                        Margin="0,0,40,0"
                        FontSize="30" />
         </StackPanel>
+
+        <CommandBar Grid.Row="3" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+            <AppBarButton Icon="Add"
+                          Label="Nové zadání"
+                          Command="{Binding CreateNewTaskCommand}" />
+        </CommandBar>
+
     </Grid>
 </Page>

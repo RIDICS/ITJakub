@@ -5,6 +5,7 @@
     <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF0050C3"/>
 
     <SolidColorBrush x:Key="AppBarBackgroundThemeBrush" Color="#FF0051B2"/>
+    <SolidColorBrush x:Key="AppCommandBarBackgroundThemeBrush" Color="Indigo"/>
     <SolidColorBrush x:Key="AppBarBorderThemeBrush" Color="WhiteSmoke"/>
 
     <SolidColorBrush x:Key="ProgressBarIndeterminateForegroundThemeBrush" Color="White"/>
@@ -822,7 +823,7 @@
     </Style>
 
     <Style x:Key="FixedBottomCommandBar" TargetType="CommandBar">
-        <Setter Property="Background" Value="{ThemeResource AppBarBackgroundThemeBrush}" />
+        <Setter Property="Background" Value="{ThemeResource AppCommandBarBackgroundThemeBrush}" />
         <Setter Property="BorderBrush" Value="{ThemeResource AppBarBorderThemeBrush}" />
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />

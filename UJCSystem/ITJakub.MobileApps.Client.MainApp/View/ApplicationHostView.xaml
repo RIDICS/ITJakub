@@ -19,16 +19,16 @@
         <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
-    
+
     <Page.TopAppBar>
         <AppBar Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
-                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
+                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}" Background="Indigo">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <ItemsControl Grid.Column="0"
                               VerticalAlignment="Center"
                               IsEnabled="{Binding IsClosed, Converter={StaticResource BooleanNegationConverter}}"
@@ -38,7 +38,7 @@
                             <StackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button IsEnabled="{Binding IsActionPerformed, Converter={StaticResource BooleanNegationConverter}}"
@@ -55,7 +55,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <ListView Grid.Column="1"
                           Margin="20,0,0,0"
                           SelectionMode="Single"
@@ -79,20 +79,20 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    
+
                 </ListView>
             </Grid>
         </AppBar>
     </Page.TopAppBar>
-    
-    <Page.BottomAppBar>
+
+    <!--<Page.BottomAppBar>
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
-            <AppBarToggleButton Icon="Comment" 
-                                Label="Chat" 
+            <AppBarToggleButton Icon="Comment"
+                                Label="Chat"
                                 IsEnabled="{Binding IsChatSupported}"
-                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -102,21 +102,22 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -124,14 +125,14 @@
                     HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock Text="{Binding ApplicationName}" 
-                       Style="{StaticResource HeaderTextBlockStyle}" 
-                       Grid.Column="1" 
-                       IsHitTestVisible="false"
-                       TextWrapping="NoWrap" 
-                       VerticalAlignment="Center" 
-                       />
+                    AutomationProperties.ItemType="Navigation Button" />
+            <Viewbox StretchDirection="DownOnly" MaxWidth="190" Grid.Column="1">
+                <TextBlock Text="{Binding ApplicationName}"
+                           Style="{StaticResource HeaderTextBlockStyle}"                           
+                           IsHitTestVisible="false"
+                           TextWrapping="NoWrap"
+                           VerticalAlignment="Center" />
+            </Viewbox>
 
             <ScrollViewer Grid.Column="2"
                           VerticalScrollBarVisibility="Auto"
@@ -144,21 +145,33 @@
                            FontSize="16"
                            TextWrapping="Wrap"
                            FontWeight="Light"
-                           Text="{Binding TaskDescription}"/>
+                           Text="{Binding TaskDescription}" />
             </ScrollViewer>
 
             <userMenu:UserMenu Grid.Column="3"
-                               Margin="0,0,30,0"/>
+                               Margin="0,0,30,0" />
+
+            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                <AppBarToggleButton Icon="Comment"
+                                    Margin="-15,0,-15,0"                                    
+                                    IsEnabled="{Binding IsChatSupported}"
+                                    IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}" 
+                                    Visibility="{Binding IsChatSupported, Converter={StaticResource BooleanToVisibilityConverter}}"/>                
+                <AppBarToggleButton Icon="More"
+                                    Margin="-15,0,-15,0"             
+                                    Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    IsChecked="{Binding IsCommandBarOpen, Mode=TwoWay}" />
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ContentControl Grid.Column="0" 
-                            Content="{Binding ApplicationViewModel}" 
+            <ContentControl Grid.Column="0"
+                            Content="{Binding ApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
@@ -221,7 +234,7 @@
                             Content="{Binding ChatApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch" />            
+                            HorizontalContentAlignment="Stretch" />
         </Grid>
 
         <control:NotificationControl
