@@ -796,6 +796,9 @@ class LemmatizationSearchBox {
 
     destroy(): void {
         $(this.inputField).typeahead("destroy");
+        $(this.inputField).unbind("typeahead:render");
+        $(this.inputField).unbind("typeahead:select");
+        $(this.inputField).unbind("typeahead:autocomplete");
     }
 
     reload() {
