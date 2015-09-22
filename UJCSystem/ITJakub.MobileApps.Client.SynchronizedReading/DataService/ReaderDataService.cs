@@ -80,6 +80,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
         public void SetTask(string data)
         {
+            m_synchronizationManager.Reset();
             m_taskManager.SetTask(data);
         }
 

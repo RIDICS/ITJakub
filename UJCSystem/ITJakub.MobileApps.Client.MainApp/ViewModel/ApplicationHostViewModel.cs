@@ -48,6 +48,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isClosed;
         private bool m_isCommunicationStopped;
         private string m_taskDescription;
+        private bool m_isChatNotificationVisible;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -390,13 +391,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_unreadMessageCount = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => IsChatNotificationVisible);
+                IsChatNotificationVisible = m_unreadMessageCount > 0;
             }
         }
 
         public bool IsChatNotificationVisible
         {
-            get { return m_unreadMessageCount > 0; }
+            get { return m_isChatNotificationVisible && m_isChatSupported; }
+            set
+            {
+                m_isChatNotificationVisible = value;
+                RaisePropertyChanged();
+            }
         }
 
         public ObservableCollection<GroupMemberViewModel> MemberList

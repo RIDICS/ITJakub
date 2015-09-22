@@ -131,7 +131,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
         private void ProcessGuessHistory(IList<ObjectDetails> syncObjectList, Action<TaskProgressInfoViewModel, Exception> callback)
         {
             if (MyTask == null)
+            {
+                callback(null, null);
                 return;
+            }
 
             var myObjects = syncObjectList.Where(details => details.Author.IsMe);
                 

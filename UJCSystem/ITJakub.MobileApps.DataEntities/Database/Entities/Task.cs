@@ -2,22 +2,29 @@ using System;
 using System.Collections.Generic;
 
 
-namespace ITJakub.MobileApps.DataEntities.Database.Entities {
-    
-    public class Task:IEquatable<Task>
+namespace ITJakub.MobileApps.DataEntities.Database.Entities
+{
+    public class Task : IEquatable<Task>
     {
-        public Task() { }
+        public Task()
+        {
+        }
+
         public virtual long Id { get; set; }
+
         public virtual User Author { get; set; }
+
         public virtual Application Application { get; set; }
+
         public virtual string Name { get; set; }
+
         public virtual DateTime CreateTime { get; set; }
+
         public virtual string Description { get; set; }
 
         public virtual IList<Group> Groups { get; set; }
 
-
-        public virtual string Data { get; set; }    //not mapped because its stored in azure tables
+        public virtual string Data { get; set; } //not mapped because its stored in azure tables
 
         public virtual bool Equals(Task other)
         {

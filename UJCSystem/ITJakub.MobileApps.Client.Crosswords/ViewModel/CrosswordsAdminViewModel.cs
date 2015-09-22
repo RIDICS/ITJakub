@@ -25,7 +25,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void SetTask(string data)
         {
-            m_dataService.SetTaskAndGetConfiguration(data, rowList =>
+            m_dataService.SetTask(data);
+            m_dataService.GetConfiguration(rowList =>
             {
                 m_rowListPattern = rowList;
             }, true);
@@ -42,6 +43,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     return;
                 }
                 m_dataService.ErrorService.HideWarning();
+                SetDataLoaded();
 
                 UpdateProgress(progressUpdateList);
             });

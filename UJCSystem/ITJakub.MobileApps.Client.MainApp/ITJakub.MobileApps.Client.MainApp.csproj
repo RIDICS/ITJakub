@@ -141,7 +141,7 @@
     <Compile Include="View\ApplicationMenuPageView.xaml.cs">
       <DependentUpon>ApplicationMenuPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
+    <Compile Include="View\Control\NotificationControl.cs" />    <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
     <Compile Include="View\Converter\GroupCountToStringConverter.cs" />
@@ -269,6 +269,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\AdminHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

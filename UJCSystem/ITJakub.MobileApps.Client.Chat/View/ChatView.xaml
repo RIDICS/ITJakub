@@ -94,7 +94,8 @@
                      Text="{Binding Message, Mode=TwoWay}"
                      EnterCommand="{Binding SendCommand}"
                      x:Name="MessageBox"
-                     />
+                     TextWrapping="Wrap"
+                     MaxHeight="100" />
             
             <Button Grid.Column="1"
                     Content="Odeslat"

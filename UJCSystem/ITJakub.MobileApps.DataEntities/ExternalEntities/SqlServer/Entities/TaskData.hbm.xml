@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="ITJakub.MobileApps.DataEntities" namespace="ITJakub.MobileApps.DataEntities.ExternalEntities.SqlServer.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="TaskData" table="[TaskData]">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <many-to-one name="Task" lazy="proxy" column="[Task]" 
+                 class="ITJakub.MobileApps.DataEntities.Database.Entities.Task, ITJakub.MobileApps.DataEntities" />
+
+    <many-to-one name="Application" lazy="proxy" column="[Application]"
+                 class="ITJakub.MobileApps.DataEntities.Database.Entities.Application, ITJakub.MobileApps.DataEntities" />
+
+    <property name="Data" />
+
+  </class>
+</hibernate-mapping>

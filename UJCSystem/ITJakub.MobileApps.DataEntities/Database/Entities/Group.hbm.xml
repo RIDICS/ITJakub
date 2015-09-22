@@ -2,7 +2,7 @@
 
 <hibernate-mapping assembly="ITJakub.MobileApps.DataEntities"
                    namespace="ITJakub.MobileApps.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
-  <class name="Group" table="[Group]" lazy="true">
+  <class name="Group" table="[Group]">
 
     <id name="Id" column="Id">
       <generator class="identity" />
@@ -44,6 +44,11 @@
     <bag name="Members" table="UserToGroup" cascade="save-update" lazy="true">
       <key column="GroupId" />
       <many-to-many class="User" column="UserId" />
+    </bag>
+
+    <bag name="SynchronizedObjectData" lazy="true" cascade="all-delete-orphan" inverse="true">
+      <key column="[Group]"/>
+      <one-to-many class="ITJakub.MobileApps.DataEntities.ExternalEntities.SqlServer.Entities.SynchronizedObjectData, ITJakub.MobileApps.DataEntities"/>
     </bag>
 
   </class>

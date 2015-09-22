@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using Microsoft.WindowsAzure.Storage.Table;
 
-namespace ITJakub.MobileApps.DataEntities.AzureTables.Daos
+namespace ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables
 {
     public class AzureTableGenericDao<T> where T : TableEntity, new()
     {
@@ -21,7 +20,7 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables.Daos
             m_table.Execute(insertOperation);
         }
 
-        public void CreateAll(IEnumerable<TaskEntity> tableEntities)
+        public void CreateAll(IEnumerable<AzureTaskEntity> tableEntities)
         {
             var batchOperation = new TableBatchOperation();
             foreach (var tableEntity in tableEntities)
@@ -51,7 +50,9 @@ namespace ITJakub.MobileApps.DataEntities.AzureTables.Daos
 
         public IEnumerable<T> FindAll(IEnumerable<T> tableEntities)
         {
-            return tableEntities.Select(tableEntity => FindByRowAndPartitionKey(tableEntity.RowKey, tableEntity.PartitionKey)).ToList();    //HACK TODO check if is possible to retrieve more unique results in batch
+            return tableEntities
+                .Select(tableEntity => FindByRowAndPartitionKey(tableEntity.RowKey, tableEntity.PartitionKey))
+                .ToList();    //HACK TODO check if is possible to retrieve more unique results in batch
         }
 
         public T FindByRowAndPartitionKey(string rowKey, string partitionKey)

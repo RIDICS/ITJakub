@@ -4,6 +4,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Chat.Message;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
@@ -32,6 +33,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_taskInfo;
         private bool m_loadingGroupInfo;
         private bool m_loadingTask;
+        private bool m_loadingData;
+        private int m_unreadMessageCount;
+        private bool m_isChatNotificationVisible;
         private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         public AdminHostViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
@@ -40,6 +44,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             m_errorService = errorService;
             m_pollingService = pollingService;
+
+            m_unreadMessageCount = 0;
+            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
+            {
+                if (!IsChatDisplayed)
+                    UnreadMessageCount += message.Count;
+            });
+
             InitCommands();
             LoadData();
         }
@@ -48,16 +60,22 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             GoBackCommand = new RelayCommand(GoBack);
             ShowTaskCommand = new RelayCommand(ShowTask);
+            ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
         }
         
         private void GoBack()
         {
+            if (ChatApplicationViewModel != null)
+                ChatApplicationViewModel.StopCommunication();
+
+            Messenger.Default.Unregister(this);
             m_pollingService.UnregisterAll();
             m_navigationService.GoBack();
         }
 
         private void LoadData()
         {
+            LoadingData = true;
             m_dataService.GetCurrentGroupId((groupId, type) =>
             {
                 LoadGroupDetails(groupId);
@@ -129,6 +147,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     return;
                 }
 
+                AdminViewModel.DataLoadedCallback = () => LoadingData = false;
                 AdminViewModel.SetTask(data);
                 AdminViewModel.InitializeCommunication();
 
@@ -176,6 +195,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand GoBackCommand { get; private set; }
 
         public RelayCommand ShowTaskCommand { get; private set; }
+
+        public RelayCommand ShowChatCommand { get; private set; }
 
         public string GroupName
         {
@@ -234,6 +255,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_isChatDisplayed = value;
                 RaisePropertyChanged();
+
+                ChatApplicationViewModel.AppVisibilityChanged(m_isChatDisplayed);
+
+                if (m_isChatDisplayed)
+                {
+                    IsCommandBarOpen = false;
+                    UnreadMessageCount = 0;
+                }
             }
         }
 
@@ -261,6 +290,37 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_loadingTask = value;
                 RaisePropertyChanged();
                 RaisePropertyChanged(() => Loading);
+            }
+        }
+
+        public bool LoadingData
+        {
+            get { return m_loadingData; }
+            set
+            {
+                m_loadingData = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int UnreadMessageCount
+        {
+            get { return m_unreadMessageCount; }
+            set
+            {
+                m_unreadMessageCount = value;
+                RaisePropertyChanged();
+                IsChatNotificationVisible = m_unreadMessageCount > 0;
+            }
+        }
+
+        public bool IsChatNotificationVisible
+        {
+            get { return m_isChatNotificationVisible; }
+            set
+            {
+                m_isChatNotificationVisible = value;
+                RaisePropertyChanged();
             }
         }
     }
