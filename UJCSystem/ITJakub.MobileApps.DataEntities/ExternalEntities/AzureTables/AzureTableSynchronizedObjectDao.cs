@@ -8,19 +8,19 @@ namespace ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables
         private readonly AzureTableIdGenerator m_idGenerator;
 
         public AzureTableSynchronizedObjectDao(AzureTablesClient azureTablesClient, AzureTableIdGenerator idGenerator)
-            : base(azureTablesClient,"SyncObjectTable")
+            : base(azureTablesClient, "SyncObjectTable")
         {
             m_idGenerator = idGenerator;
         }
 
         public void Save(ISynchronizedObjectEntity entity)
         {
-            base.Create((AzureSynchronizedObjectEntity)entity);
+            base.Create((AzureSynchronizedObjectEntity) entity);
         }
 
         public void Delete(ISynchronizedObjectEntity entity)
         {
-            base.Delete((AzureSynchronizedObjectEntity)entity);
+            base.Delete((AzureSynchronizedObjectEntity) entity);
         }
 
         public IEnumerable<ISynchronizedObjectEntity> GetAllGroupId(long groupId)
@@ -35,19 +35,25 @@ namespace ITJakub.MobileApps.DataEntities.ExternalEntities.AzureTables
 
         public ISynchronizedObjectEntity FindByObjectExternalIdAndGroup(string externalId, long groupId)
         {
-
             return FindByRowAndPartitionKey(externalId, Convert.ToString(groupId));
-        }        
+        }
 
         public ISynchronizedObjectEntity GetNewEntity(long groupId, string data)
         {
             return new AzureSynchronizedObjectEntity(m_idGenerator.GetNewId(), Convert.ToString(groupId), data);
         }
 
+        public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds)
+        {
+            foreach (var item in externalIds)
+            {
+                Delete(item, groupId);
+            }
+        }
+
         public void Delete(string externalObjectId, long groupId)
         {
             Delete(externalObjectId, Convert.ToString(groupId));
         }
-
     }
 }

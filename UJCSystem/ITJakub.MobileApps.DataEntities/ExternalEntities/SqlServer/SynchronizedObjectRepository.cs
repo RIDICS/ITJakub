@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.MobileApps.DataEntities.Database.Daos;
@@ -42,6 +43,11 @@ namespace ITJakub.MobileApps.DataEntities.ExternalEntities.SqlServer
             {
                 return new SynchronizedObjectData {Group = session.Load<Group>(groupId), Data = data};
             }
+        }
+
+        public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds)
+        {
+            return;
         }
     }
 }

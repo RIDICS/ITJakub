@@ -21,7 +21,10 @@ namespace ITJakub.MobileApps.Core.Groups
         private readonly UsersRepository m_usersRepository;
 
 
-        public GroupManager(UsersRepository usersRepository, EnterCodeGenerator enterCodeGenerator, ApplicationManager applicationManager, int maxAttemptsToSave)
+        public GroupManager(UsersRepository usersRepository,
+            EnterCodeGenerator enterCodeGenerator, 
+            ApplicationManager applicationManager,
+            int maxAttemptsToSave)
         {
             MaxAttemptsToSave = maxAttemptsToSave;
             m_usersRepository = usersRepository;
@@ -49,7 +52,7 @@ namespace ITJakub.MobileApps.Core.Groups
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
             User user = m_usersRepository.Load<User>(userId);
-            
+
             var group = new Group {Author = user, CreateTime = DateTime.UtcNow, Name = groupName, State = GroupState.Created};
 
             int attempt = 0;
@@ -174,7 +177,7 @@ namespace ITJakub.MobileApps.Core.Groups
             if (group == null || group.State == GroupState.Created)
                 throw new FaultException("Group not found.");
 
-            return Mapper.Map<GroupState,GroupStateContract>(group.State);
+            return Mapper.Map<GroupState, GroupStateContract>(group.State);
         }
     }
 }

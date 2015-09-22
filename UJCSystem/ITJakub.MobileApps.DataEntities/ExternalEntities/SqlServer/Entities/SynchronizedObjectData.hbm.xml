@@ -8,7 +8,8 @@
       <generator class="identity" />
     </id>
 
-    <many-to-one name="Group" lazy="proxy" column="[Group]" class="ITJakub.MobileApps.DataEntities.Database.Entities.Group, ITJakub.MobileApps.DataEntities"/>
+    <many-to-one name="Group" lazy="proxy" column="[Group]" 
+                 class="ITJakub.MobileApps.DataEntities.Database.Entities.Group, ITJakub.MobileApps.DataEntities" />
 
     <property name="Data" />
 

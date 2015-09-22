@@ -118,10 +118,7 @@ namespace ITJakub.MobileApps.Core.Applications
 
         public void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds)
         {
-            foreach (var objectExternalId in externalIds)
-            {
-                m_synchronizedObjectDataProvider.Delete(objectExternalId, groupId);
-            }
+            m_synchronizedObjectDataProvider.DeleteSynchronizedObjects(groupId, externalIds);       
         }
 
         public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType, DateTime since)

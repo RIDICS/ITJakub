@@ -11,5 +11,7 @@ namespace ITJakub.MobileApps.DataEntities.ExternalEntities
         ISynchronizedObjectEntity FindByObjectExternalIdAndGroup(string objectExternalId, long groupId);
 
         ISynchronizedObjectEntity GetNewEntity(long groupId, string data);
+
+        void DeleteSynchronizedObjects(long groupId, IEnumerable<string> externalIds);
     }
 }
