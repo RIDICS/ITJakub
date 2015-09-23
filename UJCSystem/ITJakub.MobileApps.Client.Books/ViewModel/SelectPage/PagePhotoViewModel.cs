@@ -1,3 +1,4 @@
+using System;
 using Windows.UI.Xaml.Media;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Books.Service;
@@ -9,6 +10,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
     {
         private readonly IDataService m_dataService;
         private readonly IErrorService m_errorService;
+        private readonly Action m_pageLoadedCallback;
         private ImageSource m_pagePhoto;
         private bool m_isShowEnabled;
         private bool m_loading;
@@ -16,10 +18,11 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private double m_currentZoom;
         private bool m_isLoadError;
 
-        public PagePhotoViewModel(IDataService dataService, IErrorService errorService)
+        public PagePhotoViewModel(IDataService dataService, IErrorService errorService, Action pageLoadedCallback)
         {
             m_dataService = dataService;
             m_errorService = errorService;
+            m_pageLoadedCallback = pageLoadedCallback;
         }
 
         public void OpenPagePhoto(PageViewModel page, bool showPagePhotoOverride)
@@ -53,10 +56,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                     {
                         m_errorService.ShowCommunicationWarning();
                     }
+                    m_pageLoadedCallback();
                     return;
                 }
 
                 PagePhoto = image;
+                m_pageLoadedCallback();
             });
         }
         
@@ -77,6 +82,9 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             get { return m_isShowEnabled; }
             set
             {
+                if (m_isShowEnabled == value)
+                    return;
+                
                 m_isShowEnabled = value;
                 IsLoadError = false;
                 RaisePropertyChanged();

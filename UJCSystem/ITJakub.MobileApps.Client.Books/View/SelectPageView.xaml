@@ -86,7 +86,9 @@
                     </Grid.ColumnDefinitions>
                     
                     <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
-                               FontSize="20">
+                               FontSize="20"
+                               MaxLines="2"
+                               TextTrimming="CharacterEllipsis">
                         <Run Text="Zvolená kniha: " />
                         <Run Text="{Binding Book.Title}" />
                     </TextBlock>

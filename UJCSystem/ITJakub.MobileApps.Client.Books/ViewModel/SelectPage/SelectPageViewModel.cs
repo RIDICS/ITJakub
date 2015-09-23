@@ -28,7 +28,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             m_navigationService = navigationService;
             m_errorService = errorService;
 
-            PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService);
+            PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService, PagePhotoLoadedCallback);
             PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService, PageLoadedCallback);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
@@ -107,7 +107,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         {
             PageTextViewModel.OpenPage(page);
             RaisePropertyChanged(() => CanSubmit);
-            PagePhotoViewModel.OpenPagePhoto(page, m_showPagePhoto);
+            PagePhotoViewModel.OpenPagePhoto(page);
         }
 
         private void GoToNextPage()
@@ -231,10 +231,23 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         public bool CanSubmit
         {
-            get { return SelectedPage != null && PageTextViewModel.RtfText != null && !PageTextViewModel.Loading; }
+            get
+            {
+                return SelectedPage != null &&
+                       ((PageTextViewModel.RtfText != null && !PageTextViewModel.Loading) ||
+                        (PagePhotoViewModel.PagePhoto != null && !PagePhotoViewModel.Loading));
+            }
         }
         
         private void PageLoadedCallback()
+        {
+            RaisePropertyChanged(() => CanSubmit);
+
+            if (PageTextViewModel.RtfText == null)
+                PagePhotoViewModel.IsShowEnabled = true;
+        }
+
+        private void PagePhotoLoadedCallback()
         {
             RaisePropertyChanged(() => CanSubmit);
         }
