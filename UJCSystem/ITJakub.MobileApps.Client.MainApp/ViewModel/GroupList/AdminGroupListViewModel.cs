@@ -140,7 +140,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public bool CanRemoveSelected
         {
             get { return m_canRemoveSelected; }
-            set { m_canRemoveSelected = value; RaisePropertyChanged(); }
+            set { m_canRemoveSelected = value && m_isOneItemSelected; RaisePropertyChanged(); }
         }
 
         public bool CanPauseSelected

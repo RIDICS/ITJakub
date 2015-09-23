@@ -310,7 +310,7 @@
                                                Margin="5,0,0,0" />
 
 
-                                    <AppBarButton Icon="Cancel" Label="Zrušit" Grid.Column="2">
+                                    <!--<AppBarButton Icon="Cancel" Label="Zrušit" Grid.Column="2">
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>
@@ -320,16 +320,16 @@
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>
-                                    </AppBarButton>
+                                    </AppBarButton>-->
 
-                                    <!--<Button Grid.Column="2"
+                                    <Button Grid.Column="2"
                                             Content="Zrušit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
                                             Command="{Binding CancelCommand}" />
                                     <Button Grid.Column="3"
                                             Content="Odstranit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding SubmitCommand}" />-->
+                                            Command="{Binding SubmitCommand}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>

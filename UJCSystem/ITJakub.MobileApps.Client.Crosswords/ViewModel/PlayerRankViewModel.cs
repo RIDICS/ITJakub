@@ -33,6 +33,9 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             get { return m_isEnd; }
             set
             {
+                if (m_isEnd == value)
+                    return;
+
                 m_isEnd = value;
                 RaisePropertyChanged();
 

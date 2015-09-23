@@ -120,7 +120,7 @@
             
             <StackPanel Orientation="Horizontal"
                         Visibility="{Binding PlayerRankingViewModel.IsEnd, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Margin="120,0,0,0">
+                        Margin="90,0,0,0">
                 <RadioButton GroupName="ShowResult"
                              IsChecked="{Binding ShowCorrectResult, Converter={StaticResource BooleanNegationConverter}}">
                     <TextBlock Text="Zobrazit moje řešení" />
