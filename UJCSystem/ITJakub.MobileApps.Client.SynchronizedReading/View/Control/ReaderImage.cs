@@ -246,7 +246,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.View.Control
                 return;
 
             if (!readerImage.m_isViewChangeByScrollViewer)
-                readerImage.m_scrollViewer.ChangeView(null, null, (float)readerImage.CurrentZoomFactor);
+                readerImage.m_scrollViewer.ChangeView(null, null, (float)readerImage.CurrentZoomFactor, true);
         }
 
         private static void OnImageSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
