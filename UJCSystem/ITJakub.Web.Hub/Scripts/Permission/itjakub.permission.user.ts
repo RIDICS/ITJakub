@@ -196,7 +196,7 @@ class UserPermissionEditor {
 
         $(moreSpan).click((event: Event) => {
             var target = event.target;
-            var detailsDiv = $(target).closest(".list-item").find(".list-item-details");
+            var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
             if (detailsDiv.is(":hidden")) {
                 $(target).removeClass("glyphicon-chevron-down");
                 $(target).addClass("glyphicon-chevron-up");

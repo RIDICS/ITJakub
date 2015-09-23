@@ -173,7 +173,7 @@ class GroupPermissionEditor {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Permission/GetCategoryContent",
+            url: getBaseUrl() + "Permission/GetAllCategoryContent",
             data: { categoryId: categoryId },
             dataType: "json",
             contentType: "application/json",
@@ -205,7 +205,7 @@ class GroupPermissionEditor {
 
     private createCategoryListItem(category: ICategory): HTMLLIElement {
         var groupLi = document.createElement("li");
-        $(groupLi).addClass("list-item");
+        $(groupLi).addClass("list-item non-leaf");
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -226,7 +226,7 @@ class GroupPermissionEditor {
 
         $(moreSpan).click((event: Event) => {
             var target = event.target;
-            var detailsDiv = $(target).closest(".list-item").find(".list-item-details");
+            var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
 
             if (detailsDiv.is(":hidden")) {
                 $(target).removeClass("glyphicon-chevron-down");
@@ -269,7 +269,7 @@ class GroupPermissionEditor {
 
     private createBookListItem(book: IBook): HTMLLIElement {
         var groupLi = document.createElement("li");
-        $(groupLi).addClass("list-item");
+        $(groupLi).addClass("list-item leaf");
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");

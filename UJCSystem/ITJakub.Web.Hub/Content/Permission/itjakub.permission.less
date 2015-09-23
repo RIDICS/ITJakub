@@ -72,7 +72,7 @@ ul.items-list li {
     color: white;
 }
 
-ul.list-item-details-list li {
+ul.list-item-details-list li.leaf {
     color: black;
     width: 100%;
     margin-bottom: 4px;
@@ -80,7 +80,15 @@ ul.list-item-details-list li {
     background-color: lightyellow;
 }
 
-ul.list-item-details-list .list-item-more:hover, ul.list-item-details-list .list-item-remove:hover, ul.list-item-details-list .list-item-edit:hover {
+ul.list-item-details-list li.non-leaf {
+    color: white;
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 3px;
+    background-color: @item-background-color;
+}
+
+ul.list-item-details-list li.leaf .list-item-more:hover, ul.list-item-details-list li.leaf  .list-item-remove:hover, ul.list-item-details-list li.leaf  .list-item-edit:hover {
     cursor: pointer;
     color: @item-background-color;
 }
@@ -92,10 +100,6 @@ span.list-item-more {
 span.list-item-name {
     margin-left: 7px;
     width: 90%;
-}
-
-ul.list-item-details-list li span.list-item-name {
-    display: inherit;
 }
 
 .list-item-details {
