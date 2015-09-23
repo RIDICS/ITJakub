@@ -12,6 +12,7 @@ class GroupPermissionEditor {
     private searchBox: ConcreteInstanceSearchBox;
     private groupSearchBox: ConcreteInstanceSearchBox;
     private currentGroupSelectedItem: IGroup;
+    private bookSelector: BooksSelector;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
@@ -88,7 +89,7 @@ class GroupPermissionEditor {
 
         $("#deleteGroup").click(() => {
 
-            var allowedBooksUl = $("ul.items-list");
+            var allowedBooksUl = $("#allowedBooksList");
             $(allowedBooksUl).empty();
             
 
@@ -106,13 +107,25 @@ class GroupPermissionEditor {
             });
 
         });
+
+        $("#addBookToGroup").click(() => {
+            this.bookSelector = new BooksSelector(<HTMLDivElement>document.getElementById("add-books-to-group-form"));
+            this.bookSelector.make();
+            $("#addBookToGroupDialog").modal();
+        });
+
+        $("#add-books-to-group-ok").click(() => {
+            alert(this.bookSelector.getSelectedBooksIds());
+            alert(this.bookSelector.getSelectedCategoriesIds());
+            $("#addBookToGroupDialog").modal('hide');
+        });
     }
 
     private loadGroup(group: IGroup) {
         this.currentGroupSelectedItem = group;
 
         if (typeof group === "undefined" || group === null) {
-            $("ul.items-list").empty();
+            $("#allowedBooksList").empty();
             $("#selected-item-div").addClass("hidden");
             $("#right-panel").addClass("hidden");
             updateQueryStringParameter("groupId", "");
@@ -128,7 +141,7 @@ class GroupPermissionEditor {
         $("#specificGroupName").text(group.Name);
         $("#specificGroupDescription").text(group.Description);
 
-        var allowedBooksUl = $("ul.items-list");
+        var allowedBooksUl = $("#allowedBooksList");
         $(allowedBooksUl).empty();
 
         $.ajax({
@@ -173,7 +186,7 @@ class GroupPermissionEditor {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Permission/GetAllCategoryContent",
+            url: getBaseUrl() + "Permission/GetCategoryContent",
             data: { categoryId: categoryId },
             dataType: "json",
             contentType: "application/json",
@@ -294,4 +307,227 @@ class GroupPermissionEditor {
 
         return groupLi;
     }
+}
+
+class BooksSelector {
+    private container: HTMLDivElement;
+    private selectedBooksIds: Array<number>;
+    private selectedCategoriesIds: Array<number>;
+    
+    constructor(container: HTMLDivElement) {
+        this.container = container;
+    }
+
+    public make() {
+        this.selectedBooksIds = new Array<number>();
+        this.selectedCategoriesIds = new Array<number>();
+
+        var rootCategoriesUl = document.createElement("ul");
+        $(rootCategoriesUl).addClass("items-list");
+
+        $(this.container).empty();
+        $(this.container).append(rootCategoriesUl);
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetRootCategories",
+            data: {},
+            dataType: "json",
+            contentType: "application/json",
+            success: (categories) => {
+
+                for (var i = 0; i < categories.length; i++) {
+                    var category = categories[i];
+                    var item = this.createCategoryListItem(category);
+                    rootCategoriesUl.appendChild(item);
+                }
+            }
+        });
+
+    }
+
+    public getSelectedBooksIds(): Array<number> {
+        return this.selectedBooksIds;
+    }
+
+    public getSelectedCategoriesIds(): Array<number> {
+        return this.selectedCategoriesIds;
+    }
+
+    private createCategoryListItem(category: ICategory): HTMLLIElement {
+        var groupLi = document.createElement("li");
+        $(groupLi).addClass("list-item non-leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                this.addToSelectedCategories(category.Id);
+            } else {
+                this.removeFromSelectedCategories(category.Id);
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        groupLi.appendChild(buttonsSpan);
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("list-item-more");
+
+        $(moreSpan).click((event: Event) => {
+            var target = event.target;
+            var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
+
+            if (detailsDiv.is(":hidden")) {
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+
+                if (!detailsDiv.hasClass("loaded")) {
+                    this.loadCategoryContent(detailsDiv, category.Id);
+                }
+
+                detailsDiv.slideDown();
+            } else {
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
+                detailsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+
+        groupLi.appendChild(moreSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = category.Description;
+
+        groupLi.appendChild(nameSpan);
+
+        var detailsDiv = document.createElement("div");
+        $(detailsDiv).addClass("list-item-details");
+
+        $(detailsDiv).hide();
+
+        groupLi.appendChild(detailsDiv);
+
+        return groupLi;
+    }
+
+    private createBookListItem(book: IBook): HTMLLIElement {
+        var groupLi = document.createElement("li");
+        $(groupLi).addClass("list-item leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                this.addToSelectedBooks(book.Id);
+            } else {
+                this.removeFromSelectedBooks(book.Id);
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        groupLi.appendChild(buttonsSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = book.Title;
+
+        groupLi.appendChild(nameSpan);
+
+
+        return groupLi;
+    }
+
+    private loadCategoryContent(targetDiv, categoryId: number) {
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetAllCategoryContent",
+            data: { categoryId: categoryId },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response: ICategoryContent) => {
+
+                var detailsUl: HTMLUListElement = document.createElement("ul");
+                $(detailsUl).addClass("list-item-details-list");
+
+                for (var i = 0; i < response.Categories.length; i++) {
+                    var category = response.Categories[i];
+                    var item = this.createCategoryListItem(category);
+                    detailsUl.appendChild(item);
+                }
+
+                for (var i = 0; i < response.Books.length; i++) {
+                    var book = response.Books[i];
+                    var bookItem = this.createBookListItem(book);
+                    detailsUl.appendChild(bookItem);
+                }
+
+                $(targetDiv).append(detailsUl);
+                $(targetDiv).addClass("loaded");
+
+            }
+        });
+
+    }
+
+
+
+    protected addToSelectedBooks(bookId: number) {
+        var isSelected = $.grep(this.selectedBooksIds, (currentBookId: number) => (currentBookId === bookId), false).length !== 0;
+        if (!isSelected) {
+            this.selectedBooksIds.push(bookId);
+        }
+    }
+
+    protected removeFromSelectedBooks(bookId: number) {
+        this.selectedBooksIds = $.grep(this.selectedBooksIds, (currentBookId: number) => (currentBookId !== bookId), false);
+    }
+
+    private addToSelectedCategories(categoryId: number) {
+        var isSelected = $.grep(this.selectedCategoriesIds, (currentCategoryId: number) => (currentCategoryId === categoryId), false).length !== 0;
+        if (!isSelected) {
+            this.selectedCategoriesIds.push(categoryId);
+        }
+    }
+
+    private removeFromSelectedCategories(categoryId: number) {
+        this.selectedCategoriesIds = $.grep(this.selectedCategoriesIds, (currentCategoryId: number) => (currentCategoryId !== categoryId), false);
+    }
+
+    
 }
