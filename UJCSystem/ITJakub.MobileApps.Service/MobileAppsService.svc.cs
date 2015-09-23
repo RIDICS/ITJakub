@@ -80,6 +80,22 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
+        public bool PromoteUserToTeacherRole(long userId, string promotionCode)
+        {
+            try
+            {
+                return m_serviceManager.PromoteUserToTeacherRole(userId, promotionCode);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+
+        }
+
         public List<GroupInfoContract> GetMembershipGroups(long userId)
         {
             try

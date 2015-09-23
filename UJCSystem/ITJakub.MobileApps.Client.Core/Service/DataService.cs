@@ -98,6 +98,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.CreateNewGroup(groupName, callback);
         }
 
+        public void DuplicateGroup(long sourceGroupId, string groupName, Action<CreatedGroupViewModel, Exception> callback)
+        {
+            m_groupManager.DuplicateGroup(sourceGroupId, groupName, callback);
+        }
+
         public void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);
@@ -192,6 +197,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback)
         {
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
+        }
+
+        public void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback)
+        {
+            m_authenticationManager.PromoteUserToTeacherRole(userId, promotionCode, callback);
         }
 
         public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)

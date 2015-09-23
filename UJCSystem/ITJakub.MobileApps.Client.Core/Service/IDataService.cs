@@ -20,6 +20,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void CreateUser(AuthProvidersContract loginProviderType, Action<bool, Exception> callback);
 
+        void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback);
+
         void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback);
 
         void GetLoginProviders(Action<List<LoginProviderViewModel>, Exception> callback);
@@ -35,6 +37,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
         void GetGroupDetails(long groupId, Action<GroupInfoViewModel, Exception> callback);
 
         void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback);
+
+        void DuplicateGroup(long sourceGroupId,string groupName, Action<CreatedGroupViewModel, Exception> callback);
 
         void ConnectToGroup(string code, Action<Exception> callback);
 
@@ -77,6 +81,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         Task<List<SyndicationItemViewModel>> GetAllNews();
         
         void UpdateEndpointAddress(string address);
+
         void RenewCodeForGroup(long groupId, Action<string, Exception> callback);
     }
 }

@@ -268,7 +268,7 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" MinWidth="200" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             
             <RadioButton Grid.Column="0"
@@ -289,6 +289,7 @@
                     Grid.RowSpan="2"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
+                    Margin="15,0,0,0"
                     IsEnabled="{Binding IsTextEditingEnabled}"
                     Click="PasteButton_OnClick">
                 <StackPanel Orientation="Horizontal">

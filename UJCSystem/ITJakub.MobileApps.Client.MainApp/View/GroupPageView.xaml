@@ -202,22 +202,22 @@
                                 <TextBlock MaxWidth="360"
                                            TextWrapping="Wrap">
                                     Skupina se může nacházet v jednom z několika stavů.
-                                    Změna stavu je obvykle nevratná tzn. že například ze stavu <Italic>Čekání na spuštění</Italic>
+                                    Změna stavu je obvykle nevratná tzn. že například ze stavu <Italic>Spuštěná</Italic>
                                     se nelze vrátit do stavu <Italic>Přijímání členů</Italic>.
                                     Vrátit stav zpět jde pouze ze stavu <Italic>Pozastaveno</Italic> do <Italic>Spuštěno</Italic>.
                                     <LineBreak />
                                     <Bold>Vytvořená</Bold> - Výchozí stav po vytvoření nové skupiny. V tomto stavu lze přiřazovat zadání ke skupině. Nelze se zatím do skupiny připojovat.
                                     <LineBreak />
                                     <Bold>Přijímání členů</Bold> - Skupina je viditelná a studenti se do ní mohou připojovat. Poslední stav ve kterém je možné měnit zadání.
-                                    <LineBreak />
-                                    <Bold>Čekání na spuštění</Bold> - Před přepnutím do tohoto stavu je nutné mít definitivně přiřazené zadání, které následně už není možné měnit.
+                                    <!--<LineBreak />
+                                    <Bold>Čekání na spuštění</Bold> - Před přepnutím do tohoto stavu je nutné mít definitivně přiřazené zadání, které následně už není možné měnit.-->
                                     <LineBreak />
                                     <Bold>Spuštěná</Bold> - Skupina je spuštěná, tzn. studenti už mohou začít používat aplikaci.
                                     <LineBreak />
                                     <Bold>Pozastavená</Bold> - Studentům se pozastaví spuštěná aplikace. Z tohoto stavu se lze vrátit do stavu
                                     <Italic>Spuštěná</Italic>.
                                     <LineBreak />
-                                    <Bold>Ukončená</Bold> - Studentům se ukončí aplikace nebo zobrazí výsledky. Učitel má možnost výsledky ohodnotit.
+                                    <Bold>Ukončená</Bold> - Studentům se ukončí aplikace nebo zobrazí výsledky.
                                     <LineBreak />
                                     <Bold>Odstranit skupinu</Bold> - Nejedná se přímo o stav, protože touto variantou dojde ke smazání skupiny včetně všech výsledků.
                                 </TextBlock>
@@ -429,9 +429,11 @@
                 </Grid>
 
                 <ListView IsItemClickEnabled="False"
-                          SelectionMode="None"
+                          SelectionMode="Single"
+                          SelectedItem="{Binding SelectedMember, Mode=TwoWay}"
                           Grid.Row="1"
-                          ItemsSource="{Binding FilteredMembers}">
+                          ItemsSource="{Binding FilteredMembers}"
+                          x:Name="MembersListView">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -513,10 +515,12 @@
                           Command="{Binding OpenAdminCommand}"
                           IsEnabled="{Binding CanOpenAdmin}" />
 
-
-            <!--TODO kick user function + UI-->
             <!--<CommandBar.SecondaryCommands>
-                <AppBarButton Label="Vyhodit uživatele" />
+                <AppBarButton Label="Vyhodit uživatele"
+                              Icon="Delete"
+                              Visibility="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource NotNullToVisibilityConverter}}">
+                    --><!--TODO--><!--
+                </AppBarButton>
             </CommandBar.SecondaryCommands>-->
         </CommandBar>
 

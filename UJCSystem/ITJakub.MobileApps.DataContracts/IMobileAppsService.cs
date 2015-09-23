@@ -28,6 +28,10 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
+        bool PromoteUserToTeacherRole(long userId, string promotionCode);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
         List<GroupInfoContract> GetMembershipGroups(long userId);
 
         [OperationContract]

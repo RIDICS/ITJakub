@@ -310,7 +310,7 @@
                                                Margin="5,0,0,0" />
 
 
-                                    <AppBarButton Icon="Cancel" Label="Zrušit" Grid.Column="2">
+                                    <!--<AppBarButton Icon="Cancel" Label="Zrušit" Grid.Column="2">
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>
@@ -320,16 +320,16 @@
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>
-                                    </AppBarButton>
+                                    </AppBarButton>-->
 
-                                    <!--<Button Grid.Column="2"
+                                    <Button Grid.Column="2"
                                             Content="Zrušit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
                                             Command="{Binding CancelCommand}" />
                                     <Button Grid.Column="3"
                                             Content="Odstranit"
                                             IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
-                                            Command="{Binding SubmitCommand}" />-->
+                                            Command="{Binding SubmitCommand}" />
                                 </Grid>
                             </StackPanel>
                         </Flyout>
@@ -376,6 +376,76 @@
                                 DataContext="{Binding SwitchToRunningViewModel}" />
                         </Flyout>
                     </AppBarButton.Flyout>
+                </AppBarButton>
+
+                <AppBarButton Icon="Copy"
+                              Label="Zduplikovat skupinu"
+                              x:Name="DuplicateButton"
+                              IsEnabled="{Binding IsOneItemSelected}"
+                              Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                    <AppBarButton.Flyout>
+                        <Flyout control:FlyoutHelpers.IsOpen="{Binding DuplicateGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                control:FlyoutHelpers.Parent="{Binding ElementName=DuplicateButton}">
+
+                            <groups:DuplicateGroupControl
+                                DataContext="{Binding DuplicateGroupViewModel}" />
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                    
+                    <!--<AppBarButton.Flyout>
+                        <Flyout>
+                            <StackPanel Orientation="Vertical"
+                                        DataContext="{Binding DuplicateGroupViewModel}">
+                                <TextBlock MaxWidth="270"
+                                           FontSize="15"
+                                           TextWrapping="Wrap">
+                                    <Run Text="Chystáte se zduplikovat skupinu." />
+                                </TextBlock>
+
+                                <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
+                                           FontSize="15"
+                                           Margin="0,5,0,0"
+                                           Text="Skupina se nepodařila zduplikovat."
+                                           Visibility="{Binding ShowError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <ProgressRing IsActive="{Binding InProgress}"
+                                                  Foreground="{StaticResource FlyoutProgressColor}" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="Duplikace"
+                                               FontSize="15"
+                                               Foreground="{StaticResource FlyoutProgressColor}"
+                                               VerticalAlignment="Center"
+                                               Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                               Margin="5,0,0,0" />
+
+                                    <Button Grid.Column="2"
+                                            Content="Zrušit"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}">
+                                        <interactivity:Interaction.Behaviors>
+                                            <control:CloseFlyoutBehavior/>
+                                        </interactivity:Interaction.Behaviors>
+                                    </Button>
+                                    
+                                    <Button Grid.Column="3"
+                                            Content="Duplikovat"
+                                            IsEnabled="{Binding InProgress, Converter={StaticResource BooleanNegationConverter}}"
+                                            Command="{Binding SubmitCommand}">
+                                        <interactivity:Interaction.Behaviors>
+                                            <control:CloseFlyoutBehavior/>
+                                        </interactivity:Interaction.Behaviors>
+                                    </Button>
+                                </Grid>
+                            </StackPanel>
+                        </Flyout>
+                    </AppBarButton.Flyout>-->
                 </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>

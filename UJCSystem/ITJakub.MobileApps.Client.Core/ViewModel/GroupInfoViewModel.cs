@@ -119,5 +119,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         {
             return m_members.Any(model => model.Id == userId);
         }
+
+        public GroupMemberViewModel SelectedMember { get; set; }
     }
 }

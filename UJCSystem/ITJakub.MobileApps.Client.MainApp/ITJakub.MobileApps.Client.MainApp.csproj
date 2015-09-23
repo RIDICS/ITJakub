@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="ViewModel\ApplicationMenuPageViewModel.cs" />
     <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\DuplicateGroupViewModel.cs" />
     <Compile Include="ViewModel\GroupList\GroupListViewModelBase.cs" />
     <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
     <Compile Include="ViewModel\News\NewsViewModel.cs" />
@@ -179,6 +180,9 @@
     </Compile>
     <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
       <DependentUpon>CreateGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\DuplicateGroupControl.xaml.cs">
+      <DependentUpon>DuplicateGroupControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\Groups\FilterByStateMenuFlyout.xaml.cs">
       <DependentUpon>FilterByStateMenuFlyout.xaml</DependentUpon>
@@ -316,6 +320,10 @@
     <Page Include="View\Groups\CreateGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\DuplicateGroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Groups\FilterByStateMenuFlyout.xaml">
       <SubType>Designer</SubType>

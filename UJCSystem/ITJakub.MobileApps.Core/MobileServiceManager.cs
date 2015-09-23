@@ -50,6 +50,12 @@ namespace ITJakub.MobileApps.Core
             return m_userManager.LoginUser(providerContract, providerToken, email);
         }
 
+        public bool PromoteUserToTeacherRole(long userId, string promotionCode)
+        {
+           return m_userManager.PromoteUserToTeacherRole(userId, promotionCode);
+
+        }
+
         public List<GroupInfoContract> GetMembershipGroups(long userId)
         {
             return m_groupManager.GetMembershipGroups(userId);

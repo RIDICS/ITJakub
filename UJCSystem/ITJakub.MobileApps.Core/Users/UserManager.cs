@@ -72,5 +72,28 @@ namespace ITJakub.MobileApps.Core.Users
             var user = m_userRepository.FindByEmailAndProvider(email, AuthenticationProviders.ItJakub);
             return user == null ? null : user.PasswordSalt;
         }
+
+        public bool PromoteUserToTeacherRole(long userId, string promotionCode)
+        {
+            var user = m_userRepository.GetUserWithInstititutionById(userId);
+            var role = GetUserRoleForUser(user);
+
+            if (role == UserRoleContract.Teacher)
+            {
+                throw new InvalidOperationException("User is already teacher. No need for promotion");
+            }
+
+            var institution = m_userRepository.FindInstitutionByEnterCode(promotionCode);
+
+            if (institution.EnterCode != promotionCode)
+            {
+                return false;
+            }
+
+            user.Institution = institution;
+            m_userRepository.Update(user);
+
+            return true;
+        }
     }
 }

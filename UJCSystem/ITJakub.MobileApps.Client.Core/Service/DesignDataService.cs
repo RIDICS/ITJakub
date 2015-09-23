@@ -28,6 +28,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(true, null);
         }
 
+        public void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback)
+        {
+            callback(true, null);
+        }
+
         public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
             callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci", UserRole = UserRoleContract.Teacher});
@@ -181,6 +186,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
         public void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback)
         {
             callback(new CreatedGroupViewModel {EnterCode = "ABCDEF", GroupId = 10}, null);
+        }
+
+        public void DuplicateGroup(long sourceGroupId, string groupName, Action<CreatedGroupViewModel, Exception> callback)
+        {
+            callback(new CreatedGroupViewModel { EnterCode = "ABCDEF", GroupId = 10 }, null);
         }
 
         public void ConnectToGroup(string code, Action<Exception> callback)

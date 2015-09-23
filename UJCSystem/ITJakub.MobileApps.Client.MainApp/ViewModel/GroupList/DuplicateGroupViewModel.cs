@@ -1,26 +1,57 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
+using ITJakub.MobileApps.Client.Core.ViewModel;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
 {
-    public class CreateGroupViewModel : FlyoutBaseViewModel
+    public class DuplicateGroupViewModel : FlyoutBaseViewModel
     {
         private readonly IDataService m_dataService;
-        private readonly Action m_submitAction;
         private readonly IErrorService m_errorService;
+        private readonly List<GroupInfoViewModel> m_selectedGroups;
+        private readonly Action m_submitAction;        
         private string m_newGroupName;
+        private GroupInfoViewModel m_selectedGroup;
         private bool m_showError;
         private bool m_showNameEmptyError;
 
-        public CreateGroupViewModel(IDataService dataService, IErrorService errorService, Action submitAction = null)
+
+        public DuplicateGroupViewModel(IDataService dataService, IErrorService errorService, List<GroupInfoViewModel> selectedGroups,
+            Action submitAction = null)
         {
             m_dataService = dataService;
-            m_submitAction = submitAction;
             m_errorService = errorService;
+            m_selectedGroups = selectedGroups;
+            m_submitAction = submitAction;
         }
+
+
+        public GroupInfoViewModel SelectedGroup
+        {
+            get { return m_selectedGroup; }
+            set
+            {
+                m_selectedGroup = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public bool ShowError
+        {
+            get { return m_showError; }
+            set
+            {
+                m_showError = value;
+                RaisePropertyChanged();
+            }
+        }
+     
 
         public string NewGroupName
         {
@@ -32,33 +63,20 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             }
         }
 
-        public bool ShowError
-        {
-            get { return m_showError; }
-            set
-            {
-                m_showError = value;
-                RaisePropertyChanged();
-            }
-        }
-
         public bool ShowNameEmptyError
         {
             get { return m_showNameEmptyError; }
             set
             {
-                m_showNameEmptyError = value; 
+                m_showNameEmptyError = value;
                 RaisePropertyChanged();
             }
         }
 
         protected override void SubmitAction()
         {
-            CreateNewGroup();
-        }
+          
 
-        protected virtual void CreateNewGroup()
-        {
             ShowError = false;
             if (string.IsNullOrWhiteSpace(NewGroupName))
             {
@@ -66,9 +84,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 return;
             }
 
+            if (m_selectedGroups.Count != 1)
+            {
+                ShowError = true;
+                return;
+            }
+
             ShowNameEmptyError = false;
             InProgress = true;
-            m_dataService.CreateNewGroup(NewGroupName, (result, exception) =>
+
+            var selectedGroupId = m_selectedGroups.First().GroupId;
+
+            m_dataService.DuplicateGroup(selectedGroupId, NewGroupName, (result, exception) =>
             {
                 InProgress = false;
                 if (exception != null)
@@ -81,8 +108,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 }
 
                 m_dataService.SetCurrentGroup(result.GroupId, GroupType.Owner);
-                if (m_submitAction != null)
-                    m_submitAction();
+                m_submitAction?.Invoke();
 
                 NewGroupName = string.Empty;
                 IsFlyoutOpen = false;

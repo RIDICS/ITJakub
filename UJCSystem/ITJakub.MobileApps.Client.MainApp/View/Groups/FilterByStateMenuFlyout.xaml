@@ -25,12 +25,12 @@
             <groups:GroupStateContract>AcceptMembers</groups:GroupStateContract>
         </MenuFlyoutItem.CommandParameter>
     </MenuFlyoutItem>
-    <MenuFlyoutItem Text="Čekající na spuštění"
+    <!--<MenuFlyoutItem Text="Čekající na spuštění"
                     Command="{Binding FilterCommand}">
         <MenuFlyoutItem.CommandParameter>
             <groups:GroupStateContract>WaitingForStart</groups:GroupStateContract>
         </MenuFlyoutItem.CommandParameter>
-    </MenuFlyoutItem>
+    </MenuFlyoutItem>-->
     <MenuFlyoutItem Text="Spuštěné"
                     Command="{Binding FilterCommand}">
         <MenuFlyoutItem.CommandParameter>
