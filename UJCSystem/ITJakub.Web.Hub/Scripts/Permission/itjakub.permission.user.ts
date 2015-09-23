@@ -2,7 +2,7 @@
     var permissionEditor = new UserPermissionEditor("#mainContainer");
     permissionEditor.make();
     var userId = getQueryStringParameterByName("userId");
-    if (typeof userId !== "undefined" && userId !== null) {
+    if (typeof userId !== "undefined" && userId !== null && userId !== "") {
         permissionEditor.loadUserById(parseInt(userId));
     }
 });
@@ -167,35 +167,6 @@ class UserPermissionEditor {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item");
 
-        var moreSpan = document.createElement("span");
-        $(moreSpan).addClass("list-item-more");
-
-        $(moreSpan).click(function () {
-            var detailsDiv = $(this).closest(".list-item").find(".list-item-details");
-            if (detailsDiv.is(":hidden")) {
-                $(this).children().removeClass("glyphicon-chevron-down");
-                $(this).children().addClass("glyphicon-chevron-up");
-                detailsDiv.slideDown();
-            } else {
-                $(this).children().removeClass("glyphicon-chevron-up");
-                $(this).children().addClass("glyphicon-chevron-down");
-                detailsDiv.slideUp();
-            }
-        });
-
-        var iconSpan = document.createElement("span");
-        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
-
-        moreSpan.appendChild(iconSpan);
-
-        groupLi.appendChild(moreSpan);
-
-        var nameSpan = document.createElement("span");
-        $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = group.Name;
-
-        groupLi.appendChild(nameSpan);
-
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
 
@@ -219,6 +190,36 @@ class UserPermissionEditor {
         buttonsSpan.appendChild(removeSpan);
 
         groupLi.appendChild(buttonsSpan);
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("list-item-more");
+
+        $(moreSpan).click((event: Event) => {
+            var target = event.target;
+            var detailsDiv = $(target).closest(".list-item").find(".list-item-details");
+            if (detailsDiv.is(":hidden")) {
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+                detailsDiv.slideDown();
+            } else {
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
+                detailsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+
+        groupLi.appendChild(moreSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = group.Name;
+
+        groupLi.appendChild(nameSpan);
 
         var detailsDiv = document.createElement("div");
         $(detailsDiv).addClass("list-item-details");

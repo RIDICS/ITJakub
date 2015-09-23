@@ -30,3 +30,8 @@ interface IBook {
     Guid: string;
     Title: string;
 }
+
+interface ICategoryContent {
+    Categories: ICategory[];
+    Books: IBook[];
+}

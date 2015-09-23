@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
@@ -64,7 +62,7 @@ namespace ITJakub.ITJakubService.Core
             return new BookTypeSearchResultContract
             {
                 BookType = bookType,
-                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
+                Books = Mapper.Map<IList<BookContractWithCategories>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
         }

@@ -2,7 +2,7 @@
     var permissionEditor = new GroupPermissionEditor("#mainContainer");
     permissionEditor.make();
     var groupId = getQueryStringParameterByName("groupId");
-    if (typeof groupId !== "undefined" && groupId !== null) {
+    if (typeof groupId !== "undefined" && groupId !== null && groupId !== "") {
         permissionEditor.loadGroupById(parseInt(groupId));
     }
 });
@@ -168,23 +168,78 @@ class GroupPermissionEditor {
         });
     }
 
+    private loadCategoryContent(targetDiv, categoryId: number) {
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetCategoryContent",
+            data: { categoryId: categoryId },
+            dataType: "json",
+            contentType: "application/json",
+            success: (response: ICategoryContent) => {
+
+                var detailsUl: HTMLUListElement = document.createElement("ul");
+                $(detailsUl).addClass("list-item-details-list");
+
+                for (var i = 0; i < response.Categories.length; i++) {
+                    var category = response.Categories[i];
+                    var item = this.createCategoryListItem(category);
+                    detailsUl.appendChild(item);
+                }
+
+                for (var i = 0; i < response.Books.length; i++) {
+                    var book = response.Books[i];
+                    var bookItem = this.createBookListItem(book);
+                    detailsUl.appendChild(bookItem);
+                }
+
+                $(targetDiv).append(detailsUl);
+                $(targetDiv).addClass("loaded");
+
+            }
+        });
+
+    }
+
 
     private createCategoryListItem(category: ICategory): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item");
 
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var removeSpan = document.createElement("span");
+        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
+
+        $(removeSpan).click(() => {
+            //TODO
+        });
+
+        buttonsSpan.appendChild(removeSpan);
+
+        groupLi.appendChild(buttonsSpan);
+
         var moreSpan = document.createElement("span");
         $(moreSpan).addClass("list-item-more");
 
-        $(moreSpan).click(function () {
-            var detailsDiv = $(this).closest(".list-item").find(".list-item-details");
+        $(moreSpan).click((event: Event) => {
+            var target = event.target;
+            var detailsDiv = $(target).closest(".list-item").find(".list-item-details");
+
             if (detailsDiv.is(":hidden")) {
-                $(this).children().removeClass("glyphicon-chevron-down");
-                $(this).children().addClass("glyphicon-chevron-up");
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+
+                if (!detailsDiv.hasClass("loaded")) {
+                    this.loadCategoryContent(detailsDiv, category.Id);
+                }
+
                 detailsDiv.slideDown();
             } else {
-                $(this).children().removeClass("glyphicon-chevron-up");
-                $(this).children().addClass("glyphicon-chevron-down");
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
                 detailsDiv.slideUp();
             }
         });
@@ -202,23 +257,8 @@ class GroupPermissionEditor {
 
         groupLi.appendChild(nameSpan);
 
-        var buttonsSpan = document.createElement("span");
-        $(buttonsSpan).addClass("list-item-buttons");
-
-        var removeSpan = document.createElement("span");
-        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
-
-        $(removeSpan).click(() => {
-            //TODO
-        });
-
-        buttonsSpan.appendChild(removeSpan);
-
-        groupLi.appendChild(buttonsSpan);
-
         var detailsDiv = document.createElement("div");
         $(detailsDiv).addClass("list-item-details");
-        //detailsDiv.innerHTML = group.Description;
 
         $(detailsDiv).hide();
 
@@ -230,12 +270,6 @@ class GroupPermissionEditor {
     private createBookListItem(book: IBook): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item");
-        
-        var nameSpan = document.createElement("span");
-        $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = book.Title;
-
-        groupLi.appendChild(nameSpan);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -250,6 +284,13 @@ class GroupPermissionEditor {
         buttonsSpan.appendChild(removeSpan);
 
         groupLi.appendChild(buttonsSpan);
+        
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = book.Title;
+
+        groupLi.appendChild(nameSpan);
+
 
         return groupLi;
     }
