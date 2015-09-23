@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
         private readonly IDataService m_dataService;
         private bool m_loading;
         private ObservableCollection<SyndicationItemViewModel> m_news;
+        private bool m_noNewsExist;
 
         public NewsViewModel(IDataService dataService)
         {
@@ -41,6 +42,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
             }
         }
 
+        public bool NoNewsExist
+        {
+            get { return m_noNewsExist; }
+            set
+            {
+                m_noNewsExist = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private async void LoadData()
         {
             Loading = true;
@@ -52,6 +63,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.News
                 {
                     News.Add(item);
                 }
+
+                NoNewsExist = News.Count == 0;
             }
             catch (Exception ex)
             {

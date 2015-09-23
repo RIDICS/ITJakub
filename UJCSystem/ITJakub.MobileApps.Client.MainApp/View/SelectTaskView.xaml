@@ -112,7 +112,7 @@
         </StackPanel>
         
         <GridView Grid.Row="2"
-                  Padding="120,0,50,70"
+                  Padding="120,0,50,0"
                   IsItemClickEnabled="True"
                   SelectionMode="None"
                   ItemsSource="{Binding Source={StaticResource TaskList}}" >
