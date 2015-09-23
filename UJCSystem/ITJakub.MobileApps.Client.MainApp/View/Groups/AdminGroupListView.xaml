@@ -380,9 +380,19 @@
 
                 <AppBarButton Icon="Copy"
                               Label="Zduplikovat skupinu"
+                              x:Name="DuplicateButton"
                               IsEnabled="{Binding IsOneItemSelected}"
                               Visibility="{Binding IsAtLeastOneSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <AppBarButton.Flyout>
+                        <Flyout control:FlyoutHelpers.IsOpen="{Binding DuplicateGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                control:FlyoutHelpers.Parent="{Binding ElementName=DuplicateButton}">
+
+                            <groups:DuplicateGroupControl
+                                DataContext="{Binding DuplicateGroupViewModel}" />
+                        </Flyout>
+                    </AppBarButton.Flyout>
+                    
+                    <!--<AppBarButton.Flyout>
                         <Flyout>
                             <StackPanel Orientation="Vertical"
                                         DataContext="{Binding DuplicateGroupViewModel}">
@@ -435,7 +445,7 @@
                                 </Grid>
                             </StackPanel>
                         </Flyout>
-                    </AppBarButton.Flyout>
+                    </AppBarButton.Flyout>-->
                 </AppBarButton>
             </CommandBar.SecondaryCommands>
         </CommandBar>

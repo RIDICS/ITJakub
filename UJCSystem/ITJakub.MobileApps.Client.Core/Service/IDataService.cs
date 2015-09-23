@@ -36,6 +36,8 @@ namespace ITJakub.MobileApps.Client.Core.Service
 
         void CreateNewGroup(string groupName, Action<CreatedGroupViewModel, Exception> callback);
 
+        void DuplicateGroup(long sourceGroupId,string groupName, Action<CreatedGroupViewModel, Exception> callback);
+
         void ConnectToGroup(string code, Action<Exception> callback);
 
         void UpdateGroupState(long groupId, GroupStateContract newState, Action<Exception> callback);
@@ -77,6 +79,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
         Task<List<SyndicationItemViewModel>> GetAllNews();
         
         void UpdateEndpointAddress(string address);
+
         void RenewCodeForGroup(long groupId, Action<string, Exception> callback);
     }
 }

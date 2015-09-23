@@ -181,6 +181,9 @@
     <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
       <DependentUpon>CreateGroupControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Groups\DuplicateGroupControl.xaml.cs">
+      <DependentUpon>DuplicateGroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Groups\FilterByStateMenuFlyout.xaml.cs">
       <DependentUpon>FilterByStateMenuFlyout.xaml</DependentUpon>
     </Compile>
@@ -317,6 +320,10 @@
     <Page Include="View\Groups\CreateGroupControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\DuplicateGroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Groups\FilterByStateMenuFlyout.xaml">
       <SubType>Designer</SubType>

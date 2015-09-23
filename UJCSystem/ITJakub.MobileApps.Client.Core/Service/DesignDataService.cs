@@ -183,6 +183,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(new CreatedGroupViewModel {EnterCode = "ABCDEF", GroupId = 10}, null);
         }
 
+        public void DuplicateGroup(long sourceGroupId, string groupName, Action<CreatedGroupViewModel, Exception> callback)
+        {
+            callback(new CreatedGroupViewModel { EnterCode = "ABCDEF", GroupId = 10 }, null);
+        }
+
         public void ConnectToGroup(string code, Action<Exception> callback)
         {
             callback(null);

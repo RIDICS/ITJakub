@@ -57,7 +57,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             CreateNewGroup();
         }
 
-        private void CreateNewGroup()
+        protected virtual void CreateNewGroup()
         {
             ShowError = false;
             if (string.IsNullOrWhiteSpace(NewGroupName))

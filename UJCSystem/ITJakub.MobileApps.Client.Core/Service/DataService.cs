@@ -98,6 +98,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_groupManager.CreateNewGroup(groupName, callback);
         }
 
+        public void DuplicateGroup(long sourceGroupId, string groupName, Action<CreatedGroupViewModel, Exception> callback)
+        {
+            m_groupManager.DuplicateGroup(sourceGroupId, groupName, callback);
+        }
+
         public void ConnectToGroup(string code, Action<Exception> callback)
         {
             m_groupManager.ConnectToGroup(code, callback);

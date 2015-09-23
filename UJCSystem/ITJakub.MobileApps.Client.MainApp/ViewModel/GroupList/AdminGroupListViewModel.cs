@@ -62,7 +62,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData, m_errorService);
             SwitchToClosedViewModel = new SwitchGroupStateViewModel(GroupStateContract.Closed, m_dataService, m_selectedGroups, LoadData, m_errorService);
             DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData, m_errorService);
-            DuplicateGroupViewModel = new DuplicateGroupViewModel(m_dataService, m_selectedGroups);
+            DuplicateGroupViewModel = new DuplicateGroupViewModel(m_dataService, m_errorService,m_selectedGroups, Navigate<GroupPageView>);
         }
 
         private void LoadData()
