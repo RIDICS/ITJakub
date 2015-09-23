@@ -36,7 +36,7 @@
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
         <Color x:Key="SelectedStateBackgroundColor">#40FFFF00</Color>
     </Page.Resources>
-        
+
     <!--
         This grid acts as a root panel for the page that defines two rows:
         * Row 0 contains the back button and page title
@@ -182,10 +182,10 @@
                     <Button Margin="30,0,0,0"
                             Width="50"
                             Height="45"
-                            Style="{StaticResource EllipseButtonStyle}">
+                            Style="{StaticResource EllipseButtonStyle}" FontFamily="Global User Interface">
                         <TextBlock FontSize="35"
                                    Margin="-7,-5,-5,-5"
-                                   Text="i" FontFamily="Monotype Corsiva"/>
+                                   Text="i" FontFamily="Monotype Corsiva" />
                         <Button.Flyout>
                             <Flyout>
                                 <TextBlock MaxWidth="360"
@@ -432,7 +432,7 @@
                                 <TextBlock VerticalAlignment="Center"
                                            Margin="5,0,0,0">
                                     <Run Text="{Binding FirstName}" />
-                                    <Run Text="{Binding LastName}" />
+                                    <Run Text="{Binding LastName}" FontFamily="Global User Interface" />
                                 </TextBlock>
                             </StackPanel>
                         </DataTemplate>
@@ -449,7 +449,7 @@
         </Grid>
 
 
-        <CommandBar Grid.Row="2" 
+        <CommandBar Grid.Row="2"
                     Style="{StaticResource FixedBottomCommandBar}">
             <AppBarButton Label="Aktualizovat"
                           Icon="Refresh"
@@ -463,7 +463,7 @@
 
             <AppBarButton Label="Změna kódu skupiny"
                           x:Name="ChangeCodeButton"
-                          Icon="Shuffle"              
+                          Icon="SwitchApps"
                           IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}">
                 <AppBarButton.Flyout>
                     <Flyout>
@@ -471,19 +471,19 @@
                             <TextBlock FontSize="{StaticResource LabelFontSize}">
                                 <Run Text="Tato akce vygeneruje nový přístupový kód do skupiny. &#x0a; Starý přistupový kód bude neplatný" />
                             </TextBlock>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
 
-                                <AppBarButton Icon="Cancel" Label="Zrušit">
+                                <Button Content="Zrušit" FontFamily="Global User Interface">
                                     <i:Interaction.Behaviors>
-                                        <control:CloseFlyoutBehavior/>
+                                        <control:CloseFlyoutBehavior />
                                     </i:Interaction.Behaviors>
-                                </AppBarButton>
-                                
-                                <AppBarButton Icon="Accept" Command="{Binding ReNewCodeForGroup}" Label="Přijmout">
+                                </Button>
+
+                                <Button Content="Vygenerovat nový kód" Command="{Binding ReNewCodeForGroup}">
                                     <i:Interaction.Behaviors>
-                                        <control:CloseFlyoutBehavior/>
+                                        <control:CloseFlyoutBehavior />
                                     </i:Interaction.Behaviors>
-                                </AppBarButton>
+                                </Button>
 
                             </StackPanel>
                         </StackPanel>
@@ -510,7 +510,7 @@
                 <AppBarButton Label="Vyhodit uživatele" />
             </CommandBar.SecondaryCommands>-->
         </CommandBar>
-        
+
         <!--<StackPanel Grid.Row="2" Orientation="Horizontal">
             <AppBarButton Label="Aktualizovat"
                           Icon="Refresh"
