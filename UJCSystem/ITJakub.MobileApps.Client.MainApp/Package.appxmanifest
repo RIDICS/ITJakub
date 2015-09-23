@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="60834MartinMudra.Kiosekstaroesk" Publisher="CN=019A62BF-42F9-440B-9B11-1C323DB86C8B" Version="0.2.0.1" />
+  <Identity Name="60834MartinMudra.Kiosekstaroesk" Publisher="CN=019A62BF-42F9-440B-9B11-1C323DB86C8B" Version="0.2.0.3" />
   <Properties>
     <DisplayName>Kiosek staročeský</DisplayName>
     <PublisherDisplayName>Martin Mudra</PublisherDisplayName>

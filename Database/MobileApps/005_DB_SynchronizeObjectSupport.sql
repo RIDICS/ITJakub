@@ -13,7 +13,7 @@ BEGIN TRAN
     (
 	   [Id] bigint NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	   [Group] bigint NOT NULL CONSTRAINT [FK_SynchronizedObjectData(Group)_Group(Id)] FOREIGN KEY REFERENCES dbo.[Group](Id),
-	   [Data] varchar(MAX) NOT NULL
+	   [Data] nvarchar(MAX) NOT NULL
     )
 
     
@@ -22,7 +22,7 @@ BEGIN TRAN
 	   [Id] bigint NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	   [Task] bigint NOT NULL CONSTRAINT [FK_TaskData(Task)_Task(Id)] FOREIGN KEY REFERENCES dbo.[Task](Id),
 	   [Application] bigint NOT NULL CONSTRAINT [FK_TaskData(Application)_Application(Id)] FOREIGN KEY REFERENCES dbo.[Application](Id),
-	   [Data] varchar(MAX) NOT NULL
+	   [Data] nvarchar(MAX) NOT NULL
     )
 
 

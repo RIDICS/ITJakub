@@ -11,9 +11,9 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
 
         private EndpointAddress m_endpointAddress;
 
-        private const string DefaultEndpointAddress = "http://censeo2.felk.cvut.cz/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        //private const string DefaultEndpointAddress = "http://censeo2.felk.cvut.cz/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string DefaultEndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string DefaultEndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
+        private const string DefaultEndpointAddress = "http://147.32.81.135/ITJakub.MobileApps.Service/MobileAppsService.svc";
         //private const string DefaultEndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";        
 
         public MobileAppsServiceClientManager()

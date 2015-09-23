@@ -14,7 +14,9 @@
     <many-to-one name="Application" lazy="proxy" column="[Application]"
                  class="ITJakub.MobileApps.DataEntities.Database.Entities.Application, ITJakub.MobileApps.DataEntities" />
 
-    <property name="Data" />
+    <property name="Data" type="StringClob">
+      <column name="Data" sql-type="nvarchar(max)" not-null ="true"/>
+    </property>
 
   </class>
 </hibernate-mapping>

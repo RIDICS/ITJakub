@@ -11,7 +11,9 @@
     <many-to-one name="Group" lazy="proxy" column="[Group]" 
                  class="ITJakub.MobileApps.DataEntities.Database.Entities.Group, ITJakub.MobileApps.DataEntities" />
 
-    <property name="Data" />
+    <property name="Data" type="StringClob">
+      <column name="Data" sql-type="nvarchar(max)" not-null ="true"/>
+    </property>
 
   </class>
 </hibernate-mapping>
