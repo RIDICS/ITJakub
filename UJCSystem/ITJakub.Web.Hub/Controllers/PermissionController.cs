@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -99,6 +100,20 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult DeleteGroup(int groupId)
         {
             m_mainServiceClient.DeleteGroup(groupId);
+            return Json(new {});
+        }
+                           
+        [HttpPost]
+        public ActionResult AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            m_mainServiceClient.AddBooksAndCategoriesToGroup(groupId, bookIds, categoryIds);
+            return Json(new {});
+        }
+
+        [HttpPost]
+        public ActionResult RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            m_mainServiceClient.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
             return Json(new {});
         }
     }

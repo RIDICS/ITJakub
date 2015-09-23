@@ -332,5 +332,15 @@ namespace ITJakub.ITJakubService.Services
         {
             m_permissionManager.DeleteGroup(groupId);
         }
+
+        public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            m_permissionManager.AddBooksAndCategoriesToGroup(groupId, bookIds, categoryIds);
+        }
+
+        public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
+        }
     }
 }

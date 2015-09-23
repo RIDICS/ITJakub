@@ -212,5 +212,11 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         void DeleteGroup(int groupId);
+
+        [OperationContract]
+        void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+
+        [OperationContract]
+        void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
     }
 }

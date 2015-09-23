@@ -75,6 +75,18 @@ namespace ITJakub.ITJakubService.Core
             m_permissionRepository.Delete(group);
         }
 
+        public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            var group = m_permissionRepository.FindGroupById(groupId);
+            throw new NotImplementedException();
+        }
+
+        public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        {
+            var group = m_permissionRepository.FindGroupById(groupId);
+            throw new NotImplementedException();
+        }
+
         public void RemoveUserFromGroup(int userId, int groupId)
         {
             var group = m_permissionRepository.FindGroupById(groupId);

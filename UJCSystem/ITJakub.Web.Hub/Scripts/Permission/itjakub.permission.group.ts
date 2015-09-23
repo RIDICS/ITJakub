@@ -115,9 +115,22 @@ class GroupPermissionEditor {
         });
 
         $("#add-books-to-group-ok").click(() => {
-            alert(this.bookSelector.getSelectedBooksIds());
-            alert(this.bookSelector.getSelectedCategoriesIds());
-            $("#addBookToGroupDialog").modal('hide');
+            var selectedBookIds = this.bookSelector.getSelectedBooksIds();
+            var selectedCategoryIds = this.bookSelector.getSelectedCategoriesIds();
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/AddBooksAndCategoriesToGroup",
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: selectedBookIds, categoryIds: selectedCategoryIds }),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response) => {
+
+                    $("#addBookToGroupDialog").modal('hide');
+                    this.loadGroup(this.currentGroupSelectedItem);
+                }
+            });
         });
     }
 
@@ -227,7 +240,20 @@ class GroupPermissionEditor {
         $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
 
         $(removeSpan).click(() => {
-            //TODO
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(), categoryIds: new Array<number>(category.Id) }),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response) => {
+
+                    var detailsDiv = $(groupLi).find(".list-item-details").first();
+                    $(detailsDiv).empty();
+                    $(detailsDiv).removeClass("loaded");
+                }
+            });
         });
 
         buttonsSpan.appendChild(removeSpan);
@@ -281,8 +307,8 @@ class GroupPermissionEditor {
     }
 
     private createBookListItem(book: IBook): HTMLLIElement {
-        var groupLi = document.createElement("li");
-        $(groupLi).addClass("list-item leaf");
+        var bookLi = document.createElement("li");
+        $(bookLi).addClass("list-item leaf");
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -291,21 +317,32 @@ class GroupPermissionEditor {
         $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
 
         $(removeSpan).click(() => {
-            //TODO
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(book.Id), categoryIds: new Array<number>() }),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response) => {
+
+                    $(bookLi).remove();
+                }
+            });
         });
 
         buttonsSpan.appendChild(removeSpan);
 
-        groupLi.appendChild(buttonsSpan);
+        bookLi.appendChild(buttonsSpan);
         
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
         nameSpan.innerHTML = book.Title;
 
-        groupLi.appendChild(nameSpan);
+        bookLi.appendChild(nameSpan);
 
 
-        return groupLi;
+        return bookLi;
     }
 }
 
