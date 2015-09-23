@@ -214,5 +214,15 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return group;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User GetUserWithInstititutionById(long userId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>().Where(x => x.Id == userId)
+                    .Fetch(x => x.Institution).Eager.SingleOrDefault<User>();
+            }
+        }
     }
 }
