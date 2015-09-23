@@ -20,13 +20,15 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_messageDialog = new MessageDialog("Nelze provést zvolenou akci. Prosím zkontrolujte připojení k internetu a akci opakujte.", "Nelze kontaktovat server");
             m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
             {
-                Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(task => m_messageDialog = null);
-                
                 if (closeAction != null)
                     closeAction();
             }));
 
-            DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
+            DispatcherHelper.CheckBeginInvokeOnUI(async () =>
+            {
+                await m_messageDialog.ShowAsync();
+                m_messageDialog = null;
+            });
         }
 
         public void ShowConnectionWarning()
@@ -37,7 +39,7 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_errorBar = new ErrorBar("Nelze kontaktovat server. Prosím zkontrolujte připojení k internetu.");
             m_errorBar.ClosedCommand = () =>
             {
-                Task.Delay(new TimeSpan(0, 0, 30)).ContinueWith(task => m_errorBar = null);
+                Task.Delay(new TimeSpan(0, 0, 5)).ContinueWith(task => m_errorBar = null);
             };
 
             DispatcherHelper.CheckBeginInvokeOnUI(m_errorBar.Show);
@@ -54,13 +56,15 @@ namespace ITJakub.MobileApps.Client.Core.Service
             
             m_messageDialog.Commands.Add(new UICommand("Zavřít", command =>
             {
-                Task.Delay(new TimeSpan(0, 0, 1)).ContinueWith(task => m_messageDialog = null);
-                
                 if (closeAction != null)
                     closeAction();
             }));
 
-            DispatcherHelper.CheckBeginInvokeOnUI(() => m_messageDialog.ShowAsync());
+            DispatcherHelper.CheckBeginInvokeOnUI(async () =>
+            {
+                await m_messageDialog.ShowAsync();
+                m_messageDialog = null;
+            });
         }
 
         public void ShowDialog(MessageDialog messageDialog)
