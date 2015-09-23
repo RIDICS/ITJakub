@@ -62,6 +62,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             SwitchToPauseViewModel = new SwitchGroupStateViewModel(GroupStateContract.Paused, m_dataService, m_selectedGroups, LoadData, m_errorService);
             SwitchToClosedViewModel = new SwitchGroupStateViewModel(GroupStateContract.Closed, m_dataService, m_selectedGroups, LoadData, m_errorService);
             DeleteGroupViewModel = new DeleteGroupViewModel(m_dataService, m_selectedGroups, LoadData, m_errorService);
+            DuplicateGroupViewModel = new DuplicateGroupViewModel(m_dataService, m_selectedGroups);
         }
 
         private void LoadData()
@@ -111,7 +112,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public SwitchGroupStateViewModel SwitchToClosedViewModel { get; set; }
 
         public DeleteGroupViewModel DeleteGroupViewModel { get; set; }
-        
+
+        public DuplicateGroupViewModel DuplicateGroupViewModel { get; set; }
+
         public bool IsOneItemSelected
         {
             get { return m_isOneItemSelected; }

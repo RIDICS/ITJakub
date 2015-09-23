@@ -424,9 +424,11 @@
                 </Grid>
 
                 <ListView IsItemClickEnabled="False"
-                          SelectionMode="None"
+                          SelectionMode="Single"
+                          SelectedItem="{Binding SelectedMember, Mode=TwoWay}"
                           Grid.Row="1"
-                          ItemsSource="{Binding FilteredMembers}">
+                          ItemsSource="{Binding FilteredMembers}"
+                          x:Name="MembersListView">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -508,10 +510,12 @@
                           Command="{Binding OpenAdminCommand}"
                           IsEnabled="{Binding CanOpenAdmin}" />
 
-
-            <!--TODO kick user function + UI-->
             <!--<CommandBar.SecondaryCommands>
-                <AppBarButton Label="Vyhodit uživatele" />
+                <AppBarButton Label="Vyhodit uživatele"
+                              Icon="Delete"
+                              Visibility="{Binding ElementName=MembersListView, Path=SelectedItem, Converter={StaticResource NotNullToVisibilityConverter}}">
+                    --><!--TODO--><!--
+                </AppBarButton>
             </CommandBar.SecondaryCommands>-->
         </CommandBar>
         
