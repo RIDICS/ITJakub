@@ -35,9 +35,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
 
         public bool CanChangeBack
         {
-            get { return GroupState == GroupStateContract.Paused; }
+            get { return GroupState == GroupStateContract.Running; }
         }
-
+        
         public bool IsCurrentState
         {
             get { return m_isCurrentState; }

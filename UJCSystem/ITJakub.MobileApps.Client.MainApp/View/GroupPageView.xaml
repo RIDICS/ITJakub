@@ -26,14 +26,15 @@
         <converter1:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converter1:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
         <Style x:Key="MyLabelStyle" TargetType="TextBlock">
-            <Setter Property="Margin" Value="0,5,0,5" />
+            <Setter Property="Margin" Value="0,0,0,5" />
             <Setter Property="FontWeight" Value="Light" />
-            <Setter Property="FontSize" Value="27" />
+            <Setter Property="FontSize" Value="21" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <x:Double x:Key="LabelFontSize">14</x:Double>
         <x:Double x:Key="ArrowThickness">2</x:Double>
         <SolidColorBrush x:Key="ArrowColor" Color="Black" />
+        <SolidColorBrush x:Key="LabelColor" Color="#CCCCCC" />
         <Color x:Key="SelectedStateBackgroundColor">#40FFFF00</Color>
     </Page.Resources>
         
@@ -86,7 +87,7 @@
 
         <Grid Grid.Row="1"
               Visibility="{Binding Loading, Converter={StaticResource BooleanNegationToVisibilityConverter}}"
-              Margin="0,20,0,40">
+              Margin="0,10,0,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*" />
                 <ColumnDefinition Width="2*" MaxWidth="550" />
@@ -99,7 +100,8 @@
 
                     <TextBlock Style="{StaticResource MyLabelStyle}"
                                IsTextSelectionEnabled="True">
-                        <Run Text="Kód skupiny:" />
+                        <Run Foreground="{StaticResource LabelColor}"
+                             Text="Kód skupiny:" />
                         <Run Text="{Binding GroupInfo.GroupCode}" />
                     </TextBlock>
 
@@ -113,7 +115,7 @@
                                   Visibility="{Binding RenewCodeInProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
                                   Width="30" Height="30" Margin="15,0,0,0" />
 
-                    <Button Margin="30,0,0,0"
+                    <!--<Button Margin="30,0,0,0"
                             Command="{Binding ConnectToGroupCommand}"
                             IsEnabled="{Binding CanConnectToGroup}">
                         <StackPanel Orientation="Horizontal">
@@ -127,16 +129,18 @@
                     <Button Margin="10,0,0,0"
                             Command="{Binding OpenAdminCommand}"
                             IsEnabled="{Binding CanOpenAdmin}"
-                            Content="Zobrazit aplikaci" />
+                            Content="Zobrazit aplikaci" />-->
                 </StackPanel>
 
                 <TextBlock Style="{StaticResource MyLabelStyle}">
-                    <Run Text="Čas založení:" />
+                    <Run Foreground="{StaticResource LabelColor}"
+                         Text="Čas založení:" />
                     <Run Text="{Binding GroupInfo.CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
                 </TextBlock>
 
                 <control:AlignableWrapPanel>
                     <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Foreground="{StaticResource LabelColor}"
                                Text="Zadání:" />
 
                     <Button Margin="7,0,0,7"
@@ -150,7 +154,7 @@
                     </Button>
 
                     <Button Content="Změnit"
-                            Margin="30,0,0,0"
+                            Margin="30,-5,0,0"
                             IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}"
                             Visibility="{Binding CanChangeTask, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Command="{Binding SelectAppAndTaskCommand}" />
@@ -160,10 +164,12 @@
                 <StackPanel Orientation="Horizontal"
                             Visibility="{Binding AppName, Converter={StaticResource NotNullToVisibilityConverter}}">
                     <TextBlock Style="{StaticResource MyLabelStyle}"
+                               Foreground="{StaticResource LabelColor}"
                                Text="Aplikace:" />
                     <Grid Margin="10,-3,10,0">
-                        <Image Width="32"
-                               Height="32"
+                        <Image Width="26"
+                               Height="26"
+                               VerticalAlignment="Top"
                                Visibility="{Binding AppIcon, Converter={StaticResource NotNullToVisibilityConverter}}"
                                Source="{Binding AppIcon}" />
                     </Grid>
@@ -173,19 +179,23 @@
 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Style="{StaticResource MyLabelStyle}"
-                               Margin="0,10,0,15">
-                        <Run Text="Stav skupiny:" />
+                               Margin="0,0,0,0">
+                        <Run Foreground="{StaticResource LabelColor}"
+                             Text="Stav skupiny:" />
                         <Run Text="{Binding GroupInfo.State, Converter={StaticResource GroupStateToNameConverter}}"
                              Foreground="Yellow" />
                     </TextBlock>
 
                     <Button Margin="30,0,0,0"
                             Width="50"
-                            Height="45"
+                            Height="40"
                             Style="{StaticResource EllipseButtonStyle}">
-                        <TextBlock FontSize="35"
-                                   Margin="-7,-5,-5,-5"
-                                   Text="i" FontFamily="Monotype Corsiva"/>
+
+                        <TextBlock FontSize="30"
+                                   Margin="-6,-5,-5,-5"
+                                   Text="i"
+                                   FontFamily="Georgia"
+                                   FontStyle="Italic" />
                         <Button.Flyout>
                             <Flyout>
                                 <TextBlock MaxWidth="360"
@@ -218,6 +228,7 @@
                 <ScrollViewer Margin="0,0,40,0"
                               VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollMode="Enabled"
                               HorizontalScrollMode="Disabled"
                               ZoomMode="Disabled">
                     <StackPanel Orientation="Vertical"
@@ -226,8 +237,9 @@
 
                         <TextBlock Text="Změnit na:"
                                    Style="{StaticResource MyLabelStyle}"
+                                   Foreground="{StaticResource LabelColor}"
                                    HorizontalAlignment="Center"
-                                   FontSize="20" />
+                                   FontSize="16" />
 
                         <ItemsControl ItemsSource="{Binding GroupStates}"
                                       IsEnabled="{Binding ChangingState, Converter={StaticResource BooleanNegationConverter}}">
@@ -239,7 +251,7 @@
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
 
-                                        <control1:DownArrowControl Grid.Row="0"
+                                        <control1:DownArrowControl Grid.Row="1"
                                                                    Height="15"
                                                                    Width="10"
                                                                    HorizontalAlignment="Center"
@@ -247,7 +259,7 @@
                                                                    StrokeThickness="{StaticResource ArrowThickness}"
                                                                    IsBothWay="{Binding CanChangeBack}" />
 
-                                        <Button Grid.Row="1"
+                                        <Button Grid.Row="0"
                                                 Content="{Binding GroupState, Converter={StaticResource GroupStateToNameConverter}}"
                                                 Width="220"
                                                 HorizontalAlignment="Center"
@@ -295,14 +307,6 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-
-                            <control1:DownArrowControl Grid.Row="0"
-                                                       Height="15"
-                                                       Width="10"
-                                                       HorizontalAlignment="Center"
-                                                       Foreground="{StaticResource ArrowColor}"
-                                                       StrokeThickness="{StaticResource ArrowThickness}"
-                                                       IsBothWay="False" />
 
                             <ContentControl Grid.Row="1"
                                             HorizontalAlignment="Center"

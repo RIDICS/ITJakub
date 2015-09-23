@@ -75,7 +75,7 @@
         
         <GridView Grid.Row="1"
                   ItemsSource="{Binding Source={StaticResource TaskListViewSource}}"
-                  Padding="110,0,0,70"
+                  Padding="110,0,0,0"
                   IsItemClickEnabled="True"
                   SelectionMode="Single">
             
