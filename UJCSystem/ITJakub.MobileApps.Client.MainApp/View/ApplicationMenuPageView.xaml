@@ -177,7 +177,7 @@
                 </DataTemplate>
             </HubSection>
 
-            <HubSection Header="Ostatní"
+            <HubSection Header="Zadání pro skupiny"
                         Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <DataTemplate>
                     <Grid>
