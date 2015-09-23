@@ -47,7 +47,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 
 
             var client = m_serviceClientManager.GetClient();
-            var salt = await client.GetSaltByUserEmail(userLoginSkeleton.Email);
+            var salt = await client.GetSaltByUserEmailAsync(userLoginSkeleton.Email);
 
             var passwordHash = GetPasswordHash(userLoginSkeleton.Password, salt);
 

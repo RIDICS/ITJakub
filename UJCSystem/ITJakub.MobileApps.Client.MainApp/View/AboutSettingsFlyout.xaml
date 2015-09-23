@@ -27,6 +27,10 @@
                 <Run Text="Vladimír Pokorný" />
                 <LineBreak />
                 <Run Text="Martin Mudra" />
+                <LineBreak />
+                <Run Text="Jan Minařík" />
+                <LineBreak />
+                <Run Text="Martin Klíma" />
             </TextBlock>
         </StackPanel>
 

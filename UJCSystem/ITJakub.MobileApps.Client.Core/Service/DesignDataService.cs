@@ -28,6 +28,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             callback(true, null);
         }
 
+        public void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback)
+        {
+            callback(true, null);
+        }
+
         public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
             callback(new LoggedUserViewModel {FirstName = "Test", LastName = "Testovaci", UserRole = UserRoleContract.Teacher});

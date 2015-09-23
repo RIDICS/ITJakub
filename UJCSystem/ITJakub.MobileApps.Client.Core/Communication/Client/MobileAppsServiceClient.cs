@@ -670,7 +670,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<string> GetSaltByUserEmail(string email)
+        public Task<string> GetSaltByUserEmailAsync(string email)
         {
             return Task.Run(() =>
             {
@@ -681,6 +681,33 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 catch (FaultException ex)
                 {
                     throw new UserNotRegisteredException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<bool> PromoteUserToTeacherRoleAsync(long userId, string promotionCode)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.PromoteUserToTeacherRole(userId, promotionCode);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException("Server error, probably wrong promotion code", ex);
                 }
                 catch (CommunicationException ex)
                 {

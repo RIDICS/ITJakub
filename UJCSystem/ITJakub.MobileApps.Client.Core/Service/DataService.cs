@@ -199,6 +199,11 @@ namespace ITJakub.MobileApps.Client.Core.Service
             m_authenticationManager.CreateUserByLoginProvider(loginProviderType, callback);
         }
 
+        public void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback)
+        {
+            m_authenticationManager.PromoteUserToTeacherRole(userId, promotionCode, callback);
+        }
+
         public void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
             m_authenticationManager.GetLoggedUserInfo(getUserAvatar, callback);

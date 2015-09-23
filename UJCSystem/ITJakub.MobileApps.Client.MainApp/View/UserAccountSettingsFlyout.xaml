@@ -23,7 +23,11 @@
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
 
         <!-- The StackPanel(s) below define individual content sections -->
-
+        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                   Text="Žádný přihlášený uživatel"
+                   Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
+        
+        
         <!-- Content Section 1-->
         <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}"
                     Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -67,11 +71,52 @@
                     Command="{Binding LogOutCommand}" />
         </StackPanel>
         
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}"
-                   Text="Žádný přihlášený uživatel"
-                   Visibility="{Binding IsUserLoggedIn, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
-
         <!-- Define more Content Sections below as necessary -->
 
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}"
+                    Visibility="{Binding IsSwitchToTeacherVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}"
+                       Text="Přepnout do učitelské role:" />
+            
+            <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                       Text="Kód instituce" />
+            
+            <Grid Width="250"
+                  Margin="0,3,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                
+                <TextBox Grid.Row="0"
+                         Grid.Column="0"
+                         Grid.ColumnSpan="2"
+                         Text="{Binding InstitutionCode, Mode=TwoWay}" />
+                
+                <Button Grid.Row="1"
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        Content="Přepnout"
+                        Command="{Binding SwitchToTeacherCommand}" />
+                
+                <ProgressRing Grid.Row="1"
+                              Grid.Column="0"
+                              HorizontalAlignment="Right"
+                              IsActive="{Binding SwitchingInProgresss}" />
+
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           Text="Nesprávný kód"
+                           Style="{StaticResource BodyTextBlockStyle}"
+                           Foreground="{StaticResource FlyoutErrorColor}"
+                           Visibility="{Binding IsSwitchToTeacherError, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            </Grid>
+            
+        </StackPanel>
     </StackPanel>
 </SettingsFlyout>

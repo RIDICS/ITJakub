@@ -224,6 +224,25 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication
             }
         }
 
+        public async void PromoteUserToTeacherRole(long userId, string promotionCode, Action<bool, Exception> callback)
+        {
+            try
+            {
+                var client = m_serviceClientManager.GetClient();
+                var result = await client.PromoteUserToTeacherRoleAsync(userId, promotionCode);
+                
+                callback(result, null);
+            }
+            catch (InvalidServerOperationException exception)
+            {
+                callback(false, exception);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(false, exception);
+            }
+        }
+
         public async void GetLoggedUserInfo(bool getUserAvatar, Action<LoggedUserViewModel> callback)
         {
             if (UserLoginInfo == null)
