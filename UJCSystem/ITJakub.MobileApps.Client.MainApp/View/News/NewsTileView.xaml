@@ -16,7 +16,7 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </UserControl.Resources>
-    <Grid Background="#40FFFFFF">
+    <Grid Background="{ThemeResource TileBackgroundThemeBrush}">
         <ProgressRing Width="75" Height="75" IsActive="True" Visibility="{Binding Loading, Converter={ StaticResource BooleanToVisibilityConverter}}" />
         
         <ListView

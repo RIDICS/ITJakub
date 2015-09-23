@@ -57,19 +57,49 @@
                     <news:NewsTileView Margin="0,0,0,110" />
                 </DataTemplate>
             </HubSection>
-            
+                                            
             <HubSection Header="Skupiny"
                         Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <DataTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />                            
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
                         <Button Grid.Row="0"
+                                Grid.Column="0"
+                                Style="{StaticResource TileButtonStyle}"
+                                Width="{StaticResource BasicSize}"
+                                Height="{StaticResource BasicSize}"
+                                x:Name="ConnectToGroupButton1">
+
+                            <Grid>
+                                <Viewbox Margin="{StaticResource SmallIconMargin}">
+                                    <SymbolIcon Symbol="AddFriend" />
+                                </Viewbox>
+
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           Text="Připojit se do skupiny" />
+                            </Grid>
+
+                            <Button.Flyout>
+                                <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                        control:FlyoutHelpers.Parent="{Binding ElementName=ConnectToGroupButton1}">
+                                    <groups:ConnectToGroupControl DataContext="{Binding ConnectToGroupViewModel}" />
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+
+                        <Button Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
                                 Style="{StaticResource TileButtonStyle}"
                                 Width="{StaticResource DoubleSize}"
                                 Height="{StaticResource BasicSize}"
@@ -82,11 +112,11 @@
 
                                 <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Bottom"
-                                           Text="Skupiny" />
+                                           Text="Členství ve skupinách" />
                             </Grid>
                         </Button>
 
-                        <Button Grid.Row="1"
+                        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
                                 Style="{StaticResource TileButtonStyle}"
                                 Width="{StaticResource DoubleSize}"
                                 Height="{StaticResource BasicSize}"
@@ -96,11 +126,39 @@
                                 <Image Source="../Icon/group-100.png"
                                        Stretch="None"
                                        Margin="0,0,0,15"/>
-                                
+
                                 <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Bottom"
-                                           Text="Administrace skupin" />
+                                           Text="Správa skupin" />
                             </Grid>
+                        </Button>
+
+
+                        <Button Grid.Row="1"
+                                Grid.Column="2"
+                                Style="{StaticResource TileButtonStyle}"
+                                Width="{StaticResource BasicSize}"
+                                Height="{StaticResource BasicSize}"
+                                x:Name="CreateGroupButton">
+
+                            <Grid>
+                                <Viewbox Margin="{StaticResource SmallIconMargin}">
+                                    <SymbolIcon Symbol="Add" />
+                                </Viewbox>
+
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           Text="Vytvořit novou skupinu" />
+                            </Grid>
+
+                            <Button.Flyout>
+                                <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
+                                        control:FlyoutHelpers.Parent="{Binding ElementName=CreateGroupButton}">
+                                    <groups:CreateGroupControl DataContext="{Binding CreateNewGroupViewModel}" />
+                                </Flyout>
+                            </Button.Flyout>
                         </Button>
 
                         <!--<TextBlock Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,0,10"
@@ -127,65 +185,12 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-
+                                            
                         <Button Grid.Row="0"
                                 Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 Style="{StaticResource TileButtonStyle}"
-                                Width="{StaticResource BasicSize}"
-                                Height="{StaticResource BasicSize}"
-                                x:Name="ConnectToGroupButton1">
-                            
-                            <Grid>
-                                <Viewbox Margin="{StaticResource SmallIconMargin}">
-                                    <SymbolIcon Symbol="AddFriend" />
-                                </Viewbox>
-
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Bottom"
-                                           TextWrapping="Wrap"
-                                           TextAlignment="Center"
-                                           Text="Připojit se do skupiny" />
-                            </Grid>
-                            
-                            <Button.Flyout>
-                                <Flyout control:FlyoutHelpers.IsOpen="{Binding ConnectToGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
-                                        control:FlyoutHelpers.Parent="{Binding ElementName=ConnectToGroupButton1}">
-                                    <groups:ConnectToGroupControl DataContext="{Binding ConnectToGroupViewModel}" />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-
-                        <Button Grid.Row="0"
-                                Grid.Column="1"
-                                Style="{StaticResource TileButtonStyle}"
-                                Width="{StaticResource BasicSize}"
-                                Height="{StaticResource BasicSize}"
-                                x:Name="CreateGroupButton">
-
-                            <Grid>
-                                <Viewbox Margin="{StaticResource SmallIconMargin}">
-                                    <SymbolIcon Symbol="Add" />
-                                </Viewbox>
-
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Bottom"
-                                           TextWrapping="Wrap"
-                                           TextAlignment="Center"
-                                           Text="Vytvořit skupinu" />
-                            </Grid>
-                            
-                            <Button.Flyout>
-                                <Flyout control:FlyoutHelpers.IsOpen="{Binding CreateNewGroupViewModel.IsFlyoutOpen, Mode=TwoWay}"
-                                        control:FlyoutHelpers.Parent="{Binding ElementName=CreateGroupButton}">
-                                    <groups:CreateGroupControl DataContext="{Binding CreateNewGroupViewModel}" />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        
-                        <Button Grid.Row="1"
-                                Grid.Column="0"
-                                Style="{StaticResource TileButtonStyle}"
-                                Width="{StaticResource BasicSize}"
+                                Width="{StaticResource DoubleSize}"
                                 Height="{StaticResource BasicSize}"
                                 Command="{Binding OpenMyTaskListCommand}">
 
@@ -203,7 +208,7 @@
                         </Button>
                         
                         <Button Grid.Row="1"
-                                Grid.Column="1"
+                                Grid.Column="0"
                                 Style="{StaticResource TileButtonStyle}"
                                 Width="{StaticResource BasicSize}"
                                 Height="{StaticResource BasicSize}"
@@ -255,7 +260,10 @@
             </HubSection>
 
             <!--Special section for students-->
-            <HubSection Header="Skupiny"
+            <!--<HubSection Header="Skupiny"
+                        Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanToVisibilityConverter}}">-->   
+                
+                <HubSection Header="Skupiny"
                         Visibility="{Binding IsTeacherMode, Converter={StaticResource BooleanNegationToVisibilityConverter}}">
                 <DataTemplate>
                     <Grid>
@@ -283,7 +291,7 @@
 
                                 <TextBlock HorizontalAlignment="Center"
                                            VerticalAlignment="Bottom"
-                                           Text="Skupiny" />
+                                           Text="Členství ve skupinách" />
                             </Grid>
                         </Button>
 
@@ -328,7 +336,7 @@
                             <Grid>
                                 <Image Source="../Icon/literature-128.png"
                                        Stretch="None" />
-                                <TextBlock Text="Otevřít čtečku knih"
+                                <TextBlock Text="Listování knihami"
                                            VerticalAlignment="Bottom"
                                            HorizontalAlignment="Center" />
                             </Grid>
@@ -349,6 +357,41 @@
                     </Grid>
                 </DataTemplate>
             </HubSection>
+            
+            <HubSection Header="Ostatní">
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />                        
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Row="0"
+                                Grid.Column="0"                                
+                                Style="{StaticResource TileButtonStyle}"
+                                Width="{StaticResource BasicSize}"
+                                Height="{StaticResource BasicSize}"
+                                Command="{Binding OpenAboutAppCommand}">
+
+                            <Grid>
+                                <Viewbox Margin="{StaticResource SmallIconMargin}">
+                                    <SymbolIcon Symbol="Library" />
+                                </Viewbox>
+
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Bottom"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           Text="O Aplikaci" />
+                            </Grid>
+                        </Button>
+
+                    </Grid>
+                </DataTemplate>
+            </HubSection>
+            
         </Hub>
 
         <userMenu:UserMenu Grid.Row="0"

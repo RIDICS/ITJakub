@@ -14,8 +14,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.News
         //private const string EndpointAddress = "http://147.32.81.136/ITJakub.ITJakubService/MobileApps.svc";
         private const string EndpointAddress = "http://censeo2.felk.cvut.cz/ITJakub.ITJakubService/MobileApps.svc";
 
-        public MobileAppsNewsClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
+        public MobileAppsNewsClient() : this(EndpointAddress)
         {
+        }
+
+        public MobileAppsNewsClient(string newsEndpoint): base(GetDefaultBinding(), GetDefaultEndpointAddress(newsEndpoint))
+        {                        
         }
 
         public IList<NewsSyndicationItemContract> GetNewsForMobileApps(int start, int count)
@@ -51,29 +55,26 @@ namespace ITJakub.MobileApps.Client.Core.Manager.News
                 result.AllowCookies = true;
                 return result;
             }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
 
-        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
+        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration, string newsEndpointAddress)
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
             {
-                return new EndpointAddress(EndpointAddress);
+                return new EndpointAddress(newsEndpointAddress);
             }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
+            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",endpointConfiguration));
         }
 
         private static Binding GetDefaultBinding()
         {
-            return
-                GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
+            return GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
 
-        private static EndpointAddress GetDefaultEndpointAddress()
+        private static EndpointAddress GetDefaultEndpointAddress(string newsEndpointAddress)
         {
-            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
+            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService, newsEndpointAddress);
         }
         #endregion
 

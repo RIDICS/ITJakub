@@ -8,10 +8,12 @@ namespace ITJakub.MobileApps.Client.Core.Manager.News
 {
     public class NewsManager
     {
-             
+
+        public string NewsEndpoint { get; set; }
+                
         public Task<List<SyndicationItemViewModel>> GetAllNews()
         {
-            var client = new MobileAppsNewsClient();            
+            var client = GetClient();
 
             //return Task.Factory.StartNew(() =>   new List<SyndicationItemViewModel>
             //{
@@ -106,6 +108,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.News
 
             });
         }
+
+        private MobileAppsNewsClient GetClient()
+        {
+            if (string.IsNullOrWhiteSpace(NewsEndpoint))
+                return new MobileAppsNewsClient();
+            return new MobileAppsNewsClient(NewsEndpoint);
+        }     
     }
 
 

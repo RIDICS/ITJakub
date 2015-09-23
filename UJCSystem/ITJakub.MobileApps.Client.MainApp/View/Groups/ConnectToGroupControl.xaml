@@ -7,8 +7,9 @@
     xmlns:groupList="using:ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList"
     xmlns:control="using:ITJakub.MobileApps.Client.Shared.Control"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     mc:Ignorable="d"
-    d:DesignHeight="300"
+    d:DesignHeight="230"
     d:DesignWidth="400"
     d:DataContext="{d:DesignInstance groupList:ConnectToGroupViewModel}">
 
@@ -16,9 +17,10 @@
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </UserControl.Resources>
+
     <StackPanel Orientation="Vertical">
         <TextBlock FontSize="15"
-                   Text="Zadejte číslo skupiny:" />
+                   Text="Zadejte přístupový kód do skupiny:" />
         <control:SubmitTextBox
             Width="250"
             Margin="0,5,0,5"
@@ -26,16 +28,45 @@
             EnterCommand="{Binding SubmitCommand}" />
         <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                    FontSize="15"
-                   Margin="0,0,0,5"
+                   Margin="10,0,0,5"
                    Text="Zadaný kód je neplatný."
                    Visibility="{Binding ShowCodeNotExistError, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <TextBlock Foreground="{StaticResource FlyoutErrorColor}"
                    FontSize="15"
-                   Margin="0,0,0,5"
+                   Margin="10,0,0,5"
                    Text="Nejdříve musíte zadat kód skupiny."
                    Visibility="{Binding ShowCodeEmptyError, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Height="40">
+            <ProgressRing IsActive="{Binding InProgress}"
+                          Foreground="{StaticResource FlyoutProgressColor}" />
+            <TextBlock
+                Text="Připojování"
+                FontSize="15"
+                Foreground="{StaticResource FlyoutProgressColor}"
+                VerticalAlignment="Center"
+                Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Margin="5,0,0,0" />
+        </StackPanel>-->
+
+
+        <!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <AppBarButton Icon="Accept" Command="{Binding ConnectToGroupCommand}" Label="Připojit se ke skupině"/>
+
+            <AppBarButton Icon="Cancel" Label="Zrušit">
+                <interactivity:Interaction.Behaviors>
+                    <control:CloseFlyoutBehavior />
+                </interactivity:Interaction.Behaviors>
+            </AppBarButton>
+
+        </StackPanel>-->
+
+
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>                
+            </Grid.RowDefinitions>
+            
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -43,7 +74,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ProgressRing IsActive="{Binding InProgress}"
+            <ProgressRing Grid.Column="0" IsActive="{Binding InProgress}"
                           Foreground="{StaticResource FlyoutProgressColor}" />
             <TextBlock Grid.Column="1"
                        Text="Připojování"
@@ -51,7 +82,7 @@
                        Foreground="{StaticResource FlyoutProgressColor}"
                        VerticalAlignment="Center"
                        Visibility="{Binding InProgress, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       Margin="5,0,0,0" />
+                       Margin="5,0,0,0" />            
 
             <Button Grid.Column="2"
                     Content="Zrušit"

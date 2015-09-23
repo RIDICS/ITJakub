@@ -49,6 +49,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 DataService.SetAppSelectionTarget(SelectApplicationTarget.CreateTask);
                 NavigationService.Navigate<SelectApplicationView>();
             });
+
+            OpenAboutAppCommand = new RelayCommand(Windows.UI.ApplicationSettings.SettingsPane.Show);
         }
 
         public RelayCommand OpenBookReaderCommand { get; private set; }
@@ -60,6 +62,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public RelayCommand CreateTaskCommand { get; private set; }
 
         public RelayCommand OpenMyTaskListCommand { get; private set; }
+
+        public RelayCommand OpenAboutAppCommand { get; private set; }
 
         public bool IsTeacherMode
         {

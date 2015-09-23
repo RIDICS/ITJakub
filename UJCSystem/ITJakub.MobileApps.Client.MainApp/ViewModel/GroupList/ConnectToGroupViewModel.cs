@@ -1,4 +1,5 @@
 using System;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -19,7 +20,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_dataService = dataService;
             m_submitAction = submitAction;
             m_errorService = errorService;
+            ConnectToGroupCommand = new RelayCommand(ConnectToGroup, ()=> !InProgress);
         }
+
+        public RelayCommand ConnectToGroupCommand { get; set; }
 
 
         public string ConnectToGroupCode
@@ -50,7 +54,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 m_showCodeEmptyError = value;
                 RaisePropertyChanged();
             }
-        }
+        }        
 
         protected override void SubmitAction()
         {
