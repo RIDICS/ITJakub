@@ -748,7 +748,7 @@
     </Style>
     
     <Style x:Key="TileButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{ThemeResource TileBackgroundThemeBrush}"/>
+        <!--<Setter Property="Background" Value="{ThemeResource TileBackgroundThemeBrush}"/>-->
         <Setter Property="Foreground" Value="{ThemeResource ButtonForegroundThemeBrush}"/>
         <Setter Property="BorderBrush" Value="{ThemeResource ButtonBorderThemeBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>

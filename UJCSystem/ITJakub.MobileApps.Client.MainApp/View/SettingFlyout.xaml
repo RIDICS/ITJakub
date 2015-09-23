@@ -9,7 +9,18 @@
     Title="Nastavení"
     d:DesignWidth="346"
     DataContext="{Binding SettingViewModel, Source={StaticResource Locator}}">
-
+    
+    
+    <SettingsFlyout.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Original">#40FFFFFF</Color>
+            <Color x:Key="Indigo">Indigo</Color>
+            <Color x:Key="DarkGreen">DarkGreen</Color>
+            <Color x:Key="DarkBlue">DarkBlue</Color>
+            <Color x:Key="Crimson">Crimson</Color>
+        </ResourceDictionary>
+    </SettingsFlyout.Resources>
+    
     <!-- This StackPanel acts as a root panel for vertical layout of the content sections -->
     <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                 Width="260">
@@ -40,6 +51,16 @@
                        TextWrapping="Wrap"
                        Text="Po změně adresy je potřeba restartovat aplikaci" />
            
+            <StackPanel Orientation="Horizontal">
+                <Button Width="40" Height="40" Background="#40FFFFFF" BorderBrush="Black" BorderThickness="2" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Original}"/>
+                <Button Width="40" Height="40" Background="Indigo" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Indigo}"/>
+                <Button Width="40" Height="40" Background="DarkGreen" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource DarkGreen}"/>
+                <Button Width="40" Height="40" Background="DarkBlue" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource DarkBlue}"/>
+                <Button Width="40" Height="40" Background="Crimson" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Crimson}"/>    
+            </StackPanel>
+            
+            
+            <!--<Button Width="40" Height="40" Background="#40FFFFFF" Command="OriginalCommand"/>-->
             
         </StackPanel>
 
