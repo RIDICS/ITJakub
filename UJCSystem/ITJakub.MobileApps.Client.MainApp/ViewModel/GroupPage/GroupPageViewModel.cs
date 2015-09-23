@@ -138,6 +138,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             {
                 for (var i = GroupStateContract.AcceptMembers; i <= GroupStateContract.Closed; i++)
                 {
+                    if (i == GroupStateContract.WaitingForStart) // this state is disabled
+                        continue;
+
                     GroupStates.Add(new GroupStateViewModel(i, ChangeGroupState));
                 }
             }
