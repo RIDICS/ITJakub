@@ -52,6 +52,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(SelectionChanged);
             OpenMyTaskListCommand = new RelayCommand(Navigate<OwnedTaskListView>);
             CreateTaskCommand = new RelayCommand(CreateNewTask);
+            RefreshListCommand = new RelayCommand(LoadData);
         }
 
         private void InitViewModels()
@@ -97,7 +98,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         public RelayCommand OpenMyTaskListCommand { get; private set; }
 
         public RelayCommand CreateTaskCommand { get; private set; }
-        
+
+        public RelayCommand RefreshListCommand { get; private set; }
+
 
         public CreateGroupViewModel CreateNewGroupViewModel { get; set; }
 
@@ -160,7 +163,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
         }
 
         public override bool IsTeacherView { get { return true; } }
-
+        
         private void SelectionChanged(SelectionChangedEventArgs args)
         {
             foreach (var removedItem in args.RemovedItems)

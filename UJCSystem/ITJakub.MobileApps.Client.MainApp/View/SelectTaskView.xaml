@@ -18,17 +18,6 @@
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:IsMyOwnershipToNameConverter x:Key="IsMyOwnershipToNameConverter" />
     </Page.Resources>
-
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Refresh"
-                          Label="Aktualizovat seznam"
-                          Command="{Binding RefreshListCommand}" />
-            <AppBarButton Icon="Add"
-                          Label="Nové zadání"
-                          Command="{Binding CreateNewTaskCommand}" />
-        </CommandBar>
-    </Page.BottomAppBar>
     
     <!--
         This grid acts as a root panel for the page that defines two rows:

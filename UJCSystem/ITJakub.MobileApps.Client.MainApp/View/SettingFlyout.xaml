@@ -50,18 +50,22 @@
             <TextBlock FontSize="15"
                        TextWrapping="Wrap"
                        Text="Po změně adresy je potřeba restartovat aplikaci" />
-           
+            
+            <!--<Button Width="40" Height="40" Background="#40FFFFFF" Command="OriginalCommand"/>-->
+            
+        </StackPanel>
+
+        <StackPanel Style="{StaticResource SettingsFlyoutSectionStyle}">
+
+            <TextBlock Style="{StaticResource TitleTextBlockStyle}" Text="Barevný motiv" />
+            
             <StackPanel Orientation="Horizontal">
                 <Button Width="40" Height="40" Background="#40FFFFFF" BorderBrush="Black" BorderThickness="2" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Original}"/>
                 <Button Width="40" Height="40" Background="Indigo" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Indigo}"/>
                 <Button Width="40" Height="40" Background="DarkGreen" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource DarkGreen}"/>
                 <Button Width="40" Height="40" Background="DarkBlue" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource DarkBlue}"/>
-                <Button Width="40" Height="40" Background="Crimson" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Crimson}"/>    
+                <Button Width="40" Height="40" Background="Crimson" Command="{Binding ChangeThemeCommand}" CommandParameter="{StaticResource Crimson}"/>
             </StackPanel>
-            
-            
-            <!--<Button Width="40" Height="40" Background="#40FFFFFF" Command="OriginalCommand"/>-->
-            
         </StackPanel>
 
     </StackPanel>

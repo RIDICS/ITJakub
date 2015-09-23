@@ -308,14 +308,13 @@
                                                Margin="5,0,0,0" />
 
 
-
-                                    <AppBarButton Icon="Delete" Command="{Binding DeleteGroupCommand}" Label="Smazat skupiny" Grid.Column="2">
+                                    <AppBarButton Icon="Cancel" Label="Zrušit" Grid.Column="2">
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>
                                     </AppBarButton>
-
-                                    <AppBarButton Icon="Cancel" Label="Zrušit"  Grid.Column="3">
+                                    
+                                    <AppBarButton Icon="Delete" Command="{Binding DeleteGroupCommand}" Label="Smazat skupiny" Grid.Column="3">
                                         <interactivity:Interaction.Behaviors>
                                             <control:CloseFlyoutBehavior/>
                                         </interactivity:Interaction.Behaviors>

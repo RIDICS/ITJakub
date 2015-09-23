@@ -15,10 +15,10 @@
         <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
     </Page.Resources>
     
-    <Page.BottomAppBar>
+    <!--<Page.BottomAppBar>
         <CommandBar>
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
