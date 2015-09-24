@@ -93,7 +93,7 @@ CREATE TABLE [SynchronizedObject](
     [ApplicationId] [bigint] NOT NULL,
     [CreateTime] [datetime] NOT NULL,
     [ObjectType] [varchar] (50),
-    [ObjectExternalId] [varchar] (50) NOT NULL,
+    [RowKey] [varchar] (50) NOT NULL,
     CONSTRAINT [PK_SynchronizedObject] PRIMARY KEY CLUSTERED ([Id] ASC)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)      
 )
 

@@ -28,11 +28,11 @@ BEGIN TRAN
 
 
 
-INSERT INTO [dbo].[DatabaseVersion]
-		(DatabaseVersion)
-	VALUES
-		('005' )
-		-- DatabaseVersion - varchar
+    INSERT INTO [dbo].[DatabaseVersion]
+		    (DatabaseVersion)
+	    VALUES
+		    ('005' )
+		    -- DatabaseVersion - varchar
 
 --ROLLBACK
 COMMIT
