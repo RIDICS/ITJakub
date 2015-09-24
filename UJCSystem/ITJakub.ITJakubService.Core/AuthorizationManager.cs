@@ -56,7 +56,7 @@ namespace ITJakub.ITJakubService.Core
             }
         }
 
-        public void FilterBooks(ref IList<BookVersion> books)
+        public void FilterBooksByCurrentUser(ref IList<BookVersion> books)
         {
             var user = GetCurrentUser();
 
@@ -67,6 +67,19 @@ namespace ITJakub.ITJakubService.Core
 
             var bookIds = books.Select(x => x.Id).ToList();
             var filteredBookIds = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, bookIds);
+            var filteredBooks = books.Where(x => filteredBookIds.Contains(x.Id)).ToList();
+            books = filteredBooks;
+        }
+
+        public void FilterBooksByGroup(int groupId, ref IList<BookVersion> books)
+        {
+            if (books == null || books.Count == 0)
+            {
+                return;
+            }
+
+            var bookIds = books.Select(x => x.Id).ToList();
+            var filteredBookIds = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(groupId, bookIds);
             var filteredBooks = books.Where(x => filteredBookIds.Contains(x.Id)).ToList();
             books = filteredBooks;
         }
@@ -102,7 +115,7 @@ namespace ITJakub.ITJakubService.Core
 
             var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, bookIds);
             bookIds = filtered;
-        }
+        }   
     }
 
     public class AuthorizationException : Exception

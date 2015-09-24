@@ -156,12 +156,77 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.Permissions, () => permissionAlias)
                     .JoinQueryOver(x => permissionAlias.Group, () => groupAlias)
                     .JoinQueryOver(x => groupAlias.Users, () => userAlias)
-                    .Select(Projections.Distinct(Projections.Property(() => bookAlias.Guid)))
+                    .Select(Projections.Distinct(Projections.Property(() => bookAlias.Id)))
                     .Where(() => userAlias.Id == userId)
                     .AndRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
                     .List<long>();
 
                 return filteredBookIds;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetFilteredBookIdListByGroupPermissions(int groupId, IEnumerable<long> bookIds)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                Permission permissionAlias = null;
+                Group groupAlias = null;
+
+                var filteredBookIds = session.QueryOver(() => bookAlias)
+                    .JoinQueryOver(x => x.Permissions, () => permissionAlias)
+                    .JoinQueryOver(x => permissionAlias.Group, () => groupAlias)
+                    .Select(Projections.Distinct(Projections.Property(() => bookAlias.Id)))
+                    .Where(() => groupAlias.Id == groupId)
+                    .AndRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
+                    .List<long>();
+
+                return filteredBookIds;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void CreatePermissions(IList<Permission> permissionsList)
+        {
+            using (var session = GetSession())
+            {
+                foreach (var permission in permissionsList)
+                {
+                    session.Save(permission); //TODO add try catch for existing permissions
+                }
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                Permission permissionAlias = null;
+                Group groupAlias = null;
+
+                var permissions = session.QueryOver(() => permissionAlias)
+                    .JoinQueryOver(x => permissionAlias.Book, () => bookAlias)
+                    .JoinQueryOver(x => permissionAlias.Group, () => groupAlias)
+                    .Where(() => groupAlias.Id == groupId)
+                    .AndRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
+                    .List<Permission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void DeletePermissions(IList<Permission> permissionsList)
+        {
+            using (var session = GetSession())
+            {
+                foreach (var permission in permissionsList)
+                {
+                    session.Delete(permission);
+                }
             }
         }
     }

@@ -1471,11 +1471,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public CategoryContentContract GetCategoryContent(int categoryId)
+        public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId)
         {
             try
             {
-                return Channel.GetCategoryContent(categoryId);
+                return Channel.GetCategoryContentForGroup(groupId, categoryId);
             }
             catch (CommunicationException ex)
             {

@@ -84,9 +84,9 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         
-        public ActionResult GetCategoryContent(int categoryId)
+        public ActionResult GetCategoryContent(int groupId, int categoryId)
         {
-            var result = m_mainServiceClient.GetCategoryContent(categoryId);
+            var result = m_mainServiceClient.GetCategoryContentForGroup(groupId, categoryId);
             return Json(result, JsonRequestBehavior.AllowGet);
         }     
            

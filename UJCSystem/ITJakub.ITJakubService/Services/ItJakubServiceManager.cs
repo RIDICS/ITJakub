@@ -58,9 +58,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetRootCategories();
         }
 
-        public CategoryContentContract GetCategoryContent(int categoryId)
+        public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId)
         {
-            return m_searchManager.GetCategoryContent(categoryId);
+            return m_searchManager.GetCategoryContentForGroup(groupId, categoryId);
         }
 
         public CategoryContentContract GetAllCategoryContent(int categoryId)

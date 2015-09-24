@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
@@ -13,14 +14,19 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
+        private readonly BookRepository m_bookRepository;
+        private readonly CategoryRepository m_categoryRepository;
         private readonly AuthorizationManager m_authorizationManager;
 
+
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        public PermissionManager(UserRepository userRepository, PermissionRepository permissionRepository, AuthorizationManager authorizationManager)
+        public PermissionManager(UserRepository userRepository, PermissionRepository permissionRepository, BookRepository bookRepository, CategoryRepository categoryRepository, AuthorizationManager authorizationManager)
         {
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_authorizationManager = authorizationManager;
+            m_bookRepository = bookRepository;
+            m_categoryRepository = categoryRepository;
         }
 
         public List<GroupContract> GetGroupsByUser(int userId)
@@ -78,13 +84,47 @@ namespace ITJakub.ITJakubService.Core
         public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         {
             var group = m_permissionRepository.FindGroupById(groupId);
-            throw new NotImplementedException();
+
+            var allBookIds = new List<long>();
+
+            if (categoryIds != null && categoryIds.Count > 0)
+            {
+                var bookIdsFromCategories = m_categoryRepository.GetBookIdsFromCategory(categoryIds);
+                allBookIds.AddRange(bookIdsFromCategories);
+            }
+            
+            allBookIds.AddRange(bookIds);
+
+            var books = m_bookRepository.GetBooksById(allBookIds);
+            var permissionsList = new List<Permission>();
+
+            foreach (var book in books)
+            {
+                    permissionsList.Add(new Permission
+                    {
+                        Book = book,
+                        Group = group
+                    });
+            }
+
+            m_permissionRepository.CreatePermissions(permissionsList);
+            
         }
 
         public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         {
-            var group = m_permissionRepository.FindGroupById(groupId);
-            throw new NotImplementedException();
+            var allBookIds = new List<long>();
+
+            if (categoryIds != null && categoryIds.Count > 0)
+            {
+                var bookIdsFromCategories = m_categoryRepository.GetBookIdsFromCategory(categoryIds);
+                allBookIds.AddRange(bookIdsFromCategories);
+            }
+
+            allBookIds.AddRange(bookIds);
+
+            var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(groupId, allBookIds);
+            m_permissionRepository.DeletePermissions(permissions);
         }
 
         public void RemoveUserFromGroup(int userId, int groupId)

@@ -200,7 +200,7 @@ class GroupPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetCategoryContent",
-            data: { categoryId: categoryId },
+            data: { groupId: this.currentGroupSelectedItem.Id, categoryId: categoryId },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {

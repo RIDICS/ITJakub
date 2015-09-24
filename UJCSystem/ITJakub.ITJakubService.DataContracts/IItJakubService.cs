@@ -205,7 +205,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<CategoryContract> GetRootCategories();
 
         [OperationContract]
-        CategoryContentContract GetCategoryContent(int categoryId);
+        CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId);
 
         [OperationContract]
         CategoryContentContract GetAllCategoryContent(int categoryId);
