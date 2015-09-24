@@ -95,9 +95,9 @@ namespace ITJakub.MobileApps.Core.Applications
             m_applicationRepository.Create(deSyncObject);
         }
 
-        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
-            var syncObjs = m_applicationRepository.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+            var syncObjs = m_applicationRepository.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
 
             foreach (SynchronizedObject syncObj in syncObjs) //TODO try to find some better way how to fill Data property
             {

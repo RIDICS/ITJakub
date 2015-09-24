@@ -236,13 +236,13 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<IList<SynchronizedObjectResponseContract>> GetSynchronizedObjectsAsync(long groupId, int applicationId, string objectType, DateTime since)
+        public Task<IList<SynchronizedObjectResponseContract>> GetSynchronizedObjectsAsync(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+                    return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
                 }
                 catch (FaultException ex)
                 {

@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager
 {
     public class SynchronizeManager : ISynchronizeCommunication
     {
+        private const int SyncObjectRequestCount = 100;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly MobileAppsServiceClientManager m_serviceClient;
         private readonly ApplicationIdManager m_applicationIdManager;
@@ -71,22 +72,38 @@ namespace ITJakub.MobileApps.Client.Core.Manager
             var appId = await m_applicationIdManager.GetApplicationId(applicationType);
             var groupId = m_groupManager.CurrentGroupId;
             var client = m_serviceClient.GetClient();
-            var objectList = await client.GetSynchronizedObjectsAsync(groupId, appId, objectType, since);
 
-            var outputList = objectList.Select(objectDetails => new ObjectDetails
+            IList<SynchronizedObjectResponseContract> objectList;
+            var outputList = new List<ObjectDetails>();
+
+            do
             {
-                Author = new UserInfo
+                objectList = await client.GetSynchronizedObjectsAsync(groupId, appId, objectType, since, SyncObjectRequestCount);
+
+                var tempOutputList = objectList.Select(objectDetails => new ObjectDetails
                 {
-                    Email = objectDetails.Author.Email,
-                    FirstName = objectDetails.Author.FirstName,
-                    LastName = objectDetails.Author.LastName,
-                    Id = objectDetails.Author.Id,
-                    IsMe = (userId == objectDetails.Author.Id)
-                },
-                CreateTime = objectDetails.CreateTime,
-                Data = objectDetails.Data
-            });
-            return outputList.ToList();
+                    Author = new UserInfo
+                    {
+                        Email = objectDetails.Author.Email,
+                        FirstName = objectDetails.Author.FirstName,
+                        LastName = objectDetails.Author.LastName,
+                        Id = objectDetails.Author.Id,
+                        IsMe = (userId == objectDetails.Author.Id)
+                    },
+                    CreateTime = objectDetails.CreateTime,
+                    Data = objectDetails.Data
+                });
+
+                outputList.AddRange(tempOutputList);
+                var latestItem = outputList.LastOrDefault();
+                if (latestItem != null)
+                {
+                    since = latestItem.CreateTime;
+                }
+
+            } while (objectList.Count == SyncObjectRequestCount);
+
+            return outputList;
         }
 
         public async Task<ObjectDetails> GetLatestObjectAsync(ApplicationType applicationType, DateTime since, string objectType)

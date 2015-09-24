@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<SynchronizedObject> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public virtual IList<SynchronizedObject> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
             using (var session = GetSession())
             {
@@ -37,6 +37,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                         && x.CreateTime > since)
                     .OrderBy(x => x.CreateTime).Asc
                     .Fetch(x => x.Author).Eager
+                    .Take(count)
                     .List();
             }
         }

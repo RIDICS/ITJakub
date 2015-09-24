@@ -87,9 +87,9 @@ namespace ITJakub.MobileApps.Core
             m_applicationManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
         }
 
-        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
-            return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+            return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
         }
 
         public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType,

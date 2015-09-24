@@ -187,11 +187,11 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
             try
             {
-                return m_serviceManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+                return m_serviceManager.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
             }
             catch (WebFaultException ex)
             {

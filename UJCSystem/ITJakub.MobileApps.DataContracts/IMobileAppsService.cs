@@ -54,7 +54,7 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         [FaultContract(typeof(ApplicationNotRunningFault))]
-        IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since);
+        IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
