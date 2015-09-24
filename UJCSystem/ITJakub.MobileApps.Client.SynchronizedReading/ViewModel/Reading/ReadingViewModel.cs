@@ -405,6 +405,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     if (exception is NotFoundException)
                     {
                         TextReaderViewModel.IsLoadError = true;
+                        IsPhotoDisplayed = true;
                     }
                     else
                     {

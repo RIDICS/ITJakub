@@ -56,9 +56,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 if (exception != null)
                 {
                     if (exception is NotFoundException)
+                    {
                         IsPageLoadError = true;
+                        IsShowPhotoEnabled = true;
+                    }
                     else
+                    {
                         m_dataService.ErrorService.ShowConnectionWarning();
+                    }
 
                     return;
                 }

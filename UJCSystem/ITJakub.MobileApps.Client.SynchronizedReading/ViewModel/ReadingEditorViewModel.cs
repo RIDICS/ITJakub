@@ -221,7 +221,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;
 
-            IsShowPhotoEnabled = BookPagePhoto != null;
+            IsShowPhotoEnabled = BookPagePhoto != null || PageRtfText == null;
         }
         
         private void LoadPhoto()
