@@ -169,6 +169,7 @@ class GroupPermissionEditor {
                 for (var i = 0; i < categories.length; i++) {
                     var category = categories[i];
                     var item = this.createCategoryListItem(category);
+                    $(item).addClass("root-category");
                     allowedBooksUl.append(item);
                 }
 
@@ -252,6 +253,18 @@ class GroupPermissionEditor {
                     var detailsDiv = $(groupLi).find(".list-item-details").first();
                     $(detailsDiv).empty();
                     $(detailsDiv).removeClass("loaded");
+
+                    var currentRootCategory = $(groupLi);
+
+                    if (!$(currentRootCategory).hasClass("root-category")) {
+                        currentRootCategory = $(groupLi).parents(".root-category");
+                    }
+
+                    var otherRootCategories = currentRootCategory.siblings(".root-category");
+                    for (var i = 0; i < otherRootCategories.length; i++) {
+                        var rootCategory = otherRootCategories[i];
+                        this.unloadWholeCategory(<HTMLLIElement>rootCategory);
+                    }
                 }
             });
         });
@@ -264,7 +277,11 @@ class GroupPermissionEditor {
         $(moreSpan).addClass("list-item-more");
 
         $(moreSpan).click((event: Event) => {
-            var target = event.target;
+            var target: JQuery = $(event.target);
+            if ($(target).hasClass("list-item-more")) {
+                target = $(target).find("span.glyphicon").first();
+            }
+
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
 
             if (detailsDiv.is(":hidden")) {
@@ -326,7 +343,13 @@ class GroupPermissionEditor {
                 contentType: "application/json",
                 success: (response) => {
 
+                    var otherRootCategories = $(bookLi).parents(".root-category").siblings(".root-category");
                     $(bookLi).remove();
+
+                    for (var i = 0; i < otherRootCategories.length; i++) {
+                        var rootCategory = otherRootCategories[i];
+                        this.unloadWholeCategory(<HTMLLIElement>rootCategory);
+                    }
                 }
             });
         });
@@ -343,6 +366,17 @@ class GroupPermissionEditor {
 
 
         return bookLi;
+    }
+
+    private unloadWholeCategory(category: HTMLLIElement) {
+        var categoryDetails = $(category).find(".list-item-details").first();
+        $(categoryDetails).slideUp();
+        $(categoryDetails).empty();
+        $(categoryDetails).removeClass("loaded");
+
+        var moreSpanIcon = $(category).children("span.list-item-more").first().children("span.glyphicon");
+        $(moreSpanIcon).removeClass("glyphicon-chevron-up");
+        $(moreSpanIcon).addClass("glyphicon-chevron-down");
     }
 }
 

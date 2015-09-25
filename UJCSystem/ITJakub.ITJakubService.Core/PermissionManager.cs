@@ -110,7 +110,21 @@ namespace ITJakub.ITJakubService.Core
                     });
             }
 
-            m_permissionRepository.CreatePermissions(permissionsList);
+            foreach (var permission in permissionsList)
+            {
+                try
+                {
+                    m_permissionRepository.CreatePermission(permission);
+                }
+                catch (Exception ex)
+                {
+                    if (m_log.IsWarnEnabled)
+                        m_log.WarnFormat("Cannot save permission for group witd id '{0}' on book with id '{1}' for reason '{2}'", permission.Group.Id, permission.Book.Id, ex.InnerException);
+                }
+
+            }
+
+            
             
         }
 
