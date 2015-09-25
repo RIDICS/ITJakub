@@ -27,6 +27,11 @@
       <key column="[Group]" />
       <many-to-many class="User" column="[User]" />
     </bag>
+
+    <bag name="Permissions" inverse="true" cascade="delete-orphan" lazy="true">
+      <key column="[Group]" />
+      <one-to-many class="Permission" />
+    </bag>
     
   </class>
 </hibernate-mapping>

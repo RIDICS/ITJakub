@@ -18,6 +18,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<User> Users { get; set; }
 
+        public virtual IList<Permission> Permissions { get; set; }
+
         public virtual bool Equals(Group other)
         {
             if (ReferenceEquals(null, other)) return false;
