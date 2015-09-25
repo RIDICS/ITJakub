@@ -244,7 +244,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(), categoryIds: new Array<number>(category.Id) }),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(), categoryIds: [category.Id] }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -321,7 +321,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(book.Id), categoryIds: new Array<number>() }),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: [book.Id], categoryIds: new Array<number>() }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {

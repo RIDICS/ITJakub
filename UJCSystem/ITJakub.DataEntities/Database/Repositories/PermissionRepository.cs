@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
+using System.Reflection;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
+using log4net;
+using NHibernate;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -12,6 +13,8 @@ namespace ITJakub.DataEntities.Database.Repositories
     [Transactional]
     public class PermissionRepository : NHibernateTransactionalDao
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public PermissionRepository(ISessionManager sessManager)
             : base(sessManager)
         {
@@ -193,7 +196,16 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 foreach (var permission in permissionsList)
                 {
-                    session.Save(permission); //TODO add try catch for existing permissions
+                    try
+                    {
+                        session.Save(permission);
+                    }
+                    catch (ADOException ex)
+                    {
+                        if (m_log.IsWarnEnabled)
+                            m_log.WarnFormat("Cannot save permission for group witd id '{0}' on book with id '{1}' for reason '{2}'", permission.Group.Id, permission.Book.Id, ex.InnerException);
+                    }
+                    
                 }
             }
         }

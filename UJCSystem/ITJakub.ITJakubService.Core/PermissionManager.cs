@@ -92,8 +92,11 @@ namespace ITJakub.ITJakubService.Core
                 var bookIdsFromCategories = m_categoryRepository.GetBookIdsFromCategory(categoryIds);
                 allBookIds.AddRange(bookIdsFromCategories);
             }
-            
-            allBookIds.AddRange(bookIds);
+
+            if (bookIds != null)
+            {
+                allBookIds.AddRange(bookIds);
+            }
 
             var books = m_bookRepository.GetBooksById(allBookIds);
             var permissionsList = new List<Permission>();
@@ -121,7 +124,10 @@ namespace ITJakub.ITJakubService.Core
                 allBookIds.AddRange(bookIdsFromCategories);
             }
 
-            allBookIds.AddRange(bookIds);
+            if (bookIds != null)
+            {
+                allBookIds.AddRange(bookIds);
+            }
 
             var permissions = m_permissionRepository.FindPermissionsByGroupAndBooks(groupId, allBookIds);
             m_permissionRepository.DeletePermissions(permissions);
