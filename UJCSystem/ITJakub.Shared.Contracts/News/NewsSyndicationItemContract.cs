@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -39,13 +40,13 @@ namespace ITJakub.Shared.Contracts.News
     public enum NewsTypeContract
     {
         [EnumMember]
-        Combined,
+        Combined = 0,
 
         [EnumMember]
-        Web,
+        Web = 1,
 
         [EnumMember]
-        MobileApps,
+        MobileApps = 2,
 
     }
 }

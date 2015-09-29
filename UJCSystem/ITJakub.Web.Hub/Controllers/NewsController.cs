@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.News;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 
@@ -16,14 +13,6 @@ namespace ITJakub.Web.Hub.Controllers
     public class NewsController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        
-
-        // GET: News
-        public ActionResult Index()
-        {
-            //return View();
-            return null;
-        }
         
         [HttpGet]
         [AllowAnonymous]
@@ -102,10 +91,9 @@ namespace ITJakub.Web.Hub.Controllers
             var username = HttpContext.User.Identity.Name;            
 
                 using(var client = new ItJakubServiceEncryptedClient())
-                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url,model.ItemType, username);
+                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);
 
-
-            return Json(new { });
+            return RedirectToAction("Index", "Home");
         }
     }
 
