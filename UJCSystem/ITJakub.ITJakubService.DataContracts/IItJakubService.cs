@@ -2,11 +2,9 @@
 using System.IO;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 
@@ -51,6 +49,50 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+
+        [OperationContract]
+        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count);
+
+        [OperationContract]
+        long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+
+        [OperationContract]
+        long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId);
+
+        [OperationContract]
+        HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
+
+        [OperationContract]
+        int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
+
+        [OperationContract]
+        CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
+            string pageXmlId, OutputFormatEnumContract resultFormat);
+
+        [OperationContract]
+        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
 
         #region CardFile methods
 
@@ -105,47 +147,6 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-        [OperationContract]
-        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
-
-        [OperationContract]
-        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count);
-
-        [OperationContract]
-        long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
-
-        [OperationContract]
-        long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId);
-
-        [OperationContract]
-        HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
-
-        [OperationContract]
-        int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
-
-        [OperationContract]
-        CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        [OperationContract]
-        int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        [OperationContract]
-        int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        [OperationContract]
-        string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
-
-        [OperationContract]
-        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
-            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
-
-        [OperationContract]
-        PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        [OperationContract]
-        string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
-            string pageXmlId, OutputFormatEnumContract resultFormat);
-
         #region Feedback
 
         [OperationContract]
@@ -175,9 +176,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-        [OperationContract]
-        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
-#region Permissions
+        #region Permissions
+
         [OperationContract]
         IList<GroupContract> GetGroupsByUser(int userId);
 
@@ -187,7 +187,7 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void AddUserToGroup(int userId, int groupId);
 
-[OperationContract]
+        [OperationContract]
         void RemoveUserFromGroup(int userId, int groupId);
 
         [OperationContract]
@@ -217,8 +217,8 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
 
+        #endregion
 
- #endregion
         #region News
 
         [OperationContract]
@@ -228,66 +228,5 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetWebNewsSyndicationItemCount();
 
         #endregion
-<<<<<<< .mine
-        [OperationContract]
-        void RemoveUserFromGroup(int userId, int groupId);
-
-        [OperationContract]
-        GroupContract CreateGroup(string name, string description);
-
-        [OperationContract]
-        UserDetailContract GetUserDetail(int userId);
-
-        [OperationContract]
-        GroupDetailContract GetGroupDetail(int groupId);
-
-        [OperationContract]
-        IList<CategoryContract> GetRootCategories();
-
-        [OperationContract]
-        CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId);
-
-        [OperationContract]
-        CategoryContentContract GetAllCategoryContent(int categoryId);
-
-        [OperationContract]
-        void DeleteGroup(int groupId);
-
-        [OperationContract]
-        void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
-
-        [OperationContract]
-        void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
-=======
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
     }
 }

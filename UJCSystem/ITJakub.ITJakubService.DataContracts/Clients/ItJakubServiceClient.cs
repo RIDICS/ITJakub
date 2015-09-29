@@ -14,9 +14,6 @@ using log4net;
 
 namespace ITJakub.ITJakubService.DataContracts.Clients
 {
-    
-
-
     public class ItJakubServiceClient : ClientBase<IItJakubService>, IItJakubService
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -25,11 +22,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         {
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("MainServiceClient created.");
-        }
-
-        private string GetCurrentMethod([CallerMemberName] string methodName = null)
-        {
-            return methodName;
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -133,7 +125,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-      
 
         public bool ProcessSession(string sessionId, string uploadMessage)
         {
@@ -513,6 +504,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+
         public IList<UserContract> GetTypeaheadUsers(string query)
         {
             try
@@ -539,6 +531,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+
         public IList<GroupContract> GetTypeaheadGroups(string query)
         {
             try
@@ -675,6 +668,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+
         public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType,
             IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
@@ -922,7 +916,8 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             try
             {
@@ -1110,7 +1105,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         {
             try
             {
-               return Channel.GetFeedbacks(feedbackSearchCriteria);
+                return Channel.GetFeedbacks(feedbackSearchCriteria);
             }
             catch (CommunicationException ex)
             {
@@ -1136,7 +1131,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         {
             try
             {
-               return Channel.GetFeedbacksCount(feedbackSearchCriteria);
+                return Channel.GetFeedbacksCount(feedbackSearchCriteria);
             }
             catch (CommunicationException ex)
             {
@@ -1157,12 +1152,12 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
-        
+
         public void DeleteFeedback(long feedbackId)
         {
             try
             {
-               Channel.DeleteFeedback(feedbackId);
+                Channel.DeleteFeedback(feedbackId);
             }
             catch (CommunicationException ex)
             {
@@ -1183,9 +1178,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
-        
-                
-    
+
 
         public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
@@ -1265,16 +1258,13 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+
         public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
         {
             try
             {
                 return Channel.GetWebNewsSyndicationItems(start, count);
             }
-
-
-
-
 
 
             catch (CommunicationException ex)
@@ -1322,22 +1312,21 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
-    }
-public IList<GroupContract> GetGroupsByUser(int userId)
+
+
+        public
+            IList<GroupContract> GetGroupsByUser(int userId)
         {
             try
             {
-                return Channel.GetGroupsByUser(userId);
+                return
+                    Channel.GetGroupsByUser(userId);
             }
-
-
-
-
-
-
             catch (CommunicationException ex)
+
             {
-                if (m_log.IsErrorEnabled)
+                if (
+                    m_log.IsErrorEnabled)
                     m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
                 throw;
             }
@@ -1406,6 +1395,7 @@ public IList<GroupContract> GetGroupsByUser(int userId)
                 throw;
             }
         }
+
         public void RemoveUserFromGroup(int userId, int groupId)
         {
             try
@@ -1431,6 +1421,7 @@ public IList<GroupContract> GetGroupsByUser(int userId)
                 throw;
             }
         }
+
         public GroupContract CreateGroup(string name, string description)
         {
             try
@@ -1560,7 +1551,7 @@ public IList<GroupContract> GetGroupsByUser(int userId)
                 throw;
             }
         }
-        
+
         public CategoryContentContract GetAllCategoryContent(int categoryId)
         {
             try
@@ -1664,4 +1655,10 @@ public IList<GroupContract> GetGroupsByUser(int userId)
                 throw;
             }
         }
-    }}
+
+        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
+        }
+    }
+}
