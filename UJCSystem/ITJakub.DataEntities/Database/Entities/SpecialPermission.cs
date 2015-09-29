@@ -1,28 +1,15 @@
 using System;
 using System.Collections.Generic;
-using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
-    public class Group : IEquatable<Group>
+    public abstract class SpecialPermission : IEquatable<SpecialPermission>
     {
         public virtual int Id { get; set; }
 
-        public virtual string Name { get; set; }
+        public virtual IList<Group> Groups { get; set; }
 
-        public virtual string Description { get; set; }
-
-        public virtual DateTime CreateTime { get; set; }
-
-        public virtual User CreatedBy { get; set; }
-
-        public virtual IList<User> Users { get; set; }
-
-        public virtual IList<Permission> Permissions { get; set; }
-
-        public virtual IList<SpecialPermission> SpecialPermissions { get; set; }
-
-        public virtual bool Equals(Group other)
+        public virtual bool Equals(SpecialPermission other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -34,12 +21,28 @@ namespace ITJakub.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Group) obj);
+            return Equals((SpecialPermission) obj);
         }
 
         public override int GetHashCode()
         {
             return Id.GetHashCode();
         }
+    }
+
+    public class UploadBookPermission : SpecialPermission
+    {
+        public virtual bool CanUploadBook { get; set; }
+
+    }
+
+    public class ManagePermissionsPermission : SpecialPermission
+    {
+        public virtual bool CanManagePermissions { get; set; }
+    }
+
+    public class AddNewsPermission : SpecialPermission
+    {
+        public virtual bool CanAddNews { get; set; }
     }
 }

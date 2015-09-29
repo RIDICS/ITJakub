@@ -32,6 +32,11 @@
       <key column="[Group]" />
       <one-to-many class="Permission" />
     </bag>
+
+    <bag name="SpecialPermissions" table="SpecialPermission_Group" lazy="true">
+      <key column="[Group]" />
+      <many-to-many class="SpecialPermission" column="[SpecialPermission]" />
+    </bag>
     
   </class>
 </hibernate-mapping>
