@@ -6,10 +6,15 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
     public abstract class SynchronizedObjectBase:IEquatable<SynchronizedObjectBase>
     {
         public virtual long Id { get; set; }
+
         public virtual User Author { get; set; }
+
         public virtual Group Group { get; set; }
+
         public virtual Application Application { get; set; }
+
         public virtual DateTime CreateTime { get; set; }
+
         public virtual string ObjectType { get; set; }
    
         public virtual string Data { get; set; }    //not mapped because its stored in azure tables
@@ -38,7 +43,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities {
 
     public class SynchronizedObject : SynchronizedObjectBase
     {
-        public virtual string RowKey { get; set; }
+        public virtual string ObjectExternalId { get; set; }
     }
 
     public class SingleSynchronizedObject : SynchronizedObjectBase

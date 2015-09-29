@@ -8,18 +8,19 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Application
 {
     public class ApplicationIdManager
     {
-        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly MobileAppsServiceClientManager m_serviceClientManager;
         private Dictionary<ApplicationType, int> m_applicationTypeToId;
         private Dictionary<int, ApplicationType> m_applicaitonIdToType; 
 
-        public ApplicationIdManager(MobileAppsServiceClient serviceClient)
+        public ApplicationIdManager(MobileAppsServiceClientManager serviceClientManager)
         {
-            m_serviceClient = serviceClient;
+            m_serviceClientManager = serviceClientManager;
         }
 
         private async Task LoadAllApplicationId()
         {
-            var appList = await m_serviceClient.GetAllApplicationAsync();
+            var client = m_serviceClientManager.GetClient();
+            var appList = await client.GetAllApplicationAsync();
             
             m_applicationTypeToId = new Dictionary<ApplicationType, int>();
             m_applicaitonIdToType = new Dictionary<int, ApplicationType>();

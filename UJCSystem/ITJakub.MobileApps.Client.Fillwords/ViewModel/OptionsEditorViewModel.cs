@@ -189,7 +189,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public void Reset()
         {
             m_wordOptionsList.Clear();
+            SelectedOption = null;
             IsReset = true;
+            IsSelected = false;
         }
     }
 }

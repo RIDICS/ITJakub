@@ -1,9 +1,8 @@
 USE [ITJakubDBBackup]
 GO
 
-
 CREATE TABLE [dbo].[User](
-	[Id] [int] NOT NULL,
+	[Id] [int] NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED,
 	[FirstName] [varchar](50) NULL,
 	[LastName] [varchar](50) NULL,
 	[Email] [varchar](255) NOT NULL,
@@ -19,21 +18,8 @@ CREATE TABLE [dbo].[User](
 
 
 
-
-
-/****** Object:  Table [dbo].[Feedbacks]    Script Date: 20-Aug-15 19:52:53 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-SET ANSI_PADDING ON
-GO
-
-
 CREATE TABLE [dbo].[Feedbacks](
-	[Id] [bigint] NOT NULL,
+	[Id] [bigint] NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED,
 	[FeedbackType] [varchar](255) NOT NULL,
 	[Text] [varchar](2000) NOT NULL,
 	[CreateDate] [datetime] NOT NULL,
@@ -46,8 +32,24 @@ CREATE TABLE [dbo].[Feedbacks](
 
 GO
 
-SET ANSI_PADDING OFF
-GO
+
+
+CREATE TABLE [dbo].[NewsSyndicationItem](
+	[Id] [bigint] NOT NULL IDENTITY(1,1) PRIMARY KEY CLUSTERED,
+	[Title] [varchar](255) NOT NULL,
+	[CreateDate] [datetime] NOT NULL,
+	[Text] [varchar](2000) NOT NULL,
+	[Url] [varchar](max) NOT NULL,
+	[ItemType] [smallint] NOT NULL,
+	[User] [int] NULL
+)
+
+
+
+
+
+
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[User] ON
 
 
 INSERT INTO ITJakubDBBackup.[dbo].[User]
@@ -69,6 +71,10 @@ INSERT INTO ITJakubDBBackup.[dbo].[User]
 SELECT * FROM [ITJakubDB].[dbo].[User]
 
 
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[User] OFF
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[Feedbacks] ON
+
+
 INSERT INTO [ITJakubDBBackup].[dbo].[Feedbacks]
 (
     [Id],
@@ -82,3 +88,32 @@ INSERT INTO [ITJakubDBBackup].[dbo].[Feedbacks]
     [Category]
 )
 SELECT * FROM [ITJakubDB].[dbo].[Feedbacks] f
+
+
+
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[Feedbacks] OFF
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[NewsSyndicationItem] ON
+
+
+
+INSERT INTO [ITJakubDBBackup].[dbo].[NewsSyndicationItem]
+(
+     [Id],
+    [Title],
+    [CreateDate],
+    [Text],
+    [Url],
+    [ItemType],
+    [User]
+)
+SELECT * FROM [ITJakubDB].[dbo].[NewsSyndicationItem]
+
+
+
+
+
+
+SET IDENTITY_INSERT ITJakubDBBackup.[dbo].[NewsSyndicationItem] OFF
+
+
+

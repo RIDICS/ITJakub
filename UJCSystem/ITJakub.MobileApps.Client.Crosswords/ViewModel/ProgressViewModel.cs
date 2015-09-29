@@ -1,14 +1,62 @@
+using System;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 {
-    public class ProgressViewModel
+    public class ProgressViewModel : ViewModelBase
     {
+        private DateTime? m_firstTime;
+        private bool m_win;
+        private int m_correctAnswers;
+
+        public ProgressViewModel(UserInfo userInfo, DateTime? firstTime)
+        {
+            m_firstTime = firstTime;
+            UserInfo = userInfo;
+        }
+
         public ObservableCollection<RowProgressViewModel> Rows { get; set; }
 
         public UserInfo UserInfo { get; set; }
+
+        public TimeSpan GameTime { get; private set; }
+
+        public bool Win
+        {
+            get { return m_win; }
+            set
+            {
+                m_win = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int CorrectAnswers
+        {
+            get { return m_correctAnswers; }
+            set
+            {
+                m_correctAnswers = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        //public void UpdateRowInfo(int row, bool isCorrect)
+        //{
+        //    m_correctAnswers[row] = isCorrect;
+        //    CorrectAnswers = m_correctAnswers.Count(b => b);
+        //    Win = m_correctAnswers.All(correctAnswer => correctAnswer);
+        //}
+
+        public void UpdateTime(DateTime time)
+        {
+            if (m_firstTime == null)
+                m_firstTime = time;
+
+            GameTime = time - m_firstTime.Value;
+        }
     }
 
     public class RowProgressViewModel : ViewModelBase

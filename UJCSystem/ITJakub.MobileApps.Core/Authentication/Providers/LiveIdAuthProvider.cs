@@ -1,5 +1,7 @@
 using System;
+using System.Threading.Tasks;
 using ITJakub.MobileApps.DataContracts;
+using Microsoft.Live;
 using User = ITJakub.MobileApps.DataEntities.Database.Entities.User;
 
 namespace ITJakub.MobileApps.Core.Authentication.Providers
@@ -18,7 +20,7 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
 
         public AuthenticateResultInfo Authenticate(string accessToken, string email)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException("Live Id not possible at this moment");
         }
 
         

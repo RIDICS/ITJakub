@@ -10,6 +10,15 @@ namespace ITJakub.MobileApps.DataContracts
         public long UserId { get; set; }
 
         [DataMember]
+        public string Email { get; set; }
+
+        [DataMember]
+        public string FirstName { get; set; }
+
+        [DataMember]
+        public string LastName { get; set; }
+
+        [DataMember]
         public UserRoleContract UserRole { get; set; }
 
         [DataMember]

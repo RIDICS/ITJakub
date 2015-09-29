@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -1264,13 +1265,76 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {
+            try
+            {
+                return Channel.GetWebNewsSyndicationItems(start, count);
+            }
 
-        public IList<GroupContract> GetGroupsByUser(int userId)
+
+
+
+
+
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            try
+            {
+                return Channel.GetWebNewsSyndicationItemCount();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+    }
+public IList<GroupContract> GetGroupsByUser(int userId)
         {
             try
             {
                 return Channel.GetGroupsByUser(userId);
             }
+
+
+
+
+
+
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)
@@ -1600,5 +1664,4 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
-    }
-}
+    }}

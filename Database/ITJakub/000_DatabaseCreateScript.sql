@@ -66,7 +66,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Publisher] 
     (
 	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Publisher(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] varchar(100) NULL,
+	   [Text] varchar(100) NOT NULL CONSTRAINT [UQ_Publisher(Text)] UNIQUE,
 	   [Email] varchar(100) NULL
     )
 

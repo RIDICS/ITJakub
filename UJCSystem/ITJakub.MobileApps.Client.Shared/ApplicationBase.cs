@@ -27,6 +27,14 @@ namespace ITJakub.MobileApps.Client.Shared
 
         public abstract Type EditorDataTemplate { get; }
 
+        public abstract AdminBaseViewModel AdminViewModel { get; }
+
+        public abstract Type AdminDataTemplate { get; }
+
+        public abstract TaskPreviewBaseViewModel TaskPreviewViewModel { get; }
+
+        public abstract Type TaskPreviewDataTemplate { get; }
+
         public abstract ApplicationRoleType ApplicationRoleType { get; }
 
         public abstract ApplicationCategory ApplicationCategory { get; }

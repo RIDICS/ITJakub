@@ -6,6 +6,7 @@ using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
@@ -23,7 +24,9 @@ namespace ITJakub.ITJakubService.Services
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;
         private readonly PermissionManager m_permissionManager;
-        private readonly UserManager m_userManager;
+        private readonly UserManager m_userManager;    
+        private readonly NewsManager m_newsManager;        
+ 
 
 
         public ItJakubServiceManager()
@@ -36,6 +39,8 @@ namespace ITJakub.ITJakubService.Services
             m_cardFileManager = m_container.Resolve<CardFileManager>();
             m_permissionManager = m_container.Resolve<PermissionManager>();
             m_userManager = m_container.Resolve<UserManager>();
+            m_newsManager = m_container.Resolve<NewsManager>();
+         
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -341,6 +346,17 @@ namespace ITJakub.ITJakubService.Services
         public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         {
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
+        }
+
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
+        }
+
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            return m_newsManager.GetWebNewsSyndicationItemCount();
         }
     }
 }

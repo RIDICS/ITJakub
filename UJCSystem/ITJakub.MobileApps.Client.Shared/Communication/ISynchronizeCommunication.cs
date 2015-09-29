@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Shared.Communication
 
         IErrorService ErrorService { get; }
 
-        Task CreateTaskAsync(ApplicationType applicationType, string name, string data);
+        Task CreateTaskAsync(ApplicationType applicationType, string name, string description, string data);
 
         Task<UserInfo> GetCurrentUserInfo();
     }

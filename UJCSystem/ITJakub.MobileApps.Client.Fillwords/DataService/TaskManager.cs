@@ -30,7 +30,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             m_pollingService = applicationCommunication.PollingService;
         }
         
-        public async void CreateTask(string taskName, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
+        public async void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
         {
             var taskContract = new FillwordsTaskContract
             {
@@ -46,7 +46,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
 
             try
             {
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, data);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, taskDescription, data);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -152,11 +152,28 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             foreach (var objectDetails in results)
             {
                 var deserializedObject = JsonConvert.DeserializeObject<FillwordsEvaluationContract>(objectDetails.Data);
+                var answerList = new ObservableCollection<ResultAnswerViewModel>();
+
+                for (int i = 0; i < deserializedObject.AnswerList.Count; i++)
+                {
+                    var answer = deserializedObject.AnswerList[i];
+                    var correctAnswer = m_currentTaskViewModel.Options[i].CorrectAnswer;
+                    
+                    var answerViewModel = new ResultAnswerViewModel
+                    {
+                        Answer = answer,
+                        IsCorrect = answer == correctAnswer
+                    };
+                    answerList.Add(answerViewModel);
+                }
+
                 var userResultViewModel = new UserResultViewModel
                 {
                     CorrectAnswers = deserializedObject.CorrectAnswers,
                     TotalAnswers = deserializedObject.AnswerList.Count,
-                    UserInfo = objectDetails.Author
+                    UserInfo = objectDetails.Author,
+                    Answers = answerList,
+                    IsTaskSubmited = true
                 };
                 outputCollection.Add(userResultViewModel);
 
@@ -181,7 +198,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             {
                 var currentOptions = optionsEnumerator.Current;
                 
-                currentOptions.SelectedAnswer = answersEnumerator.Current;
+                currentOptions.UpdateSelectedAnswer(answersEnumerator.Current);
                 currentOptions.AnswerState = currentOptions.SelectedAnswer == currentOptions.CorrectAnswer
                     ? AnswerState.Correct
                     : AnswerState.Incorrect;
@@ -192,7 +209,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         {
             try
             {
-                m_lastUserResultTime = new DateTime(1970, 1, 1);
+                ResetLastRequestTime();
                 var results =
                     await
                         m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords, m_lastUserResultTime,
@@ -231,6 +248,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         public void StopPolling()
         {
             m_pollingService.UnregisterForSynchronizedObjects(ResultsPollingInterval, PollingResultsCallback);
+        }
+
+        public void ResetLastRequestTime()
+        {
+            m_lastUserResultTime = new DateTime(1975, 1, 1);
         }
     }
 }

@@ -14,6 +14,9 @@ namespace ITJakub.MobileApps.DataContracts.Groups
         public long Id { get; set; }
 
         [DataMember]
+        public long AuthorId { get; set; }
+
+        [DataMember]
         public string Name { get; set; }
 
         [DataMember]

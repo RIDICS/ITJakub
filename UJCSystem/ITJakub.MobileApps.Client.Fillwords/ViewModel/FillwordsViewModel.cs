@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords.DataService;
 using ITJakub.MobileApps.Client.Shared.ViewModel;
@@ -91,7 +92,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
 
         public RelayCommand CancelCommand { get; private set; }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetTaskResults((taskFinished, exception) =>
             {
@@ -171,7 +172,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             
             if (m_isDataLoaded && !m_isSubmited)
             {
-                m_dataService.ErrorService.ShowError("Skupina byla ukončena, tudíž dojde k automatickému vyhodnocení vyplněných odpovědí.", "Vyhodnocení odpovědí", Submit);
+                var messageDialog = new MessageDialog("Skupina byla ukončena, přejete si vyhodnotit vyplněné odpovědi?", "Vyhodnocení odpovědí");
+                messageDialog.Commands.Add(new UICommand("Vyhodnotit", command => Submit()));
+                messageDialog.Commands.Add(new UICommand("Zrušit"));
+                m_dataService.ErrorService.ShowDialog(messageDialog);
             }
         }
 
@@ -214,6 +218,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                     m_dataService.ErrorService.ShowConnectionWarning();
                     return;
                 }
+                m_dataService.ErrorService.HideWarning();
 
                 foreach (var userResultViewModel in newResults)
                 {

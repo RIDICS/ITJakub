@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.ServiceModel;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
@@ -13,6 +14,7 @@ using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -143,6 +145,16 @@ namespace ITJakub.ITJakubService.Core
             var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
+        }
+
+        public BookContract GetBookInfoMobile(string bookGuid)
+        {
+            var bookVersion = m_bookVersionRepository.GetBookVersionWithAuthorsByGuid(bookGuid);
+            if (bookVersion == null)
+                throw new FaultException("Not found");
+
+            var bookContract = Mapper.Map<BookContract>(bookVersion);
+            return bookContract;
         }
 
         public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)

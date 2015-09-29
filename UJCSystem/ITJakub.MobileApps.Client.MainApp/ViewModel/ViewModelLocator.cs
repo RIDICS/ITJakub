@@ -21,6 +21,7 @@ using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login;
 using ITJakub.MobileApps.Client.MainApp.ViewModel.Login.UserMenu;
+using ITJakub.MobileApps.Client.MainApp.ViewModel.News;
 using Microsoft.Practices.Unity;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel
@@ -65,10 +66,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         {
             get { return Container.Current.Resolve<RegistrationViewModel>(); }
         }
-
-        public GroupListViewModel GroupListViewModel
+        
+        public NewsViewModel NewsViewModel
         {
-            get { return Container.Current.Resolve<GroupListViewModel>(); }
+            get { return Container.Current.Resolve<NewsViewModel>(); }
         }
 
         public ApplicationHostViewModel ApplicationHostViewModel
@@ -109,6 +110,36 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         public UserAccountSettingsViewModel UserAccountSettingsViewModel
         {
             get { return Container.Current.Resolve<UserAccountSettingsViewModel>(); }
+        }
+
+        public TaskPreviewHostViewModel TaskPreviewHostViewModel
+        {
+            get { return Container.Current.Resolve<TaskPreviewHostViewModel>(); }
+        }
+
+        public AdminHostViewModel AdminHostViewModel
+        {
+            get { return Container.Current.Resolve<AdminHostViewModel>(); }
+        }
+
+        public SettingViewModel SettingViewModel
+        {
+            get { return Container.Current.Resolve<SettingViewModel>(); }
+        }
+
+        public ApplicationMenuPageViewModel ApplicationMenuPageViewModel
+        {
+            get { return Container.Current.Resolve<ApplicationMenuPageViewModel>(); }
+        }
+
+        public AdminGroupListViewModel AdminGroupListViewModel
+        {
+            get { return Container.Current.Resolve<AdminGroupListViewModel>(); }
+        }
+
+        public MyGroupListViewModel MyGroupListViewModel
+        {
+            get { return Container.Current.Resolve<MyGroupListViewModel>(); }
         }
     }
 }

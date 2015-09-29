@@ -50,6 +50,7 @@
     <Compile Include="CategoryContentContract.cs" />
     <Compile Include="GroupContract.cs" />
     <Compile Include="GroupDetailContract.cs" />
+    <Compile Include="News\NewsSyndicationItemContract.cs" />
     <Compile Include="Notes\FeedbackCategoryEnumContract.cs" />
     <Compile Include="Notes\FeedbackContract.cs" />
     <Compile Include="Notes\FeedbackCriteriaContract.cs" />

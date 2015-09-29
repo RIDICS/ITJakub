@@ -28,17 +28,21 @@
                     <ColumnDefinition Width="auto" MinWidth="40" />
                 </Grid.ColumnDefinitions>
 
-                <Ellipse Grid.Column="0" Width="30" Height="30">
+                <Ellipse Grid.Column="0" Width="36" Height="36" Margin="0,-5,7,0">
                     <Ellipse.Fill>
                         <ImageBrush ImageSource="{Binding UserAvatar}" Stretch="UniformToFill" />
                     </Ellipse.Fill>
                 </Ellipse>
 
 
-                <TextBlock Grid.Column="1" Margin="2,0,0,0">
-                    <Run Text="{Binding FirstName}" />
-                    <Run Text="{Binding LastName}" />
-                </TextBlock>
+                <Viewbox StretchDirection="DownOnly" Grid.Column="1" >
+                    <TextBlock Margin="2,0,0,0">
+                        <Run Text="{Binding FirstName}" />
+                        <Run Text="{Binding LastName}" />
+                    </TextBlock>
+                </Viewbox>
+
+
             </Grid>
 
         </Button>

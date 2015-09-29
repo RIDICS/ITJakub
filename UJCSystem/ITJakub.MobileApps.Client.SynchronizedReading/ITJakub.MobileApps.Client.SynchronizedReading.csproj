@@ -121,9 +121,11 @@
     <Compile Include="DataContract\UpdateContract.cs" />
     <Compile Include="DataService\BookManager.cs" />
     <Compile Include="DataService\ReaderTaskManager.cs" />
+    <Compile Include="ViewModel\BookInfoViewModel.cs" />
     <Compile Include="ViewModel\ControlViewModel.cs" />
     <Compile Include="DataService\ReaderDataService.cs" />
     <Compile Include="DataService\SynchronizationManager.cs" />
+    <Compile Include="ViewModel\ReadingTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\Reading\ImageReaderViewModel.cs" />
     <Compile Include="ViewModel\PageViewModel.cs" />
     <Compile Include="ViewModel\Reading\TextReaderViewModel.cs" />
@@ -133,12 +135,16 @@
     <Compile Include="ViewModel\Reading\ReadingViewModel.cs" />
     <Compile Include="View\Control\ReaderImage.cs" />
     <Compile Include="View\Control\ReaderRichEditBox.cs" />
+    <Compile Include="View\Converter\BooleanToDoubleConverter.cs" />
     <Compile Include="View\Converter\BooleanToGridVisibility.cs" />
     <Compile Include="View\Converter\RangeToZoomFactorConverter.cs" />
     <Compile Include="View\Converter\RangeToZoomPercentConverter.cs" />
     <Compile Include="View\Converter\UserInfoToStringConverter.cs" />
     <Compile Include="View\ReadingEditorView.xaml.cs">
       <DependentUpon>ReadingEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ReadingPreviewView.xaml.cs">
+      <DependentUpon>ReadingPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ReadingView.xaml.cs">
       <DependentUpon>ReadingView.xaml</DependentUpon>
@@ -150,20 +156,27 @@
     <Content Include="Icon\one_finger-48.png" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=7a953f43091b5a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\netcore45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRTXamlToolkit, Version=1.6.1.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WinRTXamlToolkit.1.6.1.3\lib\netcore451\WinRTXamlToolkit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +193,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="View\ReadingEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReadingPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

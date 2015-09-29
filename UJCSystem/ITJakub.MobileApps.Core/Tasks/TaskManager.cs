@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.MobileApps.DataContracts.Tasks;
-using ITJakub.MobileApps.DataEntities.AzureTables.Daos;
-using ITJakub.MobileApps.DataEntities.AzureTables.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Entities;
 using ITJakub.MobileApps.DataEntities.Database.Repositories;
+using ITJakub.MobileApps.DataEntities.ExternalEntities;
 
 namespace ITJakub.MobileApps.Core.Tasks
 {
     public class TaskManager
     {
         private readonly UsersRepository m_usersRepository;
-        private readonly AzureTableTaskDao m_azureTableTaskDao;
+        private readonly ITaskDao m_taskDataProvider;
 
-        public TaskManager(UsersRepository usersRepository, AzureTableTaskDao azureTableTaskDao)
+        public TaskManager(UsersRepository usersRepository, ITaskDao taskDataProvider)
         {
             m_usersRepository = usersRepository;
-            m_azureTableTaskDao = azureTableTaskDao;
+            m_taskDataProvider = taskDataProvider;
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
             var now = DateTime.UtcNow;
 
@@ -31,19 +30,31 @@ namespace ITJakub.MobileApps.Core.Tasks
                 Application = application,
                 Author = user,
                 CreateTime = now,
-                Name = name
+                Name = name,
+                Description = description
             };
 
             var taskId = m_usersRepository.Create(task);
-
-            var taskEntity = new TaskEntity(Convert.ToString(taskId), Convert.ToString(applicationId), data);
-            m_azureTableTaskDao.Create(taskEntity);
+            
+            ITaskEntity taskEntity = m_taskDataProvider.GetNewEntity(task.Id, applicationId, data);
+            m_taskDataProvider.Save(taskEntity);
         }
 
         public IList<TaskDetailContract> GetTasksByApplication(int applicationId)
         {
             var tasks = m_usersRepository.GetTasksByApplication(applicationId);
             return Mapper.Map<IList<TaskDetailContract>>(tasks);
+        }
+        
+        public TaskDataContract GetTask(long taskId)
+        {
+            var taskEntity = m_usersRepository.FindById<Task>(taskId);
+            var taskAzure = m_taskDataProvider.FindByIdAndAppId(taskEntity.Id, taskEntity.Application.Id);
+
+            var task = Mapper.Map<TaskDataContract>(taskEntity);
+            task.Data = taskAzure.Data;
+
+            return task;
         }
 
         public TaskDataContract GetTaskForGroup(long groupId)
@@ -56,8 +67,7 @@ namespace ITJakub.MobileApps.Core.Tasks
             if (task == null)
                 return null;
 
-            var taskEntity = m_azureTableTaskDao.FindByRowAndPartitionKey(Convert.ToString(task.Id),
-                Convert.ToString(group.Task.Application.Id));
+            var taskEntity = m_taskDataProvider.FindByIdAndAppId(task.Id, group.Task.Application.Id);
 
             if (taskEntity != null)
                 task.Data = taskEntity.Data;

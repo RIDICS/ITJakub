@@ -9,13 +9,15 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
     public interface ICrosswordsDataService
     {
         IErrorService ErrorService { get; }
-        void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback);
+        void SetTask(string data);
+        void GetConfiguration(Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false);
         void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback);
         void GetGuessHistory(Action<List<ProgressUpdateViewModel>, Exception> callback);
         void StartPollingProgress(Action<List<ProgressUpdateViewModel>, Exception> callback);
         void StopPolling();
         void GetIsWin(Action<bool> callback);
-        void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback);
+        void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback);
+        void ResetLastRequestTime();
     }
 
     public class CrosswordsDataService : ICrosswordsDataService
@@ -34,9 +36,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             get { return m_errorService; }
         }
 
-        public void SetTaskAndGetConfiguration(string data, Action<ObservableCollection<CrosswordRowViewModel>> callback)
+        public void SetTask(string data)
         {
-            m_crosswordManager.SetTaskAndGetConfiguration(data, callback);
+            m_crosswordManager.SetTask(data);
+        }
+
+        public void GetConfiguration(Action<ObservableCollection<CrosswordRowViewModel>> callback, bool fillAnswers = false)
+        {
+            m_crosswordManager.GetConfiguration(callback, fillAnswers);
         }
 
         public void FillWord(int rowIndex, string word, Action<GameInfoViewModel, Exception> callback)
@@ -64,9 +71,14 @@ namespace ITJakub.MobileApps.Client.Crosswords.DataService
             m_crosswordManager.IsWin(callback);
         }
 
-        public void SaveTask(string taskName, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
+        public void SaveTask(string taskName, string taskDescription, IEnumerable<EditorItemViewModel> answerList, int answerColumn, Action<Exception> callback)
         {
-            m_crosswordManager.SaveTask(taskName, answerList, answerColumn, callback);
+            m_crosswordManager.SaveTask(taskName, taskDescription, answerList, answerColumn, callback);
+        }
+
+        public void ResetLastRequestTime()
+        {
+            m_crosswordManager.ResetLastRequestTime();
         }
     }
 }

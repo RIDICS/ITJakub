@@ -14,17 +14,25 @@ namespace ITJakub.MobileApps.Core
 {
     public class MobileServiceManager : IMobileAppsService
     {
+        private readonly string m_bookLibraryEndpointAddress;
+
         private readonly UserManager m_userManager;
         private readonly GroupManager m_groupManager;
         private readonly ApplicationManager m_applicationManager;
         private readonly TaskManager m_taskManager;
 
-        public MobileServiceManager(IKernel container)
+        public MobileServiceManager(UserManager userManager, GroupManager groupManager, TaskManager taskManager, ApplicationManager applicationManager, string bookLibraryEndpointAddress)
         {
-            m_userManager = container.Resolve<UserManager>();
-            m_groupManager = container.Resolve<GroupManager>();
-            m_applicationManager = container.Resolve<ApplicationManager>();
-            m_taskManager = container.Resolve<TaskManager>();
+            m_bookLibraryEndpointAddress = bookLibraryEndpointAddress;
+            m_groupManager = groupManager;
+            m_applicationManager = applicationManager;
+            m_userManager = userManager;
+            m_taskManager = taskManager;       
+        }
+
+        public string GetBookLibraryEndpointAddress()
+        {
+            return m_bookLibraryEndpointAddress;
         }
 
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
@@ -32,11 +40,32 @@ namespace ITJakub.MobileApps.Core
             m_userManager.CreateUser(providerContract, providerToken, userDetail);
         }
 
+        public string GetSaltByUserEmail(string email)
+        {
+            return m_userManager.GetSaltByUserEmail(email);
+        }
+
         public LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email)
         {
             return m_userManager.LoginUser(providerContract, providerToken, email);
         }
-        
+
+        public bool PromoteUserToTeacherRole(long userId, string promotionCode)
+        {
+           return m_userManager.PromoteUserToTeacherRole(userId, promotionCode);
+
+        }
+
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            return m_groupManager.GetMembershipGroups(userId);
+        }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            return m_groupManager.GetOwnedGroups(userId);
+        }
+
         public UserGroupsContract GetGroupsByUser(long userId)
         {
             return m_groupManager.GetGroupByUser(userId);
@@ -58,9 +87,9 @@ namespace ITJakub.MobileApps.Core
             m_applicationManager.CreateSynchronizedObject(applicationId, groupId, userId, synchronizedObject);
         }
 
-        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
-            return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+            return m_applicationManager.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
         }
 
         public SynchronizedObjectResponseContract GetLatestSynchronizedObject(long groupId, int applicationId, string objectType,
@@ -99,9 +128,14 @@ namespace ITJakub.MobileApps.Core
             return m_taskManager.GetTasksByAuthor(userId);
         }
 
-        public void CreateTask(long userId, int applicationId, string name, string data)
+        public void CreateTask(long userId, int applicationId, string name, string data, string description)
         {
-            m_taskManager.CreateTask(userId, applicationId, name, data);
+            m_taskManager.CreateTask(userId, applicationId, name, data, description);
+        }
+
+        public TaskDataContract GetTask(long taskId)
+        {
+            return m_taskManager.GetTask(taskId);
         }
 
         public TaskDataContract GetTaskForGroup(long groupId)
@@ -123,5 +157,16 @@ namespace ITJakub.MobileApps.Core
         {
             m_groupManager.RemoveGroup(groupId);
         }
+
+        public CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            return m_groupManager.DuplicateGroup(userId,  groupId, newGroupname);
+        }
+
+        public string RegenerateGroupCode(long userId, long groupId)
+        {
+            return m_groupManager.RenewGroupCode(userId, groupId);
+        }
+
     }
 }

@@ -93,7 +93,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
                 }
 
                 if (loginResult)
-                    m_navigationService.Navigate<GroupListView>();
+                    m_navigationService.Navigate<ApplicationMenuPageView>();
             });
         }
     }

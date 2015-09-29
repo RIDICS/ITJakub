@@ -46,6 +46,26 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading
             get { return typeof (ReadingEditorView); }
         }
 
+        public override AdminBaseViewModel AdminViewModel
+        {
+            get { return null; }
+        }
+
+        public override Type AdminDataTemplate
+        {
+            get { return null; }
+        }
+
+        public override TaskPreviewBaseViewModel TaskPreviewViewModel
+        {
+            get { return new ReadingTaskPreviewViewModel(m_dataService); }
+        }
+
+        public override Type TaskPreviewDataTemplate
+        {
+            get { return typeof (ReadingPreviewView); }
+        }
+
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.MainApp; }

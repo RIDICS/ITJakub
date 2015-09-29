@@ -4,6 +4,7 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -98,7 +99,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
-     
+
         [OperationContract]
         IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
 
@@ -135,7 +136,8 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
-        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
+        string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType);
 
         [OperationContract]
         PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -143,7 +145,6 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
-
 
         #region Feedback
 
@@ -164,10 +165,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
-
         #region AudioBooks
-
-   
 
         [OperationContract]
         AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias);
@@ -179,7 +177,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
-
+#region Permissions
         [OperationContract]
         IList<GroupContract> GetGroupsByUser(int userId);
 
@@ -189,6 +187,48 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void AddUserToGroup(int userId, int groupId);
 
+[OperationContract]
+        void RemoveUserFromGroup(int userId, int groupId);
+
+        [OperationContract]
+        GroupContract CreateGroup(string name, string description);
+
+        [OperationContract]
+        UserDetailContract GetUserDetail(int userId);
+
+        [OperationContract]
+        GroupDetailContract GetGroupDetail(int groupId);
+
+        [OperationContract]
+        IList<CategoryContract> GetRootCategories();
+
+        [OperationContract]
+        CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId);
+
+        [OperationContract]
+        CategoryContentContract GetAllCategoryContent(int categoryId);
+
+        [OperationContract]
+        void DeleteGroup(int groupId);
+
+        [OperationContract]
+        void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+
+        [OperationContract]
+        void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+
+
+ #endregion
+        #region News
+
+        [OperationContract]
+        List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count);
+
+        [OperationContract]
+        int GetWebNewsSyndicationItemCount();
+
+        #endregion
+<<<<<<< .mine
         [OperationContract]
         void RemoveUserFromGroup(int userId, int groupId);
 
@@ -218,5 +258,36 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+=======
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
     }
 }

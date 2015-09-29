@@ -1,0 +1,125 @@
+﻿<UserControl
+    x:Class="ITJakub.MobileApps.Client.Fillwords.View.FillwordsAdminView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="using:ITJakub.MobileApps.Client.Fillwords.ViewModel"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.Fillwords.View.Control"
+    mc:Ignorable="d"
+    d:DataContext="{d:DesignInstance Type=viewModel:FillwordsAdminViewModel}">
+
+    <UserControl.Resources>
+        <converter:DoubleToStringConverter x:Key="DoubleToStringConverter" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
+        <SolidColorBrush x:Key="ErrorColorBrush" Color="Orange" />
+    </UserControl.Resources>
+    
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Column="0"
+                   Grid.Row="0"
+                   Margin="40,0,0,0"
+                   Text="Odpovědi"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />
+
+        <TextBlock Grid.Column="1"
+                   Grid.Row="0"
+                   Text="Výsledky"
+                   Style="{StaticResource SubheaderTextBlockStyle}" />
+
+        <Grid Grid.Row="1"
+              Grid.Column="0"
+              Margin="40,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           FontSize="16"
+                           VerticalAlignment="Bottom"
+                           Margin="0,10,0,0"
+                           MaxLines="3"
+                           TextWrapping="Wrap"
+                           TextTrimming="CharacterEllipsis"
+                           Text="Pro zobrazení odpovědi konkrétního studenta označte příslušné jméno v tabulce vpravo." />
+
+                <Button Grid.Column="1"
+                        Margin="0,0,20,0"
+                        Command="{Binding ShowCorrectAnswersCommand}"
+                        Content="Zobrazit správné odpovědi" />
+
+            </Grid>
+            
+            <TextBlock Grid.Row="1"
+                       FontSize="16"
+                       Foreground="{StaticResource ErrorColorBrush}"
+                       Visibility="{Binding IsUserNotAnsweredError, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       Text="Vybraný student zatím svoje odpovědi neodeslal." />
+
+            <control:RichEditComboBox Grid.Row="2"
+                                      Margin="0,10,20,50"
+                                      MinWidth="300"
+                                      IsAnsweringAllowed="False"
+                                      DocumentRtf="{Binding TaskDocumentRtf}"
+                                      OptionsList="{Binding TaskOptionsList}" />
+        </Grid>
+
+        <ListView Grid.Row="1"
+                  Grid.Column="1"
+                  Width="270"
+                  Margin="10,10,20,0"
+                  SelectionMode="Single"
+                  IsItemClickEnabled="False"
+                  SelectedItem="{Binding SelectedUser, Mode=TwoWay}"
+                  ItemsSource="{Binding ResultList}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontWeight="Bold">
+                            <Run Text="{Binding UserInfo.FirstName}" />
+                            <Run Text="{Binding UserInfo.LastName}" />
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsTaskSubmited, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid Background="LightGray"
+                                  RequestedTheme="Light">
+                                <TextBlock Margin="2">
+                                    <Run Text="{Binding PercentageSuccess, Converter={StaticResource DoubleToStringConverter}}" /><Run Text="%" />
+                                </TextBlock>
+                            </Grid>
+                            <TextBlock Margin="10,0,0,0">
+                                <Run Text="Správně:" />
+                                <Run Text="{Binding CorrectAnswers}" />
+                                <Run Text="z" />
+                                <Run Text="{Binding TotalAnswers}" />
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TextBlock Text="(Nevyplněno)"
+                                   Visibility="{Binding IsTaskSubmited, Converter={StaticResource BooleanNegationToVisibilityConverter}}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</UserControl>

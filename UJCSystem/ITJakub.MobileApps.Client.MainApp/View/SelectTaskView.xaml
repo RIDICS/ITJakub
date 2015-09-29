@@ -1,4 +1,5 @@
 ﻿<Page
+    x:Name="PageRoot"
     x:Class="ITJakub.MobileApps.Client.MainApp.View.SelectTaskView"
     DataContext="{Binding SelectTaskViewModel, Source={StaticResource Locator}}"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,22 +13,11 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <CollectionViewSource x:Name="TaskList" Source="{Binding GroupedTaskList}" IsSourceGrouped="True" />
+        <CollectionViewSource x:Key="TaskList" Source="{Binding GroupedTaskList}" IsSourceGrouped="True" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter:IsMyOwnershipToNameConverter x:Key="IsMyOwnershipToNameConverter" />
     </Page.Resources>
-
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Refresh"
-                          Label="Aktualizovat seznam"
-                          Command="{Binding RefreshListCommand}" />
-            <AppBarButton Icon="Add"
-                          Label="Nové zadání"
-                          Command="{Binding CreateNewTaskCommand}" />
-        </CommandBar>
-    </Page.BottomAppBar>
     
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -44,6 +34,7 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
@@ -121,7 +112,7 @@
         </StackPanel>
         
         <GridView Grid.Row="2"
-                  Padding="120,0,50,70"
+                  Padding="120,0,50,0"
                   IsItemClickEnabled="True"
                   SelectionMode="None"
                   ItemsSource="{Binding Source={StaticResource TaskList}}" >
@@ -159,6 +150,14 @@
                                 <Run Text="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}}" />
                             </TextBlock>
                         </StackPanel>
+                        
+                        <Button VerticalAlignment="Center"
+                                Style="{StaticResource CircleButtonStyle}"
+                                Command="{Binding Path=DataContext.PreviewTaskCommand, ElementName=PageRoot}"
+                                CommandParameter="{Binding}"
+                                Margin="10,0,10,0">
+                            <SymbolIcon Symbol="Preview" />
+                        </Button>
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
@@ -207,5 +206,15 @@
                        Margin="0,0,40,0"
                        FontSize="30" />
         </StackPanel>
+
+        <CommandBar Grid.Row="3" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+            <AppBarButton Icon="Add"
+                          Label="Nové zadání"
+                          Command="{Binding CreateNewTaskCommand}" />
+        </CommandBar>
+
     </Grid>
 </Page>

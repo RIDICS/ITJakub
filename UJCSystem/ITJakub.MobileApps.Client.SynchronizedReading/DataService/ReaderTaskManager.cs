@@ -17,7 +17,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             m_bookManager = bookManager;
         }
 
-        public async void CreateTask(string taskName, string defaultPageId, Action<Exception> callback)
+        public async void CreateTask(string taskName, string taskDescription, string defaultPageId, Action<Exception> callback)
         {
             var taskContract = new SelectedBookTaskContract
             {
@@ -28,7 +28,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
 
             try
             {
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.SynchronizedReading, taskName, serializedTask);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.SynchronizedReading, taskName, taskDescription, serializedTask);
                 callback(null);
             }
             catch (ClientCommunicationException exception)

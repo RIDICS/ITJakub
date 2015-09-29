@@ -129,6 +129,11 @@ namespace ITJakub.MobileApps.Client.MainApp
                 var userAccountSettingsFlyout = new UserAccountSettingsFlyout();
                 userAccountSettingsFlyout.Show();
             }));
+            args.Request.ApplicationCommands.Add(new SettingsCommand("Setting", "Nastavení", handler =>
+            {
+                var settingFlyout = new SettingFlyout();
+                settingFlyout.Show();
+            }));
             args.Request.ApplicationCommands.Add(new SettingsCommand(
                 "About", "O aplikaci", handler =>
                 {

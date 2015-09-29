@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="60834MartinMudra.Kiosekstaroesk" Publisher="CN=019A62BF-42F9-440B-9B11-1C323DB86C8B" Version="0.0.1.1" />
+  <Identity Name="60834MartinMudra.Kiosekstaroesk" Publisher="CN=019A62BF-42F9-440B-9B11-1C323DB86C8B" Version="0.3.0.3" />
   <Properties>
     <DisplayName>Kiosek staročeský</DisplayName>
     <PublisherDisplayName>Martin Mudra</PublisherDisplayName>
@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="ITJakub.MobileApps.MainApp.App">
-      <m2:VisualElements DisplayName="IT Jakub" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="ITJakub.MobileApps.MainApp" ForegroundText="light" BackgroundColor="#464646">
-        <m2:SplashScreen Image="Assets\SplashScreen.png" />
+      <m2:VisualElements DisplayName="Kiosek staročeský" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="ITJakub.MobileApps.MainApp" ForegroundText="light" BackgroundColor="#464646">
+        <m2:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#0050C3" />
       </m2:VisualElements>
     </Application>
   </Applications>

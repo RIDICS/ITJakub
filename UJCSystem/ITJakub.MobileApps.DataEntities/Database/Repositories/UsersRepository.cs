@@ -185,7 +185,7 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 
                 session.Delete(group);
 
-                var rowKeys = group.SynchronizedObjects.OfType<SynchronizedObject>().Select(o => o.RowKey);
+                var rowKeys = group.SynchronizedObjects.OfType<SynchronizedObject>().Select(o => o.ObjectExternalId);
 
                 return rowKeys;
             }
@@ -199,6 +199,29 @@ namespace ITJakub.MobileApps.DataEntities.Database.Repositories
                 return session.QueryOver<Institution>()
                     .Where(x => x.EnterCode == enterCode)
                     .SingleOrDefault();
+            }
+        }
+                
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group GetGroupWithMembers(long groupId)
+        {
+            using (var session = GetSession())
+            {
+                var group = session.QueryOver<Group>().Where(x => x.Id == groupId)
+                     .Fetch(x => x.Members).Eager
+                    .SingleOrDefault<Group>();
+
+                return group;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User GetUserWithInstititutionById(long userId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>().Where(x => x.Id == userId)
+                    .Fetch(x => x.Institution).Eager.SingleOrDefault<User>();
             }
         }
     }

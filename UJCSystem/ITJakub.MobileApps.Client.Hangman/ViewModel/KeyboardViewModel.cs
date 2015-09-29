@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,6 +10,7 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
     public class KeyboardViewModel : ViewModelBase
     {
         private readonly List<KeyViewModel> m_basicKeys;
+        private bool m_isEnabled;
 
         public KeyboardViewModel()
         {
@@ -21,12 +21,23 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
                 m_basicKeys.Add(new KeyViewModel(letter));
             }
 
+            IsEnabled = true;
             Keys = new ObservableCollection<KeyViewModel>(m_basicKeys);
         }
 
         public ObservableCollection<KeyViewModel> Keys { get; set; }
 
         public RelayCommand<char> ClickCommand { get; set; }
+
+        public bool IsEnabled
+        {
+            get { return m_isEnabled; }
+            set
+            {
+                m_isEnabled = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public void DeactivateKey(char letter)
         {

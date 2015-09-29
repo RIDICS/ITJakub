@@ -6,7 +6,9 @@ namespace ITJakub.MobileApps.Core.Authentication.Providers
     public interface IAuthProvider
     {
         AuthProvidersContract ProviderContractType { get; }
+
         bool IsExternalProvider { get; }
+
         AuthenticateResultInfo Authenticate(string providerToken, string email);
     }
 }

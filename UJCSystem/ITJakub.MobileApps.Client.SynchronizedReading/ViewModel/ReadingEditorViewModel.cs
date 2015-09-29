@@ -24,6 +24,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         private string m_pageName;
         private bool m_isBookSelected;
         private bool m_isPhotoLoadError;
+        private string m_taskDescription;
+        private bool m_errorTaskDescriptionMissing;
 
         public ReadingEditorViewModel(ReaderDataService dataService)
         {
@@ -41,6 +43,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
         public RelayCommand CancelCommand { get; private set; }
 
         public string TaskName { get; set; }
+
+        public string TaskDescription
+        {
+            get { return m_taskDescription; }
+            set
+            {
+                m_taskDescription = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public bool IsBookSelected
         {
@@ -122,6 +134,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
+        public bool ErrorTaskDescriptionMissing
+        {
+            get { return m_errorTaskDescriptionMissing; }
+            set
+            {
+                m_errorTaskDescriptionMissing = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool ErrorBookNotSelected
         {
             get { return m_errorBookNotSelected; }
@@ -131,7 +153,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 RaisePropertyChanged();
             }
         }
-
+        
         public bool IsShowPhotoEnabled
         {
             get { return m_isShowPhotoEnabled; }
@@ -174,9 +196,11 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
             }
         }
 
+        
         private void HideErrors()
         {
             ErrorBookNotSelected = false;
+            ErrorTaskDescriptionMissing = false;
             ErrorTaskNameMissing = false;
         }
 
@@ -189,15 +213,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
 
             IsBookSelected = true;
             m_dataService.SetCurrentBook(book.BookInfo.Guid, book.XmlId);
-            BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
-            PublishDate = book.BookInfo.PublishDate;
+            BookAuthor = string.IsNullOrEmpty(book.BookInfo.Authors) ? "(nezadáno)" : book.BookInfo.Authors;
+            PublishDate = string.IsNullOrEmpty(book.BookInfo.PublishDate) ? "(nezadáno)" : book.BookInfo.PublishDate;
             PageName = book.PageName;
             m_defaultPageId = book.XmlId;
             PageRtfText = book.RtfText;
             BookPagePhoto = book.PagePhoto;
 
-            IsShowPhotoEnabled = BookPagePhoto != null;
+            IsShowPhotoEnabled = BookPagePhoto != null || PageRtfText == null;
         }
         
         private void LoadPhoto()
@@ -244,6 +268,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 isAnyError = true;
             }
 
+            if (string.IsNullOrWhiteSpace(TaskDescription))
+            {
+                ErrorTaskDescriptionMissing = true;
+                isAnyError = true;
+            }
+
             if (m_defaultPageId == null)
             {
                 ErrorBookNotSelected = true;
@@ -261,7 +291,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel
                 return;
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, m_defaultPageId, exception =>
+            m_dataService.CreateTask(TaskName, TaskDescription, m_defaultPageId, exception =>
             {
                 Saving = false;
                 if (exception != null)

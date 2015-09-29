@@ -9,14 +9,17 @@ namespace ITJakub.MobileApps.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<Group, GroupInfoContract>()
-                .Include<Group, OwnedGroupInfoContract>();
+                .ForMember(x => x.AuthorId, opt => opt.MapFrom(x => x.Author.Id))
+                .Include<Group, OwnedGroupInfoContract>()
+                .Include<Group, GroupDetailContract>();
 
             CreateMap<Group, OwnedGroupInfoContract>();
             CreateMap<Group, GroupDetailContract>();
 
             CreateMap<Group, GroupDetailsUpdateContract>();
 
-            CreateMap<GroupStateContract, GroupState>();
+            CreateMap<GroupStateContract, GroupState>()
+                .ReverseMap();
         }
     }
 }

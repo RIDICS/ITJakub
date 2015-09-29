@@ -11,14 +11,32 @@ namespace ITJakub.MobileApps.DataContracts
     public interface IMobileAppsService
     {
         [OperationContract]
+        string GetBookLibraryEndpointAddress();
+
+        [OperationContract]
         void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail);
+
+        [OperationContract]
+        string GetSaltByUserEmail(string email);
 
         [OperationContract]
         LoginUserResponse LoginUser(AuthProvidersContract providerContract, string providerToken, string email);
 
+        //[OperationContract]
+        //[AuthorizedMethod(UserRoleContract.Student)]
+        //UserGroupsContract GetGroupsByUser(long userId);
+
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
-        UserGroupsContract GetGroupsByUser(long userId);
+        bool PromoteUserToTeacherRole(long userId, string promotionCode);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Student)]
+        List<GroupInfoContract> GetMembershipGroups(long userId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        List<OwnedGroupInfoContract> GetOwnedGroups(long userId);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
@@ -36,7 +54,7 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         [FaultContract(typeof(ApplicationNotRunningFault))]
-        IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since);
+        IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
@@ -68,7 +86,11 @@ namespace ITJakub.MobileApps.DataContracts
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
-        void CreateTask(long userId, int applicationId, string name, string data);
+        void CreateTask(long userId, int applicationId, string name, string data, string description);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        TaskDataContract GetTask(long taskId);
 
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
@@ -77,7 +99,7 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Student)]
         GroupStateContract GetGroupState(long groupId);
-
+        
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         void UpdateGroupState(long groupId, GroupStateContract state);
@@ -85,5 +107,14 @@ namespace ITJakub.MobileApps.DataContracts
         [OperationContract]
         [AuthorizedMethod(UserRoleContract.Teacher)]
         void RemoveGroup(long groupId);
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname);
+
+
+        [OperationContract]
+        [AuthorizedMethod(UserRoleContract.Teacher)]
+        string RegenerateGroupCode(long userId, long groupId);
     }
 }

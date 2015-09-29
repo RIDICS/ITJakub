@@ -9,6 +9,7 @@ using Windows.Web.Http;
 using Windows.Web.Http.Headers;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker;
 using ITJakub.MobileApps.Client.DataContracts.Json;
+using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.DataContracts;
 using Newtonsoft.Json;
 
@@ -24,9 +25,18 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
         private const string TokenUrl = "https://accounts.google.com/o/oauth2/token";
         private const string TokenInfoUrl = "https://www.googleapis.com/oauth2/v1/tokeninfo?id_token={0}";
         private const string UserInfoUrl = "https://www.googleapis.com/plus/v1/people/me";
-
+        
         public string AccountName { get { return "Google"; } }
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.Google; } }
+        public Task<UserLoginSkeleton> ReopenWithErrorAsync()
+        {
+            throw new InvalidOperationException("Cannot open Google authentication window with error and filled fields");
+        }
+
+        public Task<UserLoginSkeleton> LoginForCreateUserAsync()
+        {
+            return LoginAsync();
+        }
 
         public async Task<UserLoginSkeleton> LoginAsync()
         {
@@ -85,7 +95,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             {
                 if (authenticationResponse.StartsWith(successString))
                 {
-                    authenticationResponse = authenticationResponse.TrimStart(successString.ToCharArray());
+                    authenticationResponse = authenticationResponse.Substring(successString.Length);
                 }
 
                 var decoder = new WwwFormUrlDecoder(authenticationResponse);
@@ -94,7 +104,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
             catch (ArgumentException)
             {
                 //parameter "code" doesn't exists
-                return null;
+                throw new ClientCommunicationException("Parsing Google result string error");
             }
 
             var client = new HttpClient();

@@ -45,6 +45,26 @@ namespace ITJakub.MobileApps.Client.Chat
             get { return null; }
         }
 
+        public override AdminBaseViewModel AdminViewModel
+        {
+            get { return null; }
+        }
+
+        public override Type AdminDataTemplate
+        {
+            get { return null; }
+        }
+
+        public override TaskPreviewBaseViewModel TaskPreviewViewModel
+        {
+            get { return null; }
+        }
+
+        public override Type TaskPreviewDataTemplate
+        {
+            get { return null; }
+        }
+
         public override ApplicationRoleType ApplicationRoleType
         {
             get { return ApplicationRoleType.SupportApp;}
@@ -69,9 +89,5 @@ namespace ITJakub.MobileApps.Client.Chat
                 return image;
             }
         }
-
-    
     }
-
-   
 }
