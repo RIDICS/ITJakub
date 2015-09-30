@@ -220,5 +220,46 @@ namespace ITJakub.ITJakubService.Core
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByGroup(groupId);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
+
+        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
+            var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
+
+            if (group.SpecialPermissions == null)
+            {
+                group.SpecialPermissions = new List<SpecialPermission>();
+            }
+
+            foreach (var specialPermission in specialPermissions)
+            {
+                group.SpecialPermissions.Add(specialPermission);
+            }
+            
+            m_permissionRepository.Save(group);
+        }
+
+        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
+            var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
+
+            if (group.SpecialPermissions == null)
+            {
+                if (m_log.IsWarnEnabled)
+                {
+                    string message = string.Format("Cannot remove special permissions from group with id '{0}'. Group special permissions are empty.", group.Id);
+                    m_log.Warn(message);
+                }
+                return;
+            }
+
+            foreach (var specialPermission in specialPermissions)
+            {
+                group.SpecialPermissions.Remove(specialPermission);
+            }
+
+            m_permissionRepository.Save(group);
+        }
     }
 }

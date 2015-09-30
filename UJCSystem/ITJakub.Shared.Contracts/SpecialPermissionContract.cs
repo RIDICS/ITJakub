@@ -12,13 +12,7 @@ namespace ITJakub.Shared.Contracts
     public class SpecialPermissionContract
     {
         [DataMember]
-        public DateTime CreateTime { get; set; }
-
-        [DataMember]
-        public UserContract CreatedBy { get; set; }
-
-        [DataMember]
-        public IList<UserContract> Members { get; set; }
+        public int Id { get;set; }
     }
 
     [DataContract]

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
@@ -23,6 +24,22 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var group = session.QueryOver<Group>()
                     .Fetch(g => g.Users).Eager
                     .Fetch(g => g.CreatedBy).Eager
+                    .Where(g => g.Id == groupId)
+                    .SingleOrDefault();
+
+                return group;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Group FindGroupWithSpecialPermissionsById(int groupId)
+        {
+            using (var session = GetSession())
+            {
+                var group = session.QueryOver<Group>()
+                    .Fetch(g => g.Users).Eager
+                    .Fetch(g => g.CreatedBy).Eager
+                    .Fetch(g => g.SpecialPermissions).Eager
                     .Where(g => g.Id == groupId)
                     .SingleOrDefault();
 
@@ -255,6 +272,21 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var permissions = session.QueryOver(() => specPermissionAlias)
                     .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
                     .Where(() => groupAlias.Id == groupId)
+                    .List<SpecialPermission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<SpecialPermission> GetSpecialPermissionsByIds(IEnumerable<int> specialPermissionIds)
+        {
+            using (var session = GetSession())
+            {
+                SpecialPermission specPermissionAlias = null;
+
+                var permissions = session.QueryOver(() => specPermissionAlias)
+                    .AndRestrictionOn(() => specPermissionAlias.Id).IsInG(specialPermissionIds)
                     .List<SpecialPermission>();
 
                 return permissions;
