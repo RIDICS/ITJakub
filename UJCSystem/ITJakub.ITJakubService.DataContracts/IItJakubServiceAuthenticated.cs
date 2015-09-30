@@ -1,30 +1,11 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
-    [ServiceContract]
-    public interface IItJakubServiceEncrypted
-    {
-        #region User Operations
-        [OperationContract]
-        UserContract FindUserById(int userId);
-        
-        [OperationContract]
-        UserContract FindUserByUserName(string userName);
-
-        [OperationContract]
-        UserContract CreateUser(UserContract user);
-        #endregion
-
-       
-    }
-
-
     [ServiceContract]
     public interface IIJakubServiceAuthenticated
     {

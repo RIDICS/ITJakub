@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
         private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();

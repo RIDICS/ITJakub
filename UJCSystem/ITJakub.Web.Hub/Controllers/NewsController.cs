@@ -1,19 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.ServiceModel.Security;
 using System.ServiceModel.Syndication;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.News;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 
 namespace ITJakub.Web.Hub.Controllers
 {
+    public abstract class BaseController : Controller
+    {
+
+
+        protected ItJakubServiceAuthenticatedClient GetAuthenticatedClient()
+        {
+            var client = new ItJakubServiceAuthenticatedClient();
+            if (client.ClientCredentials == null)
+            {
+                throw new ArgumentException("Cannot set credentials for client");
+            }
+            client.ClientCredentials.UserName.UserName = GetUserName();
+            client.ClientCredentials.UserName.Password = GetCommunicationToken();
+
+            return client;
+        }
+
+        protected ItJakubServiceEncryptedClient GetEncryptedClient()
+        {
+            var client = new ItJakubServiceEncryptedClient();          
+            return client;
+        }
+
+        protected ItJakubServiceStreamedClient GetStreamingClient()
+        {
+            var client = new ItJakubServiceStreamedClient();
+            return client;
+        }
+
+        protected ItJakubServiceClient GetUnsecuredClient()
+        {
+            var client = new ItJakubServiceClient();
+            return client;
+        }
+
+
+
+        private string GetUserName()
+        {
+            return User.Identity.Name;
+        }
+
+        private string GetCommunicationToken()
+        {
+            var communicationToken = ClaimsPrincipal.Current.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
+            if(communicationToken == null)
+                throw new ArgumentException("Cannot find communicationToken");
+
+            return communicationToken.Value;
+        }
+    }
+
     [Authorize]
     public class NewsController : Controller
-    {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        
+    {               
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult Feed(string feedType, string feedCount = "10")

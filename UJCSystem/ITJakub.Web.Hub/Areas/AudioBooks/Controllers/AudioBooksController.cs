@@ -17,11 +17,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
     [RouteArea("AudioBooks")]
     public class AudioBooksController : Controller
-    {
-
-        //private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        //private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
+    {        
         public ActionResult Index()
         {
             return View("List");
