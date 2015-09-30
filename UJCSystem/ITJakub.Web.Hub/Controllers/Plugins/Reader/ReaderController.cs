@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
@@ -24,6 +25,11 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             var text = m_mainServiceClient.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
             return Json(new { pageText = text }, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult GetTermsOnPage(string bookId, string pageXmlId)
+        {
+            var terms = m_mainServiceClient.GetTermsOnPage(bookId, pageXmlId);
+            return Json(new { terms }, JsonRequestBehavior.AllowGet);
         }
 
         

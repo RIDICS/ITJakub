@@ -1,1 +1,80 @@
-﻿
+﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+
+ol.tracks-list li::before  {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    top: -2px;
+    left: -1.7em;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 1.7em;
+    margin-right: 8px;
+    padding: 4px;
+    border-top: 2px solid #666;
+    color: #fff;
+    background: #666;
+    font-weight: bold;
+    font-family: "Helvetica Neue" , Arial, sans-serif;
+    text-align: center;
+}
+
+ol.tracks-list > li {
+    position: relative;
+    margin: 0 0 6px 2em;
+    padding: 4px 8px;
+    list-style: none;
+    border-top: 2px solid #666;
+    width: 85%; 
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+ol.tracks-list {
+    counter-reset: li;
+}
+
+div.audio {
+    margin-top: 20px;
+    margin-left: 50px;
+    font-weight: normal;
+}
+
+.audio-download {
+    display: inline-block;
+    margin-left: 50px;
+}
+
+.audio-length {
+    display: inline-block;
+    margin-left: 40px;
+    min-width: 130px;
+}
+
+.audio-length-value {
+    display: inline-block;
+    text-align: right;
+    width: 50px;
+}
+
+.audio-text {
+    margin-bottom: 20px;
+}
+
+ ul.bib-listing li.list-item a.audio-download-href { 
+    border-radius: 5px 15px; 
+    background: @item-background-color; 
+    padding: 5px;  
+    width: 120px; 
+    height:100px;      
+    color: white; 
+    text-decoration:none; 
+    font-weight: bold; 
+    font-family: "Arial"; 
+}
+ 
+ ul.bib-listing li.list-item a.audio-download-href:hover {      
+    color: black; 
+}

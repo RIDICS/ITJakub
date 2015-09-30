@@ -26,15 +26,6 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int CreateAuthor(string name)
-        {
-            using (ISession session = GetSession())
-            {
-                return (int)Create(new Author(){ Name = name});
-            }
-        }
-
-        [Transaction(TransactionMode.Requires)]
         public virtual Author FindByName(string name)
         {
             using (ISession session = GetSession())

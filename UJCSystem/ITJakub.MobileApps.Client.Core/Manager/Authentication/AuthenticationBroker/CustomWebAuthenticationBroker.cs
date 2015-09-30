@@ -1,8 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using Windows.Security.Authentication.Web;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using GalaSoft.MvvmLight.Messaging;
 using ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBroker.Messages;
@@ -90,6 +92,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
                 };
                 InputPane.GetForCurrentView().Showing += KeyboardShowing;
                 InputPane.GetForCurrentView().Hiding += KeyboardHiding;
+                Window.Current.SizeChanged += UpdatePageSize;
 
                 m_webAuthView = new WebAuthView(viewModel)
                 {
@@ -129,7 +132,17 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
             m_authenticationPopup.VerticalOffset -= 100;
             m_webAuthView.Height = m_webAuthView.Height - args.OccludedRect.Height + 200;
         }
-      
+
+        private void UpdatePageSize(object sender, WindowSizeChangedEventArgs e)
+        {
+            var page = m_authenticationPopup.Child as Page;
+            if (page == null)
+                return;
+
+            page.Width = Window.Current.Bounds.Width;
+            page.Height = Window.Current.Bounds.Height;
+        }
+
 
 
         private void Dispose(bool disposing)
@@ -142,6 +155,7 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationBr
                 UnregisterFromMessages();
                 InputPane.GetForCurrentView().Hiding -= KeyboardHiding;
                 InputPane.GetForCurrentView().Showing -= KeyboardShowing;
+                Window.Current.SizeChanged -= UpdatePageSize;
             }
             m_disposed = true;
         }

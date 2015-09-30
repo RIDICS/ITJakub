@@ -591,6 +591,10 @@
       <Project>{c575353d-c1a4-46ac-9546-e62e74270e7e}</Project>
       <Name>Daliboris.Texty.Export.EdicniModul</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.ModulMluvnic\Daliboris.Texty.Export.ModulMluvnic.csproj">
+      <Project>{3F9E4F36-8033-48EB-B362-8BC46678EBA9}</Project>
+      <Name>Daliboris.Texty.Export.ModulMluvnic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
       <Project>{585c72e8-10a8-4dfa-8a5c-467c5dd4c98c}</Project>
       <Name>Daliboris.Texty.Export.Rozhrani</Name>

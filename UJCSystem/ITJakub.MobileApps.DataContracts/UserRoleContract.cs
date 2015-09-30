@@ -7,6 +7,7 @@ namespace ITJakub.MobileApps.DataContracts
     {
         [EnumMember]
         Student,
+
         [EnumMember]
         Teacher
     }

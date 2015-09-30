@@ -15,8 +15,12 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
         private bool m_rightArmVisible;
         private bool m_leftLegVisible;
         private bool m_rightLegVisible;
-        private bool m_faceVisible;
+        private bool m_leftEyeVisible;
+        private bool m_rightEyeVisible;
+        private bool m_mouthVisible;
         private int m_lives;
+        private bool m_noseVisible;
+        private int m_currentHangmanPicture;
 
         public int Lives
         {
@@ -29,19 +33,31 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
 
         private void LivesUpdate(int lives)
         {
-            RightLegVisible = lives < 1;
-            LeftLegVisible = lives < 2;
-            RightArmVisible = lives < 3;
-            LeftArmVisible = lives < 4;
-            BodyVisible = lives < 5;
-            HeadVisible = lives < 6;
-            RopeVisible = lives < 7;
-            Construction3Visible = lives < 8;
-            Construction2Visible = lives < 9;
-            Construction1Visible = lives < 10;
-            BaseVisible = lives < 11;
+            MouthVisible = lives == 0;
+            NoseVisible = lives < 2;
+            RightEyeVisible = lives < 3;
+            LeftEyeVisible = lives < 4;
+            RightLegVisible = lives < 5;
+            LeftLegVisible = lives < 6;
+            RightArmVisible = lives < 7;
+            LeftArmVisible = lives < 8;
+            BodyVisible = lives < 9;
+            HeadVisible = lives < 10;
+            RopeVisible = lives < 11;
+            Construction3Visible = lives < 12;
+            Construction2Visible = lives < 13;
+            Construction1Visible = lives < 14;
+            BaseVisible = lives < 15;
+        }
 
-            FaceVisible = lives == 0;
+        public int CurrentHangmanPicture
+        {
+            get { return m_currentHangmanPicture; }
+            set
+            {
+                m_currentHangmanPicture = value;
+                RaisePropertyChanged();
+            }
         }
 
         public bool Construction1Visible
@@ -154,12 +170,42 @@ namespace ITJakub.MobileApps.Client.Hangman.ViewModel
             }
         }
 
-        public bool FaceVisible
+        public bool LeftEyeVisible
         {
-            get { return m_faceVisible; }
+            get { return m_leftEyeVisible; }
             set
             {
-                m_faceVisible = value;
+                m_leftEyeVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool RightEyeVisible
+        {
+            get { return m_rightEyeVisible; }
+            set
+            {
+                m_rightEyeVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool NoseVisible
+        {
+            get { return m_noseVisible; }
+            set
+            {
+                m_noseVisible = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool MouthVisible
+        {
+            get { return m_mouthVisible; }
+            set
+            {
+                m_mouthVisible = value;
                 RaisePropertyChanged();
             }
         }

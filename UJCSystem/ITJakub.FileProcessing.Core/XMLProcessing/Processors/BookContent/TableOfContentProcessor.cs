@@ -5,10 +5,11 @@ using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
 {
     public class TableOfContentProcessor : ProcessorBase
-    {
+    {        
+
         public TableOfContentProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
-        {
+        {     
         }
 
         protected override string NodeName
@@ -22,7 +23,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             {
                 return new List<ProcessorBase>
                 {
-                    Container.Resolve<ListProcessor>()
+                    Container.Resolve<ListProcessor>(),
                 };
             }
         }

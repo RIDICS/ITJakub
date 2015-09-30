@@ -97,15 +97,12 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="FileProcessingService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container.cs" />
     <Compile Include="FileProcessingManager.cs" />
-    <Compile Include="FileProcessingService.svc.cs">
-      <DependentUpon>FileProcessingService.svc</DependentUpon>
-    </Compile>
+    <Compile Include="FileProcessingService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +162,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>36539</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/FileProcessing</IISUrl>
+          <IISUrl>http://localhost/ITJakub.FileProcessing.Service</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

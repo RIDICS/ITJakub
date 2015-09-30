@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNet.Identity;

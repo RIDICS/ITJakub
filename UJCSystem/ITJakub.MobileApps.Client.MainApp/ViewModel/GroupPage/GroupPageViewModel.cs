@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Threading;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Application;
 using ITJakub.MobileApps.Client.Core.Service;
@@ -38,8 +40,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         private bool m_canOpenApplication;
         private bool m_isGlobalFocus;
         private long m_groupId;
+        private bool m_canOpenAdmin;
+        private bool m_isTaskSelected;
+        private bool m_showRenewError;
+        private bool m_renewCodeInProgress;
 
-        public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
+        public GroupPageViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService,
+            IErrorService errorService)
         {
             m_dataService = dataService;
             m_navigationService = navigationService;
@@ -55,10 +62,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 m_groupId = groupId;
                 LoadData();
             });
-            m_dataService.GetLoggedUserInfo(false, userInfo =>
-            {
-                m_currentUserId = userInfo.UserId;
-            });
+            m_dataService.GetLoggedUserInfo(false, userInfo => { m_currentUserId = userInfo.UserId; });
 
             InitCommands();
         }
@@ -68,8 +72,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             GoBackCommand = new RelayCommand(GoBack);
             SelectAppAndTaskCommand = new RelayCommand(SelectAppAndTask);
             ConnectToGroupCommand = new RelayCommand(ConnectToGroup);
-            OpenApplicationCommand = new RelayCommand(() => m_navigationService.Navigate<ApplicationHostView>());
+            OpenApplicationCommand = new RelayCommand(Navigate<ApplicationHostView>);
+            OpenAdminCommand = new RelayCommand(OpenAdminView);
             ReloadCommand = new RelayCommand(LoadData);
+            ShowTaskCommand = new RelayCommand(ShowTask);
+            ReNewCodeForGroup = new RelayCommand(RenewInputCode);
         }
 
         private void LoadData()
@@ -100,7 +107,6 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 GroupStateUpdated(groupInfo.State);
                 m_pollingService.RegisterForGroupsUpdate(MembersPollingInterval, new[] {GroupInfo}, UpdateMembers);
             });
-            
         }
 
         private void LoadAppInfo(ApplicationType applicationType)
@@ -132,6 +138,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             {
                 for (var i = GroupStateContract.AcceptMembers; i <= GroupStateContract.Closed; i++)
                 {
+                    if (i == GroupStateContract.WaitingForStart) // this state is disabled
+                        continue;
+
                     GroupStates.Add(new GroupStateViewModel(i, ChangeGroupState));
                 }
             }
@@ -140,7 +149,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 if (GroupInfo.Task == null && groupStateViewModel.GroupState > GroupStateContract.AcceptMembers)
                     groupStateViewModel.IsEnabled = false;
                 else
-                    groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState || (stateUpdate == GroupStateContract.Paused && groupStateViewModel.GroupState == GroupStateContract.Running);
+                    groupStateViewModel.IsEnabled = stateUpdate < groupStateViewModel.GroupState ||
+                                                    (stateUpdate == GroupStateContract.Paused && groupStateViewModel.GroupState == GroupStateContract.Running);
 
                 groupStateViewModel.IsCurrentState = groupStateViewModel.GroupState == stateUpdate;
             }
@@ -156,11 +166,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
             else
-                UpdateCanConnectToGroup();
+                DispatcherHelper.CheckBeginInvokeOnUI((() =>
+                {
+                    m_errorService.HideWarning();
+                    UpdateCanConnectToGroup();
+                }));
         }
 
         private void UpdateCanConnectToGroup()
         {
+            CanOpenAdmin = GroupInfo.State >= GroupStateContract.Running;
             CanConnectToGroup = GroupInfo.State >= GroupStateContract.AcceptMembers && !GroupInfo.ContainsMember(m_currentUserId);
             CanOpenApplication = GroupInfo.State >= GroupStateContract.Running && GroupInfo.ContainsMember(m_currentUserId);
         }
@@ -173,6 +188,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 m_groupInfo = value;
                 RaisePropertyChanged();
                 UpdateCanConnectToGroup();
+                IsTaskSelected = m_groupInfo.Task != null;
             }
         }
 
@@ -225,7 +241,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                 RaisePropertyChanged();
             }
         }
-        
+
         public bool Removing
         {
             get { return m_removing; }
@@ -288,12 +304,32 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
             }
         }
 
+        public bool CanOpenAdmin
+        {
+            get { return m_canOpenAdmin; }
+            set
+            {
+                m_canOpenAdmin = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool IsGlobalFocus
         {
             get { return m_isGlobalFocus; }
             set
             {
                 m_isGlobalFocus = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsTaskSelected
+        {
+            get { return m_isTaskSelected; }
+            set
+            {
+                m_isTaskSelected = value;
                 RaisePropertyChanged();
             }
         }
@@ -321,6 +357,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
         public RelayCommand OpenApplicationCommand { get; private set; }
 
         public RelayCommand ReloadCommand { get; private set; }
+
+        public RelayCommand OpenAdminCommand { get; private set; }
+
+        public RelayCommand ShowTaskCommand { get; private set; }
+
+        public RelayCommand ReNewCodeForGroup { get; private set; }
+
 
         private void SelectAppAndTask()
         {
@@ -394,6 +437,75 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupPage
                         m_errorService.ShowConnectionError();
                 }
             });
+        }
+
+        private void OpenAdminView()
+        {
+            var taskInfo = m_groupInfo.Task;
+            if (taskInfo == null)
+            {
+                Navigate<AdminHostView>();
+                return;
+            }
+
+            m_dataService.GetApplication(taskInfo.Application, (appInfo, exception) =>
+            {
+                if (appInfo != null && appInfo.AdminDataTemplate == null)
+                {
+                    Navigate<ApplicationHostView>();
+                }
+                else
+                {
+                    Navigate<AdminHostView>();
+                }
+            });
+        }
+
+        private void ShowTask()
+        {
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage {TaskViewModel = m_groupInfo.Task});
+        }
+
+        private void RenewInputCode()
+        {
+            RenewCodeInProgress = true;
+            ShowRenewError = false;
+            m_dataService.RenewCodeForGroup(GroupInfo.GroupId, (newGroupCode, exception) =>
+            {
+                RenewCodeInProgress = false;
+                if (exception != null || string.IsNullOrWhiteSpace(newGroupCode))
+                {
+                    if (exception is InvalidServerOperationException)
+                        ShowRenewError = true;
+                    else
+                        m_errorService.ShowConnectionError();
+
+                    return;
+                }
+
+                GroupInfo.GroupCode = newGroupCode;
+            });
+        }
+
+        public bool ShowRenewError
+        {
+            get { return m_showRenewError; }
+            set
+            {
+                m_showRenewError = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool RenewCodeInProgress
+        {
+            get { return m_renewCodeInProgress; }
+            set
+            {
+                m_renewCodeInProgress = value;
+                RaisePropertyChanged();
+            }
         }
     }
 }

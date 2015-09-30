@@ -30,6 +30,11 @@ namespace ITJakub.SearchService
             m_searchServiceManager.UploadVersionFile(versionResourceUploadContract);
         }
 
+        public void UploadBibliographyFile(VersionResourceUploadContract bibliographyResource)
+        {
+            m_searchServiceManager.UploadBibliographyFile(bibliographyResource);
+        }
+
         public void UploadBookFile(BookResourceUploadContract contract)
         {
             m_searchServiceManager.UploadBookFile(contract);

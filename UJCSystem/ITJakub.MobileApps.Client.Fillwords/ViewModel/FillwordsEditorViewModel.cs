@@ -18,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         private bool m_errorPageEmpty;
         private bool m_errorOptionsMissing;
         private bool m_isSaveFlyoutOpen;
+        private bool m_errorDescriptionMissing;
 
         public FillwordsEditorViewModel(FillwordsDataService dataService)
         {
@@ -96,6 +97,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
         }
 
+        public bool ErrorDescriptionMissing
+        {
+            get { return m_errorDescriptionMissing; }
+            set
+            {
+                m_errorDescriptionMissing = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public bool ErrorPageEmpty
         {
             get { return m_errorPageEmpty; }
@@ -128,6 +139,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         
         public string TaskName { get; set; }
 
+        public string TaskDescription { get; set; }
+
         public OptionsEditorViewModel OptionsEditorViewModel { get; private set; }
         
         public RelayCommand SelectBookCommand { get; private set; }
@@ -135,7 +148,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
         public RelayCommand SaveTaskCommand { get; private set; }
 
         public RelayCommand CancelCommand { get; private set; }
-
+        
         #endregion
 
 
@@ -148,15 +161,16 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                 return;
 
             IsTextEditingEnabled = false;
-            BookAuthor = book.BookInfo.Authors;
             BookName = book.BookInfo.Title;
-            PublishDate = book.BookInfo.PublishDate;
+            BookAuthor = string.IsNullOrEmpty(book.BookInfo.Authors) ? "(nezadáno)" : book.BookInfo.Authors;
+            PublishDate = string.IsNullOrEmpty(book.BookInfo.PublishDate) ? "(nezadáno)" : book.BookInfo.PublishDate;
             BookRtfContent = book.RtfText;
         }
 
         private void HideErrors()
         {
             ErrorNameMissing = false;
+            ErrorDescriptionMissing = false;
             ErrorPageEmpty = false;
             ErrorOptionsMissing = false;
         }
@@ -168,6 +182,12 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             if (string.IsNullOrEmpty(TaskName))
             {
                 ErrorNameMissing = true;
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(TaskDescription))
+            {
+                ErrorDescriptionMissing = true;
                 return true;
             }
 
@@ -195,7 +215,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
             }
 
             Saving = true;
-            m_dataService.CreateTask(TaskName, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
+            m_dataService.CreateTask(TaskName, TaskDescription, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
             {
                 Saving = false;
                 if (exception != null)

@@ -2,14 +2,15 @@
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Service.Client;
+using ITJakub.MobileApps.MobileContracts;
 
 namespace ITJakub.MobileApps.Client.Books.Manager.Cache
 {
     public class PhotoCache : CacheBase<BitmapImage>
     {
-        private readonly IServiceClient m_serviceClient;
+        private readonly IBookServiceClient m_serviceClient;
 
-        public PhotoCache(IServiceClient serviceClient, int maxSize) : base(maxSize)
+        public PhotoCache(IBookServiceClient serviceClient, int maxSize) : base(maxSize)
         {
             m_serviceClient = serviceClient;
         }
@@ -23,6 +24,9 @@ namespace ITJakub.MobileApps.Client.Books.Manager.Cache
                 {
                     await stream.CopyToAsync(memoryStream);
                     memoryStream.Position = 0;
+
+                    if (memoryStream.Length == 0)
+                        throw new NotFoundException(null);
 
                     var bitmapImage = new BitmapImage();
                     bitmapImage.SetSource(memoryStream.AsRandomAccessStream());

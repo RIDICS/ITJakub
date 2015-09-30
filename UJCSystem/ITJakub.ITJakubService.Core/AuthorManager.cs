@@ -3,6 +3,7 @@ using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -19,11 +20,6 @@ namespace ITJakub.ITJakubService.Core
         {
             var authors = m_authorRepository.GetAllAuthors();
             return Mapper.Map<IList<Author>,IList<AuthorDetailContract>>(authors);
-        }
-
-        public int CreateAuthor(string name)
-        {
-            return m_authorRepository.CreateAuthor(name);
         }
     }
 }

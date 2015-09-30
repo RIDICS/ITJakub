@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
@@ -8,7 +9,7 @@ using log4net;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 {
-    public class PageProcessor : ListProcessorBase
+    public class PageProcessor : ConcreteInstanceProcessorBase<BookPage>
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -24,7 +25,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
         protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
         {
             var position = bookVersion.BookPages.Count + 1;
-            var faxValue = xmlReader.GetAttribute("fax");
+            var facsValue = xmlReader.GetAttribute("facs");
             var pageNameValue = xmlReader.GetAttribute("n") ?? Convert.ToString(position);
             var pageIdValue = xmlReader.GetAttribute("id", XmlNamespace.NamespaceName) ?? Convert.ToString(Guid.NewGuid());
             var xmlResourceValue = xmlReader.GetAttribute("resource");
@@ -33,15 +34,24 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
                 m_log.ErrorFormat("Metadata_processor : Page in position {0} does not have resource attribute",
                     position);
 
-            bookVersion.BookPages.Add(new BookPage
+            var page = new BookPage
             {
                 Position = position,
                 Text = pageNameValue,
                 BookVersion = bookVersion,
-                Image = faxValue,
+                Image = facsValue,
                 XmlId = pageIdValue,
                 XmlResource = xmlResourceValue
-            });
+            };
+
+            bookVersion.BookPages.Add(page);
+
+            base.ProcessElement(bookVersion, page, xmlReader);
+        }
+
+        protected override IEnumerable<ConcreteInstanceProcessorBase<BookPage>> ConcreteSubProcessors
+        {
+            get { return new List<ConcreteInstanceProcessorBase<BookPage>> { Container.Resolve<TermRefProcessor>() }; }
         }
     }
 }

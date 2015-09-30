@@ -17,6 +17,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         private int m_memberCount;
         private string m_searchText;
         private GroupStateContract m_state;
+        private string m_groupCode;
 
         public GroupInfoViewModel()
         {
@@ -27,10 +28,21 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         }
 
         public string GroupName { get; set; }
-        public string GroupCode { get; set; }
+
+        public string GroupCode
+        {
+            get { return m_groupCode; }
+            set { m_groupCode = value; RaisePropertyChanged();}
+        }
+
         public long GroupId { get; set; }
+
+        public long AuthorId { get; set; }
+
         public GroupType GroupType { get; set; }
+
         public DateTime CreateTime { get; set; }
+
         public TaskViewModel Task { get; set; }
 
         public RelayCommand SearchCommand { get; private set; }
@@ -107,5 +119,7 @@ namespace ITJakub.MobileApps.Client.Core.ViewModel
         {
             return m_members.Any(model => model.Id == userId);
         }
+
+        public GroupMemberViewModel SelectedMember { get; set; }
     }
 }

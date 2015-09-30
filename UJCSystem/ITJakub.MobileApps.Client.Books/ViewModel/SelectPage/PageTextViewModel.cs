@@ -40,6 +40,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
                     {
                         m_errorService.ShowCommunicationWarning();
                     }
+                    m_pageLoadedCallback();
                     return;
                 }
 

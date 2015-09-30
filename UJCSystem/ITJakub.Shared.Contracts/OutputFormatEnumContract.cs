@@ -8,6 +8,6 @@ namespace ITJakub.Shared.Contracts
         [EnumMember] Xml = 0,
         [EnumMember] Html = 1,
         [EnumMember] Rtf = 2,
-				[EnumMember] Pdf = 3
+		[EnumMember] Pdf = 3
     }
 }

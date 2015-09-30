@@ -218,11 +218,18 @@
                     <Border Background="#20FFFFFF"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid Width="{TemplateBinding StepWidth}"
-                              HorizontalAlignment="Left"
+                        
+                        <Grid HorizontalAlignment="Left"
+                              Margin="{TemplateBinding ArrowMargin}"
                               x:Name="InnerGrid">
-                            <SymbolIcon Symbol="{TemplateBinding Symbol}"
-                                        Foreground="{TemplateBinding Foreground}" />
+                            
+                            <Border Width="{TemplateBinding StepWidth}"
+                                    BorderThickness="2"
+                                    BorderBrush="Transparent"
+                                    Margin="-1">
+                                <SymbolIcon Symbol="{TemplateBinding Symbol}"
+                                            Foreground="{TemplateBinding Foreground}" />
+                            </Border>
                         </Grid>
                     </Border>
                 </ControlTemplate>

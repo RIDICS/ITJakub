@@ -4,30 +4,31 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:userMenu="using:ITJakub.MobileApps.Client.MainApp.View.Login.UserMenu"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
     xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
+    xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
+    xmlns:control="using:ITJakub.MobileApps.Client.MainApp.View.Control"
     DataContext="{Binding ApplicationHostViewModel, Source={StaticResource Locator}}"
     mc:Ignorable="d">
 
     <Page.Resources>
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        <core:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
+        <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
         <converter1:GroupMemberToUserInfoConverter x:Key="GroupMemberToUserInfoConverter" />
         <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </Page.Resources>
-    
+
     <Page.TopAppBar>
         <AppBar Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
-                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
+                IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}" Background="Indigo">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                
+
                 <ItemsControl Grid.Column="0"
                               VerticalAlignment="Center"
                               IsEnabled="{Binding IsClosed, Converter={StaticResource BooleanNegationConverter}}"
@@ -37,7 +38,7 @@
                             <StackPanel Orientation="Vertical" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    
+
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Button IsEnabled="{Binding IsActionPerformed, Converter={StaticResource BooleanNegationConverter}}"
@@ -54,7 +55,7 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                
+
                 <ListView Grid.Column="1"
                           Margin="20,0,0,0"
                           SelectionMode="Single"
@@ -78,20 +79,20 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                    
+
                 </ListView>
             </Grid>
         </AppBar>
     </Page.TopAppBar>
-    
-    <Page.BottomAppBar>
+
+    <!--<Page.BottomAppBar>
         <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
-            <AppBarToggleButton Icon="Comment" 
-                                Label="Chat" 
+            <AppBarToggleButton Icon="Comment"
+                                Label="Chat"
                                 IsEnabled="{Binding IsChatSupported}"
-                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}" />
         </CommandBar>
-    </Page.BottomAppBar>
+    </Page.BottomAppBar>-->
 
     <!--
         This grid acts as a root panel for the page that defines two rows:
@@ -101,20 +102,22 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
             <TransitionCollection>
-                <EntranceThemeTransition/>
+                <EntranceThemeTransition />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="70" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!-- Back button and page title -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Button Command="{Binding GoBackCommand}"
                     Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -122,26 +125,53 @@
                     HorizontalAlignment="Center"
                     AutomationProperties.Name="Back"
                     AutomationProperties.AutomationId="BackButton"
-                    AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock Text="{Binding ApplicationName}" 
-                       Style="{StaticResource HeaderTextBlockStyle}" 
-                       Grid.Column="1" 
-                       IsHitTestVisible="false"
-                       TextWrapping="NoWrap" 
-                       VerticalAlignment="Center" 
-                       />
-            <userMenu:UserMenu Grid.Column="2"
-                               Margin="0,0,30,0"/>
+                    AutomationProperties.ItemType="Navigation Button" />
+            <Viewbox StretchDirection="DownOnly" MaxWidth="190" Grid.Column="1">
+                <TextBlock Text="{Binding ApplicationName}"
+                           Style="{StaticResource HeaderTextBlockStyle}"                           
+                           IsHitTestVisible="false"
+                           TextWrapping="NoWrap"
+                           VerticalAlignment="Center" />
+            </Viewbox>
+
+            <ScrollViewer Grid.Column="2"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollMode="Disabled"
+                          ZoomMode="Disabled"
+                          Margin="30,0,10,0">
+
+                <TextBlock VerticalAlignment="Center"
+                           Margin="0,20,0,10"
+                           FontSize="16"
+                           TextWrapping="Wrap"
+                           FontWeight="Light"
+                           Text="{Binding TaskDescription}" />
+            </ScrollViewer>
+
+            <userMenu:UserMenu Grid.Column="3"
+                               Margin="0,0,30,0" />
+
+            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                <AppBarToggleButton Icon="Comment"
+                                    Margin="-15,0,-15,0"                                    
+                                    IsEnabled="{Binding IsChatSupported}"
+                                    IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}" 
+                                    Visibility="{Binding IsChatSupported, Converter={StaticResource BooleanToVisibilityConverter}}"/>                
+                <AppBarToggleButton Icon="More"
+                                    Margin="-15,0,-15,0"             
+                                    Visibility="{Binding IsOwnerMode, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    IsChecked="{Binding IsCommandBarOpen, Mode=TwoWay}" />
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ContentControl Grid.Column="0" 
-                            Content="{Binding ApplicationViewModel}" 
+            <ContentControl Grid.Column="0"
+                            Content="{Binding ApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
@@ -204,39 +234,27 @@
                             Content="{Binding ChatApplicationViewModel}"
                             ContentTemplateSelector="{StaticResource ApplicationTemplateSelector}"
                             VerticalContentAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch" />            
+                            HorizontalContentAlignment="Stretch" />
         </Grid>
 
-        <Grid Grid.Row="1"
-              HorizontalAlignment="Right"
-              VerticalAlignment="Bottom"
-              Margin="0,0,30,30"
-              Width="250"
-              Height="80"
-              Visibility="{Binding IsChatNotificationVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Rectangle Fill="LightGoldenrodYellow"
-                       RadiusX="15"
-                       RadiusY="10"
-                       Stroke="#20000000"
-                       StrokeThickness="2" />
-            <Button Background="Transparent"
-                    Margin="8,4,8,4"
-                    Padding="4,0,4,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Top"
-                    BorderThickness="0"
-                    Command="{Binding ShowChatCommand}">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Upozornění"
-                               Foreground="Black"
-                               FontWeight="Bold" />
-                    <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
-                               TextWrapping="Wrap"
-                               Foreground="Black" />
-                </StackPanel>
-            </Button>
-        </Grid>
+        <control:NotificationControl
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,30,30"
+            Width="250"
+            Height="80"
+            IsVisible="{Binding IsChatNotificationVisible, Mode=TwoWay}"
+            Command="{Binding ShowChatCommand}">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Upozornění"
+                           Foreground="Black"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                           Foreground="Black"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </control:NotificationControl>
     </Grid>
 </Page>

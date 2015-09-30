@@ -27,8 +27,8 @@
         autoProcessQueue: true,
         paralelUploads: 5,
         previewsContainer: "#dropzoneFileFormPreview",
-        acceptedFiles: ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .mp3, .ogg, .wav",
-        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .mp3, .ogg, .wav",
+        acceptedFiles: ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
+        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
 
         init: function() {
             var fileDropzone = this;
@@ -74,7 +74,7 @@
         $("#processing").show();
 
         //TODO COMMENT THIS Line FOR MUSIC DISABLE
-        readyplayer.playVideo();
+        //readyplayer.playVideo();
 
 
         $.ajax({

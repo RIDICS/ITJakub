@@ -11,7 +11,7 @@ $(document).ready(() => {
         search.processSearch();
     }
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition,"Editions/Editions/GetSearchConfiguration");
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
 
@@ -114,14 +114,20 @@ $(document).ready(() => {
         });
     }
 
-    //var disabledOptions = new Array<SearchTypeEnum>();
-    //disabledOptions.push(SearchTypeEnum.Headword);
-    //disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    //disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Title);
+    enabledOptions.push(SearchTypeEnum.Author);
+    enabledOptions.push(SearchTypeEnum.Editor);
+    enabledOptions.push(SearchTypeEnum.Dating);
+    enabledOptions.push(SearchTypeEnum.Fulltext);
+    enabledOptions.push(SearchTypeEnum.TokenDistance);
+    enabledOptions.push(SearchTypeEnum.Heading);
+    enabledOptions.push(SearchTypeEnum.Sentence);
 
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
-    search.makeSearch();
+    search.makeSearch(enabledOptions);
 
+    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -138,8 +144,13 @@ $(document).ready(() => {
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
     };
+    callbackDelegate.dataLoadedCallback = () => {
+        var selectedIds = editionsSelector.getSelectedIds();
+        bookIds = selectedIds.selectedBookIds;
+        categoryIds = selectedIds.selectedCategoryIds;
+    };
 
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 });
 

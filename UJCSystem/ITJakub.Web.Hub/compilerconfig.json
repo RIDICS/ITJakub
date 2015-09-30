@@ -96,6 +96,10 @@
     "inputFile": "Content/bootstrap/bootstrap.less"
   },
   {
+    "outputFile": "Content/bootstrap/print.css",
+    "inputFile": "Content/bootstrap/print.less"
+  },
+  {
     "outputFile": "Content/Lemmatization/itjakub.lemmatization.css",
     "inputFile": "Content/Lemmatization/itjakub.lemmatization.less"
   }

@@ -7,12 +7,14 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
 {
     public class ListProcessor : ConcreteInstanceProcessorBase<BookContentItem>
     {
+        private readonly ItemProcessor m_itemProcessor;
 
-        public ListProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
+        public ListProcessor(XsltTransformationManager xsltTransformationManager, IKernel container, ItemProcessor itemProcessor)
             : base(xsltTransformationManager, container)
         {
+            m_itemProcessor = itemProcessor;
         }
-            
+
         protected override string NodeName
         {
             get { return "list"; }
@@ -24,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             {
                 return new List<ConcreteInstanceProcessorBase<BookContentItem>>
                 {
-                    Container.Resolve<ItemProcessor>()
+                    m_itemProcessor
                 };
             }
         }

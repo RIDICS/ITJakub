@@ -12,8 +12,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
     public abstract class ProcessorBase
     {
         private readonly XsltTransformationManager m_xsltTransformationManager;
+
         private bool m_initialized;
+
         private Dictionary<string, ProcessorBase> m_processors;
+
         protected readonly XNamespace XmlNamespace = "http://www.w3.org/XML/1998/namespace";
 
         protected ProcessorBase(XsltTransformationManager xsltTransformationManager, IKernel container)
@@ -23,15 +26,15 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
         }
 
         protected abstract string NodeName { get; }
+
         protected abstract IEnumerable<ProcessorBase> SubProcessors { get; }
+
         protected IKernel Container { get; private set; }
 
         public void Process(BookVersion bookVersion, XmlReader xmlReader)
         {
-            if (!m_initialized)
-            {
-                Init();
-            }
+            Init();
+
             PreprocessSetup(bookVersion);
             ProcessAttributes(bookVersion, xmlReader);
             ProcessElement(bookVersion, xmlReader);
@@ -39,6 +42,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 
         protected virtual void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
+            Init();
+
             while (xmlReader.Read())
             {
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
@@ -60,9 +65,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             return subtree;
         }
 
-        private void Init()
+        protected void Init()
         {
-            m_processors = GetProcessors();
+            if (!m_initialized)
+            {
+                InitializeProcessors();
+            }            
             m_initialized = true;
         }
 
@@ -82,9 +90,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             return enumInstance;
         }
 
-        private Dictionary<string, ProcessorBase> GetProcessors()
+        protected virtual void InitializeProcessors()
         {
-            return SubProcessors.ToDictionary(x => x.NodeName);
+            if(SubProcessors != null)
+                m_processors = SubProcessors.ToDictionary(x => x.NodeName);            
         }
 
         protected string GetAttributeValue(XElement pageElement, XName attributeName)

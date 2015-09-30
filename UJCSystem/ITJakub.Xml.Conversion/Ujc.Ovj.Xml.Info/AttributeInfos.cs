@@ -18,7 +18,14 @@ namespace Ujc.Ovj.Xml.Info
 			
 		}
 
-		public AttributeInfo GetAttributeByLocalName(string prefix, string name)
+	    public bool AttributeExists(string prefix, string name)
+	    {
+            var attribute = (from a in this
+                             where a.Prefix == prefix && a.LocalName == name
+                             select a).FirstOrDefault();
+	        return (attribute != null);
+	    }
+        public AttributeInfo GetAttributeByLocalName(string prefix, string name)
 		{
 			var attribute = (from a in this where a.Prefix == prefix && a.LocalName == name
 			select a).First();

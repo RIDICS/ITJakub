@@ -3,6 +3,7 @@
 *.DS_Store
 
 #Visual Studio files
+.vs
 *.[Oo]bj
 *.user
 *.aps
@@ -77,3 +78,6 @@ UJCSystem/ITJakub.Xml.Conversion/Ujc.Ovj.Ooxml.Conversion.Test/Data/Temp/
 #Less
 *.css
 *css.[Mm]ap
+
+#Store publish
+[Aa]ppPackages/

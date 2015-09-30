@@ -1,0 +1,92 @@
+﻿<Page
+    x:Class="ITJakub.MobileApps.Client.MainApp.View.TaskPreviewHostView"
+    DataContext="{Binding TaskPreviewHostViewModel, Source={StaticResource Locator}}"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
+    xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <template:TaskPreviewTemplateSelector x:Key="TaskPreviewTemplateSelector" />
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationToVisibilityConverter x:Key="BooleanNegationToVisibilityConverter" />
+    </Page.Resources>
+    
+    <!--<Page.BottomAppBar>
+        <CommandBar>
+        </CommandBar>
+    </Page.BottomAppBar>-->
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ProgressBar Grid.Row="0"
+                     IsIndeterminate="True"
+                     VerticalAlignment="Top"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        
+        <!-- Back button and page title -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding GoBackCommand}"
+                    Style="{StaticResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    AutomationProperties.Name="Back"
+                    AutomationProperties.AutomationId="BackButton"
+                    AutomationProperties.ItemType="Navigation Button"/>
+            <TextBlock Text="Náhled"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Grid.Column="1"
+                       IsHitTestVisible="false"
+                       TextWrapping="NoWrap"
+                       VerticalAlignment="Center"/>
+            
+            <TextBlock Grid.Column="2"
+                       Style="{StaticResource SubheaderTextBlockStyle}"
+                       VerticalAlignment="Center"
+                       Margin="40,-8,0,0">
+                <Run>Aplikace:</Run>
+                <Run Text="{Binding AppName}" />
+                <LineBreak />
+                <Run>Zadání:</Run>
+                <Run Text="{Binding TaskName}" />
+            </TextBlock>
+        </Grid>
+
+        <TextBlock Grid.Row="1"
+                   FontSize="20"
+                   FontWeight="Light"
+                   TextWrapping="Wrap"
+                   Margin="120,0,40,3">
+            <Run Text="Popis (zobrazovaný studentům): " />
+            <Run Text="{Binding TaskDescription}" />
+        </TextBlock>
+        
+        <ContentControl Grid.Row="2"
+                        Content="{Binding TaskPreviewViewModel}"
+                        ContentTemplateSelector="{StaticResource TaskPreviewTemplateSelector}"
+                        VerticalContentAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch" />
+        
+        <Grid Grid.Row="2"
+              Background="#20000000"
+              Visibility="{Binding IsLoaded, Converter={StaticResource BooleanNegationToVisibilityConverter}}"/>
+    </Grid>
+</Page>

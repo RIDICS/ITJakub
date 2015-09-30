@@ -2,7 +2,6 @@
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
-using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
@@ -10,16 +9,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
     public class CreateGroupViewModel : FlyoutBaseViewModel
     {
         private readonly IDataService m_dataService;
-        private readonly Action<Type> m_navigationAction;
+        private readonly Action m_submitAction;
         private readonly IErrorService m_errorService;
         private string m_newGroupName;
         private bool m_showError;
         private bool m_showNameEmptyError;
 
-        public CreateGroupViewModel(IDataService dataService, Action<Type> navigationAction, IErrorService errorService)
+        public CreateGroupViewModel(IDataService dataService, IErrorService errorService, Action submitAction = null)
         {
             m_dataService = dataService;
-            m_navigationAction = navigationAction;
+            m_submitAction = submitAction;
             m_errorService = errorService;
         }
 
@@ -52,13 +51,13 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 RaisePropertyChanged();
             }
         }
-        
+
         protected override void SubmitAction()
         {
             CreateNewGroup();
         }
 
-        private void CreateNewGroup()
+        protected virtual void CreateNewGroup()
         {
             ShowError = false;
             if (string.IsNullOrWhiteSpace(NewGroupName))
@@ -80,9 +79,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                         m_errorService.ShowConnectionError();
                     return;
                 }
-                
+
                 m_dataService.SetCurrentGroup(result.GroupId, GroupType.Owner);
-                m_navigationAction(typeof(GroupPageView));
+                if (m_submitAction != null)
+                    m_submitAction();
 
                 NewGroupName = string.Empty;
                 IsFlyoutOpen = false;

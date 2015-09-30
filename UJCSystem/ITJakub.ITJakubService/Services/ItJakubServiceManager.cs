@@ -4,7 +4,10 @@ using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -14,6 +17,8 @@ namespace ITJakub.ITJakubService.Services
 {
     public class ItJakubServiceManager : IItJakubService
     {
+        private readonly WindsorContainer m_container = Container.Current;
+
         private readonly UserManager m_userManager;
         private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
@@ -21,27 +26,25 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;        
-        private readonly WindsorContainer m_container = Container.Current;        
+        private readonly NewsManager m_newsManager;        
+ 
 
         public ItJakubServiceManager()
-        {
+        {            
             m_userManager = m_container.Resolve<UserManager>();
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
-            m_cardFileManager = m_container.Resolve<CardFileManager>();           
+            m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_newsManager = m_container.Resolve<NewsManager>();
+         
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             return m_authorManager.GetAllAuthors();
-        }
-
-        public int CreateAuthor(string name)
-        {
-            return m_authorManager.CreateAuthor(name);
         }
 
         public BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid)
@@ -69,10 +72,7 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookContent(bookGuid);
         }
 
-        public void AddResource(UploadResourceContract resourceInfoSkeleton)
-        {
-            m_resourceManager.AddResource(resourceInfoSkeleton);
-        }
+        
 
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
@@ -160,6 +160,10 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
+        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        {
+            return m_searchManager.GetTypeaheadTermsByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
+        }
 
         public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
@@ -197,15 +201,14 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.SearchCriteriaResultsCount(searchCriterias);
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
-            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat);
+            return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat, bookType);
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
-            OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
-            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat);
+            return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat, bookType);
         }
 
         public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
@@ -228,9 +231,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
         
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email);
+            m_feedbackManager.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
         }
         
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
@@ -239,9 +242,47 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.CreateAnonymousFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, name, email);
         }
 
-        public List<FeedbackContract> GetAllFeedback()
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
-            throw new System.NotImplementedException();
+            return m_feedbackManager.GetFeedbacks(feedbackSearchCriteria);
+        }
+
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
+        {
+            return m_feedbackManager.GetFeedbacksCount(feedbackSearchCriteria);
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            m_feedbackManager.DeleteFeedback(feedbackId);
+        }
+      
+
+        
+
+        public AudioBookSearchResultContractList GetAudioBooksSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBookSearchResults(searchCriterias);
+        }
+
+        public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
+        {
+            return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
+        }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
+        {
+            return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
+        }
+
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
+        }
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            return m_newsManager.GetWebNewsSyndicationItemCount();
         }
     }
 }

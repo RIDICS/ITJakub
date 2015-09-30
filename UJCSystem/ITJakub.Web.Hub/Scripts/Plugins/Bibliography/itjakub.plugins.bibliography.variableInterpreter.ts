@@ -136,6 +136,8 @@ class VariableInterpreter {
             return this.interpretArray(varName, interpretedVariable, variables, actualScopeObject);
         case "table":
             return this.interpretTable(varName, interpretedVariable, variables, actualScopeObject);
+        case "script":
+            return this.interpretScript(varName, interpretedVariable, variables, actualScopeObject);
         default:
             console.error("Variable with name " + varName + " does not have correct type");
             return "";
@@ -222,6 +224,29 @@ class VariableInterpreter {
         });
 
         return tableBuilder.build().outerHTML;
+    }
+
+    private interpretScript(varName: string, interpretedVariable: Object, variables: Object, scopedObject: Object): string {
+        var printIfNull: boolean = interpretedVariable["printIfNullValue"];
+        var replaceNullValueBy: string = interpretedVariable["replaceNullValueBy"];
+        var pattern: string = interpretedVariable["pattern"];
+        var actualScopedObject = this.resolveScope(interpretedVariable, scopedObject);
+        var interpretedScript = this.interpretPattern(varName, pattern, variables, actualScopedObject, false, "");
+        var patternResult = eval(interpretedScript);
+        if (typeof patternResult === "undefined" || patternResult === null || patternResult === "" || patternResult === "false" || patternResult === "0") {
+            if (printIfNull) {
+                if (typeof replaceNullValueBy !== "undefined" || replaceNullValueBy !== null) {
+                    return replaceNullValueBy;
+                } else {
+                    return patternResult;
+                }
+
+            } else {
+                return "";
+            }
+        }
+
+        return patternResult;
     }
 }
 

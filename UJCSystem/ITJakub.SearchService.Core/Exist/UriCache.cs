@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using ITJakub.SearchService.Core.Exist.Attributes;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -26,7 +27,7 @@ namespace ITJakub.SearchService.Core.Exist
                 m_uriTemplateDictionary.TryGetValue(methodName, out commInfo);
                 if (commInfo == null)
                 {
-                    var interfaceType = typeof (IExistClient);
+                    var interfaceType = typeof (IExistCommunicationManager);
                     var mInfo = interfaceType.GetMethod(methodName);
                     commInfo = m_methodInfoResolver.Resolve(mInfo);
                     AddCommunicationInfoForMethod(methodName, commInfo);
@@ -44,7 +45,8 @@ namespace ITJakub.SearchService.Core.Exist
 
     public class CommunicationInfo
     {
-        public string Method { get; set; }
+        public HttpMethodType Method { get; set; }
         public string UriTemplate { get; set; }
+        public string ContentTemplate { get; set; }
     }
 }

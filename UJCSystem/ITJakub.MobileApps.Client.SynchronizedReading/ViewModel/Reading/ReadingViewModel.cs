@@ -29,12 +29,15 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         private bool m_isPageNotFoundError;
         private bool m_isEnd;
         private bool m_isUpdateProgrammatically;
+        private bool m_isUpdateAnswer;
+        private bool m_isTextDisplayed;
 
         public ReadingViewModel(ReaderDataService dataService)
         {
             m_dataService = dataService;
             m_isPollingStarted = false;
 
+            m_isUpdateAnswer = true;
             m_updateSenderTimer = new DispatcherTimer();
             m_updateSenderTimer.Interval = new TimeSpan(0, 0, 0, 0, (int) PollingInterval.VeryFast);
             m_updateSenderTimer.Tick += (sender, o) => SendUpdate();
@@ -43,12 +46,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             ImageReaderViewModel = new ImageReaderViewModel();
             m_currentReader = new UserInfo();
 
+            IsTextDisplayed = true;
             PreviousPageCommand = new RelayCommand(() => JumpToPage(-1));
             NextPageCommand = new RelayCommand(() => JumpToPage(1));
             GoToPageCommand = new RelayCommand(GoToPage);
         }
         
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             UpdateMode();
             SetDataLoaded();
@@ -72,6 +76,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 LoadPage(); // don't wait for control update
             });
 
+            m_dataService.SetUserIsOwner(isUserOwner);
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
                 if (exception != null)
@@ -80,6 +85,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     return;
                 }
 
+                m_dataService.ErrorService.HideWarning();
                 CurrentReader = model.ReaderUser;
                 LoadPage();
             });
@@ -179,10 +185,33 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 
                 m_isPhotoDisplayed = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(() => IsTextAndPhotoDisplayed);
                 LoadPhoto();
+
+                if (!m_isPhotoDisplayed)
+                    IsTextDisplayed = true;
             }
         }
-        
+
+        public bool IsTextDisplayed
+        {
+            get { return m_isTextDisplayed; }
+            set
+            {
+                m_isTextDisplayed = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => IsTextAndPhotoDisplayed);
+
+                if (!m_isTextDisplayed)
+                    IsPhotoDisplayed = true;
+            }
+        }
+
+        public bool IsTextAndPhotoDisplayed
+        {
+            get { return m_isPhotoDisplayed && m_isTextDisplayed; }
+        }
+
         public ObservableCollection<PageViewModel> PageList
         {
             get { return m_pageList; }
@@ -259,7 +288,20 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
         public RelayCommand NextPageCommand { get; private set; }
 
         public RelayCommand GoToPageCommand { get; private set; }
-        
+
+
+        private bool IsTextUpdateNew(UpdateViewModel update)
+        {
+            return TextReaderViewModel.SelectionStart != update.SelectionStart ||
+                   TextReaderViewModel.SelectionLength != update.SelectionLength ||
+                   TextReaderViewModel.CursorPosition != update.CursorPosition;
+        }
+
+        private bool IsPhotoUpdateNew(UpdateViewModel update)
+        {
+            return !ImageReaderViewModel.PointerPositionX.Equals(update.ImageCursorPositionX) ||
+                   !ImageReaderViewModel.PointerPositionY.Equals(update.ImageCursorPositionY);
+        }
 
         private void ProcessPollingUpdate(UpdateViewModel update, Exception exception)
         {
@@ -268,12 +310,17 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 m_dataService.ErrorService.ShowConnectionWarning();
                 return;
             }
+            m_dataService.ErrorService.HideWarning();
 
-            TextReaderViewModel.SelectionStart = update.SelectionStart;
-            TextReaderViewModel.SelectionLength = update.SelectionLength;
-            TextReaderViewModel.CursorPosition = update.CursorPosition;
-
-            if (update.ContainsImageUpdate)
+            if (IsTextUpdateNew(update))
+            {
+                TextReaderViewModel.SelectionStart = update.SelectionStart;
+                TextReaderViewModel.SelectionLength = update.SelectionLength;
+                TextReaderViewModel.CursorPosition = update.CursorPosition;
+                IsTextDisplayed = true;
+            }
+            
+            if (update.ContainsImageUpdate && IsPhotoUpdateNew(update))
             {
                 ImageReaderViewModel.PointerPositionX = update.ImageCursorPositionX;
                 ImageReaderViewModel.PointerPositionY = update.ImageCursorPositionY;
@@ -284,9 +331,10 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
 
         private void SendUpdate()
         {
-            if (TextReaderViewModel.CurrentMode == ReaderRichEditBox.Modes.Reader)
+            if (TextReaderViewModel.CurrentMode == ReaderRichEditBox.Modes.Reader || !m_isUpdateAnswer)
                 return;
 
+            m_isUpdateAnswer = false;
             var updateViewModel = new UpdateViewModel
             {
                 SelectionStart = TextReaderViewModel.SelectionStart,
@@ -302,10 +350,16 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             }
 
             if (updateViewModel.Equals(m_lastUpdateViewModel))
+            {
+                m_isUpdateAnswer = true;
                 return;
-
+            }
+            
             m_lastUpdateViewModel = updateViewModel;
-            m_dataService.SendUpdate(updateViewModel, exception => { });
+            m_dataService.SendUpdate(updateViewModel, exception =>
+            {
+                m_isUpdateAnswer = true;
+            });
         }
 
         private void PassReadControl(ActionViewModel actionViewModel, UserInfo userInfo)
@@ -351,6 +405,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     if (exception is NotFoundException)
                     {
                         TextReaderViewModel.IsLoadError = true;
+                        IsPhotoDisplayed = true;
                     }
                     else
                     {

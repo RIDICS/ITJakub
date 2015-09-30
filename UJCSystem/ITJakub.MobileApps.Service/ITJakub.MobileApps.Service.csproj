@@ -155,6 +155,8 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
+    <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -175,6 +177,9 @@
       <Project>{8e467186-0805-4652-9319-98f6619492f8}</Project>
       <Name>ITJakub.MobileApps.DataEntities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

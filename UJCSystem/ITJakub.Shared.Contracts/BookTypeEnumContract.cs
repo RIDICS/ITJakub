@@ -10,8 +10,9 @@ namespace ITJakub.Shared.Contracts
         [EnumMember] Grammar = 2, //Mluvnice
         [EnumMember] ProfessionalLiterature = 3, //Odborna literatura
         [EnumMember] TextBank = 4, //Textova banka
-        [EnumMember] BibliographicalItem = 5,
-        [EnumMember] CardFile = 6,
-        
+        [EnumMember] BibliographicalItem = 5,   //Bibliograficky zaznam
+        [EnumMember] CardFile = 6,   //Kartoteka
+        [EnumMember] AudioBook = 7  //Audiokniha
+
     }
 }

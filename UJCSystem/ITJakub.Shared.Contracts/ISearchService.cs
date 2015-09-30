@@ -15,7 +15,10 @@ namespace ITJakub.Shared.Contracts
             OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        void UploadVersionFile(VersionResourceUploadContract versionResourceUploadContract);
+        void UploadVersionFile(VersionResourceUploadContract versionResource);
+
+        [OperationContract]
+        void UploadBibliographyFile(VersionResourceUploadContract bibliographyResource);
 
         [OperationContract]
         void UploadBookFile(BookResourceUploadContract contract);

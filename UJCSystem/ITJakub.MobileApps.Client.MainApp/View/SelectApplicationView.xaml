@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <CollectionViewSource x:Name="AppList" IsSourceGrouped="True" Source="{Binding AppList}" />
+        <CollectionViewSource x:Key="AppList" IsSourceGrouped="True" Source="{Binding AppList}" />
         <converter:ApplicationCategoryToNameConverter x:Key="ApplicationCategoryToNameConverter" />
     </Page.Resources>
 
@@ -62,12 +62,12 @@
                 <DataTemplate>
                     <StackPanel Orientation="Vertical"
                                 Width="200"
-                                Background="#22FFFFFF">
+                                Background="#30FFFFFF">
                         <Image Source="{Binding Icon}"
                                Width="128"
                                Height="128"
                                Margin="20" />
-                        <Grid Background="#3468CD"
+                        <Grid Background="#1956cd"
                               Height="50"
                               Margin="5">
                             <TextBlock Text="{Binding Name}"

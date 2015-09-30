@@ -22,33 +22,43 @@
     <property name="VersionId">
       <column name="VersionId" sql-type="varchar" not-null="true" />
     </property>
+    
     <property name="Title">
       <column name="Title" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="SubTitle">
       <column name="SubTitle" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
+    
     <property name="Description">
       <column name="Description" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="PublishPlace">
       <column name="PublishPlace" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="PublishDate">
       <column name="PublishDate" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="Copyright">
       <column name="Copyright" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="AvailabilityStatus">
       <column name="AvailabilityStatus" sql-type="smallint" not-null="false" />
     </property>
+    
     <property name="BiblText">
       <column name="BiblText" sql-type="varchar" not-null="false" />
     </property>
+    
     <property name="Acronym">
       <column name="Acronym" sql-type="varchar" not-null="false" />
     </property>
@@ -57,41 +67,65 @@
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
     </bag>
+    
     <bag name="Keywords" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="Keyword" />
     </bag>
+    
     <bag name="BookBibls" cascade="all-delete-orphan">
       <key column="BookVersion" />
       <one-to-many class="BookBibl" />
     </bag>
+    
     <bag name="BookPages" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
     </bag>
+    
     <bag name="BookContentItems" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookContentItem" />
     </bag>
+    
     <bag name="Authors" table="BookVersion_Author" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Author" column="Author" />
     </bag>
+    
     <bag name="Responsibles" table="BookVersion_Responsible" cascade="save-update" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Responsible" column="Responsible" />
     </bag>
+    
     <bag name="Transformations" table="BookVersion_Transformation" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Transformation" column="Transformation" />
     </bag>
+    
     <bag name="Categories" table="BookVersion_Category" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <many-to-many class="Category" column="Category" />
     </bag>
+    
     <bag name="BookHeadwords" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="BookHeadword" />
+    </bag>
+    
+    <bag name="Tracks" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <one-to-many class="Track" />
+    </bag>
+
+    <bag name="FullBookRecordings" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion"/>
+      <one-to-many class="FullBookRecording"/>
+    </bag>   
+    
+    <bag name="Accessories" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion"/>
+      <one-to-many class="BookAccessory"/>
     </bag>
     
   </class>

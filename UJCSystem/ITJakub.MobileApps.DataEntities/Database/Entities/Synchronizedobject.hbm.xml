@@ -30,11 +30,15 @@
       
     
     <subclass discriminator-value="1" name="SingleSynchronizedObject">
-      <property name="ObjectValue" />
-    </subclass>
+
+      <property name="ObjectValue" type="StringClob">
+        <column name="ObjectValue" sql-type="nvarchar(max)" not-null ="true"/>
+      </property>
+
+    </subclass>            
 
     <subclass discriminator-value="0" name="SynchronizedObject">
-      <property name="RowKey" />
+      <property name="ObjectExternalId" />
     </subclass>
   
   </class>

@@ -8,29 +8,28 @@ BEGIN TRAN
    --     Dictionary = 1,                //Slovnik
    --     Grammar = 2,                   //Mluvnice
    --     ProfessionalLiterature = 3,    //Odborna literatura
-   --     TextBank = 4,				 //Textova banka
+   --     TextBank = 4,					 //Textova banka
+   --     BibliographicalItem = 5,		 //Bibliograficke zaznamy
+   --     CardFile = 6,					 //Kartoteka
+   --     AudioBook = 7,				 //Audiokniha
 
 	  INSERT INTO [dbo].[BookType]
 	  (    
 	      [Type]	-- Type - smallint
 	  )
 	  VALUES
-	  (0),(1),(2),(3),(4)
+	  (0),(1),(2),(3),(4),(5),(6),(7)
 
-	  DECLARE @EditionTypeId INT
+	  DECLARE @EditionTypeId INT, @DictionaryTypeId INT, @GrammarTypeId INT, @ProfessionalLiteratureTypeId INT, @TextBankTypeId INT, @BibliographicalItemTypeId INT, @CardFileTypeId INT, @AudioBookTypeId INT
+
 	  SELECT @EditionTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=0
-
-	  DECLARE @DictionaryTypeId INT
 	  SELECT @DictionaryTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=1
-	  
-	  DECLARE @GrammarTypeId INT
 	  SELECT @GrammarTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=2
-	  
-	  DECLARE @ProfessionalLiteratureTypeId INT
 	  SELECT @ProfessionalLiteratureTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=3
-	  
-	  DECLARE @TextBankTypeId INT
 	  SELECT @TextBankTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=4
+	  SELECT @BibliographicalItemTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=5
+	  SELECT @CardFileTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=6
+	  SELECT @AudioBookTypeId = [Id] FROM [dbo].[BookType] WHERE [dbo].[BookType].[Type]=7
 
    --****** Output formats ********
    --Unknown = 0,
@@ -57,7 +56,10 @@ BEGIN TRAN
 	  ('dictionaryToHtml.xsl', 'def for dicts', 1, @DictionaryTypeId, 1, 2),	     -- Slovnik
 	  ('pageToHtml.xsl', 'def for paged', 1, @GrammarTypeId, 1, 2),			     -- Mluvnice
 	  ('pageToHtml.xsl', 'def for paged', 1, @ProfessionalLiteratureTypeId, 1, 2),	-- Odborna literatura
-	  ('pageToHtml.xsl', 'def for paged', 1, @TextBankTypeId, 1, 2)	-- Textova banka
+	  ('pageToHtml.xsl', 'def for paged', 1, @TextBankTypeId, 1, 2),				-- Textova banka
+	  ('pageToRtf.xsl', 'def for paged', 2, @EditionTypeId , 1, 2),
+	  ('pageToRtf.xsl', 'def for paged', 2, @GrammarTypeId , 1, 2),
+	  ('pageToRtf.xsl', 'def for paged', 2, @ProfessionalLiteratureTypeId , 1, 2)
 
 
 
@@ -76,7 +78,10 @@ BEGIN TRAN
 	  ('output-dictionary','Slovnik',NULL,@DictionaryTypeId,'/output-dictionary/'),
 	  ('output-text_bank','Textova banka',NULL,@TextBankTypeId,'/output-text_bank/'),
 	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId,'/output-scholary_literature/'),
-	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/')
+	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/'),
+	  ('output-bibliography','Bibliograficky zaznam',NULL,@BibliographicalItemTypeId,'/output-bibliography/'),
+	  ('output-cardfiles','Kartoteky',NULL,@CardFileTypeId,'/output-cardfiles/'),
+	  ('output-audiobooks','Audioknihy',NULL,@AudioBookTypeId,'/output-audiobooks/')
 	  
 
     INSERT INTO [dbo].[DatabaseVersion]

@@ -8,6 +8,8 @@
     xmlns:converter="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     xmlns:comboBoxItem="using:ITJakub.MobileApps.Client.MainApp.ViewModel.ComboBoxItem"
     xmlns:converter1="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -16,17 +18,7 @@
         <converter:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
         <converter1:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
-    
-    <Page.BottomAppBar>
-        <CommandBar>
-            <AppBarButton Icon="Refresh"
-                          Label="Aktualizovat seznam"
-                          Command="{Binding RefreshListCommand}" />
-            <AppBarButton Icon="Add"
-                          Label="Vytvořit"
-                          Command="{Binding CreateNewTaskCommand}" />
-        </CommandBar>
-    </Page.BottomAppBar>
+
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
@@ -37,6 +29,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         
         <!-- Back button and page title -->
@@ -82,7 +75,7 @@
         
         <GridView Grid.Row="1"
                   ItemsSource="{Binding Source={StaticResource TaskListViewSource}}"
-                  Padding="110,0,0,70"
+                  Padding="110,0,0,0"
                   IsItemClickEnabled="True"
                   SelectionMode="Single">
             
@@ -123,6 +116,12 @@
                     </StackPanel>
                 </DataTemplate>
             </GridView.ItemTemplate>
+
+            <interactivity:Interaction.Behaviors>
+                <core:EventTriggerBehavior EventName="ItemClick">
+                    <core:InvokeCommandAction Command="{Binding TaskClickCommand}" />
+                </core:EventTriggerBehavior>
+            </interactivity:Interaction.Behaviors>
         </GridView>
 
         <TextBlock Grid.Row="1"
@@ -130,5 +129,14 @@
                    Text="Nemáte vytvořené žádné zadání."
                    Style="{StaticResource SubheaderTextBlockStyle}"
                    Visibility="{Binding NoTask, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+        <CommandBar Grid.Row="2" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Refresh"
+                          Label="Aktualizovat seznam"
+                          Command="{Binding RefreshListCommand}" />
+            <AppBarButton Icon="Add"
+                          Label="Vytvořit"
+                          Command="{Binding CreateNewTaskCommand}" />
+        </CommandBar>
     </Grid>
 </Page>

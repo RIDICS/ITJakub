@@ -16,7 +16,7 @@ $(document).ready(() => {
         $(".twitter-typeahead").find(".tt-menu").hide();
     };
 
-    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition);
+    var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition, "Editions/Editions/GetListConfiguration");
 
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
         hideTypeahead();
@@ -120,24 +120,21 @@ $(document).ready(() => {
     }
 
 
-    var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Fulltext);
-    disabledOptions.push(SearchTypeEnum.Heading);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Sentence);
-    disabledOptions.push(SearchTypeEnum.TokenDistance);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Title);
+    enabledOptions.push(SearchTypeEnum.Author);
+    enabledOptions.push(SearchTypeEnum.Editor);
+    enabledOptions.push(SearchTypeEnum.Dating);
 
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
-    search.makeSearch(disabledOptions);
+    search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "Editions/Editions");
     typeaheadSearchBox.addDataSet("Title", "Název");
     typeaheadSearchBox.create();
     typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
-
+    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
@@ -158,8 +155,15 @@ $(document).ready(() => {
         typeaheadSearchBox.create();
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     };
+    callbackDelegate.dataLoadedCallback = () => {
+        var selectedIds = editionsSelector.getSelectedIds();
+        bookIds = selectedIds.selectedBookIds;
+        categoryIds = selectedIds.selectedCategoryIds;
+        search.processSearchQuery("%"); //search for all by default criteria (title)
+        search.writeTextToTextField("");
+    };
 
-    var editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
+    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
     editionsSelector.makeDropdown();
 
 
@@ -167,8 +171,6 @@ $(document).ready(() => {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
-    search.processSearchQuery("%"); //search for all by default criteria (title)
-    search.writeTextToTextField("");
 });
 
 

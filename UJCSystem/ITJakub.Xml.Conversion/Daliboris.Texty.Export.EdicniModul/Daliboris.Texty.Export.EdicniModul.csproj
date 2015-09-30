@@ -56,6 +56,10 @@
       <Project>{ee001376-f27f-4cf5-bca8-b25029b7d09c}</Project>
       <Name>Daliboris.Pomucky.Texty</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml.WordBreaker\Daliboris.Pomucky.Xml.WordBreaker.csproj">
+      <Project>{24155839-32ef-4bbb-8311-a04502e61864}</Project>
+      <Name>Daliboris.Pomucky.Xml.WordBreaker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
       <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
       <Name>Daliboris.Pomucky.Xml</Name>

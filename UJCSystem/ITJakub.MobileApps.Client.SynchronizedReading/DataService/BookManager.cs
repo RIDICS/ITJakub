@@ -59,5 +59,27 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         {
             m_bookDataService.GetPagePhoto(m_bookGuid, m_pageId, callback);
         }
+
+        public void GetBookInfo(Action<BookInfoViewModel, Exception> callback)
+        {
+            m_bookDataService.GetBookInfo(m_bookGuid, (book, exception) =>
+            {
+                if (exception != null)
+                {
+                    callback(null, exception);
+                }
+                else
+                {
+                    var bookInfoViewModel = new BookInfoViewModel
+                    {
+                        Authors = book.Authors,
+                        Guid = book.Guid,
+                        PublishDate = book.PublishDate,
+                        Title = book.Title
+                    };
+                    callback(bookInfoViewModel, null);
+                }
+            });
+        }
     }
 }

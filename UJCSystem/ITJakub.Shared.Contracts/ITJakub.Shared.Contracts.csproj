@@ -47,7 +47,14 @@
     <Compile Include="BookPageContract.cs" />
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
+    <Compile Include="News\NewsSyndicationItemContract.cs" />
+    <Compile Include="Notes\FeedbackCategoryEnumContract.cs" />
     <Compile Include="Notes\FeedbackContract.cs" />
+    <Compile Include="Notes\FeedbackCriteriaContract.cs" />
+    <Compile Include="Notes\FeedbackSortCriteriaContract.cs" />
+    <Compile Include="Notes\FeedbackSortEnum.cs" />
+    <Compile Include="Searching\Criteria\TermsSettingsContract.cs" />
+    <Compile Include="Searching\Results\AudioBookSearchResultContract.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContractList.cs" />
     <Compile Include="Searching\Results\HeadwordContract.cs" />
@@ -90,6 +97,7 @@
     <Compile Include="Searching\Results\SearchResultContract.cs" />
     <Compile Include="Searching\Results\SearchResultContractList.cs" />
     <Compile Include="Searching\Results\VerseResultContext.cs" />
+    <Compile Include="UserContract.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

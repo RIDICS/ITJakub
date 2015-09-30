@@ -18,7 +18,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public SimpleCrosswordsViewModel SimpleCrosswordsViewModel { get; set; }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             m_dataService.GetGuessHistory((list, exception) =>
             {
@@ -45,6 +45,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                     m_dataService.ErrorService.ShowConnectionWarning();
                     return;
                 }
+                m_dataService.ErrorService.HideWarning();
 
                 SimpleCrosswordsViewModel.UpdateProgress(list);
                 m_dataService.GetIsWin(isWin => SimpleCrosswordsViewModel.SetWin(isWin));
@@ -53,9 +54,10 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void SetTask(string data)
         {
-            m_dataService.SetTaskAndGetConfiguration(data, crosswordRowViewModels =>
+            m_dataService.SetTask(data);
+            m_dataService.GetConfiguration(crosswordRowViewModels =>
             {
-                SimpleCrosswordsViewModel.Crossword = crosswordRowViewModels;
+                SimpleCrosswordsViewModel.SetCrossword(crosswordRowViewModels);
             });
         }
 

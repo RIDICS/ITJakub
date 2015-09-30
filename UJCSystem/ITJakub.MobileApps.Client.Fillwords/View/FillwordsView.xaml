@@ -31,7 +31,7 @@
         <control:RichEditComboBox Grid.Row="0"
                                   Grid.Column="0"
                                   Grid.RowSpan="2"
-                                  Margin="120,10,10,10"
+                                  Margin="90,10,10,10"
                                   MinWidth="300"
                                   IsAnsweringAllowed="{Binding IsOver, Converter={StaticResource BooleanNegationConverter}}"
                                   DocumentRtf="{Binding TaskDocumentRtf}"

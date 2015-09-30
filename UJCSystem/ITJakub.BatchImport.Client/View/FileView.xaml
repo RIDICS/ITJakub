@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="ITJakub.BatchImport.Client.View.FileView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ITJakub.BatchImport.Client.View"
+             xmlns:viewModel="clr-namespace:ITJakub.BatchImport.Client.ViewModel"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:converters="clr-namespace:ITJakub.BatchImport.Client.View.Converters"
+             mc:Ignorable="d"              
+             d:DesignWidth="200"
+             d:DataContext="{d:DesignInstance Type=viewModel:FileViewModel}">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converters:FileStateToProgressbarVisibilityConverter x:Key="FileStateToProgressbarVisibility"/>
+            <converters:FileStateToIconConverter x:Key="FileStateToIconConverter"
+                                                 PendingIcon="{StaticResource appbar_add}"
+                                                 UploadingIcon="{StaticResource appbar_clipboard_file}"
+                                                 ProcessingIcon="{StaticResource appbar_progress}"
+                                                 DoneIcon="{StaticResource appbar_database_sql}"
+                                                 ErrorIcon="{StaticResource appbar_checkmark_cross}"/>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="45"/>         
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="12"/>
+        </Grid.RowDefinitions>
+        
+        <Rectangle Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Margin="5,2,5,2">
+            <Rectangle.Fill> 
+                <VisualBrush Stretch="Uniform"                             
+                             Visual="{Binding State, Converter={StaticResource FileStateToIconConverter} }" />
+
+                <!--StaticResource appbar_clipboard_file}-->
+            </Rectangle.Fill>
+
+        </Rectangle>
+        
+        <Label Grid.Column="0" Grid.Row="2" Content="{Binding State}" FontSize="8" Padding="0" HorizontalContentAlignment="Center" />
+         
+        <Label Grid.Column="1" Grid.Row="0" Content="{Binding FileName}" FontSize="16" />
+        <Label Grid.Column="1" Grid.Row="1" Content="{Binding FullPath}" FontSize="10" FontStyle="Italic" Foreground="LightSteelBlue" />
+        <controls:MetroProgressBar Grid.Column="1" Grid.Row="2" IsIndeterminate="True" Visibility="{Binding State, Converter= {StaticResource FileStateToProgressbarVisibility}}" />
+    </Grid>
+</UserControl>

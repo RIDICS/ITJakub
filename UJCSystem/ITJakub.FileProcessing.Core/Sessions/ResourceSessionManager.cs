@@ -70,7 +70,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
         {
             ResourceSessionDirector director = GetDirectorBySessionId(resourceInfoSkeleton.SessionId);
 
-            director.AddResource(resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
+            director.AddResourceAndFillResourceTypeByExtension(resourceInfoSkeleton.FileName, resourceInfoSkeleton.Data);
         }
 
         private ResourceSessionDirector GetDirectorBySessionId(string sessionId)

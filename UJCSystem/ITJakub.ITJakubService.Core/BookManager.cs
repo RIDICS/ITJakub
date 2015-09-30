@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.ServiceModel;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -114,7 +117,7 @@ namespace ITJakub.ITJakubService.Core
             return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
@@ -122,13 +125,30 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
 
+            var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
             var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookGuid);
-            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType);
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
             var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
+        }
+
+        public BookContract GetBookInfoMobile(string bookGuid)
+        {
+            var bookVersion = m_bookVersionRepository.GetBookVersionWithAuthorsByGuid(bookGuid);
+            if (bookVersion == null)
+                throw new FaultException("Not found");
+
+            var bookContract = Mapper.Map<BookContract>(bookVersion);
+            return bookContract;
+        }
+
+        public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)
+        {
+            var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
+            return Mapper.Map<IList<TermContract>>(terms);
         }
     }
 }

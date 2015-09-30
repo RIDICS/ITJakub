@@ -5,12 +5,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:core="using:ITJakub.MobileApps.Client.Core"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
     mc:Ignorable="d">
     
     <Page.Resources>
-        <core:EditorTemplateSelector x:Key="EditorTemplateSelector" />
+        <template:EditorTemplateSelector x:Key="EditorTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Page.Resources>
 

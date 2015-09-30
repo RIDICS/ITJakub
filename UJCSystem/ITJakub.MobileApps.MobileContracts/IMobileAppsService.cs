@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
+using ITJakub.MobileApps.MobileContracts.News;
 
 namespace ITJakub.MobileApps.MobileContracts
 {
     [ServiceContract]
-    public interface IMobileAppsService
+    public interface IMobileAppsService:INewsService
     {
         [OperationContract]
         IList<BookContract> GetBookList(BookTypeContract category);
@@ -21,5 +22,8 @@ namespace ITJakub.MobileApps.MobileContracts
 
         [OperationContract]
         Stream GetPagePhoto(string bookGuid, string pageId);
+
+        [OperationContract]
+        BookContract GetBookInfo(string bookGuid);     
     }
 }

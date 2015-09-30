@@ -1,4 +1,5 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.FeedbackViewModel
+@section styles{
     @Styles.Render("~/itjakub/tools/css")
 }
 @section scripts{
@@ -11,4 +12,67 @@
 
 <div class="content-container">
     <h1>Připomínky</h1>
+
+    <p>
+        Na této stránce nám můžete napsat své připomínky k provozu či k informacím <i>Vokabuláře webového</i>. Pro připomínky ke konkrétním částem <i>Vokabuláře webového</i> (např. slovníkům, edicím, mluvnicím, korpusu atd.) používejte laskavě <i>Připomínek</i> na stranách jednotlivých typů informačních zdrojů.
+    </p>
+    <p>
+        Pokud si přejete, abychom na Vaši připomínku odpověděli, uveďte tuto skutečnost v textu Vaší zprávy a vyplňte laskavě kolonku <i>Jméno</i> a <i>E-mail</i>. Vynasnažíme se, abychom na Vaši připomínku reagovali co nejdříve. Upozorňujeme, že <b>neřešíme domácí úkoly a další školní práce</b>. V těchto případech Vám může pomoci dostupná <a href='@Url.Action("Index", "ProfessionalLiterature", "ProfessionalLiterature")'>odborná literatura</a> či <a href='@Url.Action("Links", "Home", "")'>další zdroje</a>. Pokud má Vaše připomínka charakter dotazu, upozorňujeme, že <b>odpovědi na dotazy v Ústavu pro jazyk český AV ČR mohou být zpoplatněny.</b>
+    </p>
+    <p>
+        <a href="http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/">Provozovatel</a> stránek si vyhrazuje právo nereagovat na připomínky, které jsou pro provoz <i>Vokabuláře webového</i> zcela nepřínosné či které jsou v rozporu s dobrými mravy.
+    </p>
+
+    <p>
+        @using (Html.BeginForm("Feedback", "Tools", new { }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.TextAreaFor(m => m.Text, new { @class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..." })
+            </div>
+
+            <div class="text-area-info" style="float: right;margin-right:140px;">
+                Max. <span class="text-area-max-chars"></span> znaků <br />
+                Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br />
+                Můžete používat diakritiku
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
+                <div class="col-md-3">
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
+                <div class="col-md-3">
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Odeslat" class="btn btn-default" style="margin-left: 900px;">
+            </div>
+        }
+    </p>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var maxChars = $(".feedback-text-area").attr("data-val-maxlength-max");
+        $(".text-area-max-chars").html(maxChars);
+        $(".text-area-remaining-chars").html(maxChars);
+
+        $(".feedback-text-area").keyup(function () {
+            var text = $(this).val();
+            var actualCharsRemaining = maxChars - text.length;
+            if (actualCharsRemaining < 0) {
+                actualCharsRemaining = 0;
+                $(this).val(text.substring(0,maxChars));
+            }
+            $(".text-area-remaining-chars").html(actualCharsRemaining);
+        });
+
+    });
+</script>

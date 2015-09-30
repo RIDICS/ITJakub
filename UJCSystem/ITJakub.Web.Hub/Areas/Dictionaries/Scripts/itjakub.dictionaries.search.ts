@@ -48,14 +48,17 @@ class DictionarySearch {
     }
 
     create() {
-        var disabledOptions = new Array<SearchTypeEnum>();
-        disabledOptions.push(SearchTypeEnum.Fulltext);
-        disabledOptions.push(SearchTypeEnum.TokenDistance);
-        disabledOptions.push(SearchTypeEnum.Sentence);
-        disabledOptions.push(SearchTypeEnum.Heading);
+        var enabledOptions = new Array<SearchTypeEnum>();
+        enabledOptions.push(SearchTypeEnum.Headword);
+        enabledOptions.push(SearchTypeEnum.HeadwordDescription);
+        enabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
+        enabledOptions.push(SearchTypeEnum.Author);
+        enabledOptions.push(SearchTypeEnum.Dating);
+        enabledOptions.push(SearchTypeEnum.Editor);
+        enabledOptions.push(SearchTypeEnum.Title);
 
         this.dictionarySelector.makeDropdown();
-        this.search.makeSearch(disabledOptions);
+        this.search.makeSearch(enabledOptions);
 
         this.typeaheadSearchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
         this.typeaheadSearchBox.create();
@@ -292,6 +295,8 @@ class DictionaryViewerTextWrapper {
         if (this.selectedIds.isOnlyRootSelected)
             this.selectedIds.selectedCategoryIds = [];
 
+        $("#search-headword-count").text("");
+        $("#search-fulltext-count").text("");
         this.headwordViewer.showLoading();
         this.fulltextViewer.showLoading();
         $.ajax({
@@ -305,15 +310,40 @@ class DictionaryViewerTextWrapper {
             },
             dataType: "json",
             contentType: "application/json",
-            success: (response: IHeadwordSearchResult) => {
-                this.hideMainLoadingBar();
-                $("#search-headword-count").text(response.HeadwordCount);
-                $("#search-fulltext-count").text(response.FulltextCount);
-                this.tabs.showBasic();
-                this.headwordViewer.createViewer(response.HeadwordCount, this.loadHeadwords.bind(this), this.pageSize, text);
-                this.fulltextViewer.createViewer(response.FulltextCount, this.loadFulltextHeadwords.bind(this), this.pageSize, text);
+            success: (resultCount: number) => {
+                this.showBasicTabsAndCount("#search-headword-count", resultCount);
+                this.headwordViewer.createViewer(resultCount, this.loadHeadwords.bind(this), this.pageSize, text);
+            },
+            error: () => {
+                this.showBasicTabsAndCount("#search-headword-count", "!");
             }
         });
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Dictionaries/Dictionaries/SearchBasicFulltextResultsCount",
+            data: {
+                text: text,
+                selectedBookIds: this.selectedIds.selectedBookIds,
+                selectedCategoryIds: this.selectedIds.selectedCategoryIds
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (resultCount: number) => {
+                this.showBasicTabsAndCount("#search-fulltext-count", resultCount);
+                this.fulltextViewer.createViewer(resultCount, this.loadFulltextHeadwords.bind(this), this.pageSize, text);
+            },
+            error: () => {
+                this.showBasicTabsAndCount("#search-fulltext-count", "!");
+            }
+        });
+    }
+
+    private showBasicTabsAndCount(container: string, count: string|number|boolean) {
+        this.hideMainLoadingBar();
+        $(container).text(count);
+        this.tabs.showBasic();
     }
 
     private loadHeadwords(pageNumber: number) {
@@ -361,9 +391,4 @@ class DictionaryViewerTextWrapper {
         $(".dictionary-result-word-search-description").removeClass("hidden");
         $("#main-loader").addClass("hidden");
     }
-}
-
-interface IHeadwordSearchResult {
-    HeadwordCount: number;
-    FulltextCount: number;
 }

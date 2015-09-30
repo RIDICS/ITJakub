@@ -15,7 +15,10 @@ namespace ITJakub.MobileApps.Client.Shared.Converter
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
-            throw new InvalidOperationException("Conversion back is not supported");
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException("The target must be a bool");
+
+            return !(bool)value;
         }
     }
 }

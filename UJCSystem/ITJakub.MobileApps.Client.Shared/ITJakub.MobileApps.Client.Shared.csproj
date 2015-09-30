@@ -105,15 +105,22 @@
   <ItemGroup>
     <Compile Include="ApplicationBase.cs" />
     <Compile Include="Communication\IErrorService.cs" />
+    <Compile Include="Control\BehaviorBase.cs" />
+    <Compile Include="Control\CloseFlyoutAction.cs" />
     <Compile Include="Control\ErrorBar.cs" />
     <Compile Include="Control\ErrorBarView.xaml.cs">
       <DependentUpon>ErrorBarView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\Expander.cs" />
     <Compile Include="Control\FocusableBehavior.cs" />
+    <Compile Include="Control\PasswordBoxBehaviors.cs" />
+    <Compile Include="Control\ScaleHelper.cs" />
     <Compile Include="Converter\BooleanNegationToVisibilityConverter.cs" />
     <Compile Include="Enum\SynchronizationType.cs" />
+    <Compile Include="Template\DataTemplateCreator.cs" />
     <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="Message\AppActionFinishedMessage.cs" />
+    <Compile Include="ViewModel\AdminBaseViewModel.cs" />
     <Compile Include="ViewModel\ApplicationBaseViewModel.cs" />
     <Compile Include="Communication\ClientCommunicationException.cs" />
     <Compile Include="Communication\IPollingService.cs" />
@@ -138,22 +145,30 @@
     <Compile Include="MobileApplicationAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\ErrorBarViewModel.cs" />
+    <Compile Include="ViewModel\TaskPreviewBaseViewModel.cs" />
     <Compile Include="ViewModel\SupportAppBaseViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.0.2.32240, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.0.2.32242, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=7a953f43091b5a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xaml.Interactivity">
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft SDKs\Windows\v8.1\ExtensionSDKs\BehaviorsXamlSDKManaged\12.0\References\CommonConfiguration\Neutral\Microsoft.Xaml.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="WinRTXamlToolkit">
+      <HintPath>..\packages\WinRTXamlToolkit.1.6.1.3\lib\netcore451\WinRTXamlToolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +176,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Control\ErrorBarView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

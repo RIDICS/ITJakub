@@ -1,5 +1,14 @@
 ﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
-    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0]);
+
+
+    function readerPageChangedCallback(pageXmlId: string) {
+        updateQueryStringParameter("page", pageXmlId);
+    }
+
+    var readerPanels = [ReaderPanelEnum.TextPanel, ReaderPanelEnum.ImagePanel, ReaderPanelEnum.ContentPanel, ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel];
+    var panelButtons = [PanelButtonEnum.Close, PanelButtonEnum.Pin, PanelButtonEnum.ToNewWindow];
+
+    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, panelButtons, panelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     var search: Search;
 
@@ -64,7 +73,7 @@
         });
     }
 
-    function pageClickCallback(pageNumber: number) {
+    function paginatorPageClickCallback(pageNumber: number) {
         
         readerPlugin.searchPanelClearResults();
         readerPlugin.searchPanelShowLoading();
@@ -89,7 +98,7 @@
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", text);
-                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);
             }
         });
 
@@ -118,7 +127,7 @@
             contentType: 'application/json',
             success: response => {
                 updateQueryStringParameter("searchText", json);
-                readerPlugin.setResultsPaging(response["count"], pageClickCallback);
+                readerPlugin.setResultsPaging(response["count"], paginatorPageClickCallback);
             }
         });
 
@@ -139,15 +148,13 @@
 
 
     search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
-    var disabledOptions = new Array<SearchTypeEnum>();
-    disabledOptions.push(SearchTypeEnum.Author);
-    disabledOptions.push(SearchTypeEnum.Dating);
-    disabledOptions.push(SearchTypeEnum.Editor);
-    disabledOptions.push(SearchTypeEnum.Headword);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescription);
-    disabledOptions.push(SearchTypeEnum.HeadwordDescriptionTokenDistance);
-    disabledOptions.push(SearchTypeEnum.Title);
-    search.makeSearch(disabledOptions);
+    var enabledOptions = new Array<SearchTypeEnum>();
+    enabledOptions.push(SearchTypeEnum.Fulltext);
+    enabledOptions.push(SearchTypeEnum.TokenDistance);
+    enabledOptions.push(SearchTypeEnum.Sentence);
+    enabledOptions.push(SearchTypeEnum.Heading);
+
+    search.makeSearch(enabledOptions);
 
     if (typeof searchedText !== "undefined" && searchedText !== null) {
         var decodedText = decodeURIComponent(searchedText);
@@ -162,7 +169,7 @@
     }
 }
 
-function listBook(target) {
+function listBookReadClicked(target) {
     var bookId = $(target).parents("li.list-item").attr("data-bookid");
     if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
         window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
@@ -170,4 +177,9 @@ function listBook(target) {
         window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId;
     }
     
+}
+
+function searchBookReadClicked(target) {
+    var bookId = $(target).parents("li.list-item").attr("data-bookid");
+    window.location.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
 }

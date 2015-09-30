@@ -24,9 +24,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             get { return m_errorService; }
         }
 
-        public void CreateTask(string taskName, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
+        public void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
         {
-            m_taskManager.CreateTask(taskName, bookRtfContent, optionsList, callback);
+            m_taskManager.CreateTask(taskName, taskDescription, bookRtfContent, optionsList, callback);
         }
 
         public void SetTaskAndGetData(string data, Action<TaskViewModel> callback)
@@ -62,6 +62,11 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         public void GetAnswers(Action<IList<AnswerViewModel>, Exception> callback)
         {
             m_progressManager.GetAnswers(callback);
+        }
+
+        public void ResetLastRequestTime()
+        {
+            m_taskManager.ResetLastRequestTime();
         }
     }
 }

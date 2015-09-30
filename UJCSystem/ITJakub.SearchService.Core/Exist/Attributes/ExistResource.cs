@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.SearchService.Core.Exist.Attributes

@@ -70,7 +70,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// </summary>
 		public Func<string, List<VersionInfoSkeleton>> GetVersionList { get; set; }
 
-	    
+	    public string OutputDirectoryPath { get; set; }
 
 	    #endregion
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using GalaSoft.MvvmLight.Messaging;
+using ITJakub.MobileApps.Client.Books.Message;
 
 namespace ITJakub.MobileApps.Client.Books.Service
 {
@@ -47,6 +49,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
             {
                 m_parent.Child = null;
                 m_currentPageType = null;
+                Messenger.Default.Send(new CloseBookSelectAppMessage());
             }
         }
 

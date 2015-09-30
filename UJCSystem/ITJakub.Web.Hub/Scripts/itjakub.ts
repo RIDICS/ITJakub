@@ -35,16 +35,20 @@ function updateQueryStringParameter(key, value) {
     var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
     var separator = uri.indexOf('?') !== -1 ? "&" : "?";
     if (uri.match(re)) {
-        history.pushState(null,null,uri.replace(re, '$1' + key + "=" + encodeURIComponent(value) + '$2'));
+        history.replaceState(null,null,uri.replace(re, '$1' + key + "=" + encodeURIComponent(value) + '$2'));
     }
     else {
-        history.pushState(null, null,uri + separator + key + "=" + encodeURIComponent(value));
+        history.replaceState(null, null,uri + separator + key + "=" + encodeURIComponent(value));
     }
 }
 
 function getBaseUrl() {
     var baseUrl = $("#baseUrl").data("path");
     return baseUrl;
+}
+
+function convertDate(date: string): Date {
+    return new Date(parseInt(date.substr(6)));
 }
 
 // jQuery case-insensitive contains

@@ -1,6 +1,12 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.Shared.Contracts.Notes;
+using FeedbackSortEnum = ITJakub.DataEntities.Database.Entities.Enums.FeedbackSortEnum;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -15,9 +21,9 @@ namespace ITJakub.ITJakubService.Core
             m_userRepository = userRepository;
             m_feedbackRepository = feedbackRepository;
             m_bookVersionRepository = bookVersionRepository;
-        }        
+        }
 
-        public void CreateFeedback(string note, string username)
+        public void CreateFeedback(string note, string username, FeedbackCategoryEnumContract feedbackCategory)
         {
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username is empty, cannot add bookmark");
@@ -26,13 +32,20 @@ namespace ITJakub.ITJakubService.Core
             if (user == null)
                 throw new ArgumentException(string.Format("Cannot locate user by username: '{0}'", username));
 
-            Feedback entity = new Feedback {CreateDate = DateTime.UtcNow, Text = note, User = user};
+            Feedback entity = new Feedback {CreateDate = DateTime.UtcNow, Text = note, User = user, Category = (FeedbackCategoryEnum) feedbackCategory};
             m_feedbackRepository.Save(entity);
         }
 
-        public void CreateAnonymousFeedback(string feedback, string name, string email)
+        public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
-            Feedback entity = new Feedback { CreateDate = DateTime.UtcNow, Text = feedback, Name = name, Email = email};
+            Feedback entity = new Feedback
+            {
+                CreateDate = DateTime.UtcNow,
+                Text = feedback,
+                Name = name,
+                Email = email,
+                Category = (FeedbackCategoryEnum) feedbackCategory
+            };
             m_feedbackRepository.Save(entity);
         }
 
@@ -46,7 +59,8 @@ namespace ITJakub.ITJakubService.Core
                 Text = feedback,
                 Name = name,
                 Email = email,
-                BookHeadword = headwordEntity
+                BookHeadword = headwordEntity,
+                Category = FeedbackCategoryEnum.Dictionaries
             };
             m_feedbackRepository.Save(entity);
         }
@@ -62,16 +76,38 @@ namespace ITJakub.ITJakubService.Core
 
             BookHeadword headwordEntity = m_bookVersionRepository.GetFirstHeadwordInfo(bookXmlId, entryXmlId, versionXmlId);
             if (headwordEntity == null)
-                throw new ArgumentException(string.Format("Cannot find headword with bookId: {0}, versionId: {1}, entryXmlId: {2}", bookXmlId, versionXmlId, entryXmlId));
-            
+                throw new ArgumentException(string.Format("Cannot find headword with bookId: {0}, versionId: {1}, entryXmlId: {2}", bookXmlId, versionXmlId,
+                    entryXmlId));
+
             HeadwordFeedback entity = new HeadwordFeedback
             {
                 CreateDate = DateTime.UtcNow,
                 Text = feedback,
                 BookHeadword = headwordEntity,
-                User = user
+                User = user,
+                Category = FeedbackCategoryEnum.Dictionaries
             };
             m_feedbackRepository.Save(entity);
+        }
+
+        public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
+        {
+            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
+            var sortCriteria = feedbackSearchCriteria.SortCriteria;
+            var feedbacks = m_feedbackRepository.GetFeedbacks(categories, (FeedbackSortEnum) sortCriteria.SortByField, sortCriteria.SortAsc,
+                feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
+            return Mapper.Map<List<FeedbackContract>>(feedbacks);
+        }
+
+        public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
+        {
+            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
+            return m_feedbackRepository.GetFeedbacksCount(categories);
+        }
+
+        public void DeleteFeedback(long feedbackId)
+        {
+            m_feedbackRepository.DeleteFeedback(feedbackId);
         }
     }
 }

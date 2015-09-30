@@ -47,6 +47,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private TaskViewModel m_currentTask;
         private bool m_isClosed;
         private bool m_isCommunicationStopped;
+        private string m_taskDescription;
+        private bool m_isChatNotificationVisible;
 
         public ApplicationHostViewModel(IDataService dataService, INavigationService navigationService, IMainPollingService pollingService, IErrorService errorService)
         {
@@ -76,7 +78,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_groupInfo = new GroupInfoViewModel
                 {
                     GroupId = groupId,
-                    GroupType = GroupType.Owner
+                    GroupType = groupType
                 };
 
                 m_pollingService.RegisterForGetGroupState(GroupStatePollingInterval, groupId, GroupStateUpdate);
@@ -111,7 +113,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             if (exception != null)
                 m_errorService.ShowConnectionWarning();
             else
-                DispatcherHelper.CheckBeginInvokeOnUI(() => MemberList = m_groupInfo.Members);
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    MemberList = m_groupInfo.Members;
+                    m_errorService.HideWarning();
+                });
         }
 
         private void StopCommunication()
@@ -145,7 +151,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 m_errorService.ShowConnectionWarning();
                 return;
             }
-
+            
             if (m_isCommunicationStopped)
             {
                 return;
@@ -153,6 +159,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
             DispatcherHelper.CheckBeginInvokeOnUI(() =>
             {
+                m_errorService.HideWarning();
                 m_groupInfo.State = state;
                 GroupStateUpdate();
             });
@@ -227,7 +234,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ChatApplicationViewModel = chat.ApplicationViewModel as SupportAppBaseViewModel;
                     if (ChatApplicationViewModel != null)
                     {
-                        ChatApplicationViewModel.InitializeCommunication();
+                        ChatApplicationViewModel.InitializeCommunication(IsOwnerMode);
                     }
                 }
 
@@ -245,8 +252,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 return;
             }
 
+            TaskDescription = m_currentTask.Description;
             ApplicationViewModel.SetTask(m_currentTask.Data);
-            ApplicationViewModel.InitializeCommunication();
+            ApplicationViewModel.InitializeCommunication(IsOwnerMode);
             
             m_isAppStarted = true;
             GroupStateUpdate();
@@ -260,6 +268,16 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_applicationName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string TaskDescription
+        {
+            get { return m_taskDescription; }
+            set
+            {
+                m_taskDescription = value;
                 RaisePropertyChanged();
             }
         }
@@ -373,13 +391,18 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             {
                 m_unreadMessageCount = value;
                 RaisePropertyChanged();
-                RaisePropertyChanged(() => IsChatNotificationVisible);
+                IsChatNotificationVisible = m_unreadMessageCount > 0;
             }
         }
 
         public bool IsChatNotificationVisible
         {
-            get { return m_unreadMessageCount > 0; }
+            get { return m_isChatNotificationVisible && m_isChatSupported; }
+            set
+            {
+                m_isChatNotificationVisible = value;
+                RaisePropertyChanged();
+            }
         }
 
         public ObservableCollection<GroupMemberViewModel> MemberList

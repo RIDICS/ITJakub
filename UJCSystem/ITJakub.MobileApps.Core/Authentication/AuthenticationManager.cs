@@ -48,20 +48,8 @@ namespace ITJakub.MobileApps.Core.Authentication
 
         public void AuthenticateByProvider(UserLogin userLoginInfo, User dbUser)
         {
-            IAuthProvider authProvider = m_authDirector.GetProvider(userLoginInfo.AuthProviderContract);
-            AuthenticateResultInfo authResult = authProvider.Authenticate(userLoginInfo.AuthenticationToken, dbUser.Email);
 
-            if (authResult == null || authResult.Result == AuthResultType.Failed)
-                throw new WebFaultException(HttpStatusCode.Unauthorized)
-                {
-                    Source = "Users e-mail is not valid."
-                };
-
-
-            dbUser.AvatarUrl = authResult.UserImageLocation;
-
-            if (authProvider.IsExternalProvider)
-                dbUser.AuthenticationProviderToken = userLoginInfo.AuthenticationToken;
+            AuthenticateUserAccount(userLoginInfo.AuthProviderContract, userLoginInfo.AuthenticationToken, dbUser);
         }
 
         public void AuthenticateUserAccount(AuthProvidersContract provider, string providerToken, User user)
