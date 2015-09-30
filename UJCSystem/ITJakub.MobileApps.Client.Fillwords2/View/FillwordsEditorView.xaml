@@ -168,54 +168,77 @@
                             Orientation="Vertical"
                             Width="270"
                             x:Name="FlyoutContent">
-                    <TextBlock Text="Nové slovo:"
+                    <TextBlock Text="Vyberte část slova:"
                                FontSize="15" />
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
 
-                        <control:SubmitTextBox Grid.Column="0"
-                                               Text="{Binding NewOption, Mode=TwoWay}"
-                                               EnterCommand="{Binding AddNewOptionCommand}" />
-                        <Button Grid.Column="1"
-                                Content="Přidat"
-                                Command="{Binding AddNewOptionCommand}" />
-                    </Grid>
-                    <TextBlock Text="Zadané slovo už v seznamu existuje."
-                               FontSize="12"
-                               Margin="0,3,0,0"
-                               Foreground="LightCyan"
-                               Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <control1:SelectableRichEditBox
+                        ScrollViewer.HorizontalScrollMode="Enabled"
+                        ScrollViewer.VerticalScrollMode="Disabled"
+                        ScrollViewer.ZoomMode="Disabled"
+                        DataContext="{Binding SelectedOption}"
+                        DocumentRtf="{Binding SelectedWord}"
+                        SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                        SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
+                        SelectedText="{Binding SelectedText, Mode=TwoWay}"
+                        IsSelectedTextHighlighted="{Binding IsSelectedTextHighlighted, Mode=TwoWay}"
+                        SelectionChangedCommand="{Binding SelectionChangedCommand}" />
 
-                    <TextBlock Margin="0,17,0,0"
-                               FontSize="14"
-                               FontWeight="SemiBold"
-                               Text="Správná odpověď:" />
+                    <StackPanel Orientation="Vertical"
+                                Visibility="{Binding SelectedOption.IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Vertical"
+                                    DataContext="{Binding SelectedOption.CurrentOption.AnswerTypeViewModel}">
+                            <RadioButton IsChecked="{Binding IsNoAnswer, Mode=TwoWay}">
+                                <TextBlock Text="Žádná možnost" />
+                            </RadioButton>
+                            <RadioButton IsChecked="{Binding IsFill, Mode=TwoWay}">
+                                <TextBlock Text="Doplňování čehokoliv" />
+                            </RadioButton>
+                            <RadioButton IsChecked="{Binding IsSelect, Mode=TwoWay}">
+                                <TextBlock Text="Výběr z možností" />
+                            </RadioButton>
+                        </StackPanel>
 
-                    <Grid HorizontalAlignment="Stretch"
-                          Background="#90FFFFFF"
-                          Height="30"
-                          Margin="0,0,22,0">
+                        <Grid Margin="0,10,0,0"
+                              DataContext="{Binding SelectedOption.CurrentOption}"
+                              Visibility="{Binding AnswerTypeViewModel.IsSelect, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
 
-                        <Grid Background="#28008000">
-                            <TextBlock Grid.Column="0"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left"
-                                       TextTrimming="CharacterEllipsis"
-                                       TextAlignment="Center"
-                                       Foreground="Black"
+                            <control:SubmitTextBox Grid.Row="0"
+                                                   Grid.Column="0"
+                                                   MaxLength="1"
+                                                   Text="{Binding NewOption, Mode=TwoWay}"
+                                                   EnterCommand="{Binding AddNewOptionCommand}" />
+                            <Button Grid.Row="0"
+                                    Grid.Column="1"
+                                    Content="Přidat"
+                                    Command="{Binding AddNewOptionCommand}" />
+
+                            <TextBlock Grid.Row="1"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
+                                       Text="Zadané slovo už v seznamu existuje."
+                                       FontSize="12"
+                                       Margin="0,3,0,0"
+                                       Foreground="LightCyan"
+                                       Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                            <TextBlock Grid.Row="2"
+                                       Grid.Column="0"
+                                       Grid.ColumnSpan="2"
                                        FontSize="14"
-                                       Margin="5,0,0,0"
-                                       Text="{Binding SelectedText}" />
+                                       Margin="0,17,0,0"
+                                       FontWeight="SemiBold"
+                                       Text="Špatné odpovědi:" />
                         </Grid>
-                    </Grid>
-
-                    <TextBlock FontSize="14"
-                               Margin="0,17,0,0"
-                               FontWeight="SemiBold"
-                               Text="Špatné odpovědi:" />
+                    </StackPanel>
 
                 </StackPanel>
 
@@ -225,9 +248,11 @@
                           Margin="-5,0,0,10"
                           SelectionMode="None"
                           IsItemClickEnabled="False"
-                          ItemsSource="{Binding SelectedOption.List}"
+                          
                           Width="280"
-                          Background="#10FFFFFF">
+                          Background="#10FFFFFF"
+                          DataContext="{Binding SelectedOption.CurrentOption}"
+                          Visibility="{Binding AnswerTypeViewModel.IsSelect, Converter={StaticResource BooleanToVisibilityConverter}}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Grid Background="#90FFFFFF">
@@ -244,7 +269,7 @@
                                                MaxLines="1"
                                                Foreground="Black"
                                                TextTrimming="CharacterEllipsis"
-                                               Text="{Binding Word}" />
+                                               Text="{Binding Letters}" />
                                     <Button Grid.Column="1"
                                             Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
                                             CommandParameter="{Binding}"

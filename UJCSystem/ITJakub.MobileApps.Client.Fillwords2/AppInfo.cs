@@ -10,6 +10,7 @@ using ITJakub.MobileApps.Client.Shared.ViewModel;
 
 namespace ITJakub.MobileApps.Client.Fillwords2
 {
+    [MobileApplication(ApplicationType.Fillwords2)]
     public class AppInfo : ApplicationBase
     {
         private readonly FillwordsDataService m_dataService;

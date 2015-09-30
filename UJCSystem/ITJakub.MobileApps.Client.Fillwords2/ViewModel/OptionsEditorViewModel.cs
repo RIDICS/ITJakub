@@ -8,10 +8,10 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 {
     public class OptionsEditorViewModel : ViewModelBase
     {
-        private readonly Dictionary<int, OptionsViewModel> m_wordOptionsList;
+        private readonly Dictionary<int, WordOptionsViewModel> m_wordOptionsList;
         private bool m_showOptionExistsInfo;
         private string m_newOption;
-        private OptionsViewModel m_selectedOption;
+        private WordOptionsViewModel m_selectedOption;
         private string m_selectedText;
         private bool m_setSelectedTextHighlighted;
         private int m_selectionStart;
@@ -20,14 +20,14 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 
         public OptionsEditorViewModel()
         {
-            m_wordOptionsList = new Dictionary<int, OptionsViewModel>();
+            m_wordOptionsList = new Dictionary<int, WordOptionsViewModel>();
 
             AddNewOptionCommand = new RelayCommand(AddNewOption);
-            DeleteCommand = new RelayCommand<OptionViewModel>(DeleteOption);
+            DeleteCommand = new RelayCommand<LetterOptionViewModel>(DeleteOption);
             SelectionChangedCommand = new RelayCommand(SelectionChanged);
         }
 
-        public Dictionary<int, OptionsViewModel> WordOptionsList
+        public Dictionary<int, WordOptionsViewModel> WordOptionsList
         {
             get
             {
@@ -56,7 +56,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             }
         }
 
-        public OptionsViewModel SelectedOption
+        public WordOptionsViewModel SelectedOption
         {
             get { return m_selectedOption; }
             private set
@@ -119,43 +119,45 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 
         public RelayCommand AddNewOptionCommand { get; private set; }
 
-        public RelayCommand<OptionViewModel> DeleteCommand { get; private set; }
+        public RelayCommand<LetterOptionViewModel> DeleteCommand { get; private set; }
 
         public RelayCommand SelectionChangedCommand { get; private set; }
         
+
+
 
         private void AddNewOption()
         {
             if (NewOption == string.Empty)
                 return;
 
-            if (SelectedOption.List == null)
+            if (SelectedOption.Options == null)
             {
-                SelectedOption.List = new ObservableCollection<OptionViewModel>();
+                SelectedOption.Options = new ObservableCollection<LetterOptionViewModel>();
                 SetSelectedTextHighlighted = true;
             }
 
-            if (SelectedOption.List.Any(model => model.Word == NewOption))
+            if (SelectedOption.Options.Any(model => model.Letters == NewOption))
             {
                 ShowOptionExistsInfo = true;
             }
             else
             {
-                var newOptionViewModel = new OptionViewModel { Word = NewOption };
+                var newOptionViewModel = new LetterOptionViewModel { Letters = NewOption };
 
-                SelectedOption.List.Add(newOptionViewModel);
+                SelectedOption.Options.Add(newOptionViewModel);
                 ShowOptionExistsInfo = false;
                 NewOption = string.Empty;
             }
         }
 
-        private void DeleteOption(OptionViewModel option)
+        private void DeleteOption(LetterOptionViewModel letterOption)
         {
-            SelectedOption.List.Remove(option);
+            SelectedOption.Options.Remove(letterOption);
 
-            if (SelectedOption.List.Count == 0)
+            if (SelectedOption.Options.Count == 0)
             {
-                SelectedOption.List = null;
+                SelectedOption.Options = null;
                 SetSelectedTextHighlighted = false;
             }
         }
@@ -165,7 +167,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             if (SelectedOption == null)
                 return;
             
-            if (SelectedOption.List == null)
+            if (SelectedOption.Options == null)
             {
                 m_wordOptionsList.Remove(SelectedOption.WordPosition);
             }
@@ -181,9 +183,11 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             UpdateWordOptionsList();
             IsSelected = !string.IsNullOrEmpty(SelectedText);
 
-            SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
-                ? m_wordOptionsList[SelectionStart]
-                : new OptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart};
+            //SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
+            //    ? m_wordOptionsList[SelectionStart]
+            //    : new WordOptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart};
+            //todo
+            SelectedOption = new WordOptionsViewModel(SelectedText, SelectionStart);
         }
 
         public void Reset()
