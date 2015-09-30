@@ -285,9 +285,6 @@ namespace ITJakub.Web.Hub
             }
         }
 
-
-       
-
         public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
             try

@@ -217,6 +217,12 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
 
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId);
+
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId);
+
         #endregion
 
         #region News

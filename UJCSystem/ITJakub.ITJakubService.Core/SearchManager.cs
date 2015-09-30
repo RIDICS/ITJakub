@@ -73,31 +73,6 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<CategoryContract>>(categories);
         }
 
-        public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId)
-        {
-            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
-            m_authorizationManager.FilterBooksByGroup(groupId, ref books);
-            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
-
-            return new CategoryContentContract
-            {
-                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
-                Categories = Mapper.Map<IList<CategoryContract>>(categories)
-            };
-        }
-
-        public CategoryContentContract GetAllCategoryContent(int categoryId)        //TODO add check on special rule (admin role)
-        {
-            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
-            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
-
-            return new CategoryContentContract
-            {
-                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
-                Categories = Mapper.Map<IList<CategoryContract>>(categories)
-            };
-        }
-
         private string EscapeQuery(string query)
         {
             return query.Replace("[", "[[]");

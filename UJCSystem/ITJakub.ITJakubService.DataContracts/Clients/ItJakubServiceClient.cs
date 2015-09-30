@@ -24,6 +24,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 m_log.DebugFormat("MainServiceClient created.");
         }
 
+        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
+        }
+
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
         {
             try
@@ -1313,9 +1318,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-
-        public
-            IList<GroupContract> GetGroupsByUser(int userId)
+        public IList<GroupContract> GetGroupsByUser(int userId)
         {
             try
             {
@@ -1656,9 +1659,58 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        private string GetCurrentMethod([CallerMemberName] string methodName = null)
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
         {
-            return methodName;
+            try
+            {
+                return Channel.GetSpecialPermissionsForUser(userId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
         }
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        {
+            try
+            {
+                return Channel.GetSpecialPermissionsForGroup(groupId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
     }
 }

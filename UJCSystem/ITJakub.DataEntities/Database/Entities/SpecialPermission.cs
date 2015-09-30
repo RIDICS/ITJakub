@@ -41,8 +41,13 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual bool CanManagePermissions { get; set; }
     }
 
-    public class AddNewsPermission : SpecialPermission
+    public class NewsPermission : SpecialPermission
     {
         public virtual bool CanAddNews { get; set; }
+    }
+
+    public class FeedbackPermission : SpecialPermission
+    {
+        public virtual bool CanManageFeedbacks { get; set; }
     }
 }

@@ -25,9 +25,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly FeedbackManager m_feedbackManager;
         private readonly PermissionManager m_permissionManager;
         private readonly UserManager m_userManager;    
-        private readonly NewsManager m_newsManager;        
- 
-
+        private readonly NewsManager m_newsManager;
 
         public ItJakubServiceManager()
         {            
@@ -65,12 +63,12 @@ namespace ITJakub.ITJakubService.Services
 
         public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId)
         {
-            return m_searchManager.GetCategoryContentForGroup(groupId, categoryId);
+            return m_permissionManager.GetCategoryContentForGroup(groupId, categoryId);
         }
 
         public CategoryContentContract GetAllCategoryContent(int categoryId)
         {
-            return m_searchManager.GetAllCategoryContent(categoryId);
+            return m_permissionManager.GetAllCategoryContent(categoryId);
         }
 
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
@@ -87,8 +85,6 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_bookManager.GetBookContent(bookGuid);
         }
-
-        
 
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
@@ -246,6 +242,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_searchManager.GetCorpusSearchResults(searchCriterias);
         }
+
         public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             return m_searchManager.GetCorpusSearchResultsCount(searchCriterias);
@@ -348,15 +345,25 @@ namespace ITJakub.ITJakubService.Services
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
         }
 
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        {
+            return m_permissionManager.GetSpecialPermissionsForGroup(groupId);
+        }
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
+        {
+            return m_permissionManager.GetSpecialPermissionsForUser(userId);
+        }
+
         public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
         {
             return m_newsManager.GetWebNewsSyndicationItems(start, count);
         }
 
-
         public int GetWebNewsSyndicationItemCount()
         {
             return m_newsManager.GetWebNewsSyndicationItemCount();
         }
+
     }
 }

@@ -14,13 +14,15 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly FeedbackRepository m_feedbackRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly UserRepository m_userRepository;
 
-        public FeedbackManager(UserRepository userRepository, FeedbackRepository feedbackRepository, BookVersionRepository bookVersionRepository)
+        public FeedbackManager(UserRepository userRepository, FeedbackRepository feedbackRepository, BookVersionRepository bookVersionRepository, AuthorizationManager authorizationManager)
         {
             m_userRepository = userRepository;
             m_feedbackRepository = feedbackRepository;
             m_bookVersionRepository = bookVersionRepository;
+            m_authorizationManager = authorizationManager;
         }
 
         public void CreateFeedback(string note, string username, FeedbackCategoryEnumContract feedbackCategory)
@@ -92,6 +94,7 @@ namespace ITJakub.ITJakubService.Core
 
         public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
+            m_authorizationManager.CheckUserCanManageFeedbacks();
             var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
             var sortCriteria = feedbackSearchCriteria.SortCriteria;
             var feedbacks = m_feedbackRepository.GetFeedbacks(categories, (FeedbackSortEnum) sortCriteria.SortByField, sortCriteria.SortAsc,
@@ -101,12 +104,14 @@ namespace ITJakub.ITJakubService.Core
 
         public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
+            m_authorizationManager.CheckUserCanManageFeedbacks();
             var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
             return m_feedbackRepository.GetFeedbacksCount(categories);
         }
 
         public void DeleteFeedback(long feedbackId)
         {
+            m_authorizationManager.CheckUserCanManageFeedbacks();
             m_feedbackRepository.DeleteFeedback(feedbackId);
         }
     }

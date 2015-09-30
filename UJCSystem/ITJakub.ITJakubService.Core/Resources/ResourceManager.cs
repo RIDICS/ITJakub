@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ITJakub.Shared.Contracts.Resources;
+﻿using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Core.Resources
 {
     public class ResourceManager
     {
         private readonly FileProcessingServiceClient m_resourceClient;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public ResourceManager(FileProcessingServiceClient resourceClient)
+        public ResourceManager(FileProcessingServiceClient resourceClient, AuthorizationManager authorizationManager)
         {
             m_resourceClient = resourceClient;
+            m_authorizationManager = authorizationManager;
         }
 
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
+            m_authorizationManager.CheckUserCanUploadBook();
             m_resourceClient.AddResource(resourceInfoSkeleton);
         }
 
         public bool ProcessSession(string resourceSessionId, string uploadMessage)
         {
+            m_authorizationManager.CheckUserCanUploadBook();
             return m_resourceClient.ProcessSession(resourceSessionId, uploadMessage);
         }
     }

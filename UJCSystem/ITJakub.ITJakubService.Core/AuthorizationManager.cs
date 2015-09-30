@@ -15,10 +15,10 @@ namespace ITJakub.ITJakubService.Core
         private readonly PermissionRepository m_permissionRepository;
         private readonly UserRepository m_userRepository;
 
-        public AuthorizationManager(UserRepository mUserRepository, PermissionRepository mPermissionRepository)
+        public AuthorizationManager(UserRepository userRepository, PermissionRepository permissionRepository)
         {
-            m_userRepository = mUserRepository;
-            m_permissionRepository = mPermissionRepository;
+            m_userRepository = userRepository;
+            m_permissionRepository = permissionRepository;
         }
 
         public User GetCurrentUser()
@@ -33,6 +33,52 @@ namespace ITJakub.ITJakubService.Core
 
             return user;
         }
+
+        public void CheckUserCanAddNews()
+        {
+            var user = GetCurrentUser();
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var newsPermissions = specialPermissions.OfType<NewsPermission>();
+            if (!newsPermissions.Any(x => x.CanAddNews))
+            {
+                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to add news", user.UserName));
+            }
+
+        }
+
+        public void CheckUserCanManageFeedbacks()
+        {
+            var user = GetCurrentUser();
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var feedbackPermissions = specialPermissions.OfType<FeedbackPermission>();
+            if (!feedbackPermissions.Any(x => x.CanManageFeedbacks))
+            {
+                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to manage feedbacks", user.UserName));
+            }
+
+        } 
+
+        public void CheckUserCanManagePermissions()
+        {
+            var user = GetCurrentUser();
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var managePermissionsPermissions = specialPermissions.OfType<ManagePermissionsPermission>();
+            if (!managePermissionsPermissions.Any(x => x.CanManagePermissions))
+            {
+                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to manage permissions", user.UserName));
+            }
+        } 
+
+        public void CheckUserCanUploadBook()
+        {
+            var user = GetCurrentUser();
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
+            if (!uploadBookPermissions.Any(x => x.CanUploadBook))
+            {
+                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to upload books", user.UserName));
+            }
+        } 
 
         public void AuthorizeBook(string bookXmlId)
         {

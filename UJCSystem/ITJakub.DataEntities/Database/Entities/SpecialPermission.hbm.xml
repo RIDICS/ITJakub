@@ -34,11 +34,20 @@
       
     </subclass>
     
-    <subclass name="AddNewsPermission"
-      discriminator-value="AddNews">
+    <subclass name="NewsPermission"
+      discriminator-value="NewsPermission">
 
       <property name="CanAddNews">
         <column name="CanAddNews" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="FeedbackPermission"
+      discriminator-value="FeedbackPermission">
+
+      <property name="CanManageFeedbacks">
+        <column name="CanManageFeedbacks" sql-type="bit" not-null="true" />
       </property>
       
     </subclass>

@@ -88,17 +88,9 @@ namespace ITJakub.ITJakubService.Services
             m_feedbackManager.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
         }
 
-
-
         #endregion
 
-
-        #region News
-
-        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
-        {
-            return m_newsManager.GetWebNewsSyndicationItems(start, count);
-        }
+        #region news
 
         public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {

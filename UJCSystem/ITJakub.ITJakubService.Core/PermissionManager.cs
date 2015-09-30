@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
@@ -53,6 +52,7 @@ namespace ITJakub.ITJakubService.Core
 
         public GroupDetailContract CreateGroup(string groupName, string description)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var user = m_authorizationManager.GetCurrentUser();
 
             var group = new Group
@@ -77,12 +77,14 @@ namespace ITJakub.ITJakubService.Core
 
         public void DeleteGroup(int groupId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var group = m_permissionRepository.FindGroupById(groupId);
             m_permissionRepository.Delete(group);
         }
 
         public void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var group = m_permissionRepository.FindGroupById(groupId);
 
             var allBookIds = new List<long>();
@@ -123,13 +125,11 @@ namespace ITJakub.ITJakubService.Core
                 }
 
             }
-
-            
-            
         }
 
         public void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var allBookIds = new List<long>();
 
             if (categoryIds != null && categoryIds.Count > 0)
@@ -149,6 +149,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void RemoveUserFromGroup(int userId, int groupId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var group = m_permissionRepository.FindGroupById(groupId);
             var user = m_userRepository.FindById(userId);
 
@@ -168,6 +169,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void AddUserToGroup(int userId, int groupId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var group = m_permissionRepository.FindGroupById(groupId);
             var user = m_userRepository.FindById(userId);
 
@@ -178,6 +180,45 @@ namespace ITJakub.ITJakubService.Core
 
             group.Users.Add(user);
             m_permissionRepository.Save(group);
+        }
+
+        public CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
+            m_authorizationManager.FilterBooksByGroup(groupId, ref books);
+            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
+
+            return new CategoryContentContract
+            {
+                Books = Mapper.Map<IList<BookContract>>(books),
+                Categories = Mapper.Map<IList<CategoryContract>>(categories)
+            };
+        }
+
+        public CategoryContentContract GetAllCategoryContent(int categoryId)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
+            var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
+
+            return new CategoryContentContract
+            {
+                Books = Mapper.Map<IList<BookContract>>(books),
+                Categories = Mapper.Map<IList<CategoryContract>>(categories)
+            };
+        }
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
+        {
+            var specPermissions = m_permissionRepository.GetSpecialPermissionsByUser(userId);
+            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+        }
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
+        {
+            var specPermissions = m_permissionRepository.GetSpecialPermissionsByGroup(groupId);
+            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
     }
 }

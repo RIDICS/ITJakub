@@ -224,5 +224,41 @@ namespace ITJakub.DataEntities.Database.Repositories
                 }
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<SpecialPermission> GetSpecialPermissionsByUser(int userId)
+        {
+            using (var session = GetSession())
+            {
+                SpecialPermission specPermissionAlias = null;
+                Group groupAlias = null;
+                User userAlias = null;
+
+                var permissions = session.QueryOver(() => specPermissionAlias)
+                    .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
+                    .JoinQueryOver(x => groupAlias.Users, () => userAlias)
+                    .Where(() => userAlias.Id == userId)
+                    .List<SpecialPermission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<SpecialPermission> GetSpecialPermissionsByGroup(int groupId)
+        {
+            using (var session = GetSession())
+            {
+                SpecialPermission specPermissionAlias = null;
+                Group groupAlias = null;
+
+                var permissions = session.QueryOver(() => specPermissionAlias)
+                    .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
+                    .Where(() => groupAlias.Id == groupId)
+                    .List<SpecialPermission>();
+
+                return permissions;
+            }
+        }
     }
 }
