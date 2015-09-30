@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
-    [KnownType(typeof(AddNewsPermissionContract))]
+    [KnownType(typeof(NewsPermissionContract))]
     [KnownType(typeof(UploadBookPermissionContract))]
     [KnownType(typeof(ManagePermissionsPermissionContract))]
     [KnownType(typeof(FeedbackPermissionContract))]
@@ -22,7 +22,7 @@ namespace ITJakub.Shared.Contracts
     }
 
     [DataContract]
-    public class AddNewsPermissionContract: SpecialPermissionContract
+    public class NewsPermissionContract: SpecialPermissionContract
     {
         [DataMember]
         public bool CanAddNews { get; set; }

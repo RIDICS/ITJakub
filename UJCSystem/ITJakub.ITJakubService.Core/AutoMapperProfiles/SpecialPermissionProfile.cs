@@ -11,7 +11,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<UploadBookPermission, UploadBookPermissionContract>()
                 .ForMember(dest => dest.CanUploadBook, opts => opts.MapFrom(src => src.CanUploadBook));
 
-            CreateMap<NewsPermission, AddNewsPermissionContract>()
+            CreateMap<NewsPermission, NewsPermissionContract>()
                 .ForMember(dest => dest.CanAddNews, opts => opts.MapFrom(src => src.CanAddNews));
 
             CreateMap<ManagePermissionsPermission, ManagePermissionsPermissionContract>()
