@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Web;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
-using ITJakub.Shared.Contracts.News;
-using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 
@@ -16,7 +12,7 @@ namespace ITJakub.Web.Hub.Controllers
     public class NewsController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        
+
 
         // GET: News
         public ActionResult Index()
@@ -24,17 +20,17 @@ namespace ITJakub.Web.Hub.Controllers
             //return View();
             return null;
         }
-        
+
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult Feed(string feedType, string feedCount = "10")
-        {            
+        {
             FeedType ft;
             if (!Enum.TryParse(feedType, true, out ft))
             {
                 throw new ArgumentException("Unknown feed type");
             }
-            int count = Convert.ToInt32(feedCount);
+            var count = Convert.ToInt32(feedCount);
             if (count <= 0)
             {
                 throw new ArgumentException("Invalid feed count");
@@ -54,7 +50,7 @@ namespace ITJakub.Web.Hub.Controllers
                     syndicationItem.Authors.Add(person);
 
                     items.Add(syndicationItem);
-                }                
+                }
             }
 
             if (ft == FeedType.Rss)
@@ -66,12 +62,12 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItems(int start, int count)
-        {      
+        {
             using (var client = new ItJakubServiceClient())
             {
-                List<NewsSyndicationItemContract> feeds = client.GetWebNewsSyndicationItems(start, count);
+                var feeds = client.GetWebNewsSyndicationItems(start, count);
                 return Json(feeds, JsonRequestBehavior.AllowGet);
-            }         
+            }
         }
 
         [HttpGet]
@@ -80,12 +76,10 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = new ItJakubServiceClient())
             {
-                int feedCount = client.GetWebNewsSyndicationItemCount();
+                var feedCount = client.GetWebNewsSyndicationItemCount();
                 return Json(feedCount, JsonRequestBehavior.AllowGet);
             }
         }
-
-
 
 
         public ActionResult Add()
@@ -94,24 +88,23 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
 
-
-        [HttpPost]        
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;            
+            var username = HttpContext.User.Identity.Name;
 
-                using(var client = new ItJakubServiceEncryptedClient())
-                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url,model.ItemType, username);
+            using (var client = new ItJakubServiceEncryptedClient())
+                client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, model.ItemType, username);
 
 
-            return Json(new { });
+            return Json(new {});
         }
     }
 
     public enum FeedType
     {
         Rss,
-        Atom,
+        Atom
     }
 }

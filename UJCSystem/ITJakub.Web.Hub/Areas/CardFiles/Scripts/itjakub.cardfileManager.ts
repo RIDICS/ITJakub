@@ -465,10 +465,10 @@ class CardFileViewer {
     private makeSlider(pageControlsDiv: HTMLDivElement) {
         var actualCardPosition: number = 0;
         var sliderDiv: HTMLDivElement = document.createElement("div");
-        $(sliderDiv).addClass("slider");
+        $(sliderDiv).addClass("slider");        
         $(sliderDiv).slider({
             min: 0,
-            max: this.actualBucket.getCardsCount()-1,
+            max: this.actualBucket.getCardsCount() - 1,
             value: actualCardPosition,
             start: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
