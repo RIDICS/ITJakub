@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Jewelery;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -82,6 +83,7 @@ namespace ITJakub.Web.Hub.Identity
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
             var result = await base.CreateIdentityAsync(user, authenticationType);
+            result.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
             return result;
         }
     }

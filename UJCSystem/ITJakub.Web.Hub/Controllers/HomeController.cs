@@ -1,7 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Security.Claims;
+using System.Web;
+using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -9,6 +14,12 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
         private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
+
+        private ApplicationUserManager UserManager
+        {
+            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+        }
+
 
         public ActionResult Index()
         {
@@ -31,7 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
-            var username = HttpContext.User.Identity.Name;
+            var username = User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
                 return View();
@@ -52,7 +63,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public  ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            var username = User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
                 m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);

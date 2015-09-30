@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.WebPages;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
@@ -105,7 +104,8 @@ namespace ITJakub.Web.Hub.Identity
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
+                    PasswordHash = user.PasswordHash,
+                    CommunicationToken = user.CommunicationToken
                 };
                 var result = m_serviceEncryptedClient.CreateUser(userContract);
                 user.Id = result.Id.ToString();
@@ -137,7 +137,8 @@ namespace ITJakub.Web.Hub.Identity
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
+                    PasswordHash = user.PasswordHash,
+                    CommunicationToken = user.CommunicationToken
                 };
             });
 
@@ -158,7 +159,8 @@ namespace ITJakub.Web.Hub.Identity
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
+                    PasswordHash = user.PasswordHash,
+                    CommunicationToken = user.CommunicationToken
                 };
             });
             return await task;

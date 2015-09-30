@@ -229,6 +229,7 @@
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Identity\CustomClaimType.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />

@@ -27,5 +27,8 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public string PasswordHash { get; set; }
+
+        [DataMember]
+        public string CommunicationToken { get; set; }
     }
 }

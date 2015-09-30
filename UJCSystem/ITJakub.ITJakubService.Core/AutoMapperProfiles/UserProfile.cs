@@ -15,6 +15,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(m => m.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(m => m.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
+                .ForMember(m => m.CommunicationToken, opt => opt.MapFrom(src => src.CommunicationToken))
                 .ForMember(m => m.Groups, opt => opt.MapFrom(src => src.Groups));
 
             CreateMap<User, UserContract>()
@@ -23,7 +24,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.FirstName, opt => opt.MapFrom(src => src.FirstName))
                 .ForMember(m => m.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(m => m.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(m => m.CreateTime, opt => opt.MapFrom(src => src.CreateTime));
+                .ForMember(m => m.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
+                .ForMember(m => m.CommunicationToken, opt => opt.MapFrom(src => src.CommunicationToken));
         }
     }
 }
