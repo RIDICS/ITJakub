@@ -40,9 +40,115 @@ BEGIN TRAN;
 		CONSTRAINT [PK_SpecialPermission_Group(SpecialPermission)_SpecialPermission_Group(Group)] PRIMARY KEY ([SpecialPermission], [Group])
 	);
 
-    INSERT INTO [dbo].[DatabaseVersion]
+
+
+
+	INSERT INTO dbo.[User]
+	(
+	    --Id - this column value is auto-generated
+	    FirstName,
+	    LastName,
+	    Email,
+	    AuthenticationProvider,
+	    CommunicationToken,
+	    CommunicationTokenCreateTime,
+	    PasswordHash,
+	    Salt,
+	    CreateTime,
+	    AvatarUrl,
+	    UserName
+	)
+	VALUES
+	(
+	    -- Id - int
+	    'Admin', -- FirstName - varchar
+	    'Admin', -- LastName - varchar
+	    'Admin', -- Email - varchar
+	    0, -- AuthenticationProvider - tinyint
+	    'e61edc70-9c8f-4ef4-84ff-f57b3758b88f', -- CommunicationToken - varchar
+	    '2015-10-01 10:50:36', -- CommunicationTokenCreateTime - datetime
+	    'ANx75Iw7AnQgKChYKghJVcXKE8vwofGlP3tRctamVrqTLOvhyXM0Qko27aui6mhTlg==', -- PasswordHash - varchar -- password is 'Administrator'
+	    '', -- Salt - varchar
+	    '2015-10-01 10:50:36', -- CreateTime - datetime
+	    '', -- AvatarUrl - varchar
+	    'Admin' -- UserName - varchar
+	)
+
+	DECLARE @AdminUserId INT
+
+	SELECT @AdminUserId = [Id] FROM [dbo].[User] WHERE [dbo].[User].[UserName]= 'Admin'
+
+	INSERT INTO dbo.[Group]
+	(
+	    --Id - this column value is auto-generated
+	    Name,
+	    Description,
+	    CreateTime,
+	    CreatedBy
+	)
+	VALUES
+	(
+	    -- Id - int
+	    'AdminGroup', -- Name - varchar
+	    'Group for administrators', -- Description - varchar
+	    '2015-10-01 10:52:35', -- CreateTime - datetime
+	     @AdminUserId -- CreatedBy - int
+	)
+
+	DECLARE @AdminGroupId INT
+
+	SELECT @AdminGroupId = [Id] FROM [dbo].[Group] WHERE [dbo].[Group].[Name]= 'AdminGroup'
+
+	INSERT INTO dbo.User_Group
+	(
+	    [User],
+	    [Group]
+	)
+	VALUES
+	(
+	    @AdminUserId, -- User - int
+	    @AdminGroupId -- Group - int
+	)
+
+	INSERT INTO dbo.SpecialPermission
+	(
+	    --Id - this column value is auto-generated
+	    PermissionType,
+	    CanUploadBook,
+	    CanManagePermissions,
+	    CanAddNews,
+	    CanManageFeedbacks
+	)
+	VALUES
+	(
+	    -- Id - int
+	    'ManagePermissions', -- PermissionType - varchar
+	    0, -- CanUploadBook - bit
+	    1, -- CanManagePermissions - bit
+	    0, -- CanAddNews - bit
+	    0 -- CanManageFeedbacks - bit
+	)
+
+	DECLARE @ManagePermissionId INT
+
+	SELECT @ManagePermissionId = [Id] FROM [dbo].[SpecialPermission] WHERE [dbo].[SpecialPermission].[PermissionType] = 'ManagePermissions'
+
+	INSERT INTO dbo.SpecialPermission_Group
+	(
+	    SpecialPermission,
+	    [Group]
+	)
+	VALUES
+	(
+	    @ManagePermissionId, -- SpecialPermission - int
+	    @AdminGroupId -- Group - int
+	)
+
+
+	INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion )
-    VALUES( '018' );
+    VALUES
+		 ( '018' );
 	-- DatabaseVersion - varchar
 --ROLLBACK
 COMMIT;

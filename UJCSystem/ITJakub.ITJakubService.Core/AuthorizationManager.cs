@@ -24,7 +24,7 @@ namespace ITJakub.ITJakubService.Core
         public User GetCurrentUser()
         {
             //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            var username = "testUser"; //TODO HACK
+            var username = "Admin"; //TODO HACK
             var user =  m_userRepository.FindByUserName(username);
             if (user == null)
             {
