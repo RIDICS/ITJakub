@@ -15,20 +15,21 @@ namespace ITJakub.ITJakubService.Services
 {
     public class ItJakubServiceManager : IItJakubService
     {
-        private readonly WindsorContainer m_container = Container.Current;
-        
-        private readonly BookManager m_bookManager;
         private readonly AuthorManager m_authorManager;
+
+        private readonly BookManager m_bookManager;
+        private readonly CardFileManager m_cardFileManager;
+        private readonly WindsorContainer m_container = Container.Current;
+        private readonly FavoriteManager m_favoriteManager;
+        private readonly FeedbackManager m_feedbackManager;
+        private readonly NewsManager m_newsManager;
+        private readonly PermissionManager m_permissionManager;
         private readonly ResourceManager m_resourceManager;
         private readonly SearchManager m_searchManager;
-        private readonly CardFileManager m_cardFileManager;        
-        private readonly FeedbackManager m_feedbackManager;
-        private readonly PermissionManager m_permissionManager;
-        private readonly UserManager m_userManager;    
-        private readonly NewsManager m_newsManager;
+        private readonly UserManager m_userManager;
 
         public ItJakubServiceManager()
-        {            
+        {
             m_bookManager = m_container.Resolve<BookManager>();
             m_authorManager = m_container.Resolve<AuthorManager>();
             m_resourceManager = m_container.Resolve<ResourceManager>();
@@ -38,7 +39,7 @@ namespace ITJakub.ITJakubService.Services
             m_permissionManager = m_container.Resolve<PermissionManager>();
             m_userManager = m_container.Resolve<UserManager>();
             m_newsManager = m_container.Resolve<NewsManager>();
-         
+            m_favoriteManager = m_container.Resolve<FavoriteManager>();
         }
 
         public IEnumerable<AuthorDetailContract> GetAllAuthors()
@@ -91,11 +92,11 @@ namespace ITJakub.ITJakubService.Services
             return m_resourceManager.ProcessSession(resourceSessionId, uploadMessage);
         }
 
-        public IEnumerable<SearchResultContract> Search(string term)
+        public IList<SearchResultContract> Search(string term)
         {
             return m_searchManager.Search(term);
         }
-        
+
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
             return m_bookManager.GetBookPageImage(bookXmlId, position);
@@ -111,48 +112,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.SearchByCriteria(searchCriterias);
         }
 
-        #region CardFile methods
-        public IEnumerable<CardFileContract> GetCardFiles()
-        {
-            return m_cardFileManager.GetCardFiles();
-        }
-        
-        public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
-        {
-            return m_cardFileManager.GetBuckets(cardFileId);
-        }        
-        public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
-        {
-            return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
-        }        
-
-        public IEnumerable<CardContract> GetCards(string cardFileId, string bucketId)
-        {
-            return m_cardFileManager.GetCards(cardFileId, bucketId);
-        }
-
-        public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
-        {
-            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
-        }
-
-        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
-        {
-            return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
-        }
-
-        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
-        {
-            return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
-        }
-        
-        #endregion
-        
         public IList<string> GetTypeaheadAuthors(string query)
         {
             return m_searchManager.GetTypeaheadAuthors(query);
-        }    
-            
+        }
+
         public IList<UserContract> GetTypeaheadUsers(string query)
         {
             return m_searchManager.GetTypeaheadUsers(query);
@@ -178,11 +142,14 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadAuthorsByBookType(query, bookType);
         }
 
-        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        public IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds,
+            IList<long> selectedBookIds)
         {
             return m_searchManager.GetTypeaheadTitlesByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
-        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+
+        public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds,
+            IList<long> selectedBookIds)
         {
             return m_searchManager.GetTypeaheadTermsByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
@@ -228,7 +195,8 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, resultFormat, bookType);
         }
 
-        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
+        public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookType)
         {
             return m_searchManager.GetDictionaryEntryFromSearch(searchCriterias, bookGuid, xmlEntryId, resultFormat, bookType);
         }
@@ -249,16 +217,16 @@ namespace ITJakub.ITJakubService.Services
         }
 
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
-             string pageXmlId, OutputFormatEnumContract resultFormat)
+            string pageXmlId, OutputFormatEnumContract resultFormat)
         {
             return m_searchManager.GetEditionPageFromSearch(searchCriterias, bookXmlId, pageXmlId, resultFormat);
         }
-        
+
         public void CreateAnonymousFeedback(string feedback, string name, string email, FeedbackCategoryEnumContract feedbackCategory)
         {
             m_feedbackManager.CreateAnonymousFeedback(feedback, name, email, feedbackCategory);
         }
-        
+
         public void CreateAnonymousFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
             string name, string email)
         {
@@ -365,5 +333,105 @@ namespace ITJakub.ITJakubService.Services
             return m_newsManager.GetWebNewsSyndicationItemCount();
         }
 
+        #region news
+
+        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
+        {
+            m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
+        }
+
+        #endregion
+
+        public void Dispose()
+        {
+        }
+
+        #region CardFile methods
+
+        public IEnumerable<CardFileContract> GetCardFiles()
+        {
+            return m_cardFileManager.GetCardFiles();
+        }
+
+        public IEnumerable<BucketShortContract> GetBuckets(string cardFileId)
+        {
+            return m_cardFileManager.GetBuckets(cardFileId);
+        }
+
+        public IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword)
+        {
+            return m_cardFileManager.GetBucketsByHeadword(cardFileId, headword);
+        }
+
+        public IEnumerable<CardContract> GetCards(string cardFileId, string bucketId)
+        {
+            return m_cardFileManager.GetCards(cardFileId, bucketId);
+        }
+
+        public IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId)
+        {
+            return m_cardFileManager.GetCardsShort(cardFileId, bucketId);
+        }
+
+        public CardContract GetCard(string cardFileId, string bucketId, string cardId)
+        {
+            return m_cardFileManager.GetCard(cardFileId, bucketId, cardId);
+        }
+
+        public Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize)
+        {
+            return m_cardFileManager.GetImage(cardFileId, bucketId, cardId, imageId, imageSize);
+        }
+
+        #endregion
+
+        #region Favorite Items
+
+        public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
+        {
+            return m_favoriteManager.GetPageBookmarks(bookId, userName);
+        }
+
+        public void AddPageBookmark(string bookId, string pageName, string userName)
+        {
+            m_favoriteManager.AddPageBookmark(bookId, pageName, userName);
+        }
+
+        public void RemovePageBookmark(string bookId, string pageName, string userName)
+        {
+            m_favoriteManager.RemovePageBookmark(bookId, pageName, userName);
+        }
+
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        {
+            return m_favoriteManager.GetHeadwordBookmarks(userName);
+        }
+
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        {
+            m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
+        }
+
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        {
+            m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
+        }
+
+        #endregion
+
+        #region Feedback
+
+        public void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category)
+        {
+            m_feedbackManager.CreateFeedback(feedback, username, category);
+        }
+
+        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
+            string username)
+        {
+            m_feedbackManager.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
+        }
+
+        #endregion
     }
 }

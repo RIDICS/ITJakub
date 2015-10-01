@@ -65,5 +65,12 @@ namespace ITJakub.ITJakubService.Core
             var user = Mapper.Map<UserDetailContract>(dbUser);
             return user;
         }
+
+        public bool ValidateUserAndCommToken(string userName, string commToken)
+        {
+
+            //TODO implement validation for username and token.
+            return true;
+        }
     }
 }

@@ -104,16 +104,16 @@ class ConcreteInstanceSearchBox {
         var bloodhound: Bloodhound<string> = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: remoteOptions
+            remote: remoteOptions,
+            limit:10,
         });
 
         var suggestionTemplate = (item) => { return this.getDefaultSuggestionTemplate(item) };
 
         var dataset: Twitter.Typeahead.Dataset = {
-            name: name,
-            limit: 10,
+            name: name,            
             source: bloodhound,
-            display: "Text",
+            displayKey: "Text",
             templates: {
                 suggestion: suggestionTemplate
             }

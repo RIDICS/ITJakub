@@ -1,20 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts.Clients;
+﻿using System.Web.Mvc;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Searching.Results;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {
     [RouteArea("Bibliographies")]
-    public class BibliographiesController : Controller
+    public class BibliographiesController : BaseController
     {
-
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
         public ActionResult Index()
         {
             return View("Search");
@@ -37,15 +31,17 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             {
                 return View();
             }
-
-            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
-            var viewModel = new FeedbackViewModel
+            using (var client = GetEncryptedClient())
             {
-                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                Email = user.Email
-            };
+                var user = client.FindUserByUserName(username);
+                var viewModel = new FeedbackViewModel
+                {
+                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                    Email = user.Email
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
@@ -56,33 +52,50 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Bibliographies);
+            {
+                using (var client = GetUnsecuredClient())
+                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Bibliographies);
+            }
             else
-                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Bibliographies);
+            {
+                using (var client = GetAuthenticatedClient())
+                {
+                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Bibliographies);
+                }
+            }
 
             return View("Information");
         }
 
         public ActionResult SearchTerm(string term)
         {
-            IEnumerable<SearchResultContract> listBooks = m_mainServiceClient.Search(term);
-            foreach (var list in listBooks)
+            using (var client = GetUnsecuredClient())
             {
-                list.CreateTimeString = list.CreateTime.ToString();
+                var listBooks = client.Search(term);
+                foreach (var list in listBooks)
+                {
+                    list.CreateTimeString = list.CreateTime.ToString();
+                }
+                return Json(new {books = listBooks}, JsonRequestBehavior.AllowGet);
             }
-            return Json(new { books = listBooks }, JsonRequestBehavior.AllowGet);
         }
-        
+
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.BibliographicalItem);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetUnsecuredClient())
+            {
+                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.BibliographicalItem);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem, null, null);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetUnsecuredClient())
+            {
+                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem, null, null);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

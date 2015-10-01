@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Web.Hub.Identity;
 
@@ -9,9 +10,9 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
-        protected ItJakubServiceAuthenticatedClient GetAuthenticatedClient()
+        protected IItJakubService GetAuthenticatedClient()
         {
-            var client = new ItJakubServiceAuthenticatedClient();
+            var client = new ItJakubServiceClient("AuthenticatedEndpoint");
             if (client.ClientCredentials == null)
             {
                 throw new ArgumentException("Cannot set credentials for client");
@@ -34,7 +35,7 @@ namespace ITJakub.Web.Hub.Controllers
             return client;
         }
 
-        protected ItJakubServiceClient GetUnsecuredClient()
+        protected IItJakubService GetUnsecuredClient()
         {
             var client = new ItJakubServiceClient();
             return client;

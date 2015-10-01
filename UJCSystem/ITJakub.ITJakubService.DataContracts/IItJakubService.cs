@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
@@ -11,7 +12,7 @@ using ITJakub.Shared.Contracts.Searching.Results;
 namespace ITJakub.ITJakubService.DataContracts
 {
     [ServiceContract]
-    public interface IItJakubService
+    public interface IItJakubService: IDisposable
     {
         [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
@@ -33,7 +34,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IEnumerable<SearchResultContract> Search(string term); // TODO probably remove
+        IList<SearchResultContract> Search(string term); // TODO probably remove
 
         [OperationContract]
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
@@ -232,6 +233,45 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         int GetWebNewsSyndicationItemCount();
+
+        #endregion
+
+        #region Favorite Items
+
+        [OperationContract]
+        List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
+
+        [OperationContract]
+        void AddPageBookmark(string bookId, string pageName, string userName);
+
+        [OperationContract]
+        void RemovePageBookmark(string bookId, string pageName, string userName);
+
+        [OperationContract]
+        IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
+
+        [OperationContract]
+        void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        [OperationContract]
+        void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        #endregion
+
+        #region Feedback
+
+        [OperationContract]
+        void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category);
+
+        [OperationContract]
+        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
+
+        #endregion
+
+        #region News
+
+        [OperationContract]
+        void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
 
         #endregion
     }

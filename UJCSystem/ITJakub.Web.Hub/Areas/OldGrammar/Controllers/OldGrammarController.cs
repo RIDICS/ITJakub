@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -16,11 +16,8 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
     [RouteArea("OldGrammar")]
-    public class OldGrammarController : Controller
+    public class OldGrammarController : BaseController
     {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
         public ActionResult Index()
         {
             return View("List");
@@ -48,15 +45,17 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 return View();
             }
-
-            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
-            var viewModel = new FeedbackViewModel
+            using (var client = GetEncryptedClient())
             {
-                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                Email = user.Email
-            };
+                var user = client.FindUserByUserName(username);
+                var viewModel = new FeedbackViewModel
+                {
+                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                    Email = user.Email
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
@@ -67,9 +66,15 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.OldGrammar);
+                using (var client = GetAuthenticatedClient())
+                {
+                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.OldGrammar);
+                }
             else
-                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.OldGrammar);
+                using (var client = GetAuthenticatedClient())
+                {
+                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.OldGrammar);
+                }
 
             return View("Information");
         }
@@ -81,57 +86,74 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Listing(string bookId, string searchText, string page)
         {
-            var book = m_mainServiceClient.GetBookInfoWithPages(bookId);
-            return
-                View(new BookListingModel
-                {
-                    BookId = book.BookId,
-                    BookXmlId = book.BookXmlId,
-                    VersionXmlId = book.LastVersionXmlId,
-                    BookTitle = book.Title,
-                    BookPages = book.BookPages,
-                    SearchText = searchText,
-                    InitPageXmlId = page
-                });
+            using (var client = GetAuthenticatedClient())
+            {
+                var book = client.GetBookInfoWithPages(bookId);
+                return
+                    View(new BookListingModel
+                    {
+                        BookId = book.BookId,
+                        BookXmlId = book.BookXmlId,
+                        VersionXmlId = book.LastVersionXmlId,
+                        BookTitle = book.Title,
+                        BookPages = book.BookPages,
+                        SearchText = searchText,
+                        InitPageXmlId = page
+                    });
+            }
         }
 
         public ActionResult GetListConfiguration()
         {
-            string fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json");
+            var fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json");
             return File(fullPath, "application/json", fullPath);
         }
+
         public ActionResult GetSearchConfiguration()
         {
-            string fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json");
+            var fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json");
             return File(fullPath, "application/json", fullPath);
         }
 
         public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            var result = m_mainServiceClient.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetGrammarsWithCategories()
         {
-            var editionsWithCategories = m_mainServiceClient.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Grammar);
-            return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var editionsWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Grammar);
+                return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
+            }
         }
 
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
@@ -140,7 +162,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 Start = start,
                 Count = count,
-                Sorting = (SortEnum)sortingEnum,
+                Sorting = (SortEnum) sortingEnum,
                 Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
                 HitSettingsContract = new HitSettingsContract
                 {
@@ -163,9 +185,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = result}, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.SearchByCriteria(listSearchCriteriaContracts);
+                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -181,9 +205,11 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-            return Json(new { count }, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
+                return Json(new {count}, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -211,10 +237,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
+            using (var client = GetAuthenticatedClient())
+            {
+                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-            return Json(new { count }, JsonRequestBehavior.AllowGet);
+                return Json(new {count}, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -242,13 +270,16 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
+            using (var client = GetAuthenticatedClient())
+            {
+                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-            var count = m_mainServiceClient.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-            return Json(new { count }, JsonRequestBehavior.AllowGet);
+                return Json(new {count}, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -275,7 +306,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         Count = 3,
                         Start = 1
                     }
-                },
+                }
             };
 
             if (selectedBookIds != null || selectedCategoryIds != null)
@@ -286,12 +317,15 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = result }, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.SearchByCriteria(listSearchCriteriaContracts);
+                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+            }
         }
 
-        public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
@@ -317,7 +351,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         ContextLength = 50,
                         Count = 3,
                         Start = 1
-                    },
+                    }
                 }
             };
 
@@ -334,12 +368,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts);
-            return Json(new { books = result }, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var result = client.SearchByCriteria(listSearchCriteriaContracts);
+                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+            }
         }
-
-
 
         #region search in boook
 
@@ -361,7 +395,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 new ResultCriteriaContract
                 {
                     Start = 0,
-                    Count = 1,
+                    Count = 1
                 },
                 new ResultRestrictionCriteriaContract
                 {
@@ -377,14 +411,16 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-            if (result != null)
+            using (var client = GetAuthenticatedClient())
             {
-                return Json(new { results = result.TermsPageHits }, JsonRequestBehavior.AllowGet);
-            }
+                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+                if (result != null)
+                {
+                    return Json(new {results = result.TermsPageHits}, JsonRequestBehavior.AllowGet);
+                }
 
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult AdvancedSearchInBook(string json, string bookXmlId, string versionXmlId)
@@ -400,24 +436,25 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
             listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
             {
-                ResultBooks = new List<BookVersionPairContract> { new BookVersionPairContract { Guid = bookXmlId, VersionId = versionXmlId } }
+                ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
             });
 
             if (!string.IsNullOrWhiteSpace(json))
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-
-            var result = m_mainServiceClient.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
-            if (result != null)
+            using (var client = GetAuthenticatedClient())
             {
-                return Json(new { results = result.TermsPageHits }, JsonRequestBehavior.AllowGet);
-            }
+                var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
+                if (result != null)
+                {
+                    return Json(new {results = result.TermsPageHits}, JsonRequestBehavior.AllowGet);
+                }
 
-            return Json(new { }, JsonRequestBehavior.AllowGet);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
 
         #endregion
-
     }
 }

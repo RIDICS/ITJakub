@@ -14,16 +14,11 @@ namespace ITJakub.ITJakubService.Services
     {
         private readonly WindsorContainer m_container = Container.Current;
         private readonly UserManager m_userManager;
-        private readonly FavoriteManager m_favoriteManager;
-        private readonly FeedbackManager m_feedbackManager;
-        private readonly NewsManager m_newsManager;
+
 
         public ItJakubServiceAuthenticatedManager()
         {
-            m_userManager = m_container.Resolve<UserManager>();
-            m_favoriteManager = m_container.Resolve<FavoriteManager>();
-            m_feedbackManager = m_container.Resolve<FeedbackManager>();
-            m_newsManager = m_container.Resolve<NewsManager>();
+            m_userManager = m_container.Resolve<UserManager>();         
         }
 
         public UserContract FindUserById(int userId)
@@ -41,63 +36,7 @@ namespace ITJakub.ITJakubService.Services
             return m_userManager.CreateLocalUser(user);
         }
 
-        #region Favorite Items
-
-        public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
-        {
-            return m_favoriteManager.GetPageBookmarks(bookId, userName);
-        }
-
-        public void AddPageBookmark(string bookId, string pageName, string userName)
-        {
-           m_favoriteManager.AddPageBookmark(bookId,pageName, userName);
-        }
-
-        public void RemovePageBookmark(string bookId, string pageName, string userName)
-        {
-            m_favoriteManager.RemovePageBookmark(bookId, pageName, userName);
-        }
-
-        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
-        {
-            return m_favoriteManager.GetHeadwordBookmarks(userName);
-        }
-
-        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
-        {
-            m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
-        }
-
-        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
-        {
-            m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
-        }
-
-        #endregion
-
-        #region Feedback
-
-        public void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category)
-        {
-            m_feedbackManager.CreateFeedback(feedback, username, category);
-        }
-
-        public void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId,
-            string username)
-        {
-            m_feedbackManager.CreateFeedbackForHeadword(feedback, bookXmlId, versionXmlId, entryXmlId, username);
-        }
-
-        #endregion
-
-        #region news
-
-        public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
-        {
-            m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
-        }
-
-        #endregion
+     
 
     }
 }
