@@ -139,6 +139,7 @@ class GroupPermissionEditor {
 
         if (typeof group === "undefined" || group === null) {
             $("#allowedBooksList").empty();
+            $("#allowedSpecialPermissionList").empty();
             $("#selected-item-div").addClass("hidden");
             $("#right-panel").addClass("hidden");
             updateQueryStringParameter("groupId", "");
@@ -171,6 +172,29 @@ class GroupPermissionEditor {
                     var item = this.createCategoryListItem(category);
                     $(item).addClass("root-category");
                     allowedBooksUl.append(item);
+                }
+
+                $("#right-panel").removeClass("hidden");
+            }
+        });
+
+        var allowedSpecialPermissionsUl = $("#allowedSpecialPermissionList");
+        $(allowedSpecialPermissionsUl).empty();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetSpecialPermissionsForGroup",
+            data: {groupId: group.Id},
+            dataType: "json",
+            contentType: "application/json",
+            success: (specialPermissions) => {
+
+                for (var i = 0; i < specialPermissions.length; i++) {
+                    var specialPermission = specialPermissions[i];
+                    var item = this.createSpecialPermissionListItem(specialPermission);
+                    $(item).addClass("special-permission");
+                    allowedSpecialPermissionsUl.append(item);
                 }
 
                 $("#right-panel").removeClass("hidden");
@@ -368,6 +392,13 @@ class GroupPermissionEditor {
         return bookLi;
     }
 
+    private createSpecialPermissionListItem(specialPermission: ISpecialPermission): HTMLLIElement {
+        var permissionLi = document.createElement("li");
+        $(permissionLi).addClass("list-item non-leaf");
+        permissionLi.innerHTML = specialPermission.Id.toString();
+        return permissionLi;
+    }
+
     private unloadWholeCategory(category: HTMLLIElement) {
         var categoryDetails = $(category).find(".list-item-details").first();
         $(categoryDetails).slideUp();
@@ -503,8 +534,8 @@ class BooksSelector {
     }
 
     private createBookListItem(book: IBook): HTMLLIElement {
-        var groupLi = document.createElement("li");
-        $(groupLi).addClass("list-item leaf");
+        var bookLi = document.createElement("li");
+        $(bookLi).addClass("list-item leaf");
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -530,16 +561,16 @@ class BooksSelector {
 
         buttonsSpan.appendChild(checkSpan);
 
-        groupLi.appendChild(buttonsSpan);
+        bookLi.appendChild(buttonsSpan);
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
         nameSpan.innerHTML = book.Title;
 
-        groupLi.appendChild(nameSpan);
+        bookLi.appendChild(nameSpan);
 
 
-        return groupLi;
+        return bookLi;
     }
 
     private loadCategoryContent(targetDiv, categoryId: number) {

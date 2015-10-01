@@ -37,12 +37,34 @@
     </div>
 </div>
 <div id="right-panel" class="permission-right-panel hidden">
-    <div class="right-panel-title">Povolená díla pro vybranou skupinu:</div>
-    <ul id="allowedBooksList" class="items-list">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a href="#tab-book-permissions" data-toggle="tab">Práva na dílo</a>
+        </li>
+        <li>
+            <a href="#tab-special-permission" data-toggle="tab">Speciální práva</a>
+        </li>
     </ul>
 
-    <div class="category-buttons">
-        <button id="addBookToGroup" class="btn btn-default permission-button">+</button>
+    <div class="tab-content">
+        <div id="tab-book-permissions" class="tab-pane active">
+
+            <div class="right-panel-title">Povolená díla pro vybranou skupinu:</div>
+            <ul id="allowedBooksList" class="items-list"></ul>
+
+            <div class="category-buttons">
+                <button id="addBookToGroup" class="btn btn-default permission-button">+</button>
+            </div>
+        </div>
+        <div id="tab-special-permission" class="tab-pane">
+
+            <div class="right-panel-title">Speciální práva pro vybranou skupinu:</div>
+            <ul id="allowedSpecialPermissionList" class="items-list"></ul>
+
+            <div class="category-buttons">
+                <button id="addSpecialPermissionToGroup" class="btn btn-default permission-button">+</button>
+            </div>
+        </div>
     </div>
 </div>
 

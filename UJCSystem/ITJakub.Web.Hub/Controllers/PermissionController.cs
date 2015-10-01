@@ -116,5 +116,12 @@ namespace ITJakub.Web.Hub.Controllers
             m_mainServiceClient.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
             return Json(new {});
         }
+
+
+        public ActionResult GetSpecialPermissionsForGroup(int groupId)
+        {
+            var result = m_mainServiceClient.GetSpecialPermissionsForGroup(groupId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

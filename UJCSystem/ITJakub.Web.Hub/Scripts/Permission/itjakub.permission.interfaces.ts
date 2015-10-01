@@ -31,6 +31,10 @@ interface IBook {
     Title: string;
 }
 
+interface ISpecialPermission {
+    Id: number;
+}
+
 interface ICategoryContent {
     Categories: ICategory[];
     Books: IBook[];
