@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 
@@ -120,7 +121,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetSpecialPermissionsForGroup(int groupId)
         {
-            var result = m_mainServiceClient.GetSpecialPermissionsForGroup(groupId);
+            var specialPermissions = m_mainServiceClient.GetSpecialPermissionsForGroup(groupId);
+            var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

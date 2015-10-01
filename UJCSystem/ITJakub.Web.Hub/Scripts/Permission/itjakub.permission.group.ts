@@ -132,6 +132,17 @@ class GroupPermissionEditor {
                 }
             });
         });
+
+
+
+        $("#addSpecialPermissionToGroup").click(() => {
+            var specialPermissionDialogBody = <HTMLDivElement>document.getElementById("add-special-permission-to-group-form");
+            $("#addSpecialPermissionToGroupDialog").modal();
+        });
+
+        $("#add-special-permissions-to-group-ok").click(() => {
+            
+        });
     }
 
     private loadGroup(group: IGroup) {
@@ -190,11 +201,12 @@ class GroupPermissionEditor {
             contentType: "application/json",
             success: (specialPermissions) => {
 
-                for (var i = 0; i < specialPermissions.length; i++) {
-                    var specialPermission = specialPermissions[i];
-                    var item = this.createSpecialPermissionListItem(specialPermission);
-                    $(item).addClass("special-permission");
-                    allowedSpecialPermissionsUl.append(item);
+                for (var specialPermissionsOfType in specialPermissions) {
+                    if (specialPermissions.hasOwnProperty(specialPermissionsOfType)) {
+                        var item = this.createSpecialPermissionListItem(specialPermissionsOfType, specialPermissions[specialPermissionsOfType]);
+                        $(item).addClass("special-permission");
+                        allowedSpecialPermissionsUl.append(item);
+                    }
                 }
 
                 $("#right-panel").removeClass("hidden");
@@ -392,10 +404,10 @@ class GroupPermissionEditor {
         return bookLi;
     }
 
-    private createSpecialPermissionListItem(specialPermission: ISpecialPermission): HTMLLIElement {
+    private createSpecialPermissionListItem(type: string, specialPermissions: Array<ISpecialPermission>): HTMLLIElement {
         var permissionLi = document.createElement("li");
         $(permissionLi).addClass("list-item non-leaf");
-        permissionLi.innerHTML = specialPermission.Id.toString();
+        //permissionLi.innerHTML = specialPermission.Id.toString();
         return permissionLi;
     }
 
