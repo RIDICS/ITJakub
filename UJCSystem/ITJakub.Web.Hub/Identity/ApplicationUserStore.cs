@@ -108,6 +108,8 @@ namespace ITJakub.Web.Hub.Identity
                     CommunicationToken = user.CommunicationToken
                 };
                 var result = m_serviceEncryptedClient.CreateUser(userContract);
+                user.CreateTime = result.CreateTime;
+                user.CommunicationToken = result.CommunicationToken;
                 user.Id = result.Id.ToString();
             });
             await task;
