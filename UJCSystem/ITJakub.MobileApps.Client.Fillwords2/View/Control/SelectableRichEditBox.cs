@@ -8,6 +8,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
     public class SelectableRichEditBox : BindableRichEditBox
     {
         private Color m_defaultBackgroundColor;
+        private bool m_updatingSelection;
 
         public SelectableRichEditBox()
         {
@@ -16,9 +17,9 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
         
         public static readonly DependencyProperty SelectedTextProperty = DependencyProperty.Register("SelectedText", typeof(string), typeof(SelectableRichEditBox), new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty SelectionStartProperty = DependencyProperty.Register("SelectionStart", typeof(int), typeof(SelectableRichEditBox), new PropertyMetadata(0));
-
-        public static readonly DependencyProperty SelectionEndProperty = DependencyProperty.Register("SelectionEnd", typeof(int), typeof(SelectableRichEditBox), new PropertyMetadata(0));
+        public static readonly DependencyProperty SelectionStartProperty = DependencyProperty.Register("SelectionStart", typeof(int), typeof(SelectableRichEditBox), new PropertyMetadata(0, OnSelectionPropertyChanged));
+        
+        public static readonly DependencyProperty SelectionEndProperty = DependencyProperty.Register("SelectionEnd", typeof(int), typeof(SelectableRichEditBox), new PropertyMetadata(0, OnSelectionPropertyChanged));
 
         public static readonly DependencyProperty IsEditingEnabledProperty = DependencyProperty.Register("IsEditingEnabled", typeof(bool), typeof(SelectableRichEditBox), new PropertyMetadata(false, IsEditingEnabledChanged));
 
@@ -29,6 +30,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
         public static readonly DependencyProperty SelectionChangedCommandProperty = DependencyProperty.Register("SelectionChangedCommand", typeof(ICommand), typeof(SelectableRichEditBox), new PropertyMetadata(null));
 
         public static readonly DependencyProperty IsResetProperty = DependencyProperty.Register("IsReset", typeof(bool), typeof(SelectableRichEditBox), new PropertyMetadata(true, OnIsResetChanged));
+        
 
         public string SelectedText
         {
@@ -117,6 +119,20 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 editBox.ResetDocument();
         }
 
+        private static void OnSelectionPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var editBox = d as SelectableRichEditBox;
+            if (editBox == null || editBox.m_updatingSelection)
+                return;
+            
+            var selection = editBox.Document.Selection;
+            if (selection.StartPosition != editBox.SelectionStart)
+                selection.StartPosition = editBox.SelectionStart;
+
+            if (selection.EndPosition != editBox.SelectionEnd)
+                selection.EndPosition = editBox.SelectionEnd;
+        }
+
         protected override void OnDocumentLoad()
         {
             base.OnDocumentLoad();
@@ -126,6 +142,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 
         private void OnSelectionChanged(object sender, RoutedEventArgs routedEventArgs)
         {
+            m_updatingSelection = true;
             if (Document.Selection.Length == 0)
             {
                 SelectionStart = -1;
@@ -142,6 +159,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 IsSelectedTextHighlighted = Document.Selection.CharacterFormat.BackgroundColor.Equals(BackgroundColorHighlight);
             }
 
+            m_updatingSelection = false;
             InvokeCommand(SelectionChangedCommand);
         }
 

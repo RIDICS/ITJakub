@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
@@ -22,8 +20,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         {
             m_wordOptionsList = new Dictionary<int, WordOptionsViewModel>();
 
-            AddNewOptionCommand = new RelayCommand(AddNewOption);
-            DeleteCommand = new RelayCommand<LetterOptionViewModel>(DeleteOption);
+            //AddNewOptionCommand = new RelayCommand(AddNewOption);
+            //DeleteCommand = new RelayCommand<LetterOptionViewModel>(DeleteOption);
             SelectionChangedCommand = new RelayCommand(SelectionChanged);
         }
 
@@ -117,57 +115,14 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             }
         }
 
-        public RelayCommand AddNewOptionCommand { get; private set; }
-
-        public RelayCommand<LetterOptionViewModel> DeleteCommand { get; private set; }
-
         public RelayCommand SelectionChangedCommand { get; private set; }
         
-
-
-
-        private void AddNewOption()
-        {
-            if (NewOption == string.Empty)
-                return;
-
-            if (SelectedOption.Options == null)
-            {
-                SelectedOption.Options = new ObservableCollection<LetterOptionViewModel>();
-                SetSelectedTextHighlighted = true;
-            }
-
-            if (SelectedOption.Options.Any(model => model.Letters == NewOption))
-            {
-                ShowOptionExistsInfo = true;
-            }
-            else
-            {
-                var newOptionViewModel = new LetterOptionViewModel { Letters = NewOption };
-
-                SelectedOption.Options.Add(newOptionViewModel);
-                ShowOptionExistsInfo = false;
-                NewOption = string.Empty;
-            }
-        }
-
-        private void DeleteOption(LetterOptionViewModel letterOption)
-        {
-            SelectedOption.Options.Remove(letterOption);
-
-            if (SelectedOption.Options.Count == 0)
-            {
-                SelectedOption.Options = null;
-                SetSelectedTextHighlighted = false;
-            }
-        }
-
         private void UpdateWordOptionsList()
         {
             if (SelectedOption == null)
                 return;
             
-            if (SelectedOption.Options == null)
+            if (SelectedOption.Options.Count == 0)
             {
                 m_wordOptionsList.Remove(SelectedOption.WordPosition);
             }
@@ -183,11 +138,15 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             UpdateWordOptionsList();
             IsSelected = !string.IsNullOrEmpty(SelectedText);
 
-            //SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
-            //    ? m_wordOptionsList[SelectionStart]
-            //    : new WordOptionsViewModel {CorrectAnswer = SelectedText, WordPosition = SelectionStart};
-            //todo
-            SelectedOption = new WordOptionsViewModel(SelectedText, SelectionStart);
+            SelectedOption = m_wordOptionsList.ContainsKey(SelectionStart)
+                ? m_wordOptionsList[SelectionStart]
+                : new WordOptionsViewModel(SelectedText, SelectionStart);
+            
+            SelectedOption.HighlightChangeCallback = isHighlight =>
+            {
+                SetSelectedTextHighlighted = isHighlight;
+            };
+            SelectedOption.RecoverHighlight();
         }
 
         public void Reset()

@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Windows.Input;
 using Windows.Foundation;
 using Windows.UI.Text;
 using Windows.UI.Xaml;
