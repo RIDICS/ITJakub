@@ -11,10 +11,9 @@ using Microsoft.Owin.Security;
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
-        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
+        
 
         private ApplicationSignInManager SignInManager
         {

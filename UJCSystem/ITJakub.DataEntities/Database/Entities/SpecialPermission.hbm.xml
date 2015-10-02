@@ -35,7 +35,7 @@
     </subclass>
     
     <subclass name="NewsPermission"
-      discriminator-value="NewsPermission">
+      discriminator-value="News">
 
       <property name="CanAddNews">
         <column name="CanAddNews" sql-type="bit" not-null="true" />
@@ -44,7 +44,7 @@
     </subclass>
     
     <subclass name="FeedbackPermission"
-      discriminator-value="FeedbackPermission">
+      discriminator-value="Feedback">
 
       <property name="CanManageFeedbacks">
         <column name="CanManageFeedbacks" sql-type="bit" not-null="true" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
@@ -211,14 +212,79 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUser(userId);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
 
+        public IList<SpecialPermissionContract> GetSpecialPermissions()
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            var specPermissions = m_permissionRepository.GetSpecialPermissions();
+            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+        }
         public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByGroup(groupId);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+        }
+
+        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
+            {
+                return;
+            }
+
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
+            var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
+
+            if (group.SpecialPermissions == null)
+            {
+                group.SpecialPermissions = new List<SpecialPermission>();
+            }
+
+            var missingSpecialPermissions = specialPermissions.Where(x => !group.SpecialPermissions.Contains(x));
+
+            foreach (var specialPermission in missingSpecialPermissions)
+            {
+                group.SpecialPermissions.Add(specialPermission);
+            }
+            
+            m_permissionRepository.Save(group);
+        }
+
+        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
+            {
+                return;
+            }
+
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
+            var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
+
+            if (group.SpecialPermissions == null)
+            {
+                if (m_log.IsWarnEnabled)
+                {
+                    string message = string.Format("Cannot remove special permissions from group with id '{0}'. Group special permissions are empty.", group.Id);
+                    m_log.Warn(message);
+                }
+                return;
+            }
+
+            foreach (var specialPermission in specialPermissions)
+            {
+                group.SpecialPermissions.Remove(specialPermission);
+            }
+
+            m_permissionRepository.Save(group);
         }
     }
 }

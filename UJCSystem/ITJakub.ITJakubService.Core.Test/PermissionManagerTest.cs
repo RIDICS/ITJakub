@@ -12,6 +12,7 @@ namespace ITJakub.ITJakubService.Core.Test
         private readonly WindsorContainer m_container = Container.Current;
         private readonly PermissionManager m_permissionManager;
         private readonly UserManager m_userManager;
+        private readonly string testUserUsername = "testUser";
 
         public PermissionManagerTest()
         {
@@ -23,14 +24,12 @@ namespace ITJakub.ITJakubService.Core.Test
         public void CreateUserTest()
         {
             //var username = Guid.NewGuid().ToString();
-            var username = "testUser";
-
             var newUserContract = new UserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = "test@test.test",
-                UserName = username
+                Email = string.Format("test@{0}.test", Guid.NewGuid()),
+                UserName = testUserUsername
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
@@ -44,7 +43,7 @@ namespace ITJakub.ITJakubService.Core.Test
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = "test@test.test",
+                Email = string.Format("test@{0}.test", Guid.NewGuid()),
                 UserName = Guid.NewGuid().ToString()
             };
 
@@ -241,5 +240,6 @@ namespace ITJakub.ITJakubService.Core.Test
             Assert.IsNotNull(groupsForSecondMember);
             Assert.AreEqual(1, groupsForSecondMember.Count);
         }
+       
     }
 }
