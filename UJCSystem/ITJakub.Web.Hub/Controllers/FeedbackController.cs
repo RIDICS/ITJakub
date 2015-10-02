@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
-    public class FeedbackController : Controller
+    public class FeedbackController : BaseController
     {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
         public ActionResult Feedback()
         {
             return View();
@@ -24,8 +20,11 @@ namespace ITJakub.Web.Hub.Controllers
                 Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
             };
 
-            var count = m_mainServiceClient.GetFeedbacksCount(feedbackCriteria);
-            return Json(count, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var count = client.GetFeedbacksCount(feedbackCriteria);
+                return Json(count, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetFeedbacks(IEnumerable<byte> categories, int? start, int? count, byte sortCriteria, bool sortAsc)
@@ -41,16 +40,21 @@ namespace ITJakub.Web.Hub.Controllers
                     SortByField = (FeedbackSortEnum) sortCriteria
                 }
             };
-
-            var results = m_mainServiceClient.GetFeedbacks(feedbackCriteria);
-            return Json(results, JsonRequestBehavior.AllowGet);
+            using (var client = GetAuthenticatedClient())
+            {
+                var results = client.GetFeedbacks(feedbackCriteria);
+                return Json(results, JsonRequestBehavior.AllowGet);
+            }
         }
 
         [HttpPost]
         public ActionResult DeleteFeedback(long feedbackId)
         {
-            m_mainServiceClient.DeleteFeedback(feedbackId);
-            return Json(new {});
+            using (var client = GetAuthenticatedClient())
+            {
+                client.DeleteFeedback(feedbackId);
+                return Json(new {});
+            }
         }
     }
 }

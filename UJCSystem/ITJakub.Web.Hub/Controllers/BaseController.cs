@@ -10,6 +10,13 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
+        private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
+        private const string MainServiceEndpointName= "ItJakubService";
+        private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
+        private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
+        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
+
+
         protected IItJakubService GetAuthenticatedClient()
         {
             var client = new ItJakubServiceClient("AuthenticatedEndpoint");
@@ -25,7 +32,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected ItJakubServiceEncryptedClient GetEncryptedClient()
         {
-            var client = new ItJakubServiceEncryptedClient();
+            var client = new ItJakubServiceEncryptedClient(EncryptedEndpointName);
             return client;
         }
 

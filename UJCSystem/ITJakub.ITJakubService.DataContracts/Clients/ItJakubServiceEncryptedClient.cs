@@ -11,6 +11,10 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public ItJakubServiceEncryptedClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         public UserContract FindUserById(int userId)
         {
             try
