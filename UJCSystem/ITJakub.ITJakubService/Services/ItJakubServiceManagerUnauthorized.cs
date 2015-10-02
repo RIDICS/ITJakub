@@ -10,13 +10,13 @@ using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services
 {
-    public class ItJakubServiceAuthenticatedManager : IItJakubServiceEncrypted
+    public class IItJakubServiceEncryptedManager : IItJakubServiceEncrypted
     {
         private readonly WindsorContainer m_container = Container.Current;
         private readonly UserManager m_userManager;
 
 
-        public ItJakubServiceAuthenticatedManager()
+        public IItJakubServiceEncryptedManager()
         {
             m_userManager = m_container.Resolve<UserManager>();         
         }
