@@ -744,6 +744,9 @@ class SpecialPermissionsSelector {
                 this.removeFromSelectedPermissions(specialPermission.Id);
             }
 
+            var parentNodeItem: HTMLLIElement = <any>$(specPermissionLi).parents("li.list-item.non-leaf").first();
+            this.changeStateOfNodeItemCheckIfNeeded(parentNodeItem);
+
         });
 
         checkSpan.appendChild(checkInput);
@@ -759,6 +762,27 @@ class SpecialPermissionsSelector {
         specPermissionLi.appendChild(textSpan);
 
         return specPermissionLi;
+    }
+
+    private changeStateOfNodeItemCheckIfNeeded(nodeItem: HTMLLIElement) {
+        var checked = $(nodeItem).find(".list-item-details .list-item-check input:checked");
+        var notChecked = $(nodeItem).find(".list-item-details .list-item-check input:not(:checked)");
+
+        var nodeItemCheckbox = $(nodeItem).children(".list-item-buttons").find(".list-item-check input");
+
+        if (typeof checked === "undefined" || checked === null || checked.length === 0) {
+            $(nodeItemCheckbox).prop("indeterminate", false);
+            $(nodeItemCheckbox).prop("checked", false);
+            return;
+        }
+
+        if (typeof notChecked === "undefined" || notChecked === null || notChecked.length === 0) {
+            $(nodeItemCheckbox).prop("indeterminate", false);
+            $(nodeItemCheckbox).prop("checked", true);
+            return;
+        }
+
+        $(nodeItemCheckbox).prop("indeterminate", true);
     }
 
     public getSelectedSpecialPermissionsIds(): Array<number> {
