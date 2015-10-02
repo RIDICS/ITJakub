@@ -10,42 +10,28 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
-        private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
-        private const string MainServiceEndpointName= "ItJakubService";
-        private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
-        private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
-        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
+        private readonly CommunicationProvider m_communication = new CommunicationProvider();
 
-
-        protected IItJakubService GetAuthenticatedClient()
+        public IItJakubService GetAuthenticatedClient()
         {
-            var client = new ItJakubServiceClient("AuthenticatedEndpoint");
-            if (client.ClientCredentials == null)
-            {
-                throw new ArgumentException("Cannot set credentials for client");
-            }
-            client.ClientCredentials.UserName.UserName = GetUserName();
-            client.ClientCredentials.UserName.Password = GetCommunicationToken();
+            var username = GetUserName();
+            var password = GetCommunicationToken();
 
-            return client;
+            return m_communication.GetAuthenticatedClient(username, password);            
         }
 
-        protected ItJakubServiceEncryptedClient GetEncryptedClient()
+        public ItJakubServiceEncryptedClient GetEncryptedClient()
         {
-            var client = new ItJakubServiceEncryptedClient(EncryptedEndpointName);
-            return client;
+            return m_communication.GetEncryptedClient();
+        }
+        public IItJakubService GetUnsecuredClient()
+        {
+            return m_communication.GetUnsecuredClient();
         }
 
-        protected ItJakubServiceStreamedClient GetStreamingClient()
+        public ItJakubServiceStreamedClient GetStreamingClient()
         {
-            var client = new ItJakubServiceStreamedClient();
-            return client;
-        }
-
-        protected IItJakubService GetUnsecuredClient()
-        {
-            var client = new ItJakubServiceClient();
-            return client;
+            return m_communication.GetStreamingClient();
         }
 
 
@@ -62,5 +48,6 @@ namespace ITJakub.Web.Hub.Controllers
 
             return communicationToken.Value;
         }
-    }
+    }   
+
 }
