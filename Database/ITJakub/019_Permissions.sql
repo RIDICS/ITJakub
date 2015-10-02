@@ -43,6 +43,48 @@ BEGIN TRAN;
 
 
 
+	INSERT INTO dbo.SpecialPermission
+	(
+	    --Id - this column value is auto-generated
+	    PermissionType,
+	    CanUploadBook,
+	    CanManagePermissions,
+	    CanAddNews,
+	    CanManageFeedbacks
+	)
+	VALUES
+	(
+	    -- Id - int
+	    'ManagePermissions', -- PermissionType - varchar
+	    NULL, -- CanUploadBook - bit
+	    1, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL -- CanManageFeedbacks - bit
+	),(
+		-- Id - int
+	    'UploadBook', -- PermissionType - varchar
+	    1, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL -- CanManageFeedbacks - bit
+	),(
+		-- Id - int
+	    'News', -- PermissionType - varchar
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    1, -- CanAddNews - bit
+	    NULL -- CanManageFeedbacks - bit
+	),(
+		-- Id - int
+	    'Feedback', -- PermissionType - varchar
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    1 -- CanManageFeedbacks - bit
+	)
+
+
+
 	INSERT INTO dbo.[User]
 	(
 	    --Id - this column value is auto-generated
@@ -108,25 +150,6 @@ BEGIN TRAN;
 	(
 	    @AdminUserId, -- User - int
 	    @AdminGroupId -- Group - int
-	)
-
-	INSERT INTO dbo.SpecialPermission
-	(
-	    --Id - this column value is auto-generated
-	    PermissionType,
-	    CanUploadBook,
-	    CanManagePermissions,
-	    CanAddNews,
-	    CanManageFeedbacks
-	)
-	VALUES
-	(
-	    -- Id - int
-	    'ManagePermissions', -- PermissionType - varchar
-	    0, -- CanUploadBook - bit
-	    1, -- CanManagePermissions - bit
-	    0, -- CanAddNews - bit
-	    0 -- CanManageFeedbacks - bit
 	)
 
 	DECLARE @ManagePermissionId INT

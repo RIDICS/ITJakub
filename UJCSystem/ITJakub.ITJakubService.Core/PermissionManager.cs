@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
@@ -232,6 +233,12 @@ namespace ITJakub.ITJakubService.Core
         public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
+            {
+                return;
+            }
+
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
             var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
 
@@ -240,7 +247,9 @@ namespace ITJakub.ITJakubService.Core
                 group.SpecialPermissions = new List<SpecialPermission>();
             }
 
-            foreach (var specialPermission in specialPermissions)
+            var missingSpecialPermissions = specialPermissions.Where(x => !group.SpecialPermissions.Contains(x));
+
+            foreach (var specialPermission in missingSpecialPermissions)
             {
                 group.SpecialPermissions.Add(specialPermission);
             }
@@ -251,6 +260,12 @@ namespace ITJakub.ITJakubService.Core
         public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
+
+            if (specialPermissionsIds == null || specialPermissionsIds.Count == 0)
+            {
+                return;
+            }
+
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
             var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
 

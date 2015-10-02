@@ -155,7 +155,7 @@ class GroupPermissionEditor {
                 contentType: "application/json",
                 success: (response) => {
 
-                    $("#addSpecialPermissionToGroup").modal('hide');
+                    $("#addSpecialPermissionToGroupDialog").modal('hide');
                     this.loadGroup(this.currentGroupSelectedItem);
                 }
             });
@@ -428,26 +428,10 @@ class GroupPermissionEditor {
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
 
-        var checkSpan = document.createElement("span");
-        $(checkSpan).addClass("list-item-check");
+        var removeSpan = document.createElement("span");
+        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
 
-        var checkInput = document.createElement("input");
-        checkInput.type = "checkbox";
-
-        $(checkInput).change((event: Event) => {
-            var target: HTMLInputElement = <HTMLInputElement>event.target;
-
-            if (target.checked) {
-
-            } else {
-
-            }
-
-        });
-
-        checkSpan.appendChild(checkInput);
-
-        buttonsSpan.appendChild(checkSpan);
+        buttonsSpan.appendChild(removeSpan);
 
         groupSpecialPermissionsLi.appendChild(buttonsSpan);
 
@@ -455,7 +439,11 @@ class GroupPermissionEditor {
         $(moreSpan).addClass("list-item-more");
 
         $(moreSpan).click((event: Event) => {
-            var target = event.target;
+            var target: JQuery = $(event.target);
+            if ($(target).hasClass("list-item-more")) {
+                target = $(target).find("span.glyphicon").first();
+            }
+
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
 
             if (detailsDiv.is(":hidden")) {
@@ -497,6 +485,11 @@ class GroupPermissionEditor {
         $(detailsDiv).append(detailsUl);
         $(detailsDiv).hide();
 
+
+        $(removeSpan).click(() => {
+            $(detailsDiv).find(".list-item-remove").click();
+        });
+
         groupSpecialPermissionsLi.appendChild(detailsDiv);
 
         return groupSpecialPermissionsLi;
@@ -509,26 +502,30 @@ class GroupPermissionEditor {
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
 
-        var checkSpan = document.createElement("span");
-        $(checkSpan).addClass("list-item-check");
+        var removeSpan = document.createElement("span");
+        $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
 
-        var checkInput = document.createElement("input");
-        checkInput.type = "checkbox";
+        $(removeSpan).click(() => {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/RemoveSpecialPermissionsFromGroup",
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, specialPermissionIds: [specialPermission.Id]}),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response) => {
 
-        $(checkInput).change((event: Event) => {
-            var target: HTMLInputElement = <HTMLInputElement>event.target;
+                    var parentNodeItem: HTMLLIElement = <any>$(specPermissionLi).parents("li.list-item.non-leaf").first();
+                    $(specPermissionLi).remove();
+                    this.removeSpecialPermissionNodeItemIfEmpty(parentNodeItem);
 
-            if (target.checked) {
-                //this.addToSelectedPermissions(specialPermission.Id);
-            } else {
-                //this.removeFromSelectedPermissions(specialPermission.Id);
-            }
-
+                }
+            });
         });
 
-        checkSpan.appendChild(checkInput);
+        buttonsSpan.appendChild(removeSpan);
 
-        buttonsSpan.appendChild(checkSpan);
+        specPermissionLi.appendChild(buttonsSpan);
 
         specPermissionLi.appendChild(buttonsSpan);
 
@@ -539,6 +536,13 @@ class GroupPermissionEditor {
         specPermissionLi.appendChild(textSpan);
 
         return specPermissionLi;
+    }
+
+    private removeSpecialPermissionNodeItemIfEmpty(nodeItem: HTMLLIElement) {
+        var listItems = $(nodeItem).find(".list-item");
+        if (typeof listItems === "undefined" || listItems === null || listItems.length === 0) {
+            $(nodeItem).remove();
+        }
     }
 
     private unloadWholeCategory(category: HTMLLIElement) {
@@ -581,15 +585,15 @@ class SpecialPermissionTextResolver {
 
         switch (type) {
             case this.newsPermission:
-                return "Novinky xxx";
+                return "Přidávat novinky";
             case this.uploadBookPermission:
-                return "Nahrávání děl xxx";
+                return "Nahrávat díla";
             case this.managePermission:
-                return "Správa práv xxx";
+                return "Spravovat práva";
             case this.feedbackPermission:
-                return "Správa připomínek xxx";
+                return "Číst připomínky";
             default:
-                return "Neznámé právo xxx";
+                return "Neznámé právo";
         }
     }
 
@@ -646,17 +650,6 @@ class SpecialPermissionsSelector {
         var checkInput = document.createElement("input");
         checkInput.type = "checkbox";
 
-        $(checkInput).change((event: Event) => {
-            var target: HTMLInputElement = <HTMLInputElement>event.target;
-
-            if (target.checked) {
-                
-            } else {
-                
-            }
-
-        });
-
         checkSpan.appendChild(checkInput);
 
         buttonsSpan.appendChild(checkSpan);
@@ -667,7 +660,11 @@ class SpecialPermissionsSelector {
         $(moreSpan).addClass("list-item-more");
 
         $(moreSpan).click((event: Event) => {
-            var target = event.target;
+            var target: JQuery = $(event.target);
+            if ($(target).hasClass("list-item-more")) {
+                target = $(target).find("span.glyphicon").first();
+            }
+
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
 
             if (detailsDiv.is(":hidden")) {
@@ -708,6 +705,17 @@ class SpecialPermissionsSelector {
 
         $(detailsDiv).append(detailsUl);
         $(detailsDiv).hide();
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                $(detailsDiv).find(".list-item-check input").prop("checked", true).trigger("change");
+            } else {
+                $(detailsDiv).find(".list-item-check input").prop("checked", false).trigger("change");
+            }
+
+        });
 
         groupSpecialPermissionsLi.appendChild(detailsDiv);
 
@@ -849,7 +857,11 @@ class BooksSelector {
         $(moreSpan).addClass("list-item-more");
 
         $(moreSpan).click((event: Event) => {
-            var target = event.target;
+            var target: JQuery = $(event.target);
+            if ($(target).hasClass("list-item-more")) {
+                target = $(target).find("span.glyphicon").first();
+            }
+
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
 
             if (detailsDiv.is(":hidden")) {
