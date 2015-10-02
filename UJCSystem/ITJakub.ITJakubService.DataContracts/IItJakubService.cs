@@ -218,10 +218,19 @@ namespace ITJakub.ITJakubService.DataContracts
         void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
 
         [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissions();
+
+        [OperationContract]
         IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId);
 
         [OperationContract]
         IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId);
+
+        [OperationContract]
+        void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds);
+
+        [OperationContract]
+        void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionIds);
 
         #endregion
 
@@ -234,5 +243,6 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetWebNewsSyndicationItemCount();
 
         #endregion
+
     }
 }

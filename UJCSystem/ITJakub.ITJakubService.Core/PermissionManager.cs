@@ -211,18 +211,27 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUser(userId);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
 
+        public IList<SpecialPermissionContract> GetSpecialPermissions()
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            var specPermissions = m_permissionRepository.GetSpecialPermissions();
+            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+        }
         public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByGroup(groupId);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
 
         public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionsIds)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
             var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
 
@@ -241,6 +250,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionsIds)
         {
+            m_authorizationManager.CheckUserCanManagePermissions();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByIds(specialPermissionsIds);
             var group = m_permissionRepository.FindGroupWithSpecialPermissionsById(groupId);
 

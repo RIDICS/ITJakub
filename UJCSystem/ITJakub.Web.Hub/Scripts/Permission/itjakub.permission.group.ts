@@ -13,6 +13,7 @@ class GroupPermissionEditor {
     private groupSearchBox: ConcreteInstanceSearchBox;
     private currentGroupSelectedItem: IGroup;
     private bookSelector: BooksSelector;
+    private specialPermissionSelector: SpecialPermissionsSelector;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
@@ -137,11 +138,27 @@ class GroupPermissionEditor {
 
         $("#addSpecialPermissionToGroup").click(() => {
             var specialPermissionDialogBody = <HTMLDivElement>document.getElementById("add-special-permission-to-group-form");
+            this.specialPermissionSelector = new SpecialPermissionsSelector(specialPermissionDialogBody);
+            this.specialPermissionSelector.make();
             $("#addSpecialPermissionToGroupDialog").modal();
         });
 
         $("#add-special-permissions-to-group-ok").click(() => {
-            
+            var specialPermissionIds = this.specialPermissionSelector.getSelectedSpecialPermissionsIds();
+
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: getBaseUrl() + "Permission/AddSpecialPermissionsToGroup",
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, specialPermissionIds: specialPermissionIds}),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response) => {
+
+                    $("#addSpecialPermissionToGroup").modal('hide');
+                    this.loadGroup(this.currentGroupSelectedItem);
+                }
+            });
         });
     }
 
@@ -203,7 +220,7 @@ class GroupPermissionEditor {
 
                 for (var specialPermissionsOfType in specialPermissions) {
                     if (specialPermissions.hasOwnProperty(specialPermissionsOfType)) {
-                        var item = this.createSpecialPermissionListItem(specialPermissionsOfType, specialPermissions[specialPermissionsOfType]);
+                        var item = this.createSpecialPermissionNodeItem(specialPermissionsOfType, specialPermissions[specialPermissionsOfType]);
                         $(item).addClass("special-permission");
                         allowedSpecialPermissionsUl.append(item);
                     }
@@ -404,11 +421,124 @@ class GroupPermissionEditor {
         return bookLi;
     }
 
-    private createSpecialPermissionListItem(type: string, specialPermissions: Array<ISpecialPermission>): HTMLLIElement {
-        var permissionLi = document.createElement("li");
-        $(permissionLi).addClass("list-item non-leaf");
-        //permissionLi.innerHTML = specialPermission.Id.toString();
-        return permissionLi;
+    private createSpecialPermissionNodeItem(type: string, specialPermissions: Array<ISpecialPermission>): HTMLLIElement {
+        var groupSpecialPermissionsLi = document.createElement("li");
+        $(groupSpecialPermissionsLi).addClass("list-item non-leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+
+            } else {
+
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        groupSpecialPermissionsLi.appendChild(buttonsSpan);
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("list-item-more");
+
+        $(moreSpan).click((event: Event) => {
+            var target = event.target;
+            var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
+
+            if (detailsDiv.is(":hidden")) {
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+                detailsDiv.slideDown();
+            } else {
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
+                detailsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+
+        groupSpecialPermissionsLi.appendChild(moreSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+
+        groupSpecialPermissionsLi.appendChild(nameSpan);
+
+        var detailsDiv = document.createElement("div");
+        $(detailsDiv).addClass("list-item-details");
+
+        var detailsUl: HTMLUListElement = document.createElement("ul");
+        $(detailsUl).addClass("list-item-details-list");
+
+        for (var i = 0; i < specialPermissions.length; i++) {
+            var specPermission = specialPermissions[i];
+            var item = this.createSpecialPermissionLeafItem(type, specPermission);
+            detailsUl.appendChild(item);
+        }
+
+        $(detailsDiv).append(detailsUl);
+        $(detailsDiv).hide();
+
+        groupSpecialPermissionsLi.appendChild(detailsDiv);
+
+        return groupSpecialPermissionsLi;
+    }
+
+    private createSpecialPermissionLeafItem(type: string, specialPermission: ISpecialPermission): HTMLLIElement {
+        var specPermissionLi = document.createElement("li");
+        $(specPermissionLi).addClass("list-item leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                //this.addToSelectedPermissions(specialPermission.Id);
+            } else {
+                //this.removeFromSelectedPermissions(specialPermission.Id);
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        specPermissionLi.appendChild(buttonsSpan);
+
+        var textSpan = document.createElement("span");
+        $(textSpan).addClass("list-item-name");
+        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+
+        specPermissionLi.appendChild(textSpan);
+
+        return specPermissionLi;
     }
 
     private unloadWholeCategory(category: HTMLLIElement) {
@@ -420,6 +550,222 @@ class GroupPermissionEditor {
         var moreSpanIcon = $(category).children("span.list-item-more").first().children("span.glyphicon");
         $(moreSpanIcon).removeClass("glyphicon-chevron-up");
         $(moreSpanIcon).addClass("glyphicon-chevron-down");
+    }
+}
+
+class SpecialPermissionTextResolver {
+    
+    private static newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
+    private static uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
+    private static managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
+    private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
+    
+    static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
+
+        switch (type) {
+            case this.newsPermission:
+                return "Novinky";
+            case this.uploadBookPermission:
+                return "Nahrávání děl";
+            case this.managePermission:
+                return "Správa práv";
+            case this.feedbackPermission:
+                return "Správa připomínek";
+            default:
+                return "Neznámé právo";
+        }
+         
+    }
+
+    static resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
+
+        switch (type) {
+            case this.newsPermission:
+                return "Novinky xxx";
+            case this.uploadBookPermission:
+                return "Nahrávání děl xxx";
+            case this.managePermission:
+                return "Správa práv xxx";
+            case this.feedbackPermission:
+                return "Správa připomínek xxx";
+            default:
+                return "Neznámé právo xxx";
+        }
+    }
+
+}
+
+class SpecialPermissionsSelector {
+    private container: HTMLDivElement;
+    private specialPermissionIds: Array<number>;
+
+    constructor(container: HTMLDivElement) {
+        this.container = container;
+    }
+
+    public make() {
+        this.specialPermissionIds = new Array<number>();
+
+        var specPermissionsUl = document.createElement("ul");
+        $(specPermissionsUl).addClass("items-list");
+
+        $(this.container).empty();
+        $(this.container).append(specPermissionsUl);
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Permission/GetSpecialPermissions",
+            data: {},
+            dataType: "json",
+            contentType: "application/json",
+            success: (specialPermissions) => {
+
+                for (var specialPermissionsOfType in specialPermissions) {
+                    if (specialPermissions.hasOwnProperty(specialPermissionsOfType)) {
+                        var item = this.createNodeItem(specialPermissionsOfType, specialPermissions[specialPermissionsOfType]);
+                        $(item).addClass("special-permission");
+                        specPermissionsUl.appendChild(item);
+                    }
+                }
+            }
+        });
+
+    }
+
+    private createNodeItem(type: string, specialPermissions: Array<ISpecialPermission>): HTMLLIElement {
+        var groupSpecialPermissionsLi = document.createElement("li");
+        $(groupSpecialPermissionsLi).addClass("list-item non-leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                
+            } else {
+                
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        groupSpecialPermissionsLi.appendChild(buttonsSpan);
+
+        var moreSpan = document.createElement("span");
+        $(moreSpan).addClass("list-item-more");
+
+        $(moreSpan).click((event: Event) => {
+            var target = event.target;
+            var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
+
+            if (detailsDiv.is(":hidden")) {
+                $(target).removeClass("glyphicon-chevron-down");
+                $(target).addClass("glyphicon-chevron-up");
+                detailsDiv.slideDown();
+            } else {
+                $(target).removeClass("glyphicon-chevron-up");
+                $(target).addClass("glyphicon-chevron-down");
+                detailsDiv.slideUp();
+            }
+        });
+
+        var iconSpan = document.createElement("span");
+        $(iconSpan).addClass("glyphicon glyphicon-chevron-down");
+
+        moreSpan.appendChild(iconSpan);
+
+        groupSpecialPermissionsLi.appendChild(moreSpan);
+
+        var nameSpan = document.createElement("span");
+        $(nameSpan).addClass("list-item-name");
+        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+
+        groupSpecialPermissionsLi.appendChild(nameSpan);
+
+        var detailsDiv = document.createElement("div");
+        $(detailsDiv).addClass("list-item-details");
+
+        var detailsUl: HTMLUListElement = document.createElement("ul");
+        $(detailsUl).addClass("list-item-details-list");
+
+        for (var i = 0; i < specialPermissions.length; i++) {
+            var specPermission = specialPermissions[i];
+            var item = this.createLeafItem(type, specPermission);
+            detailsUl.appendChild(item);
+        }
+
+        $(detailsDiv).append(detailsUl);
+        $(detailsDiv).hide();
+
+        groupSpecialPermissionsLi.appendChild(detailsDiv);
+
+        return groupSpecialPermissionsLi;
+    }
+
+    private createLeafItem(type: string, specialPermission: ISpecialPermission): HTMLLIElement {
+        var specPermissionLi = document.createElement("li");
+        $(specPermissionLi).addClass("list-item leaf");
+
+        var buttonsSpan = document.createElement("span");
+        $(buttonsSpan).addClass("list-item-buttons");
+
+        var checkSpan = document.createElement("span");
+        $(checkSpan).addClass("list-item-check");
+
+        var checkInput = document.createElement("input");
+        checkInput.type = "checkbox";
+
+        $(checkInput).change((event: Event) => {
+            var target: HTMLInputElement = <HTMLInputElement>event.target;
+
+            if (target.checked) {
+                this.addToSelectedPermissions(specialPermission.Id);
+            } else {
+                this.removeFromSelectedPermissions(specialPermission.Id);
+            }
+
+        });
+
+        checkSpan.appendChild(checkInput);
+
+        buttonsSpan.appendChild(checkSpan);
+
+        specPermissionLi.appendChild(buttonsSpan);
+
+        var textSpan = document.createElement("span");
+        $(textSpan).addClass("list-item-name");
+        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+
+        specPermissionLi.appendChild(textSpan);
+
+        return specPermissionLi;
+    }
+
+    public getSelectedSpecialPermissionsIds(): Array<number> {
+        return this.specialPermissionIds;
+    }
+
+    protected addToSelectedPermissions(bookId: number) {
+        var isSelected = $.grep(this.specialPermissionIds, (currentBookId: number) => (currentBookId === bookId), false).length !== 0;
+        if (!isSelected) {
+            this.specialPermissionIds.push(bookId);
+        }
+    }
+
+    protected removeFromSelectedPermissions(bookId: number) {
+        this.specialPermissionIds = $.grep(this.specialPermissionIds, (currentBookId: number) => (currentBookId !== bookId), false);
     }
 }
 

@@ -37,7 +37,6 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
                 var group = session.QueryOver<Group>()
-                    .Fetch(g => g.Users).Eager
                     .Fetch(g => g.CreatedBy).Eager
                     .Fetch(g => g.SpecialPermissions).Eager
                     .Where(g => g.Id == groupId)
@@ -255,6 +254,20 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
                     .JoinQueryOver(x => groupAlias.Users, () => userAlias)
                     .Where(() => userAlias.Id == userId)
+                    .List<SpecialPermission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<SpecialPermission> GetSpecialPermissions()
+        {
+            using (var session = GetSession())
+            {
+                SpecialPermission specPermissionAlias = null;
+
+                var permissions = session.QueryOver(() => specPermissionAlias)
                     .List<SpecialPermission>();
 
                 return permissions;

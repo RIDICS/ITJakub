@@ -125,5 +125,26 @@ namespace ITJakub.Web.Hub.Controllers
             var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
             return Json(result, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetSpecialPermissions()
+        {
+            var specialPermissions = m_mainServiceClient.GetSpecialPermissions();
+            var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds)
+        {
+            m_mainServiceClient.AddSpecialPermissionsToGroup(groupId, specialPermissionIds);
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public ActionResult RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionIds)
+        {
+            m_mainServiceClient.RemoveSpecialPermissionsFromGroup(groupId, specialPermissionIds);
+            return Json(new { });
+        }
     }
 }

@@ -345,6 +345,10 @@ namespace ITJakub.ITJakubService.Services
             m_permissionManager.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
         }
 
+        public IList<SpecialPermissionContract> GetSpecialPermissions()
+        {
+            return m_permissionManager.GetSpecialPermissions();
+        }
         public IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId)
         {
             return m_permissionManager.GetSpecialPermissionsForGroup(groupId);
@@ -353,6 +357,16 @@ namespace ITJakub.ITJakubService.Services
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
         {
             return m_permissionManager.GetSpecialPermissionsForUser(userId);
+        }
+
+        public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds)
+        {
+            m_permissionManager.AddSpecialPermissionsToGroup(groupId, specialPermissionIds);
+        }
+
+        public void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionIds)
+        {
+            m_permissionManager.RemoveSpecialPermissionsFromGroup(groupId, specialPermissionIds);
         }
 
         public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
