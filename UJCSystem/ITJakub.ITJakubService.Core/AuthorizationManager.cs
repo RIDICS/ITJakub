@@ -71,6 +71,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void CheckUserCanUploadBook()
         {
+            return; //TODO HACK
             var user = GetCurrentUser();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
@@ -117,17 +118,17 @@ namespace ITJakub.ITJakubService.Core
             books = filteredBooks;
         }
 
-        public void FilterBooksByGroup(int groupId, ref IList<BookVersion> books)
+        public void FilterBooksByGroup(int groupId, ref IList<BookVersion> bookVersions)
         {
-            if (books == null || books.Count == 0)
+            if (bookVersions == null || bookVersions.Count == 0)
             {
                 return;
             }
 
-            var bookIds = books.Select(x => x.Id).ToList();
+            var bookIds = bookVersions.Select(x => x.Book.Id).ToList();
             var filteredBookIds = m_permissionRepository.GetFilteredBookIdListByGroupPermissions(groupId, bookIds);
-            var filteredBooks = books.Where(x => filteredBookIds.Contains(x.Id)).ToList();
-            books = filteredBooks;
+            var filteredBookVersions = bookVersions.Where(x => filteredBookIds.Contains(x.Book.Id)).ToList();
+            bookVersions = filteredBookVersions;
         }
 
         public void AuthorizeCriteria(List<SearchCriteriaContract> searchCriteriaContracts)

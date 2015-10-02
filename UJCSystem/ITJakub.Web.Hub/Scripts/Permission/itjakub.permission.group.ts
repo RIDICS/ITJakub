@@ -515,7 +515,7 @@ class GroupPermissionEditor {
                 contentType: "application/json",
                 success: (response) => {
 
-                    var parentNodeItem: HTMLLIElement = <any>$(specPermissionLi).parents("li.list-item.non-leaf").first();
+                    var parentNodeItem: HTMLLIElement = <HTMLLIElement>$(specPermissionLi).parents("li.list-item.non-leaf").first()[0];
                     $(specPermissionLi).remove();
                     this.removeSpecialPermissionNodeItemIfEmpty(parentNodeItem);
 
@@ -744,7 +744,7 @@ class SpecialPermissionsSelector {
                 this.removeFromSelectedPermissions(specialPermission.Id);
             }
 
-            var parentNodeItem: HTMLLIElement = <any>$(specPermissionLi).parents("li.list-item.non-leaf").first();
+            var parentNodeItem: HTMLLIElement = <HTMLLIElement>$(specPermissionLi).parents("li.list-item.non-leaf").first()[0];
             this.changeStateOfNodeItemCheckIfNeeded(parentNodeItem);
 
         });
@@ -850,6 +850,7 @@ class BooksSelector {
     private createCategoryListItem(category: ICategory): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
+        $(groupLi).data("id", category.Id);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -860,15 +861,25 @@ class BooksSelector {
         var checkInput = document.createElement("input");
         checkInput.type = "checkbox";
 
-        $(checkInput).change((event: Event) => {
+        $(checkInput).change((event: Event, data) => {
             var target: HTMLInputElement = <HTMLInputElement>event.target;
+            var listItems = $(groupLi).find(".list-item");
 
             if (target.checked) {
+                $(listItems).find(".list-item-check input").prop("checked", false).trigger("change", [{ propagate: false }]);
+                $(listItems).find(".list-item-check input").prop("checked", true);
+                $(target).prop("checked", true);
                 this.addToSelectedCategories(category.Id);
             } else {
+                $(listItems).find(".list-item-check input").prop("checked", false);
+                $(target).prop("checked", false);
                 this.removeFromSelectedCategories(category.Id);
             }
-
+            
+            if (typeof data === "undefined" || data === null || data.propagate === true) {
+                var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(groupLi).parents("li.list-item.non-leaf").first()[0];
+                this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);    
+            }
         });
 
         checkSpan.appendChild(checkInput);
@@ -930,6 +941,7 @@ class BooksSelector {
     private createBookListItem(book: IBook): HTMLLIElement {
         var bookLi = document.createElement("li");
         $(bookLi).addClass("list-item leaf");
+        $(bookLi).data("id", book.Id);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -940,7 +952,7 @@ class BooksSelector {
         var checkInput = document.createElement("input");
         checkInput.type = "checkbox";
 
-        $(checkInput).change((event: Event) => {
+        $(checkInput).change((event: Event, data) => {
             var target: HTMLInputElement = <HTMLInputElement>event.target;
 
             if (target.checked) {
@@ -949,6 +961,10 @@ class BooksSelector {
                 this.removeFromSelectedBooks(book.Id);
             }
 
+            if (typeof data === "undefined" || data === null || data.propagate === true) {
+                var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(bookLi).parents("li.list-item.non-leaf").first()[0];
+                this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
+            }
         });
 
         checkSpan.appendChild(checkInput);
@@ -965,6 +981,41 @@ class BooksSelector {
 
 
         return bookLi;
+    }
+
+    private changeStateOfCategoryItemCheckboxIfNeeded(categoryItem: HTMLLIElement) {
+        if (typeof categoryItem === "undefined" || categoryItem === null) {
+            return;
+        }
+
+        var categoryId = $(categoryItem).data("id");
+
+        var checked = $(categoryItem).find(".list-item-details .list-item-check input:checked");
+        var notChecked = $(categoryItem).find(".list-item-details .list-item-check input:not(:checked)");
+
+        var nodeItemCheckbox = $(categoryItem).children(".list-item-buttons").find(".list-item-check input");
+
+        if (typeof checked === "undefined" || checked === null || checked.length === 0) {
+
+            $(nodeItemCheckbox).prop("indeterminate", false);
+            $(nodeItemCheckbox).prop("checked", false).trigger("change", [{ propagate: false }]);
+            this.removeFromSelectedCategories(categoryId);
+
+        } else if (typeof notChecked === "undefined" || notChecked === null || notChecked.length === 0) {
+
+            $(nodeItemCheckbox).prop("indeterminate", false);
+            $(nodeItemCheckbox).prop("checked", false).trigger("change", [{ propagate: false }]);
+            $(nodeItemCheckbox).prop("checked", true);
+            this.addToSelectedCategories(categoryId);
+
+        } else {
+
+            $(nodeItemCheckbox).prop("indeterminate", true);    
+            this.removeFromSelectedCategories(categoryId);
+        }
+
+        var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(categoryItem).parents("li.list-item.non-leaf").first()[0];
+        this.changeStateOfCategoryItemCheckboxIfNeeded(parentCategoryItem);
     }
 
     private loadCategoryContent(targetDiv, categoryId: number) {

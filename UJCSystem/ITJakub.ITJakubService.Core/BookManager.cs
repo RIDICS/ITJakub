@@ -27,13 +27,13 @@ namespace ITJakub.ITJakubService.Core
         private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
-        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager mAuthorizationManager)
+        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager authorizationManager)
         {
             m_searchServiceClient = searchServiceClient;
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_fileSystemManager = fileSystemManager;
-            m_authorizationManager = mAuthorizationManager;
+            m_authorizationManager = authorizationManager;
         }
 
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
