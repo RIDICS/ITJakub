@@ -9,7 +9,6 @@ using ITJakub.MobileApps.Client.Core.ViewModel.Authentication;
 using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.MainApp.View.Login;
 using ITJakub.MobileApps.Client.Shared.Communication;
-using ITJakub.MobileApps.Client.Shared.Enum;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
@@ -31,12 +30,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.Login
 
             GoBackCommand = new RelayCommand(m_navigationService.GoBack);
             ItemClickCommand = new RelayCommand<ItemClickEventArgs>(ItemClick);
-            //RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
-            RegistrationCommand = new RelayCommand(() =>
-            {
-                m_dataService.SetCurrentApplication(ApplicationType.Fillwords2);
-                m_navigationService.Navigate<EditorHostView>();
-            });
+            RegistrationCommand = new RelayCommand(() => m_navigationService.Navigate<RegistrationView>());
         }
 
 

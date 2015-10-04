@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
@@ -252,5 +253,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         public int StartPosition { get; set; }
 
         public int EndPosition { get; set; }
+
+        public IList<string> Options { get; set; }
     }
 }

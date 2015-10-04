@@ -1,0 +1,28 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="using:ITJakub.MobileApps.Client.Fillwords2.View.Control">
+
+    <Style TargetType="control:FillRichEditBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="control:FillRichEditBox">
+                    <ScrollViewer HorizontalScrollMode="Disabled"
+                                  VerticalScrollMode="Enabled">
+                        <Grid>
+                            <control:SimpleRichEditBox DocumentRtf="{TemplateBinding DocumentRtf}"
+                                                       Padding="10,3,23,5"
+                                                       BorderBrush="#80ffffff"
+                                                       Background="#80ffffff"
+                                                       IsReadOnly="True"
+                                                       x:Name="RichEditBox"
+                                                       ScrollViewer.HorizontalScrollMode="Disabled"
+                                                       ScrollViewer.VerticalScrollMode="Disabled" />
+                            <Canvas x:Name="Canvas" />
+                        </Grid>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

@@ -215,17 +215,17 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
             }
 
             Saving = true;
-            //m_dataService.CreateTask(TaskName, TaskDescription, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
-            //{
-            //    Saving = false;
-            //    if (exception != null)
-            //    {
-            //        m_dataService.ErrorService.ShowConnectionError();
-            //        return;
-            //    }
+            m_dataService.CreateTask(TaskName, TaskDescription, BookRtfContent, OptionsEditorViewModel.WordOptionsList.Values.ToList(), exception =>
+            {
+                Saving = false;
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError();
+                    return;
+                }
 
-            //    GoBack();
-            //});
+                GoBack();
+            });
         }
     }
 }
