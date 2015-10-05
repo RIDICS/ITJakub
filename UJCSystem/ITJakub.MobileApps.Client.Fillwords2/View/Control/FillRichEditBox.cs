@@ -107,7 +107,6 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 return;
 
             const char emDash = (char)0x2014;
-            const int charCountEnlarge = 3;
 
             var oldIsReadonlyState = m_richEditBoxControl.IsReadOnly;
             m_richEditBoxControl.IsReadOnly = false;
@@ -122,7 +121,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             foreach (var optionsViewModel in sortedOptionsList)
             {
                 // create replacement for current word in the document
-                var wordLength = optionsViewModel.CorrectAnswer.Length + charCountEnlarge;
+                var wordLength = optionsViewModel.CorrectAnswer.Length;
                 var stringBuilder = new StringBuilder(wordLength, wordLength);
                 stringBuilder.Append(emDash, wordLength);
                 var characterSequence = stringBuilder.ToString();
@@ -148,10 +147,11 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 //    BorderBrush = new SolidColorBrush(Colors.White),
                 //    ItemsSource = new ObservableCollection<string>(optionList.OrderBy(s => s))
                 //};
-                var button = new Button()
+                var button = new AnswerButton
                 {
                     IsEnabled = IsAnsweringAllowed,
-                    Content = "test"
+                    Options = optionsViewModel,
+                    Text = optionsViewModel.CorrectAnswer // todo hide text
                 };
 
                 // create Button background binding
@@ -214,7 +214,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 
         private class ButtonItem
         {
-            public Button Button { get; set; }
+            public AnswerButton Button { get; set; }
 
             public int WordPosition { get; set; }
 

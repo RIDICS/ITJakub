@@ -123,6 +123,7 @@
     <Compile Include="ViewModel\Data\TaskViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AnswerTypeViewModel.cs" />
+    <Compile Include="ViewModel\Data\UserResultViewModel.cs" />
     <Compile Include="ViewModel\Enum\AnswerState.cs" />
     <Compile Include="ViewModel\Enum\AnswerType.cs" />
     <Compile Include="ViewModel\FillwordsEditorViewModel.cs" />
@@ -130,8 +131,10 @@
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\Data\SimpleWordOptionsViewModel.cs" />
     <Compile Include="ViewModel\WordOptionsViewModel.cs" />
+    <Compile Include="View\Control\AnswerButton.cs" />
     <Compile Include="View\Control\EditorRichEditBox.cs" />
     <Compile Include="View\Control\FillRichEditBox.cs" />
+    <Compile Include="View\Control\OpaqueButton.cs" />
     <Compile Include="View\Control\SelectableRichEditBox.cs" />
     <Compile Include="View\Control\SimpleRichEditBox.cs" />
     <Compile Include="View\Converter\AnswerStateToBackgroundConverter.cs" />

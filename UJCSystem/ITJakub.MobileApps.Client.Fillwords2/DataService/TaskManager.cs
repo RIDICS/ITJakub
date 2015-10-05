@@ -86,6 +86,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
                 };
                 wordOptions.Add(wordOption);
 
+                var optionList = new List<LetterOptionViewModel>();
                 foreach (var optionContract in wordOptionsContract.OptionList)
                 {
                     var option = new LetterOptionViewModel
@@ -95,8 +96,9 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
                         AnswerTypeViewModel = new AnswerTypeViewModel{AnswerType = optionContract.AnswerType},
                         Options = optionContract.Options
                     };
-                    wordOption.Options.Add(option);
+                    optionList.Add(option);
                 }
+                wordOption.Options = new ObservableCollection<LetterOptionViewModel>(optionList.OrderBy(x => x.StartPosition));
             }
 
             m_currentTaskFinished = false;
