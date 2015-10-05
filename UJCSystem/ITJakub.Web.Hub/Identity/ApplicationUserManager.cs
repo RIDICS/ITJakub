@@ -1,7 +1,8 @@
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Jewelery;
+using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -82,9 +83,35 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
-            var result = await base.CreateIdentityAsync(user, authenticationType);
-            result.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
-            return result;
+            var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
+            claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+
+            if (user.SpecialPermissions.Count != 0)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
+            }
+
+            if (user.SpecialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
+            }
+
+            if (user.SpecialPermissions.OfType<NewsPermissionContract>().Count() != 0)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
+            }
+
+            if (user.SpecialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
+            }
+
+            if (user.SpecialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
+            }
+
+            return claimsIdentity;
         }
     }
 }

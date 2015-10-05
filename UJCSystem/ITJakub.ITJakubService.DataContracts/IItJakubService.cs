@@ -227,6 +227,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId);
 
         [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(int userId, SpecialPermissionCategorizationEnumContract permissionType);
+
+        [OperationContract]
         void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds);
 
         [OperationContract]

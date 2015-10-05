@@ -359,6 +359,11 @@ namespace ITJakub.ITJakubService.Services
             return m_permissionManager.GetSpecialPermissionsForUser(userId);
         }
 
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(int userId, SpecialPermissionCategorizationEnumContract permissionType)
+        {
+            return m_permissionManager.GetSpecialPermissionsForUserByType(userId, permissionType);
+        }
+
         public void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds)
         {
             m_permissionManager.AddSpecialPermissionsToGroup(groupId, specialPermissionIds);

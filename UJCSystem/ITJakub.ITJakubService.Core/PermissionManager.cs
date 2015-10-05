@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts;
 using log4net;
@@ -214,6 +215,13 @@ namespace ITJakub.ITJakubService.Core
         {
             m_authorizationManager.CheckUserCanManagePermissions();
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUser(userId);
+            return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
+        }
+
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(int userId, SpecialPermissionCategorizationEnumContract type)
+        {
+            m_authorizationManager.CheckUserCanManagePermissions();
+            var specPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(userId, (SpecialPermissionCategorization) type);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
 

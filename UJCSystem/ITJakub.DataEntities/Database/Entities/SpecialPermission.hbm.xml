@@ -10,6 +10,9 @@
                not-null="true"
                type="System.String" />
 
+    <property name="PermissionCategorization">
+      <column name="PermissionCategorization" sql-type="tinyint" not-null="true" />
+    </property>
 
     <bag name="Groups" table="SpecialPermission_Group"  lazy="true">
       <key column="[SpecialPermission]" />

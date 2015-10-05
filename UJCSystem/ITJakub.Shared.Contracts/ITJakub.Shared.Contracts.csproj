@@ -103,6 +103,7 @@
     <Compile Include="Searching\Results\SearchResultContract.cs" />
     <Compile Include="Searching\Results\SearchResultContractList.cs" />
     <Compile Include="Searching\Results\VerseResultContext.cs" />
+    <Compile Include="SpecialPermissionCategorizationEnumContract.cs" />
     <Compile Include="SpecialPermissionContract.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity
@@ -15,6 +17,7 @@ namespace ITJakub.Web.Hub.Identity
         public string LastName { get; set; }
         public DateTime CreateTime { get; set; }
         public string CommunicationToken { get; set; }
+        public IList<SpecialPermissionContract> SpecialPermissions { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

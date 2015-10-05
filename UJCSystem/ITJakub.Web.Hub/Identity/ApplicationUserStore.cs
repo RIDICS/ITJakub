@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.WebPages;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
@@ -9,6 +10,7 @@ namespace ITJakub.Web.Hub.Identity
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string> {
         
         private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
+        private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
 
         public async Task SetEmailAsync(ApplicationUser user, string email)
         {
@@ -105,12 +107,16 @@ namespace ITJakub.Web.Hub.Identity
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
                     PasswordHash = user.PasswordHash,
-                    CommunicationToken = user.CommunicationToken
+                    CommunicationToken = user.CommunicationToken,
                 };
                 var result = m_serviceEncryptedClient.CreateUser(userContract);
                 user.CreateTime = result.CreateTime;
                 user.CommunicationToken = result.CommunicationToken;
                 user.Id = result.Id.ToString();
+
+                var specialPermissions = m_serviceClient.GetSpecialPermissionsForUserByType(result.Id, SpecialPermissionCategorizationEnumContract.Action);
+                user.SpecialPermissions = specialPermissions;
+
             });
             await task;
         }
@@ -131,6 +137,9 @@ namespace ITJakub.Web.Hub.Identity
             {
                 var user = m_serviceEncryptedClient.FindUserById(Int32.Parse(userId));
                 if (user == null) return null;
+
+                var specialPermissions = m_serviceClient.GetSpecialPermissionsForUserByType(user.Id, SpecialPermissionCategorizationEnumContract.Action);
+
                 return new ApplicationUser
                 {
                     Id = user.Id.ToString(),
@@ -140,8 +149,10 @@ namespace ITJakub.Web.Hub.Identity
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
                     PasswordHash = user.PasswordHash,
-                    CommunicationToken = user.CommunicationToken
+                    CommunicationToken = user.CommunicationToken,
+                    SpecialPermissions = specialPermissions
                 };
+
             });
 
             return await task;
@@ -153,6 +164,9 @@ namespace ITJakub.Web.Hub.Identity
             {
                 var user = m_serviceEncryptedClient.FindUserByUserName(userName);
                 if (user == null) return null;
+
+                var specialPermissions = m_serviceClient.GetSpecialPermissionsForUserByType(user.Id, SpecialPermissionCategorizationEnumContract.Action);
+
                 return new ApplicationUser
                 {
                     Id = user.Id.ToString(),
@@ -162,8 +176,10 @@ namespace ITJakub.Web.Hub.Identity
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
                     PasswordHash = user.PasswordHash,
-                    CommunicationToken = user.CommunicationToken
+                    CommunicationToken = user.CommunicationToken,
+                    SpecialPermissions = specialPermissions
                 };
+
             });
             return await task;
         }

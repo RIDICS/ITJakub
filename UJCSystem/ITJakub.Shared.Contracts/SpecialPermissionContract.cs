@@ -1,22 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
-    [KnownType(typeof(NewsPermissionContract))]
-    [KnownType(typeof(UploadBookPermissionContract))]
-    [KnownType(typeof(ManagePermissionsPermissionContract))]
-    [KnownType(typeof(FeedbackPermissionContract))]
+    [KnownType(typeof (NewsPermissionContract))]
+    [KnownType(typeof (UploadBookPermissionContract))]
+    [KnownType(typeof (ManagePermissionsPermissionContract))]
+    [KnownType(typeof (FeedbackPermissionContract))]
     public class SpecialPermissionContract
     {
         [DataMember]
-        public int Id { get;set; }
+        public int Id { get; set; }
     }
 
     [DataContract]
-    public class NewsPermissionContract: SpecialPermissionContract
+    public class NewsPermissionContract : SpecialPermissionContract
     {
         [DataMember]
         public bool CanAddNews { get; set; }

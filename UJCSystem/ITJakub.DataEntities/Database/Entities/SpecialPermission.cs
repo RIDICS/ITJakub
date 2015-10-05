@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
     public abstract class SpecialPermission : IEquatable<SpecialPermission>
     {
         public virtual int Id { get; set; }
+
+        public virtual SpecialPermissionCategorization PermissionCategorization { get; protected set; }
 
         public virtual IList<Group> Groups { get; set; }
 
@@ -32,22 +35,42 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class UploadBookPermission : SpecialPermission
     {
-        public virtual bool CanUploadBook { get; set; }
+        public UploadBookPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
 
+        public virtual bool CanUploadBook { get; set; }
     }
 
     public class ManagePermissionsPermission : SpecialPermission
     {
+        public ManagePermissionsPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
         public virtual bool CanManagePermissions { get; set; }
+        
     }
 
     public class NewsPermission : SpecialPermission
     {
+        public NewsPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
         public virtual bool CanAddNews { get; set; }
     }
 
     public class FeedbackPermission : SpecialPermission
     {
+        public FeedbackPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
         public virtual bool CanManageFeedbacks { get; set; }
     }
 }
