@@ -1,7 +1,7 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
@@ -9,6 +9,7 @@ using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 {
     [TemplatePart(Name = "StackPanel", Type = typeof(StackPanel))]
+    [TemplatePart(Name = "Flyout", Type = typeof(Flyout))]
     public sealed class AnswerButton : Windows.UI.Xaml.Controls.Control
     {
         private StackPanel m_stackPanel;
@@ -99,7 +100,14 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 letterOptionViewModel.SelectedAnswer = textBox.Text;
                 button.UpdateDisplayedText();
             };
-            
+            var textBinding = new Binding
+            {
+                Path = new PropertyPath("SelectedAnswer"),
+                Source = letterOptionViewModel,
+                Mode = BindingMode.TwoWay
+            }; // TODO fix binding
+            textBox.SetBinding(TextBox.TextProperty, textBinding);
+
             stackPanel.Children.Add(textBox);
         }
 
@@ -131,7 +139,6 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 
             var resultText = stringBuilder.ToString();
             Text = resultText;
-            Options.SelectedAnswer = resultText;
         }
 
         protected override void OnApplyTemplate()
@@ -139,6 +146,13 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             base.OnApplyTemplate();
 
             m_stackPanel = GetTemplateChild("StackPanel") as StackPanel;
+
+            var flyout = GetTemplateChild("Flyout") as Flyout;
+            if (flyout != null)
+                flyout.Closed += (sender, o) =>
+                {
+                    Options.SubmitAnswer();
+                };
 
             OptionsPropertyChanged(this, null);
         }

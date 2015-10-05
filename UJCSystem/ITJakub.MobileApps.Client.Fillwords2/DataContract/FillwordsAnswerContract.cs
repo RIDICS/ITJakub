@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Fillwords2.DataContract
 {
@@ -7,7 +8,17 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataContract
         [JsonProperty("WordPosition")]
         public int WordPosition { get; set; }
 
-        [JsonProperty("SelectedAnswer")]
-        public string SelectedAnswer { get; set; }
+        [JsonProperty("Answers")]
+        public IList<OptionContract> Answers { get; set; }
+
+
+        public class OptionContract
+        {
+            [JsonProperty("StartPosition")]
+            public int StartPosition { get; set; }
+
+            [JsonProperty("Answer")]
+            public string Answer { get; set; }
+        }
     }
 }

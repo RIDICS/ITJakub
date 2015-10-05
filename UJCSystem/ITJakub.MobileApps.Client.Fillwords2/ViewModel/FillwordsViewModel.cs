@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords2.DataService;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
@@ -17,6 +18,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         private bool m_saving;
         private bool m_isSubmitFlyoutOpen;
         private bool m_isSubmited;
+        private bool m_isDataLoaded;
 
         public FillwordsViewModel(FillwordsDataService dataService)
         {
@@ -28,8 +30,51 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 
         public override void InitializeCommunication(bool isUserOwner)
         {
-            SetDataLoaded();
-            // TODO
+            LoadMyProgress();
+            //m_dataService.GetTaskResults((taskFinished, exception) =>
+            //{
+            //    if (exception != null)
+            //    {
+            //        m_dataService.ErrorService.ShowConnectionError(GoBack);
+            //        return;
+            //    }
+
+            //    ResultList = taskFinished.ResultList;
+            //    IsOver = taskFinished.IsFinished || IsOver;
+
+            //    m_isDataLoaded = true;
+            //    m_isSubmited = taskFinished.IsFinished;
+
+            //    if (IsOver)
+            //    {
+            //        SetDataLoaded();
+            //        StartPollingResults();
+            //    }
+            //    else
+            //    {
+            //        LoadMyProgress();
+            //    }
+            //});
+        }
+
+        private void LoadMyProgress()
+        {
+            m_dataService.GetAnswers((answers, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    return;
+                }
+
+                foreach (var answerViewModel in answers)
+                {
+                    var optionsViewModel = TaskOptionsList.Single(x => x.WordPosition == answerViewModel.WordPosition);
+                    optionsViewModel.UpdateSelectedAnswer(answerViewModel.Answers);
+                }
+
+                SetDataLoaded();
+            });
         }
 
         public override void SetTask(string data)
@@ -39,10 +84,21 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
                 TaskDocumentRtf = viewModel.DocumentRtf;
                 TaskOptionsList = viewModel.Options;
 
-                //foreach (var optionsViewModel in TaskOptionsList)
-                //{
-                //    optionsViewModel.AnswerChangedCallback = AnswerChanged;
-                //}
+                foreach (var optionsViewModel in TaskOptionsList)
+                {
+                    optionsViewModel.AnswerChangedCallback = AnswerChanged;
+                }
+            });
+        }
+
+        private void AnswerChanged(SimpleWordOptionsViewModel optionsViewModel)
+        {
+            m_dataService.SendAnswer(optionsViewModel.WordPosition, optionsViewModel.Options, exception =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
+                }
             });
         }
 

@@ -118,7 +118,9 @@
     <Compile Include="DataContract\FillwordsAnswerContract.cs" />
     <Compile Include="DataContract\FillwordsEvaluationContract.cs" />
     <Compile Include="DataContract\FillwordsTaskContract.cs" />
+    <Compile Include="ViewModel\Data\AnswerViewModel.cs" />
     <Compile Include="DataService\FillwordsDataService.cs" />
+    <Compile Include="DataService\ProgressManager.cs" />
     <Compile Include="DataService\TaskManager.cs" />
     <Compile Include="ViewModel\Data\EvaluationResultViewModel.cs" />
     <Compile Include="ViewModel\Data\TaskFinishedViewModel.cs" />

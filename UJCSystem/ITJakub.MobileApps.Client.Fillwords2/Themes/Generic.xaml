@@ -112,7 +112,7 @@
                         Content="{TemplateBinding Text}">
                         
                         <control:OpaqueButton.Flyout>
-                            <Flyout>
+                            <Flyout x:Name="Flyout">
                                 <StackPanel MinWidth="150"
                                             x:Name="StackPanel"
                                             Orientation="Horizontal" />

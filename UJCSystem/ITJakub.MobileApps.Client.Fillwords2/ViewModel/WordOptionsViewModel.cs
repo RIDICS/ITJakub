@@ -232,6 +232,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
     public class LetterOptionViewModel : ViewModelBase
     {
         private string m_letters;
+        private string m_selectedAnswer;
 
         public LetterOptionViewModel()
         {
@@ -249,13 +250,21 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
                 RaisePropertyChanged();
             }
         }
+        
+        public string SelectedAnswer
+        {
+            get { return m_selectedAnswer; }
+            set
+            {
+                m_selectedAnswer = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int StartPosition { get; set; }
 
         public int EndPosition { get; set; }
 
         public IList<string> Options { get; set; }
-
-        public string SelectedAnswer { get; set; }
     }
 }

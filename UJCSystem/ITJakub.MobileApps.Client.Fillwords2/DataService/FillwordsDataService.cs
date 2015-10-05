@@ -11,11 +11,13 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
     {
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private readonly TaskManager m_taskManager;
+        private readonly ProgressManager m_progressManager;
 
         public FillwordsDataService(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
             m_taskManager = new TaskManager(applicationCommunication);
+            m_progressManager = new ProgressManager(applicationCommunication);
         }
 
         public IErrorService ErrorService
@@ -51,6 +53,16 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         public void StopPolling()
         {
             //m_taskManager.StopPolling();
+        }
+
+        public void SendAnswer(int wordPosition, IList<LetterOptionViewModel> selectedAnswers, Action<Exception> callback)
+        {
+            m_progressManager.SendAnswer(wordPosition, selectedAnswers, callback);
+        }
+
+        public void GetAnswers(Action<IList<AnswerViewModel>, Exception> callback)
+        {
+            m_progressManager.GetAnswers(callback);
         }
     }
 }

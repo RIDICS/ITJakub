@@ -138,14 +138,6 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 textRange.SetText(TextSetOptions.None, characterSequence);
 
                 // create Button
-                //var optionList = new List<string>(wordList) { optionsViewModel.CorrectAnswer };
-                //var comboBox = new OpaqueComboBox
-                //{
-                //    PlaceholderText = "???",
-                //    IsEnabled = IsAnsweringAllowed,
-                //    BorderBrush = new SolidColorBrush(Colors.White),
-                //    ItemsSource = new ObservableCollection<string>(optionList.OrderBy(s => s))
-                //};
                 var button = new AnswerButton
                 {
                     IsEnabled = IsAnsweringAllowed,
@@ -159,14 +151,13 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                     Source = optionsViewModel,
                     Converter = m_answerStateToBackgroundConverter
                 };
-                //var selectedAnswerBinding = new Binding
-                //{
-                //    Path = new PropertyPath("SelectedAnswer"),
-                //    Source = optionsViewModel,
-                //    Mode = BindingMode.TwoWay
-                //};
+                var textBinding = new Binding
+                {
+                    Path = new PropertyPath("SelectedAnswer"),
+                    Source = optionsViewModel
+                };
                 button.SetBinding(BackgroundProperty, answerStateBinding);
-                //comboBox.SetBinding(Selector.SelectedItemProperty, selectedAnswerBinding);
+                button.SetBinding(AnswerButton.TextProperty, textBinding);
 
                 // create ButtonItem
                 var buttonItem = new ButtonItem
