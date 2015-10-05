@@ -10,7 +10,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
 using ITJakub.MobileApps.Client.Books.View.Control;
 using ITJakub.MobileApps.Client.Fillwords2.View.Converter;
-using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
 using ITJakub.MobileApps.Client.Shared.Control;
 
@@ -160,12 +159,12 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                     Source = optionsViewModel,
                     Converter = m_answerStateToBackgroundConverter
                 };
-                var selectedAnswerBinding = new Binding
-                {
-                    Path = new PropertyPath("SelectedAnswer"),
-                    Source = optionsViewModel,
-                    Mode = BindingMode.TwoWay
-                };
+                //var selectedAnswerBinding = new Binding
+                //{
+                //    Path = new PropertyPath("SelectedAnswer"),
+                //    Source = optionsViewModel,
+                //    Mode = BindingMode.TwoWay
+                //};
                 button.SetBinding(BackgroundProperty, answerStateBinding);
                 //comboBox.SetBinding(Selector.SelectedItemProperty, selectedAnswerBinding);
 

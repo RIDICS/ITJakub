@@ -9,6 +9,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data
         private ObservableCollection<LetterOptionViewModel> m_options;
         private int m_wordPosition;
         private string m_correctAnswer;
+        private AnswerState m_answerState;
+        private string m_selectedAnswer;
 
         public SimpleWordOptionsViewModel()
         {
@@ -45,6 +47,24 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data
             }
         }
 
-        public AnswerState AnswerState { get; set; }
+        public AnswerState AnswerState
+        {
+            get { return m_answerState; }
+            set
+            {
+                m_answerState = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string SelectedAnswer
+        {
+            get { return m_selectedAnswer; }
+            set
+            {
+                m_selectedAnswer = value;
+                RaisePropertyChanged();
+            }
+        }
     }
 }

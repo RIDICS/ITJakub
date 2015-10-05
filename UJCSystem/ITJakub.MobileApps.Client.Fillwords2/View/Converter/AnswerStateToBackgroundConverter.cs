@@ -21,6 +21,21 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Converter
                     return new SolidColorBrush(Color.FromArgb(255, 50, 205, 50));
                 case AnswerState.Incorrect:
                     return new SolidColorBrush(Color.FromArgb(255, 230, 100, 100));
+                case AnswerState.PartlyCorrect:
+                    var gradientStopCollection = new GradientStopCollection
+                    {
+                        new GradientStop
+                        {
+                            Color = Color.FromArgb(255, 50, 205, 50),
+                            Offset = 0.0
+                        },
+                        new GradientStop
+                        {
+                            Color = Color.FromArgb(255, 230, 100, 100),
+                            Offset = 1.0
+                        }
+                    };
+                    return new LinearGradientBrush(gradientStopCollection, 90);
                 default:
                     return new SolidColorBrush(Colors.White);
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
 using ITJakub.MobileApps.Client.Shared.Communication;
@@ -30,6 +31,26 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         public void SetTaskAndGetData(string data, Action<TaskViewModel> callback)
         {
             m_taskManager.SetTaskAndGetData(data, callback);
+        }
+
+        public void EvaluateTask(Action<EvaluationResultViewModel, Exception> callback)
+        {
+            m_taskManager.EvaluateTask(callback);
+        }
+
+        public void GetTaskResults(Action<TaskFinishedViewModel, Exception> callback)
+        {
+            //m_taskManager.GetTaskResults(callback);
+        }
+
+        public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)
+        {
+            //m_taskManager.StartPollingResults(callback);
+        }
+
+        public void StopPolling()
+        {
+            //m_taskManager.StopPolling();
         }
     }
 }

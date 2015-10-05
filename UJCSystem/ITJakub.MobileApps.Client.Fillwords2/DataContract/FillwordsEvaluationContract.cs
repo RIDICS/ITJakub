@@ -8,6 +8,9 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataContract
         [JsonProperty("CorrectAnswers")]
         public int CorrectAnswers { get; set; }
 
+        [JsonProperty("OptionsCount")]
+        public int OptionsCount { get; set; }
+
         [JsonProperty("AnswerList")]
         public IList<string> AnswerList { get; set; }
     }

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
@@ -91,7 +92,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             var textBox = new TextBox
             {
                 MinWidth = 20,
-                Text = letterOptionViewModel.SelectedAnswer
+                Text = letterOptionViewModel.SelectedAnswer ?? string.Empty
             };
             textBox.TextChanged += (sender, args) =>
             {
@@ -126,9 +127,11 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             }
 
             endPosition = correctAnswer.Length;
-
             stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
-            Text = stringBuilder.ToString();
+
+            var resultText = stringBuilder.ToString();
+            Text = resultText;
+            Options.SelectedAnswer = resultText;
         }
 
         protected override void OnApplyTemplate()

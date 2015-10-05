@@ -16,6 +16,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         private bool m_isOver;
         private bool m_saving;
         private bool m_isSubmitFlyoutOpen;
+        private bool m_isSubmited;
 
         public FillwordsViewModel(FillwordsDataService dataService)
         {
@@ -54,24 +55,43 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         {
             
         }
+
         private void Submit()
         {
             IsSubmitFlyoutOpen = false;
             Saving = true;
-            //m_dataService.EvaluateTask((result, exception) =>
-            //{
-            //    Saving = false;
-            //    if (exception != null)
-            //    {
-            //        m_dataService.ErrorService.ShowError("Úlohu se nepodařilo uložit a proto ji ani nelze vyhodnotit. Zkontrolujte připojení k internetu a zkuste to znovu.", "Vyhodnocení nelze provést");
-            //        return;
-            //    }
+            m_dataService.EvaluateTask((result, exception) =>
+            {
+                Saving = false;
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowError("Úlohu se nepodařilo uložit a proto ji ani nelze vyhodnotit. Zkontrolujte připojení k internetu a zkuste to znovu.", "Vyhodnocení nelze provést");
+                    return;
+                }
 
-            //    IsOver = result.IsOver;
-            //    m_isSubmited = result.IsOver;
+                IsOver = result.IsOver;
+                m_isSubmited = result.IsOver;
 
-            //    StartPollingResults();
-            //});
+                StartPollingResults();
+            });
+        }
+
+        private void StartPollingResults()
+        {
+            m_dataService.StartPollingResults((newResults, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionWarning();
+                    return;
+                }
+                m_dataService.ErrorService.HideWarning();
+
+                foreach (var userResultViewModel in newResults)
+                {
+                    ResultList.Add(userResultViewModel);
+                }
+            });
         }
 
         public override IEnumerable<ActionViewModel> ActionsWithUsers

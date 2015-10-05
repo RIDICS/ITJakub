@@ -4,6 +4,7 @@
     {
         NoAnswer,
         Correct,
-        Incorrect
+        Incorrect,
+        PartlyCorrect
     }
 }
