@@ -159,52 +159,63 @@
               Background="#10000000"
               DataContext="{Binding OptionsEditorViewModel}">
             <Grid Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-                  Margin="0,10,0,0">
+                  Margin="0,10,0,0"
+                  Width="270">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"
-                                   MinHeight="140" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <StackPanel Grid.Row="0"
+                <!--<StackPanel Grid.Row="0"
                             Orientation="Vertical"
                             Width="270"
-                            x:Name="FlyoutContent">
-                    <TextBlock Text="Vyberte část slova:"
-                               FontSize="15" />
+                            x:Name="FlyoutContent">-->
+                <TextBlock Grid.Row="0"
+                            Text="Vyberte část slova:"
+                            FontSize="15" />
 
-                    <control1:SelectableRichEditBox
-                        x:Name="SelectableRichEditBox"
-                        ScrollViewer.HorizontalScrollMode="Enabled"
-                        ScrollViewer.VerticalScrollMode="Disabled"
-                        ScrollViewer.ZoomMode="Disabled"
-                        DataContext="{Binding SelectedOption}"
-                        DocumentRtf="{Binding SelectedWord}"
-                        SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
-                        SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
-                        SelectedText="{Binding SelectedText, Mode=TwoWay}"
-                        IsSelectedTextHighlighted="{Binding IsSelectedTextHighlighted, Mode=TwoWay}"
-                        SelectionChangedCommand="{Binding SelectionChangedCommand}" />
+                <control1:SelectableRichEditBox
+                    Grid.Row="1"
+                    x:Name="SelectableRichEditBox"
+                    ScrollViewer.HorizontalScrollMode="Enabled"
+                    ScrollViewer.VerticalScrollMode="Disabled"
+                    ScrollViewer.ZoomMode="Disabled"
+                    DataContext="{Binding SelectedOption}"
+                    DocumentRtf="{Binding SelectedWord}"
+                    SelectionStart="{Binding SelectionStart, Mode=TwoWay}"
+                    SelectionEnd="{Binding SelectionEnd, Mode=TwoWay}"
+                    SelectedText="{Binding SelectedText, Mode=TwoWay}"
+                    IsSelectedTextHighlighted="{Binding IsSelectedTextHighlighted, Mode=TwoWay}"
+                    SelectionChangedCommand="{Binding SelectionChangedCommand}" />
 
-                    <StackPanel Orientation="Vertical"
-                                Visibility="{Binding SelectedOption.IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                        <StackPanel Orientation="Vertical"
-                                    DataContext="{Binding SelectedOption.CurrentOption.AnswerTypeViewModel}">
-                            <RadioButton IsChecked="{Binding IsNoAnswer, Mode=TwoWay}"
-                                         IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
-                                <TextBlock Text="Žádná možnost" />
-                            </RadioButton>
-                            <RadioButton IsChecked="{Binding IsFill, Mode=TwoWay}"
-                                         IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
-                                <TextBlock Text="Doplňování čehokoliv" />
-                            </RadioButton>
-                            <RadioButton IsChecked="{Binding IsSelect, Mode=TwoWay}"
-                                         IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
-                                <TextBlock Text="Výběr z možností" />
-                            </RadioButton>
-                        </StackPanel>
+                <Grid Grid.Row="2"
+                      Visibility="{Binding SelectedOption.IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
 
-                        <Grid Visibility="{Binding SelectedOption.IsSelectionError, Converter={StaticResource BooleanNegationToVisibilityConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0"
+                                Orientation="Vertical"
+                                DataContext="{Binding SelectedOption.CurrentOption.AnswerTypeViewModel}">
+                        <RadioButton IsChecked="{Binding IsNoAnswer, Mode=TwoWay}"
+                                     IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
+                            <TextBlock Text="Žádná možnost" />
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding IsFill, Mode=TwoWay}"
+                                     IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
+                            <TextBlock Text="Doplňování čehokoliv" />
+                        </RadioButton>
+                        <RadioButton IsChecked="{Binding IsSelect, Mode=TwoWay}"
+                                     IsEnabled="{Binding ElementName=SelectableRichEditBox, Path=DataContext.IsSelectionError, Converter={StaticResource BooleanNegationConverter}}">
+                            <TextBlock Text="Výběr z možností" />
+                        </RadioButton>
+                    </StackPanel>
+
+                    <Grid Grid.Row="1"
+                          Visibility="{Binding SelectedOption.IsSelectionError, Converter={StaticResource BooleanNegationToVisibilityConverter}}">
                         <Grid Margin="0,10,0,0"
                               DataContext="{Binding SelectedOption.CurrentOption}"
                               Visibility="{Binding AnswerTypeViewModel.IsSelect, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -212,6 +223,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -229,68 +241,64 @@
                                     Command="{Binding AddNewOptionCommand}" />
 
                             <TextBlock Grid.Row="1"
-                                       Grid.Column="0"
-                                       Grid.ColumnSpan="2"
-                                       Text="Zadané slovo už v seznamu existuje."
-                                       FontSize="12"
-                                       Margin="0,3,0,0"
-                                       Foreground="LightCyan"
-                                       Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        Text="Zadané slovo už v seznamu existuje."
+                                        FontSize="12"
+                                        Margin="0,3,0,0"
+                                        Foreground="LightCyan"
+                                        Visibility="{Binding ShowOptionExistsInfo, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                             <TextBlock Grid.Row="2"
-                                       Grid.Column="0"
-                                       Grid.ColumnSpan="2"
-                                       FontSize="14"
-                                       Margin="0,17,0,0"
-                                       FontWeight="SemiBold"
-                                       Text="Špatné odpovědi:" />
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        FontSize="14"
+                                        Margin="0,17,0,0"
+                                        FontWeight="SemiBold"
+                                        Text="Špatné odpovědi:" />
+
+                            <ListView Grid.Row="3"
+                                      Grid.Column="0"
+                                      Grid.ColumnSpan="2"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Stretch"
+                                        Margin="5,0,5,10"
+                                        SelectionMode="None"
+                                        IsItemClickEnabled="False"
+                                        Background="#10FFFFFF"
+                                        DataContext="{Binding SelectedOption.CurrentOption}"
+                                        Visibility="{Binding AnswerTypeViewModel.IsSelect, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Background="#90FFFFFF">
+                                            <Grid Width="250"
+                                                        Background="#28800000">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0"
+                                                                VerticalAlignment="Center"
+                                                                Margin="5,0,0,0"
+                                                                MaxLines="1"
+                                                                Foreground="Black"
+                                                                TextTrimming="CharacterEllipsis"
+                                                                Text="{Binding Letters}" />
+                                                <Button Grid.Column="1"
+                                                            Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
+                                                            CommandParameter="{Binding}"
+                                                            Foreground="Black"
+                                                            BorderBrush="Black">
+                                                    <SymbolIcon Symbol="Delete" />
+                                                </Button>
+                                            </Grid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
                         </Grid>
-                        </Grid>
-                    </StackPanel>
-
-                </StackPanel>
-
-                <Grid Grid.Row="1"
-                      Visibility="{Binding SelectedOption.IsSelectionError, Converter={StaticResource BooleanNegationToVisibilityConverter}}">
-                <ListView HorizontalAlignment="Center"
-                          VerticalAlignment="Stretch"
-                          Margin="-5,0,0,10"
-                          SelectionMode="None"
-                          IsItemClickEnabled="False"
-                          
-                          Width="280"
-                          Background="#10FFFFFF"
-                          DataContext="{Binding SelectedOption.CurrentOption}"
-                          Visibility="{Binding AnswerTypeViewModel.IsSelect, Converter={StaticResource BooleanToVisibilityConverter}}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Background="#90FFFFFF">
-                                <Grid Width="250"
-                                      Background="#28800000">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <TextBlock Grid.Column="0"
-                                               VerticalAlignment="Center"
-                                               Margin="5,0,0,0"
-                                               MaxLines="1"
-                                               Foreground="Black"
-                                               TextTrimming="CharacterEllipsis"
-                                               Text="{Binding Letters}" />
-                                    <Button Grid.Column="1"
-                                            Command="{Binding DataContext.DeleteCommand, ElementName=FlyoutContent}"
-                                            CommandParameter="{Binding}"
-                                            Foreground="Black"
-                                            BorderBrush="Black">
-                                        <SymbolIcon Symbol="Delete" />
-                                    </Button>
-                                </Grid>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

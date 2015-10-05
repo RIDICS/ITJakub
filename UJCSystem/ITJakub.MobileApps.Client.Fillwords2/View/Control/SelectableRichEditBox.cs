@@ -37,7 +37,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             get { return (string)GetValue(SelectedTextProperty); }
             set { SetValue(SelectedTextProperty, value); }
         }
-
+        
         public bool IsEditingEnabled
         {
             get { return (bool)GetValue(IsEditingEnabledProperty); }
@@ -140,7 +140,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             IsReset = true;
         }
 
-        private void OnSelectionChanged(object sender, RoutedEventArgs routedEventArgs)
+        protected virtual void OnSelectionChanged(object sender, RoutedEventArgs routedEventArgs)
         {
             m_updatingSelection = true;
             if (Document.Selection.Length == 0)

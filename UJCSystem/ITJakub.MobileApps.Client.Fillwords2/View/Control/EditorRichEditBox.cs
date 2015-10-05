@@ -34,6 +34,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             }
 
             Document.Selection.SetRange(textRange.StartPosition, textRange.EndPosition);
+            base.OnSelectionChanged(this, null);
         }
         
         protected override void OnApplyTemplate()
@@ -41,6 +42,10 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             base.OnApplyTemplate();
 
             m_contentElement = GetTemplateChild("ContentElement") as ScrollViewer;
+        }
+
+        protected override void OnSelectionChanged(object sender, RoutedEventArgs routedEventArgs)
+        {
         }
     }
 }
