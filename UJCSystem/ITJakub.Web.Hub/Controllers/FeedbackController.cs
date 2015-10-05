@@ -3,15 +3,17 @@ using System.Linq;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = CustomRole.CanManageFeedbacks)]
     public class FeedbackController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
         private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
 
+        
         public ActionResult Feedback()
         {
             return View();

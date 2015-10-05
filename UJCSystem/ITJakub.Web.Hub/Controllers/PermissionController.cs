@@ -2,13 +2,16 @@
 using System.Linq;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
 {
+    [Authorize(Roles = CustomRole.CanManagePermissions)]
     public class PermissionController : Controller
     {
         private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
         private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
+
 
         public ActionResult UserPermission()
         {
