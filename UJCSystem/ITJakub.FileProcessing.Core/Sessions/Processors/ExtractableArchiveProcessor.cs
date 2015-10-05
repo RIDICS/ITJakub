@@ -12,19 +12,19 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class ExtractableArchiveProcessor : IResourceProcessor
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);      
-          
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
             var archives = resourceSessionDirector.Resources.Where(x => x.ResourceType == ResourceType.ExtractableArchive);
             foreach (var archive in archives.ToList())
-            {                
-               var filesFromArchive = ExtractFilesFromArchive(archive, resourceSessionDirector);
+            {
+                var filesFromArchive = ExtractFilesFromArchive(archive, resourceSessionDirector);
                 foreach (var extractedFile in filesFromArchive)
                 {
                     resourceSessionDirector.AddResourceAndFillResourceTypeByExtension(extractedFile);
                 }
-            }            
+            }
         }
 
         private List<Resource> ExtractFilesFromArchive(Resource extractableArchive, ResourceSessionDirector resourceSessionDirector)
@@ -36,26 +36,30 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 {
                     var fileName = entry.Name;
                     var fullPath = resourceSessionDirector.GetFullPathForNewSessionResource(fileName);
-
-                    try
+                    if (!string.IsNullOrWhiteSpace(fileName))
                     {
-                        if (m_log.IsDebugEnabled)
-                            m_log.Debug($"Extracting file '{fileName}' from archive '{extractableArchive.FullPath}'");
-
-                        entry.ExtractToFile(fullPath, false);
-                        result.Add(new Resource
+                        if (!string.IsNullOrWhiteSpace(fileName))
                         {
-                            FileName = fileName,
-                            FullPath = fullPath
-                        });
+                            try
+                            {
+                                if (m_log.IsDebugEnabled)
+                                    m_log.Debug($"Extracting file '{fileName}' from archive '{extractableArchive.FullPath}'");
 
+                                entry.ExtractToFile(fullPath, false);
+                                result.Add(new Resource
+                                {
+                                    FileName = fileName,
+                                    FullPath = fullPath
+                                });
+                            }
+                            catch (InvalidDataException ex)
+                            {
+                                if (m_log.IsErrorEnabled)
+                                    m_log.ErrorFormat("Cannot extract resource: '{0}' from archive '{1}'. Exception: '{2}'", fileName,
+                                        extractableArchive.FullPath, ex.Message);
+                            }
+                        }
                     }
-                    catch (InvalidDataException ex)
-                    {
-                        if (m_log.IsErrorEnabled)
-                            m_log.ErrorFormat("Cannot extract resource: '{0}' from archive '{1}'. Exception: '{2}'", fileName, extractableArchive.FullPath, ex.Message);
-                    }
-
                 }
             }
 
@@ -69,5 +73,4 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         {
         }
     }
-
 }

@@ -15,7 +15,6 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
     {
         private const PollingInterval ProgressPollingInterval = PollingInterval.Medium;
         private const string ProgressObjectType = "UserProgress";
-        private const string LetterObjectType = "Letter";
 
         private readonly ISynchronizeCommunication m_synchronizeCommunication;
         private readonly IPollingService m_pollingService;
@@ -38,15 +37,24 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        public override void GetTaskInfoWithGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
+        public override async void GetTaskHistoryAndStartPollingProgress(Action<TaskProgressInfoViewModel, Exception> callback, Action<ObservableCollection<ProgressInfoViewModel>, Exception> pollingCallback)
         {
-            GetAndProcessGuessHistory(callback);
-        }
+            m_pollingCallback = pollingCallback;
+            try
+            {
+                var result = await m_synchronizeCommunication.GetObjectsAsync(ApplicationType.Hangman, new DateTime(1975, 1, 1), ProgressObjectType);
 
-        public override void StartPollingProgress(Action<ObservableCollection<ProgressInfoViewModel>, Exception> callback)
-        {
-            m_pollingService.RegisterForSynchronizedObjects(ProgressPollingInterval, ApplicationType.Hangman, ProgressObjectType, ProcessNewProgressUpdate);
-            m_pollingCallback = callback;
+                ProcessGuessHistory(result, callback);
+                ProcessNewProgressUpdate(result, null);
+
+                var latestSyncObject = result.LastOrDefault();
+                var latestTime = latestSyncObject != null ? latestSyncObject.CreateTime : new DateTime(1975, 1, 1);
+                m_pollingService.RegisterForSynchronizedObjects(ProgressPollingInterval, ApplicationType.Hangman, latestTime, ProgressObjectType, ProcessNewProgressUpdate);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
         }
 
         public override void StopPolling()
@@ -60,10 +68,10 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             MyTask.Guess(letter);
             
             var taskInfo = GetCurrentTaskInfo();
+            taskInfo.UseDelay = true;
             callback(taskInfo, null);
 
-            SendProgressInfo(callback);
-            SendLetterInfo(letter, wordOrder, callback);
+            SendProgressInfo(letter, wordOrder, callback);
         }
 
         public override async void SaveTask(string taskName, string taskDescription, IEnumerable<AnswerViewModel> answerList, Action<Exception> callback)
@@ -96,15 +104,17 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void SendProgressInfo(Action<TaskProgressInfoViewModel, Exception> callback)
+        private async void SendProgressInfo(char letter, int wordOrder, Action<TaskProgressInfoViewModel, Exception> callback)
         {
             var progressUpdate = new ProgressInfoContract
             {
                 LetterCount = MyTask.GuessedLetterCount,
-                GuessedWordCount = MyTask.WordOrder,
+                WordOrder = MyTask.WordOrder, // TODO check if it has same meaning like wordOrderParameter
                 HangmanCount = MyTask.HangmanCount,
                 LivesRemain = MyTask.LivesRemain,
-                Win = MyTask.Win
+                Win = MyTask.Win,
+                HangmanPicture = MyTask.HangmanPicture,
+                Letter = letter
             };
             var serializedProgressInfo = JsonConvert.SerializeObject(progressUpdate);
 
@@ -118,48 +128,27 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
             }
         }
 
-        private async void SendLetterInfo(char letter, int wordOrder, Action<TaskProgressInfoViewModel, Exception> callback)
+        private void ProcessGuessHistory(IList<ObjectDetails> syncObjectList, Action<TaskProgressInfoViewModel, Exception> callback)
         {
-            var guessLetterContract = new GuessLetterContract
+            if (MyTask == null)
             {
-                Letter = letter,
-                WordOrder = wordOrder
-            };
-            var serializedGuessLetter = JsonConvert.SerializeObject(guessLetterContract);
-
-            try
-            {
-                await m_synchronizeCommunication.SendObjectAsync(ApplicationType.Hangman, LetterObjectType, serializedGuessLetter);
+                callback(null, null);
+                return;
             }
-            catch (ClientCommunicationException exception)
-            {
-                callback(null, exception);
-            }
-        }
 
-        private async void GetAndProcessGuessHistory(Action<TaskProgressInfoViewModel, Exception> callback)
-        {
-            try
-            {
-                var result = await m_synchronizeCommunication.GetObjectsAsync(ApplicationType.Hangman, new DateTime(1970, 1, 1), LetterObjectType);
-                var myObjects = result.Where(details => details.Author.IsMe);
+            var myObjects = syncObjectList.Where(details => details.Author.IsMe);
                 
-                foreach (var details in myObjects)
-                {
-                    var guessLetterContract = JsonConvert.DeserializeObject<GuessLetterContract>(details.Data);
-                    MyTask.Guess(guessLetterContract);
-
-                    if (MyTask.IsNewWord)
-                    {
-                        callback(GetCurrentTaskInfo(), null);
-                    }
-                }
-                callback(GetCurrentTaskInfo(), null);
-            }
-            catch (ClientCommunicationException exception)
+            foreach (var details in myObjects)
             {
-                callback(null, exception);
+                var guessLetterContract = JsonConvert.DeserializeObject<ProgressInfoContract>(details.Data);
+                MyTask.Guess(guessLetterContract);
+
+                if (MyTask.IsNewWord)
+                {
+                    callback(GetCurrentTaskInfo(), null);
+                }
             }
+            callback(GetCurrentTaskWithKeyboardInfo(), null);
         }
 
         private void ProcessNewProgressUpdate(IList<ObjectDetails> objectList, Exception exception)
@@ -176,13 +165,14 @@ namespace ITJakub.MobileApps.Client.Hangman.DataService
                 var progressUpdate = JsonConvert.DeserializeObject<ProgressInfoContract>(objectDetails.Data);
                 var viewModel = new ProgressInfoViewModel
                 {
-                    GuessedWordCount = progressUpdate.GuessedWordCount,
+                    GuessedWordCount = progressUpdate.WordOrder,
                     LetterCount = progressUpdate.LetterCount,
                     HangmanCount = progressUpdate.HangmanCount,
                     LivesRemain = progressUpdate.LivesRemain,
                     Win = progressUpdate.Win,
                     UserInfo = objectDetails.Author,
-                    Time = objectDetails.CreateTime
+                    Time = objectDetails.CreateTime,
+                    HangmanPicture = progressUpdate.HangmanPicture
                 };
                 updateList.Add(viewModel);
             }

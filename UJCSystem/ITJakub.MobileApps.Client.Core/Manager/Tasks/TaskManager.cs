@@ -14,13 +14,13 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
 {
     public class TaskManager
     {
-        private readonly MobileAppsServiceClient m_client;
+        private readonly MobileAppsServiceClientManager m_clientManager;
         private readonly ApplicationIdManager m_applicationIdManager;
         private readonly AuthenticationManager m_authenticationManager;
 
-        public TaskManager(MobileAppsServiceClient client, ApplicationIdManager applicationIdManager, AuthenticationManager authenticationManager)
+        public TaskManager(MobileAppsServiceClientManager clientManager, ApplicationIdManager applicationIdManager, AuthenticationManager authenticationManager)
         {
-            m_client = client;
+            m_clientManager = clientManager;
             m_applicationIdManager = applicationIdManager;
             m_authenticationManager = authenticationManager;
         }
@@ -33,7 +33,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 var userId = currentUserId.HasValue ? currentUserId.Value : 0;
                 var applicationId = await m_applicationIdManager.GetApplicationId(application);
 
-                var taskList = await m_client.GetTasksByApplicationAsync(applicationId);
+                var client = m_clientManager.GetClient();
+                var taskList = await client.GetTasksByApplicationAsync(applicationId);
                 await m_applicationIdManager.LoadAllApplications(); // ensure that all application IDs are loaded
                 var tasks = new ObservableCollection<TaskViewModel>(taskList.Select(task => new TaskViewModel
                 {
@@ -67,7 +68,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
         {
             try
             {
-                await m_client.AssignTaskToGroupAsync(groupId, taskId);
+                var client = m_clientManager.GetClient();
+                await client.AssignTaskToGroupAsync(groupId, taskId);
                 callback(null);
             }
             catch (InvalidServerOperationException exception)
@@ -84,7 +86,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
         {
             try
             {
-                var result = await m_client.GetTaskForGroupAsync(groupId);
+                var client = m_clientManager.GetClient();
+                var result = await client.GetTaskForGroupAsync(groupId);
                 if (result == null)
                     return;
 
@@ -114,8 +117,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
                 var userId = m_authenticationManager.GetCurrentUserId();
                 if (!userId.HasValue)
                     return;
-
-                var result = await m_client.GetTasksByAuthor(userId.Value);
+                var client = m_clientManager.GetClient();
+                var result = await client.GetTasksByAuthor(userId.Value);
                 await m_applicationIdManager.LoadAllApplications(); // ensure that all application IDs are loaded
                 var taskList = new ObservableCollection<TaskViewModel>(result.Select(task => new TaskViewModel
                 {
@@ -149,7 +152,8 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Tasks
         {
             try
             {
-                var result = await m_client.GetTaskAsync(taskId);
+                var client = m_clientManager.GetClient();
+                var result = await client.GetTaskAsync(taskId);
                 if (result == null)
                     return;
 

@@ -7,6 +7,7 @@ using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -25,6 +26,7 @@ namespace ITJakub.ITJakubService.Services
         private readonly SearchManager m_searchManager;
         private readonly CardFileManager m_cardFileManager;        
         private readonly FeedbackManager m_feedbackManager;        
+        private readonly NewsManager m_newsManager;        
  
 
         public ItJakubServiceManager()
@@ -36,6 +38,7 @@ namespace ITJakub.ITJakubService.Services
             m_searchManager = m_container.Resolve<SearchManager>();
             m_feedbackManager = m_container.Resolve<FeedbackManager>();
             m_cardFileManager = m_container.Resolve<CardFileManager>();
+            m_newsManager = m_container.Resolve<NewsManager>();
          
         }
 
@@ -270,6 +273,16 @@ namespace ITJakub.ITJakubService.Services
         public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
         {
             return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);
+        }
+
+        public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
+        {
+            return m_newsManager.GetWebNewsSyndicationItems(start, count);
+        }
+
+        public int GetWebNewsSyndicationItemCount()
+        {
+            return m_newsManager.GetWebNewsSyndicationItemCount();
         }
     }
 }

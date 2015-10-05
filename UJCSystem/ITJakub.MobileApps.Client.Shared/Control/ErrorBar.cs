@@ -43,5 +43,11 @@ namespace ITJakub.MobileApps.Client.Shared.Control
         }
 
         public Action ClosedCommand { get; set; }
+
+        public void Hide()
+        {
+            if (m_popup != null)
+                Close(null);
+        }
     }
 }

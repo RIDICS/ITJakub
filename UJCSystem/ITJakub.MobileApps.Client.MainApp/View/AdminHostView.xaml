@@ -7,22 +7,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:template="using:ITJakub.MobileApps.Client.Core.Template"
     xmlns:converter="using:ITJakub.MobileApps.Client.Shared.Converter"
+    xmlns:control="using:ITJakub.MobileApps.Client.MainApp.View.Control"
+    xmlns:converter1="using:ITJakub.MobileApps.Client.MainApp.View.Converter"
     mc:Ignorable="d">
 
     <Page.Resources>
         <template:AdminTemplateSelector x:Key="AdminTemplateSelector" />
         <template:ApplicationTemplateSelector x:Key="ApplicationTemplateSelector" />
         <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+        <converter1:MessageCountToNotificationConverter x:Key="MessageCountToNotificationConverter" />
     </Page.Resources>
 
-    <Page.BottomAppBar>
-        <CommandBar IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}">
-            <AppBarToggleButton Icon="Comment" 
-                                Label="Chat" 
-                                IsEnabled="{Binding IsChatSupported}"
-                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
-        </CommandBar>
-    </Page.BottomAppBar>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ChildrenTransitions>
@@ -33,9 +29,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid>
+        <ProgressBar Grid.Row="0"
+                     VerticalAlignment="Top"
+                     IsIndeterminate="True"
+                     Visibility="{Binding Loading, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120" />
                 <ColumnDefinition Width="*" />
@@ -76,5 +78,74 @@
                             VerticalContentAlignment="Stretch"
                             HorizontalContentAlignment="Stretch" />
         </Grid>
+
+        <Grid Grid.Row="1"
+              Background="#22000000"
+              Visibility="{Binding LoadingData, Converter={StaticResource BooleanToVisibilityConverter}}">
+
+            <Grid MinWidth="400"
+                  MinHeight="100"
+                  Margin="0,0,0,70"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Background="White">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="30" />
+                </Grid.ColumnDefinitions>
+
+                <ProgressRing Grid.Column="0"
+                                  Width="40"
+                                  Height="40"
+                                  Margin="20"
+                                  Foreground="Black"
+                                  IsActive="True" />
+
+                <Grid Grid.Column="1">
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Stahování uživatelských dat"
+                               Foreground="Black"
+                               FontSize="30" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <control:NotificationControl
+            Grid.Row="1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="0,0,30,30"
+            Width="250"
+            Height="80"
+            IsVisible="{Binding IsChatNotificationVisible, Mode=TwoWay}"
+            Command="{Binding ShowChatCommand}">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Upozornění"
+                           Foreground="Black"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding UnreadMessageCount, Converter={StaticResource MessageCountToNotificationConverter}}"
+                           Foreground="Black"
+                           TextWrapping="Wrap" />
+            </StackPanel>
+        </control:NotificationControl>
+
+
+
+        <CommandBar Grid.Row="2" IsOpen="{Binding IsCommandBarOpen, Mode=TwoWay}" Style="{StaticResource FixedBottomCommandBar}">
+            <AppBarButton Icon="Preview"
+                          Label="Zobrazit správné řešení"
+                          IsEnabled="{Binding Loading, Converter={StaticResource BooleanNegationConverter}}"
+                          Command="{Binding ShowTaskCommand}"/>
+            <AppBarToggleButton Icon="Comment" 
+                                Label="Chat" 
+                                IsEnabled="{Binding IsChatSupported}"
+                                IsChecked="{Binding IsChatDisplayed, Mode=TwoWay}"/>
+        </CommandBar>
+
+
+
     </Grid>
 </Page>

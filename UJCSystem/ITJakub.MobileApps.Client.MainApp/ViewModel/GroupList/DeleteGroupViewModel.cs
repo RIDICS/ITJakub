@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Core.Communication.Error;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.ViewModel;
@@ -24,6 +25,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             m_selectedGroups = selectedGroups;
             m_refreshAction = refreshAction;
             m_errorService = errorService;
+            DeleteGroupCommand = new RelayCommand(DeleteGroup);
         }
 
         public GroupInfoViewModel SelectedGroup
@@ -68,6 +70,8 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
             get { return SelectedGroupCount > 1; }
         }
         
+        public RelayCommand DeleteGroupCommand { get; set; }
+
         protected override void SubmitAction()
         {
             DeleteGroup();

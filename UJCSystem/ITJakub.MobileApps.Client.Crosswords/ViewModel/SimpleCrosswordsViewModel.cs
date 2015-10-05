@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Crosswords.DataService;
 
 namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
@@ -11,14 +12,18 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
     {
         private readonly ICrosswordsDataService m_dataService;
         private ObservableCollection<CrosswordRowViewModel> m_crossword;
+        private ObservableCollection<CrosswordRowViewModel> m_myCrossword;
+        private ObservableCollection<CrosswordRowViewModel> m_correctCrossword;
         private bool m_firstUpdate;
-
+        private bool m_showCorrectResult;
+        
         public SimpleCrosswordsViewModel(ICrosswordsDataService dataService)
         {
             m_dataService = dataService;
             m_firstUpdate = true;
             Crossword = new ObservableCollection<CrosswordRowViewModel>();
             OpponentProgress = new ObservableCollection<ProgressViewModel>();
+            ShowResultsCommand = new RelayCommand(() => PlayerRankingViewModel.IsResultTableVisible = true);
         }
         
         public Action GoBack { get; set; }
@@ -30,14 +35,26 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             {
                 m_crossword = value;
                 RaisePropertyChanged();
-                SetSubmitCallbacks(m_crossword);
-                PlayerRankingViewModel = new PlayerRankingViewModel();
             }
         }
-        
+
+        public bool ShowCorrectResult
+        {
+            get { return m_showCorrectResult; }
+            set
+            {
+                m_showCorrectResult = value;
+                RaisePropertyChanged();
+
+                Crossword = ShowCorrectResult ? m_correctCrossword : m_myCrossword;
+            }
+        }
+
         public ObservableCollection<ProgressViewModel> OpponentProgress { get; set; }
 
         public PlayerRankingViewModel PlayerRankingViewModel { get; set; }
+
+        public RelayCommand ShowResultsCommand { get; private set; }
         
         private void SetSubmitCallbacks(IEnumerable<CrosswordRowViewModel> crosswordRows)
         {
@@ -58,7 +75,7 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
                 }
 
                 rowViewModel.IsCorrect = gameInfo.WordFilledCorrectly;
-                PlayerRankingViewModel.IsEnd = gameInfo.Win;
+                SetIsEnd(gameInfo.Win);
             });
         }
 
@@ -112,15 +129,36 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
             viewModel.UpdateTime(progressUpdate.Time);
         }
 
+        private void SetIsEnd(bool value)
+        {
+            if (value && m_correctCrossword == null)
+            {
+                m_dataService.GetConfiguration(rowList =>
+                {
+                    m_correctCrossword = rowList;
+                }, true);
+            }
+
+            PlayerRankingViewModel.IsEnd = value;
+        }
+
         public void SetWin(bool isWin)
         {
             if (PlayerRankingViewModel != null && isWin)
-                PlayerRankingViewModel.IsEnd = true;
+                SetIsEnd(true);
         }
 
         public void StopAndShowResults()
         {
-            PlayerRankingViewModel.IsEnd = true;
+            SetIsEnd(true);
+        }
+
+        public void SetCrossword(ObservableCollection<CrosswordRowViewModel> crosswordRowViewModels)
+        {
+            m_myCrossword = crosswordRowViewModels;
+            Crossword = crosswordRowViewModels;
+            SetSubmitCallbacks(m_crossword);
+            PlayerRankingViewModel = new PlayerRankingViewModel();
         }
     }
 }

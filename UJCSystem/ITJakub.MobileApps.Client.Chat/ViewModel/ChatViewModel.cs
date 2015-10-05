@@ -26,7 +26,7 @@ namespace ITJakub.MobileApps.Client.Chat.ViewModel
             MessageHistory = new AsyncObservableCollection<MessageViewModel>();
         }
 
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             Loading = true;
             DataLoadedCallback = () => Loading = false;

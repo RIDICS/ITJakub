@@ -14,23 +14,40 @@ using ITJakub.MobileApps.DataContracts.Tasks;
 namespace ITJakub.MobileApps.Client.Core.Communication.Client
 {
     public class MobileAppsServiceClient : ClientBase<IMobileAppsService>
-    {
-        private const string EndpointAddress = "http://localhost/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://147.32.81.136/ITJakub.MobileApps.Service/MobileAppsService.svc";
-        //private const string EndpointAddress = "http://itjakubmobileapps.cloudapp.net/MobileAppsService.svc";
+    {       
 
-        private readonly ClientMessageInspector m_clientMessageInspector;
-
-        public MobileAppsServiceClient() : base(GetDefaultBinding(), GetDefaultEndpointAddress())
+        public MobileAppsServiceClient(ClientMessageInspector communicationTokenInspector, EndpointAddress endpointAddress) :
+            base(GetDefaultBinding(), endpointAddress)
         {
-            m_clientMessageInspector = new ClientMessageInspector();
-            var endpointBehavior = new CustomEndpointBehavior(m_clientMessageInspector);
+            var endpointBehavior = new CustomEndpointBehavior(communicationTokenInspector);
             Endpoint.EndpointBehaviors.Add(endpointBehavior);
         }
 
-        public void UpdateCommunicationToken(string communicationToken)
+        public Task<string> GetBookLibraryEndpointAddressAsync()
         {
-            m_clientMessageInspector.CommunicationToken = communicationToken;
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.GetBookLibraryEndpointAddress();
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
         }
 
         public Task CreateUserAsync(AuthProvidersContract providerContract, string providerToken,
@@ -88,32 +105,6 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<UserGroupsContract> GetGroupsByUserAsync(long userId)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    return Channel.GetGroupsByUser(userId);
-                }
-                catch (FaultException ex)
-                {
-                    throw new InvalidServerOperationException(ex);
-                }
-                catch (CommunicationException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-                catch (TimeoutException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-                catch (ObjectDisposedException ex)
-                {
-                    throw new ClientCommunicationException(ex);
-                }
-            });
-        }
 
         public Task<CreateGroupResponse> CreateGroupAsync(long userId, string groupName)
         {
@@ -141,6 +132,55 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
             });
         }
+
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            try
+            {
+                return Channel.GetMembershipGroups(userId);
+            }
+            catch (FaultException ex)
+            {
+                throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (TimeoutException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+        }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            try
+            {
+                return Channel.GetOwnedGroups(userId);
+            }
+            catch (FaultException ex)
+            {
+                throw new InvalidServerOperationException("Invalid server operation, probably wrong access code or group is unopened or closed.", ex);
+            }
+            catch (CommunicationException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (TimeoutException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                throw new ClientCommunicationException(ex);
+            }
+        }
+
 
         public Task AddUserToGroupAsync(string groupAccessCode, long userId)
         {
@@ -196,13 +236,13 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<IList<SynchronizedObjectResponseContract>> GetSynchronizedObjectsAsync(long groupId, int applicationId, string objectType, DateTime since)
+        public Task<IList<SynchronizedObjectResponseContract>> GetSynchronizedObjectsAsync(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
             return Task.Run(() =>
             {
                 try
                 {
-                    return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+                    return Channel.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
                 }
                 catch (FaultException ex)
                 {
@@ -303,7 +343,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 }
             });
         }
-        
+
         public Task AssignTaskToGroupAsync(long groupId, long taskId)
         {
             return Task.Run(() =>
@@ -547,6 +587,62 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
+
+        public Task<CreateGroupResponse> DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.DuplicateGroup(userId, groupId, newGroupname);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+        public Task<string> RegenerateGroupCode(long userId, long groupId)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.RegenerateGroupCode(userId, groupId);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException(ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
+
         public Task<GroupStateContract> GetGroupStateAsync(long groupId)
         {
             return Task.Run(() =>
@@ -574,7 +670,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
-        public Task<string> GetSaltByUserEmail(string email)
+        public Task<string> GetSaltByUserEmailAsync(string email)
         {
             return Task.Run(() =>
             {
@@ -601,8 +697,36 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             });
         }
 
+        public Task<bool> PromoteUserToTeacherRoleAsync(long userId, string promotionCode)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    return Channel.PromoteUserToTeacherRole(userId, promotionCode);
+                }
+                catch (FaultException ex)
+                {
+                    throw new InvalidServerOperationException("Server error, probably wrong promotion code", ex);
+                }
+                catch (CommunicationException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (TimeoutException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    throw new ClientCommunicationException(ex);
+                }
+            });
+        }
+
 
         #region enpoint settings
+
         private static Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
@@ -616,17 +740,7 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
             }
             throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
                 endpointConfiguration));
-        }
-
-        private static EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
-        {
-            if ((endpointConfiguration == EndpointConfiguration.BasicHttpBindingIMobileAppsService))
-            {
-                return new EndpointAddress(EndpointAddress);
-            }
-            throw new InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.",
-                endpointConfiguration));
-        }
+        }        
 
         private static Binding GetDefaultBinding()
         {
@@ -634,10 +748,6 @@ namespace ITJakub.MobileApps.Client.Core.Communication.Client
                 GetBindingForEndpoint(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
         }
 
-        private static EndpointAddress GetDefaultEndpointAddress()
-        {
-            return GetEndpointAddress(EndpointConfiguration.BasicHttpBindingIMobileAppsService);
-        }
         #endregion
     }
 }

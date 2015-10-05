@@ -28,17 +28,14 @@ namespace ITJakub.MobileApps.Client.Books
             m_navigationService = Container.Current.Resolve<INavigationService>();
             m_dataService = Container.Current.Resolve<IDataService>();
         }
-
-        private async Task<BookPageViewModel> StartSelectingBookAsync()
+        
+        private void OpenPopup<T>()
         {
-            m_dataService.SetMode(ReaderMode.SelectPage);
-            m_navigationService.Navigate<SelectBookView>();
+            m_navigationService.Navigate<T>();
             m_popup = m_navigationService.ParentPopup;
             m_popup.IsOpen = true;
 
             Window.Current.SizeChanged += UpdatePageSize;
-
-            return await m_taskCompletition.Task;
         }
 
         private void UpdatePageSize(object sender, WindowSizeChangedEventArgs e)
@@ -60,16 +57,28 @@ namespace ITJakub.MobileApps.Client.Books
             m_taskCompletition.SetResult(message.SelectedBookPage);
         }
 
+        private async Task<BookPageViewModel> StartSelectingBookAsync()
+        {
+            m_dataService.SetMode(ReaderMode.SelectPage);
+            OpenPopup<SelectBookView>();
+
+            return await m_taskCompletition.Task;
+        }
+
         private async Task StartReader(string bookGuid)
         {
             m_dataService.SetMode(ReaderMode.ReadBook);
             m_dataService.SetCurrentBook(new BookViewModel {Guid = bookGuid});
-            m_navigationService.Navigate<SelectPageView>();
-            m_popup = m_navigationService.ParentPopup;
-            m_popup.IsOpen = true;
+            OpenPopup<SelectPageView>();
 
-            Window.Current.SizeChanged += UpdatePageSize;
+            await m_taskCompletition.Task;
+        }
 
+        private async Task StartOpenLibrary()
+        {
+            m_dataService.SetMode(ReaderMode.ReadBook);
+            OpenPopup<SelectBookView>();
+            
             await m_taskCompletition.Task;
         }
 
@@ -88,6 +97,18 @@ namespace ITJakub.MobileApps.Client.Books
         {
             var book = new Book();
             await book.StartReader(bookGuid);
+        }
+
+        public static async void OpenLibrary()
+        {
+            var book = new Book();
+            await book.StartOpenLibrary();
+        }
+
+        public static void UpdateEndpointAddress(string address)
+        {
+            var dataService = Container.Current.Resolve<IDataService>();
+            dataService.UpdateEndpointAddress(address);
         }
     }
 }

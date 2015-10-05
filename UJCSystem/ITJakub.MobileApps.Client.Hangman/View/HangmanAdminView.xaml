@@ -6,16 +6,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="using:ITJakub.MobileApps.Client.Hangman.ViewModel"
     xmlns:control="using:ITJakub.MobileApps.Client.Hangman.View.Control"
+    xmlns:hangmanPicture="using:ITJakub.MobileApps.Client.Hangman.View.Control.HangmanPicture"
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanAdminViewModel}">
     
     <UserControl.Resources>
         <SolidColorBrush x:Key="HangmanCountColor" Color="Salmon" />
         <SolidColorBrush x:Key="GuessedColor" Color="LawnGreen" />
+        <hangmanPicture:HangmanPictureTemplateSelector x:Key="HangmanPictureTemplateSelector" />
     </UserControl.Resources>
     
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}"
-          Margin="100,0,40,40">
+          Margin="20,0,40,40">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="470" />
@@ -51,9 +53,10 @@
 
                         <Viewbox Height="100"
                                  Margin="20,0,20,0">
-                            <control:HangmanPictureControl DataContext="{Binding PictureViewModel}"
-                                                           HorizontalAlignment="Center"
-                                                           Margin="0,15,0,20" />
+                            <ContentControl Content="{Binding PictureViewModel}"
+                                            ContentTemplateSelector="{StaticResource HangmanPictureTemplateSelector}"
+                                            HorizontalAlignment="Center"
+                                            Margin="0,15,0,20" />
                         </Viewbox>
                         
                         <Grid Grid.Column="1">

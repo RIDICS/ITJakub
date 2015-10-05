@@ -206,8 +206,10 @@
                         <StackPanel Grid.Column="1"
                                     Orientation="Vertical">
                             <TextBlock Text="{Binding Title}"
+                                       TextTrimming="CharacterEllipsis"
                                        FontWeight="Bold" />
-                            <TextBlock Text="{Binding Authors, Converter={StaticResource NoAuthorConverter}}" />
+                            <TextBlock Text="{Binding Authors, Converter={StaticResource NoAuthorConverter}}"
+                                       TextTrimming="CharacterEllipsis" />
                             <TextBlock Text="{Binding PublishDate}" />
                         </StackPanel>
                     </Grid>

@@ -68,6 +68,7 @@
     <Compile Include="AutoMapperProfiles\BucketContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
     <Compile Include="AutoMapperProfiles\ManuscriptProfile.cs" />
+    <Compile Include="AutoMapperProfiles\NewsSyndicationItemProfile.cs" />
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />
+    <Compile Include="NewsManager.cs" />
     <Compile Include="Resources\FileProcessingServiceClient.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="CardFileManager.cs" />

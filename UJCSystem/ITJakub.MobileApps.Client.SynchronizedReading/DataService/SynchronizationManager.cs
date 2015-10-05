@@ -21,6 +21,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
         private Action<UpdateViewModel, Exception> m_callback;
         private Action<ControlViewModel, Exception> m_controlCallback;
         private ControlContract m_latestControlContract;
+        private UserInfo m_currentReaderInfo;
 
         public SynchronizationManager(ISynchronizeCommunication applicationCommunication, BookManager bookManager)
         {
@@ -28,6 +29,8 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             m_bookManager = bookManager;
             m_pollingService = applicationCommunication.PollingService;
         }
+
+        public bool IsUserOwner { get; set; }
 
         public void StartPollingUpdates(Action<UpdateViewModel,Exception> callback)
         {
@@ -91,7 +94,13 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             }
 
             if (objectDetails == null || objectDetails.Data == null)
+            {
+                if (m_currentReaderInfo == null && IsUserOwner)
+                {
+                    TakeReadControl(error => { });
+                }
                 return;
+            }
 
             var controlContract = JsonConvert.DeserializeObject<ControlContract>(objectDetails.Data);
             m_latestControlContract = controlContract;
@@ -100,12 +109,14 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
                 m_bookManager.PageId = controlContract.PageId;
             
             var currentUser = await m_applicationCommunication.GetCurrentUserInfo();
+            var newReaderInfo = MapToUserInfo(controlContract.ReaderUser, currentUser.Id);
             var controlViewModel = new ControlViewModel
             {
-                ReaderUser = MapToUserInfo(controlContract.ReaderUser, currentUser.Id),
+                ReaderUser = newReaderInfo,
                 PageId = m_bookManager.PageId
             };
-            
+
+            m_currentReaderInfo = newReaderInfo;
             m_controlCallback(controlViewModel, null);
         }
 
@@ -220,6 +231,12 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.DataService
             {
                 callback(exception);
             }
+        }
+
+        public void Reset()
+        {
+            m_latestControlContract = null;
+            m_currentReaderInfo = null;
         }
     }
 }

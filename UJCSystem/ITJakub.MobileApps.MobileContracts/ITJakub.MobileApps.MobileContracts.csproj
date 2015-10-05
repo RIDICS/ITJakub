@@ -38,6 +38,9 @@
     <Compile Include="BookContract.cs" />
     <Compile Include="BookTypeContract.cs" />
     <Compile Include="IMobileAppsService.cs" />
+    <Compile Include="INewsService.cs" />
+    <Compile Include="MobileCommunicationException.cs" />
+    <Compile Include="News\NewsSyndicationItemContract.cs" />
     <Compile Include="PageContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchDestinationContract.cs" />

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.ServiceModel;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
@@ -137,6 +138,9 @@ namespace ITJakub.ITJakubService.Core
         public BookContract GetBookInfoMobile(string bookGuid)
         {
             var bookVersion = m_bookVersionRepository.GetBookVersionWithAuthorsByGuid(bookGuid);
+            if (bookVersion == null)
+                throw new FaultException("Not found");
+
             var bookContract = Mapper.Map<BookContract>(bookVersion);
             return bookContract;
         }

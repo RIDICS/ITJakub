@@ -18,8 +18,9 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
         private bool m_loading;
         private PageViewModel m_selectedPage;
         private int m_currentPageNumber;
-        private string m_pageTitle;
+        private string m_viewTitle;
         private bool m_showSubmitButton;
+        private bool m_showPagePhoto;
 
         public SelectPageViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService)
         {
@@ -27,7 +28,7 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             m_navigationService = navigationService;
             m_errorService = errorService;
 
-            PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService);
+            PagePhotoViewModel = new PagePhotoViewModel(m_dataService, m_errorService, PagePhotoLoadedCallback);
             PageTextViewModel = new PageTextViewModel(m_dataService, m_errorService, PageLoadedCallback);
             GoBackCommand = new RelayCommand(navigationService.GoBack);
             SelectCommand = new RelayCommand(SubmitSelectedPage);
@@ -90,13 +91,15 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         private void LoadInSelectionMode()
         {
-            PageTitle = "Vyberte stranu";
+            ViewTitle = "Vyberte stranu";
+            m_showPagePhoto = false;
             ShowSubmitButton = true;
         }
 
         private void LoadInReaderMode()
         {
-            PageTitle = "Listování knihou";
+            ViewTitle = "Listování knihou";
+            m_showPagePhoto = true;
             ShowSubmitButton = false;
         }
         
@@ -159,12 +162,12 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
             }
         }
 
-        public string PageTitle
+        public string ViewTitle
         {
-            get { return m_pageTitle; }
+            get { return m_viewTitle; }
             set
             {
-                m_pageTitle = value;
+                m_viewTitle = value;
                 RaisePropertyChanged();
             }
         }
@@ -228,10 +231,23 @@ namespace ITJakub.MobileApps.Client.Books.ViewModel.SelectPage
 
         public bool CanSubmit
         {
-            get { return SelectedPage != null && PageTextViewModel.RtfText != null && !PageTextViewModel.Loading; }
+            get
+            {
+                return SelectedPage != null &&
+                       ((PageTextViewModel.RtfText != null && !PageTextViewModel.Loading) ||
+                        (PagePhotoViewModel.PagePhoto != null && !PagePhotoViewModel.Loading));
+            }
         }
         
         private void PageLoadedCallback()
+        {
+            RaisePropertyChanged(() => CanSubmit);
+
+            if (PageTextViewModel.RtfText == null)
+                PagePhotoViewModel.IsShowEnabled = true;
+        }
+
+        private void PagePhotoLoadedCallback()
         {
             RaisePropertyChanged(() => CanSubmit);
         }

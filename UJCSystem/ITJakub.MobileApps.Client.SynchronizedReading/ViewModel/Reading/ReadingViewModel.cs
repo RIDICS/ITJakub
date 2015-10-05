@@ -52,7 +52,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
             GoToPageCommand = new RelayCommand(GoToPage);
         }
         
-        public override void InitializeCommunication()
+        public override void InitializeCommunication(bool isUserOwner)
         {
             UpdateMode();
             SetDataLoaded();
@@ -76,6 +76,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 LoadPage(); // don't wait for control update
             });
 
+            m_dataService.SetUserIsOwner(isUserOwner);
             m_dataService.StartPollingControlUpdates((model, exception) =>
             {
                 if (exception != null)
@@ -84,6 +85,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     return;
                 }
 
+                m_dataService.ErrorService.HideWarning();
                 CurrentReader = model.ReaderUser;
                 LoadPage();
             });
@@ -308,6 +310,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                 m_dataService.ErrorService.ShowConnectionWarning();
                 return;
             }
+            m_dataService.ErrorService.HideWarning();
 
             if (IsTextUpdateNew(update))
             {
@@ -402,6 +405,7 @@ namespace ITJakub.MobileApps.Client.SynchronizedReading.ViewModel.Reading
                     if (exception is NotFoundException)
                     {
                         TextReaderViewModel.IsLoadError = true;
+                        IsPhotoDisplayed = true;
                     }
                     else
                     {

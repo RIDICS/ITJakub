@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities"
+                   xmlns="urn:nhibernate-mapping-2.2">
+  <class name="NewsSyndicationItem" 
+         table="[NewsSyndicationItem]">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>  
+    
+    <property name ="Title"/>
+    
+    <property name ="Text"/>
+    
+    <property name ="Url"/>
+    
+    <property name ="ItemType"/>
+    
+    <property name ="CreateDate"/>    
+    
+    <many-to-one name="User"
+                 column="[User]"
+                 class="User"
+                 lazy="proxy" />
+  </class>
+</hibernate-mapping>

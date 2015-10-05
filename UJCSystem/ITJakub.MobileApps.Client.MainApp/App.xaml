@@ -5,7 +5,7 @@
     
     <Application.Resources>
         <ResourceDictionary>
-            <x:String x:Key="AppName">IT Jakub</x:String>
+            <x:String x:Key="AppName">Kiosek staročeský</x:String>
             <viewModel:ViewModelLocator x:Key="Locator" />
             
             <ResourceDictionary.MergedDictionaries>

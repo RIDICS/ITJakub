@@ -3,30 +3,52 @@ using System.Threading.Tasks;
 using Windows.Security.Cryptography;
 using Windows.Security.Cryptography.Core;
 using ITJakub.MobileApps.Client.Core.Communication.Client;
+using ITJakub.MobileApps.Client.Core.Manager.Authentication.LocalAuthentication;
 using ITJakub.MobileApps.DataContracts;
 
 namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationProviders
 {
     public class ItJakubProvider : ILoginProvider
     {
-        private readonly MobileAppsServiceClient m_serviceClient;
+        private readonly MobileAppsServiceClientManager m_serviceClientManager;
+        private LocalAuthenticationBroker m_authBroker;
 
-        public ItJakubProvider(MobileAppsServiceClient serviceClient)
+        public ItJakubProvider(MobileAppsServiceClientManager serviceClientManager)
         {
-            m_serviceClient = serviceClient;
+            m_serviceClientManager = serviceClientManager;
         }
 
         public string AccountName { get { return "It Jakub"; } }
 
         public AuthProvidersContract ProviderType { get { return AuthProvidersContract.ItJakub; } }
 
+        public async Task<UserLoginSkeleton> ReopenWithErrorAsync()
+        {
+            var userLoginSkeleton = await m_authBroker.ReopenWithErrorAsync();
+
+            if (m_authBroker.IsCreatingUser)
+                return GetSkeletonForCreateUser(userLoginSkeleton);
+
+            return await GetSkeletonForLoginAsync(userLoginSkeleton);
+        }
+
         public async Task<UserLoginSkeleton> LoginAsync()
         {
-            var userLoginSkeleton = await LocalAuthentication.LocalAuthenticationBroker.LoginAsync();
+            m_authBroker = new LocalAuthenticationBroker();
+            var userLoginSkeleton = await m_authBroker.LoginAsync();
+
+            return await GetSkeletonForLoginAsync(userLoginSkeleton);
+        }
+
+        private async Task<UserLoginSkeleton> GetSkeletonForLoginAsync(UserLoginSkeletonWithPassword userLoginSkeleton)
+        {
             if (!userLoginSkeleton.Success)
                 return userLoginSkeleton;
 
-            var salt = await m_serviceClient.GetSaltByUserEmail(userLoginSkeleton.Email);
+
+            var client = m_serviceClientManager.GetClient();
+            var salt = await client.GetSaltByUserEmailAsync(userLoginSkeleton.Email);
+
             var passwordHash = GetPasswordHash(userLoginSkeleton.Password, salt);
 
             var newLoginSkeleton = new UserLoginSkeleton
@@ -41,7 +63,14 @@ namespace ITJakub.MobileApps.Client.Core.Manager.Authentication.AuthenticationPr
 
         public async Task<UserLoginSkeleton> LoginForCreateUserAsync()
         {
-            var userLoginSkeleton = await LocalAuthentication.LocalAuthenticationBroker.CreateUserAsync();
+            m_authBroker = new LocalAuthenticationBroker();
+            var userLoginSkeleton = await m_authBroker.CreateUserAsync();
+
+            return GetSkeletonForCreateUser(userLoginSkeleton);
+        }
+
+        private UserLoginSkeleton GetSkeletonForCreateUser(UserLoginSkeletonWithPassword userLoginSkeleton)
+        {
             if (!userLoginSkeleton.Success)
                 return userLoginSkeleton;
 

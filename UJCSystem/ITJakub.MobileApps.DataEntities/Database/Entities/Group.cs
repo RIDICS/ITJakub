@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ITJakub.MobileApps.DataEntities.ExternalEntities.SqlServer.Entities;
 
 namespace ITJakub.MobileApps.DataEntities.Database.Entities
 {
@@ -24,6 +25,8 @@ namespace ITJakub.MobileApps.DataEntities.Database.Entities
         public virtual IList<SynchronizedObjectBase> SynchronizedObjects { get; set; }
 
         public virtual IList<User> Members { get; set; }
+
+        public virtual IList<SynchronizedObjectData> SynchronizedObjectData { get; set; }
 
         public virtual bool Equals(Group other)
         {

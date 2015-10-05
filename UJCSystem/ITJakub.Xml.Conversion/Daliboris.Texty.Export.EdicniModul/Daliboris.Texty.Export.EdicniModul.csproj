@@ -57,7 +57,7 @@
       <Name>Daliboris.Pomucky.Texty</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml.WordBreaker\Daliboris.Pomucky.Xml.WordBreaker.csproj">
-      <Project>{24155839-32EF-4BBB-8311-A04502E61864}</Project>
+      <Project>{24155839-32ef-4bbb-8311-a04502e61864}</Project>
       <Name>Daliboris.Pomucky.Xml.WordBreaker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">

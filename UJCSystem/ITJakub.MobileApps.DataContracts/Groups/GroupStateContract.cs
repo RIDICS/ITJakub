@@ -7,14 +7,19 @@ namespace ITJakub.MobileApps.DataContracts.Groups
     {
         [EnumMember]
         Created = 0,
+
         [EnumMember]
         AcceptMembers = 1,
+
         [EnumMember]
         WaitingForStart = 2,
+
         [EnumMember]
         Running = 3,
+
         [EnumMember]
         Paused = 4,
+
         [EnumMember]
         Closed = 5
     }

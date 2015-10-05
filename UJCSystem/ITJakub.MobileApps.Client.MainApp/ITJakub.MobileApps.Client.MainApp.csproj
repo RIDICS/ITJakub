@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.MobileApps.Client.MainApp</RootNamespace>
     <AssemblyName>ITJakub.MobileApps.Client.MainApp</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>cs-CZ</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -18,7 +18,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <PackageCertificateThumbprint>153302954D6EFF9105839A8268696CA8E5482F19</PackageCertificateThumbprint>
-    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -107,6 +107,13 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ViewModel\ApplicationMenuPageViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\AdminGroupListViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\DuplicateGroupViewModel.cs" />
+    <Compile Include="ViewModel\GroupList\GroupListViewModelBase.cs" />
+    <Compile Include="ViewModel\GroupList\MyGroupListViewModel.cs" />
+    <Compile Include="ViewModel\News\NewsViewModel.cs" />
+    <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="View\AdminHostView.xaml.cs">
       <DependentUpon>AdminHostView.xaml</DependentUpon>
     </Compile>
@@ -133,6 +140,10 @@
     <Compile Include="View\AboutSettingsFlyout.xaml.cs">
       <DependentUpon>AboutSettingsFlyout.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ApplicationMenuPageView.xaml.cs">
+      <DependentUpon>ApplicationMenuPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\NotificationControl.cs" />
     <Compile Include="View\Control\SettingsFlyoutHelper.cs" />
     <Compile Include="View\Converter\ApplicationTypeToNameConverter.cs" />
     <Compile Include="View\Converter\DateTimeToStringConverter.cs" />
@@ -161,19 +172,42 @@
     <Compile Include="ViewModel\Login\UserMenu\UserMenuViewModel.cs" />
     <Compile Include="ViewModel\GroupPage\GroupPageViewModel.cs" />
     <Compile Include="ViewModel\Login\RegistrationViewModel.cs" />
+    <Compile Include="View\Groups\AdminGroupListView.xaml.cs">
+      <DependentUpon>AdminGroupListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\ConnectToGroupControl.xaml.cs">
+      <DependentUpon>ConnectToGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\CreateGroupControl.xaml.cs">
+      <DependentUpon>CreateGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\DuplicateGroupControl.xaml.cs">
+      <DependentUpon>DuplicateGroupControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\FilterByStateMenuFlyout.xaml.cs">
+      <DependentUpon>FilterByStateMenuFlyout.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\GroupMemberListControl.xaml.cs">
+      <DependentUpon>GroupMemberListControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\MyGroupListView.xaml.cs">
+      <DependentUpon>MyGroupListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Groups\SwitchGroupStateControl.xaml.cs">
+      <DependentUpon>SwitchGroupStateControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\News\NewsTileView.xaml.cs">
+      <DependentUpon>NewsTileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectApplicationView.xaml.cs">
       <DependentUpon>SelectApplicationView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
-    <Compile Include="ViewModel\GroupList\GroupListViewModel.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\ApplicationHostView.xaml.cs">
       <DependentUpon>ApplicationHostView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\GroupListView.xaml.cs">
-      <DependentUpon>GroupListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GroupPageView.xaml.cs">
       <DependentUpon>GroupPageView.xaml</DependentUpon>
@@ -196,6 +230,9 @@
     <Compile Include="View\SelectTaskView.xaml.cs">
       <DependentUpon>SelectTaskView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\SettingFlyout.xaml.cs">
+      <DependentUpon>SettingFlyout.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TaskPreviewHostView.xaml.cs">
       <DependentUpon>TaskPreviewHostView.xaml</DependentUpon>
     </Compile>
@@ -215,8 +252,10 @@
     <Content Include="Icon\google_plus-128.png" />
     <Content Include="Icon\group-64.png" />
     <Content Include="Icon\license.txt" />
+    <Content Include="Icon\literature-128.png" />
     <Content Include="Icon\login-128.png" />
     <Content Include="Icon\LogoMobileApps_128x128.png" />
+    <Content Include="Icon\group-100.png" />
     <Content Include="Icon\user-32.png" />
     <Content Include="Icon\windows8-128.png" />
     <None Include="ITJakub.MobileApps.Client.MainApp_StoreKey.pfx" />
@@ -241,11 +280,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\AdminHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\AboutSettingsFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ApplicationMenuPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,15 +309,47 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="View\Groups\AdminGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\ConnectToGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\CreateGroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\DuplicateGroupControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Groups\FilterByStateMenuFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\GroupMemberListControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\MyGroupListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Groups\SwitchGroupStateControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\News\NewsTileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SelectApplicationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ApplicationHostView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\GroupListView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -298,6 +377,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\SettingFlyout.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\TaskPreviewHostView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -308,16 +391,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.0.2.32240, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.0.2.32242, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=7a953f43091b5a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\packages\Unity.3.5.1404.0\lib\win8\Microsoft.Practices.Unity.dll</HintPath>

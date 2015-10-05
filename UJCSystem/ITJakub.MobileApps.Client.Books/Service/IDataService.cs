@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Windows.UI.Xaml.Media.Imaging;
 using ITJakub.MobileApps.Client.Books.Enum;
 using ITJakub.MobileApps.Client.Books.ViewModel;
@@ -14,6 +15,7 @@ namespace ITJakub.MobileApps.Client.Books.Service
         void GetPagePhoto(string bookGuid, string pageId, Action<BitmapImage, Exception> callback);
         void GetBookInfo(string bookGuid, Action<BookViewModel, Exception> callback);
     }
+  
 
     public interface IDataService : IBookDataService
     {
@@ -23,5 +25,8 @@ namespace ITJakub.MobileApps.Client.Books.Service
         void GetCurrentBook(Action<BookViewModel> callback);
         void SetMode(ReaderMode readerMode);
         void GetMode(Action<ReaderMode> callback);
+        void UpdateEndpointAddress(string address);
     }
+
+
 }

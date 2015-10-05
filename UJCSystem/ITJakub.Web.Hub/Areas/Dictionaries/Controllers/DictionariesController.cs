@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net.Mime;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
@@ -259,7 +260,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
             var start = (page - 1)*pageSize;
-            var result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize);
+            HeadwordListContract result = m_mainServiceClient.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 

@@ -16,7 +16,8 @@ namespace ITJakub.MobileApps.Client.Crosswords.ViewModel
 
         public override void ShowTask(string data)
         {
-            m_dataService.SetTaskAndGetConfiguration(data, rows =>
+            m_dataService.SetTask(data);
+            m_dataService.GetConfiguration(rows =>
             {
                 CrosswordRows = rows;
             }, true);

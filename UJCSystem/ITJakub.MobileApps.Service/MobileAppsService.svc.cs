@@ -20,6 +20,21 @@ namespace ITJakub.MobileApps.Service
             m_serviceManager = Container.Current.Resolve<IMobileAppsService>();
         }
 
+        public string GetBookLibraryEndpointAddress()
+        {
+            try
+            {
+                return m_serviceManager.GetBookLibraryEndpointAddress();
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
         public void CreateUser(AuthProvidersContract providerContract, string providerToken, UserDetailContract userDetail)
         {
             try
@@ -65,11 +80,27 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public UserGroupsContract GetGroupsByUser(long userId)
+        public bool PromoteUserToTeacherRole(long userId, string promotionCode)
         {
             try
             {
-                return m_serviceManager.GetGroupsByUser(userId);
+                return m_serviceManager.PromoteUserToTeacherRole(userId, promotionCode);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+
+        }
+
+        public List<GroupInfoContract> GetMembershipGroups(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetMembershipGroups(userId);
             }
             catch (WebFaultException ex)
             {
@@ -79,6 +110,36 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public List<OwnedGroupInfoContract> GetOwnedGroups(long userId)
+        {
+            try
+            {
+                return m_serviceManager.GetOwnedGroups(userId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        //public UserGroupsContract GetGroupsByUser(long userId)
+        //{
+        //    try
+        //    {
+        //        return m_serviceManager.GetGroupsByUser(userId);
+        //    }
+        //    catch (WebFaultException ex)
+        //    {
+        //        if (m_log.IsErrorEnabled)
+        //            m_log.ErrorFormat(ex.Message);
+
+        //        throw;
+        //    }
+        //}
 
         public CreateGroupResponse CreateGroup(long userId, string groupName)
         {
@@ -126,11 +187,11 @@ namespace ITJakub.MobileApps.Service
             }
         }
 
-        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since)
+        public IList<SynchronizedObjectResponseContract> GetSynchronizedObjects(long groupId, int applicationId, string objectType, DateTime since, int count)
         {
             try
             {
-                return m_serviceManager.GetSynchronizedObjects(groupId, applicationId, objectType, since);
+                return m_serviceManager.GetSynchronizedObjects(groupId, applicationId, objectType, since, count);
             }
             catch (WebFaultException ex)
             {
@@ -335,5 +396,35 @@ namespace ITJakub.MobileApps.Service
                 throw;
             }
         }
+
+        public CreateGroupResponse DuplicateGroup(long userId, long groupId, string newGroupname)
+        {
+            try
+            {
+                return m_serviceManager.DuplicateGroup(userId, groupId, newGroupname);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }
+
+        public string RegenerateGroupCode(long userId, long groupId)
+        {
+            try
+            {
+                return m_serviceManager.RegenerateGroupCode(userId, groupId);
+            }
+            catch (WebFaultException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat(ex.Message);
+
+                throw;
+            }
+        }        
     }
 }

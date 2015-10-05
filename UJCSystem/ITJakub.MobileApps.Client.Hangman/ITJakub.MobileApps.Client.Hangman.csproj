@@ -111,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
-    <Compile Include="DataContract\GuessLetterContract.cs" />
     <Compile Include="DataContract\HangmanTaskContract.cs" />
     <Compile Include="DataContract\ProgressInfoContract.cs" />
     <Compile Include="DataService\GuessManager.cs" />
@@ -132,6 +131,28 @@
     <Compile Include="ViewModel\TaskProgressInfoViewModel.cs" />
     <Compile Include="ViewModel\TaskSettingsViewModel.cs" />
     <Compile Include="ViewModel\WordViewModel.cs" />
+    <Compile Include="View\Control\HangmanPicture\Hangman1.xaml.cs">
+      <DependentUpon>Hangman1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman2.xaml.cs">
+      <DependentUpon>Hangman2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman3.xaml.cs">
+      <DependentUpon>Hangman3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman4.xaml.cs">
+      <DependentUpon>Hangman4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman5.xaml.cs">
+      <DependentUpon>Hangman5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman6.xaml.cs">
+      <DependentUpon>Hangman6.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\Hangman7.xaml.cs">
+      <DependentUpon>Hangman7.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Control\HangmanPicture\HangmanPictureTemplateSelector.cs" />
     <Compile Include="View\Control\ResultTableControl.xaml.cs">
       <DependentUpon>ResultTableControl.xaml</DependentUpon>
     </Compile>
@@ -178,6 +199,34 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman6.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Control\HangmanPicture\Hangman7.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\Control\ResultTableControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -217,14 +266,17 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="GalaSoft.MvvmLight">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.2.0.37222, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Extras.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform">
-      <HintPath>..\packages\MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.2.0.37226, Culture=neutral, PublicKeyToken=7a953f43091b5a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.2.0.0\lib\windows81\GalaSoft.MvvmLight.Platform.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -235,6 +287,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon\checkmark-26.png" />
+    <Content Include="Icon\hangman-icon.png" />
     <Content Include="Icon\hearts-26.png" />
     <Content Include="Icon\license.txt" />
     <Content Include="Icon\olympic_medal-26.png" />

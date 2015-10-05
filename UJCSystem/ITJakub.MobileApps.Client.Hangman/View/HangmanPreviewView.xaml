@@ -9,7 +9,7 @@
     mc:Ignorable="d"
     d:DataContext="{d:DesignInstance Type=viewModel:HangmanTaskPreviewViewModel}">
     
-    <Grid>
+    <Grid Margin="30,10,40,30">
         <ListView SelectionMode="None"
                   ItemsSource="{Binding TaskLevelList}">
             
@@ -23,16 +23,26 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         
                         <TextBlock Grid.Column="0"
-                                   Text="TODO text zadání"/>
-                        <control:WordControl Grid.Column="1"
-                                             HorizontalAlignment="Left"
-                                             HorizontalContentAlignment="Left"
-                                             DataContext="{Binding ResultWord}" />
+                                   Margin="5,10,5,10"
+                                   FontSize="20"
+                                   TextWrapping="Wrap"
+                                   Text="{Binding Hint}" />
+
+                        <control:WordControl
+                            Grid.Column="1"
+                            Margin="10,6,0,0"
+                            HorizontalAlignment="Left"
+                            HorizontalContentAlignment="Center"
+                            FontSize="20"
+                            LetterWidth="30"
+                            LetterHeight="32"
+                            LineHeight="4"
+                            DataContext="{Binding ResultWord}" />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

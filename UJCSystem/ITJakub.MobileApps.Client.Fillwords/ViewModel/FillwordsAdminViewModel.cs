@@ -116,6 +116,8 @@ namespace ITJakub.MobileApps.Client.Fillwords.ViewModel
                     m_dataService.ErrorService.ShowConnectionWarning();
                     return;
                 }
+                m_dataService.ErrorService.HideWarning();
+                SetDataLoaded();
 
                 foreach (var userResultViewModel in newResults)
                 {

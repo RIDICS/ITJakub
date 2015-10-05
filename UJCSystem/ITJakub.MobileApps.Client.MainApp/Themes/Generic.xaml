@@ -1,0 +1,56 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local2="using:ITJakub.MobileApps.Client.MainApp.View.Control">
+
+    <Style TargetType="local2:NotificationControl">
+        <Setter Property="Background" Value="LightGoldenrodYellow" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local2:NotificationControl">
+                    <Grid Background="Transparent"
+                          Visibility="Collapsed"
+                          x:Name="MainGrid">
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="MyCommonStates">
+                                <VisualState x:Name="Visible">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="MainGrid" Storyboard.TargetProperty="Opacity" From="0.0" To="1.0" Duration="0:0:0.25" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainGrid" Storyboard.TargetProperty="Visibility" Duration="0">
+                                            <DiscreteObjectKeyFrame Value="Visible" KeyTime="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Hidden">
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="MainGrid" Storyboard.TargetProperty="Opacity" From="1.0" To="0.0" Duration="0:0:1.0" />
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MainGrid" Storyboard.TargetProperty="Visibility" BeginTime="0:0:1.0" Duration="0">
+                                            <DiscreteObjectKeyFrame Value="Collapsed" KeyTime="0" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                        <Rectangle Fill="{TemplateBinding Background}"
+                                   RadiusX="15"
+                                   RadiusY="10"
+                                   Stroke="#20000000"
+                                   StrokeThickness="2" />
+                        <Button Background="Transparent"
+                                Foreground="{TemplateBinding Foreground}"
+                                Margin="8,4,8,4"
+                                Padding="4,0,4,0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                VerticalContentAlignment="Top"
+                                BorderThickness="0"
+                                Command="{TemplateBinding Command}"
+                                Content="{TemplateBinding Content}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

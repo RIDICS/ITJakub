@@ -2,11 +2,14 @@
 using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.Threading;
+using ITJakub.MobileApps.Client.Chat.Message;
 using ITJakub.MobileApps.Client.Core.Manager.Groups;
 using ITJakub.MobileApps.Client.Core.Service;
 using ITJakub.MobileApps.Client.Core.Service.Polling;
 using ITJakub.MobileApps.Client.Core.ViewModel;
+using ITJakub.MobileApps.Client.MainApp.View;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
@@ -27,6 +30,12 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private bool m_isChatDisplayed;
         private SupportAppBaseViewModel m_chatApplicationViewModel;
         private GroupInfoViewModel m_groupInfo;
+        private TaskViewModel m_taskInfo;
+        private bool m_loadingGroupInfo;
+        private bool m_loadingTask;
+        private bool m_loadingData;
+        private int m_unreadMessageCount;
+        private bool m_isChatNotificationVisible;
         private const PollingInterval GroupMembersPollingInterval = PollingInterval.Medium;
 
         public AdminHostViewModel(IDataService dataService, INavigationService navigationService, IErrorService errorService, IMainPollingService pollingService)
@@ -35,6 +44,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             m_navigationService = navigationService;
             m_errorService = errorService;
             m_pollingService = pollingService;
+
+            m_unreadMessageCount = 0;
+            Messenger.Default.Register<NotifyNewMessagesMessage>(this, message =>
+            {
+                if (!IsChatDisplayed)
+                    UnreadMessageCount += message.Count;
+            });
+
             InitCommands();
             LoadData();
         }
@@ -42,16 +59,23 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private void InitCommands()
         {
             GoBackCommand = new RelayCommand(GoBack);
+            ShowTaskCommand = new RelayCommand(ShowTask);
+            ShowChatCommand = new RelayCommand(() => IsChatDisplayed = true);
         }
-
+        
         private void GoBack()
         {
+            if (ChatApplicationViewModel != null)
+                ChatApplicationViewModel.StopCommunication();
+
+            Messenger.Default.Unregister(this);
             m_pollingService.UnregisterAll();
             m_navigationService.GoBack();
         }
 
         private void LoadData()
         {
+            LoadingData = true;
             m_dataService.GetCurrentGroupId((groupId, type) =>
             {
                 LoadGroupDetails(groupId);
@@ -66,8 +90,10 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupType = GroupType.Owner
             };
 
+            LoadingGroupInfo = true;
             m_dataService.GetGroupDetails(groupId, (groupInfo, exception) =>
             {
+                LoadingGroupInfo = false;
                 if (exception != null)
                 {
                     m_errorService.ShowConnectionError();
@@ -77,14 +103,17 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 GroupName = groupInfo.GroupName;
             });
 
+            LoadingTask = true;
             m_dataService.GetTaskForGroup(groupId, (taskInfo, exception) =>
             {
+                LoadingTask = false;
                 if (exception != null)
                 {
                     m_errorService.ShowConnectionError(GoBack);
                     return;
                 }
 
+                m_taskInfo = taskInfo;
                 LoadApps(taskInfo.Application, taskInfo.Data);
             });
         }
@@ -111,6 +140,14 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 AdminViewModel = currentApplication.AdminViewModel;
                 IsChatSupported = currentApplication.IsChatSupported;
+
+                if (AdminViewModel == null)
+                {
+                    m_errorService.ShowError("Tato aplikace nemá vlastní učitelský pohled.", "Neexistující učitelský pohled", GoBack);
+                    return;
+                }
+
+                AdminViewModel.DataLoadedCallback = () => LoadingData = false;
                 AdminViewModel.SetTask(data);
                 AdminViewModel.InitializeCommunication();
 
@@ -119,7 +156,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     ChatApplicationViewModel = chatApplication.ApplicationViewModel as SupportAppBaseViewModel;
                     if (ChatApplicationViewModel != null)
                     {
-                        ChatApplicationViewModel.InitializeCommunication();
+                        ChatApplicationViewModel.InitializeCommunication(true);
                     }
                 }
 
@@ -141,11 +178,25 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                     FirstName = x.FirstName,
                     LastName = x.LastName
                 });
-                DispatcherHelper.CheckBeginInvokeOnUI(() => AdminViewModel.UpdateGroupMembers(members));
+                DispatcherHelper.CheckBeginInvokeOnUI(() =>
+                {
+                    AdminViewModel.UpdateGroupMembers(members);
+                    m_errorService.HideWarning();
+                });
             }
         }
 
+        private void ShowTask()
+        {
+            m_navigationService.OpenPopup<TaskPreviewHostView>();
+            Messenger.Default.Send(new SelectedTaskMessage { TaskViewModel = m_taskInfo });
+        }
+
         public RelayCommand GoBackCommand { get; private set; }
+
+        public RelayCommand ShowTaskCommand { get; private set; }
+
+        public RelayCommand ShowChatCommand { get; private set; }
 
         public string GroupName
         {
@@ -203,6 +254,72 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             set
             {
                 m_isChatDisplayed = value;
+                RaisePropertyChanged();
+
+                ChatApplicationViewModel.AppVisibilityChanged(m_isChatDisplayed);
+
+                if (m_isChatDisplayed)
+                {
+                    IsCommandBarOpen = false;
+                    UnreadMessageCount = 0;
+                }
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loadingGroupInfo && m_loadingTask; }
+        }
+
+        public bool LoadingGroupInfo
+        {
+            get { return m_loadingGroupInfo; }
+            set
+            {
+                m_loadingGroupInfo = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Loading);
+            }
+        }
+
+        public bool LoadingTask
+        {
+            get { return m_loadingTask; }
+            set
+            {
+                m_loadingTask = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(() => Loading);
+            }
+        }
+
+        public bool LoadingData
+        {
+            get { return m_loadingData; }
+            set
+            {
+                m_loadingData = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int UnreadMessageCount
+        {
+            get { return m_unreadMessageCount; }
+            set
+            {
+                m_unreadMessageCount = value;
+                RaisePropertyChanged();
+                IsChatNotificationVisible = m_unreadMessageCount > 0;
+            }
+        }
+
+        public bool IsChatNotificationVisible
+        {
+            get { return m_isChatNotificationVisible; }
+            set
+            {
+                m_isChatNotificationVisible = value;
                 RaisePropertyChanged();
             }
         }

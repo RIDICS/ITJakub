@@ -15,6 +15,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
         private string m_appName;
         private string m_taskName;
         private TaskPreviewBaseViewModel m_taskPreviewHostViewModel;
+        private bool m_loading;
+        private string m_taskDescription;
+        private bool m_isLoaded;
 
         public TaskPreviewHostViewModel(IDataService dataService, IErrorService errorService, NavigationService navigationService)
         {
@@ -33,6 +36,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadData(SelectedTaskMessage message)
         {
+            Messenger.Default.Unregister(this);
             var task = message.TaskViewModel;
             m_dataService.GetApplication(task.Application, (appInfo, exception) =>
             {
@@ -44,6 +48,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
                 AppName = appInfo.Name;
                 TaskName = task.Name;
+                TaskDescription = task.Description;
                 TaskPreviewViewModel = appInfo.TaskPreviewViewModel;
 
                 LoadTask(task.Id);
@@ -52,8 +57,11 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
 
         private void LoadTask(long taskId)
         {
+            Loading = true;
+            IsLoaded = false;
             m_dataService.GetTask(taskId, (task, exception) =>
             {
+                Loading = false;
                 if (exception != null)
                 {
                     m_errorService.ShowConnectionWarning();
@@ -61,6 +69,7 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
                 }
 
                 TaskPreviewViewModel.ShowTask(task.Data);
+                IsLoaded = true;
             });
         }
 
@@ -86,12 +95,42 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel
             }
         }
 
+        public string TaskDescription
+        {
+            get { return m_taskDescription; }
+            set
+            {
+                m_taskDescription = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public TaskPreviewBaseViewModel TaskPreviewViewModel
         {
             get { return m_taskPreviewHostViewModel; }
             set
             {
                 m_taskPreviewHostViewModel = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool Loading
+        {
+            get { return m_loading; }
+            set
+            {
+                m_loading = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsLoaded
+        {
+            get { return m_isLoaded; }
+            set
+            {
+                m_isLoaded = value;
                 RaisePropertyChanged();
             }
         }

@@ -32,6 +32,7 @@
 
         <TextBlock Grid.Column="0"
                    Grid.Row="0"
+                   Margin="40,0,0,0"
                    Text="Aktuální stav"
                    Style="{StaticResource SubheaderTextBlockStyle}" />
 
@@ -42,7 +43,7 @@
 
         <ListView Grid.Row="1"
                   Grid.Column="0"
-                  Margin="0,30,10,10"
+                  Margin="20,30,10,10"
                   ItemsSource="{Binding PlayerRanking}">
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -65,7 +66,7 @@
                                         <ItemsControl x:Name="RowItemsControl"
                                                       MinHeight="5"
                                                       ItemsSource="{Binding Cells}"
-                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=9}">
+                                                      Margin="{Binding StartPosition, Converter={StaticResource StartPositionToMarginConverter}, ConverterParameter=10}">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Horizontal" />
@@ -73,8 +74,8 @@
                                             </ItemsControl.ItemsPanel>
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border Width="10"
-                                                            Height="10"
+                                                    <Border Width="11"
+                                                            Height="11"
                                                             BorderBrush="Black"
                                                             BorderThickness="1"
                                                             Margin="-0.5"

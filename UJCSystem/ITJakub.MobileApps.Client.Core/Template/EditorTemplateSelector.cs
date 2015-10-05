@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using ITJakub.MobileApps.Client.Shared.Template;
 
 namespace ITJakub.MobileApps.Client.Core.Template
 {
