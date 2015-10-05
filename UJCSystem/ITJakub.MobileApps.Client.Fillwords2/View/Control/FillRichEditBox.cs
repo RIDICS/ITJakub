@@ -151,7 +151,6 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 {
                     IsEnabled = IsAnsweringAllowed,
                     Options = optionsViewModel,
-                    Text = optionsViewModel.CorrectAnswer // todo hide text
                 };
 
                 // create Button background binding

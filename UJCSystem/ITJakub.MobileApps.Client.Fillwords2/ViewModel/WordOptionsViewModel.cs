@@ -255,5 +255,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
         public int EndPosition { get; set; }
 
         public IList<string> Options { get; set; }
+
+        public string SelectedAnswer { get; set; }
     }
 }

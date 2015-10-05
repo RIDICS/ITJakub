@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System.Text;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
@@ -42,8 +43,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             var wordOption = button.Options;
             var word = wordOption.CorrectAnswer;
 
-            var startPosition = 0;
-            var endPosition = 0;
+            int startPosition = 0;
+            int endPosition;
             stackPanel.Children.Clear();
             
             foreach (var letterOptionViewModel in wordOption.Options)
@@ -57,7 +58,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                         //TODO
                         break;
                     default:
-                        CreateFillControl(stackPanel, letterOptionViewModel);
+                        CreateFillControl(stackPanel, button, letterOptionViewModel);
                         break;
                 }
                 startPosition = letterOptionViewModel.EndPosition;
@@ -65,6 +66,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 
             endPosition = word.Length;
             CreateTextControl(stackPanel, word, startPosition, endPosition);
+
+            button.UpdateDisplayedText();
         }
 
         private static void CreateTextControl(StackPanel stackPanel, string word, int startPosition, int endPosition)
@@ -74,21 +77,59 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 var text = word.Substring(startPosition, endPosition - startPosition);
                 var textBlock = new TextBlock
                 {
-                    Text = text
+                    Text = text,
+                    FontSize = 15,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(1,0,1,0)
                 };
                 stackPanel.Children.Add(textBlock);
             }
         }
 
-        private static void CreateFillControl(StackPanel stackPanel, LetterOptionViewModel letterOptionViewModel)
+        private static void CreateFillControl(StackPanel stackPanel, AnswerButton button, LetterOptionViewModel letterOptionViewModel)
         {
             var textBox = new TextBox
             {
-                MinWidth = 20
+                MinWidth = 20,
+                Text = letterOptionViewModel.SelectedAnswer
             };
+            textBox.TextChanged += (sender, args) =>
+            {
+                letterOptionViewModel.SelectedAnswer = textBox.Text;
+                button.UpdateDisplayedText();
+            };
+            
             stackPanel.Children.Add(textBox);
         }
 
+        
+        private void UpdateDisplayedText()
+        {
+            var stringBuilder = new StringBuilder();
+
+            int startPosition = 0;
+            int endPosition;
+            var correctAnswer = Options.CorrectAnswer;
+            
+            foreach (var letterOptionViewModel in Options.Options)
+            {
+                var selectedAnswer = string.IsNullOrEmpty(letterOptionViewModel.SelectedAnswer)
+                    ? "_"
+                    : letterOptionViewModel.SelectedAnswer;
+
+                endPosition = letterOptionViewModel.StartPosition;
+
+                stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
+                stringBuilder.Append(selectedAnswer);
+
+                startPosition = letterOptionViewModel.EndPosition;
+            }
+
+            endPosition = correctAnswer.Length;
+
+            stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
+            Text = stringBuilder.ToString();
+        }
 
         protected override void OnApplyTemplate()
         {
