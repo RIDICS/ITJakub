@@ -53,12 +53,12 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
             if (string.IsNullOrWhiteSpace(username))
             {
-                using (var client = GetUnsecuredClient())
+                using (var client = GetMainServiceClient())
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Bibliographies);
             }
             else
             {
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Bibliographies);
                 }
@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult SearchTerm(string term)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var listBooks = client.Search(term);
                 foreach (var list in listBooks)
@@ -82,7 +82,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.BibliographicalItem);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -91,7 +91,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem, null, null);
                 return Json(result, JsonRequestBehavior.AllowGet);

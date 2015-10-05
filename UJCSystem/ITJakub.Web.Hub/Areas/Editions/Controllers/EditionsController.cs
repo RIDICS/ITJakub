@@ -31,7 +31,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Listing(string bookId, string searchText, string page)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var book = client.GetBookInfoWithPages(bookId);
                 return
@@ -62,7 +62,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public FileResult GetBookImage(string bookId, int position)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var imageDataStream = client.GetBookPageImage(bookId, position);
                 return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
@@ -108,12 +108,12 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Editions);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Editions);
                 }
@@ -133,7 +133,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Edition);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -142,7 +142,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -151,7 +151,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult GetEditionsWithCategories()
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
                 return Json(grammarsWithCategories, JsonRequestBehavior.AllowGet);
@@ -171,7 +171,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -206,7 +206,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = results}, JsonRequestBehavior.AllowGet);
@@ -238,7 +238,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
@@ -271,7 +271,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
@@ -318,7 +318,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = results}, JsonRequestBehavior.AllowGet);
@@ -364,7 +364,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = results}, JsonRequestBehavior.AllowGet);
@@ -394,7 +394,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
             });
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
@@ -421,7 +421,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
             });
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
@@ -449,7 +449,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 ResultBooks = new List<BookVersionPairContract> {new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}}
             });
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 
@@ -492,7 +492,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         }
                 }
             };
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
@@ -533,7 +533,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         }
                 }
             };
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
@@ -575,7 +575,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         }
                 }
             };
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 

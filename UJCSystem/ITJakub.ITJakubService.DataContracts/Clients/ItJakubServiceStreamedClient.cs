@@ -13,6 +13,10 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public ItJakubServiceStreamedClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;

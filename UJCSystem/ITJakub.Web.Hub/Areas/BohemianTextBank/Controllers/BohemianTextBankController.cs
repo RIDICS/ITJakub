@@ -65,12 +65,12 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetUnsecuredClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.BohemianTextBank);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.BohemianTextBank);
                 }
@@ -85,7 +85,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult GetCorpusWithCategories()
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var audiosWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
 
@@ -119,7 +119,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -152,7 +152,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
 
@@ -199,7 +199,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {results}, JsonRequestBehavior.AllowGet);
@@ -243,7 +243,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
                 return Json(new {results = results.SearchResults}, JsonRequestBehavior.AllowGet);
@@ -263,7 +263,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -283,7 +283,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -318,7 +318,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {results}, JsonRequestBehavior.AllowGet);
@@ -351,7 +351,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
                 return Json(new {results = results.SearchResults}, JsonRequestBehavior.AllowGet);
@@ -360,7 +360,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.TextBank);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -369,7 +369,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.TextBank, null, null);
                 return Json(result, JsonRequestBehavior.AllowGet);

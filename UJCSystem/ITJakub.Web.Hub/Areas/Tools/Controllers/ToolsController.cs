@@ -46,12 +46,12 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Tools);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Tools);
                 }

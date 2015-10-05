@@ -7,7 +7,7 @@ namespace ITJakub.ITJakubService
     public class UserNamePasswordValidator : System.IdentityModel.Selectors.UserNamePasswordValidator
     {
 
-        private readonly UserManager m_userManager = Container.Current.Resolve<UserManager>();
+        private readonly AuthenticationManager m_authorizationManager = Container.Current.Resolve<AuthenticationManager>();
 
         public override void Validate(string userName, string commToken)
         {
@@ -16,7 +16,7 @@ namespace ITJakub.ITJakubService
                 throw new ArgumentNullException();
             }
 
-            if (!m_userManager.ValidateUserAndCommToken(userName, commToken))
+            if (!m_authorizationManager.ValidateUserAndCommToken(userName, commToken))
                 throw new SecurityTokenValidationException("Invalid Credentials");
 
         }

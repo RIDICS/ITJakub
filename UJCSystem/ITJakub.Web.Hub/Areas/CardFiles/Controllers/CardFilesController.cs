@@ -40,7 +40,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             term = term.ToLower();
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var cardFiles = client.GetCardFiles();
                 var result = new List<SearchResultContract>();
@@ -95,14 +95,14 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
             if (string.IsNullOrWhiteSpace(username))
             {
-                using (var client = GetUnsecuredClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.CardFiles);
                 }
             }
             else
             {
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.CardFiles);
                 }
@@ -113,7 +113,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult CardFiles()
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var cardFiles = client.GetCardFiles();
                 return Json(new {cardFiles}, JsonRequestBehavior.AllowGet);
@@ -122,7 +122,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Buckets(string cardFileId, string headword)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var buckets = headword.IsEmpty()
                     ? client.GetBuckets(cardFileId)
@@ -133,7 +133,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Cards(string cardFileId, string bucketId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var cards = client.GetCards(cardFileId, bucketId);
                 return Json(new {cards}, JsonRequestBehavior.AllowGet);
@@ -142,7 +142,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult CardsShort(string cardFileId, string bucketId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var cards = client.GetCardsShort(cardFileId, bucketId);
                 return Json(new {cards}, JsonRequestBehavior.AllowGet);
@@ -151,7 +151,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Card(string cardFileId, string bucketId, string cardId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var card = client.GetCard(cardFileId, bucketId, cardId);
                 return Json(new {card}, JsonRequestBehavior.AllowGet);
@@ -167,7 +167,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var imageDataStream = client.GetImage(cardFileId, bucketId, cardId, imageId, imageSizeEnum);
                 return new FileStreamResult(imageDataStream, "image/jpeg");

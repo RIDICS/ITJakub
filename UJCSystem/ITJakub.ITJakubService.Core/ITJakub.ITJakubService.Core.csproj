@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioBookManager.cs" />
+    <Compile Include="AuthenticationManager.cs" />
     <Compile Include="AutoMapperProfiles\AudioBookSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookContentItemProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookInfoProfile.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="AutoMapperProfiles\TermProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
     <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="CommunicationTokenGenerator.cs" />
+    <Compile Include="DefaultUserProvider.cs" />
     <Compile Include="PermissionManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />

@@ -14,7 +14,7 @@ namespace ITJakub.Web.Hub
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)
         {
-            var client = new ItJakubServiceClient("AuthenticatedEndpoint");            
+            var client = new ItJakubServiceClient(MainServiceEndpointNameAuthenticated);
             if (client.ClientCredentials == null)
             {
                 throw new ArgumentException("Cannot set credentials for client");
@@ -22,6 +22,12 @@ namespace ITJakub.Web.Hub
 
             client.ClientCredentials.UserName.UserName = username;
             client.ClientCredentials.UserName.Password = commToken;
+            return client;
+        }
+
+        public IItJakubService GetUnsecuredClient()
+        {
+            var client = new ItJakubServiceClient(MainServiceEndpointName);
             return client;
         }
 
@@ -33,15 +39,22 @@ namespace ITJakub.Web.Hub
 
         public ItJakubServiceStreamedClient GetStreamingClient()
         {
-            var client = new ItJakubServiceStreamedClient();
+            var client = new ItJakubServiceStreamedClient(StreamedServiceEndpointName);
             return client;
         }
 
-        public IItJakubService GetUnsecuredClient()
+        public ItJakubServiceStreamedClient GetStreamingClientAuthenticated(string username, string commToken)
         {
-            var client = new ItJakubServiceClient();
+            var client = new ItJakubServiceStreamedClient(StreamedServiceEndpointNameAuthenticated);
+            if (client.ClientCredentials == null)
+            {
+                throw new ArgumentException("Cannot set credentials for client");
+            }
+            client.ClientCredentials.UserName.UserName = username;
+            client.ClientCredentials.UserName.Password = commToken;
             return client;
         }
-       
+
+   
     }
 }

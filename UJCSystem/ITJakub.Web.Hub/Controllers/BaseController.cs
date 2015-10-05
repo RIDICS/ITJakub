@@ -12,28 +12,36 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly CommunicationProvider m_communication = new CommunicationProvider();
 
-        public IItJakubService GetAuthenticatedClient()
-        {
-            var username = GetUserName();
-            var password = GetCommunicationToken();
-
-            return m_communication.GetAuthenticatedClient(username, password);            
-        }
 
         public ItJakubServiceEncryptedClient GetEncryptedClient()
         {
             return m_communication.GetEncryptedClient();
         }
-        public IItJakubService GetUnsecuredClient()
+
+        public IItJakubService GetMainServiceClient()
         {
-            return m_communication.GetUnsecuredClient();
+            if (!IsUserLoggedIn()) return m_communication.GetUnsecuredClient();
+
+            var username = GetUserName();
+            var password = GetCommunicationToken();
+
+            return m_communication.GetAuthenticatedClient(username, password);
         }
 
         public ItJakubServiceStreamedClient GetStreamingClient()
         {
-            return m_communication.GetStreamingClient();
+            if (!IsUserLoggedIn()) return m_communication.GetStreamingClient();
+
+            var username = GetUserName();
+            var password = GetCommunicationToken();
+
+            return m_communication.GetStreamingClientAuthenticated(username, password);
         }
 
+        private bool IsUserLoggedIn()
+        {
+            return User.Identity.IsAuthenticated;            
+        }
 
         private string GetUserName()
         {
@@ -48,6 +56,5 @@ namespace ITJakub.Web.Hub.Controllers
 
             return communicationToken.Value;
         }
-    }   
-
+    }
 }

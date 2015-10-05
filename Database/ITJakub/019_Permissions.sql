@@ -8,7 +8,7 @@ BEGIN TRAN;
 		[Name] varchar(255) NOT NULL UNIQUE,
 		[Description] varchar(500) NULL,
 		[CreateTime] datetime NOT NULL,
-		[CreatedBy] int NOT NULL CONSTRAINT [FK_Group(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
+		[CreatedBy] int NULL CONSTRAINT [FK_Group(CreatedBy)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
 	);
 
 	CREATE TABLE [dbo].[User_Group](
@@ -112,7 +112,7 @@ BEGIN TRAN;
 	    'ANx75Iw7AnQgKChYKghJVcXKE8vwofGlP3tRctamVrqTLOvhyXM0Qko27aui6mhTlg==', -- PasswordHash - varchar -- password is 'Administrator'
 	    '', -- Salt - varchar
 	    '2015-10-01 10:50:36', -- CreateTime - datetime
-	    '', -- AvatarUrl - varchar
+	    NULL, -- AvatarUrl - varchar
 	    'Admin' -- UserName - varchar
 	)
 
@@ -168,10 +168,12 @@ BEGIN TRAN;
 	)
 
 
-	INSERT INTO [dbo].[DatabaseVersion]
+	ALTER TABLE dbo.[User] DROP COLUMN [Salt]
+
+    INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion )
     VALUES
-		 ( '018' );
+		 ( '019' );
 	-- DatabaseVersion - varchar
 --ROLLBACK
 COMMIT;

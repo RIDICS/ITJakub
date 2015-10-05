@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.ServiceModel;
+using System.ServiceModel.Security;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -11,13 +14,17 @@ namespace ITJakub.ITJakubService.Core
 {
     public class UserManager
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly CommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly DefaultUserProvider m_defaultMembershipProvider;
         private readonly UserRepository m_userRepository;
 
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public UserManager(UserRepository userRepository)
+        public UserManager(UserRepository userRepository, CommunicationTokenGenerator communicationTokenGenerator,
+            DefaultUserProvider defaultMembershipProvider)
         {
             m_userRepository = userRepository;
+            m_communicationTokenGenerator = communicationTokenGenerator;
+            m_defaultMembershipProvider = defaultMembershipProvider;
         }
 
         public UserContract CreateLocalUser(UserContract user)
@@ -32,8 +39,9 @@ namespace ITJakub.ITJakubService.Core
                 CreateTime = now,
                 PasswordHash = user.PasswordHash,
                 AuthenticationProvider = AuthenticationProvider.ItJakub,
-                CommunicationToken = Guid.NewGuid().ToString(), //TODO this should do communicationTokenManager
-                CommunicationTokenCreateTime = now
+                CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken(),
+                CommunicationTokenCreateTime = now,
+                Groups = new List<Group> {m_defaultMembershipProvider.GetDefaultGroup()}
             };
             var userId = m_userRepository.Create(dbUser);
             return GetUserDetail(userId);
@@ -43,7 +51,7 @@ namespace ITJakub.ITJakubService.Core
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                string message = "Username could not be empty";
+                var message = "Username could not be empty";
 
                 if (m_log.IsWarnEnabled)
                     m_log.Warn(message);
@@ -64,11 +72,19 @@ namespace ITJakub.ITJakubService.Core
             return user;
         }
 
-        public bool ValidateUserAndCommToken(string userName, string commToken)
-        {
 
-            //TODO implement validation for username and token.
-            return true;
+        public User GetCurrentUser()
+        {
+            if (ServiceSecurityContext.Current != null)
+            {
+                var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+                return m_userRepository.GetByLogin(username);
+            }
+
+            return m_defaultMembershipProvider.GetDefaultUser();
         }
+
+
+        
     }
 }

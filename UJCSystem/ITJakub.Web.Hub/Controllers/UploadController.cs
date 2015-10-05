@@ -9,7 +9,7 @@ namespace ITJakub.Web.Hub.Controllers
     //[Authorize]
     public class UploadController : BaseController
     {
-        //private readonly ItJakubServiceClient m_serviceClient = GetUnsecuredClient();
+        //private readonly ItJakubServiceClient m_serviceClient = GetMainServiceClient();
 
         public ActionResult Upload()
         {
@@ -42,7 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult ProcessUploadedFiles(string sessionId, string uploadMessage)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var success = client.ProcessSession(sessionId, uploadMessage);
                 return Json(new {success});

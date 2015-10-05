@@ -66,12 +66,12 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.OldGrammar);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.OldGrammar);
                 }
@@ -86,7 +86,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Listing(string bookId, string searchText, string page)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var book = client.GetBookInfoWithPages(bookId);
                 return
@@ -117,7 +117,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -126,7 +126,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -135,7 +135,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -144,7 +144,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult GetGrammarsWithCategories()
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var editionsWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Grammar);
                 return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
@@ -185,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = result}, JsonRequestBehavior.AllowGet);
@@ -205,7 +205,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -237,7 +237,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
@@ -270,7 +270,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
@@ -317,7 +317,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                     SelectedCategoryIds = selectedCategoryIds
                 });
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = result}, JsonRequestBehavior.AllowGet);
@@ -368,7 +368,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
                 return Json(new {books = result}, JsonRequestBehavior.AllowGet);
@@ -411,7 +411,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
@@ -443,7 +443,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)

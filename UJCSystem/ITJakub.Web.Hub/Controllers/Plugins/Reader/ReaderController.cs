@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
     {
         public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var text = client.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html, BookTypeEnumContract.Edition);
                 return Json(new {pageText = text}, JsonRequestBehavior.AllowGet);
@@ -22,7 +22,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetTermsOnPage(string bookId, string pageXmlId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var terms = client.GetTermsOnPage(bookId, pageXmlId);
                 return Json(new {terms}, JsonRequestBehavior.AllowGet);
@@ -55,7 +55,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                     }
                 };
             }
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var text = client.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId, OutputFormatEnumContract.Html);
                 return Json(new {pageText = text}, JsonRequestBehavior.AllowGet);
@@ -64,7 +64,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPageList(string bookId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var pages = client.GetBookPageList(bookId);
                 return Json(new {pageList = pages}, JsonRequestBehavior.AllowGet);
@@ -73,7 +73,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookContent(string bookId)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var contentItems = client.GetBookContent(bookId);
                 return Json(new {content = contentItems}, JsonRequestBehavior.AllowGet);
@@ -82,7 +82,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult AddBookmark(string bookId, string pageXmlId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
                 client.AddPageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
             return Json(new {});
         }
@@ -90,14 +90,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult RemoveBookmark(string bookId, string pageXmlId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
                 client.RemovePageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
             return Json(new {});
         }
 
         public ActionResult GetAllBookmarks(string bookId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var bookmarsList = client.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
                 return Json(new {bookmarks = bookmarsList}, JsonRequestBehavior.AllowGet)

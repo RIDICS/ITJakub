@@ -59,12 +59,12 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.ProfessionalLiterature);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.ProfessionalLiterature);
                 }
@@ -74,7 +74,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.ProfessionalLiterature);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -83,7 +83,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.ProfessionalLiterature, null, null);
             return Json(result, JsonRequestBehavior.AllowGet);

@@ -12,6 +12,7 @@ namespace ITJakub.ITJakubService.Core
 {
     public class PermissionManager
     {
+        private readonly UserManager m_userManager;
         private readonly UserRepository m_userRepository;
         private readonly PermissionRepository m_permissionRepository;
         private readonly BookRepository m_bookRepository;
@@ -20,8 +21,9 @@ namespace ITJakub.ITJakubService.Core
 
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        public PermissionManager(UserRepository userRepository, PermissionRepository permissionRepository, BookRepository bookRepository, CategoryRepository categoryRepository, AuthorizationManager authorizationManager)
+        public PermissionManager(UserManager userManager,UserRepository userRepository, PermissionRepository permissionRepository, BookRepository bookRepository, CategoryRepository categoryRepository, AuthorizationManager authorizationManager)
         {
+            m_userManager = userManager;
             m_userRepository = userRepository;
             m_permissionRepository = permissionRepository;
             m_authorizationManager = authorizationManager;
@@ -54,7 +56,7 @@ namespace ITJakub.ITJakubService.Core
         public GroupDetailContract CreateGroup(string groupName, string description)
         {
             m_authorizationManager.CheckUserCanManagePermissions();
-            var user = m_authorizationManager.GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
 
             var group = new Group
             {

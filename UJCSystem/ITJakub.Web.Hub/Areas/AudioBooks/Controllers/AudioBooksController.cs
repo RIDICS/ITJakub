@@ -56,12 +56,12 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetUnsecuredClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.AudioBooks);
                 }
             else
-                using (var client = GetAuthenticatedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.AudioBooks);
                 }
@@ -77,7 +77,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.AudioBook);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -86,7 +86,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.AudioBook, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -95,7 +95,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetAudioWithCategories()
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var audiosWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.AudioBook);
                 return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
@@ -116,7 +116,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -146,7 +146,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
                 return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);
@@ -180,7 +180,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
 
@@ -223,7 +223,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
                 return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);

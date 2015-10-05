@@ -12,31 +12,33 @@ namespace ITJakub.ITJakubService.Core
     public class AuthorizationManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly PermissionRepository m_permissionRepository;
-        private readonly UserRepository m_userRepository;
+        private readonly PermissionRepository m_permissionRepository;        
+        private readonly UserManager m_userManager;
 
-        public AuthorizationManager(UserRepository userRepository, PermissionRepository permissionRepository)
-        {
-            m_userRepository = userRepository;
+        public AuthorizationManager(UserManager userManager, UserRepository userRepository, PermissionRepository permissionRepository)
+        {            
+            m_userManager = userManager;
             m_permissionRepository = permissionRepository;
         }
 
-        public User GetCurrentUser()
-        {
-            //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-            var username = "Admin"; //TODO HACK
-            var user =  m_userRepository.FindByUserName(username);
-            if (user == null)
-            {
-                throw new AuthorizationException(string.Format("Cannot find user with username '{0}'. Probably does not exist.", username));
-            }
+  
 
-            return user;
-        }
+        //public User GetCurrentUser()
+        //{
+        //    //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+        //    var username = "Admin"; //TODO HACK
+        //    var user =  m_userRepository.FindByUserName(username);
+        //    if (user == null)
+        //    {
+        //        throw new AuthorizationException(string.Format("Cannot find user with username '{0}'. Probably does not exist.", username));
+        //    }
+
+        //    return user;
+        //}
 
         public void CheckUserCanAddNews()
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             var newsPermissions = specialPermissions.OfType<NewsPermission>();
             if (!newsPermissions.Any(x => x.CanAddNews))
@@ -48,7 +50,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void CheckUserCanManageFeedbacks()
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             var feedbackPermissions = specialPermissions.OfType<FeedbackPermission>();
             if (!feedbackPermissions.Any(x => x.CanManageFeedbacks))
@@ -60,7 +62,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void CheckUserCanManagePermissions()
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             var managePermissionsPermissions = specialPermissions.OfType<ManagePermissionsPermission>();
             if (!managePermissionsPermissions.Any(x => x.CanManagePermissions))
@@ -72,7 +74,7 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanUploadBook()
         {
             return; //TODO HACK
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
             if (!uploadBookPermissions.Any(x => x.CanUploadBook))
@@ -83,7 +85,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void AuthorizeBook(string bookXmlId)
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var filtered = m_permissionRepository.GetFilteredBookXmlIdListByUserPermissions(user.Id, new List<string> {bookXmlId});
             if (filtered == null)
             {
@@ -94,7 +96,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void AuthorizeBook(long bookId)
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {bookId});
             if (filtered == null)
             {
@@ -105,7 +107,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void FilterBooksByCurrentUser(ref IList<BookVersion> books)
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
 
             if (books == null || books.Count == 0)
             {
@@ -133,7 +135,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void AuthorizeCriteria(List<SearchCriteriaContract> searchCriteriaContracts)
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
             var authCriterias = searchCriteriaContracts.OfType<AuthorizationCriteriaContract>().ToList();
             if (authCriterias.Count != 0)
             {
@@ -153,7 +155,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void FilterBookIdList(ref IList<long> bookIds)
         {
-            var user = GetCurrentUser();
+            var user = m_userManager.GetCurrentUser();
 
             if (bookIds == null || bookIds.Count == 0)
             {

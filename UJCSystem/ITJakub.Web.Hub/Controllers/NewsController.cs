@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var items = new List<SyndicationItem>();
 
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var feeds = client.GetWebNewsSyndicationItems(0, count);
                 foreach (var feed in feeds)
@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var feeds = client.GetWebNewsSyndicationItems(start, count);
                 return Json(feeds, JsonRequestBehavior.AllowGet);
@@ -65,7 +65,7 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItemCount()
         {
-            using (var client = GetUnsecuredClient())
+            using (var client = GetMainServiceClient())
             {
                 var feedCount = client.GetWebNewsSyndicationItemCount();
                 return Json(feedCount, JsonRequestBehavior.AllowGet);
@@ -85,7 +85,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var username = HttpContext.User.Identity.Name;
 
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);
 
             return RedirectToAction("Index", "Home");

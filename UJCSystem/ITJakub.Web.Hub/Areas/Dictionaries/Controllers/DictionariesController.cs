@@ -45,7 +45,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionariesWithCategories()
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Dictionary);
 
@@ -150,7 +150,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 searchContractBasic.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
 
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
 
                 var headwordCount = client.SearchHeadwordByCriteriaResultsCount(searchContractBasic, DictionarySearchTarget.Headword);
@@ -169,7 +169,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 searchContractFulltext.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var fulltextCount = client.SearchHeadwordByCriteriaResultsCount(searchContractFulltext, DictionarySearchTarget.Fulltext);
                 return Json(fulltextCount, JsonRequestBehavior.AllowGet);
@@ -186,7 +186,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -203,7 +203,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -217,7 +217,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
                 return Json(resultCount);
@@ -232,7 +232,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
                 return Json(result);
@@ -241,7 +241,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, BookTypeEnumContract.Dictionary);
                 return Json(result, JsonRequestBehavior.AllowGet);
@@ -262,7 +262,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
                 };
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
                     BookTypeEnumContract.Dictionary);
@@ -272,7 +272,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var resultCount = client.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
             return Json(resultCount, JsonRequestBehavior.AllowGet);
@@ -281,7 +281,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var start = (page - 1)*pageSize;
             HeadwordListContract result = client.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize);
@@ -291,7 +291,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            using(var client = GetAuthenticatedClient()) { 
+            using(var client = GetMainServiceClient()) { 
             var rowNumber = client.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
             
             var resultPageNumber = (rowNumber - 1)/pageSize + 1;
@@ -303,7 +303,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult GetHeadwordPageNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId,
             string headwordEntryXmlId, int pageSize)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId);
             var resultPageNumber = (rowNumber - 1)/pageSize + 1;
@@ -313,7 +313,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -322,7 +322,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Dictionary, selectedCategoryIds, selectedBookIds);
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -331,7 +331,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordBookmarks()
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var list = client.GetHeadwordBookmarks(HttpContext.User.Identity.Name);
             return Json(list, JsonRequestBehavior.AllowGet);
@@ -341,7 +341,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult AddHeadwordBookmark(string bookId, string entryXmlId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 client.AddHeadwordBookmark(bookId, entryXmlId, HttpContext.User.Identity.Name);
             return Json(new {}, JsonRequestBehavior.AllowGet);
@@ -350,7 +350,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult RemoveHeadwordBookmark(string bookId, string entryXmlId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 client.RemoveHeadwordBookmark(bookId, entryXmlId, HttpContext.User.Identity.Name);
             return Json(new {}, JsonRequestBehavior.AllowGet);
@@ -359,7 +359,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
             return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
@@ -373,7 +373,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
-                    using (var client = GetAuthenticatedClient())
+                    using (var client = GetMainServiceClient())
                     {
                         client.CreateAnonymousFeedback(content, name, email, FeedbackCategoryEnumContract.Dictionaries);
                     }
@@ -381,7 +381,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
                 else
                 {
-                    using (var client = GetAuthenticatedClient())
+                    using (var client = GetMainServiceClient())
                     {
                         client.CreateFeedback(content, username, FeedbackCategoryEnumContract.Dictionaries);
                     }
@@ -391,12 +391,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             else
             {
                 if (string.IsNullOrWhiteSpace(username))
-                    using (var client = GetAuthenticatedClient())
+                    using (var client = GetMainServiceClient())
                     {
                         client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
                     }
                 else
-                    using (var client = GetAuthenticatedClient())
+                    using (var client = GetMainServiceClient())
                     {
                         client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
                     }
@@ -413,7 +413,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
             return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -430,7 +430,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new {books = results}, JsonRequestBehavior.AllowGet);
@@ -448,7 +448,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
             return Json(new {count}, JsonRequestBehavior.AllowGet);
@@ -468,7 +468,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
             return Json(new {books = results}, JsonRequestBehavior.AllowGet);
@@ -477,7 +477,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionaryInfo(string bookXmlId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetBookInfoWithPages(bookXmlId);
             return Json(result, JsonRequestBehavior.AllowGet);

@@ -21,13 +21,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         public ItJakubServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
         {
         }
-
-        public ItJakubServiceClient()
-        {
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("MainServiceClient created.");
-        }
-
+          
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;

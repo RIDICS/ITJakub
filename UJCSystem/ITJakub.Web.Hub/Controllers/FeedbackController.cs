@@ -20,7 +20,7 @@ namespace ITJakub.Web.Hub.Controllers
                 Categories = categories?.Select(x => (FeedbackCategoryEnumContract) x).ToList()
             };
 
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetFeedbacksCount(feedbackCriteria);
                 return Json(count, JsonRequestBehavior.AllowGet);
@@ -40,7 +40,7 @@ namespace ITJakub.Web.Hub.Controllers
                     SortByField = (FeedbackSortEnum) sortCriteria
                 }
             };
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetFeedbacks(feedbackCriteria);
                 return Json(results, JsonRequestBehavior.AllowGet);
@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult DeleteFeedback(long feedbackId)
         {
-            using (var client = GetAuthenticatedClient())
+            using (var client = GetMainServiceClient())
             {
                 client.DeleteFeedback(feedbackId);
                 return Json(new {});

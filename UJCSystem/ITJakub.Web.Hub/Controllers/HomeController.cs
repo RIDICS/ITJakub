@@ -63,7 +63,7 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult Feedback(FeedbackViewModel model)
         {
            
-                using (var client = GetUnsecuredClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);
                 }
@@ -91,7 +91,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetUnsecuredClient()) { 
+            using (var client = GetMainServiceClient()) { 
             var result = client.GetTypeaheadAuthors(query);
             return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -99,7 +99,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = new ItJakubServiceClient()) { 
+            using (var client = GetMainServiceClient()) { 
                 var result = client.GetTypeaheadTitles(query);
             return Json(result, JsonRequestBehavior.AllowGet);
             }
@@ -107,7 +107,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadDictionaryHeadwords(null, null, query);
             return Json(result, JsonRequestBehavior.AllowGet);
