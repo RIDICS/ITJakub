@@ -155,7 +155,7 @@
 
         <Grid Grid.Row="1"
               Grid.Column="2"
-              Margin="0,-50,0,0"
+              Margin="0,0,0,0"
               Background="#10000000"
               DataContext="{Binding OptionsEditorViewModel}">
             <Grid Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -177,6 +177,7 @@
 
                 <control1:SelectableRichEditBox
                     Grid.Row="1"
+                    FontSize="18"
                     x:Name="SelectableRichEditBox"
                     ScrollViewer.HorizontalScrollMode="Enabled"
                     ScrollViewer.VerticalScrollMode="Disabled"

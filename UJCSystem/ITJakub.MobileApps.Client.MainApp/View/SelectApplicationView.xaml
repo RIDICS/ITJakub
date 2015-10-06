@@ -64,8 +64,8 @@
                                 Width="200"
                                 Background="#30FFFFFF">
                         <Image Source="{Binding Icon}"
-                               Width="128"
-                               Height="128"
+                               Width="100"
+                               Height="100"
                                Margin="20" />
                         <Grid Background="#1956cd"
                               Height="50"

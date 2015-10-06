@@ -69,7 +69,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
             endPosition = word.Length;
             CreateTextControl(stackPanel, word, startPosition, endPosition);
 
-            button.UpdateDisplayedText();
+            if (button.Options.SelectedAnswer == null)
+                button.UpdateDisplayedText();
         }
 
         private static void CreateTextControl(StackPanel stackPanel, string word, int startPosition, int endPosition)
@@ -92,7 +93,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
         {
             var textBox = new TextBox
             {
-                MinWidth = 20,
+                MinWidth = 30,
                 Text = letterOptionViewModel.SelectedAnswer ?? string.Empty
             };
             textBox.TextChanged += (sender, args) =>
