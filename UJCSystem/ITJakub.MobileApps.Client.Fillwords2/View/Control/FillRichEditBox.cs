@@ -154,7 +154,8 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 var textBinding = new Binding
                 {
                     Path = new PropertyPath("SelectedAnswer"),
-                    Source = optionsViewModel
+                    Source = optionsViewModel,
+                    Mode = BindingMode.TwoWay
                 };
                 button.SetBinding(BackgroundProperty, answerStateBinding);
                 button.SetBinding(AnswerButton.TextProperty, textBinding);

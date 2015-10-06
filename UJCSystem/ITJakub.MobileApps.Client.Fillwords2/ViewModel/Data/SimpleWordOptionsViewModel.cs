@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using GalaSoft.MvvmLight;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 
@@ -85,7 +86,36 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data
 
                 concreteOption.SelectedAnswer = concreteAnswerViewModel.Answer;
             }
-            SelectedAnswer = "TEST";
+            UpdateCompleteSelectedAnswer();
+        }
+
+        public void UpdateCompleteSelectedAnswer()
+        {
+            var stringBuilder = new StringBuilder();
+
+            int startPosition = 0;
+            int endPosition;
+            var correctAnswer = CorrectAnswer;
+
+            foreach (var letterOptionViewModel in Options)
+            {
+                var selectedAnswer = string.IsNullOrEmpty(letterOptionViewModel.SelectedAnswer)
+                    ? "_"
+                    : letterOptionViewModel.SelectedAnswer;
+
+                endPosition = letterOptionViewModel.StartPosition;
+
+                stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
+                stringBuilder.Append(selectedAnswer);
+
+                startPosition = letterOptionViewModel.EndPosition;
+            }
+
+            endPosition = correctAnswer.Length;
+            stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
+
+            var resultText = stringBuilder.ToString();
+            SelectedAnswer = resultText;
         }
 
         public void SubmitAnswer()

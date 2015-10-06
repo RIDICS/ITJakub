@@ -13,6 +13,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
     public sealed class AnswerButton : Windows.UI.Xaml.Controls.Control
     {
         private StackPanel m_stackPanel;
+        private string m_lastAnswer;
 
         public AnswerButton()
         {
@@ -105,7 +106,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
                 Path = new PropertyPath("SelectedAnswer"),
                 Source = letterOptionViewModel,
                 Mode = BindingMode.TwoWay
-            }; // TODO fix binding
+            };
             textBox.SetBinding(TextBox.TextProperty, textBinding);
 
             stackPanel.Children.Add(textBox);
@@ -114,31 +115,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
         
         private void UpdateDisplayedText()
         {
-            var stringBuilder = new StringBuilder();
-
-            int startPosition = 0;
-            int endPosition;
-            var correctAnswer = Options.CorrectAnswer;
-            
-            foreach (var letterOptionViewModel in Options.Options)
-            {
-                var selectedAnswer = string.IsNullOrEmpty(letterOptionViewModel.SelectedAnswer)
-                    ? "_"
-                    : letterOptionViewModel.SelectedAnswer;
-
-                endPosition = letterOptionViewModel.StartPosition;
-
-                stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
-                stringBuilder.Append(selectedAnswer);
-
-                startPosition = letterOptionViewModel.EndPosition;
-            }
-
-            endPosition = correctAnswer.Length;
-            stringBuilder.Append(correctAnswer.Substring(startPosition, endPosition - startPosition));
-
-            var resultText = stringBuilder.ToString();
-            Text = resultText;
+            Options.UpdateCompleteSelectedAnswer();
         }
 
         protected override void OnApplyTemplate()
@@ -149,10 +126,17 @@ namespace ITJakub.MobileApps.Client.Fillwords2.View.Control
 
             var flyout = GetTemplateChild("Flyout") as Flyout;
             if (flyout != null)
+            {
                 flyout.Closed += (sender, o) =>
                 {
-                    Options.SubmitAnswer();
+                    if (m_lastAnswer != Text)
+                        Options.SubmitAnswer();
                 };
+                flyout.Opened += (sender, o) =>
+                {
+                    m_lastAnswer = Text;
+                };
+            }
 
             OptionsPropertyChanged(this, null);
         }
