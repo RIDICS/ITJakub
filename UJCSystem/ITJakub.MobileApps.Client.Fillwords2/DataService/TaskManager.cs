@@ -20,13 +20,16 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         private const PollingInterval ResultsPollingInterval = PollingInterval.Slow;
 
         private readonly ISynchronizeCommunication m_applicationCommunication;
+        private readonly IPollingService m_pollingService;
         private bool m_currentTaskFinished;
         private TaskViewModel m_currentTaskViewModel;
         private DateTime m_lastUserResultTime;
-
+        private Action<ObservableCollection<UserResultViewModel>, Exception> m_resultCallback;
+        
         public TaskManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
+            m_pollingService = applicationCommunication.PollingService;
         }
 
         public async void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<WordOptionsViewModel> wordOptionsList, Action<Exception> callback)
@@ -281,7 +284,29 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
                 callback(null, exception);
             }
         }
-        
+
+        public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)
+        {
+            m_resultCallback = callback;
+            m_pollingService.RegisterForSynchronizedObjects(ResultsPollingInterval, ApplicationType.Fillwords2, m_lastUserResultTime, EvaluationMessageType, PollingResultsCallback);
+        }
+
+        private void PollingResultsCallback(IList<ObjectDetails> objectList, Exception exception)
+        {
+            if (exception != null)
+            {
+                m_resultCallback(null, exception);
+                return;
+            }
+
+            m_resultCallback(ProcessResults(objectList), null);
+        }
+
+        public void StopPolling()
+        {
+            m_pollingService.UnregisterForSynchronizedObjects(ResultsPollingInterval, PollingResultsCallback);
+        }
+
         public void ResetLastRequestTime()
         {
             m_lastUserResultTime = new DateTime(1975, 1, 1);

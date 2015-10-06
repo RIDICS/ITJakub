@@ -47,12 +47,12 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
 
         public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)
         {
-            //m_taskManager.StartPollingResults(callback);
+            m_taskManager.StartPollingResults(callback);
         }
 
         public void StopPolling()
         {
-            //m_taskManager.StopPolling();
+            m_taskManager.StopPolling();
         }
 
         public void SendAnswer(int wordPosition, IList<LetterOptionViewModel> selectedAnswers, Action<Exception> callback)

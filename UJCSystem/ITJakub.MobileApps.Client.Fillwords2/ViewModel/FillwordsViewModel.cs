@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Windows.UI.Popups;
 using GalaSoft.MvvmLight.Command;
 using ITJakub.MobileApps.Client.Fillwords2.DataService;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
@@ -103,12 +104,20 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 
         public override void EvaluateAndShowResults()
         {
-            
+            IsOver = true;
+
+            if (m_isDataLoaded && !m_isSubmited)
+            {
+                var messageDialog = new MessageDialog("Skupina byla ukončena, přejete si vyhodnotit vyplněné odpovědi?", "Vyhodnocení odpovědí");
+                messageDialog.Commands.Add(new UICommand("Vyhodnotit", command => Submit()));
+                messageDialog.Commands.Add(new UICommand("Zrušit"));
+                m_dataService.ErrorService.ShowDialog(messageDialog);
+            }
         }
 
         public override void StopCommunication()
         {
-            
+            m_dataService.StopPolling();
         }
 
         private void Submit()
