@@ -52,9 +52,11 @@ function initSearch() {
             var contextStructure = pageContext["ContextStructure"];
             var bookXmlId = result["BookXmlId"];
             var pageXmlId = pageContext["PageXmlId"];
-            var acronym = result["Acronym"];;
+            var acronym = result["Acronym"];
+            var notes = result["Notes"];
 
             var tr = document.createElement("tr");
+            $(tr).addClass("search-result");
             $(tr).data("bookXmlId", bookXmlId);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
             $(tr).data("author", result["Author"]);
@@ -91,6 +93,25 @@ function initSearch() {
             tr.appendChild(tdAfter);
 
             tableBody.appendChild(tr);
+
+            var notesTr = document.createElement("tr");
+            $(notesTr).addClass("notes");
+
+            var tdNotes = document.createElement("td");
+            tdNotes.colSpan = 3;
+
+            if (notes !== null && typeof notes !== "undefined") {
+                for (var j = 0; j < notes.length; j++) {
+                    var noteSpan = document.createElement("span");
+                    noteSpan.innerHTML = notes[j];
+                    $(noteSpan).addClass("note");
+                    tdNotes.appendChild(noteSpan);
+                }
+            }
+
+            notesTr.appendChild(tdNotes);
+
+            tableBody.appendChild(notesTr);
 
             //fill left table with abbrev of corpus name
             var abbrevTr = document.createElement("tr");
@@ -290,11 +311,16 @@ function initSearch() {
     }
 
     $("#resultsTableBody").click((event: Event) => {
-        $("#resultsTableBody").find("tr").removeClass("clicked");
-        var row = $(event.target).parents("tr");
-        $(row).addClass("clicked");
+        var clickedRow = $(event.target).parents("tr");
 
-        printDetailInfo(row[0]);
+        if ($(clickedRow).hasClass("notes")) {
+            return;
+        }
+        
+        $("#resultsTableBody").find("tr").removeClass("clicked");
+        $(clickedRow).addClass("clicked");
+
+        printDetailInfo(clickedRow[0]);
     });
 
     $("#contextPositionsSelect").change((evnet: Event) => {
