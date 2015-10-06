@@ -64,5 +64,10 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         {
             m_progressManager.GetAnswers(callback);
         }
+
+        public void ResetLastRequestTime()
+        {
+            m_taskManager.ResetLastRequestTime();
+        }
     }
 }

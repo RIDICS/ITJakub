@@ -47,22 +47,22 @@ namespace ITJakub.MobileApps.Client.Fillwords2
 
         public override AdminBaseViewModel AdminViewModel
         {
-            get { return null; }
+            get { return new FillwordsAdminViewModel(m_dataService); }
         }
 
         public override Type AdminDataTemplate
         {
-            get { return null; }
+            get { return typeof(FillwordsAdminView); }
         }
 
         public override TaskPreviewBaseViewModel TaskPreviewViewModel
         {
-            get { return null; }
+            get { return new FillwordsTaskPreviewViewModel(m_dataService); }
         }
 
         public override Type TaskPreviewDataTemplate
         {
-            get { return null; }
+            get { return typeof(FillwordsPreviewView); }
         }
 
         public override ApplicationRoleType ApplicationRoleType

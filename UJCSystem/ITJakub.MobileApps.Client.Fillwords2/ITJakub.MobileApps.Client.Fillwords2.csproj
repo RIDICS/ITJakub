@@ -118,6 +118,7 @@
     <Compile Include="DataContract\FillwordsAnswerContract.cs" />
     <Compile Include="DataContract\FillwordsEvaluationContract.cs" />
     <Compile Include="DataContract\FillwordsTaskContract.cs" />
+    <Compile Include="ViewModel\Comparer\UserInfoNameComparer.cs" />
     <Compile Include="ViewModel\Data\AnswerViewModel.cs" />
     <Compile Include="DataService\FillwordsDataService.cs" />
     <Compile Include="DataService\ProgressManager.cs" />
@@ -130,7 +131,9 @@
     <Compile Include="ViewModel\Data\UserResultViewModel.cs" />
     <Compile Include="ViewModel\Enum\AnswerState.cs" />
     <Compile Include="ViewModel\Enum\AnswerType.cs" />
+    <Compile Include="ViewModel\FillwordsAdminViewModel.cs" />
     <Compile Include="ViewModel\FillwordsEditorViewModel.cs" />
+    <Compile Include="ViewModel\FillwordsTaskPreviewViewModel.cs" />
     <Compile Include="ViewModel\FillwordsViewModel.cs" />
     <Compile Include="ViewModel\OptionsEditorViewModel.cs" />
     <Compile Include="ViewModel\Data\SimpleWordOptionsViewModel.cs" />
@@ -142,8 +145,14 @@
     <Compile Include="View\Control\SelectableRichEditBox.cs" />
     <Compile Include="View\Control\SimpleRichEditBox.cs" />
     <Compile Include="View\Converter\AnswerStateToBackgroundConverter.cs" />
+    <Compile Include="View\FillwordsAdminView.xaml.cs">
+      <DependentUpon>FillwordsAdminView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FillwordsEditorView.xaml.cs">
       <DependentUpon>FillwordsEditorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\FillwordsPreviewView.xaml.cs">
+      <DependentUpon>FillwordsPreviewView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\FillwordsView.xaml.cs">
       <DependentUpon>FillwordsView.xaml</DependentUpon>
@@ -182,7 +191,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\FillwordsAdminView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FillwordsEditorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FillwordsPreviewView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
