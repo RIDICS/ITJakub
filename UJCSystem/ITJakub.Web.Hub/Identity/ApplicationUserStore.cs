@@ -25,7 +25,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async Task<bool> GetEmailConfirmedAsync(ApplicationUser user)
         {
-            var task = Task<bool>.Factory.StartNew(() => true); //TODO
+            var task = Task<bool>.Factory.StartNew(() => true);
             return await task;
         }
 
@@ -180,7 +180,7 @@ namespace ITJakub.Web.Hub.Identity
         }
 
         public void Dispose()
-        {
+        {            
         }
 
         public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)

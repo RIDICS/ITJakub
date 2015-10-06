@@ -25,7 +25,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new AuthenticationException("Invalid credentials");
 
             if((user.CommunicationTokenCreateTime + m_timeToTokenExpiration) <= now)
-                throw new SecurityTokenValidationException("Invalid Credentials");            
+                throw new SecurityTokenValidationException("Invalid Credentials");   
         }
     }
 }
