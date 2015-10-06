@@ -1658,11 +1658,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         }
 
 
-        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser(int userId)
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUser()
         {
             try
             {
-                return Channel.GetSpecialPermissionsForUser(userId);
+                return Channel.GetSpecialPermissionsForUser();
             }
             catch (CommunicationException ex)
             {
@@ -1684,11 +1684,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(int userId, SpecialPermissionCategorizationEnumContract permissionType)
+        public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract permissionType)
         {
             try
             {
-                return Channel.GetSpecialPermissionsForUserByType(userId, permissionType);
+                return Channel.GetSpecialPermissionsForUserByType(permissionType);
             }
             catch (CommunicationException ex)
             {
