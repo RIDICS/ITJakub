@@ -65,12 +65,12 @@ declare function local:get-matches-mock($hits as node()*,
 	declare function local:get-match-with-notes-mock($match, $pb, $l, $bible) {
 		let $new-match := 
 		<HitResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
-				<After>tvój. Protož<span class="superscript">1</span> konečně pravím to, že nikakež ode...</After>
-				<Before> touto strašitedlnú nemocí<span class="superscript">ac</span> a ranou ostříhati a brániti a své svaté</Before>
+				<After>tvój. Protož<span class="note-ref">1</span> konečně pravím to, že nikakež ode...</After>
+				<Before> touto strašitedlnú nemocí<span class="note-ref">ac</span> a ranou ostříhati a brániti a své svaté</Before>
 				<Match>slovo</Match>
 				<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-					<a:string><span class="superscript">1</span> poznámka textová</a:string>
-					<a:string><span class="superscript">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
+					<a:string><span class="note-ref">1</span> poznámka textová</a:string>
+					<a:string><span class="note-ref">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
 				</Notes>
 		</HitResultContext>
 		

@@ -9,6 +9,17 @@ function initSearch() {
     var bookIds = new Array();
     var categoryIds = new Array();
 
+    $("#commentCheckbox").change(() => {
+        var checkbox = $("#commentCheckbox");
+        var mainDiv = $("#corpus-search-div");
+
+        if ($(checkbox).is(":checked")) {
+            $(mainDiv).addClass("show-notes");
+        } else {
+            $(mainDiv).removeClass("show-notes");
+        }
+    });
+
     function sortOrderChanged() {
         search.processSearch();
     }
