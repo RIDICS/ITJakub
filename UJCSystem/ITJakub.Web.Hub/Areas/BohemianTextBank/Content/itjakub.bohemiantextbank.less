@@ -4,7 +4,7 @@
 
 @search-results-area-width: 855px;
 @search-results-area-height: 450px;
-@search-result-detail-area-height: 190px;
+@search-result-detail-area-height: 240px;
 
 .search-area {
     height: 100%;
@@ -23,9 +23,9 @@
     margin-bottom: 15px;
 }
 
-.corpus-search-results-div{
+/*.corpus-search-results-div{
     height: @search-result-detail-area-height + @search-results-area-height;
-}
+}*/
 
 .corpus-search-result-detail-div{
     background-color: white;
@@ -37,7 +37,7 @@
 .corpus-search-results-table-div {
     background-color: white;
     height: @search-results-area-height;
-    overflow-x: auto;
+    overflow-x: scroll;
     overflow-y: auto;
 }
 
@@ -164,24 +164,30 @@
 
 #corpus-search-results-abbrev-table-div {
     float: left;
-    overflow-x: auto;
-    overflow-y: auto;
+    overflow-x: scroll;
+    width: 110px;
+    overflow-y: hidden;
     background-color: white;
     height: @search-results-area-height;
-    padding-right: 5px;
+    margin-right: 1px;
 }
 
-#corpus-search-results-abbrev-table-div::-webkit-scrollbar {
+/*#corpus-search-results-abbrev-table-div::-webkit-scrollbar {
     visibility: hidden;
-}
+}*/
 
 #result-abbrev-table {
     min-width: 90px;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 #result-abbrev-table tr:hover{
     color: @item-background-color;
+}
+
+#resultsAbbrevTableBody tr td a {
+     padding-right: 15px;
+     padding-left: 15px;
 }
 
 .corpus-search-detail a, .corpus-search-results-abbrev-table-div a {
