@@ -30,31 +30,30 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel
 
         public override void InitializeCommunication(bool isUserOwner)
         {
-            LoadMyProgress();
-            //m_dataService.GetTaskResults((taskFinished, exception) =>
-            //{
-            //    if (exception != null)
-            //    {
-            //        m_dataService.ErrorService.ShowConnectionError(GoBack);
-            //        return;
-            //    }
+            m_dataService.GetTaskResults((taskFinished, exception) =>
+            {
+                if (exception != null)
+                {
+                    m_dataService.ErrorService.ShowConnectionError(GoBack);
+                    return;
+                }
 
-            //    ResultList = taskFinished.ResultList;
-            //    IsOver = taskFinished.IsFinished || IsOver;
+                ResultList = taskFinished.ResultList;
+                IsOver = taskFinished.IsFinished || IsOver;
 
-            //    m_isDataLoaded = true;
-            //    m_isSubmited = taskFinished.IsFinished;
+                m_isDataLoaded = true;
+                m_isSubmited = taskFinished.IsFinished;
 
-            //    if (IsOver)
-            //    {
-            //        SetDataLoaded();
-            //        StartPollingResults();
-            //    }
-            //    else
-            //    {
-            //        LoadMyProgress();
-            //    }
-            //});
+                if (IsOver)
+                {
+                    SetDataLoaded();
+                    StartPollingResults();
+                }
+                else
+                {
+                    LoadMyProgress();
+                }
+            });
         }
 
         private void LoadMyProgress()

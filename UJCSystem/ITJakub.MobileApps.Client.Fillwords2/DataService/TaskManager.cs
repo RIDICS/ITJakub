@@ -8,6 +8,7 @@ using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
 using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 using ITJakub.MobileApps.Client.Shared.Communication;
+using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using Newtonsoft.Json;
 
@@ -21,6 +22,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private bool m_currentTaskFinished;
         private TaskViewModel m_currentTaskViewModel;
+        private DateTime m_lastUserResultTime;
 
         public TaskManager(ISynchronizeCommunication applicationCommunication)
         {
@@ -121,12 +123,15 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
             int optionsCount = 0;
             int index = 0;
             var taskOptionsList = m_currentTaskViewModel.Options;
-            var answerList = new List<string>();
-            var evaluatedAnswers = new AnswerState[taskOptionsList.Count];
+            var answerList = new List<FillwordsEvaluationContract.AnswerContract>();
 
             foreach (var wordOptionsViewModel in taskOptionsList)
             {
-                answerList.Add(wordOptionsViewModel.SelectedAnswer);
+                var answerContract = new FillwordsEvaluationContract.AnswerContract
+                {
+                    Answer = wordOptionsViewModel.SelectedAnswer
+                };
+                answerList.Add(answerContract);
 
                 var correctCount = 0;
                 foreach (var letterOptionViewModel in wordOptionsViewModel.Options)
@@ -141,15 +146,15 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
 
                 if (correctCount == 0)
                 {
-                    evaluatedAnswers[index] = AnswerState.Incorrect;
+                    answerContract.AnswerState = AnswerState.Incorrect;
                 }
                 else if (correctCount == wordOptionsViewModel.Options.Count)
                 {
-                    evaluatedAnswers[index] = AnswerState.Correct;
+                    answerContract.AnswerState = AnswerState.Correct;
                 }
                 else
                 {
-                    evaluatedAnswers[index] = AnswerState.PartlyCorrect;
+                    answerContract.AnswerState = AnswerState.PartlyCorrect;
                 }
 
                 correctAnswerCount += correctCount;
@@ -164,7 +169,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
                 index = 0;
                 foreach (var optionsViewModel in taskOptionsList)
                 {
-                    optionsViewModel.AnswerState = evaluatedAnswers[index++];
+                    optionsViewModel.AnswerState = answerList[index++].AnswerState;
                 }
 
                 var evaluationResult = new EvaluationResultViewModel
@@ -186,7 +191,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
             }
         }
 
-        private async Task SaveEvaluation(IList<string> answerList, int correctAnswerCount, int optionsCount)
+        private async Task SaveEvaluation(List<FillwordsEvaluationContract.AnswerContract> answerList, int correctAnswerCount, int optionsCount)
         {
             var evaluationObject = new FillwordsEvaluationContract
             {
@@ -196,7 +201,90 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
             };
             var serializedEvaluation = JsonConvert.SerializeObject(evaluationObject);
 
-            //await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords2, EvaluationMessageType, serializedEvaluation);
+            await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords2, EvaluationMessageType, serializedEvaluation);
+        }
+
+        private ObservableCollection<UserResultViewModel> ProcessResults(IList<ObjectDetails> results)
+        {
+            var outputCollection = new ObservableCollection<UserResultViewModel>();
+            foreach (var objectDetails in results)
+            {
+                var deserializedObject = JsonConvert.DeserializeObject<FillwordsEvaluationContract>(objectDetails.Data);
+                var answerList = new ObservableCollection<ResultAnswerViewModel>();
+
+                for (int i = 0; i < deserializedObject.AnswerList.Count; i++)
+                {
+                    var answer = deserializedObject.AnswerList[i];
+                    var answerViewModel = new ResultAnswerViewModel
+                    {
+                        Answer = answer.Answer,
+                        AnswerState = answer.AnswerState
+                    };
+                    answerList.Add(answerViewModel);
+                }
+
+                var userResultViewModel = new UserResultViewModel
+                {
+                    CorrectAnswers = deserializedObject.CorrectAnswers,
+                    TotalAnswers = deserializedObject.OptionsCount,
+                    UserInfo = objectDetails.Author,
+                    Answers = answerList,
+                    IsTaskSubmited = true
+                };
+                outputCollection.Add(userResultViewModel);
+
+                if (objectDetails.Author.IsMe)
+                {
+                    FillMyAnswers(deserializedObject.AnswerList);
+                    m_currentTaskFinished = true;
+                }
+
+                m_lastUserResultTime = objectDetails.CreateTime;
+            }
+
+            return outputCollection;
+        }
+
+        private void FillMyAnswers(IList<FillwordsEvaluationContract.AnswerContract> myAnswers)
+        {
+            var answersEnumerator = myAnswers.GetEnumerator();
+            var optionsEnumerator = m_currentTaskViewModel.Options.GetEnumerator();
+
+            while (answersEnumerator.MoveNext() && optionsEnumerator.MoveNext())
+            {
+                var currentOptions = optionsEnumerator.Current;
+
+                currentOptions.SelectedAnswer = answersEnumerator.Current.Answer;
+                currentOptions.AnswerState = answersEnumerator.Current.AnswerState;
+            }
+        }
+
+        public async void GetTaskResults(Action<TaskFinishedViewModel, Exception> callback)
+        {
+            try
+            {
+                ResetLastRequestTime();
+                var results =
+                    await
+                        m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords2, m_lastUserResultTime,
+                            EvaluationMessageType);
+
+                var resultViewModels = ProcessResults(results);
+                callback(new TaskFinishedViewModel
+                {
+                    IsFinished = m_currentTaskFinished,
+                    ResultList = resultViewModels
+                }, null);
+            }
+            catch (ClientCommunicationException exception)
+            {
+                callback(null, exception);
+            }
+        }
+        
+        public void ResetLastRequestTime()
+        {
+            m_lastUserResultTime = new DateTime(1975, 1, 1);
         }
     }
 }

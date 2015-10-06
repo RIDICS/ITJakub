@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 using Newtonsoft.Json;
 
 namespace ITJakub.MobileApps.Client.Fillwords2.DataContract
@@ -12,6 +13,16 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataContract
         public int OptionsCount { get; set; }
 
         [JsonProperty("AnswerList")]
-        public IList<string> AnswerList { get; set; }
+        public IList<AnswerContract> AnswerList { get; set; }
+
+
+        public class AnswerContract
+        {
+            [JsonProperty("Answer")]
+            public string Answer { get; set; }
+
+            [JsonProperty("AnswerState")]
+            public AnswerState AnswerState { get; set; }
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
 
             try
             {
-                await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords, UserAnswerObjectType, serializedProgressContract);
+                await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords2, UserAnswerObjectType, serializedProgressContract);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -48,7 +48,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
         {
             try
             {
-                var answers = await m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords, new DateTime(1975, 1, 1), UserAnswerObjectType);
+                var answers = await m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords2, new DateTime(1975, 1, 1), UserAnswerObjectType);
                 var resultList = new List<AnswerViewModel>();
                 foreach (var objectDetails in answers.Where(x => x.Author.IsMe))
                 {

@@ -42,7 +42,7 @@ namespace ITJakub.MobileApps.Client.Fillwords2.DataService
 
         public void GetTaskResults(Action<TaskFinishedViewModel, Exception> callback)
         {
-            //m_taskManager.GetTaskResults(callback);
+            m_taskManager.GetTaskResults(callback);
         }
 
         public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)

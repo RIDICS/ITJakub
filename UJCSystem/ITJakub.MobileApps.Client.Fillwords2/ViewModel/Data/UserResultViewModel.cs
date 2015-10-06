@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
+using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 using ITJakub.MobileApps.Client.Shared.Data;
 
 namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data
@@ -65,6 +66,6 @@ namespace ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data
     {
         public string Answer { get; set; }
 
-        public bool IsCorrect { get; set; }
+        public AnswerState AnswerState { get; set; }
     }
 }
