@@ -4,12 +4,13 @@ using System.ServiceModel.Syndication;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.News;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = CustomRole.CanAddNews)]
     public class NewsController : BaseController
     {
         [HttpGet]

@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
 {
+    [Authorize(Roles = CustomRole.CanManagePermissions)]
     public class PermissionController : BaseController
     {
+
         public ActionResult UserPermission()
         {
             return View();

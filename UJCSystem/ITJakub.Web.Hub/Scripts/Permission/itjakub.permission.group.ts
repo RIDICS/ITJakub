@@ -898,7 +898,7 @@ class BooksSelector {
             }
 
             var detailsDiv = $(target).parents(".list-item").first().find(".list-item-details").first();
-
+            
             if (detailsDiv.is(":hidden")) {
                 $(target).removeClass("glyphicon-chevron-down");
                 $(target).addClass("glyphicon-chevron-up");
@@ -1004,14 +1004,15 @@ class BooksSelector {
         } else if (typeof notChecked === "undefined" || notChecked === null || notChecked.length === 0) {
 
             $(nodeItemCheckbox).prop("indeterminate", false);
-            $(nodeItemCheckbox).prop("checked", false).trigger("change", [{ propagate: false }]);
-            $(nodeItemCheckbox).prop("checked", true);
+            $(nodeItemCheckbox).prop("checked", true).trigger("change", [{ propagate: false }]);
             this.addToSelectedCategories(categoryId);
 
         } else {
 
             $(nodeItemCheckbox).prop("indeterminate", true);    
             this.removeFromSelectedCategories(categoryId);
+            $(checked).trigger("change", [{ propagate: false }]);
+            $(notChecked).trigger("change", [{ propagate: false }]);
         }
 
         var parentCategoryItem: HTMLLIElement = <HTMLLIElement>$(categoryItem).parents("li.list-item.non-leaf").first()[0];
@@ -1046,6 +1047,8 @@ class BooksSelector {
 
                 $(targetDiv).append(detailsUl);
                 $(targetDiv).addClass("loaded");
+
+                $(targetDiv).parent(".list-item").children(".list-item-buttons").find(".list-item-check input").trigger("change"); //trigger change for labeling currently added checkboxes
 
             }
         });

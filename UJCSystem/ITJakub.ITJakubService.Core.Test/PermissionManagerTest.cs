@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Castle.Windsor;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.Shared.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

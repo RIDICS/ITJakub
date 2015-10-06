@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.WebPages;
+using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
@@ -9,7 +11,7 @@ namespace ITJakub.Web.Hub.Identity
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserLockoutStore<ApplicationUser, string>,
         IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string>
     {
-        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+        private readonly CommunicationProvider m_communication = new CommunicationProvider();        
 
         public async Task SetEmailAsync(ApplicationUser user, string email)
         {
@@ -116,6 +118,15 @@ namespace ITJakub.Web.Hub.Identity
                     user.CommunicationToken = result.CommunicationToken;
                     user.Id = result.Id.ToString();
                 }
+
+                using (var client = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+                {
+                    var specialPermissions = client.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                    user.SpecialPermissions = specialPermissions;
+                }
+
+
+                
             });
             await task;
         }
@@ -138,6 +149,15 @@ namespace ITJakub.Web.Hub.Identity
                 {
                     var user = client.FindUserById(int.Parse(userId));
                     if (user == null) return null;
+
+                    IList<SpecialPermissionContract> specialPermissions;
+                    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+                    {
+                        specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                    }
+                    
+                    
+
                     return new ApplicationUser
                     {
                         Id = user.Id.ToString(),
@@ -147,7 +167,8 @@ namespace ITJakub.Web.Hub.Identity
                         LastName = user.LastName,
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
-                        CommunicationToken = user.CommunicationToken
+                        CommunicationToken = user.CommunicationToken,
+                        SpecialPermissions = specialPermissions
                     };
                 }
             });
@@ -163,6 +184,13 @@ namespace ITJakub.Web.Hub.Identity
                 {
                     var user = client.FindUserByUserName(userName);
                     if (user == null) return null;
+
+                    IList<SpecialPermissionContract> specialPermissions;
+                    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+                    {
+                        specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                    }                   
+
                     return new ApplicationUser
                     {
                         Id = user.Id.ToString(),
@@ -172,7 +200,8 @@ namespace ITJakub.Web.Hub.Identity
                         LastName = user.LastName,
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
-                        CommunicationToken = user.CommunicationToken
+                        CommunicationToken = user.CommunicationToken,
+                        SpecialPermissions = specialPermissions
                     };
                 }
             });
@@ -180,7 +209,7 @@ namespace ITJakub.Web.Hub.Identity
         }
 
         public void Dispose()
-        {            
+        {
         }
 
         public Task SetTwoFactorEnabledAsync(ApplicationUser user, bool enabled)

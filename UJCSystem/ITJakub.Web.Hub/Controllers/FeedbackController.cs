@@ -2,12 +2,14 @@
 using System.Linq;
 using System.Web.Mvc;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = CustomRole.CanManageFeedbacks)]
     public class FeedbackController : BaseController
     {
+        
         public ActionResult Feedback()
         {
             return View();

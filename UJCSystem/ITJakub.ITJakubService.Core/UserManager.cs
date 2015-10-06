@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
-using System.ServiceModel.Security;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -84,7 +83,15 @@ namespace ITJakub.ITJakubService.Core
             return m_defaultMembershipProvider.GetDefaultUser();
         }
 
+        public string GetCurrentUserName()
+        {
+            if (ServiceSecurityContext.Current != null)
+            {
+                var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
+                return username;
+            }
 
-        
+            return m_defaultMembershipProvider.GetDefaultUserName();
+        }
     }
 }

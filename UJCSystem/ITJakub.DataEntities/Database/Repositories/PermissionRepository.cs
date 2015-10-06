@@ -4,6 +4,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -254,6 +255,26 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
                     .JoinQueryOver(x => groupAlias.Users, () => userAlias)
                     .Where(() => userAlias.Id == userId)
+                    .List<SpecialPermission>();
+
+                return permissions;
+            }
+        }
+        
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<SpecialPermission> GetSpecialPermissionsByUserAndType(int userId, SpecialPermissionCategorization type)
+        {
+            using (var session = GetSession())
+            {
+                SpecialPermission specPermissionAlias = null;
+                Group groupAlias = null;
+                User userAlias = null;
+
+                var permissions = session.QueryOver(() => specPermissionAlias)
+                    .JoinQueryOver(x => specPermissionAlias.Groups, () => groupAlias)
+                    .JoinQueryOver(x => groupAlias.Users, () => userAlias)
+                    .Where(() => userAlias.Id == userId)
+                    .And(()=> specPermissionAlias.PermissionCategorization == type)
                     .List<SpecialPermission>();
 
                 return permissions;

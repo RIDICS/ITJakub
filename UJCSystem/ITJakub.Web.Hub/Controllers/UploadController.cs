@@ -2,14 +2,16 @@
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    //[Authorize]
+    [Authorize(Roles = CustomRole.CanUploadBooks)]
     public class UploadController : BaseController
     {
         //private readonly ItJakubServiceClient m_serviceClient = GetMainServiceClient();
+
 
         public ActionResult Upload()
         {

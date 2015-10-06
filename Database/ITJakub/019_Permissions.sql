@@ -27,6 +27,7 @@ BEGIN TRAN;
 	CREATE TABLE [dbo].[SpecialPermission](
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_SpecialPermission(Id)] PRIMARY KEY,
 		[PermissionType] varchar(20) NOT NULL,
+		[PermissionCategorization] tinyint NOT NULL,
 		[CanUploadBook] bit NULL,
 		[CanManagePermissions] bit NULL,
 		[CanAddNews] bit NULL,
@@ -47,6 +48,7 @@ BEGIN TRAN;
 	(
 	    --Id - this column value is auto-generated
 	    PermissionType,
+		PermissionCategorization,
 	    CanUploadBook,
 	    CanManagePermissions,
 	    CanAddNews,
@@ -56,6 +58,7 @@ BEGIN TRAN;
 	(
 	    -- Id - int
 	    'ManagePermissions', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
 	    NULL, -- CanUploadBook - bit
 	    1, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
@@ -63,6 +66,7 @@ BEGIN TRAN;
 	),(
 		-- Id - int
 	    'UploadBook', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
 	    1, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
@@ -70,6 +74,7 @@ BEGIN TRAN;
 	),(
 		-- Id - int
 	    'News', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    1, -- CanAddNews - bit
@@ -77,6 +82,7 @@ BEGIN TRAN;
 	),(
 		-- Id - int
 	    'Feedback', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit

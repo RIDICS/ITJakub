@@ -20,21 +20,7 @@ namespace ITJakub.ITJakubService.Core
             m_userManager = userManager;
             m_permissionRepository = permissionRepository;
         }
-
   
-
-        //public User GetCurrentUser()
-        //{
-        //    //var username = ServiceSecurityContext.Current.PrimaryIdentity.Name;
-        //    var username = "Admin"; //TODO HACK
-        //    var user =  m_userRepository.FindByUserName(username);
-        //    if (user == null)
-        //    {
-        //        throw new AuthorizationException(string.Format("Cannot find user with username '{0}'. Probably does not exist.", username));
-        //    }
-
-        //    return user;
-        //}
 
         public void CheckUserCanAddNews()
         {
