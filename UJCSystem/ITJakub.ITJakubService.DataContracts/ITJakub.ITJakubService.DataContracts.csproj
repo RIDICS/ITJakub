@@ -49,7 +49,6 @@
     <Compile Include="Contracts\AudioBooks\DownloadAudioBookTrackContract.cs" />
     <Compile Include="Contracts\AudioBooks\DownloadWholeBookContract.cs" />
     <Compile Include="Contracts\AuthorDetailContract.cs" />
-    <Compile Include="Contracts\AuthProviderEnumContract.cs" />
     <Compile Include="Contracts\BookInfoWithPagesContract.cs" />
     <Compile Include="Contracts\BucketContract.cs" />
     <Compile Include="Contracts\CardShortContract.cs" />
@@ -64,9 +63,6 @@
     <Compile Include="Contracts\CardFileContract.cs" />
     <Compile Include="Contracts\SelectedCategoriesContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
-    <Compile Include="Contracts\LoginUserContract.cs" />
-    <Compile Include="Contracts\CreateUserContract.cs" />
-    <Compile Include="Contracts\LoginUserResultContract.cs" />
     <Compile Include="Contracts\CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
     <Compile Include="Contracts\PageBookmarkContract.cs" />

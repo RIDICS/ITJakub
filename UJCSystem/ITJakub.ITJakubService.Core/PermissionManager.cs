@@ -217,8 +217,7 @@ namespace ITJakub.ITJakubService.Core
         {
 
             var user = m_userManager.GetCurrentUser();
-
-            m_authorizationManager.CheckUserCanManagePermissions();
+            
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
@@ -226,8 +225,7 @@ namespace ITJakub.ITJakubService.Core
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract type)
         {
             var user = m_userManager.GetCurrentUser();
-
-            m_authorizationManager.CheckUserCanManagePermissions();
+            
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, (SpecialPermissionCategorization) type);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts.Clients;
@@ -9,7 +11,7 @@ using Microsoft.AspNet.Identity;
 namespace ITJakub.Web.Hub.Identity
 {
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserLockoutStore<ApplicationUser, string>,
-        IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string>
+        IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string>, IUserRoleStore<ApplicationUser>, IUserClaimStore<ApplicationUser>
     {
         private readonly CommunicationProvider m_communication = new CommunicationProvider();        
 
@@ -125,8 +127,10 @@ namespace ITJakub.Web.Hub.Identity
                     user.SpecialPermissions = specialPermissions;
                 }
 
+                var claims = GetClaimsFromSpecialPermissions(user.SpecialPermissions);
+                claims.Add(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+                user.Claims = claims;
 
-                
             });
             await task;
         }
@@ -155,8 +159,9 @@ namespace ITJakub.Web.Hub.Identity
                     {
                         specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
                     }
-                    
-                    
+
+                    var claims = GetClaimsFromSpecialPermissions(specialPermissions);
+                    claims.Add(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
 
                     return new ApplicationUser
                     {
@@ -168,7 +173,8 @@ namespace ITJakub.Web.Hub.Identity
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
                         CommunicationToken = user.CommunicationToken,
-                        SpecialPermissions = specialPermissions
+                        SpecialPermissions = specialPermissions,
+                        Claims = claims
                     };
                 }
             });
@@ -189,7 +195,10 @@ namespace ITJakub.Web.Hub.Identity
                     using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
                     {
                         specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
-                    }                   
+                    }
+
+                    var claims = GetClaimsFromSpecialPermissions(specialPermissions);                   
+                    claims.Add(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
 
                     return new ApplicationUser
                     {
@@ -201,7 +210,8 @@ namespace ITJakub.Web.Hub.Identity
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
                         CommunicationToken = user.CommunicationToken,
-                        SpecialPermissions = specialPermissions
+                        SpecialPermissions = specialPermissions,
+                        Claims = claims
                     };
                 }
             });
@@ -226,6 +236,101 @@ namespace ITJakub.Web.Hub.Identity
         public async Task<ApplicationUser> FindAsync(string userName, string password)
         {
             return await FindByNameAsync(userName);
+        }
+
+        public async Task AddToRoleAsync(ApplicationUser user, string roleName)
+        {
+            var claims = await GetClaimsAsync(user);
+            var roleClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role && x.Value == roleName);
+            if (roleClaim == null)
+            {
+                roleClaim = new Claim(ClaimTypes.Role, roleName);
+                var task = Task.Factory.StartNew(() => user.Claims.Add(roleClaim));
+                await task;
+            }
+        }
+
+        public async Task RemoveFromRoleAsync(ApplicationUser user, string roleName)
+        {
+            var claims = await GetClaimsAsync(user);
+            var roleClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role && x.Value == roleName);
+            if (roleClaim != null)
+            {
+                var task = Task.Factory.StartNew(() => RemoveClaimAsync(user, roleClaim));
+                await task;
+            }
+        }
+
+        public async Task<IList<string>> GetRolesAsync(ApplicationUser user)
+        {
+            var task = Task<IList<string>>.Factory.StartNew(() =>
+            {
+                var roles = user.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value).ToList();
+                return roles;
+            });
+
+            return await task;
+        }
+
+        public async Task<bool> IsInRoleAsync(ApplicationUser user, string roleName)
+        {
+            var task = Task<bool>.Factory.StartNew(() =>
+            {
+                return user.Claims.Any(x => x.Type == ClaimTypes.Role && x.Value == roleName);
+            });
+
+            return await task;
+        }
+
+        public async Task<IList<Claim>> GetClaimsAsync(ApplicationUser user)
+        {
+            var task = Task<IList<Claim>>.Factory.StartNew(() => user.Claims);
+            return await task;
+        }
+
+        public async Task AddClaimAsync(ApplicationUser user, Claim claim)
+        {
+            var task = Task.Factory.StartNew(() => user.Claims.Add(claim));
+            await task;
+        }
+
+        public async Task RemoveClaimAsync(ApplicationUser user, Claim claim)
+        {
+            var task = Task.Factory.StartNew(() => user.Claims.Remove(claim));
+            await task;
+        }
+
+
+        private IList<Claim> GetClaimsFromSpecialPermissions(IList<SpecialPermissionContract> specialPermissions)
+        {
+            var claims = new List<Claim>();
+
+            if (specialPermissions.Count != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
+            }
+
+            if (specialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
+            }
+
+            if (specialPermissions.OfType<NewsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
+            }
+
+            if (specialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
+            }
+
+            if (specialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
+            }
+
+            return claims;
         }
     }
 }

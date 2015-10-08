@@ -24,7 +24,10 @@ namespace ITJakub.Web.Hub.Identity
         public DateTime CreateTime { get; set; }
 
         public string CommunicationToken { get; set; }
+
         public IList<SpecialPermissionContract> SpecialPermissions { get; set; }
+
+        public IList<Claim> Claims { get; set; }
 
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)

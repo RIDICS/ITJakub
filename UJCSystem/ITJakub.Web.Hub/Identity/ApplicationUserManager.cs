@@ -84,33 +84,10 @@ namespace ITJakub.Web.Hub.Identity
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
             var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
-            claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
-
-            if (user.SpecialPermissions.Count != 0)
+            foreach (var claim in user.Claims)
             {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
+                claimsIdentity.AddClaim(claim);
             }
-
-            if (user.SpecialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
-            {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
-            }
-
-            if (user.SpecialPermissions.OfType<NewsPermissionContract>().Count() != 0)
-            {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
-            }
-
-            if (user.SpecialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
-            {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
-            }
-
-            if (user.SpecialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
-            {
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
-            }
-
             return claimsIdentity;
         }
     }
