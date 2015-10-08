@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.ServiceModel.Security.Tokens;
 using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
@@ -11,6 +13,8 @@ namespace ITJakub.Web.Hub.Identity
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
@@ -20,7 +24,7 @@ namespace ITJakub.Web.Hub.Identity
         {
             var manager = new ApplicationUserManager(new ApplicationUserStore());
 
-            manager.PasswordHasher = new ApplicationPasswordHasher();
+            manager.PasswordHasher = new PasswordHasher();
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -53,7 +57,8 @@ namespace ITJakub.Web.Hub.Identity
             //    Subject = "Security Code",
             //    BodyFormat = "Your security code is {0}"
             //});
-            //manager.EmailService = new EmailService();
+            //manager.EmailService = new EmailService();            
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
@@ -81,8 +86,24 @@ namespace ITJakub.Web.Hub.Identity
 
         }
 
+        public bool RenewCommunicationToken(string userName, string password)
+        {
+            using (var client = m_communication.GetEncryptedClient())
+            {
+                return client.RenewCommToken(userName, password);
+            }
+            
+        }
+
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
+
+            //IList<SpecialPermissionContract> specialPermissions;
+            using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+            {
+                user.SpecialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+            }
+
             var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
             claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
 
@@ -113,5 +134,5 @@ namespace ITJakub.Web.Hub.Identity
 
             return claimsIdentity;
         }
-    }
+    }   
 }

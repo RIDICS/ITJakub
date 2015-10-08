@@ -15,8 +15,12 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         UserContract CreateUser(UserContract user);
+
+        [OperationContract]
+        bool RenewCommToken(string username, string passwordHash);
+
         #endregion
 
-       
+
     }
 }

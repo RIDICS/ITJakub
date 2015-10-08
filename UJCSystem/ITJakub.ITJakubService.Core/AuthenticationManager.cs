@@ -1,6 +1,7 @@
 using System;
 using System.IdentityModel.Tokens;
 using System.Security.Authentication;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
 
 namespace ITJakub.ITJakubService.Core
@@ -8,11 +9,13 @@ namespace ITJakub.ITJakubService.Core
     public class AuthenticationManager
     {
         private readonly UserRepository m_userRepository;
+        private readonly CommunicationTokenGenerator m_communicationTokenGenerator;
         private readonly TimeSpan m_timeToTokenExpiration;
 
-        public AuthenticationManager(UserRepository userRepository, TimeSpan timeToTokenExpiration)
+        public AuthenticationManager(UserRepository userRepository, CommunicationTokenGenerator communicationTokenGenerator, TimeSpan timeToTokenExpiration, TimeSpan virtualTokenExpiration)
         {
             m_userRepository = userRepository;
+            m_communicationTokenGenerator = communicationTokenGenerator;
             m_timeToTokenExpiration = timeToTokenExpiration;
         }
 
@@ -26,6 +29,28 @@ namespace ITJakub.ITJakubService.Core
 
             if((user.CommunicationTokenCreateTime + m_timeToTokenExpiration) <= now)
                 throw new SecurityTokenValidationException("Invalid Credentials");   
+        }
+
+
+        public bool RenewCommToken(string userName, string passwordHash)
+        {
+            var now = DateTime.UtcNow;
+            var user = m_userRepository.GetByLoginAndPassword(userName, passwordHash);
+            if (user != null)
+            {
+                user.CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken();
+                user.CommunicationTokenCreateTime = now;
+
+                m_userRepository.Save(user);
+                return true;
+            }
+
+            return false;
+        }
+
+        public DateTime GetExpirationTimeForToken(User user)
+        {
+            return user.CreateTime + m_timeToTokenExpiration;
         }
     }
 }

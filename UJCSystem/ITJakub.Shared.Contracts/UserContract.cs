@@ -31,5 +31,8 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public string CommunicationToken { get; set; }
+
+        [DataMember]
+        public DateTime CommunicationTokenExpirationTime { get; set; }
     }
 }

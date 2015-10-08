@@ -23,18 +23,27 @@ namespace ITJakub.ITJakubService.Core
 
         public User GetDefaultUser()
         {
-            return m_repository.GetVirtualUserForUnregisteredUsers(m_unregisteredUserName, m_unRegisteredUsersGroupName);
+            return m_repository.GetVirtualUserForUnregisteredUsersOrCreate(m_unregisteredUserName, GetDefaultUnRegisteredUserGroup());
         }
+
         public string GetDefaultUserName()
         {
             return m_unregisteredUserName;
         }
+
+        public Group GetDefaultUnRegisteredUserGroup()
+        {
+            return m_repository.GetDefaultGroupOrCreate(m_unRegisteredUsersGroupName);
+        }
+
         
 
 
-        public Group GetDefaultGroup()
+        public Group GetDefaultRegisteredUserGroup()
         {
-            return m_repository.GetDefaultRegisteredUsersGroup(m_registeredUsersGroupName);
+            return m_repository.GetDefaultGroupOrCreate(m_registeredUsersGroupName);
         }
+
+
     }
 }

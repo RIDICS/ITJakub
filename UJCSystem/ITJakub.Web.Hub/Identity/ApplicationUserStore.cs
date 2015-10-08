@@ -148,14 +148,7 @@ namespace ITJakub.Web.Hub.Identity
                 using (var client = m_communication.GetEncryptedClient())
                 {
                     var user = client.FindUserById(int.Parse(userId));
-                    if (user == null) return null;
-
-                    IList<SpecialPermissionContract> specialPermissions;
-                    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
-                    {
-                        specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
-                    }
-                    
+                    if (user == null) return null;              
                     
 
                     return new ApplicationUser
@@ -168,7 +161,7 @@ namespace ITJakub.Web.Hub.Identity
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
                         CommunicationToken = user.CommunicationToken,
-                        SpecialPermissions = specialPermissions
+                        CommunicationTokenExpirationTime = user.CommunicationTokenExpirationTime,
                     };
                 }
             });
@@ -185,11 +178,7 @@ namespace ITJakub.Web.Hub.Identity
                     var user = client.FindUserByUserName(userName);
                     if (user == null) return null;
 
-                    IList<SpecialPermissionContract> specialPermissions;
-                    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
-                    {
-                        specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
-                    }                   
+                    
 
                     return new ApplicationUser
                     {
@@ -201,7 +190,7 @@ namespace ITJakub.Web.Hub.Identity
                         CreateTime = user.CreateTime,
                         PasswordHash = user.PasswordHash,
                         CommunicationToken = user.CommunicationToken,
-                        SpecialPermissions = specialPermissions
+                        CommunicationTokenExpirationTime = user.CommunicationTokenExpirationTime,                        
                     };
                 }
             });

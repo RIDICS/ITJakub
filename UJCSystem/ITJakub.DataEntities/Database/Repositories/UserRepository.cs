@@ -101,7 +101,16 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual User GetVirtualUserForUnregisteredUsers(string unregisteredUserName, string unregisteredUserGroupName)
+        public virtual User GetByLoginAndPassword(string userName, string passwordHash)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<User>().Where(x => x.UserName == userName && x.PasswordHash == passwordHash).SingleOrDefault<User>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual User GetVirtualUserForUnregisteredUsersOrCreate(string unregisteredUserName, Group unregisteredUserGroupName)
         {
             using (var session = GetSession())
             {
@@ -122,12 +131,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     AuthenticationProvider = AuthenticationProvider.ItJakub,
                     CommunicationToken = string.Empty,
                     CommunicationTokenCreateTime = DateTime.UtcNow,           
-                    Groups = new List<Group> { new Group
-                    {
-                        Name = unregisteredUserGroupName,
-                        CreateTime = now,
-                        Description = "Unregistered user group",                        
-                    } }
+                    Groups = new List<Group> { unregisteredUserGroupName }
                 };
 
                 session.Save(defaultUser);
@@ -137,7 +141,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }        
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Group GetDefaultRegisteredUsersGroup(string defaultRegisteredGroupName)
+        public virtual Group GetDefaultGroupOrCreate(string defaultRegisteredGroupName)
         {
             using (var session = GetSession())
             {
@@ -150,7 +154,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 {
                     Name = defaultRegisteredGroupName,
                     CreateTime = now,
-                    Description = "Registered user defeault group",
+                    Description = "Default user group",
                 };
 
                 session.Save(registeredUsersGroup);
@@ -159,5 +163,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return registeredUsersGroup;
             }
         }
+
+   
     }
 }

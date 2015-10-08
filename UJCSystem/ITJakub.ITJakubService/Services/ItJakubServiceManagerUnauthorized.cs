@@ -14,11 +14,13 @@ namespace ITJakub.ITJakubService.Services
     {
         private readonly WindsorContainer m_container = Container.Current;
         private readonly UserManager m_userManager;
+        private readonly AuthenticationManager m_authenticationManager;
 
 
         public ItJakubServiceEncryptedManager()
         {
-            m_userManager = m_container.Resolve<UserManager>();         
+            m_userManager = m_container.Resolve<UserManager>();
+            m_authenticationManager = m_container.Resolve<AuthenticationManager>();
         }
 
         public UserContract FindUserById(int userId)
@@ -36,7 +38,9 @@ namespace ITJakub.ITJakubService.Services
             return m_userManager.CreateLocalUser(user);
         }
 
-     
-
+        public bool RenewCommToken(string username, string passwordHash)
+        {
+            return m_authenticationManager.RenewCommToken(username, passwordHash);
+        }
     }
 }

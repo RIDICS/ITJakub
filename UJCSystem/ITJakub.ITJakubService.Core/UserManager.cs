@@ -15,14 +15,16 @@ namespace ITJakub.ITJakubService.Core
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private readonly CommunicationTokenGenerator m_communicationTokenGenerator;
+        private readonly AuthenticationManager m_authenticationManager;
         private readonly DefaultUserProvider m_defaultMembershipProvider;
         private readonly UserRepository m_userRepository;
 
-        public UserManager(UserRepository userRepository, CommunicationTokenGenerator communicationTokenGenerator,
+        public UserManager(UserRepository userRepository, CommunicationTokenGenerator communicationTokenGenerator, AuthenticationManager authenticationManager,
             DefaultUserProvider defaultMembershipProvider)
         {
             m_userRepository = userRepository;
             m_communicationTokenGenerator = communicationTokenGenerator;
+            m_authenticationManager = authenticationManager;
             m_defaultMembershipProvider = defaultMembershipProvider;
         }
 
@@ -40,11 +42,13 @@ namespace ITJakub.ITJakubService.Core
                 AuthenticationProvider = AuthenticationProvider.ItJakub,
                 CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken(),
                 CommunicationTokenCreateTime = now,
-                Groups = new List<Group> {m_defaultMembershipProvider.GetDefaultGroup()}
+                Groups = new List<Group> {m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup()}
             };
             var userId = m_userRepository.Create(dbUser);
             return GetUserDetail(userId);
         }
+
+  
 
         public UserContract FindByUserName(string userName)
         {
@@ -60,6 +64,7 @@ namespace ITJakub.ITJakubService.Core
             var dbUser = m_userRepository.FindByUserName(userName);
             if (dbUser == null) return null;
             var user = Mapper.Map<UserContract>(dbUser);
+            user.CommunicationTokenExpirationTime = m_authenticationManager.GetExpirationTimeForToken(dbUser);
             return user;
         }
 
@@ -93,5 +98,7 @@ namespace ITJakub.ITJakubService.Core
 
             return m_defaultMembershipProvider.GetDefaultUserName();
         }
+
+        
     }
 }

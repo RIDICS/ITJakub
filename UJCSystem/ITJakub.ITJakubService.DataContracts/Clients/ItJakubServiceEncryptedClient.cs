@@ -74,11 +74,33 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
+        public bool RenewCommToken(string userName, string password)
+        {
+            try
+            {
+                return Channel.RenewCommToken(userName, password);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
 
 
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;
         }
+
+     
     }
 }
