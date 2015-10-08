@@ -225,7 +225,7 @@ namespace ITJakub.ITJakubService.Core
         public IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract type)
         {
             var user = m_userManager.GetCurrentUser();
-            
+
             var specPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, (SpecialPermissionCategorization) type);
             return Mapper.Map<List<SpecialPermissionContract>>(specPermissions);
         }
