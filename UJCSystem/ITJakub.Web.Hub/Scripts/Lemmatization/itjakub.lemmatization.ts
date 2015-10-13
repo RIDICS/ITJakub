@@ -833,13 +833,13 @@ class LemmatizationSearchBox {
         var bloodhound: Bloodhound<string> = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
+            limit: 10,
             remote: remoteOptions
         });
 
         var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
         var dataset: Twitter.Typeahead.Dataset = {
             name: name,
-            limit: 10,
             source: bloodhound,
             display: "Text",
             templates: {
