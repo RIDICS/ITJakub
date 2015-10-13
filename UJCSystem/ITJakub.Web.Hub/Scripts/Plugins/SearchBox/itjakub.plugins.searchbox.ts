@@ -60,12 +60,13 @@
              datumTokenizer: Bloodhound.tokenizers.whitespace,
              queryTokenizer: Bloodhound.tokenizers.whitespace,
              prefetch: prefetchUrl,
-             remote: remoteOptions
+             remote: remoteOptions,
+             limit: 5
          });
 
+
          var dataset: Twitter.Typeahead.Dataset = {
-             name: name,
-             limit: 5,
+             name: name,             
              source: bloodhound,
              templates: {
                  header: "<div class=\"tt-suggestions-header\">" + groupHeader + "</div>"
