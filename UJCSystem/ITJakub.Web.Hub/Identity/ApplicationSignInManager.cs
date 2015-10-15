@@ -27,16 +27,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
-            var passwordLoginResult =  await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
-            if (passwordLoginResult == SignInStatus.Success) {                                 
-                ((ApplicationUserManager)UserManager).RenewCommunicationToken(userName);
-
-
-                return passwordLoginResult;
-            }
-
-
-            return passwordLoginResult;
+            return await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
         }
     }
 }

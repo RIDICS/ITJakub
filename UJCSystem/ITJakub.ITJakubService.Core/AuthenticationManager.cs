@@ -21,21 +21,17 @@ namespace ITJakub.ITJakubService.Core
 
         public void ValidateUserAndCommToken(string userName, string commToken)
         {
-            var now = DateTime.UtcNow;
-            var user = m_userRepository.GetByLogin(userName);
+            var user = m_userRepository.GetByLoginAndCommToken(userName, commToken);
 
             if (user == null || user.CommunicationToken == null || user.CommunicationToken != commToken )
                 throw new AuthenticationException("Invalid credentials");
-
-            if((user.CommunicationTokenCreateTime + m_timeToTokenExpiration) <= now)
-                throw new SecurityTokenValidationException("Invalid Credentials");   
         }
 
 
         public bool RenewCommToken(string userName)
         {
             var now = DateTime.UtcNow;
-            var user = m_userRepository.GetByLoginAndPassword(userName);
+            var user = m_userRepository.GetByLogin(userName);
             if (user != null)
             {
                 user.CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken();

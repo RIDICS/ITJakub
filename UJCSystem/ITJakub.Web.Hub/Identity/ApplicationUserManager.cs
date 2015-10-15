@@ -97,19 +97,51 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
+            var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
 
-            //IList<SpecialPermissionContract> specialPermissions;
+            claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+
             using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
             {
-                user.SpecialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                var specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                var roleClaims = GetClaimsFromSpecialPermissions(specialPermissions);
+                claimsIdentity.AddClaims(roleClaims);
             }
 
-            var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
-            foreach (var claim in user.Claims)
-            {
-                claimsIdentity.AddClaim(claim);
-            }
             return claimsIdentity;
+        }
+
+
+        private IList<Claim> GetClaimsFromSpecialPermissions(IList<SpecialPermissionContract> specialPermissions)
+        {
+            var claims = new List<Claim>();
+
+            if (specialPermissions.Count != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
+            }
+
+            if (specialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
+            }
+
+            if (specialPermissions.OfType<NewsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
+            }
+
+            if (specialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
+            }
+
+            if (specialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
+            }
+
+            return claims;
         }
     }   
 }

@@ -101,11 +101,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual User GetByLoginAndPassword(string userName)
+        public virtual User GetByLoginAndCommToken(string userName, string commToken)
         {
             using (var session = GetSession())
             {
-                return session.QueryOver<User>().Where(x => x.UserName == userName).SingleOrDefault<User>();
+                return session.QueryOver<User>().Where(x => x.UserName == userName && x.CommunicationToken == commToken).SingleOrDefault<User>();
             }
         }
 

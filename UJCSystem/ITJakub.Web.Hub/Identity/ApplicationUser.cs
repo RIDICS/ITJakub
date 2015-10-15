@@ -29,8 +29,6 @@ namespace ITJakub.Web.Hub.Identity
 
         public DateTime CommunicationTokenExpirationTime { get; set; }
 
-        public IList<Claim> Claims { get; set; }
-
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {

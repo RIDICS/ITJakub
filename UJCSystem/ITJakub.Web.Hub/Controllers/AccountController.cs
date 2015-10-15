@@ -13,7 +13,6 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize]
     public class AccountController : BaseController
     {
-        
 
         private ApplicationSignInManager SignInManager
         {
@@ -110,6 +109,12 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOut()
         {
+
+            using (var client = GetEncryptedClient())
+            {
+                client.RenewCommToken(User.Identity.Name);
+            }
+
             AuthenticationManager.SignOut();
             return RedirectToLocal("");
         }
