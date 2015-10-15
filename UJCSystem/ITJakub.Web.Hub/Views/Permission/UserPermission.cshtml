@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Administrace - Správa uživatelů";
+}
+@section styles{
+    @Styles.Render("~/itjakub/permission/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/permission/user/javascript")
+}
+
+<h2>Správa uživatelů</h2>
+
+<div class="permission-left-panel">
+    <div>
+        <div class="permission-main-buttons">
+            @*<button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>*@
+        </div>
+        <div class="permission-search">
+            <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="Hledat uživatele..."/>
+        </div>
+    </div>
+    <div id="selected-item-div" class="content hidden">
+        <div class="item-details-title">Vybraný uživatel</div>
+        <div class="item-details">
+            <div class="detail-item">
+                <span class="detail-item-title">Křestní jméno: </span>
+                <span id="specificUserFirstName"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">Příjmení: </span>
+                <span id="specificUserLastName"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">Uživatelské jméno: </span>
+                <span id="specificUserUsername"></span>
+            </div>
+            <div class="detail-item">
+                <span class="detail-item-title">E-mail: </span>
+                <span id="specificUserEmail"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="right-panel" class="permission-right-panel hidden">
+    <div class="right-panel-title">Skupiny jichž je uživatel členem:</div>
+    <ul class="items-list">
+    </ul>
+
+    <div class="groups-buttons">
+        <button id="addGroupButton" class="btn btn-default permission-button">+</button>
+    </div>
+</div>
+
+<div id="addToGroupDialog" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Přidělit skupinu</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab2-select-existing" data-toggle="tab">Výběr existující</a>
+                    </li>
+                    <li>
+                        <a href="#tab2-create-new" data-toggle="tab">Vytvoření nové</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="tab2-select-existing" class="tab-pane active">
+                        <div class="permission-search">
+                            <input type="text" class="form-control permission-search-input" id="groupSearchInput" placeholder="Hledat skupinu..."/>
+                        </div>
+
+                        <div class="content">
+                            <div class="item-details-title">Vybraná skupina</div>
+                            <div class="item-details">
+                                <div class="detail-item">
+                                    <span class="detail-item-title">Název: </span>
+                                    <span id="specificGroupName"></span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-item-title">Popis: </span>
+                                    <span id="specificGroupDescription"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab2-create-new" class="tab-pane">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="new-group-name" class="col-md-3 control-label">Název skupiny</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-group-name" name="new-text" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-group-description" class="col-md-3 control-label">Popis</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="new-group-description" name="new-text" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                    <button type="button" class="btn btn-default" id="add-user-to-group">Přiřadit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

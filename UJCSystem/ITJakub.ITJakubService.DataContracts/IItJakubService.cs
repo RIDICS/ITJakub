@@ -1,19 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
     [ServiceContract]
-    public interface IItJakubService
+    public interface IItJakubService: IDisposable
     {
         [OperationContract]
         IEnumerable<AuthorDetailContract> GetAllAuthors();
@@ -35,7 +34,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IEnumerable<SearchResultContract> Search(string term); // TODO probably remove
+        IList<SearchResultContract> Search(string term); // TODO probably remove
 
         [OperationContract]
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
@@ -51,53 +50,6 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
-
-        #region CardFile methods
-
-        [OperationContract]
-        IEnumerable<CardFileContract> GetCardFiles();
-
-        [OperationContract]
-        IEnumerable<BucketShortContract> GetBuckets(string cardFileId);
-
-        [OperationContract]
-        IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword);
-
-        [OperationContract]
-        IEnumerable<CardContract> GetCards(string cardFileId, string bucketId);
-
-        [OperationContract]
-        IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
-
-        [OperationContract]
-        CardContract GetCard(string cardFileId, string bucketId, string cardId);
-
-        [OperationContract]
-        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize);
-
-        #endregion
-
-        #region Typeahead methods
-
-        [OperationContract]
-        IList<string> GetTypeaheadAuthors(string query);
-
-        [OperationContract]
-        IList<string> GetTypeaheadTitles(string query);
-
-        [OperationContract]
-        IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
-
-        [OperationContract]
-        IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
-
-        [OperationContract]
-        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
-
-        [OperationContract]
-        IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
-
-        #endregion
 
         [OperationContract]
         int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
@@ -140,6 +92,62 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId,
             string pageXmlId, OutputFormatEnumContract resultFormat);
 
+        [OperationContract]
+        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
+
+        #region CardFile methods
+
+        [OperationContract]
+        IEnumerable<CardFileContract> GetCardFiles();
+
+        [OperationContract]
+        IEnumerable<BucketShortContract> GetBuckets(string cardFileId);
+
+        [OperationContract]
+        IEnumerable<BucketShortContract> GetBucketsWithHeadword(string cardFileId, string headword);
+
+        [OperationContract]
+        IEnumerable<CardContract> GetCards(string cardFileId, string bucketId);
+
+        [OperationContract]
+        IEnumerable<CardShortContract> GetCardsShort(string cardFileId, string bucketId);
+
+        [OperationContract]
+        CardContract GetCard(string cardFileId, string bucketId, string cardId);
+
+        [OperationContract]
+        Stream GetImage(string cardFileId, string bucketId, string cardId, string imageId, ImageSizeEnum imageSize);
+
+        #endregion
+
+        #region Typeahead methods
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthors(string query);
+
+        [OperationContract]
+        IList<UserContract> GetTypeaheadUsers(string query);
+
+        [OperationContract]
+        IList<GroupContract> GetTypeaheadGroups(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitles(string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+
+        [OperationContract]
+        IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+
+        [OperationContract]
+        IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookType, IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+
+        #endregion
+
         #region Feedback
 
         [OperationContract]
@@ -169,8 +177,66 @@ namespace ITJakub.ITJakubService.DataContracts
 
         #endregion
 
+        #region Permissions
+
         [OperationContract]
-        IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId);
+        IList<GroupContract> GetGroupsByUser(int userId);
+
+        [OperationContract]
+        IList<UserContract> GetUsersByGroup(int groupId);
+
+        [OperationContract]
+        void AddUserToGroup(int userId, int groupId);
+
+        [OperationContract]
+        void RemoveUserFromGroup(int userId, int groupId);
+
+        [OperationContract]
+        GroupContract CreateGroup(string name, string description);
+
+        [OperationContract]
+        UserDetailContract GetUserDetail(int userId);
+
+        [OperationContract]
+        GroupDetailContract GetGroupDetail(int groupId);
+
+        [OperationContract]
+        IList<CategoryContract> GetRootCategories();
+
+        [OperationContract]
+        CategoryContentContract GetCategoryContentForGroup(int groupId, int categoryId);
+
+        [OperationContract]
+        CategoryContentContract GetAllCategoryContent(int categoryId);
+
+        [OperationContract]
+        void DeleteGroup(int groupId);
+
+        [OperationContract]
+        void AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+
+        [OperationContract]
+        void RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds);
+
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissions();
+
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForGroup(int groupId);
+
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForUser();
+
+        [OperationContract]
+        IList<SpecialPermissionContract> GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract permissionType);
+
+        [OperationContract]
+        void AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds);
+
+        [OperationContract]
+        void RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionIds);
+
+        #endregion
 
         #region News
 
@@ -179,6 +245,45 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         int GetWebNewsSyndicationItemCount();
+
+        #endregion
+
+        #region Favorite Items
+
+        [OperationContract]
+        List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
+
+        [OperationContract]
+        void AddPageBookmark(string bookId, string pageName, string userName);
+
+        [OperationContract]
+        void RemovePageBookmark(string bookId, string pageName, string userName);
+
+        [OperationContract]
+        IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
+
+        [OperationContract]
+        void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        [OperationContract]
+        void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        #endregion
+
+        #region Feedback
+
+        [OperationContract]
+        void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category);
+
+        [OperationContract]
+        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
+
+        #endregion
+
+        #region News
+
+        [OperationContract]
+        void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
 
         #endregion
     }

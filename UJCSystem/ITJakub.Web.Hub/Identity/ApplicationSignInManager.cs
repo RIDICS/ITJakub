@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
@@ -15,7 +17,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
-            return await user.GenerateUserIdentityAsync((ApplicationUserManager)UserManager);
+            return await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes. ApplicationCookie);            
         }
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)

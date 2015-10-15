@@ -11,6 +11,7 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
     [KnownType(typeof(RegexSearchCriteriaContract))]
     [KnownType(typeof(RegexTokenListCriteriaContract))]
     [KnownType(typeof(SelectedCategoryCriteriaContract))]
+    [KnownType(typeof(AuthorizationCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
         [DataMember]

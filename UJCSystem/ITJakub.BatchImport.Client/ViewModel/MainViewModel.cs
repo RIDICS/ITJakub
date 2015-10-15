@@ -7,26 +7,26 @@ using ITJakub.BatchImport.Client.DataService;
 
 namespace ITJakub.BatchImport.Client.ViewModel
 {
-    /// <summary>
-    ///     This class contains properties that the main View can data bind to.
-    ///     <para>
-    ///         Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    ///     </para>
-    ///     <para>
-    ///         You can also use Blend to data bind with the tool's support.
-    ///     </para>
-    ///     <para>
-    ///         See http://www.galasoft.ch/mvvm
-    ///     </para>
-    /// </summary>
+    /// <summary> 
+    /// This class contains properties that the main View can data bind to. 
+    /// <para> 
+    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel. 
+    /// </para> 
+    /// <para> 
+    /// You can also use Blend to data bind with the tool's support. 
+    /// </para> 
+    /// <para> 
+    /// See http://www.galasoft.ch/mvvm 
+    /// </para> 
+    /// </summary> 
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private string m_folderPath;
 
-        /// <summary>
-        ///     Initializes a new instance of the MainViewModel class.
-        /// </summary>
+        /// <summary> 
+        /// Initializes a new instance of the MainViewModel class. 
+        /// </summary> 
         public MainViewModel(IDataService dataService)
         {
             m_dataService = dataService;
@@ -36,14 +36,14 @@ namespace ITJakub.BatchImport.Client.ViewModel
             InitializeCommands();
 
 
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
+            ////if (IsInDesignMode) 
+            ////{ 
+            //// // Code runs in Blend --> create design time data. 
+            ////} 
+            ////else 
+            ////{ 
+            //// // Code runs "for real" 
+            ////} 
         }
 
         public string FolderPath
@@ -90,7 +90,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
             }
 
 
-            //item = item.ToLowerInvariant();
+            //item = item.ToLowerInvariant(); 
         }
 
         private void ConvertSelectedPath()

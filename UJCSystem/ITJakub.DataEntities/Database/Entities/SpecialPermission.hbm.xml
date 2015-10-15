@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="SpecialPermission" table="[SpecialPermission]">
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <discriminator column="PermissionType"
+               not-null="true"
+               type="System.String" />
+
+    <property name="PermissionCategorization">
+      <column name="PermissionCategorization" sql-type="tinyint" not-null="true" />
+    </property>
+
+    <bag name="Groups" table="SpecialPermission_Group"  lazy="true">
+      <key column="[SpecialPermission]" />
+      <many-to-many class="Group" column="[Group]" />
+    </bag>
+    
+    <subclass name="UploadBookPermission"
+      discriminator-value="UploadBook">
+
+      <property name="CanUploadBook">
+        <column name="CanUploadBook" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="ManagePermissionsPermission"
+      discriminator-value="ManagePermissions">
+
+      <property name="CanManagePermissions">
+        <column name="CanManagePermissions" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="NewsPermission"
+      discriminator-value="News">
+
+      <property name="CanAddNews">
+        <column name="CanAddNews" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="FeedbackPermission"
+      discriminator-value="Feedback">
+
+      <property name="CanManageFeedbacks">
+        <column name="CanManageFeedbacks" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+  </class>
+</hibernate-mapping>

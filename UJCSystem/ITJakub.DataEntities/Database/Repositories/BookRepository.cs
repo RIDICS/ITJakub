@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Facilities.NHibernateIntegration;
@@ -613,6 +614,21 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return dbQuery
                     .Take(recordCount)
                     .List<string>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Book> GetBooksById(IList<long> bookIds)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+
+                var books = session.QueryOver(() => bookAlias)
+                    .AndRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
+                    .List<Book>();
+
+                return books;
             }
         }
     }

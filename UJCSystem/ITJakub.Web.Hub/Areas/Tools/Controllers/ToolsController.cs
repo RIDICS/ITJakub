@@ -1,16 +1,14 @@
 ﻿using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 {
     [RouteArea("Tools")]
-    public class ToolsController : Controller
-    {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
+    public class ToolsController : BaseController
+    {        
         public ActionResult Index()
         {
             return View("List");
@@ -27,8 +25,9 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             {
                 return View();
             }
-
-            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
+            using (var client = GetEncryptedClient())
+            {
+                var user = client.FindUserByUserName(username);
             var viewModel = new FeedbackViewModel
             {
                 Name = string.Format("{0} {1}", user.FirstName, user.LastName),
@@ -36,6 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             };
 
             return View(viewModel);
+        }
         }
 
         [HttpPost]
@@ -46,9 +46,15 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Tools);
+                using (var client = GetMainServiceClient())
+                {
+                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Tools);
+                }
             else
-                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Tools);
+                using (var client = GetMainServiceClient())
+                {
+                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Tools);
+                }
 
             return View("Information");
         }

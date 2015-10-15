@@ -18,19 +18,19 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual AuthenticationProvider AuthenticationProvider { get; set; }
 
-        public virtual string CommunicationToken { get; set; } //TODO remove property/column?
+        public virtual string CommunicationToken { get; set; }
 
-        public virtual DateTime? CommunicationTokenCreateTime { get; set; } //TODO remove property/column?
+        public virtual DateTime? CommunicationTokenCreateTime { get; set; }
 
-        public virtual string PasswordHash { get; set; }
-
-        public virtual string Salt { get; set; } //TODO remove property/column?
+        public virtual string PasswordHash { get; set; }        
 
         public virtual DateTime CreateTime { get; set; }
 
         public virtual string AvatarUrl { get; set; }
 
         public virtual IList<FavoriteBase> FavoriteItems { get; set; }
+
+        public virtual IList<Group> Groups { get; set; }
         
 
         public virtual bool Equals(User other)

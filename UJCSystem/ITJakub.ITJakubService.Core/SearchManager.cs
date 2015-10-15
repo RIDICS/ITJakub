@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AutoMapper;
 using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
@@ -26,17 +24,23 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly UserRepository m_userRepository;
+        private readonly PermissionRepository m_permissionRepository;
         private readonly MetadataSearchCriteriaDirector m_searchCriteriaDirector;
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
         public SearchManager(BookRepository bookRepository, BookVersionRepository bookVersionRepository,
-            CategoryRepository categoryRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
-            SearchServiceClient searchServiceClient)
+            CategoryRepository categoryRepository, UserRepository userRepository, PermissionRepository permissionRepository, MetadataSearchCriteriaDirector searchCriteriaDirector,
+            AuthorizationManager authorizationManager, SearchServiceClient searchServiceClient)
         {
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
             m_categoryRepository = categoryRepository;
+            m_userRepository = userRepository;
+            m_permissionRepository = permissionRepository;
             m_searchCriteriaDirector = searchCriteriaDirector;
+            m_authorizationManager = authorizationManager;
             m_searchServiceClient = searchServiceClient;
         }
 
@@ -44,6 +48,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var escapedTerm = EscapeQuery(term);
             var bookVersionResults = m_bookRepository.SearchByTitle(escapedTerm);
+            m_authorizationManager.FilterBooksByCurrentUser(ref bookVersionResults);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
 
@@ -51,14 +56,21 @@ namespace ITJakub.ITJakubService.Core
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
             var books = m_bookRepository.FindBookVersionsByTypeWithCategories(type);
+            m_authorizationManager.FilterBooksByCurrentUser(ref books);
             var categories = m_categoryRepository.FindCategoriesByBookType(type).OrderBy(x => x.Description);
 
             return new BookTypeSearchResultContract
             {
                 BookType = bookType,
-                Books = Mapper.Map<IList<Shared.Contracts.BookContract>>(books),
+                Books = Mapper.Map<IList<BookContractWithCategories>>(books),
                 Categories = Mapper.Map<IList<CategoryContract>>(categories)
             };
+        }
+
+        public IList<CategoryContract> GetRootCategories()
+        {
+            var categories = m_categoryRepository.GetRootCategories();
+            return Mapper.Map<IList<CategoryContract>>(categories);
         }
 
         private string EscapeQuery(string query)
@@ -66,7 +78,7 @@ namespace ITJakub.ITJakubService.Core
             return query.Replace("[", "[[]");
         }
 
-        private FilteredCriterias FilterSearchCriterias(IEnumerable<SearchCriteriaContract> searchCriterias)
+        private FilteredCriterias FilterSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
         {
             ResultCriteriaContract resultCriteria = null;
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
@@ -104,6 +116,9 @@ namespace ITJakub.ITJakubService.Core
         public IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             var searchCriteriaContracts = searchCriterias.ToList();
+
+            m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
             var filteredCriterias = FilterSearchCriterias(searchCriteriaContracts);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             var resultCriteria = filteredCriterias.ResultCriteria;
@@ -266,6 +281,42 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadAuthors(query, PrefetchRecordCount);
         }
 
+        public IList<UserContract> GetTypeaheadUsers(string query)
+        {
+            IList<User> users = null;
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                users = m_userRepository.GetLastUsers(PrefetchRecordCount);
+            }
+            else
+            {
+                query = PrepareQuery(query);
+                users = m_userRepository.GetTypeaheadUsers(query, PrefetchRecordCount);
+            }
+
+            var userContracts = Mapper.Map<IList<UserContract>>(users);
+            return userContracts;
+        }
+
+        public IList<GroupContract> GetTypeaheadGroups(string query)
+        {
+            IList<Group> groups = null;
+
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                groups = m_permissionRepository.GetLastGroups(PrefetchRecordCount);
+            }
+            else
+            {
+                query = PrepareQuery(query);
+                groups = m_permissionRepository.GetTypeaheadGroups(query, PrefetchRecordCount);
+            }
+
+            var groupContracts = Mapper.Map<IList<GroupContract>>(groups);
+            return groupContracts;
+        }
+
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookTypeContract)
         {
             var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
@@ -276,7 +327,7 @@ namespace ITJakub.ITJakubService.Core
             return m_bookRepository.GetTypeaheadAuthorsByBookType(query, bookType, PrefetchRecordCount);
         }
 
-        public IList<string> GetTypeaheadTitles(string query)
+        public IList<string> GetTypeaheadTitles(string query)   //TODO HACK should be secure directly in queryover
         {
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastTitles(PrefetchRecordCount);
@@ -289,6 +340,8 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookIdList = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
+            m_authorizationManager.FilterBookIdList(ref bookIdList);
+
             var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastTitlesByBookType(PrefetchRecordCount, bookType, bookIdList);
@@ -299,6 +352,8 @@ namespace ITJakub.ITJakubService.Core
         public IList<string> GetTypeaheadTermsByBookType(string query, BookTypeEnumContract bookTypeContract, IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
             var bookIdList = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            m_authorizationManager.FilterBookIdList(ref bookIdList);
 
             var bookType = Mapper.Map<BookTypeEnum>(bookTypeContract);
             if (string.IsNullOrWhiteSpace(query))
@@ -311,6 +366,8 @@ namespace ITJakub.ITJakubService.Core
         public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            m_authorizationManager.FilterBookIdList(ref bookIds);
 
             if (string.IsNullOrWhiteSpace(query))
                 return m_bookRepository.GetLastTypeaheadHeadwords(PrefetchRecordCount, bookIds);
@@ -406,6 +463,8 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
+            m_authorizationManager.FilterBookIdList(ref bookIds);   //TODO HACK when all filtered, statement below returns all
+
             return bookIds == null
                 ? m_bookVersionRepository.GetHeadwordCount()
                 : m_bookVersionRepository.GetHeadwordCount(bookIds);
@@ -415,6 +474,8 @@ namespace ITJakub.ITJakubService.Core
             int start, int count)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            m_authorizationManager.FilterBookIdList(ref bookIds);
 
             var databaseResult = bookIds == null
                 ? m_bookVersionRepository.GetHeadwordList(start, count)
@@ -427,6 +488,9 @@ namespace ITJakub.ITJakubService.Core
         public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
+
+            m_authorizationManager.FilterBookIdList(ref bookIds);
+
             query = string.Format("{0}%", query);
             query = EscapeQuery(query);
 
@@ -439,6 +503,8 @@ namespace ITJakub.ITJakubService.Core
         {
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds);
 
+            m_authorizationManager.FilterBookIdList(ref bookIds);
+
             var resultRowNumber = m_bookVersionRepository.GetHeadwordRowNumberById(bookIds, headwordBookId, headwordEntryXmlId);
             if (resultRowNumber == 0)
                 throw new ArgumentException("Headword not found.");
@@ -449,7 +515,11 @@ namespace ITJakub.ITJakubService.Core
         public int SearchHeadwordByCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias,
             DictionarySearchTarget searchTarget)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
 
@@ -495,7 +565,10 @@ namespace ITJakub.ITJakubService.Core
 
         public int SearchCriteriaResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
                 filteredCriterias.MetadataParameters);
@@ -521,7 +594,10 @@ namespace ITJakub.ITJakubService.Core
 
         public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var resultCriteria = filteredCriterias.ResultCriteria;
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
 
@@ -588,6 +664,9 @@ namespace ITJakub.ITJakubService.Core
 
         public string GetDictionaryEntryFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -599,7 +678,7 @@ namespace ITJakub.ITJakubService.Core
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType);
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(searchCriterias.ToList(),
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryFromSearch(criterias,
                 bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
@@ -607,12 +686,17 @@ namespace ITJakub.ITJakubService.Core
 
         public PageListContract GetSearchEditionsPageList(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            return m_searchServiceClient.GetSearchEditionsPageList(searchCriterias.ToList());
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+            return m_searchServiceClient.GetSearchEditionsPageList(criterias);
         }
 
         public CorpusSearchResultContractList GetCorpusSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
             if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
@@ -675,7 +759,10 @@ namespace ITJakub.ITJakubService.Core
 
         public int GetCorpusSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery,
                 filteredCriterias.MetadataParameters);
@@ -701,6 +788,9 @@ namespace ITJakub.ITJakubService.Core
 
         public string GetEditionPageFromSearch(IEnumerable<SearchCriteriaContract> searchCriterias, string bookXmlId, string pageXmlId, OutputFormatEnumContract resultFormat)
         {
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
             OutputFormat outputFormat;
             if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
             {
@@ -712,7 +802,7 @@ namespace ITJakub.ITJakubService.Core
                 bookVersion.DefaultBookType.Type); //TODO add bookType as method parameter
             var transformationName = transformation.Name;
             var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
-            var pageText = m_searchServiceClient.GetEditionPageFromSearch(searchCriterias.ToList(),
+            var pageText = m_searchServiceClient.GetEditionPageFromSearch(criterias,
                 bookXmlId, bookVersion.VersionId, pageXmlId, transformationName, resultFormat, transformationLevel);
 
             return pageText;
@@ -720,7 +810,10 @@ namespace ITJakub.ITJakubService.Core
 
         public AudioBookSearchResultContractList GetAudioBookSearchResults(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
 
             if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
@@ -766,7 +859,10 @@ namespace ITJakub.ITJakubService.Core
 
         public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
-            var filteredCriterias = FilterSearchCriterias(searchCriterias);
+            var criterias = searchCriterias.ToList();
+            m_authorizationManager.AuthorizeCriteria(criterias);
+
+            var filteredCriterias = FilterSearchCriterias(criterias);
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             return databaseSearchResult.Count;

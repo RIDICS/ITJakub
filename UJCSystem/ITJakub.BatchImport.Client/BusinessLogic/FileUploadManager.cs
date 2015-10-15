@@ -12,6 +12,8 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
     public class FileUploadManager
     {
         private const string DefaultUploadMessage = "Uploaded by BatchImport client";
+        private const string EndpointName = "";
+        
 
         private ConcurrentQueue<FileModel> m_files = new ConcurrentQueue<FileModel>();
         //private List<FileModel> m_files;        
@@ -57,7 +59,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         private void ProcessFile(FileModel file, Action<string, Exception> callback)
         {
             var session = Guid.NewGuid().ToString();
-            using (var client = new ItJakubServiceStreamedClient())
+            using (var client = new ItJakubServiceStreamedClient(EndpointName))
             {
                 file.CurrentState = FileStateType.Uploading;
                 using (var dataStream = GetDataStream(file.FullPath))
@@ -75,7 +77,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
             file.CurrentState = FileStateType.Processing;
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = new ItJakubServiceClient(EndpointName))
             {
                 try
                 {

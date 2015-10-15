@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioBookManager.cs" />
+    <Compile Include="AuthenticationManager.cs" />
     <Compile Include="AutoMapperProfiles\AudioBookSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookContentItemProfile.cs" />
     <Compile Include="AutoMapperProfiles\BookInfoProfile.cs" />
@@ -63,6 +65,7 @@
     <Compile Include="AutoMapperProfiles\CorpusSearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\DictionaryContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\FeedbackProfile.cs" />
+    <Compile Include="AutoMapperProfiles\GroupProfile.cs" />
     <Compile Include="AutoMapperProfiles\ImageContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardShortContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\BucketContractProfile.cs" />
@@ -73,8 +76,13 @@
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\SpecialPermissionProfile.cs" />
     <Compile Include="AutoMapperProfiles\TermProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="CommunicationTokenGenerator.cs" />
+    <Compile Include="DefaultUserProvider.cs" />
+    <Compile Include="PermissionManager.cs" />
     <Compile Include="FavoriteManager.cs" />
     <Compile Include="FeedbackManager.cs" />
     <Compile Include="NewsManager.cs" />
@@ -91,7 +99,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config" />
+    <EmbeddedResource Include="ITJakub.ITJakubService.Core.Container.Config">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj">

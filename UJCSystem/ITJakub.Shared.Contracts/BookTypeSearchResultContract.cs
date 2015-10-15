@@ -13,7 +13,7 @@ namespace ITJakub.Shared.Contracts
         public IList<CategoryContract> Categories { get; set; }
 
         [DataMember]
-        public IList<BookContract> Books { get; set; }
+        public IList<BookContractWithCategories> Books { get; set; }
 
 
     }

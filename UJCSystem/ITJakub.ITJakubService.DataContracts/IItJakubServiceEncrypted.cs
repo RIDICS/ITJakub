@@ -1,9 +1,5 @@
-using System.Collections.Generic;
 using System.ServiceModel;
-using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.News;
-using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.DataContracts
 {
@@ -19,48 +15,12 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         UserContract CreateUser(UserContract user);
-        #endregion
-
-        #region Favorite Items
 
         [OperationContract]
-        List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
-
-        [OperationContract]
-        void AddPageBookmark(string bookId, string pageName, string userName);
-
-        [OperationContract]
-        void RemovePageBookmark(string bookId, string pageName, string userName);
-
-        [OperationContract]
-        IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
-
-        [OperationContract]
-        void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
-
-        [OperationContract]
-        void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+        bool RenewCommToken(string username);
 
         #endregion
 
-        #region Feedback
-
-        [OperationContract]
-        void CreateFeedback(string feedback, string username, FeedbackCategoryEnumContract category);
-
-        [OperationContract]
-        void CreateFeedbackForHeadword(string feedback, string bookXmlId, string versionXmlId, string entryXmlId, string username);
-
-        #endregion
-
-        #region News
-
-     
-
-        [OperationContract]
-        void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
-
-        #endregion
 
     }
 }

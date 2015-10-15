@@ -1,19 +1,26 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNet.Identity.Owin;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
+    public class HomeController : BaseController
+    {        
+        private ApplicationUserManager UserManager
+        {
+            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
+        }
+
 
         public ActionResult Index()
         {
             return View();
         }
+
         public ActionResult About()
         {
             return View();
@@ -31,33 +38,38 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
-            var username = HttpContext.User.Identity.Name;
+            var username = User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
                 return View();
             }
 
-            var user = m_mainServiceEncryptedClient.FindUserByUserName(username);
-            var viewModel = new FeedbackViewModel
+            using (var client = GetEncryptedClient())
             {
-                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                Email = user.Email
-            };
+                var user = client.FindUserByUserName(username);
+                var viewModel = new FeedbackViewModel
+                {
+                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                    Email = user.Email
+                };
 
-            return View(viewModel);
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public  ActionResult Feedback(FeedbackViewModel model)
+        public ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+           
+                using (var client = GetMainServiceClient())
+                {
+                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);
+                }
 
-            if (string.IsNullOrWhiteSpace(username))
-                m_mainServiceClient.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);
-            else
-                m_mainServiceEncryptedClient.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.None);
+          
+
 
             return View("Index");
         }
@@ -79,23 +91,27 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            var client = new ItJakubServiceClient();
+            using (var client = GetMainServiceClient()) { 
             var result = client.GetTypeaheadAuthors(query);
             return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            var client = new ItJakubServiceClient();
-            var result = client.GetTypeaheadTitles(query);
+            using (var client = GetMainServiceClient()) { 
+                var result = client.GetTypeaheadTitles(query);
             return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetTypeaheadDictionaryHeadword(string query)
         {
-            var client = new ItJakubServiceClient();
-            var result = client.GetTypeaheadDictionaryHeadwords(null, null, query);
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetTypeaheadDictionaryHeadwords(null, null, query);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }
+}
 }

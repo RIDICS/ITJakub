@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
+    [KnownType(typeof(UserDetailContract))]
     public class UserContract
     {
         [DataMember]
@@ -16,9 +18,6 @@ namespace ITJakub.Shared.Contracts
         public string UserName { get; set; }
 
         [DataMember]
-        public string PasswordHash { get; set; }
-
-        [DataMember]
         public string FirstName { get; set; }
 
         [DataMember]
@@ -26,5 +25,14 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public DateTime CreateTime { get; set; }
+
+        [DataMember]
+        public string PasswordHash { get; set; }
+
+        [DataMember]
+        public string CommunicationToken { get; set; }
+
+        [DataMember]
+        public DateTime CommunicationTokenExpirationTime { get; set; }
     }
 }

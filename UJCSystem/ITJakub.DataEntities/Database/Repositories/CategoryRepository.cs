@@ -7,6 +7,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate.Criterion;
+using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
@@ -171,6 +172,54 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.GetNamedQuery("GetBookIdsFromCategoryHierarchy")
                     .SetParameterList("categoryIds", categoryIds)
                     .List<long>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Category> GetRootCategories()
+        {
+            using (var session = GetSession())
+            {
+                var categories = session.QueryOver<Category>()
+                    .Where(x => x.ParentCategory == null)
+                    .List<Category>();
+                return categories;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Category> FindChildCategoriesInCategory(int categoryId)
+        {
+            using (var session = GetSession())
+            {
+                var categories = session.QueryOver<Category>()
+                    .Where(x => x.ParentCategory.Id == categoryId)
+                    .List<Category>();
+                return categories;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<BookVersion> FindChildBookVersionsInCategory(int categoryId)
+        {
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            using (var session = GetSession())
+            {
+                var bookVersions =
+                    session.QueryOver(() => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                        .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                        .Where(() => categoryAlias.Id == categoryId && bookVersionAlias.Id == bookAlias.LastVersion.Id)
+                        .OrderBy(() => bookVersionAlias.Title).Asc
+                        .TransformUsing(Transformers.DistinctRootEntity)
+                        .List<BookVersion>();
+
+                return bookVersions;
             }
         }
     }

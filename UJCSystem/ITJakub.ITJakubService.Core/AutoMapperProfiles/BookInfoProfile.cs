@@ -28,6 +28,12 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Book.Id))
                 .ForMember(dest => dest.Guid, opts => opts.MapFrom(src => src.Book.Guid))
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
+                .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle));
+
+            CreateMap<BookVersion, BookContractWithCategories>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Book.Id))
+                .ForMember(dest => dest.Guid, opts => opts.MapFrom(src => src.Book.Guid))
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle))
                 .ForMember(dest => dest.CategoryIds, opts => opts.MapFrom(src => src.Categories.Select(x => x.Id)));
 

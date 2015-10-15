@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using ITJakub.Web.Hub.Identity
+@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8"/>
@@ -257,35 +259,63 @@
         </li>
     </ul>
 </li>
-<li class="has-sub last">
-    <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-        <span>Administrace</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                <span>Nahrání díla</span></a>
-        </li>
-        <li>
-            <a href="#">
-                <span>Lemmatizace</span></a>
-        </li>
-        <li>
-            <a href="#">
-                <span>Správa práv</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                <span>Správa připomínek</span>
-            </a>
-        </li>
+@if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
+{
+    <li class="has-sub last">
+        <a href='#'>
+            <span>Administrace</span>
+        </a>
+        <ul>
+            @if (User.IsInRole(CustomRole.CanUploadBooks))
+            {
+                <li>
+                    <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+                        <span>Nahrání díla</span>
+                    </a>
+                </li>
+            }
 
-        <li>
-            <a href='@Url.Action("Add", "News", new {area = ""})'>
-                <span>Přidat novinku</span>
-            </a>
-        </li>
-    </ul>
-</li>
+            <li>
+                <a href="#">
+                    <span>Lemmatizace</span></a>
+            </li>
+
+            @if (User.IsInRole(CustomRole.CanManagePermissions))
+            {
+                <li>
+                    <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
+                        <span>Správa uživatelů</span>
+                    </a>
+                </li>
+                <li>
+                    <a href='@Url.Action("GroupPermission", "Permission", new {area = ""})'>
+                        <span>Správa skupin</span>
+                    </a>
+                </li>
+            }
+
+
+            @if (User.IsInRole(CustomRole.CanManageFeedbacks))
+            {
+                <li>
+                    <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
+                        <span>Správa připomínek</span>
+                    </a>
+                </li>
+            }
+
+            @if (User.IsInRole(CustomRole.CanAddNews))
+            {
+                <li>
+                    <a href='@Url.Action("Add", "News", new {area = ""})'>
+                        <span>Přidat novinku</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </li>
+}
 </ul>
 </div>
 </div>

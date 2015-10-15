@@ -226,8 +226,13 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="CommunicationProvider.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Identity\CustomClaimType.cs" />
+    <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
@@ -257,7 +262,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Identity\ApplicationPasswordHasher.cs" />
     <Compile Include="Identity\ApplicationSignInManager.cs" />
     <Compile Include="Identity\ApplicationUser.cs" />
     <Compile Include="Identity\ApplicationUserManager.cs" />
@@ -364,6 +368,9 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\mlceni_blue.jpg" />
+    <Content Include="Content\Images\mlceni_hangman.jpg" />
+    <Content Include="Content\Images\Mlceni_pink.jpg" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -376,8 +383,6 @@
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\mlceni.jpg" />
-    <Content Include="Content\Images\mlceni2.jpg" />
     <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\Images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.Footer.css">
@@ -670,6 +675,7 @@
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
     <Content Include="Content\Plugins\ITJakub.Pagination.less" />
+    <Content Include="Content\Permission\itjakub.permission.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -700,12 +706,6 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -723,6 +723,8 @@
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\Permission\UserPermission.cshtml" />
+    <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -768,6 +770,10 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.interfaces.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.group.ts" />
+    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.user.ts" />
     <TypeScriptCompile Include="Scripts\News\itjakub.news.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.plugins.pagination.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.list.ts" />
