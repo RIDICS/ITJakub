@@ -38,9 +38,9 @@ namespace ITJakub.ITJakubService.Services
             return m_userManager.CreateLocalUser(user);
         }
 
-        public bool RenewCommToken(string username, string passwordHash)
+        public bool RenewCommToken(string username)
         {
-            return m_authenticationManager.RenewCommToken(username, passwordHash);
+            return m_authenticationManager.RenewCommToken(username);
         }
     }
 }

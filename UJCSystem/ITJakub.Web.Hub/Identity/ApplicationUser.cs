@@ -36,5 +36,6 @@ namespace ITJakub.Web.Hub.Identity
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             return userIdentity;
+        }
     }
 }

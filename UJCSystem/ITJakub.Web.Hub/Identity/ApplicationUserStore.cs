@@ -152,10 +152,16 @@ namespace ITJakub.Web.Hub.Identity
                 using (var client = m_communication.GetEncryptedClient())
                 {
                     var user = client.FindUserById(int.Parse(userId));
-                    if (user == null) return null;              
+                    if (user == null) return null;
+
+                    IList<SpecialPermissionContract> specialPermissions;
+                    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+                    {
+                        specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                    }
 
                     var claims = GetClaimsFromSpecialPermissions(specialPermissions);
-                    claims.Add(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+                    claims.Add(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));                    
 
                     return new ApplicationUser
                     {

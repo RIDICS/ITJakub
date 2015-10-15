@@ -32,10 +32,10 @@ namespace ITJakub.ITJakubService.Core
         }
 
 
-        public bool RenewCommToken(string userName, string passwordHash)
+        public bool RenewCommToken(string userName)
         {
             var now = DateTime.UtcNow;
-            var user = m_userRepository.GetByLoginAndPassword(userName, passwordHash);
+            var user = m_userRepository.GetByLoginAndPassword(userName);
             if (user != null)
             {
                 user.CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken();

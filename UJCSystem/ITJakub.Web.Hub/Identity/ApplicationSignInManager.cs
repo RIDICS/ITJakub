@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async override Task<ClaimsIdentity> CreateUserIdentityAsync(ApplicationUser user)
         {
-            return await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes.ApplicationCookie);            
+            return await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes. ApplicationCookie);            
         }
 
         public static ApplicationSignInManager Create(IdentityFactoryOptions<ApplicationSignInManager> options, IOwinContext context)
@@ -28,10 +28,9 @@ namespace ITJakub.Web.Hub.Identity
         public async override Task<SignInStatus> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
             var passwordLoginResult =  await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);
-            if (passwordLoginResult == SignInStatus.Success) {                 
-                var passwordHash = UserManager.PasswordHasher.HashPassword(password);
+            if (passwordLoginResult == SignInStatus.Success) {                                 
+                ((ApplicationUserManager)UserManager).RenewCommunicationToken(userName);
 
-                ((ApplicationUserManager)UserManager).RenewCommunicationToken(userName, passwordHash);
 
                 return passwordLoginResult;
             }

@@ -74,11 +74,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
                 throw;
             }
         }
-        public bool RenewCommToken(string userName, string password)
+        public bool RenewCommToken(string userName)
         {
             try
             {
-                return Channel.RenewCommToken(userName, password);
+                return Channel.RenewCommToken(userName);
             }
             catch (CommunicationException ex)
             {

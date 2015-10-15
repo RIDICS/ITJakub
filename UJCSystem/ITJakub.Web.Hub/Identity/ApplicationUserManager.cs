@@ -86,11 +86,11 @@ namespace ITJakub.Web.Hub.Identity
 
         }
 
-        public bool RenewCommunicationToken(string userName, string password)
+        public bool RenewCommunicationToken(string userName)
         {
             using (var client = m_communication.GetEncryptedClient())
             {
-                return client.RenewCommToken(userName, password);
+                return client.RenewCommToken(userName);
             }
             
         }

@@ -368,6 +368,9 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\mlceni_blue.jpg" />
+    <Content Include="Content\Images\mlceni_hangman.jpg" />
+    <Content Include="Content\Images\Mlceni_pink.jpg" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -380,8 +383,6 @@
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\loading.gif" />
     <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\mlceni.jpg" />
-    <Content Include="Content\Images\mlceni2.jpg" />
     <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\Images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.Footer.css">
