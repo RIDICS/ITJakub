@@ -190,7 +190,7 @@ namespace ITJakub.ITJakubService.Core
         {
             m_authorizationManager.CheckUserCanManagePermissions();
             var books = m_categoryRepository.FindChildBookVersionsInCategory(categoryId);
-            m_authorizationManager.FilterBooksByGroup(groupId, ref books);
+            m_authorizationManager.FilterBookVersionsByGroup(groupId, ref books);
             var categories = m_categoryRepository.FindChildCategoriesInCategory(categoryId);
 
             return new CategoryContentContract

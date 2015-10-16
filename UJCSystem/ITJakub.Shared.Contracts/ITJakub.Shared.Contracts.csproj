@@ -60,6 +60,7 @@
     <Compile Include="Searching\Criteria\AuthorizationCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\TermsSettingsContract.cs" />
     <Compile Include="Searching\Results\AudioBookSearchResultContract.cs" />
+    <Compile Include="Searching\Results\BibleVerseResultContext.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContract.cs" />
     <Compile Include="Searching\Results\CorpusSearchResultContractList.cs" />
     <Compile Include="Searching\Results\HeadwordContract.cs" />

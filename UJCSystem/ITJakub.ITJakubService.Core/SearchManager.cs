@@ -48,7 +48,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var escapedTerm = EscapeQuery(term);
             var bookVersionResults = m_bookRepository.SearchByTitle(escapedTerm);
-            m_authorizationManager.FilterBooksByCurrentUser(ref bookVersionResults);
+            m_authorizationManager.FilterBookVersionsByCurrentUser(ref bookVersionResults);
             return Mapper.Map<List<SearchResultContract>>(bookVersionResults);
         }
 
@@ -56,7 +56,7 @@ namespace ITJakub.ITJakubService.Core
         {
             var type = Mapper.Map<BookTypeEnum>(bookType);
             var books = m_bookRepository.FindBookVersionsByTypeWithCategories(type);
-            m_authorizationManager.FilterBooksByCurrentUser(ref books);
+            m_authorizationManager.FilterBookVersionsByCurrentUser(ref books);
             var categories = m_categoryRepository.FindCategoriesByBookType(type).OrderBy(x => x.Description);
 
             return new BookTypeSearchResultContract

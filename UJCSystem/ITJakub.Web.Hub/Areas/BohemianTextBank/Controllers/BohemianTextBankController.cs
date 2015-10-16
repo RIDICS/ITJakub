@@ -87,9 +87,9 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
 
-                return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
+                return Json(booksWithCategories, JsonRequestBehavior.AllowGet);
             }
         }
 

@@ -17,7 +17,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
         private ConcurrentQueue<FileModel> m_files = new ConcurrentQueue<FileModel>();
         //private List<FileModel> m_files;        
-        private int MaxDegreeOfParallelism = 10;
+        private int MaxDegreeOfParallelism = 5;
 
         public void AddFilesForUpload(Action<List<FileViewModel>, Exception> callback, string folderPath)
         {

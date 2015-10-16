@@ -34,6 +34,9 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         [DataMember]
         public VerseResultContext VerseResultContext { get; set; }
 
+        [DataMember]
+        public BibleVerseResultContext BibleVerseResultContext { get; set; }
+
 
         public virtual string ToXml()
         {
