@@ -87,21 +87,27 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult EditToken(long tokenId, string description)
+        {
+            m_serviceClient.EditToken(tokenId, description);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description)
         {
-            //todo
+            m_serviceClient.EditTokenCharacteristic(tokenCharacteristicId, morphologicalCharacteristic, description);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
         {
-            //todo
+            m_serviceClient.EditCanonicalForm(canonicalFormId, text, type, description);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description)
         {
-            //todo
+            m_serviceClient.EditHyperCanonicalForm(hyperCanonicalFormId, text, type, description);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
     }

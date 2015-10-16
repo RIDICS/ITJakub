@@ -68,5 +68,26 @@ namespace ITJakub.Lemmatization.Service
         {
             return m_lemmatizationManager.GetTypeaheadHyperCannonicalForm(type, query);
         }
+
+        public void EditToken(long tokenId, string description)
+        {
+            m_lemmatizationManager.EditToken(tokenId, description);
+        }
+
+        public void EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description)
+        {
+            m_lemmatizationManager.EditTokenCharacteristic(tokenCharacteristicId, morphologicalCharacteristic, description);
+        }
+
+        public void EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
+        {
+            m_lemmatizationManager.EditCanonicalForm(canonicalFormId, text, type, description);
+        }
+
+        public void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type,
+            string description)
+        {
+            m_lemmatizationManager.EditHyperCanonicalForm(hyperCanonicalFormId, text, type, description);
+        }
     }
 }

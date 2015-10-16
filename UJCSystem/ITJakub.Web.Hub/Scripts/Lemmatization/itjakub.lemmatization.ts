@@ -52,6 +52,19 @@ class Lemmatization {
         $("#save-token").click(() => {
             this.saveNewToken();
         });
+
+        $("#showEditToken").click(() => {
+            $("#edit-token-text").val(this.currentTokenItem.Text);
+            $("#edit-token-description").val(this.currentTokenItem.Description);
+            $("#editTokenDialog").modal({
+                show: true,
+                backdrop: "static"
+            });
+        });
+
+        $("#save-edited-token").click(() => {
+            this.saveEditedToken();
+        });
     }
 
     private loadToken(tokenItem: IToken) {
@@ -132,6 +145,27 @@ class Lemmatization {
                     Description: description
                 };
                 this.loadToken(tokenItem);
+            }
+        });
+    }
+
+    private saveEditedToken() {
+        var description = $("#edit-token-description").val();
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/EditToken",
+            data: JSON.stringify({
+                tokenId: this.currentTokenItem.Id,
+                description: description
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                $("#editTokenDialog").modal("hide");
+                $("#specificTokenDescription").text(description);
+                this.currentTokenItem.Description = description;
             }
         });
     }
@@ -682,7 +716,7 @@ class LemmatizationCanonicalForm {
             traditional: true,
             url: getBaseUrl() + "Lemmatization/EditHyperCanonicalForm",
             data: JSON.stringify({
-                hyperCanonicalFormId: this.canonicalForm.Id,
+                hyperCanonicalFormId: this.canonicalForm.HyperCanonicalForm.Id,
                 text: text,
                 type: formType,
                 description: description

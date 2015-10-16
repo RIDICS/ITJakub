@@ -35,5 +35,17 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 
         [OperationContract]
         IList<HyperCanonicalFormContract> GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query);
+
+        [OperationContract]
+        void EditToken(long tokenId, string description);
+
+        [OperationContract]
+        void EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description);
+
+        [OperationContract]
+        void EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description);
+
+        [OperationContract]
+        void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description);
     }
 }

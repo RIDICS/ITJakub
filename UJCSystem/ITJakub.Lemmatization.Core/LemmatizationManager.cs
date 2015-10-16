@@ -127,5 +127,44 @@ namespace ITJakub.Lemmatization.Core
             var id = m_repository.Create(hyperCanonicalForm);
             return (long) id;
         }
+
+        public void EditToken(long tokenId, string description)
+        {
+            var token = m_repository.FindById<Token>(tokenId);
+            token.Description = description;
+
+            m_repository.Update(token);
+        }
+
+        public void EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description)
+        {
+            var tokenCharacteristic = m_repository.FindById<TokenCharacteristic>(tokenCharacteristicId);
+            tokenCharacteristic.MorphologicalCharakteristic = morphologicalCharacteristic;
+            tokenCharacteristic.Description = description;
+
+            m_repository.Update(tokenCharacteristic);
+        }
+
+        public void EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
+        {
+            var canonicalFormType = Mapper.Map<CanonicalFormType>(type);
+            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
+            canonicalForm.Text = text;
+            canonicalForm.Type = canonicalFormType;
+            canonicalForm.Description = description;
+
+            m_repository.Update(canonicalForm);
+        }
+
+        public void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description)
+        {
+            var hyperCanonicalFormType = Mapper.Map<HyperCanonicalFormType>(type);
+            var hyperCanonicalForm = m_repository.FindById<HyperCanonicalForm>(hyperCanonicalFormId);
+            hyperCanonicalForm.Text = text;
+            hyperCanonicalForm.Type = hyperCanonicalFormType;
+            hyperCanonicalForm.Description = description;
+
+            m_repository.Update(hyperCanonicalForm);
+        }
     }
 }
