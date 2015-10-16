@@ -667,6 +667,7 @@
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
