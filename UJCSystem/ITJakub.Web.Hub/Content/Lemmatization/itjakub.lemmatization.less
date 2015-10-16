@@ -1,4 +1,9 @@
 ﻿@import "../ITJakub.DefaultTheme.less";
+@label-width: 125px;
+
+hr {
+    border-color: #BBBBBB;
+}
 
 .lemmatization-button {
     border-radius: 0;
@@ -37,10 +42,59 @@
     font-size: 110%;
 }
 
-td {
-    border: 1px solid black;
+.lemmatization-table {
+    margin-top: 15px;
 }
 
-.canonical-form-row td {
+.lemmatization-table td, .lemmatization-table th {
+    border: 1px solid #333333;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.lemmatization-table tr.canonical-form-row td {
     border-bottom-color: lightgray;
+}
+
+.lemmatization-table .column-commands {
+    padding: 0;
+    text-align: right;
+}
+
+.lemmatization-table .column-canonical-form {
+    min-width: 200px;
+}
+
+.lemmatization-table .column-description {
+    min-width: 300px;
+}
+
+.lemmatization-label {
+    font-weight: bold;
+    display: inline-block;
+    width: @label-width;
+}
+
+.lemmatization-label-description {
+    float:left;
+}
+
+.lemmatization-token {
+    font-size: 150%;
+    color: black;
+    margin-left: -5px;
+}
+
+.lemmatization-description {
+    display: block;
+    margin-left: @label-width;
+}
+
+.lemmatization-edit {
+    margin-left: @label-width;
+    margin-top: 3px;
+}
+
+.lemmatization-token-info {
+    margin-top: 15px;
 }

@@ -19,22 +19,21 @@
         <input type="text" class="form-control lemmatization-search-input" id="mainSearchInput"/>
     </div>
 </div>
-<div class="content hidden">
+<div class="content hidden lemmatization-token-info">
     <div>
-        <span>Token: </span>
-        <span id="specificToken"></span>
+        <span class="lemmatization-label">Token: </span>
+        <span class="lemmatization-token" id="specificToken"></span>
     </div>
     <div>
-        <span>Popis: </span>
-        <span id="specificTokenDescription"></span>
+        <span class="lemmatization-label lemmatization-label-description">Popis: </span>
+        <span class="lemmatization-description" id="specificTokenDescription"></span>
     </div>
     <div>
-        <button id="showEditToken">Upravit</button>
+        <button class="lemmatization-edit" id="showEditToken">Upravit</button>
     </div>
 </div>
 <div class="content hidden">
-    <span>Charakteristiky:</span>
-    <hr/>
+    <h3>Charakteristiky</h3>
     <div id="mainContainer"></div>
     <hr/>
     <div>

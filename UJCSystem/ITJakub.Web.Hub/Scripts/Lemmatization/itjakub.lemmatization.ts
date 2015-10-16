@@ -314,10 +314,10 @@ class LemmatizationCharacteristicEditor {
 class LemmatizationCharacteristicTable {
     private characteristicEditor: LemmatizationCharacteristicEditor;
     private container: HTMLDivElement;
-    private table: HTMLTableElement;
+    private tbody: HTMLTableSectionElement;
     private item: ITokenCharacteristic;
     private descriptionDiv: HTMLDivElement;
-    private morphologicalDiv: HTMLDivElement;
+    private morphologicalSpan: HTMLSpanElement;
     
     constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement) {
         this.characteristicEditor = characteristicEditor;
@@ -329,54 +329,80 @@ class LemmatizationCharacteristicTable {
         $(this.container).empty();
 
         var morphologicalDiv = document.createElement("div");
+        var morphologicalLabelDiv = document.createElement("div");
+        var morphologicalContentSpan = document.createElement("span");
         var descriptionDiv = document.createElement("div");
+        var descriptionLabelDiv = document.createElement("div");
+        var descriptionContentDiv = document.createElement("div");
         var tableDiv = document.createElement("div");
         var editCharacteristicDiv = document.createElement("div");
         var editCharacteristicButton = document.createElement("button");
 
         $(editCharacteristicButton)
+            .addClass("lemmatization-edit")
             .text("Upravit")
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });
-
         $(editCharacteristicDiv)
-            .addClass("lemmatization-edit-characteristic")
             .append(editCharacteristicButton);
 
-        $(morphologicalDiv)
-            .addClass("lemmatization-morphologic")
+        $(morphologicalLabelDiv)
+            .addClass("lemmatization-label")
+            .text("Morfologická charakteristika:");
+        $(morphologicalContentSpan)
+            .addClass("lemmatization-token")
             .text(this.item.MorphologicalCharacteristic);
+        $(morphologicalDiv)
+            .append(morphologicalLabelDiv)
+            .append(morphologicalContentSpan);
 
-        $(descriptionDiv)
-            .addClass("lemmatization-characteristic-description")
+        $(descriptionLabelDiv)
+            .addClass("lemmatization-label")
+            .addClass("lemmatization-label-description")
+            .text("Popis:");
+        $(descriptionContentDiv)
+            .addClass("lemmatization-description")
             .text(this.item.Description);
+        $(descriptionDiv)
+            .append(descriptionLabelDiv)
+            .append(descriptionContentDiv);
 
         $(tableDiv)
             .addClass("lemmatization-characteristic");
 
         var table = document.createElement("table");
+        var thead = document.createElement("thead");
         var headerTr = document.createElement("tr");
-        var td1 = document.createElement("td");
-        var td2 = document.createElement("td");
-        var td3 = document.createElement("td");
-        var td4 = document.createElement("td");
-        this.table = table;
+        var th1 = document.createElement("th");
+        var th2 = document.createElement("th");
+        var th3 = document.createElement("th");
+        var th4 = document.createElement("th");
+        var tbody = document.createElement("tbody");
+        this.tbody = tbody;
 
-        $(td1).text("");
-        $(td2).text("Kanonická forma");
-        $(td3).text("Typ");
-        $(td4).text("Popis");
+        $(th1).addClass("column-commands")
+            .text("");
+        $(th2).addClass("column-canonical-form")
+            .text("Kanonická forma");
+        $(th3).addClass("column-type")
+            .text("Typ");
+        $(th4).addClass("column-description")
+            .text("Popis");
         $(headerTr)
-            .append(td1)
-            .append(td2)
-            .append(td3)
-            .append(td4);
-        $(table).append(headerTr);
+            .append(th1)
+            .append(th2)
+            .append(th3)
+            .append(th4);
+        $(thead).append(headerTr);
+        $(table)
+            .addClass("lemmatization-table")
+            .append(thead)
+            .append(tbody);
 
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
             var canonicalFormItem = this.item.CanonicalFormList[i];
-            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, table, canonicalFormItem);
+            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, tbody, canonicalFormItem);
             canonicalForm.make(this.addNewEmptyRow.bind(this));
         }
         this.addNewEmptyRow();
@@ -384,23 +410,23 @@ class LemmatizationCharacteristicTable {
         $(tableDiv).append(table);
 
         $(this.container)
-            .append(descriptionDiv)
             .append(morphologicalDiv)
+            .append(descriptionDiv)
             .append(editCharacteristicDiv)
             .append(tableDiv);
 
-        this.descriptionDiv = descriptionDiv;
-        this.morphologicalDiv = morphologicalDiv;
+        this.descriptionDiv = descriptionContentDiv;
+        this.morphologicalSpan = morphologicalContentSpan;
     }
 
     private addNewEmptyRow() {
-        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.table);
+        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.tbody);
         canonicalForm.make(this.addNewEmptyRow.bind(this));
     }
 
     private updateUiAfterSave() {
         $(this.descriptionDiv).text(this.item.Description);
-        $(this.morphologicalDiv).text(this.item.MorphologicalCharacteristic);
+        $(this.morphologicalSpan).text(this.item.MorphologicalCharacteristic);
     }
 }
 
@@ -408,7 +434,7 @@ class LemmatizationCanonicalForm {
     private static searchBox: LemmatizationSearchBox;
     private static hyperSearchBox: LemmatizationSearchBox;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
-    private tableContainer: HTMLTableElement;
+    private tableBody: HTMLTableSectionElement;
     private canonicalForm: ICanonicalForm;
     private tokenCharacteristicId: number;
     private containerCanonicalForm: HTMLDivElement;
@@ -417,8 +443,8 @@ class LemmatizationCanonicalForm {
     private editButton: HTMLButtonElement;
     private hyperLemmatization: LemmatizationHyperCanonicalForm;
 
-    constructor(tokenCharacteristicId: number, tableContainer: HTMLTableElement, canonicalForm: ICanonicalForm = null) {
-        this.tableContainer = tableContainer;
+    constructor(tokenCharacteristicId: number, tableBody: HTMLTableSectionElement, canonicalForm: ICanonicalForm = null) {
+        this.tableBody = tableBody;
         this.canonicalForm = canonicalForm;
         this.tokenCharacteristicId = tokenCharacteristicId;
     }
@@ -434,7 +460,11 @@ class LemmatizationCanonicalForm {
         var containerType = document.createElement("div");
         var containerDescription = document.createElement("div");
         var editButton = document.createElement("button");
-        $(editButton).text(this.canonicalForm ? "E" : "+");
+        var editButtonContent = document.createElement("span");
+        $(editButtonContent)
+            .addClass("glyphicon")
+            .addClass(this.canonicalForm ? "glyphicon-pencil" : "glyphicon-plus");
+        $(editButton).append(editButtonContent);
         $(editButton).click(() => {
             if (this.canonicalForm)
                 this.showEditDialog();
@@ -449,7 +479,8 @@ class LemmatizationCanonicalForm {
         }
 
 
-        $(td1).append(editButton);
+        $(td1).addClass("column-commands")
+            .append(editButton);
         $(td2).append(containerCanonicalForm);
         $(td3).append(containerType);
         $(td4).append(containerDescription);
@@ -471,10 +502,20 @@ class LemmatizationCanonicalForm {
 
         var editHyperButton = document.createElement("button");
         var setHyperButton = document.createElement("button");
-        $(editHyperButton).text("E");
-        $(setHyperButton).text("Set");
-        $(editHyperButton).addClass("hidden");
-        $(setHyperButton).addClass("hidden");
+        var editHyperLabel = document.createElement("span");
+        var setHyperLabel = document.createElement("span");
+        $(editHyperLabel)
+            .addClass("glyphicon")
+            .addClass("glyphicon-pencil");
+        $(setHyperLabel)
+            .addClass("glyphicon")
+            .addClass("glyphicon-edit");
+        $(editHyperButton)
+            .addClass("hidden")
+            .append(editHyperLabel);
+        $(setHyperButton)
+            .addClass("hidden")
+            .append(setHyperLabel);
 
         if (this.canonicalForm) {
             if (this.canonicalForm.HyperCanonicalForm) {
@@ -498,7 +539,9 @@ class LemmatizationCanonicalForm {
                 this.showCreateHyperDialog();
         });
 
-        $(hyperTd1).append(setHyperButton)
+        $(hyperTd1)
+            .addClass("column-commands")
+            .append(setHyperButton)
             .append(editHyperButton);
         $(hyperTd2).append(containerHyperForm);
         $(hyperTd3).append(containerHyperType);
@@ -509,8 +552,8 @@ class LemmatizationCanonicalForm {
             .append(hyperTd3)
             .append(hyperTd4);
 
-        $(this.tableContainer).append(tr);
-        $(this.tableContainer).append(hyperTr);
+        $(this.tableBody).append(tr);
+        $(this.tableBody).append(hyperTr);
 
         this.containerCanonicalForm = containerCanonicalForm;
         this.containerType = containerType;
@@ -764,7 +807,9 @@ class LemmatizationCanonicalForm {
         $(this.containerCanonicalForm).text(this.canonicalForm.Text);
         $(this.containerDescription).text(this.canonicalForm.Description);
         $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
-        $(this.editButton).text("E");
+        $(this.editButton).children()
+            .removeClass("glyphicon-plus")
+            .addClass("glyphicon-pencil");
         $(this.hyperLemmatization.setButton).removeClass("hidden");
 
         this.newCanonicalFormCreatedCallback(this.canonicalForm);
