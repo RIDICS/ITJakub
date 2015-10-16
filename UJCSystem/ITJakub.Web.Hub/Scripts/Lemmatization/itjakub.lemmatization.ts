@@ -81,7 +81,7 @@ class Lemmatization {
         for (var i = 0; i < list.length; i++) {
             var containerDiv = document.createElement("div");
             var characteristicItem = list[i];
-            var characteristicTable = new LemmatizationCharacteristicTable(characteristicItem, containerDiv);
+            var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, characteristicItem, containerDiv);
             characteristicTable.make();
 
             $(this.mainContainer).append(containerDiv);
@@ -90,7 +90,7 @@ class Lemmatization {
 
     private addNewCharacteristic(item: ITokenCharacteristic) {
         var containerDiv = document.createElement("div");
-        var characteristicTable = new LemmatizationCharacteristicTable(item, containerDiv);
+        var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, item, containerDiv);
         characteristicTable.make();
 
         $(this.mainContainer).append(containerDiv);
@@ -112,13 +112,13 @@ class Lemmatization {
         var description = $("#new-token-description").val();
 
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Lemmatization/CreateToken",
-            data: {
+            data: JSON.stringify({
                 token: token,
                 description: description
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (newTokenId) => {
@@ -185,9 +185,16 @@ class LemmatizationCharacteristicEditor {
         var characteristic = tokenCharacteristic.MorphologicalCharacteristic;
         $("#new-token-text-description").val(tokenCharacteristic.Description);
         $("#newTokenCharacteristic select").each((index: number, element: HTMLSelectElement) => {
+            element.selectedIndex = 0;
             var charValue = characteristic.charAt(index);
-            //TODO set selected value
-            //element.selectedIndex = 0;
+            for (var i = 0; i < element.children.length; i++) {
+                var option = element.children[i];
+                var value = $(option).attr("value");
+                if (value === charValue) {
+                    element.selectedIndex = i;
+                    break;
+                }
+            }
         });
         this.updateTag();
     }
@@ -220,14 +227,14 @@ class LemmatizationCharacteristicEditor {
     private saveNew() {
         var description = $("#new-token-text-description").val();
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
-            data: {
+            data: JSON.stringify({
                 tokenId: this.tokenId,
                 morphologicalCharacteristic: this.currentValue,
                 description: description
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (newTokenCharacteristicId) => {
@@ -246,16 +253,40 @@ class LemmatizationCharacteristicEditor {
     }
 
     private saveEdit() {
-        throw "not implemented";
+        var description = $("#new-token-text-description").val();
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/EditTokenCharacteristic",
+            data: JSON.stringify({
+                tokenCharacteristicId: this.tokenCharacteristic.Id,
+                morphologicalCharacteristic: this.currentValue,
+                description: description
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                $("#newTokenCharacteristic").modal("hide");
+
+                this.tokenCharacteristic.Description = description;
+                this.tokenCharacteristic.MorphologicalCharacteristic = this.currentValue;
+                
+                this.itemSavedCallback(null);
+            }
+        });
     }
 }
 
 class LemmatizationCharacteristicTable {
+    private characteristicEditor: LemmatizationCharacteristicEditor;
     private container: HTMLDivElement;
     private table: HTMLTableElement;
     private item: ITokenCharacteristic;
+    private descriptionDiv: HTMLDivElement;
+    private morphologicalDiv: HTMLDivElement;
     
-    constructor(item: ITokenCharacteristic, container: HTMLDivElement) {
+    constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement) {
+        this.characteristicEditor = characteristicEditor;
         this.container = container;
         this.item = item;
     }
@@ -272,7 +303,7 @@ class LemmatizationCharacteristicTable {
         $(editCharacteristicButton)
             .text("Upravit")
             .click(() => {
-                //TODO show edit dialog
+                this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });
 
         $(editCharacteristicDiv)
@@ -323,11 +354,19 @@ class LemmatizationCharacteristicTable {
             .append(morphologicalDiv)
             .append(editCharacteristicDiv)
             .append(tableDiv);
+
+        this.descriptionDiv = descriptionDiv;
+        this.morphologicalDiv = morphologicalDiv;
     }
 
     private addNewEmptyRow() {
         var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.table);
         canonicalForm.make(this.addNewEmptyRow.bind(this));
+    }
+
+    private updateUiAfterSave() {
+        $(this.descriptionDiv).text(this.item.Description);
+        $(this.morphologicalDiv).text(this.item.MorphologicalCharacteristic);
     }
 }
 
@@ -342,7 +381,7 @@ class LemmatizationCanonicalForm {
     private containerType: HTMLDivElement;
     private containerDescription: HTMLDivElement;
     private editButton: HTMLButtonElement;
-    private hyperCanonicalForm: LemmatizationHyperCanonicalForm;
+    private hyperLemmatization: LemmatizationHyperCanonicalForm;
 
     constructor(tokenCharacteristicId: number, tableContainer: HTMLTableElement, canonicalForm: ICanonicalForm = null) {
         this.tableContainer = tableContainer;
@@ -444,12 +483,12 @@ class LemmatizationCanonicalForm {
         this.containerDescription = containerDescription;
         this.editButton = editButton;
 
-        this.hyperCanonicalForm = new LemmatizationHyperCanonicalForm();
-        this.hyperCanonicalForm.containerName = containerHyperForm;
-        this.hyperCanonicalForm.containerType = containerHyperType;
-        this.hyperCanonicalForm.containerDescription = containerHyperDescription;
-        this.hyperCanonicalForm.editButton = editHyperButton;
-        this.hyperCanonicalForm.setButton = setHyperButton;
+        this.hyperLemmatization = new LemmatizationHyperCanonicalForm();
+        this.hyperLemmatization.containerName = containerHyperForm;
+        this.hyperLemmatization.containerType = containerHyperType;
+        this.hyperLemmatization.containerDescription = containerHyperDescription;
+        this.hyperLemmatization.editButton = editHyperButton;
+        this.hyperLemmatization.setButton = setHyperButton;
     }
 
     private showCreateDialog() {
@@ -475,7 +514,7 @@ class LemmatizationCanonicalForm {
         });
         $("#save-edited-form").off("click");
         $("#save-edited-form").click(() => {
-            alert("todo save edited");
+            this.editItem();
         });
 
         $("#edit-form-text").val(this.canonicalForm.Text);
@@ -510,7 +549,7 @@ class LemmatizationCanonicalForm {
         });
         $("#save-edited-hyper").off("click");
         $("#save-edited-hyper").click(() => {
-
+            this.editHyperItem();
         });
 
         $("#edit-hyper-text").val(this.canonicalForm.HyperCanonicalForm.Text);
@@ -525,19 +564,19 @@ class LemmatizationCanonicalForm {
 
         if ($("#tab-create-new").hasClass("active")) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Lemmatization/CreateCanonicalForm",
-                data: {
+                data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     text: name,
                     type: formType,
                     description: description
-                },
+                }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (newCanonicalFormId) => {
-                    this.updateUiAfterItemCreation(newCanonicalFormId, name, formType, description);
+                    this.updateAfterItemCreation(newCanonicalFormId, name, formType, description);
                 }
             });
         } else {
@@ -548,17 +587,17 @@ class LemmatizationCanonicalForm {
                 return; //TODO show error
 
             $.ajax({
-                type: "GET",
+                type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Lemmatization/AddCanonicalForm",
-                data: {
+                data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     canonicalFormId: currentItem.Id
-                },
+                }),
                 dataType: "json",
                 contentType: "application/json",
                 success: () => {
-                    this.updateUiAfterItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
+                    this.updateAfterItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
                 }
             });
         }
@@ -571,19 +610,19 @@ class LemmatizationCanonicalForm {
 
         if ($("#tab2-create-new").hasClass("active")) {
             $.ajax({
-                type: "GET",
+                type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Lemmatization/CreateHyperCanonicalForm",
-                data: {
+                data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     text: name,
                     type: formType,
                     description: description
-                },
+                }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (newHyperCanonicalFormId) => {
-                    this.updateUiAfterHyperItemCreation(newHyperCanonicalFormId, name, formType, description);
+                    this.updateAfterHyperItemCreation(newHyperCanonicalFormId, name, formType, description);
                 }
             });
         } else {
@@ -594,23 +633,92 @@ class LemmatizationCanonicalForm {
                 return; //TODO show error
 
             $.ajax({
-                type: "GET",
+                type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Lemmatization/SetHyperCanonicalForm",
-                data: {
+                data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     hyperCanonicalFormId: currentItem.Id
-                },
+                }),
                 dataType: "json",
                 contentType: "application/json",
                 success: () => {
-                    this.updateUiAfterHyperItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
+                    this.updateAfterHyperItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
                 }
             });
         }
     }
 
-    private updateUiAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
+    private editItem() {
+        var text = $("#edit-form-text").val();
+        var formType = Number($("#edit-form-type").val());
+        var description = $("#edit-form-description").val();
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/EditCanonicalForm",
+            data: JSON.stringify({
+                canonicalFormId: this.canonicalForm.Id,
+                text: text,
+                type: formType,
+                description: description
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                this.updateAfterItemEdit(text, formType, description);
+            }
+        });
+    }
+
+    private editHyperItem() {
+        var text = $("#edit-hyper-text").val();
+        var formType = Number($("#edit-hyper-type").val());
+        var description = $("#edit-hyper-description").val();
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/EditHyperCanonicalForm",
+            data: JSON.stringify({
+                hyperCanonicalFormId: this.canonicalForm.Id,
+                text: text,
+                type: formType,
+                description: description
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                this.updateAfterHyperItemEdit(text, formType, description);
+            }
+        });
+    }
+
+    private updateAfterItemEdit(text: string, formType: CanonicalFormTypeEnum, description: string) {
+        this.canonicalForm.Text = text;
+        this.canonicalForm.Type = formType;
+        this.canonicalForm.Description = description;
+
+        $(this.containerCanonicalForm).text(this.canonicalForm.Text);
+        $(this.containerDescription).text(this.canonicalForm.Description);
+        $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
+        $("#editCanonicalFormDialog").modal("hide");
+    }
+
+    private updateAfterHyperItemEdit(text: string, formType: HyperCanonicalFormTypeEnum, description: string) {
+        var hyperCanonicalForm = this.canonicalForm.HyperCanonicalForm;
+        hyperCanonicalForm.Text = text;
+        hyperCanonicalForm.Type = formType;
+        hyperCanonicalForm.Description = description;
+
+        $(this.hyperLemmatization.containerName).text(hyperCanonicalForm.Text);
+        $(this.hyperLemmatization.containerDescription).text(hyperCanonicalForm.Description);
+        $(this.hyperLemmatization.containerType).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
+        $("#editHyperCanonicalFormDialog").modal("hide");
+    }
+
+    private updateAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
         this.canonicalForm = {
             Id: newId,
             Text: name,
@@ -623,13 +731,13 @@ class LemmatizationCanonicalForm {
         $(this.containerDescription).text(this.canonicalForm.Description);
         $(this.containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
         $(this.editButton).text("E");
-        $(this.hyperCanonicalForm.setButton).removeClass("hidden");
+        $(this.hyperLemmatization.setButton).removeClass("hidden");
 
         this.newCanonicalFormCreatedCallback(this.canonicalForm);
         $("#newCanonicalFormDialog").modal("hide");
     }
 
-    private updateUiAfterHyperItemCreation(newId: number, name: string, formType: HyperCanonicalFormTypeEnum, description: string) {
+    private updateAfterHyperItemCreation(newId: number, name: string, formType: HyperCanonicalFormTypeEnum, description: string) {
         this.canonicalForm.HyperCanonicalForm = {
             Id: newId,
             Text: name,
@@ -638,32 +746,12 @@ class LemmatizationCanonicalForm {
         }
 
         var hyperCanonicalForm = this.canonicalForm.HyperCanonicalForm;
-        $(this.hyperCanonicalForm.containerName).text(hyperCanonicalForm.Text);
-        $(this.hyperCanonicalForm.containerDescription).text(hyperCanonicalForm.Description);
-        $(this.hyperCanonicalForm.containerType).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
-        $(this.hyperCanonicalForm.editButton).removeClass("hidden");
+        $(this.hyperLemmatization.containerName).text(hyperCanonicalForm.Text);
+        $(this.hyperLemmatization.containerDescription).text(hyperCanonicalForm.Description);
+        $(this.hyperLemmatization.containerType).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
+        $(this.hyperLemmatization.editButton).removeClass("hidden");
 
         $("#newHyperCanonicalFormDialog").modal("hide");
-    }
-
-    private updateItem() {
-        //$.ajax({
-        //    type: "GET",
-        //    traditional: true,
-        //    url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
-        //    data: {
-        //        tokenId: this.tokenId,
-        //        morphologicalCharacteristic: this.currentValue,
-        //        description: description
-        //    },
-        //    dataType: "json",
-        //    contentType: "application/json",
-        //    success: (newTokenId) => {
-        //        $("#newTokenCharacteristic").modal("hide");
-
-        //        //todo show new empty characteristic
-        //    }
-        //});
     }
 
     static init() {
