@@ -337,9 +337,11 @@ class LemmatizationCharacteristicTable {
         var tableDiv = document.createElement("div");
         var editCharacteristicDiv = document.createElement("div");
         var editCharacteristicButton = document.createElement("button");
+        var delimeter = document.createElement("hr");
 
         $(editCharacteristicButton)
             .addClass("lemmatization-edit")
+            .addClass("lemmatization-big-left-space")
             .text("Upravit")
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
@@ -349,9 +351,10 @@ class LemmatizationCharacteristicTable {
 
         $(morphologicalLabelDiv)
             .addClass("lemmatization-label")
+            .addClass("lemmatization-big-label-width")
             .text("Morfologická charakteristika:");
         $(morphologicalContentSpan)
-            .addClass("lemmatization-token")
+            .addClass("lemmatization-label-content-big")
             .text(this.item.MorphologicalCharacteristic);
         $(morphologicalDiv)
             .append(morphologicalLabelDiv)
@@ -360,9 +363,11 @@ class LemmatizationCharacteristicTable {
         $(descriptionLabelDiv)
             .addClass("lemmatization-label")
             .addClass("lemmatization-label-description")
+            .addClass("lemmatization-big-label-width")
             .text("Popis:");
         $(descriptionContentDiv)
             .addClass("lemmatization-description")
+            .addClass("lemmatization-big-left-space")
             .text(this.item.Description);
         $(descriptionDiv)
             .append(descriptionLabelDiv)
@@ -413,7 +418,8 @@ class LemmatizationCharacteristicTable {
             .append(morphologicalDiv)
             .append(descriptionDiv)
             .append(editCharacteristicDiv)
-            .append(tableDiv);
+            .append(tableDiv)
+            .append(delimeter);
 
         this.descriptionDiv = descriptionContentDiv;
         this.morphologicalSpan = morphologicalContentSpan;

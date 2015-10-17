@@ -1,5 +1,6 @@
 ﻿@import "../ITJakub.DefaultTheme.less";
-@label-width: 125px;
+@label-width: 80px;
+@label-big-width: 125px;
 
 hr {
     border-color: #BBBBBB;
@@ -9,6 +10,10 @@ hr {
     border-radius: 0;
     background-color: @item-background-color;
     color: white;
+}
+
+.lemmatization-search-bar {
+    width: 70%;
 }
 
 .lemmatization-search-input {
@@ -21,7 +26,11 @@ hr {
 }
 
 .lemmatization-search {
-    width: 60%;
+    margin-right: 105px;
+}
+
+#loadButton, #addNewTokenButton {
+    width: 100px;
 }
 
 .form-characteristic .form-group {
@@ -69,6 +78,10 @@ hr {
     min-width: 300px;
 }
 
+.lemmatization-table .column-type {
+    min-width: 100px;
+}
+
 .lemmatization-label {
     font-weight: bold;
     display: inline-block;
@@ -85,6 +98,11 @@ hr {
     margin-left: -5px;
 }
 
+.lemmatization-label-content-big {
+    font-size: 150%;
+    color: black;
+}
+
 .lemmatization-description {
     display: block;
     margin-left: @label-width;
@@ -97,4 +115,12 @@ hr {
 
 .lemmatization-token-info {
     margin-top: 15px;
+}
+
+.lemmatization-big-label-width {
+    width: @label-big-width;
+}
+
+.lemmatization-big-left-space {
+    margin-left: @label-big-width;
 }
