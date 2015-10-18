@@ -13,7 +13,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         long CreateToken(string token, string description);
 
         [OperationContract]
-        IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId);
+        IList<TokenCharacteristicDetailContract> GetTokenCharacteristic(long tokenId);
 
         [OperationContract]
         long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description);
@@ -47,5 +47,17 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 
         [OperationContract]
         void EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description);
+
+        [OperationContract]
+        int GetTokenCount();
+
+        [OperationContract]
+        IList<TokenContract> GetTokenList(int start, int count);
+
+        [OperationContract]
+        IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId);
+
+        [OperationContract]
+        IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId);
     }
 }

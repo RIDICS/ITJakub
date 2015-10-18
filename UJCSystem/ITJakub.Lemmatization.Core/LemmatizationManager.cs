@@ -42,10 +42,10 @@ namespace ITJakub.Lemmatization.Core
             return (long) id;
         }
 
-        public IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId)
+        public IList<TokenCharacteristicDetailContract> GetTokenCharacteristic(long tokenId)
         {
             var result = m_repository.GetTokenCharacteristicDetail(tokenId);
-            return Mapper.Map<IList<TokenCharacteristicContract>>(result);
+            return Mapper.Map<IList<TokenCharacteristicDetailContract>>(result);
         }
 
         public long AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
@@ -165,6 +165,31 @@ namespace ITJakub.Lemmatization.Core
             hyperCanonicalForm.Description = description;
 
             m_repository.Update(hyperCanonicalForm);
+        }
+
+        public int GetTokenCount()
+        {
+            return m_repository.GetTokenCount();
+        }
+
+        public IList<TokenContract> GetTokenList(int start, int count)
+        {
+            var result = m_repository.GetTokenList(start, count);
+            var resultContract = Mapper.Map<IList<TokenContract>>(result);
+            return resultContract;
+        }
+
+        public IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
+        {
+            var result = m_repository.GetCanonicalFormIdList(hyperCanonicalFormId);
+            return result;
+        }
+
+        public IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId)
+        {
+            var result = m_repository.GetCanonicalFormDetail(canonicalFormId);
+            var contract = Mapper.Map<IList<InverseCanonicalFormContract>>(result);
+            return contract;
         }
     }
 }

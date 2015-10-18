@@ -3,25 +3,8 @@ using System.Runtime.Serialization;
 namespace ITJakub.Lemmatization.Shared.Contracts
 {
     [DataContract]
-    public class CanonicalFormContract
-    {
-        [DataMember]
-        public long Id { get; set; }
-
-        [DataMember]
-        public string Text { get; set; }
-
-        [DataMember]
-        public string Description { get; set; }
-
-        [DataMember]
-        public CanonicalFormTypeContract Type { get; set; }
-
-        [DataMember]
-        public HyperCanonicalFormContract HyperCanonicalForm { get; set; }
-    }
-
-    [DataContract]
+    [KnownType(typeof(CanonicalFormContract))]
+    [KnownType(typeof(InverseCanonicalFormContract))]
     public class CanonicalFormTypeaheadContract
     {
         [DataMember]
@@ -37,6 +20,20 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         public CanonicalFormTypeContract Type { get; set; }
     }
 
+    [DataContract]
+    public class CanonicalFormContract : CanonicalFormTypeaheadContract
+    {
+        [DataMember]
+        public HyperCanonicalFormContract HyperCanonicalForm { get; set; }
+    }
+
+    [DataContract]
+    public class InverseCanonicalFormContract : CanonicalFormTypeaheadContract
+    {
+        [DataMember]
+        public TokenCharacteristicContract CanonicalFormFor { get; set; }
+    }
+    
     [DataContract]
     public enum CanonicalFormTypeContract : short
     {

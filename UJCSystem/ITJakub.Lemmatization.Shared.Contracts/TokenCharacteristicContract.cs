@@ -4,6 +4,8 @@ using System.Runtime.Serialization;
 namespace ITJakub.Lemmatization.Shared.Contracts
 {
     [DataContract]
+    [KnownType(typeof(TokenCharacteristicDetailContract))]
+    [KnownType(typeof(InverseTokenCharacteristic))]
     public class TokenCharacteristicContract
     {
         [DataMember]
@@ -15,7 +17,19 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         [DataMember]
         public string Description { get; set; }
 
+    }
+
+    [DataContract]
+    public class TokenCharacteristicDetailContract : TokenCharacteristicContract
+    {
         [DataMember]
-        public IList<CanonicalFormContract> CanonicalFormList { get; set; } 
+        public IList<CanonicalFormContract> CanonicalFormList { get; set; }
+    }
+
+    [DataContract]
+    public class InverseTokenCharacteristic : TokenCharacteristicContract
+    {
+        [DataMember]
+        public TokenContract Token { get; set; }
     }
 }

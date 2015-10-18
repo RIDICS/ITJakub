@@ -89,5 +89,15 @@ namespace ITJakub.Lemmatization.Service
         {
             m_lemmatizationManager.EditHyperCanonicalForm(hyperCanonicalFormId, text, type, description);
         }
+
+        public int GetTokenCount()
+        {
+            return m_lemmatizationManager.GetTokenCount();
+        }
+
+        public IList<TokenContract> GetTokenList(int start, int count)
+        {
+            return m_lemmatizationManager.GetTokenList(start, count);
+        }
     }
 }

@@ -92,5 +92,66 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                 return result;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual int GetTokenCount()
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<Token>()
+                    .RowCount();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Token> GetTokenList(int start, int count)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<Token>()
+                    .OrderBy(x => x.Text).Asc
+                    .Take(count)
+                    .Skip(start)
+                    .List();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<CanonicalForm>()
+                    .Where(x => x.HyperCanonicalForm.Id == hyperCanonicalFormId)
+                    .Select(x => x.Id)
+                    .OrderBy(x => x.Text).Asc
+                    .List<long>();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual CanonicalForm GetCanonicalFormDetail(long canonicalFormId)
+        {
+            using (var session = GetSession())
+            {
+                Token tokenAlias = null;
+                TokenCharacteristic tokenCharacteristicAlias = null;
+
+                var result = session.QueryOver<CanonicalForm>()
+                    .Where(x => x.Id == canonicalFormId)
+                    .Fetch(x => x.CanonicalFormFor).Eager
+                    .JoinAlias(x => x.CanonicalFormFor, () => tokenCharacteristicAlias, JoinType.LeftOuterJoin)
+                    .JoinAlias(x => tokenCharacteristicAlias.Token, () => tokenAlias, JoinType.LeftOuterJoin)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
     }
 }
