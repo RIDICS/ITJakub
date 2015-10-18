@@ -1,7 +1,10 @@
-﻿$(document).ready(() => {
+﻿function initLemmatization(tokenId: string) {
     var lemmatization = new Lemmatization("#mainContainer");
     lemmatization.make();
-});
+
+    if (tokenId)
+        lemmatization.load(Number(tokenId));
+}
 
 class Lemmatization {
     private mainContainer: string;
@@ -64,6 +67,23 @@ class Lemmatization {
 
         $("#save-edited-token").click(() => {
             this.saveEditedToken();
+        });
+    }
+
+    public load(tokenId: number) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/GetToken",
+            data: {
+                tokenId: tokenId
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (token) => {
+                this.loadToken(token);
+                this.searchBox.setValue(token.Text);
+            }
         });
     }
 

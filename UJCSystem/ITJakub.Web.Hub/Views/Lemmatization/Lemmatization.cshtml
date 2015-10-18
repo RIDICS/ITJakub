@@ -8,6 +8,12 @@
     @Scripts.Render("~/itjakub/lemmatization/javascript")
 }
 
+<script type="text/javascript">
+    $(document).ready(function() {
+        initLemmatization("@Request["tokenId"]");
+    });
+</script>
+
 <h2>Lemmatizace</h2>
 
 <div class="lemmatization-search-bar">

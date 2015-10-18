@@ -29,7 +29,7 @@ namespace ITJakub.Lemmatization.Service
             return m_lemmatizationManager.CreateToken(token, description);
         }
 
-        public IList<TokenCharacteristicContract> GetTokenCharacteristic(long tokenId)
+        public IList<TokenCharacteristicDetailContract> GetTokenCharacteristic(long tokenId)
         {
             return m_lemmatizationManager.GetTokenCharacteristic(tokenId);
         }
@@ -98,6 +98,21 @@ namespace ITJakub.Lemmatization.Service
         public IList<TokenContract> GetTokenList(int start, int count)
         {
             return m_lemmatizationManager.GetTokenList(start, count);
+        }
+
+        public TokenContract GetToken(long tokenId)
+        {
+            return m_lemmatizationManager.GetToken(tokenId);
+        }
+
+        public IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
+        {
+            return m_lemmatizationManager.GetCanonicalFormIdList(hyperCanonicalFormId);
+        }
+
+        public IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId)
+        {
+            return m_lemmatizationManager.GetCanonicalFormDetail(canonicalFormId);
         }
     }
 }

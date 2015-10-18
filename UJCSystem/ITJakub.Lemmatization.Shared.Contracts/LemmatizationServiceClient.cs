@@ -427,6 +427,32 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
+        public TokenContract GetToken(long tokenId)
+        {
+            try
+            {
+                return Channel.GetToken(tokenId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
             try

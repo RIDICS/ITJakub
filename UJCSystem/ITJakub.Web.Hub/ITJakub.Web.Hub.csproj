@@ -365,6 +365,12 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.css">
+      <DependentUpon>itjakub.lemmatization.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.min.css">
+      <DependentUpon>itjakub.lemmatization.css</DependentUpon>
+    </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -771,6 +777,7 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
+    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.list.ts" />
     <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\News\itjakub.news.ts" />

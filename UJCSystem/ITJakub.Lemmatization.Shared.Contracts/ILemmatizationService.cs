@@ -55,6 +55,9 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         IList<TokenContract> GetTokenList(int start, int count);
 
         [OperationContract]
+        TokenContract GetToken(long tokenId);
+
+        [OperationContract]
         IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId);
 
         [OperationContract]

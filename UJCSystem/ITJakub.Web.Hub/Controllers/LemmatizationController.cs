@@ -110,5 +110,35 @@ namespace ITJakub.Web.Hub.Controllers
             m_serviceClient.EditHyperCanonicalForm(hyperCanonicalFormId, text, type, description);
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult GetTokenCount()
+        {
+            var count = m_serviceClient.GetTokenCount();
+            return Json(count, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetTokenList(int start, int count)
+        {
+            var list = m_serviceClient.GetTokenList(start, count);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetToken(long tokenId)
+        {
+            var result = m_serviceClient.GetToken(tokenId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetCanonicalFormIdList(long hyperCanonicalFormId)
+        {
+            var list = m_serviceClient.GetCanonicalFormIdList(hyperCanonicalFormId);
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetCanonicalFormDetail(long canonicalFormId)
+        {
+            var result = m_serviceClient.GetCanonicalFormDetail(canonicalFormId);
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
     }
 }

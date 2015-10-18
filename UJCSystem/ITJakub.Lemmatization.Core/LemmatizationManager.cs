@@ -191,5 +191,12 @@ namespace ITJakub.Lemmatization.Core
             var contract = Mapper.Map<IList<InverseCanonicalFormContract>>(result);
             return contract;
         }
+
+        public TokenContract GetToken(long tokenId)
+        {
+            var result = m_repository.FindById<Token>(tokenId);
+            var contract = Mapper.Map<TokenContract>(result);
+            return contract;
+        }
     }
 }
