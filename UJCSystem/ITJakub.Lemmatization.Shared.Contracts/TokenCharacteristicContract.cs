@@ -5,7 +5,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 {
     [DataContract]
     [KnownType(typeof(TokenCharacteristicDetailContract))]
-    [KnownType(typeof(InverseTokenCharacteristic))]
+    [KnownType(typeof(InverseTokenCharacteristicContract))]
     public class TokenCharacteristicContract
     {
         [DataMember]
@@ -27,7 +27,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     }
 
     [DataContract]
-    public class InverseTokenCharacteristic : TokenCharacteristicContract
+    public class InverseTokenCharacteristicContract : TokenCharacteristicContract
     {
         [DataMember]
         public TokenContract Token { get; set; }

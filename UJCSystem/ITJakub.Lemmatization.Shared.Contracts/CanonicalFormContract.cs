@@ -32,7 +32,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     public class InverseCanonicalFormContract : CanonicalFormTypeaheadContract
     {
         [DataMember]
-        public IList<TokenCharacteristicContract> CanonicalFormFor { get; set; }
+        public IList<InverseTokenCharacteristicContract> CanonicalFormFor { get; set; }
     }
     
     [DataContract]

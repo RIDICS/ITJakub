@@ -85,7 +85,7 @@
             .text("Kanonická forma");
         $(th2).addClass("column-canonical-form")
             .text("Morfologická charakteristika");
-        $(th3).addClass("column-canonical-token")
+        $(th3).addClass("column-canonical-form")
             .text("Token");
         $(headerTr)
             .append(th1)
@@ -142,6 +142,10 @@
             var td2 = document.createElement("td");
             $(td2).text(characteristic.MorphologicalCharacteristic);
             tr.appendChild(td2);
+
+            var td3 = document.createElement("td");
+            $(td3).text(characteristic.Token.Text);
+            tr.appendChild(td3);
         }
 
         $(td1).attr("rowspan", rows);

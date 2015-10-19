@@ -13,12 +13,12 @@ namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
                 .ForMember(dest => dest.MorphologicalCharacteristic, opts => opts.MapFrom(src => src.MorphologicalCharakteristic))
                 .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.Description))
                 .Include<TokenCharacteristic, TokenCharacteristicDetailContract>()
-                .Include<TokenCharacteristic, InverseTokenCharacteristic>();
+                .Include<TokenCharacteristic, InverseTokenCharacteristicContract>();
 
             CreateMap<TokenCharacteristic, TokenCharacteristicDetailContract>()
                 .ForMember(dest => dest.CanonicalFormList, opts => opts.MapFrom(src => src.CanonicalForms));
 
-            CreateMap<TokenCharacteristic, InverseTokenCharacteristic>()
+            CreateMap<TokenCharacteristic, InverseTokenCharacteristicContract>()
                 .ForMember(dest => dest.Token, opts => opts.MapFrom(src => src.Token));
         }
     }
