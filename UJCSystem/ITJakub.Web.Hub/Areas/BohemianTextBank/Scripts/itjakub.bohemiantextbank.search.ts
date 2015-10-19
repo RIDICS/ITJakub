@@ -9,6 +9,17 @@ function initSearch() {
     var bookIds = new Array();
     var categoryIds = new Array();
 
+    $("#commentCheckbox").change(() => {
+        var checkbox = $("#commentCheckbox");
+        var mainDiv = $("#corpus-search-div");
+
+        if ($(checkbox).is(":checked")) {
+            $(mainDiv).addClass("show-notes");
+        } else {
+            $(mainDiv).removeClass("show-notes");
+        }
+    });
+
     function sortOrderChanged() {
         search.processSearch();
     }
@@ -32,27 +43,39 @@ function initSearch() {
         var tableBody = document.getElementById("resultsTableBody");
         var abbrevTableBody = document.getElementById("resultsAbbrevTableBody");
         $(tableBody).empty();
+        $(abbrevTableBody).empty();
         for (var i = 0; i < results.length; i++) {
             var result = results[i];
             var pageContext = result["PageResultContext"];
             var verseContext = result["VerseResultContext"];
+            var bibleVerseContext = result["BibleVerseResultContext"];
             var contextStructure = pageContext["ContextStructure"];
             var bookXmlId = result["BookXmlId"];
             var pageXmlId = pageContext["PageXmlId"];
+            var acronym = result["Acronym"];
+            var notes = result["Notes"];
 
             var tr = document.createElement("tr");
+            $(tr).addClass("search-result");
             $(tr).data("bookXmlId", bookXmlId);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
             $(tr).data("author", result["Author"]);
             $(tr).data("title", result["Title"]);
             $(tr).data("dating", result["OriginDate"]);
-            $(tr).data("pageXmlId", pageXmlId );
+            $(tr).data("pageXmlId", pageXmlId);
             $(tr).data("pageName", pageContext["PageName"]);
+            $(tr).data("acronym", acronym);
 
 
             if (verseContext !== null && typeof verseContext !== "undefined") {
                 $(tr).data("verseXmlId", verseContext["VerseXmlId"]);
-                $(tr).data("verseName", verseContext["VerseName"]);   
+                $(tr).data("verseName", verseContext["VerseName"]);
+            }
+
+            if (bibleVerseContext !== null && typeof bibleVerseContext !== "undefined") {
+                $(tr).data("bibleBook", bibleVerseContext["BibleBook"]);
+                $(tr).data("bibleChapter", bibleVerseContext["BibleChapter"]);
+                $(tr).data("bibleVerse", bibleVerseContext["BibleVerse"]);
             }
 
             var tdBefore = document.createElement("td");
@@ -71,6 +94,37 @@ function initSearch() {
 
             tableBody.appendChild(tr);
 
+            if (notes !== null && typeof notes !== "undefined") {
+
+                var notesTr = document.createElement("tr");
+                $(notesTr).addClass("notes");
+
+                var tdNotes = document.createElement("td");
+                tdNotes.colSpan = 3;
+
+
+                for (var j = 0; j < notes.length; j++) {
+                    var noteSpan = document.createElement("span");
+                    noteSpan.innerHTML = notes[j];
+                    $(noteSpan).addClass("note");
+                    tdNotes.appendChild(noteSpan);
+                }
+
+
+                notesTr.appendChild(tdNotes);
+
+                var beforeNotesTr = document.createElement("tr");
+                $(beforeNotesTr).addClass("notes spacer");
+
+                var afterNotesTr = document.createElement("tr");
+                $(afterNotesTr).addClass("notes spacer");
+
+                tableBody.appendChild(beforeNotesTr);
+                tableBody.appendChild(notesTr);
+                tableBody.appendChild(afterNotesTr);
+
+            }
+
             //fill left table with abbrev of corpus name
             var abbrevTr = document.createElement("tr");
             //$(abbrevTr).data("bookXmlId", bookXmlId);
@@ -80,14 +134,35 @@ function initSearch() {
 
             var abbrevHref = document.createElement("a");
             abbrevHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookXmlId + "&searchText=" + search.getLastQuery() + "&page=" + pageXmlId;
-            abbrevHref.innerHTML = result["Acronym"];
+            abbrevHref.innerHTML = acronym;
 
             abbrevTd.appendChild(abbrevHref);
 
             abbrevTr.appendChild(abbrevTd);
             abbrevTableBody.appendChild(abbrevTr);
+
+            if (notes !== null && typeof notes !== "undefined") {
+
+                var abbRevNotesTr = document.createElement("tr");
+                $(abbRevNotesTr).addClass("notes");
+
+                var abbrevTdNotes = document.createElement("td");
+
+                abbRevNotesTr.appendChild(abbrevTdNotes);
+
+                var beforeAbbrevNotesTr = document.createElement("tr");
+                $(beforeAbbrevNotesTr).addClass("notes spacer");
+
+                var afterAbbrevNotesTr = document.createElement("tr");
+                $(afterAbbrevNotesTr).addClass("notes spacer");
+
+                abbrevTableBody.appendChild(beforeAbbrevNotesTr);
+                abbrevTableBody.appendChild(abbRevNotesTr);
+                abbrevTableBody.appendChild(afterAbbrevNotesTr);
+
+            }
         }
-        
+
 
         //scroll from left to center match column in table
         var firstChildTdWidth = $(tableBody).children("tr").first().children("td").first().width();
@@ -96,14 +171,13 @@ function initSearch() {
         var scrollOffset = firstChildTdWidth - tableContainerWidth / 2;
         $(tableContainer).scrollLeft(scrollOffset);
     }
-    
+
     function corpusAdvancedSearchPaged(json: string, pageNumber: number, contextLength: number) {
 
         if (typeof json === "undefined" || json === null || json === "") return;
-        
-        var start = (pageNumber - 1) * resultsCountOnPage;
-        var sortingEnum = SortEnum.Title; //TODO
-        var sortAsc = true; //TODO
+        const start = (pageNumber - 1) * resultsCountOnPage;
+        const sortingEnum = SortEnum.Title; //TODO
+        const sortAsc = true; //TODO
 
         showLoading();
 
@@ -112,8 +186,8 @@ function initSearch() {
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusPaged",
             data: { json: json, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 hideLoading();
                 fillResultsIntoTable(response["results"]);
@@ -124,10 +198,9 @@ function initSearch() {
     function corpusBasicSearchPaged(text: string, pageNumber: number, contextLength: number) {
 
         if (typeof text === "undefined" || text === null || text === "") return;
-
-        var start = (pageNumber - 1) * resultsCountOnPage;
-        var sortingEnum = SortEnum.Title; //TODO
-        var sortAsc = true; //TODO
+        const start = (pageNumber - 1) * resultsCountOnPage;
+        const sortingEnum = SortEnum.Title; //TODO
+        const sortAsc = true; //TODO
 
         showLoading();
 
@@ -136,8 +209,8 @@ function initSearch() {
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextPaged",
             data: { text: text, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 hideLoading();
                 fillResultsIntoTable(response["results"]);
@@ -147,8 +220,7 @@ function initSearch() {
 
     function searchForPageNumber(pageNumber: number) {
         actualPage = pageNumber;
-        var contextLength = $("#contextPositionsSelect").val();
-
+        const contextLength = $("#contextPositionsSelect").val();
         if (search.isLastQueryJson()) {
             corpusAdvancedSearchPaged(search.getLastQuery(), pageNumber, contextLength);
         } else {
@@ -157,11 +229,10 @@ function initSearch() {
     }
 
     function createPagination(resultsCount: number) {
-        var paginatorContainer = document.getElementById("paginationContainer");
-        var paginator = new Pagination(<any>paginatorContainer, paginationMaxVisibleElements);
+        const paginatorContainer = document.getElementById("paginationContainer");
+        const paginator = new Pagination(<any>paginatorContainer, paginationMaxVisibleElements);
         paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber);
-
-        var totalResultsDiv = document.getElementById("totalResultCountDiv");
+        const totalResultsDiv = document.getElementById("totalResultCountDiv");
         totalResultsDiv.innerHTML = resultsCount.toString();
     }
 
@@ -176,8 +247,8 @@ function initSearch() {
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextCount",
             data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 var count = response["count"];
                 createPagination(count);
@@ -195,8 +266,8 @@ function initSearch() {
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusResultsCount",
             data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 var count = response["count"];
                 createPagination(count);
@@ -204,7 +275,7 @@ function initSearch() {
         });
     }
 
-    var enabledOptions = new Array<SearchTypeEnum>();
+    const enabledOptions = new Array<SearchTypeEnum>();
     enabledOptions.push(SearchTypeEnum.Title);
     enabledOptions.push(SearchTypeEnum.Author);
     enabledOptions.push(SearchTypeEnum.Editor);
@@ -219,7 +290,7 @@ function initSearch() {
     search.makeSearch(enabledOptions);
 
     var editionsSelector: DropDownSelect2;
-    var callbackDelegate = new DropDownSelectCallbackDelegate();
+    const callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         bookIds = new Array();
 
@@ -247,11 +318,11 @@ function initSearch() {
     function printDetailInfo(tableRow: HTMLElement) {
         var undefinedReplaceString = "&lt;Nezadáno&gt;";
 
-        document.getElementById("detail-author").innerHTML = typeof $(tableRow).data("author") !== "undefined" && $(tableRow).data("author") !== null? $(tableRow).data("author") : undefinedReplaceString;
-        document.getElementById("detail-title").innerHTML = typeof $(tableRow).data("title") !== "undefined" && $(tableRow).data("title") !== null? $(tableRow).data("title") : undefinedReplaceString;
-        document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;;
+        document.getElementById("detail-author").innerHTML = typeof $(tableRow).data("author") !== "undefined" && $(tableRow).data("author") !== null ? $(tableRow).data("author") : undefinedReplaceString;
+        document.getElementById("detail-title").innerHTML = typeof $(tableRow).data("title") !== "undefined" && $(tableRow).data("title") !== null ? $(tableRow).data("title") : undefinedReplaceString;
+        document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;
         document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
-        document.getElementById("detail-abbrev").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
+        document.getElementById("detail-abbrev").innerHTML = typeof $(tableRow).data("acronym") !== "undefined" && $(tableRow).data("acronym") !== null ? $(tableRow).data("acronym") : undefinedReplaceString;
 
         var folioHref = document.createElement("a");
         folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookXmlId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageXmlId");
@@ -262,14 +333,23 @@ function initSearch() {
 
 
         document.getElementById("detail-vers").innerHTML = typeof $(tableRow).data("verseName") !== "undefined" && $(tableRow).data("verseName") !== null ? $(tableRow).data("verseName") : undefinedReplaceString;
+
+        document.getElementById("detail-bible-vers-book").innerHTML = typeof $(tableRow).data("bibleBook") !== "undefined" && $(tableRow).data("bibleBook") !== null ? $(tableRow).data("bibleBook") : undefinedReplaceString;
+        document.getElementById("detail-bible-vers-chapter").innerHTML = typeof $(tableRow).data("bibleChapter") !== "undefined" && $(tableRow).data("bibleChapter") !== null ? $(tableRow).data("bibleChapter") : undefinedReplaceString;
+        document.getElementById("detail-bible-vers-vers").innerHTML = typeof $(tableRow).data("bibleVerse") !== "undefined" && $(tableRow).data("bibleVerse") !== null ? $(tableRow).data("bibleVerse") : undefinedReplaceString;
     }
 
     $("#resultsTableBody").click((event: Event) => {
-        $("#resultsTableBody").find("tr").removeClass("clicked");
-        var row = $(event.target).parents("tr");
-        $(row).addClass("clicked");
+        var clickedRow = $(event.target).parents("tr");
 
-        printDetailInfo(row[0]);
+        if ($(clickedRow).hasClass("notes")) {
+            return;
+        }
+
+        $("#resultsTableBody").find("tr").removeClass("clicked");
+        $(clickedRow).addClass("clicked");
+
+        printDetailInfo(clickedRow[0]);
     });
 
     $("#contextPositionsSelect").change((evnet: Event) => {

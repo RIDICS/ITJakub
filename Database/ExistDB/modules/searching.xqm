@@ -4,7 +4,6 @@ declare default collation "?lang=cs-CZ";
 
 import module namespace functx = "http://www.functx.com" at "functx.xqm";
 
-
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/tei/1.0";
@@ -90,14 +89,14 @@ declare function search:get-query-document-hits-token-distance($root as node()*,
 
 declare function search:match-hits-by-heading-elements($root as node()*, $query as element()?) as item()* {
 	if ($root and $query) then
-		$root/tei:TEI//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]
+		$root/tei:TEI//tei:text//(tei:titlePart | tei:head) [ft:query(., $query, $search:query-options)]
 	else
 		()
 } ;
 
 declare function search:match-hits-by-fulltext-elements($root as node()*, $query as element()?) as item()* {
 	if ($root and $query) then
-		$root/tei:TEI//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]
+		$root/tei:TEI//tei:text//(tei:l | tei:p) [ft:query(., $query, $search:query-options)]
 	else
 		()
 } ;
@@ -458,15 +457,21 @@ declare function search:get-document-search-hits-by-fragments($document as node(
 (:			for $match in $matches:)
 (:		return <result> {( <count>{$matches-count}</count>, <position>{$match-position}</position>, $matches)} </result>:)
 				for $content-item in $content
-				return <PageResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+				let $verse := 
+				<VerseResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								<VerseXmlId>{string($pb/@xml:id)}</VerseXmlId>
+								<VerseName>{string('17')}</VerseName>
+								</VerseResultContext>
+				return (<PageResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
 								{ ($content-item)}
 								<PageName>{string($pb/@n)}</PageName>
 								<PageXmlId>{string($pb/@xml:id)}</PageXmlId>
-								<VerseXmlId>{string($pb/l[1]/position())}</VerseXmlId>
-								<VerseName>{string($pb/l[1]/@xml:id)}</VerseName>
-								</PageResultContext>
+								</PageResultContext>,
+								$verse)
 (:	return $hits:)
 	
+(:	<VerseXmlId>{string($pb/l[1]/position())}</VerseXmlId>
+								<VerseName>{string($pb/l[1]/@xml:id)}</VerseName>:)
 		let $selected-matches := if ($kwic-count = 0) then
 				subsequence($all-matches, $kwic-start)
 			else
@@ -484,7 +489,23 @@ declare function search:get-document-search-hits-by-fragments($document as node(
 declare function search:get-hits-from-fragments() as element()* {
 	""
 } ;
+
+declare function search:get-document-search-hits($documents as node()*, 
+	$queries as item()?) as element()* {
 	
+	let $root := $documents
+	
+	let $fulltext := search:get-query-document-hits-fulltext($root, $queries)
+	let $heading := search:get-query-document-hits-heading($root, $queries)
+	let $sentence := search:get-query-document-hits-sentence($root, $queries)
+	let $token-distance := search:get-query-document-hits-token-distance($root, $queries)
+
+	let $hits := search:intersect-results($fulltext, $heading, $sentence, $token-distance, (), ())
+	
+	return $hits
+	
+	};
+
 declare function search:get-document-search-hits($document as node()?, 
 	$queries as item()?, 
 	$kwic-start as xs:double,
@@ -668,7 +689,9 @@ declare function search:get-queries-from-search-criteria-string($search-criteria
 declare function search:get-match-count($hits as node()*) as xs:int {
 	let $hits-expanded := util:expand($hits)
 	return count($hits-expanded//exist:match)
+(:	sum(for $hit in $hits return text:match-count($hit)):)
 } ;
+
 
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
 declare function search:get-queries-from-search-criteria($search-criteria  as node()*) as element() {
