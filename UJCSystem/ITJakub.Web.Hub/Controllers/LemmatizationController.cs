@@ -27,6 +27,11 @@ namespace ITJakub.Web.Hub.Controllers
             return View("LemmatizationList");
         }
 
+        public ActionResult Derivation()
+        {
+            return View("Derivation");
+        }
+
         public ActionResult GetTypeaheadToken(string query)
         {
             var result = m_serviceClient.GetTypeaheadToken(query);

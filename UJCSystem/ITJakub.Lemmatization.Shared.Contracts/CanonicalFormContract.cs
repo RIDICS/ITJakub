@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Lemmatization.Shared.Contracts
@@ -31,7 +32,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     public class InverseCanonicalFormContract : CanonicalFormTypeaheadContract
     {
         [DataMember]
-        public TokenCharacteristicContract CanonicalFormFor { get; set; }
+        public IList<TokenCharacteristicContract> CanonicalFormFor { get; set; }
     }
     
     [DataContract]

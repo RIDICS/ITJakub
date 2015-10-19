@@ -110,7 +110,7 @@ namespace ITJakub.Lemmatization.Service
             return m_lemmatizationManager.GetCanonicalFormIdList(hyperCanonicalFormId);
         }
 
-        public IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId)
+        public InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId)
         {
             return m_lemmatizationManager.GetCanonicalFormDetail(canonicalFormId);
         }

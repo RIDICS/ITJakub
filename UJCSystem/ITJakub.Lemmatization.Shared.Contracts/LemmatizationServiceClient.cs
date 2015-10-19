@@ -479,7 +479,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             }
         }
 
-        public IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId)
+        public InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId)
         {
             try
             {

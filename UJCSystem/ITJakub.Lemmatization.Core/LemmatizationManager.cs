@@ -185,10 +185,10 @@ namespace ITJakub.Lemmatization.Core
             return result;
         }
 
-        public IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId)
+        public InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId)
         {
             var result = m_repository.GetCanonicalFormDetail(canonicalFormId);
-            var contract = Mapper.Map<IList<InverseCanonicalFormContract>>(result);
+            var contract = Mapper.Map<InverseCanonicalFormContract>(result);
             return contract;
         }
 

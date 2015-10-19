@@ -1,9 +1,4 @@
-﻿$(document).ready(() => {
-    var lemmatization = new LemmatizationList("#mainContainer", "#paginationContainer");
-    lemmatization.make();
-});
-
-class LemmatizationList {
+﻿class LemmatizationList {
     private paginationContainer: string;
     private container: string;
     private pagination: Pagination;

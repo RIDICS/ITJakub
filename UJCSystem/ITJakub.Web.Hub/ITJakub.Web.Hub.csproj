@@ -734,6 +734,7 @@
     <Content Include="Views\Lemmatization\LemmatizationList.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
+    <Content Include="Views\Lemmatization\Derivation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -777,6 +778,7 @@
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
+    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.derivation.ts" />
     <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.list.ts" />
     <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />

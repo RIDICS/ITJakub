@@ -57,7 +57,8 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/lemmatization/javascript").Include(
                 "~/Scripts/Lemmatization/itjakub.lemmatization.js",
-                "~/Scripts/Lemmatization/itjakub.lemmatization.list.js"));
+                "~/Scripts/Lemmatization/itjakub.lemmatization.list.js",
+                "~/Scripts/Lemmatization/itjakub.derivation.js"));
 
 
             bundles.Add(new StyleBundle("~/Content/css").Include(

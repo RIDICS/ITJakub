@@ -61,6 +61,6 @@ namespace ITJakub.Lemmatization.Shared.Contracts
         IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId);
 
         [OperationContract]
-        IList<InverseCanonicalFormContract> GetCanonicalFormDetail(long canonicalFormId);
+        InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId);
     }
 }
