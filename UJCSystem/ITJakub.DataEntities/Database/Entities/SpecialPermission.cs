@@ -51,7 +51,6 @@ namespace ITJakub.DataEntities.Database.Entities
         }
 
         public virtual bool CanManagePermissions { get; set; }
-        
     }
 
     public class NewsPermission : SpecialPermission
@@ -72,5 +71,33 @@ namespace ITJakub.DataEntities.Database.Entities
         }
 
         public virtual bool CanManageFeedbacks { get; set; }
+    }
+
+
+    public class CardFilePermission : SpecialPermission
+    {
+        public CardFilePermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Read;
+        }
+
+        public virtual bool CanReadCardFile { get; set; }
+
+        public virtual string CardFileId { get; set; }
+
+        public virtual string CardFileName { get; set; }
+    }
+
+
+    public class AutoImportCategoryPermission : SpecialPermission
+    {
+        public AutoImportCategoryPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Autoimport;
+        }
+
+        public virtual bool AutoImportIsAllowed { get; set; }
+
+        public virtual Category Category { get; set; }
     }
 }

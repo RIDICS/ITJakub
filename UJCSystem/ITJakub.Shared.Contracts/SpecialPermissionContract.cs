@@ -7,6 +7,8 @@ namespace ITJakub.Shared.Contracts
     [KnownType(typeof (UploadBookPermissionContract))]
     [KnownType(typeof (ManagePermissionsPermissionContract))]
     [KnownType(typeof (FeedbackPermissionContract))]
+    [KnownType(typeof (CardFilePermissionContract))]
+    [KnownType(typeof (AutoImportCategoryPermissionContract))]
     public class SpecialPermissionContract
     {
         [DataMember]
@@ -39,5 +41,28 @@ namespace ITJakub.Shared.Contracts
     {
         [DataMember]
         public bool CanManageFeedbacks { get; set; }
+    }
+
+    [DataContract]
+    public class CardFilePermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool CanReadCardFile { get; set; }
+
+        [DataMember]
+        public string CardFileId { get; set; }
+
+        [DataMember]
+        public string CardFileName { get; set; }
+    }
+
+    [DataContract]
+    public class AutoImportCategoryPermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool AutoImportIsAllowed { get; set; }
+
+        [DataMember]
+        public CategoryContract Category { get; set; }
     }
 }

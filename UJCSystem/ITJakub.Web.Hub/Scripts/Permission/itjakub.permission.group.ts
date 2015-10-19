@@ -563,6 +563,8 @@ class SpecialPermissionTextResolver {
     private static uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
     private static managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
     private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
+    private static cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
+    private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -575,6 +577,10 @@ class SpecialPermissionTextResolver {
                 return "Správa práv";
             case this.feedbackPermission:
                 return "Správa připomínek";
+            case this.cardFilePermission:
+                return "Prohlížení kartoték";
+            case this.autoimportPermission:
+                return "Automatické právo na kategorii";
             default:
                 return "Neznámé právo";
         }
@@ -592,9 +598,21 @@ class SpecialPermissionTextResolver {
                 return "Spravovat práva";
             case this.feedbackPermission:
                 return "Číst připomínky";
+            case this.cardFilePermission:
+                return this.resolveCardFileText(<ICardFilePermission>specialPermission);
+            case this.autoimportPermission:
+                return this.resolveAutoImportText(<IAutoImportPermission>specialPermission);
             default:
                 return "Neznámé právo";
         }
+    }
+
+    private static resolveCardFileText(cardFilePermission: ICardFilePermission):string {
+        return cardFilePermission.CardFileName;
+    }
+
+    private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
+        return autoimportPermission.Category.Description;
     }
 
 }

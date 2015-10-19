@@ -13,6 +13,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .Include<NewsPermission, NewsPermissionContract>()
                 .Include<ManagePermissionsPermission, ManagePermissionsPermissionContract>()
                 .Include<FeedbackPermission, FeedbackPermissionContract>()
+                .Include<CardFilePermission, CardFilePermissionContract>()
+                .Include<AutoImportCategoryPermission, AutoImportCategoryPermissionContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id));
 
             CreateMap<UploadBookPermission, UploadBookPermissionContract>()
@@ -26,6 +28,15 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<FeedbackPermission, FeedbackPermissionContract>()
                 .ForMember(dest => dest.CanManageFeedbacks, opts => opts.MapFrom(src => src.CanManageFeedbacks));
+
+            CreateMap<CardFilePermission, CardFilePermissionContract>()
+                .ForMember(dest => dest.CanReadCardFile, opts => opts.MapFrom(src => src.CanReadCardFile))
+                .ForMember(dest => dest.CardFileId, opts => opts.MapFrom(src => src.CardFileId))
+                .ForMember(dest => dest.CardFileName, opts => opts.MapFrom(src => src.CardFileName));
+
+            CreateMap<AutoImportCategoryPermission, AutoImportCategoryPermissionContract>()
+                .ForMember(dest => dest.AutoImportIsAllowed, opts => opts.MapFrom(src => src.AutoImportIsAllowed))
+                .ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category));
         }
     }
 }
