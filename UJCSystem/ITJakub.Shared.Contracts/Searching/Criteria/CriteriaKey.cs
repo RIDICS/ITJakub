@@ -20,5 +20,6 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
         [EnumMember] HeadwordDescriptionTokenDistance = 12,
         [EnumMember] SelectedCategory = 13,
         [EnumMember] Term = 14,
+        [EnumMember] Authorization = 15,
     }
 }

@@ -7,21 +7,17 @@ using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
-using Jewelery;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
     [RouteArea("AudioBooks")]
-    public class AudioBooksController : Controller
+    public class AudioBooksController : BaseController
     {
-
-        //private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-        //private readonly ItJakubServiceEncryptedClient m_mainServiceEncryptedClient = new ItJakubServiceEncryptedClient();
-
         public ActionResult Index()
         {
             return View("List");
@@ -39,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             {
                 return View();
             }
-            using (var client = new ItJakubServiceEncryptedClient())
+            using (var client = GetEncryptedClient())
             {
                 var user = client.FindUserByUserName(username);
                 var viewModel = new FeedbackViewModel
@@ -49,7 +45,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 };
 
                 return View(viewModel);
-            }           
+            }
         }
 
         [HttpPost]
@@ -60,12 +56,12 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             var username = HttpContext.User.Identity.Name;
 
             if (string.IsNullOrWhiteSpace(username))
-                using (var client = new ItJakubServiceClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.AudioBooks);
                 }
             else
-                using (var client = new ItJakubServiceEncryptedClient())
+                using (var client = GetMainServiceClient())
                 {
                     client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.AudioBooks);
                 }
@@ -81,27 +77,25 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.AudioBook);
                 return Json(result, JsonRequestBehavior.AllowGet);
-           }            
+            }
         }
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.AudioBook, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
-
             }
-            
         }
 
         public ActionResult GetAudioWithCategories()
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var audiosWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.AudioBook);
                 return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
@@ -122,14 +116,15 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
-                return Json(new { count }, JsonRequestBehavior.AllowGet);
+                return Json(new {count}, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
@@ -138,8 +133,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             {
                 Start = start,
                 Count = count,
-                Sorting = (SortEnum)sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                Sorting = (SortEnum) sortingEnum,
+                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
             });
 
             if (selectedBookIds != null || selectedCategoryIds != null)
@@ -151,12 +146,11 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-                return Json(new { books = results.Results }, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);
             }
-
         }
 
 
@@ -166,14 +160,14 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             {
                 new WordListCriteriaContract
                 {
-                  Key = CriteriaKey.Title,
-                  Disjunctions = new List<WordCriteriaContract>
-                  {
-                      new WordCriteriaContract
-                      {
-                          Contains = new List<string>{ text }
-                      }
-                  }
+                    Key = CriteriaKey.Title,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
                 }
             };
 
@@ -186,36 +180,37 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
 
                 return Json(new {count}, JsonRequestBehavior.AllowGet);
             }
         }
-        
 
-        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
                 new WordListCriteriaContract
                 {
-                  Key = CriteriaKey.Title,
-                  Disjunctions = new List<WordCriteriaContract>
-                  {
-                      new WordCriteriaContract
-                      {
-                          Contains = new List<string>{ text }
-                      }
-                  }
+                    Key = CriteriaKey.Title,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
                 },
                 new ResultCriteriaContract
                 {
                     Start = start,
                     Count = count,
                     Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
                 }
             };
 
@@ -228,7 +223,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 });
             }
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
                 return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);
@@ -244,7 +239,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 TrackPosition = trackPosition
             };
 
-            using (var client = new ItJakubServiceStreamedClient())
+            using (var client = GetStreamingClient())
             {
                 var audioTrack = client.DownloadAudioBookTrack(audioTrackContract);
                 var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
@@ -257,9 +252,9 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             var audioTrackContract = new DownloadWholeBookContract
             {
                 BookId = bookId,
-                RequestedAudioType = audioType,
+                RequestedAudioType = audioType
             };
-            using (var client = new ItJakubServiceStreamedClient())
+            using (var client = GetStreamingClient())
             {
                 var audioTrack = client.DownloadWholeAudiobook(audioTrackContract);
                 var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};

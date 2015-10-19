@@ -102,5 +102,9 @@
   {
     "outputFile": "Content/Lemmatization/itjakub.lemmatization.css",
     "inputFile": "Content/Lemmatization/itjakub.lemmatization.less"
+  },
+  {
+    "outputFile": "Content/Permission/itjakub.permission.css",
+    "inputFile": "Content/Permission/itjakub.permission.less"
   }
 ]

@@ -38,10 +38,6 @@
       <column name="PasswordHash" sql-type="varchar" not-null="false" />
     </property>
     
-    <property name="Salt">
-      <column name="Salt" sql-type="varchar" not-null="false" />
-    </property>
-    
     <property name="CreateTime">
       <column name="CreateTime" sql-type="datetime" not-null="true" />
     </property>
@@ -54,5 +50,11 @@
       <key column="User" />
       <one-to-many class="FavoriteBase" />
     </bag>
+
+    <bag name="Groups" table="User_Group" cascade="all">
+      <key column="[User]" />
+      <many-to-many class="Group" column="[Group]" />
+    </bag>
+    
   </class>
 </hibernate-mapping>

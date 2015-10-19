@@ -3,24 +3,16 @@ using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.Shared.Contracts.News;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    [Authorize]
-    public class NewsController : Controller
+    [Authorize(Roles = CustomRole.CanAddNews)]
+    public class NewsController : BaseController
     {
-        private readonly ItJakubServiceClient m_mainServiceClient = new ItJakubServiceClient();
-
-
-        // GET: News
-        public ActionResult Index()
-        {
-            //return View();
-            return null;
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult Feed(string feedType, string feedCount = "10")
@@ -39,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             var items = new List<SyndicationItem>();
 
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var feeds = client.GetWebNewsSyndicationItems(0, count);
                 foreach (var feed in feeds)
@@ -63,7 +55,7 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItems(int start, int count)
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var feeds = client.GetWebNewsSyndicationItems(start, count);
                 return Json(feeds, JsonRequestBehavior.AllowGet);
@@ -74,7 +66,7 @@ namespace ITJakub.Web.Hub.Controllers
         [AllowAnonymous]
         public virtual ActionResult GetSyndicationItemCount()
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var feedCount = client.GetWebNewsSyndicationItemCount();
                 return Json(feedCount, JsonRequestBehavior.AllowGet);
@@ -94,11 +86,10 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var username = HttpContext.User.Identity.Name;
 
-            using (var client = new ItJakubServiceEncryptedClient())
-                client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, model.ItemType, username);
+            using (var client = GetMainServiceClient())
+                client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);
 
-
-            return Json(new {});
+            return RedirectToAction("Index", "Home");
         }
     }
 

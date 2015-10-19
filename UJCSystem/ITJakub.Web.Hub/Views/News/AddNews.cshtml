@@ -1,64 +1,90 @@
 ﻿@model ITJakub.Web.Hub.Models.NewsSyndicationItemViewModel
 
 @{
-    ViewBag.Title = "AddNews";
+    ViewBag.Title = "Administrace - Přidat novinku";
 }
-
-<h2>AddNews</h2>
-
-
-@using (Html.BeginForm("Add", "News", FormMethod.Post)) 
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>NewsSyndicationItemModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Url, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Url, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Url, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model=>model.ItemType, htmlAttributes: new {@class="control-label col-md-2"})
-            <div class="coll-md-10 selectContainer">
-                @Html.EnumDropDownListFor(model=>model.ItemType, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ItemType, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/itjakub/home/javascript")
 }
+
+<div class="content-container">
+    <h1>Přidat novinku</h1>
+
+    <p>
+        @using (Html.BeginForm("Add", "News", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Url, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Url, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Url, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10 selectContainer">
+                        @Html.EnumDropDownListFor(model => model.ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-1" })
+                    <div class="col-md-10">
+                        @Html.TextAreaFor(m => m.Content, new { @class = "form-control news-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..." })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="text-area-info" style="float: right;margin-right:140px;">
+                        Max. <span class="text-area-max-chars"></span> znaků <br />
+                        Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br />
+                        Můžete používat diakritiku
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-10 col-md-1">
+                        <input type="submit" value="Přidat" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        }
+   </p>
+</div>
+
+
+
+<script>
+    $(document).ready(function () {
+        var maxChars = $(".news-text-area").attr("data-val-maxlength-max");
+        $(".text-area-max-chars").html(maxChars);
+        $(".text-area-remaining-chars").html(maxChars);
+
+        $(".news-text-area").keyup(function () {
+            var text = $(this).val();
+            var actualCharsRemaining = maxChars - text.length;
+            if (actualCharsRemaining < 0) {
+                actualCharsRemaining = 0;
+                $(this).val(text.substring(0,maxChars));
+            }
+            $(".text-area-remaining-chars").html(actualCharsRemaining);
+        });
+
+    });
+</script>

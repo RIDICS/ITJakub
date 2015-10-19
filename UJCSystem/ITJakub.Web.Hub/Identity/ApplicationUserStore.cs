@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.WebPages;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>,IUserLockoutStore<ApplicationUser, string>, IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string> {
-        
-        private readonly ItJakubServiceEncryptedClient m_serviceEncryptedClient = new ItJakubServiceEncryptedClient();
+    public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserLockoutStore<ApplicationUser, string>,
+        IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser, string>
+    {
+        private readonly CommunicationProvider m_communication = new CommunicationProvider();        
 
         public async Task SetEmailAsync(ApplicationUser user, string email)
         {
@@ -25,7 +26,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async Task<bool> GetEmailConfirmedAsync(ApplicationUser user)
         {
-            var task = Task<bool>.Factory.StartNew(() => true); //TODO
+            var task = Task<bool>.Factory.StartNew(() => true);
             return await task;
         }
 
@@ -105,10 +106,18 @@ namespace ITJakub.Web.Hub.Identity
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
+                    PasswordHash = user.PasswordHash,
+                    CommunicationToken = user.CommunicationToken
                 };
-                var result = m_serviceEncryptedClient.CreateUser(userContract);
-                user.Id = result.Id.ToString();
+
+                using (var client = m_communication.GetEncryptedClient())
+                {
+                    var result = client.CreateUser(userContract);
+                    user.CreateTime = result.CreateTime;
+                    user.CommunicationToken = result.CommunicationToken;
+                    user.Id = result.Id.ToString();
+                }
+
             });
             await task;
         }
@@ -127,18 +136,23 @@ namespace ITJakub.Web.Hub.Identity
         {
             var task = Task<ApplicationUser>.Factory.StartNew(() =>
             {
-                var user = m_serviceEncryptedClient.FindUserById(Int32.Parse(userId));
-                if (user == null) return null;
-                return new ApplicationUser
+                using (var client = m_communication.GetEncryptedClient())
                 {
-                    Id = user.Id.ToString(),
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
-                };
+                    var user = client.FindUserById(int.Parse(userId));
+                    if (user == null) return null;                    
+
+                    return new ApplicationUser
+                    {
+                        Id = user.Id.ToString(),
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        CreateTime = user.CreateTime,
+                        PasswordHash = user.PasswordHash,
+                        CommunicationToken = user.CommunicationToken
+                    };
+                }
             });
 
             return await task;
@@ -148,25 +162,26 @@ namespace ITJakub.Web.Hub.Identity
         {
             var task = Task<ApplicationUser>.Factory.StartNew(() =>
             {
-                var user = m_serviceEncryptedClient.FindUserByUserName(userName);
-                if (user == null) return null;
-                return new ApplicationUser
+                using (var client = m_communication.GetEncryptedClient())
                 {
-                    Id = user.Id.ToString(),
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    CreateTime = user.CreateTime,
-                    PasswordHash = user.PasswordHash
-                };
+                    var user = client.FindUserByUserName(userName);
+                    if (user == null) return null;
+
+                    return new ApplicationUser
+                    {
+                        Id = user.Id.ToString(),
+                        UserName = user.UserName,
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        CreateTime = user.CreateTime,
+                        PasswordHash = user.PasswordHash,
+                        CommunicationToken = user.CommunicationToken,
+                        CommunicationTokenExpirationTime = user.CommunicationTokenExpirationTime
+                    };
+                }
             });
             return await task;
-        }
-
-        public async Task<ApplicationUser> FindAsync(string userName, string password)
-        {
-            return await FindByNameAsync(userName);
         }
 
         public void Dispose()
@@ -183,5 +198,11 @@ namespace ITJakub.Web.Hub.Identity
             var task = Task<bool>.Factory.StartNew(() => false);
             return await task;
         }
+
+        public async Task<ApplicationUser> FindAsync(string userName, string password)
+        {
+            return await FindByNameAsync(userName);
+        }
+
     }
 }

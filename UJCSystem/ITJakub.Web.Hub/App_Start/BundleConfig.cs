@@ -59,7 +59,18 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Lemmatization/itjakub.lemmatization.js",
                 "~/Scripts/Lemmatization/itjakub.lemmatization.list.js",
                 "~/Scripts/Lemmatization/itjakub.derivation.js"));
+            
+            bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
+                "~/Scripts/Permission/itjakub.permission.user.js",
+                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/permission/group/javascript").Include(
+                "~/Scripts/Permission/itjakub.permission.group.js",
+                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+
+
+            bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
+                "~/Content/Permission/itjakub.permission.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",

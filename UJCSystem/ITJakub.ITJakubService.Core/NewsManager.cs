@@ -11,11 +11,13 @@ namespace ITJakub.ITJakubService.Core
     {
         private readonly NewsRepository m_repository;
         private readonly UserRepository m_userRepository;
+        private readonly AuthorizationManager m_authorizationManager;
 
-        public NewsManager(NewsRepository repository, UserRepository userRepository)
+        public NewsManager(NewsRepository repository, UserRepository userRepository, AuthorizationManager authorizationManager)
         {
             m_repository = repository;
             m_userRepository = userRepository;
+            m_authorizationManager = authorizationManager;
         }
 
         public List<NewsSyndicationItemContract> GetWebNewsSyndicationItems(int start, int count)
@@ -32,6 +34,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void CreateNewSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
+            m_authorizationManager.CheckUserCanAddNews();
             if (string.IsNullOrWhiteSpace(username))
                 throw new ArgumentException("Username is empty, cannot add bookmark");
 

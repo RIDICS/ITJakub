@@ -30,7 +30,11 @@ declare function local:get-matches-mock($hits as node()*,
 	let $kwic-options := <config width="{$kwic-context-length}" />
 	
 	let $relevant-hits := subsequence($hits, $kwic-start, $kwic-count)
-	return <SearchResults  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"> {
+	return 
+	<CorpusSearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"
+		xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+		<SearchResults> {
 	for $hit at $position in $relevant-hits
 		let $xml-id := string($hit/ancestor::tei:TEI/@n)
 		let $version-id := substring-after($hit/ancestor::tei:TEI/@change, '#')
@@ -55,23 +59,23 @@ declare function local:get-matches-mock($hits as node()*,
 				</CorpusSearchResultContract>
 		}
 		</SearchResults>
+		</CorpusSearchResultContractList>
 	};
 	
 	declare function local:get-match-with-notes-mock($match, $pb, $l, $bible) {
 		let $new-match := 
 		<HitResultContext xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
-			<After>tvój.Protož<span class="superscript">1</span> konečně pravím to, že nikakež ode...</After>
-			<Before> touto strašitedlnú nemocí<span class="superscript">ac</span> a ranou ostříhati a brániti a své svaté</Before>
-			<Match>slovo</Match>
-			<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-				<a:string><span class="superscript">1</span> poznámka textová</a:string>
-				<a:string><span class="superscript">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
-			</Notes>
+				<After>tvój. Protož<span class="note-ref">1</span> konečně pravím to, že nikakež ode...</After>
+				<Before> touto strašitedlnú nemocí<span class="note-ref">ac</span> a ranou ostříhati a brániti a své svaté</Before>
+				<Match>slovo</Match>
+				<Notes xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+					<a:string><span class="note-ref">1</span> poznámka textová</a:string>
+					<a:string><span class="note-ref">ac</span> <span class="italic">nemocí</span>] nemo </a:string>
+				</Notes>
 		</HitResultContext>
 		
 		return
-		(<HitResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
-								{$new-match}</HitResultContext>, $pb, $l, $bible)
+		($new-match, $pb, $l, $bible)
 	};
 
 
@@ -318,9 +322,9 @@ let $result-start := if($result-params/sc:Start) then
 (:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
 let $result-count := if($result-params/sc:Count) then
 	if($result-params/sc:Count[@i:nil='true']) then
-			1
+			0
 	else xs:int($result-params/sc:Count) else 
-			20
+			25
 
 (:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
 let $kwic-start := if($result-params/sc:HitSettingsContract/sc:Start) then xs:int($result-params/sc:HitSettingsContract/sc:Start) else 1
@@ -361,14 +365,15 @@ let $kwic-config := <config width="{$kwic-context-length}" preserve-space="yes" 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
 let $documents := search:get-query-documents-matches($collection, $queries)
-let $documents := for $document in $documents 
-	order by $document/tei:TEI/tei:teiHeader//tei:origDate[@notBefore]
+let $sorted-documents := for $document in $documents 
+	order by number($document/tei:TEI/tei:teiHeader//tei:origDate/@notBefore),
+		number($document/tei:TEI/tei:teiHeader//tei:origDate/@notAfter) 
 	return $document
 	
 let $result-documents := if($result-count = 0) then
-		subsequence($documents, $result-start)
+		subsequence($sorted-documents, $result-start)
 	else
-		subsequence($documents, $result-start, $result-count)
+		subsequence($sorted-documents, $result-start, $result-count)
 
 
 let $hits := search:get-query-document-hits($result-documents, $queries)
@@ -383,12 +388,29 @@ let $result := ($matches, $summary)
 :)
 
 let $xslt-path := $trans:transformation-path || "resultToContractCorpus.xsl"
+let $template := doc(escape-html-uri($xslt-path))
+let $step := transform:transform($matches, $template, ())
 
-let $step := trans:transform-document($matches, "Html", $xslt-path)
+(:let $result := $step:)
 
-let $xslt-path := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
+let $xslt-path2 := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
 (:let $result := $xslt-path:)
-let $result := trans:transform-document($step, "Html", $xslt-path)
-let $result := $matches
+let $result := trans:transform-document($step, "Html", $xslt-path2)
+
+(:let $result := $matches:)
+(:let $result := $step:)
+
+(:let $result := <dates xmlns="http://www.tei-c.org/ns/1.0">
+	{for $document in $sorted-documents
+		return $document/tei:TEI/tei:teiHeader//tei:origDate}
+</dates>
+:)
+(:{for $document in $documents 
+	order by number($document/tei:TEI/tei:teiHeader//tei:origDate/@notBefore),
+		number($document/tei:TEI/tei:teiHeader//tei:origDate/@notAfter) 
+	return $document/tei:TEI/tei:teiHeader//tei:origDate
+	}:)
+(:	{$sorted-documents/tei:TEI/tei:teiHeader//tei:origDate}:)
+
 return
  	$result

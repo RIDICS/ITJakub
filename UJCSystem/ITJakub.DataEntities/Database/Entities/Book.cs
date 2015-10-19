@@ -13,6 +13,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<BookVersion> BookVersions { get; set; }
 
+        public virtual IList<Permission> Permissions { get; set; }
+
         public virtual bool Equals(Book other)
         {
             if (ReferenceEquals(null, other)) return false;

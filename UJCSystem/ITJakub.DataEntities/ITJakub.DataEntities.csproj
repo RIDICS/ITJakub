@@ -73,11 +73,14 @@
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\BookAccessory.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
+    <Compile Include="Database\Entities\Enums\SpecialPermissionCategorization.cs" />
+    <Compile Include="Database\Entities\Group.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackCategoryEnum.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackSortEnum.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
     <Compile Include="Database\Entities\NewsSyndicationItem.cs" />
+    <Compile Include="Database\Entities\SpecialPermission.cs" />
     <Compile Include="Database\Entities\RecordingBase.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
@@ -88,7 +91,9 @@
     <Compile Include="Database\Entities\Term.cs" />
     <Compile Include="Database\Entities\TermCategory.cs" />
     <Compile Include="Database\Entities\Track.cs" />
+    <Compile Include="Database\Entities\Permission.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Repositories\PermissionRepository.cs" />
     <Compile Include="Database\Repositories\NewsRepository.cs" />
     <Compile Include="Database\Repositories\TermRepository.cs" />
     <Compile Include="Database\Repositories\FeedbackRepository.cs" />
@@ -206,7 +211,16 @@
     <EmbeddedResource Include="Database\Entities\TermCategory.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Group.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Permission.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Include="Database\Entities\NewsSyndicationItem.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

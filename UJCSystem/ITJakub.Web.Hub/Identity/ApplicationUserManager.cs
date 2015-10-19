@@ -1,6 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
+using System.ServiceModel.Security.Tokens;
 using System.Threading.Tasks;
+using ITJakub.Shared.Contracts;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
@@ -9,6 +13,8 @@ namespace ITJakub.Web.Hub.Identity
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
+        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
@@ -18,7 +24,7 @@ namespace ITJakub.Web.Hub.Identity
         {
             var manager = new ApplicationUserManager(new ApplicationUserStore());
 
-            manager.PasswordHasher = new ApplicationPasswordHasher();
+            manager.PasswordHasher = new PasswordHasher();
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -51,7 +57,8 @@ namespace ITJakub.Web.Hub.Identity
             //    Subject = "Security Code",
             //    BodyFormat = "Your security code is {0}"
             //});
-            //manager.EmailService = new EmailService();
+            //manager.EmailService = new EmailService();            
+
             var dataProtectionProvider = options.DataProtectionProvider;
             if (dataProtectionProvider != null)
             {
@@ -79,10 +86,62 @@ namespace ITJakub.Web.Hub.Identity
 
         }
 
+        public bool RenewCommunicationToken(string userName)
+        {
+            using (var client = m_communication.GetEncryptedClient())
+            {
+                return client.RenewCommToken(userName);
+            }
+            
+        }
+
         public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
         {
-            var result = await base.CreateIdentityAsync(user, authenticationType);
-            return result;
+            var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
+
+            claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+
+            using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+            {
+                var specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+                var roleClaims = GetClaimsFromSpecialPermissions(specialPermissions);
+                claimsIdentity.AddClaims(roleClaims);
+            }
+
+            return claimsIdentity;
         }
-    }
+
+
+        private IList<Claim> GetClaimsFromSpecialPermissions(IList<SpecialPermissionContract> specialPermissions)
+        {
+            var claims = new List<Claim>();
+
+            if (specialPermissions.Count != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
+            }
+
+            if (specialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
+            }
+
+            if (specialPermissions.OfType<NewsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
+            }
+
+            if (specialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
+            }
+
+            if (specialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
+            }
+
+            return claims;
+        }
+    }   
 }

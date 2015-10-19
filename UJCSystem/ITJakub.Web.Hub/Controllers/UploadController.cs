@@ -2,14 +2,16 @@
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    //[Authorize]
-    public class UploadController : Controller
+    [Authorize(Roles = CustomRole.CanUploadBooks)]
+    public class UploadController : BaseController
     {
-        //private readonly ItJakubServiceClient m_serviceClient = new ItJakubServiceClient();
+        //private readonly ItJakubServiceClient m_serviceClient = GetMainServiceClient();
+
 
         public ActionResult Upload()
         {
@@ -24,7 +26,7 @@ namespace ITJakub.Web.Hub.Controllers
                 var file = Request.Files[i];
                 if (file != null && file.ContentLength != 0)
                 {
-                    using (var client = new ItJakubServiceStreamedClient())
+                    using (var client = GetStreamingClient())
                     {
                         client.AddResource(
                             new UploadResourceContract
@@ -42,7 +44,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult ProcessUploadedFiles(string sessionId, string uploadMessage)
         {
-            using (var client = new ItJakubServiceClient())
+            using (var client = GetMainServiceClient())
             {
                 var success = client.ProcessSession(sessionId, uploadMessage);
                 return Json(new {success});

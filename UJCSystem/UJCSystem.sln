@@ -221,6 +221,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.BatchImport", "ITJa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Xml.WordBreaker", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml.WordBreaker\Daliboris.Pomucky.Xml.WordBreaker.csproj", "{24155839-32EF-4BBB-8311-A04502E61864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService.Core.Test", "ITJakub.ITJakubService.Core.Test\ITJakub.ITJakubService.Core.Test.csproj", "{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1482,6 +1484,26 @@ Global
 		{24155839-32EF-4BBB-8311-A04502E61864}.Release|x64.Build.0 = Release|Any CPU
 		{24155839-32EF-4BBB-8311-A04502E61864}.Release|x86.ActiveCfg = Release|Any CPU
 		{24155839-32EF-4BBB-8311-A04502E61864}.Release|x86.Build.0 = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|ARM.Build.0 = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|x64.Build.0 = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Debug|x86.Build.0 = Debug|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|ARM.ActiveCfg = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|ARM.Build.0 = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|x64.ActiveCfg = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|x64.Build.0 = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|x86.ActiveCfg = Release|Any CPU
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1561,6 +1583,7 @@ Global
 		{3F9E4F36-8033-48EB-B362-8BC46678EBA9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{24155839-32EF-4BBB-8311-A04502E61864} = {2A83D63B-A058-4542-9B67-A3EA03CFC9D9}
+		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi
