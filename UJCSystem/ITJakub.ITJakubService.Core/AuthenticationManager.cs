@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens;
 using System.Security.Authentication;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
+using Jewelery;
 
 namespace ITJakub.ITJakubService.Core
 {
@@ -26,6 +27,16 @@ namespace ITJakub.ITJakubService.Core
             if (user == null || user.CommunicationToken == null || user.CommunicationToken != commToken )
                 throw new AuthenticationException("Invalid credentials");
         }
+
+        public void ValidateUserAndPassword(string userName, string password)
+        {
+            var user = m_userRepository.GetByLogin(userName);
+
+            if (user == null || user.PasswordHash == null || (!CustomPasswordHasher.ValidatePassword(password.Split(':')[1], user.PasswordHash)))
+                throw new AuthenticationException("Invalid credentials");                                    
+        }
+
+        
 
 
         public bool RenewCommToken(string userName)

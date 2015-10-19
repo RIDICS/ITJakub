@@ -162,8 +162,6 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 return registeredUsersGroup;
             }
-        }
-
-   
+        }    
     }
 }
