@@ -78,7 +78,7 @@ namespace ITJakub.DataEntities.Database.Entities
     {
         public CardFilePermission()
         {
-            PermissionCategorization = SpecialPermissionCategorization.Read;
+            PermissionCategorization = SpecialPermissionCategorization.CardFile;
         }
 
         public virtual bool CanReadCardFile { get; set; }
@@ -99,5 +99,25 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual bool AutoImportIsAllowed { get; set; }
 
         public virtual Category Category { get; set; }
+    }
+
+    public class ReadLemmatizationPermission : SpecialPermission
+    {
+        public ReadLemmatizationPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.CardFile;
+        }
+
+        public virtual bool CanReadLemmatization { get; set; }
+    }
+
+    public class EditLemmatizationPermission : SpecialPermission
+    {
+        public EditLemmatizationPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
+        public virtual bool CanEditLemmatization { get; set; }
     }
 }

@@ -4,6 +4,6 @@ namespace ITJakub.DataEntities.Database.Entities.Enums
     {
         Action = 0,
         Autoimport = 1,
-        Read = 2,
+        CardFile = 2,
     }
 }

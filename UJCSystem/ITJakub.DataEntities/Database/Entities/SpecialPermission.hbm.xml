@@ -79,7 +79,25 @@
         <column name="AutoimportAllowed" sql-type="bit" not-null="true" />
       </property>
 
-      <many-to-one name="Category" class="Category" column="AutoimportCategory"/>
+      <many-to-one name="Category" class="Category" column="AutoimportCategory" lazy="false"/>
+      
+    </subclass>
+    
+    <subclass name="ReadLemmatizationPermission"
+      discriminator-value="ReadLemmatization">
+
+      <property name="CanReadLemmatization">
+        <column name="CanReadLemmatization" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="EditLemmatizationPermission"
+      discriminator-value="EditLemmatization">
+
+      <property name="CanEditLemmatization">
+        <column name="CanEditLemmatization" sql-type="bit" not-null="true" />
+      </property>
       
     </subclass>
     

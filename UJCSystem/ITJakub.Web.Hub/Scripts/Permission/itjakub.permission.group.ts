@@ -565,6 +565,8 @@ class SpecialPermissionTextResolver {
     private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
     private static cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
     private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
+    private static readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
+    private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -581,6 +583,10 @@ class SpecialPermissionTextResolver {
                 return "Prohlížení kartoték";
             case this.autoimportPermission:
                 return "Automatické právo na kategorii";
+            case this.readLemmatizationPermission:
+                return "Prohlížení lematizace";
+            case this.editLemmatizationPermission:
+                return "Úprava lematizace";
             default:
                 return "Neznámé právo";
         }
@@ -602,6 +608,10 @@ class SpecialPermissionTextResolver {
                 return this.resolveCardFileText(<ICardFilePermission>specialPermission);
             case this.autoimportPermission:
                 return this.resolveAutoImportText(<IAutoImportPermission>specialPermission);
+            case this.readLemmatizationPermission:
+                return "Prohlížení lematizace";
+            case this.editLemmatizationPermission:
+                return "Úprava lematizace";
             default:
                 return "Neznámé právo";
         }

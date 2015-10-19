@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;

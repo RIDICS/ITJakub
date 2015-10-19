@@ -7,5 +7,7 @@ namespace ITJakub.Web.Hub.Identity
         public const string CanAddNews = "CanAddNews";
         public const string CanManagePermissions = "CanManagePermissions";
         public const string CanManageFeedbacks = "CanManageFeedbacks";
+        public const string CanReadLemmatization = "CanReadLemmatization";
+        public const string CanEditLemmatization = "CanEditLemmatization";
     }
 }

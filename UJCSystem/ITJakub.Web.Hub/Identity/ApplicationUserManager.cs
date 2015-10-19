@@ -141,6 +141,16 @@ namespace ITJakub.Web.Hub.Identity
                 claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
             }
 
+            if (specialPermissions.OfType<ReadLemmatizationPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanReadLemmatization));
+            }
+
+            if (specialPermissions.OfType<EditLemmatizationPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditLemmatization));
+            }
+
             return claims;
         }
     }   

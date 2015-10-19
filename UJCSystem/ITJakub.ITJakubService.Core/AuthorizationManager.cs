@@ -73,7 +73,7 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Read);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile);
             var cardFilePermissions = specialPermissions.OfType<CardFilePermission>();
             if (!cardFilePermissions.Any(x => x.CanReadCardFile && x.CardFileId == cardFileId))
             {
@@ -175,7 +175,7 @@ namespace ITJakub.ITJakubService.Core
                 return;
             }
 
-            var cardFileSpecialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Read).OfType<CardFilePermission>();
+            var cardFileSpecialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile).OfType<CardFilePermission>();
             var allowedCardFileIds = cardFileSpecialPermissions.Where(x => x.CanReadCardFile).Select(x => x.CardFileId);
             cardFilesContracts = cardFilesContracts.Where(x => allowedCardFileIds.Contains(x.Id)).ToList();
         }

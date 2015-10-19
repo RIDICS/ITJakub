@@ -37,6 +37,12 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<AutoImportCategoryPermission, AutoImportCategoryPermissionContract>()
                 .ForMember(dest => dest.AutoImportIsAllowed, opts => opts.MapFrom(src => src.AutoImportIsAllowed))
                 .ForMember(dest => dest.Category, opts => opts.MapFrom(src => src.Category));
+
+            CreateMap<ReadLemmatizationPermission, ReadLemmatizationPermissionContract>()
+                .ForMember(dest => dest.CanReadLemmatization, opts => opts.MapFrom(src => src.CanReadLemmatization));
+
+            CreateMap<EditLemmatizationPermission, EditLemmatizationPermissionContract>()
+                .ForMember(dest => dest.CanEditLemmatization, opts => opts.MapFrom(src => src.CanEditLemmatization));
         }
     }
 }

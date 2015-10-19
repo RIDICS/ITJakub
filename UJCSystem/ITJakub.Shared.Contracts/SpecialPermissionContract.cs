@@ -9,6 +9,8 @@ namespace ITJakub.Shared.Contracts
     [KnownType(typeof (FeedbackPermissionContract))]
     [KnownType(typeof (CardFilePermissionContract))]
     [KnownType(typeof (AutoImportCategoryPermissionContract))]
+    [KnownType(typeof (ReadLemmatizationPermissionContract))]
+    [KnownType(typeof (EditLemmatizationPermissionContract))]
     public class SpecialPermissionContract
     {
         [DataMember]
@@ -64,5 +66,19 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public CategoryContract Category { get; set; }
+    }
+
+    [DataContract]
+    public class ReadLemmatizationPermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool CanReadLemmatization { get; set; }
+    }
+
+    [DataContract]
+    public class EditLemmatizationPermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool CanEditLemmatization { get; set; }
     }
 }

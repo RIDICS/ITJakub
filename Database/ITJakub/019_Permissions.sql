@@ -37,7 +37,9 @@ BEGIN TRAN;
 		[CardFileName] varchar(100) NULL,
 		[AutoimportAllowed] bit NULL,
 		[AutoimportCategory] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
-		CONSTRAINT [Uniq_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory]) 
+		[CanEditLemmatization] bit NULL,
+		[CanReadLemmatization] bit NULL,
+		CONSTRAINT [Uniq_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization]) 
 	);
 
 	CREATE TABLE [dbo].[SpecialPermission_Group](
@@ -57,7 +59,9 @@ BEGIN TRAN;
 	    CanUploadBook,
 	    CanManagePermissions,
 	    CanAddNews,
-	    CanManageFeedbacks
+	    CanManageFeedbacks,
+		CanEditLemmatization,
+		CanReadLemmatization
 	)
 	VALUES
 	(
@@ -67,7 +71,9 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    1, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'UploadBook', -- PermissionType - varchar
@@ -75,7 +81,9 @@ BEGIN TRAN;
 	    1, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'News', -- PermissionType - varchar
@@ -83,7 +91,9 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    1, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'Feedback', -- PermissionType - varchar
@@ -91,10 +101,42 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    1 -- CanManageFeedbacks - bit
-	)	
+	    1, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
+	),(
+		-- Id - int
+	    'EditLemmatization', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL, -- CanManageFeedbacks - bit
+		1, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
+	),(
+		-- Id - int
+	    'ReadLemmatization', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		1 -- CanReadLemmatization - bit
+	)
 
-	--read permissions
+	INSERT INTO dbo.SpecialPermission
+	(
+	    --Id - this column value is auto-generated
+	    PermissionType,
+	    PermissionCategorization,
+	    AutoimportAllowed,
+		AutoimportCategory
+	)
+	SELECT 'Autoimport', 1, 1, c.Id FROM dbo.Category c
+
+	--cardfiles permissions
 	INSERT INTO dbo.SpecialPermission
 	(
 	    --Id - this column value is auto-generated
@@ -320,7 +362,7 @@ BEGIN TRAN;
 	    SpecialPermission,
 	    [Group]
 	)
-	SELECT Id, @AdminGroupId FROM dbo.SpecialPermission sp
+	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp
 
 
 	ALTER TABLE dbo.[User] DROP COLUMN [Salt]
