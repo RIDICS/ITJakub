@@ -108,7 +108,7 @@
     <Compile Include="Services\ItJakubServiceManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MobileAppsServiceManager.cs" />
-    <Compile Include="UserNameValidator.cs" />
+    <Compile Include="UserNameAuthTokenValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

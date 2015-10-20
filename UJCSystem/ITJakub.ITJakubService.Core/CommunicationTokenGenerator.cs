@@ -6,7 +6,7 @@ namespace ITJakub.ITJakubService.Core
     {
         public string GetNewCommunicationToken()
         {
-            return Guid.NewGuid().ToString();
+            return string.Format("CT:{0}",Guid.NewGuid()) ;
         }
     }
 }
