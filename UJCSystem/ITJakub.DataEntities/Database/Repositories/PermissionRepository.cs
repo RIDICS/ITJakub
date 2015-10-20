@@ -326,5 +326,39 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return permissions;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<AutoImportCategoryPermission> GetAutoimportPermissionsByCategoryIdList(IEnumerable<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                AutoImportCategoryPermission autoimportPermissionAlias = null;
+                Category categoryAlias = null;
+
+                var permissions = session.QueryOver(() => autoimportPermissionAlias)
+                    .JoinQueryOver(x => autoimportPermissionAlias.Category, () => categoryAlias)
+                    .AndRestrictionOn(() => categoryAlias.Id).IsInG(categoryIds)
+                    .List<AutoImportCategoryPermission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> GetGroupsBySpecialPermissionIds(IEnumerable<int> specialPermissionIds)
+        {
+            using (var session = GetSession())
+            {
+                Group groupAlias = null;
+                SpecialPermission specialPermissionAlias = null;
+
+                var groups = session.QueryOver(() => groupAlias)
+                    .JoinQueryOver(x => groupAlias.SpecialPermissions, () => specialPermissionAlias)
+                    .AndRestrictionOn(() => specialPermissionAlias.Id).IsInG(specialPermissionIds)
+                    .List<Group>();
+
+                return groups;
+            }
+        }
     }
 }
