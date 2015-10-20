@@ -21,7 +21,7 @@ BEGIN TRAN;
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Permission(Id)] PRIMARY KEY,
 		[Group] int NOT NULL CONSTRAINT [FK_Permission(Group)_Group(Id)] FOREIGN KEY REFERENCES [dbo].[Group](Id),
 		[Book] bigint NOT NULL CONSTRAINT [FK_Permission(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id),
-		CONSTRAINT [Uniq_Permission(Group_Book)] UNIQUE ([Group],[Book])    
+		CONSTRAINT [UQ_Permission(Group_Book)] UNIQUE ([Group],[Book])    
 	);
 	
 	CREATE TABLE [dbo].[SpecialPermission](
@@ -39,7 +39,7 @@ BEGIN TRAN;
 		[AutoimportCategory] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
 		[CanEditLemmatization] bit NULL,
 		[CanReadLemmatization] bit NULL,
-		CONSTRAINT [Uniq_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization]) 
+		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization]) 
 	);
 
 	CREATE TABLE [dbo].[SpecialPermission_Group](

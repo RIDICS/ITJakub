@@ -18,6 +18,12 @@ namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
         private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
 
 
+        public string GetFormattedPasswordAsAuthToken(string password)
+        {
+            return string.Format("PW:{0}", password);
+        }
+
+
         /// <summary>
         /// 
         /// </summary>

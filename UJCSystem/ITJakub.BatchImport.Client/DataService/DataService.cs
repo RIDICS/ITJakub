@@ -20,9 +20,9 @@ namespace ITJakub.BatchImport.Client.DataService
             Task.Factory.StartNew(() => m_fileUploadManager.AddFilesForUpload(callback, folderPath));
         }
 
-        public void ProcessItems(Action<string, Exception> callback)
+        public void ProcessItems(string username, string password, int threadCount, Action<string, Exception> callback)
         {
-            Task.Factory.StartNew(() => m_fileUploadManager.ProcessAllItems(callback));
+            Task.Factory.StartNew(() => m_fileUploadManager.ProcessAllItems(username, password, threadCount, callback));
         }
     }
 }
