@@ -233,6 +233,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
+    <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />

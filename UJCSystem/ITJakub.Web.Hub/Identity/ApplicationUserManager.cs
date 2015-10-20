@@ -23,8 +23,7 @@ namespace ITJakub.Web.Hub.Identity
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
             var manager = new ApplicationUserManager(new ApplicationUserStore());
-
-            manager.PasswordHasher = new PasswordHasher();
+            manager.PasswordHasher = new CustomPasswordHasher();
             // Configure validation logic for usernames
             manager.UserValidator = new UserValidator<ApplicationUser>(manager)
             {
@@ -153,5 +152,5 @@ namespace ITJakub.Web.Hub.Identity
 
             return claims;
         }
-    }   
+    }
 }

@@ -312,9 +312,9 @@ BEGIN TRAN;
 	    'Admin', -- LastName - varchar
 	    'Admin', -- Email - varchar
 	    0, -- AuthenticationProvider - tinyint
-	    'e61edc70-9c8f-4ef4-84ff-f57b3758b88f', -- CommunicationToken - varchar
+	    'CT:ca22d7b7-e1d6-46b0-a77f-29296fe9f7f0', -- CommunicationToken - varchar
 	    '2015-10-01 10:50:36', -- CommunicationTokenCreateTime - datetime
-	    'ANx75Iw7AnQgKChYKghJVcXKE8vwofGlP3tRctamVrqTLOvhyXM0Qko27aui6mhTlg==', -- PasswordHash - varchar -- password is 'Administrator'
+	    'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9', -- PasswordHash - varchar -- password is 'Administrator'
 	    '', -- Salt - varchar
 	    '2015-10-01 10:50:36', -- CreateTime - datetime
 	    NULL, -- AvatarUrl - varchar

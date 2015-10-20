@@ -95,6 +95,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\FolderDialogBehavior.cs" />
+    <Compile Include="BusinessLogic\Communication\CommunicationProvider.cs" />
     <Compile Include="ComponentInstaller.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="DataService\DataService.cs" />
