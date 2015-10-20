@@ -80,7 +80,7 @@ BEGIN TRAN
 	  ('output-scholary_literature','Odborna literatura',NULL,@ProfessionalLiteratureTypeId,'/output-scholary_literature/'),
 	  ('output-digitized-grammar','Mluvnice',NULL,@GrammarTypeId,'/output-digitized-grammar/'),
 	  ('output-bibliography','Bibliograficky zaznam',NULL,@BibliographicalItemTypeId,'/output-bibliography/'),
-	  ('output-cardfiles','Kartoteky',NULL,@CardFileTypeId,'/output-cardfiles/'),
+	  --('output-cardfiles','Kartoteky',NULL,@CardFileTypeId,'/output-cardfiles/'),
 	  ('output-audiobooks','Audioknihy',NULL,@AudioBookTypeId,'/output-audiobooks/')
 	  
 

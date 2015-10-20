@@ -1745,12 +1745,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             {
                 return Channel.GetSpecialPermissions();
             }
-
-
-
-
-
-
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)

@@ -263,7 +263,7 @@ class CardFileViewer {
 
         var headwordNameSpan : HTMLSpanElement = document.createElement("span");
         $(headwordNameSpan).addClass("headword-name");
-        headwordNameSpan.innerText = "";
+        headwordNameSpan.innerHTML = "";
 
         headwordDiv.appendChild(headwordNameSpan);
         cardFileLeftPanelDiv.appendChild(headwordDiv);
@@ -295,22 +295,22 @@ class CardFileViewer {
 
         var cardFileDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDescDiv).addClass("cardfile-description");
-        cardFileDescDiv.innerText = "Kartotéka: ";
+        cardFileDescDiv.innerHTML = "Kartotéka: ";
 
         var cardFileNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileNameSpan).addClass("cardfile-name");
-        cardFileNameSpan.innerText = "";
+        cardFileNameSpan.innerHTML = "";
 
         cardFileDescDiv.appendChild(cardFileNameSpan);
         cardFileRightPanelDiv.appendChild(cardFileDescDiv);
 
         var cardFileDrawerDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDrawerDescDiv).addClass("cardfile-drawer-description");
-        cardFileDrawerDescDiv.innerText = "Zásuvka: ";
+        cardFileDrawerDescDiv.innerHTML = "Zásuvka: ";
 
         var cardFileDrawerNameSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileDrawerNameSpan).addClass("cardfile-drawer-name");
-        cardFileDrawerNameSpan.innerText = "";
+        cardFileDrawerNameSpan.innerHTML = "";
 
         cardFileDrawerDescDiv.appendChild(cardFileDrawerNameSpan);
         cardFileRightPanelDiv.appendChild(cardFileDrawerDescDiv);
@@ -326,7 +326,7 @@ class CardFileViewer {
 
         var cardFilePagesDiv: HTMLDivElement = document.createElement("div");
         $(cardFilePagesDiv).addClass("cardfile-pages");
-        cardFilePagesDiv.innerText = "Stránky: ";
+        cardFilePagesDiv.innerHTML = "Stránky: ";
 
         cardFileRightPanelDiv.appendChild(cardFilePagesDiv);
 
@@ -335,18 +335,18 @@ class CardFileViewer {
 
         var cardFileHeadwordDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileHeadwordDescDiv).addClass("cardfile-headword-description");
-        cardFileHeadwordDescDiv.innerText = "Hesla: ";
+        cardFileHeadwordDescDiv.innerHTML = "Hesla: ";
 
         var cardFileHeadwordTextSpan: HTMLSpanElement = document.createElement("span");
         $(cardFileHeadwordTextSpan).addClass("cardfile-headword-text");
-        cardFileHeadwordTextSpan.innerText = "";
+        cardFileHeadwordTextSpan.innerHTML = "";
 
         cardFileHeadwordDescDiv.appendChild(cardFileHeadwordTextSpan);
         cardFileScrollableRightPanelDiv.appendChild(cardFileHeadwordDescDiv);
 
         var cardFileNoticeDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoticeDiv).addClass("cardfile-notice");
-        cardFileNoticeDiv.innerText = "Upozornění: ";
+        cardFileNoticeDiv.innerHTML = "Upozornění: ";
 
         var cardFileNoticeList: HTMLUListElement = document.createElement("ul");
         $(cardFileNoticeList).addClass("cardfile-notice-list");
@@ -356,7 +356,7 @@ class CardFileViewer {
 
         var cardFileNoteDiv: HTMLDivElement = document.createElement("div");
         $(cardFileNoteDiv).addClass("cardfile-note");
-        cardFileNoteDiv.innerText = "Poznámka: ";
+        cardFileNoteDiv.innerHTML = "Poznámka: ";
 
         var cardFileNoteList: HTMLUListElement = document.createElement("ul");
         $(cardFileNoteList).addClass("cardfile-note-list");

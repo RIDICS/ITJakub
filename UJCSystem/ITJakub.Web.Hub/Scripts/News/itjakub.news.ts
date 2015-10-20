@@ -61,7 +61,7 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
 
         var date = convertDate(item.CreateDate);
         var titleHeader = document.createElement("h2");
-        titleHeader.innerText = item.Title;
+        titleHeader.innerHTML = item.Title;
 
         itemDiv.appendChild(titleHeader);
 
@@ -72,7 +72,7 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         itemDiv.appendChild(dateDiv);
 
         var itemMessage = document.createElement("p");
-        itemMessage.innerText = item.Text;
+        itemMessage.innerHTML = item.Text;
 
         itemDiv.appendChild(itemMessage);
 

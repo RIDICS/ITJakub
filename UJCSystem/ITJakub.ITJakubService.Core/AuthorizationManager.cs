@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
 
@@ -25,7 +27,7 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanAddNews()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
             var newsPermissions = specialPermissions.OfType<NewsPermission>();
             if (!newsPermissions.Any(x => x.CanAddNews))
             {
@@ -37,7 +39,7 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanManageFeedbacks()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
             var feedbackPermissions = specialPermissions.OfType<FeedbackPermission>();
             if (!feedbackPermissions.Any(x => x.CanManageFeedbacks))
             {
@@ -49,7 +51,7 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanManagePermissions()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
             var managePermissionsPermissions = specialPermissions.OfType<ManagePermissionsPermission>();
             if (!managePermissionsPermissions.Any(x => x.CanManagePermissions))
             {
@@ -60,13 +62,25 @@ namespace ITJakub.ITJakubService.Core
         public void CheckUserCanUploadBook()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUser(user.Id);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
             var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
             if (!uploadBookPermissions.Any(x => x.CanUploadBook))
             {
                 throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to upload books", user.UserName));
             }
-        } 
+        }
+
+        public void CheckUserCanViewCardFile(string cardFileId)
+        {
+            var user = m_userManager.GetCurrentUser();
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile);
+            var cardFilePermissions = specialPermissions.OfType<CardFilePermission>();
+            if (!cardFilePermissions.Any(x => x.CanReadCardFile && x.CardFileId == cardFileId))
+            {
+                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to read cardfile with id '{1}'", user.UserName, cardFileId));
+            }
+        }
+
 
         public void AuthorizeBook(string bookXmlId)
         {
@@ -149,7 +163,24 @@ namespace ITJakub.ITJakubService.Core
 
             var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, bookIds);
             bookIds = filtered;
-        }   
+        }
+
+
+        public void FilterCardFileList(ref IList<CardFileContract> cardFilesContracts)
+        {
+            var user = m_userManager.GetCurrentUser();
+
+            if (cardFilesContracts == null || cardFilesContracts.Count == 0)
+            {
+                return;
+            }
+
+            var cardFileSpecialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile).OfType<CardFilePermission>();
+            var allowedCardFileIds = cardFileSpecialPermissions.Where(x => x.CanReadCardFile).Select(x => x.CardFileId);
+            cardFilesContracts = cardFilesContracts.Where(x => allowedCardFileIds.Contains(x.Id)).ToList();
+        }
+
+
     }
 
     public class AuthorizationException : Exception
