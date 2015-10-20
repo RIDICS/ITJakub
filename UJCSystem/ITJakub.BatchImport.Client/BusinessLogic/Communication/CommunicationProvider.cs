@@ -14,7 +14,8 @@ namespace ITJakub.BatchImport.Client.BusinessLogic.Communication
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
         private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
-        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
+        //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
+        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
 
 
         /// <summary>
