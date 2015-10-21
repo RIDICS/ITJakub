@@ -336,17 +336,11 @@
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
       <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.editions.content.css">
-      <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
-    </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.editions.content.min.css">
-      <DependentUpon>itjakub.editions.content.css</DependentUpon>
-    </Content>
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
       <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
-      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.css">
+      <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
     </Content>
     <Content Include="Areas\Tools\Content\itjakub.tools.css">
       <DependentUpon>itjakub.tools.less</DependentUpon>
@@ -384,6 +378,9 @@
     </Content>
     <Content Include="Content\Lemmatization\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Permission\itjakub.permission.css">
+      <DependentUpon>itjakub.permission.less</DependentUpon>
     </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
@@ -562,6 +559,7 @@
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
     <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
@@ -673,7 +671,6 @@
     <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
     <None Include="compilerconfig.json" />

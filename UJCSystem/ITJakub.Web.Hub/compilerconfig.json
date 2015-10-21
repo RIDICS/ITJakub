@@ -34,6 +34,10 @@
   {
     "outputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.css",
     "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.less"
+  },  
+  {
+    "outputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.content.css",
+    "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.content.less"
   },
   {
     "outputFile": "Areas/Tools/Content/itjakub.tools.css",
