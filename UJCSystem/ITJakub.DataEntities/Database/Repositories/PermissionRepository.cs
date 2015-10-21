@@ -211,6 +211,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual void CreateSpecialPermission(SpecialPermission permission)
+        {
+            using (var session = GetSession())
+            {
+                session.Save(permission);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
         {
             using (var session = GetSession())
