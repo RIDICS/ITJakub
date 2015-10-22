@@ -167,6 +167,12 @@
         decodedText = replaceSpecialChars(decodedText);
         readerPlugin.moveToPage(decodedText, true);
     }
+
+
+    //label item in main menu
+    $('#main-plugins-menu').find('li').removeClass('active');
+    var mainMenuLi = $('#professional-menu');
+    $(mainMenuLi).addClass('active');
 }
 
 function listProfLitBookReadClicked(target) {
