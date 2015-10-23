@@ -17,7 +17,7 @@
         var select: HTMLSelectElement = document.createElement('select');
 
         $(select).change(() => {
-            var selectedOptionValue:string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
+            var selectedOptionValue: string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 
@@ -106,8 +106,7 @@
  * 
  */
 
-enum SortEnum 
-{
+enum SortEnum {
     Author = 0,
     Title = 1,
     Editor = 2,
