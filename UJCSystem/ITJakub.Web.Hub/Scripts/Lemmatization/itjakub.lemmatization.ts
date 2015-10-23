@@ -1,5 +1,5 @@
 ﻿function initLemmatization(tokenId: string) {
-    var lemmatization = new Lemmatization("#mainContainer");
+    var lemmatization = new Lemmatization("#mainContainer", true);
     lemmatization.make();
 
     if (tokenId)
@@ -7,17 +7,19 @@
 }
 
 class Lemmatization {
+    private canEdit: boolean;
     private mainContainer: string;
     private searchBox: LemmatizationSearchBox;
     private lemmatizationCharacteristic: LemmatizationCharacteristicEditor;
     private currentTokenItem: IToken;
 
-    constructor(mainContainer: string) {
+    constructor(mainContainer: string, canEdit: boolean) {
+        this.canEdit = canEdit;
         this.mainContainer = mainContainer;
         this.searchBox = new LemmatizationSearchBox("#mainSearchInput");
         this.lemmatizationCharacteristic = new LemmatizationCharacteristicEditor();
     }
-
+    
     public make() {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
@@ -68,6 +70,21 @@ class Lemmatization {
         $("#save-edited-token").click(() => {
             this.saveEditedToken();
         });
+
+        if (!this.canEdit) {
+            $("#addNewTokenButton").remove();
+            $("#showEditToken").remove();
+            $("#addNewCharacteristic").remove();
+
+            $("#newTokenDialog").remove();
+            $("#editTokenDialog").remove();
+            $("#newTokenCharacteristic").remove();
+
+            $("#newCanonicalFormDialog").remove();
+            $("#editCanonicalFormDialog").remove();
+            $("#newHyperCanonicalFormDialog").remove();
+            $("#editHyperCanonicalFormDialog").remove();
+        }
     }
 
     public load(tokenId: number) {
@@ -114,7 +131,7 @@ class Lemmatization {
         for (var i = 0; i < list.length; i++) {
             var containerDiv = document.createElement("div");
             var characteristicItem = list[i];
-            var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, characteristicItem, containerDiv);
+            var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, characteristicItem, containerDiv, this.canEdit);
             characteristicTable.make();
 
             $(this.mainContainer).append(containerDiv);
@@ -123,7 +140,7 @@ class Lemmatization {
 
     private addNewCharacteristic(item: ITokenCharacteristic) {
         var containerDiv = document.createElement("div");
-        var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, item, containerDiv);
+        var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, item, containerDiv, this.canEdit);
         characteristicTable.make();
 
         $(this.mainContainer).append(containerDiv);
@@ -332,6 +349,7 @@ class LemmatizationCharacteristicEditor {
 }
 
 class LemmatizationCharacteristicTable {
+    private canEdit: boolean;
     private characteristicEditor: LemmatizationCharacteristicEditor;
     private container: HTMLDivElement;
     private tbody: HTMLTableSectionElement;
@@ -339,7 +357,8 @@ class LemmatizationCharacteristicTable {
     private descriptionDiv: HTMLDivElement;
     private morphologicalSpan: HTMLSpanElement;
     
-    constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement) {
+    constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement, canEdit: boolean) {
+        this.canEdit = canEdit;
         this.characteristicEditor = characteristicEditor;
         this.container = container;
         this.item = item;
@@ -427,12 +446,17 @@ class LemmatizationCharacteristicTable {
 
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
             var canonicalFormItem = this.item.CanonicalFormList[i];
-            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, tbody, canonicalFormItem);
+            var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, tbody, this.canEdit, canonicalFormItem);
             canonicalForm.make(this.addNewEmptyRow.bind(this));
         }
         this.addNewEmptyRow();
 
         $(tableDiv).append(table);
+
+        if (!this.canEdit) {
+            editCharacteristicButton.remove();
+            th1.remove();
+        }
 
         $(this.container)
             .append(morphologicalDiv)
@@ -446,7 +470,10 @@ class LemmatizationCharacteristicTable {
     }
 
     private addNewEmptyRow() {
-        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.tbody);
+        if (!this.canEdit)
+            return;
+
+        var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.tbody, this.canEdit);
         canonicalForm.make(this.addNewEmptyRow.bind(this));
     }
 
@@ -460,6 +487,7 @@ class LemmatizationCanonicalForm {
     private static searchBox: LemmatizationSearchBox;
     private static hyperSearchBox: LemmatizationSearchBox;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
+    private canEdit: boolean;
     private tableBody: HTMLTableSectionElement;
     private canonicalForm: ICanonicalForm;
     private tokenCharacteristicId: number;
@@ -469,8 +497,9 @@ class LemmatizationCanonicalForm {
     private editButton: HTMLButtonElement;
     private hyperLemmatization: LemmatizationHyperCanonicalForm;
 
-    constructor(tokenCharacteristicId: number, tableBody: HTMLTableSectionElement, canonicalForm: ICanonicalForm = null) {
+    constructor(tokenCharacteristicId: number, tableBody: HTMLTableSectionElement, canEdit: boolean, canonicalForm: ICanonicalForm = null) {
         this.tableBody = tableBody;
+        this.canEdit = canEdit;
         this.canonicalForm = canonicalForm;
         this.tokenCharacteristicId = tokenCharacteristicId;
     }
@@ -577,6 +606,11 @@ class LemmatizationCanonicalForm {
             .append(hyperTd2)
             .append(hyperTd3)
             .append(hyperTd4);
+
+        if (!this.canEdit) {
+            td1.remove();
+            hyperTd1.remove();
+        }
 
         $(this.tableBody).append(tr);
         $(this.tableBody).append(hyperTr);
