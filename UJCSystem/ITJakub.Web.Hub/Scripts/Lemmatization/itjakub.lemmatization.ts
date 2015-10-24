@@ -734,7 +734,7 @@ class LemmatizationCanonicalForm {
                 dataType: "json",
                 contentType: "application/json",
                 success: () => {
-                    this.updateAfterItemCreation(currentItem.Id, currentItem.Text, currentItem.Type, currentItem.Description);
+                    this.updateAfterItemAssign(currentItem);
                 }
             });
         }
@@ -855,14 +855,8 @@ class LemmatizationCanonicalForm {
         $("#editHyperCanonicalFormDialog").modal("hide");
     }
 
-    private updateAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
-        this.canonicalForm = {
-            Id: newId,
-            Text: name,
-            Type: formType,
-            Description: description,
-            HyperCanonicalForm: null
-        };
+    private updateAfterItemAssign(canonicalForm: ICanonicalForm) {
+        this.canonicalForm = canonicalForm;
 
         $(this.containerCanonicalForm).text(this.canonicalForm.Text);
         $(this.containerDescription).text(this.canonicalForm.Description);
@@ -872,8 +866,28 @@ class LemmatizationCanonicalForm {
             .addClass("glyphicon-pencil");
         $(this.hyperLemmatization.setButton).removeClass("hidden");
 
+        if (canonicalForm.HyperCanonicalForm != null) {
+            var hyperCanonicalForm = this.canonicalForm.HyperCanonicalForm;
+            $(this.hyperLemmatization.containerName).text(hyperCanonicalForm.Text);
+            $(this.hyperLemmatization.containerDescription).text(hyperCanonicalForm.Description);
+            $(this.hyperLemmatization.containerType).text(LemmatizationCanonicalForm.hyperTypeToString(hyperCanonicalForm.Type));
+            $(this.hyperLemmatization.editButton).removeClass("hidden");
+        }
+
         this.newCanonicalFormCreatedCallback(this.canonicalForm);
         $("#newCanonicalFormDialog").modal("hide");
+    }
+
+    private updateAfterItemCreation(newId: number, name: string, formType: CanonicalFormTypeEnum, description: string) {
+        var canonicalForm = {
+            Id: newId,
+            Text: name,
+            Type: formType,
+            Description: description,
+            HyperCanonicalForm: null
+        };
+
+        this.updateAfterItemAssign(canonicalForm);
     }
 
     private updateAfterHyperItemCreation(newId: number, name: string, formType: HyperCanonicalFormTypeEnum, description: string) {

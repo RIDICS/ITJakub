@@ -8,15 +8,15 @@ namespace ITJakub.Lemmatization.Core.AutoMapperProfiles
     {
         protected override void Configure()
         {
-            CreateMap<CanonicalForm, CanonicalFormTypeaheadContract>()
+            CreateMap<CanonicalForm, CanonicalFormContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Text, opts => opts.MapFrom(src => src.Text))
                 .ForMember(dest => dest.Description, opts => opts.MapFrom(src => src.Description))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Type))
-                .Include<CanonicalForm, CanonicalFormContract>()
+                .Include<CanonicalForm, CanonicalFormTypeaheadContract>()
                 .Include<CanonicalForm, InverseCanonicalFormContract>();
 
-            CreateMap<CanonicalForm, CanonicalFormContract>()
+            CreateMap<CanonicalForm, CanonicalFormTypeaheadContract>()
                 .ForMember(dest => dest.HyperCanonicalForm, opts => opts.MapFrom(src => src.HyperCanonicalForm));
 
             CreateMap<CanonicalForm, InverseCanonicalFormContract>()

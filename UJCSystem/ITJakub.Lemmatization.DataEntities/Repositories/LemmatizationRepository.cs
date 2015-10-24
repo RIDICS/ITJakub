@@ -37,6 +37,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
                     .WhereRestrictionOn(x => x.Text).IsLike(query, MatchMode.Start)
                     .And(x => x.Type == type)
                     .OrderBy(x => x.Text).Asc
+                    .Fetch(x => x.HyperCanonicalForm).Eager
                     .Take(recordCount)
                     .List();
                 return result;
