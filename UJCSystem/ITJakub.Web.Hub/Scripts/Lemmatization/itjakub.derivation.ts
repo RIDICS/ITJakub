@@ -98,6 +98,14 @@
             .append(tbody);
 
         for (var i = 0; i < this.idList.length; i++) {
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            $(td).addClass("column-canonical-form");
+            $(tr).append(td);
+            tr.setAttribute("data-id", String(this.idList[i]));
+            $(this.tbody).append(tr);
+        }
+        for (var i = 0; i < this.idList.length; i++) {
             var id = this.idList[i];
             this.loadCanonicalForm(id);
         }
@@ -123,11 +131,11 @@
 
     private processCanonicalForm(canonicalForm: IInverseCanonicalForm) {
         var rows = 1;
-        var tr = document.createElement("tr");
+        var tr = $("tr[data-id=\"" + canonicalForm.Id + "\"]", this.tbody);
         var td1 = document.createElement("td");
         $(td1).text(canonicalForm.Text);
-        tr.appendChild(td1);
-        this.tbody.appendChild(tr);
+        tr.empty();
+        tr.append(td1);
 
         var characteristicCount = canonicalForm.CanonicalFormFor.length;
         if (characteristicCount > 1)
@@ -135,23 +143,22 @@
         for (var i = 0; i < characteristicCount; i++) {
             var characteristic = canonicalForm.CanonicalFormFor[i];
             if (i > 0) {
-                tr = document.createElement("tr");
-                this.tbody.appendChild(tr);
+                var lastTr = tr;
+                tr = $(document.createElement("tr"));
+                lastTr.after(tr);
             }
 
             var td2 = document.createElement("td");
             $(td2).text(characteristic.MorphologicalCharacteristic);
-            tr.appendChild(td2);
+            tr.append(td2);
 
             var td3 = document.createElement("td");
             $(td3).text(characteristic.Token.Text);
-            tr.appendChild(td3);
+            tr.append(td3);
         }
 
         $(td1).attr("rowspan", rows);
     }
-
-    
 }
 
 interface IInverseTokenCharacteristic {
