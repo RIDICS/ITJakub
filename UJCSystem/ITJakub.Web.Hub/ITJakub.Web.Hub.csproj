@@ -286,6 +286,9 @@
     <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.css">
       <DependentUpon>itjakub.audiobooks.less</DependentUpon>
     </Content>
+    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.min.css">
+      <DependentUpon>itjakub.audiobooks.css</DependentUpon>
+    </Content>
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
@@ -371,6 +374,12 @@
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
+    <Content Include="Content\Permission\itjakub.permission.css">
+      <DependentUpon>itjakub.permission.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Permission\itjakub.permission.min.css">
+      <DependentUpon>itjakub.permission.css</DependentUpon>
+    </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -861,9 +870,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets'))" />
   </Target>
-  <Import Project="..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets')" />
+  <Import Project="..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
