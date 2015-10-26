@@ -55,5 +55,51 @@
       
     </subclass>
     
+    <subclass name="CardFilePermission"
+      discriminator-value="CardFile">
+
+      <property name="CanReadCardFile">
+        <column name="CanReadCardFile" sql-type="bit" not-null="true" />
+      </property>
+      
+      <property name="CardFileId">
+        <column name="CardFileId" not-null="true" />
+      </property>
+      
+      <property name="CardFileName">
+        <column name="CardFileName" not-null="true" />
+      </property>
+      
+    </subclass>    
+    
+    <subclass name="AutoImportCategoryPermission"
+      discriminator-value="Autoimport">
+
+      <property name="AutoImportIsAllowed">
+        <column name="AutoimportAllowed" sql-type="bit" not-null="true" />
+      </property>
+
+      <many-to-one name="Category" class="Category" column="AutoimportCategory" lazy="false"/>
+      
+    </subclass>
+    
+    <subclass name="ReadLemmatizationPermission"
+      discriminator-value="ReadLemmatization">
+
+      <property name="CanReadLemmatization">
+        <column name="CanReadLemmatization" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
+    <subclass name="EditLemmatizationPermission"
+      discriminator-value="EditLemmatization">
+
+      <property name="CanEditLemmatization">
+        <column name="CanEditLemmatization" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
   </class>
 </hibernate-mapping>

@@ -167,6 +167,11 @@
         decodedText = replaceSpecialChars(decodedText);
         readerPlugin.moveToPage(decodedText, true);
     }
+
+    //label item in main menu
+    $('#main-plugins-menu').find('li').removeClass('active');
+    var mainMenuLi = $('#editions-menu');
+    $(mainMenuLi).addClass('active');
 }
 
 function listBookReadClicked(target) {

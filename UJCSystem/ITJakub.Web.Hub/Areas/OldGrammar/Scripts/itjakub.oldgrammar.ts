@@ -107,6 +107,11 @@
         decodedText = replaceSpecialChars(decodedText);
         readerPlugin.moveToPage(decodedText, true);
     }
+
+    //label item in main menu
+    $('#main-plugins-menu').find('li').removeClass('active');
+    var mainMenuLi = $('#grammars-menu');
+    $(mainMenuLi).addClass('active');
 }
 
 function listGrammarBookReadClicked(target) {

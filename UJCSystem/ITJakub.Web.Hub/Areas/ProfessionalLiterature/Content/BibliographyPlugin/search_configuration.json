@@ -1,0 +1,166 @@
+﻿{
+  "ProfessionalLiterature": {
+    "middle-panel": {
+      "title": "{$printAuthors}{Title}",
+      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "variables": {
+        "$test": {
+          "type": "if",
+          "pattern": "{Century}",
+          "onTrue": "{Editor}",
+          "onFalse": "was false"
+        },
+        "$manuscripts": {
+          "type": "array",
+          "scope": "Manuscripts",
+          "pattern": "{Settlement}, {Repository}, {OriginDate}",
+          "delimeter": " <br> "
+        },
+        "$printAuthors": {
+          "type": "basic",
+          "pattern": "{$authors}: ",
+          "printIfNullValue": false
+        },
+        "$authors": {
+          "type": "array",
+          "scope": "Authors",
+          "pattern": "{Name}",
+          "delimeter": ", "
+        },
+        "$publisher": {
+          "type": "basic",
+          "scope": "Publisher",
+          "pattern": "{Text}",
+          "printIfNullValue": false,
+          "replaceNullValueBy": ""
+        },
+        "$litType": {
+          "type": "array",
+          "scope": "Pages",
+          "pattern": "<a href='{BookXmlId}'>[{$LiteraryTypeStart}{$LiteraryTypeEnd}]</a>",
+          "delimeter": " , "
+        },
+        "$LiteraryTypeStart": {
+          "type": "basic",
+          "pattern": "{Start}",
+          "printIfNullValue": false,
+          "replaceNullValueBy": ""
+        },
+        "$LiteraryTypeEnd": {
+          "type": "basic",
+          "pattern": "-{End}",
+          "printIfNullValue": false,
+          "replaceNullValueBy": ""
+        },
+        "$sign": {
+          "type": "basic",
+          "pattern": ", {Sign}",
+          "printIfNullValue": false,
+          "replaceNullValueBy": ""
+        },
+        "$archive": {
+          "type": "basic",
+          "scope": "Archive",
+          "pattern": " {Name} ({City}, {State})",
+          "printIfNullValue": false
+        },
+        "$century": {
+          "type": "basic",
+          "pattern": ", {Century}. století",
+          "printIfNullValue": false
+        },
+        "$pages": {
+          "type": "basic",
+          "pattern": ", 5v- 6v, 11v-12v ",
+          "printIfNullValue": false
+        }
+      }
+    },
+    "bottom-panel": {
+      "body": "{$printSearchResultsCondition}{$editionTable}<a href='#'>Ediční poznámka</a> <br> <a href=''>Copyright</a> {Copyright}",
+      "variables": {
+        "$editionTable": {
+          "type": "table",
+          "printRowIfNullValue": true,
+          "replaceNullValueBy": "&lt;Nezadáno&gt;",
+          "rows": [
+            {
+              "label": "Editor",
+              "pattern": "{$editor}"
+            },
+            {
+              "label": "Předloha",
+              "pattern": "{Pattern}"
+            },
+            {
+              "label": "Zkratka památky",
+              "pattern": "{RelicAbbreviation}"
+            },
+            {
+              "label": "Zkratka pramene",
+              "pattern": "{SourceAbbreviation}"
+            },
+            {
+              "label": "Literární druh",
+              "pattern": "{LiteraryType}"
+            },
+            {
+              "label": "Literární žánr",
+              "pattern": "{LiteraryGenre}"
+            },
+            {
+              "label": "Poslední úprava edice",
+              "pattern": "{CreateTimeString}"
+            }
+          ]
+        },
+        "$printSearchResults": {
+          "type": "basic",
+          "pattern": "<div class=\"results\"><div class=\"hits-count\">({TotalHitCount}x)</div><div class=\"hits-results\">{$printSearchResultsArray}</div></div>",
+          "printIfNullValue": true
+        },
+        "$printSearchResultsArray": {
+          "type": "array",
+          "scope": "Results",
+          "pattern": "<div class=\"result-hit\">{$printSearchResultContext}</div>",
+          "delimeter": ""
+        },
+        "$printSearchResultContext": {
+          "type": "basic",
+          "scope": "ContextStructure",
+          "pattern": "<div class=\"search-context-before\">{Before}</div> <div class=\"search-context-match\">{Match}</div><div class=\"search-context-after\"> {After}</div>",
+          "delimeter": ""
+        },
+        "$printSearchResultsCondition": {
+          "type": "if",
+          "pattern": "{Results}",
+          "onTrue": "{$printSearchResults}",
+          "onFalse": ""
+        },
+
+        "$editor": {
+          "type": "array",
+          "scope": "Editors",
+          "pattern": "{Text}",
+          "delimeter": ", "
+        }
+      }
+    },
+    "right-panel": {
+      "info-button": {
+        "onclick": "searchProfLitBookReadClicked(this)"
+      },
+      "read-button": {
+        "onclick": "searchProfLitBookReadClicked(this)"
+      },
+      "variables": {
+        "$test": {
+          "type": "basic",
+          "pattern": "{Name}",
+          "printIfNullValue": false
+        }
+      }
+
+    }
+  }
+}

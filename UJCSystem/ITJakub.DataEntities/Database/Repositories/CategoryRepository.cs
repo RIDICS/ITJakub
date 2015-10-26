@@ -222,5 +222,33 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return bookVersions;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Category> GetAllCategories()
+        {
+            using (var session = GetSession())
+            {
+                var categories = session.QueryOver<Category>().List<Category>();
+                return categories;
+            }
+        }
+
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Category> GetDirectCategoriesByBookVersionId(long bookVersionId)
+        {
+            BookVersion bookVersionAlias = null;
+            Category categoryAlias = null;
+
+            using (var session = GetSession())
+            {
+                var categories =
+                    session.QueryOver(() => categoryAlias)
+                        .JoinAlias(() => categoryAlias.BookVersions, () => bookVersionAlias)
+                        .Where( () => bookVersionAlias.Id == bookVersionId)
+                        .List<Category>();
+                return categories;
+            }
+        }
     }
 }

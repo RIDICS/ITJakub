@@ -8,7 +8,7 @@ namespace ITJakub.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
         public virtual string Text { get; set; }
-        public virtual Enums.ResponsibleType Type { get; set; }
+        public virtual ResponsibleTypeEnum Type { get; set; }
         public virtual IList<Responsible> Responsibles { get; set; }
 
         public virtual bool Equals(ResponsibleType other)

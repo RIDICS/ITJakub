@@ -20,7 +20,7 @@
             <RowDefinition Height="50" />
         </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="{Binding Path=FolderPath}"/>
+        <TextBox Grid.Row="0" Text="{Binding Path=FolderPath, Mode=TwoWay}"/>        
 
         <ListView Grid.Row="1" ItemsSource="{Binding FileItems}">
             <ListView.Resources>
@@ -31,8 +31,18 @@
             
         </ListView>
 
-        <Button Grid.Row="2"
-                HorizontalAlignment="Left"
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Left" Orientation="Horizontal" Height="26">
+            <TextBox controls:TextBoxHelper.Watermark="Username" Width="150" Text="{Binding UserName}"/>
+            <PasswordBox Name="PasswordBox" controls:TextBoxHelper.Watermark="Password" controls:PasswordBoxHelper.CapsLockWarningToolTip="Capslock is on" Width="150"/>
+            <controls:NumericUpDown Value="{Binding ThreadCount}" Minimum="1" Maximum="20" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right" Orientation="Horizontal">
+
+           
+            
+            <Button                
                 Width="50"
                 Height="50"
                 Style="{DynamicResource MetroCircleButtonStyle}"
@@ -53,12 +63,13 @@
         </Button>
 
 
-        <Button Grid.Row="2"
-                HorizontalAlignment="Right"
+        <Button              
                 Width="50"
                 Height="50"
                 Style="{DynamicResource MetroCircleButtonStyle}"
-                Command="{Binding ConvertCommand}">
+                Command="{Binding ConvertCommand}"
+                CommandParameter="{Binding ElementName=PasswordBox}"
+                Background="LightSeaGreen">
             <Rectangle Width="20"
                        Height="20"
                        Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
@@ -68,7 +79,7 @@
                 </Rectangle.OpacityMask>
             </Rectangle>
         </Button>
-
+        </StackPanel>
 
     </Grid>
 </controls:MetroWindow>

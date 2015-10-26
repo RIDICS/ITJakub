@@ -1,0 +1,26 @@
+﻿@model ITJakub.Web.Hub.Models.BookListingModel
+@{
+    ViewBag.Title = "Odborná literatura - Čtečka děl";
+}
+
+@section styles{
+    @Styles.Render("~/itjakub/professionalliterature/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/professionalliterature/javascript")
+}
+
+
+<div id="SearchDiv">
+
+</div>
+
+<div id="ReaderDiv" data-bookid="@Model.BookXmlId" data-versionid="@Model.VersionXmlId">
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        initProfLitReader(@Html.Raw(Json.Encode(@Model.BookXmlId)), @Html.Raw(Json.Encode(@Model.VersionXmlId)),  @Html.Raw(Json.Encode(@Model.BookTitle)), @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
+    });
+</script>

@@ -113,7 +113,7 @@ class ConcreteInstanceSearchBox {
         var dataset: Twitter.Typeahead.Dataset = {
             name: name,            
             source: bloodhound,
-            displayKey: "Text",
+            display: "Text",
             templates: {
                 suggestion: suggestionTemplate
             }

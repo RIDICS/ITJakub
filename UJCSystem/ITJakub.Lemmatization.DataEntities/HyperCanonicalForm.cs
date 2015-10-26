@@ -15,9 +15,9 @@ namespace ITJakub.Lemmatization.DataEntities
         public virtual IList<CanonicalForm> CanonicalForms { get; set; }
     }
 
-    public enum HyperCanonicalFormType
+    public enum HyperCanonicalFormType : short
     {
-        HyperLemma,
-        HyperStemma,
+        HyperLemma = 0,
+        HyperStemma = 1,
     }
 }

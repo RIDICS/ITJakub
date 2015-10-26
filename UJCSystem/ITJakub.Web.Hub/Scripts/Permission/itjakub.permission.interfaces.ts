@@ -35,6 +35,21 @@ interface ISpecialPermission {
     Id: number;
 }
 
+
+interface ICardFilePermission extends ISpecialPermission {
+    CardFileId: string;
+    CardFileName: string;
+}
+
+interface IAutoImportPermission extends ISpecialPermission {
+    Category: IBookCategory;
+}
+
+interface IBookCategory {
+    Id: number;
+    Description: string;
+}
+
 interface ICategoryContent {
     Categories: ICategory[];
     Books: IBook[];

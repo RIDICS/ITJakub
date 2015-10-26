@@ -75,7 +75,6 @@
     <Compile Include="PublisherContract.cs" />
     <Compile Include="ResourceLevelEnumContract.cs" />
     <Compile Include="ResourceUploadContract.cs" />
-    <Compile Include="ILemmatizationService.cs" />
     <Compile Include="ISearchService.cs" />
     <Compile Include="Resources\ResourceType.cs" />
     <Compile Include="Resources\UploadResourceContract.cs" />

@@ -214,6 +214,7 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
+    <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
     <Compile Include="Areas\Tools\BundleConfig.cs" />
     <Compile Include="Areas\Tools\Controllers\ToolsController.cs" />
     <Compile Include="Areas\Tools\RouteConfig.cs" />
@@ -226,12 +227,14 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Controllers\LemmatizationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="CommunicationProvider.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
+    <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
@@ -250,7 +253,6 @@
     <Compile Include="Areas\OldGrammar\OldGrammarAreaRegistration.cs" />
     <Compile Include="Areas\OldGrammar\RouteConfig.cs" />
     <Compile Include="Areas\ProfessionalLiterature\BundleConfig.cs" />
-    <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\ProfessionalLiteratureAreaRegistration.cs" />
     <Compile Include="Areas\ProfessionalLiterature\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -285,9 +287,6 @@
   <ItemGroup>
     <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.css">
       <DependentUpon>itjakub.audiobooks.less</DependentUpon>
-    </Content>
-    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.min.css">
-      <DependentUpon>itjakub.audiobooks.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
@@ -340,8 +339,8 @@
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
       <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
-      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.css">
+      <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
     </Content>
     <Content Include="Areas\Tools\Content\itjakub.tools.css">
       <DependentUpon>itjakub.tools.less</DependentUpon>
@@ -374,11 +373,14 @@
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.css">
+      <DependentUpon>itjakub.lemmatization.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.min.css">
+      <DependentUpon>itjakub.lemmatization.css</DependentUpon>
+    </Content>
     <Content Include="Content\Permission\itjakub.permission.css">
       <DependentUpon>itjakub.permission.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Permission\itjakub.permission.min.css">
-      <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
@@ -557,6 +559,7 @@
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
     <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
@@ -645,7 +648,7 @@
     <Content Include="Content\bootstrap\alerts.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.content.less" />
     <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Help.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Help.cshtml" />
@@ -666,6 +669,10 @@
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\Editions\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
@@ -684,6 +691,7 @@
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
     <Content Include="Content\Plugins\ITJakub.Pagination.less" />
+    <Content Include="Content\Lemmatization\itjakub.lemmatization.less" />
     <Content Include="Content\Permission\itjakub.permission.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
@@ -731,10 +739,13 @@
     <Content Include="Views\Home\Links.cshtml" />
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
+    <Content Include="Views\Lemmatization\Lemmatization.cshtml" />
+    <Content Include="Views\Lemmatization\LemmatizationList.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\Permission\UserPermission.cshtml" />
     <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
+    <Content Include="Views\Lemmatization\Derivation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -777,7 +788,12 @@
     <TypeScriptCompile Include="Areas\Dictionaries\Scripts\itjakub.dictionariesViewer.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.search.ts" />
     <TypeScriptCompile Include="Areas\OldGrammar\Scripts\itjakub.oldgrammar.list.ts" />
+    <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.search.ts" />
+    <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
+    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.derivation.ts" />
+    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.list.ts" />
+    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.interfaces.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
@@ -792,7 +808,6 @@
     <TypeScriptCompile Include="Scripts\Home\itjakub.home.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect2.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.searchbox.ts" />
-    <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.sorting.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.variableInterpreter.ts" />
@@ -802,6 +817,7 @@
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.ts" />
     <TypeScriptCompile Include="Areas\Editions\Scripts\itjakub.editions.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Sort\itjakub.plugins.sort.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
@@ -811,6 +827,10 @@
     <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj">
       <Project>{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}</Project>
       <Name>ITJakub.ITJakubService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj">
+      <Project>{ADCE48CE-05C9-494A-A848-1C681DAD5FD9}</Project>
+      <Name>ITJakub.Lemmatization.Shared.Contracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
@@ -870,9 +890,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets'))" />
   </Target>
-  <Import Project="..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" />
+  <Import Project="..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.1.103\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

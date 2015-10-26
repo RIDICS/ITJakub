@@ -17,14 +17,13 @@
         var select: HTMLSelectElement = document.createElement('select');
 
         $(select).change(() => {
-            var selectedOptionValue:string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
+            var selectedOptionValue: string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 
         this.addOption(select, "Název", SortEnum.Title.toString());
         this.addOption(select, "Datace", SortEnum.Dating.toString());
         this.addOption(select, "Autor", SortEnum.Author.toString());
-        this.addOption(select, "Editor", SortEnum.Editor.toString());
 
         sortBarDiv.appendChild(select);
 
@@ -97,19 +96,15 @@
         [EnumMember]
         Title = 1,
         [EnumMember]
-        Editor = 2,
-        [EnumMember]
-        Dating = 3,
+        Dating = 2,
     }
  
  *
  * 
  */
 
-enum SortEnum 
-{
+enum SortEnum {
     Author = 0,
     Title = 1,
-    Editor = 2,
-    Dating = 3,
+    Dating = 2,
 }

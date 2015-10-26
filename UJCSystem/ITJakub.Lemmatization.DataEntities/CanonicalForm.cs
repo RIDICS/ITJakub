@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace ITJakub.Lemmatization.DataEntities
@@ -39,14 +38,11 @@ namespace ITJakub.Lemmatization.DataEntities
         }
     }
 
-    public enum CanonicalFormType
+    public enum CanonicalFormType : short
     {
-        Lemma,
-        Stemma,
-        LemmaOld,
-        StemmaOld,
-        
+        Lemma = 0,
+        Stemma = 1,
+        LemmaOld = 2,
+        StemmaOld = 3,
     }
-
-    
 }

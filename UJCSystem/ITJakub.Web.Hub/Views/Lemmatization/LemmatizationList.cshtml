@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Lemmatizace - procházení";
+}
+@section styles{
+    @Styles.Render("~/itjakub/lemmatization/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/lemmatization/javascript")
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var lemmatization = new LemmatizationList("#mainContainer", "#paginationContainer");
+        lemmatization.make();
+    });
+</script>
+
+<h2>Lemmatizace - procházení</h2>
+
+<div class="content" id="mainContainer">
+
+</div>
+
+<div id="paginationContainer"></div>

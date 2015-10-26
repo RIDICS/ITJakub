@@ -1,8 +1,10 @@
 1. Move *.container.config to root folder of deployed service
-2. Xquery GetDocument in existDB folder modules change resource path to actual project name in existDB
-3. Install Altova XML 2013 community edition
-4. Deploy Each service into different App pool in IIS  >8 
-5. Exist DB - Http 413 "entity too large" error workaround: 
+2. Install eXistDB version 2.1.
+3. Copy content of "ExistDB" folder except "config" folder to app collection named "jacob".
+4. Copy content of "ExistDB/config" folder to collection "/system/config/db/apps/jacob".
+5. Install Altova XML 2013 community edition
+6. Deploy Each service into different App pool in IIS  >8 
+7. Exist DB - Http 413 "entity too large" error workaround: 
 	copy <Set name="requestHeaderSize">sizeInBytes</Set> to jetty.xml (i.e. C:\eXist-db\tools\jetty\etc\jetty.xml) under <New class="org.eclipse.jetty.server.nio.SelectChannelConnector"> element.
 	Example:
 	
@@ -26,3 +28,8 @@
       </New>
     </Arg>
   </Call>
+8. Install certificates
+	 8.1. - Install ITJakubCA to trusted root certificate authrorities for local computer
+	 8.2. - Install certificates for ITJakubClient and ITJakubService to Personal store in Local computer
+	 8.3. - Click on each certificate in personal store and select "Manage private keys" and add "Everyone" for full control to all certificates
+	 8.4. - in IIS manager select website and add binding with localhost certificate issued by ITJakubCA

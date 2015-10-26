@@ -1,4 +1,4 @@
-SET XACT_ABORT ON;
+﻿SET XACT_ABORT ON;
 USE ITJakubDB;
 
 BEGIN TRAN;
@@ -21,7 +21,7 @@ BEGIN TRAN;
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Permission(Id)] PRIMARY KEY,
 		[Group] int NOT NULL CONSTRAINT [FK_Permission(Group)_Group(Id)] FOREIGN KEY REFERENCES [dbo].[Group](Id),
 		[Book] bigint NOT NULL CONSTRAINT [FK_Permission(Book)_Book(Id)] FOREIGN KEY REFERENCES [dbo].[Book](Id),
-		CONSTRAINT [Uniq_Permission(Group_Book)] UNIQUE ([Group],[Book])    
+		CONSTRAINT [UQ_Permission(Group_Book)] UNIQUE ([Group],[Book])    
 	);
 	
 	CREATE TABLE [dbo].[SpecialPermission](
@@ -32,7 +32,14 @@ BEGIN TRAN;
 		[CanManagePermissions] bit NULL,
 		[CanAddNews] bit NULL,
 		[CanManageFeedbacks] bit NULL,
-		CONSTRAINT [Uniq_SpecialPermission(PermissionType_CanUploadBook_CanManagePermissions_CanAddNews_CanManageFeedbacks)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks])    
+		[CanReadCardFile] bit NULL,
+		[CardFileId] varchar(100) NULL,
+		[CardFileName] varchar(100) NULL,
+		[AutoimportAllowed] bit NULL,
+		[AutoimportCategory] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
+		[CanEditLemmatization] bit NULL,
+		[CanReadLemmatization] bit NULL,
+		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization]) 
 	);
 
 	CREATE TABLE [dbo].[SpecialPermission_Group](
@@ -43,7 +50,7 @@ BEGIN TRAN;
 
 
 
-
+	--action permissions
 	INSERT INTO dbo.SpecialPermission
 	(
 	    --Id - this column value is auto-generated
@@ -52,7 +59,9 @@ BEGIN TRAN;
 	    CanUploadBook,
 	    CanManagePermissions,
 	    CanAddNews,
-	    CanManageFeedbacks
+	    CanManageFeedbacks,
+		CanEditLemmatization,
+		CanReadLemmatization
 	)
 	VALUES
 	(
@@ -62,7 +71,9 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    1, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'UploadBook', -- PermissionType - varchar
@@ -70,7 +81,9 @@ BEGIN TRAN;
 	    1, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'News', -- PermissionType - varchar
@@ -78,7 +91,9 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    1, -- CanAddNews - bit
-	    NULL -- CanManageFeedbacks - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
 	),(
 		-- Id - int
 	    'Feedback', -- PermissionType - varchar
@@ -86,9 +101,193 @@ BEGIN TRAN;
 	    NULL, -- CanUploadBook - bit
 	    NULL, -- CanManagePermissions - bit
 	    NULL, -- CanAddNews - bit
-	    1 -- CanManageFeedbacks - bit
+	    1, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
+	),(
+		-- Id - int
+	    'EditLemmatization', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL, -- CanManageFeedbacks - bit
+		1, -- CanEditLemmatization - bit
+		NULL -- CanReadLemmatization - bit
+	),(
+		-- Id - int
+	    'ReadLemmatization', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		1 -- CanReadLemmatization - bit
 	)
 
+	INSERT INTO dbo.SpecialPermission
+	(
+	    --Id - this column value is auto-generated
+	    PermissionType,
+	    PermissionCategorization,
+	    AutoimportAllowed,
+		AutoimportCategory
+	)
+	SELECT 'Autoimport', 1, 1, c.Id FROM dbo.Category c
+
+	--cardfiles permissions
+	INSERT INTO dbo.SpecialPermission
+	(
+	    --Id - this column value is auto-generated
+	    PermissionType,
+	    PermissionCategorization,
+	    CanReadCardFile,
+	    CardFileId,
+	    CardFileName
+	)
+	VALUES
+	(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '1', -- CardFileId - varchar
+	    'NLA – excerpce' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '2', -- CardFileId - varchar
+	    'Gebauer – excerpce' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '3', -- CardFileId - varchar
+	    'Gebauer – prameny' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '4', -- CardFileId - varchar
+	    'Staročeská excerpce' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '5', -- CardFileId - varchar
+	    'Zubatý – excerpce' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '6', -- CardFileId - varchar
+	    'Archiv lidového jazyka' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '7', -- CardFileId - varchar
+	    'Excerpce textů z 16. století' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '8', -- CardFileId - varchar
+	    'Latinsko-česká kartotéka' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '9', -- CardFileId - varchar
+	    'Rukopisy' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '10', -- CardFileId - varchar
+	    'Justitia' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '11', -- CardFileId - varchar
+	    'Tyl – excerpce' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '12', -- CardFileId - varchar
+	    'NLA − prameny' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '14', -- CardFileId - varchar
+	    'Svoboda' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '15', -- CardFileId - varchar
+	    'Excerpce pomístních jmen' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '16', -- CardFileId - varchar
+	    'Tereziánský katastr' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '17', -- CardFileId - varchar
+	    'Archivy, muzea' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '18', -- CardFileId - varchar
+	    'Stabilní katastr' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '19', -- CardFileId - varchar
+	    'Sajtl' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '20', -- CardFileId - varchar
+	    'Dodatky PSJČ' -- CardFileName - varchar
+	),(
+	    -- Id - int
+	    'CardFile', -- PermissionType - varchar
+	    2, -- PermissionCategorization - tinyint	    
+	    1, -- CanReadCardFile - bit
+	    '21', -- CardFileId - varchar
+	    'Grepl - archiv' -- CardFileName - varchar
+	)
 
 
 	INSERT INTO dbo.[User]
@@ -113,9 +312,9 @@ BEGIN TRAN;
 	    'Admin', -- LastName - varchar
 	    'Admin', -- Email - varchar
 	    0, -- AuthenticationProvider - tinyint
-	    'e61edc70-9c8f-4ef4-84ff-f57b3758b88f', -- CommunicationToken - varchar
+	    'CT:ca22d7b7-e1d6-46b0-a77f-29296fe9f7f0', -- CommunicationToken - varchar
 	    '2015-10-01 10:50:36', -- CommunicationTokenCreateTime - datetime
-	    'ANx75Iw7AnQgKChYKghJVcXKE8vwofGlP3tRctamVrqTLOvhyXM0Qko27aui6mhTlg==', -- PasswordHash - varchar -- password is 'Administrator'
+	    'PW:sha1:1000:FhLySoxcL/5CA0RqlRBZMiqblj4sZ0zV:Vocj0I6bhs9bF4p9Nh+Rk7vbCoToulg9', -- PasswordHash - varchar -- password is 'Administrator'
 	    '', -- Salt - varchar
 	    '2015-10-01 10:50:36', -- CreateTime - datetime
 	    NULL, -- AvatarUrl - varchar
@@ -158,20 +357,12 @@ BEGIN TRAN;
 	    @AdminGroupId -- Group - int
 	)
 
-	DECLARE @ManagePermissionId INT
-
-	SELECT @ManagePermissionId = [Id] FROM [dbo].[SpecialPermission] WHERE [dbo].[SpecialPermission].[PermissionType] = 'ManagePermissions'
-
 	INSERT INTO dbo.SpecialPermission_Group
 	(
 	    SpecialPermission,
 	    [Group]
 	)
-	VALUES
-	(
-	    @ManagePermissionId, -- SpecialPermission - int
-	    @AdminGroupId -- Group - int
-	)
+	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp
 
 
 	ALTER TABLE dbo.[User] DROP COLUMN [Salt]

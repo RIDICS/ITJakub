@@ -121,7 +121,7 @@ declare module Twitter.Typeahead {
          * This will be used when setting the value of the input control after a suggestion is selected. Can be either a key string or a function that transforms a suggestion object into a string.
          * Defaults to value.
           */
-        displayKey?: string;
+        display?: string;
 
         /**
          * A hash of templates to be used when rendering the dataset.

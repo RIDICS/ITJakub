@@ -451,14 +451,13 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.Categories, () => categoryAlias)
                     .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
-                    .Select(x => bookVersionAlias.Title)
-                    .Where(x => bookTypeAlias.Type == bookType);
+                    .Where(x => bookTypeAlias.Type == bookType)
+                    .Select(Projections.Distinct(Projections.Property(() => bookVersionAlias.Title)));
 
                 if (bookIdList != null)
                     query.AndRestrictionOn(() => bookAlias.Id).IsInG(bookIdList);
                     
                 return query
-                    .OrderBy(() => bookVersionAlias.CreateTime).Desc
                     .Take(recordCount)
                     .List<string>();
             }
@@ -524,7 +523,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.LastVersion, () => bookVersionAlias)
                     .JoinQueryOver(x => x.Categories, () => categoryAlias)
                     .JoinQueryOver(x => categoryAlias.BookType, () => bookTypeAlias)
-                    .Select(x => bookVersionAlias.Title)
+                    .Select(Projections.Distinct(Projections.Property(() => bookVersionAlias.Title)))
                     .Where(x => bookTypeAlias.Type == bookType)
                     .AndRestrictionOn(() => bookVersionAlias.Title).IsInsensitiveLike(query);
 

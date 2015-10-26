@@ -6,12 +6,19 @@ namespace ITJakub.DataEntities.Database.Entities {
     public class Category : IEquatable<Category> {
 
         public virtual int Id { get; set; }
+
         public virtual Category ParentCategory { get; set; }
+
         public virtual string XmlId { get; set; }
+
         public virtual string Description { get; set; }
+
         public virtual string Path { get; set; }
+
         public virtual BookType BookType { get; set; }
+
         public virtual IList<BookVersion> BookVersions { get; set; }
+
         public virtual IList<Category> Categories { get; set; }
 
         public virtual bool Equals(Category other)

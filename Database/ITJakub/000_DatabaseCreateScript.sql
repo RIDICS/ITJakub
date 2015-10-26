@@ -30,13 +30,13 @@ BEGIN TRAN
 	   [LastName] varchar(50) NOT NULL,
 	   [Email] varchar(255) NOT NULL,
 	   [AuthenticationProvider] tinyint NOT NULL,
-	   [CommunicationToken] varchar(255) NOT NULL UNIQUE,
+	   [CommunicationToken] varchar(255) CONSTRAINT [UQ_User(CommunicationToken)] NOT NULL UNIQUE,
 	   [CommunicationTokenCreateTime] datetime NULL,    
 	   [PasswordHash] varchar(255) NULL,
 	   [Salt] varchar(50)  NULL,	   
 	   [CreateTime] datetime NOT NULL,
 	   [AvatarUrl] varchar (255) NULL,
-	   CONSTRAINT [Uniq_Email_AuthProvider] UNIQUE ([Email],[AuthenticationProvider])    
+	   CONSTRAINT [UQ_User(Email)(AuthProvider)] UNIQUE ([Email],[AuthenticationProvider])    
     )
 
 
@@ -66,8 +66,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Publisher] 
     (
 	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Publisher(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] varchar(100) NOT NULL CONSTRAINT [UQ_Publisher(Text)] UNIQUE,
-	   [Email] varchar(100) NULL
+	   [Text] nvarchar(255) NOT NULL CONSTRAINT [UQ_Publisher(Text)] UNIQUE,
+	   [Email] varchar(255) NULL
     )
 
 
@@ -75,7 +75,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Category]
     (
         [Id] int IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
-	   [XmlId] varchar(150) NOT NULL UNIQUE,
+	   [XmlId] varchar(150) NOT NULL CONSTRAINT [UQ_Category(XmlId)] UNIQUE,
 	   [Description] varchar(150) NULL,
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
@@ -130,7 +130,7 @@ BEGIN TRAN
 	   [Copyright] varchar(MAX) NULL,
 	   [AvailabilityStatus] smallint NULL,
 	   [BiblText] varchar (MAX) NULL,
-	   CONSTRAINT [Uniq_VersionId_Book] UNIQUE ([VersionId],[Book])  
+	   CONSTRAINT [UQ_BookVersion(VersionId)(Book)] UNIQUE ([VersionId],[Book])  
 
     )
 
