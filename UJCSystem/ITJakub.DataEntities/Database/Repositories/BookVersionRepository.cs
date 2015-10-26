@@ -252,6 +252,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 ManuscriptDescription manuscriptDescriptionAlias = null;
                 Responsible responsibleAlias = null;
                 ResponsibleType responsibleTypeAlias = null;
+                Author authorAlias = null;
 
                 var query = session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
@@ -275,17 +276,24 @@ namespace ITJakub.DataEntities.Database.Repositories
                             if (direction.Value == ListSortDirection.Descending)
                             {
                                 query = query
-                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias)
+                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias, JoinType.LeftOuterJoin)
                                     .OrderBy(() => manuscriptDescriptionAlias.NotAfter).Desc;
                             }
                             else
                             {
                                 query = query
-                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias)
+                                    .JoinAlias(x => x.ManuscriptDescriptions, () => manuscriptDescriptionAlias, JoinType.LeftOuterJoin)
                                     .OrderBy(() => manuscriptDescriptionAlias.NotBefore).Asc;
                             }
                             break;
-                        // TODO order by author and editor
+                        case SortEnum.Author:
+                            queryOrder = query
+                                    .JoinAlias(x => x.Authors, () => authorAlias, JoinType.LeftOuterJoin)
+                                    .OrderBy(() => authorAlias.Name);
+                            query = SetOrderDirection(queryOrder, direction.Value);
+                            break;
+                        case SortEnum.Editor:
+                            //TODO consult ordering by editor
                         default:
                             queryOrder = query.OrderBy(x => x.Title);
                             query = SetOrderDirection(queryOrder, direction.Value);
@@ -297,8 +305,14 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.Book).Eager
                     .Fetch(x => x.Publisher).Eager
                     .Fetch(x => x.DefaultBookType).Eager
-                    .Fetch(x => x.ManuscriptDescriptions).Eager
                     .Future<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                  .JoinAlias(x => x.Book, () => bookAlias)
+                  .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                  .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                  .Fetch(x => x.ManuscriptDescriptions).Eager
+                  .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
