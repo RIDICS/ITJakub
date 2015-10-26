@@ -7,6 +7,7 @@ using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -60,11 +61,11 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual Responsible FindResponsible(string text, ResponsibleType type)
+        public virtual Responsible FindResponsible(string text, ResponsibleType respType)
         {
             using (var session = GetSession())
             {
-                var responsibleType = FindResponsibleType(type) ?? type;
+                var responsibleType = FindResponsibleType(respType.Text, respType.Type) ?? respType;
                 return
                     session.QueryOver<Responsible>()
                         .Where(
@@ -76,7 +77,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual ResponsibleType FindResponsibleType(ResponsibleType responsibleType)
+        public virtual ResponsibleType FindResponsibleType(string responsibleTypeText, ResponsibleTypeEnum responsibleTypeEnum)
         {
             using (var session = GetSession())
             {
@@ -84,10 +85,23 @@ namespace ITJakub.DataEntities.Database.Repositories
                     session.QueryOver<ResponsibleType>()
                         .Where(
                             respType =>
-                                respType.Text == responsibleType.Text ||
-                                respType.Type == responsibleType.Type)
+                                respType.Text == responsibleTypeText ||
+                                respType.Type == responsibleTypeEnum)
                         .Take(1)
                         .SingleOrDefault<ResponsibleType>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void CreateResponsibleTypeIfNotExist(ResponsibleType responsibleType)
+        {
+            using (var session = GetSession())
+            {
+                var tmpResponsibleType = FindResponsibleType(responsibleType.Text, responsibleType.Type);
+                if (tmpResponsibleType == null)
+                {
+                    session.Save(responsibleType);
+                }
             }
         }
 
@@ -292,8 +306,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                                     .OrderBy(() => authorAlias.Name);
                             query = SetOrderDirection(queryOrder, direction.Value);
                             break;
-                        case SortEnum.Editor:
-                            //TODO consult ordering by editor
                         default:
                             queryOrder = query.OrderBy(x => x.Title);
                             query = SetOrderDirection(queryOrder, direction.Value);
@@ -307,25 +319,31 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.DefaultBookType).Eager
                     .Future<BookVersion>();
 
-                session.QueryOver(() => bookVersionAlias)
+                if (sorting == null || sorting.Value != SortEnum.Dating)
+                {
+                    session.QueryOver(() => bookVersionAlias)
                   .JoinAlias(x => x.Book, () => bookAlias)
                   .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                   .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
                   .Fetch(x => x.ManuscriptDescriptions).Eager
                   .Future<BookVersion>();
+                }
+
+                if (sorting == null || sorting.Value != SortEnum.Author)
+                {
+                    session.QueryOver(() => bookVersionAlias)
+                        .JoinAlias(x => x.Book, () => bookAlias)
+                        .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                        .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
+                        .Fetch(x => x.Authors).Eager
+                        .Future<BookVersion>();
+                }
 
                 session.QueryOver(() => bookVersionAlias)
                     .JoinAlias(x => x.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
                     .Fetch(x => x.Keywords).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.Authors).Eager
                     .Future<BookVersion>();
 
                 session.QueryOver(() => bookVersionAlias)

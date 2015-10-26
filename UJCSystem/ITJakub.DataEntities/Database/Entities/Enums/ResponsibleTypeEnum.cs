@@ -1,6 +1,6 @@
 namespace ITJakub.DataEntities.Database.Entities.Enums
 {
-    public enum ResponsibleType : short
+    public enum ResponsibleTypeEnum : short
     {
         Unknown = 0,
         Editor = 1,
