@@ -24,7 +24,6 @@
         this.addOption(select, "Název", SortEnum.Title.toString());
         this.addOption(select, "Datace", SortEnum.Dating.toString());
         this.addOption(select, "Autor", SortEnum.Author.toString());
-        this.addOption(select, "Editor", SortEnum.Editor.toString());
 
         sortBarDiv.appendChild(select);
 
@@ -97,9 +96,7 @@
         [EnumMember]
         Title = 1,
         [EnumMember]
-        Editor = 2,
-        [EnumMember]
-        Dating = 3,
+        Dating = 2,
     }
  
  *
@@ -109,6 +106,5 @@
 enum SortEnum {
     Author = 0,
     Title = 1,
-    Editor = 2,
-    Dating = 3,
+    Dating = 2,
 }
