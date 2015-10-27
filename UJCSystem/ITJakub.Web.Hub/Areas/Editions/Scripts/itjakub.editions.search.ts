@@ -8,7 +8,9 @@ $(document).ready(() => {
     var categoryIds = new Array();
 
     function sortOrderChanged() {
-        search.processSearch();
+        var textInTextField = search.getTextFromTextField();
+        search.processSearchQuery(search.getLastQuery());
+        search.writeTextToTextField(textInTextField);
     }
 
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition,"Editions/Editions/GetSearchConfiguration");
@@ -40,7 +42,7 @@ $(document).ready(() => {
 
     function editionBasicSearchPaged(text: string, pageNumber: number) {
 
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber-1) * bibliographyModule.getBooksCountOnPage();
         var count = bibliographyModule.getBooksCountOnPage();
@@ -74,7 +76,7 @@ $(document).ready(() => {
 
     function editionBasicSearch(text: string) {
 
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();

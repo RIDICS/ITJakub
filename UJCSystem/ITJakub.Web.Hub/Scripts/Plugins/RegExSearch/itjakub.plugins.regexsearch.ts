@@ -130,8 +130,6 @@ class Search {
             }
         });
 
-        
-
         var searchbarAdvancedEditor = document.createElement("div");
         $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
         $(searchAreaDiv).append(searchbarAdvancedEditor);
@@ -154,7 +152,6 @@ class Search {
             this.processSearch();
         });
 
-
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -170,10 +167,14 @@ class Search {
         $(this.searchInputTextbox).focus();
     }
 
-    writeTextToTextField(text: string) {
+    public writeTextToTextField(text: string) {
         $(this.searchInputTextbox).text(text);
         $(this.searchInputTextbox).val(text);
         $(this.searchInputTextbox).change();
+    }
+
+    public getTextFromTextField(): string {
+        return $(this.searchInputTextbox).val();
     }
 
     public processSearchQuery(query: string) {

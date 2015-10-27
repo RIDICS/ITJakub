@@ -9,7 +9,9 @@ $(document).ready(() => {
     var categoryIds = new Array();
 
     function sortOrderChanged() {
-        search.processSearch();
+        var textInTextField = search.getTextFromTextField();
+        search.processSearchQuery(search.getLastQuery());
+        search.writeTextToTextField(textInTextField);
     }
     
     function hideTypeahead() {
@@ -45,7 +47,7 @@ $(document).ready(() => {
 
     function editionBasicSearchPaged(text: string, pageNumber: number) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
         var count = bibliographyModule.getBooksCountOnPage();
@@ -79,7 +81,7 @@ $(document).ready(() => {
 
     function editionBasicSearch(text: string) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
@@ -159,8 +161,9 @@ $(document).ready(() => {
         var selectedIds = editionsSelector.getSelectedIds();
         bookIds = selectedIds.selectedBookIds;
         categoryIds = selectedIds.selectedCategoryIds;
-        search.processSearchQuery("%"); //search for all by default criteria (title)
-        search.writeTextToTextField("");
+        search.processSearch();
+        //search.processSearchQuery("%"); //search for all by default criteria (title)
+        //search.writeTextToTextField("");
     };
 
     editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
