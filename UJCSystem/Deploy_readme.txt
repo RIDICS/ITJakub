@@ -33,3 +33,4 @@
 	 8.2. - Install certificates for ITJakubClient and ITJakubService to Personal store in Local computer
 	 8.3. - Click on each certificate in personal store and select "Manage private keys" and add "Everyone" for full control to all certificates
 	 8.4. - in IIS manager select website and add binding with localhost certificate issued by ITJakubCA
+9. Allow SSL in IIS - Edit bindings for Default Web Site and Add HTTPS with localhost (ITJAKUBCA) certificate. Allow SSL for default Website and select "Accept client certificate" in SSL settings for default WebSite
