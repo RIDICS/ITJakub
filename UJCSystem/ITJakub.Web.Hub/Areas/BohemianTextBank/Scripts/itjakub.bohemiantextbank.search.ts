@@ -21,7 +21,9 @@ function initSearch() {
     });
 
     function sortOrderChanged() {
-        search.processSearch();
+        var textInTextField = search.getTextFromTextField();
+        search.processSearchQuery(search.getLastQuery());
+        search.writeTextToTextField(textInTextField);
     }
 
     function showLoading() {
@@ -197,7 +199,7 @@ function initSearch() {
 
     function corpusBasicSearchPaged(text: string, pageNumber: number, contextLength: number) {
 
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
         const start = (pageNumber - 1) * resultsCountOnPage;
         const sortingEnum = SortEnum.Title; //TODO
         const sortAsc = true; //TODO
@@ -238,7 +240,7 @@ function initSearch() {
 
     function corpusBasicSearchCount(text: string) {
 
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         showLoading();
 

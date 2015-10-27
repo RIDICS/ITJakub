@@ -9,7 +9,9 @@ $(document).ready(() => {
     var categoryIds = new Array();
 
     function sortOrderChanged() {
-        search.processSearch();
+        var textInTextField = search.getTextFromTextField();
+        search.processSearchQuery(search.getLastQuery());
+        search.writeTextToTextField(textInTextField);
     }
 
     function hideTypeahead() {
@@ -18,7 +20,7 @@ $(document).ready(() => {
 
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.ProfessionalLiterature, "ProfessionalLiterature/ProfessionalLiterature/GetListConfiguration");
 
-    function editionAdvancedSearchPaged(json: string, pageNumber: number) {
+    function advancedSearchPaged(json: string, pageNumber: number) {
         hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
@@ -43,9 +45,9 @@ $(document).ready(() => {
         });
     }
 
-    function editionBasicSearchPaged(text: string, pageNumber: number) {
+    function basicSearchPaged(text: string, pageNumber: number) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
         var count = bibliographyModule.getBooksCountOnPage();
@@ -71,15 +73,15 @@ $(document).ready(() => {
     function pageClickCallbackForBiblModule(pageNumber: number) {
 
         if (search.isLastQueryJson()) {
-            editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+            advancedSearchPaged(search.getLastQuery(), pageNumber);
         } else {
-            editionBasicSearchPaged(search.getLastQuery(), pageNumber);
+            basicSearchPaged(search.getLastQuery(), pageNumber);
         }
     }
 
     function proffesionalLiteratureBasicSearch(text: string) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
@@ -159,8 +161,9 @@ $(document).ready(() => {
         var selectedIds = professionalLiteratureSelector.getSelectedIds();
         bookIds = selectedIds.selectedBookIds;
         categoryIds = selectedIds.selectedCategoryIds;
-        search.processSearchQuery("%"); //search for all by default criteria (title)
-        search.writeTextToTextField("");
+        search.processSearch();
+        //search.processSearchQuery("%"); //search for all by default criteria (title)
+        //search.writeTextToTextField("");
     };
 
     professionalLiteratureSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/GetProfessionalLiteratureWithCategories", true, callbackDelegate);
