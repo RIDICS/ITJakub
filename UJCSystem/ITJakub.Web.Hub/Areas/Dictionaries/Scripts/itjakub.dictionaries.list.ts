@@ -50,8 +50,9 @@ class DictionariesList {
                 return;
             }
 
-            this.search.processSearchQuery("%"); //search for all by default criteria (title)
-            this.search.writeTextToTextField("");
+            this.search.processSearch();
+            //this.search.processSearchQuery("%"); //search for all by default criteria (title)
+            //this.search.writeTextToTextField("");
         }
 
         this.dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
@@ -152,7 +153,7 @@ class DictionariesList {
     }
 
     private basicSearchPaged(text: string, pageNumber: number) {
-        if (!text) return;
+        //if (!text) return;
 
         var start = (pageNumber - 1) * this.bibliographyModule.getBooksCountOnPage();
         var count = this.bibliographyModule.getBooksCountOnPage();
@@ -184,6 +185,8 @@ class DictionariesList {
     }
 
     private sortOrderChanged() {
-        this.search.processSearch();
+        var textInTextField = this.search.getTextFromTextField();
+        this.search.processSearchQuery(this.search.getLastQuery());
+        this.search.writeTextToTextField(textInTextField);
     }
 }
