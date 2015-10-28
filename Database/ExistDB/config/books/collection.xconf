@@ -1,5 +1,7 @@
 <collection xmlns="http://exist-db.org/collection-config/1.0">
     <index xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0">
+        <create qname="@notBefore" type="xs:integer"/>
+        <create qname="@notAfter" type="xs:integer"/>
         <fulltext default="none" attributes="no"/>
 		
         <lucene>
@@ -18,7 +20,8 @@
             <text qname="tei:l">
                 <ignore qname="tei:note"/>
             </text>
-            <text qname="tei:note"/>
+            <text qname="tei:w"/> 
+            <text qname="tei:note"/> 
             <text qname="tei:form"/> 
             <text qname="tei:pos"/> 
             <text qname="tei:xr"/> 
