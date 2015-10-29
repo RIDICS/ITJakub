@@ -359,6 +359,11 @@ namespace ITJakub.ITJakubService.Services
             m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
         }
 
+        public string GetBookEditionNote(long bookId, OutputFormatEnumContract outputFormat)
+        {
+            return m_bookManager.GetBookEditionNote(bookId, outputFormat);
+        }
+
         #endregion
 
         public void Dispose()

@@ -110,6 +110,11 @@ namespace ITJakub.SearchService
                 transformationLevel);
         }
 
+        public string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat)
+        {
+            return m_existManager.GetBookEditionNote(bookId, versionId, outputFormat);
+        }
+
         public int GetCorpusSearchResultsCount(List<SearchCriteriaContract> searchCriterias)
         {
             return m_existManager.GetCorpusSearchResultsCount(searchCriterias);

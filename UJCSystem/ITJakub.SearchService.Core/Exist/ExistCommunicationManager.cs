@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using ITJakub.Shared.Contracts;
 using log4net;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -167,6 +168,15 @@ namespace ITJakub.SearchService.Core.Exist
             var result = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
 
             return int.Parse(result);
+        }
+
+        public string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat)
+        {
+            var commInfo = m_uriCache.GetCommunicationInfoForMethod();
+            var uri = GetCompleteUri(commInfo, null);
+            var content = GetContentKeyValuePairs(commInfo, null, bookId, versionId, outputFormat);
+            var noteText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
+            return noteText;
         }
 
         public string GetPageByPositionFromStart(string bookId, string versionId, int pagePosition, string outputFormat, string xslPath)

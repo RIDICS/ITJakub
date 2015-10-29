@@ -286,5 +286,8 @@ namespace ITJakub.ITJakubService.DataContracts
         void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
 
         #endregion
+
+        [OperationContract]
+        string GetBookEditionNote(long bookId, OutputFormatEnumContract outputFormat);
     }
 }

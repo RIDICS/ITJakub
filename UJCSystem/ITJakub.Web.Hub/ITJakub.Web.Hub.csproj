@@ -231,6 +231,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="CommunicationProvider.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\EditionNoteController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
@@ -749,6 +750,7 @@
     <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
     <Content Include="Views\Lemmatization\Derivation.cshtml" />
+    <Content Include="Views\EditionNote\EditionNote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
