@@ -4,7 +4,9 @@
 4. Copy content of "ExistDB/config" folder to collection "/system/config/db/apps/jacob".
 5. Install Altova XML 2013 community edition
 6. Deploy Each service into different App pool in IIS  >8 
-7. Exist DB - Http 413 "entity too large" error workaround: 
+7. Exist DB - Http 413 "entity too large"
+	7.1 Might not be needed because we use POST for larger queries.
+    7.2 Workaround: 
 	copy <Set name="requestHeaderSize">sizeInBytes</Set> to jetty.xml (i.e. C:\eXist-db\tools\jetty\etc\jetty.xml) under <New class="org.eclipse.jetty.server.nio.SelectChannelConnector"> element.
 	Example:
 	
