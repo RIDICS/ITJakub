@@ -369,5 +369,33 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return groups;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void CreatePermissionIfNotExist(Permission permission)
+        {
+            using (var session = GetSession())
+            {
+                var tmpPermission = FindPermissionByBookAndGroup(permission.Book.Id, permission.Group.Id);
+                if (tmpPermission == null)
+                {
+                    session.Save(permission);
+                }
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Permission FindPermissionByBookAndGroup(long bookId, int groupId)
+        {
+            using (var session = GetSession())
+            {
+                return
+                    session.QueryOver<Permission>()
+                        .Where(
+                            permission =>
+                                permission.Book.Id == bookId &&
+                                permission.Group.Id == groupId)
+                        .SingleOrDefault<Permission>();
+            }
+        }
     }
 }

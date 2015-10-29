@@ -59,18 +59,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             foreach (var newPermission in newPermissions)
             {
-                try
-                {
-                    m_permissionRepository.Create(newPermission);
-                }
-                catch (Exception)
-                {
-                    if (m_log.IsInfoEnabled)
-                    {
-                        m_log.Info(string.Format("Group with id '{0}' already have permission on book with '{1}'",
-                            newPermission.Group.Id, newPermission.Book.Id));
-                    }
-                }
+                 m_permissionRepository.CreatePermissionIfNotExist(newPermission);
             }
         }
     }
