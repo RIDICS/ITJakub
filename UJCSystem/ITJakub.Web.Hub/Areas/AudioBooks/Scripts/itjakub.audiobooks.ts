@@ -80,8 +80,9 @@ class AudibooksList {
             this.bookIds = selectedIds.selectedBookIds;
             this.categoryIds = selectedIds.selectedCategoryIds;
             $("#listResults").removeClass("loader");
-            this.search.processSearchQuery("%"); //search for all by default criteria (title)
-            this.search.writeTextToTextField("");
+            this.search.processSearch();
+            //this.search.processSearchQuery("%"); //search for all by default criteria (title)
+            //this.search.writeTextToTextField("");
         };
         this.audibookSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories", true, callbackDelegate);
         this.audibookSelector.makeDropdown();
@@ -121,7 +122,7 @@ class AudibooksList {
 
     private audioBasicSearchPaged(text: string, pageNumber: number) {
         this.hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * this.bibliographyModule.getBooksCountOnPage();
         var count = this.bibliographyModule.getBooksCountOnPage();
@@ -155,7 +156,7 @@ class AudibooksList {
 
     private audioBasicSearch(text: string) {
         this.hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         this.bibliographyModule.clearBooks();
         this.bibliographyModule.showLoading();
@@ -194,7 +195,9 @@ class AudibooksList {
     }
 
     private sortOrderChanged() {
-        this.search.processSearch();
+        var textInTextField = this.search.getTextFromTextField();
+        this.search.processSearchQuery(this.search.getLastQuery());
+        this.search.writeTextToTextField(textInTextField);
     }
 
     private hideTypeahead() {

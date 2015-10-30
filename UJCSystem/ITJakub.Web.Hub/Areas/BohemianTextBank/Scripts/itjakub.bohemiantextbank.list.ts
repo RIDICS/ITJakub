@@ -54,8 +54,9 @@ class CorpusList {
             var selectedIds = this.edition.getSelectedIds();
             this.bookIds = selectedIds.selectedBookIds;
             this.categoryIds = selectedIds.selectedCategoryIds;
-            this.search.processSearchQuery("%"); //search for all by default criteria (title)
-            this.search.writeTextToTextField("");
+            this.search.processSearch();
+            //this.search.processSearchQuery("%"); //search for all by default criteria (title)
+            //this.search.writeTextToTextField("");
         };
         this.edition = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
         this.edition.makeDropdown();
@@ -95,7 +96,7 @@ class CorpusList {
 
     private basicSearchPaged(text: string, pageNumber: number) {
         this.hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * this.bibliographyModule.getBooksCountOnPage();
         var count = this.bibliographyModule.getBooksCountOnPage();
@@ -129,7 +130,7 @@ class CorpusList {
 
     private basicSearch(text: string) {
         this.hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         this.bibliographyModule.clearBooks();
         this.bibliographyModule.showLoading();
@@ -168,7 +169,9 @@ class CorpusList {
     }
 
     private sortOrderChanged() {
-        this.search.processSearch();
+        var textInTextField = this.search.getTextFromTextField();
+        this.search.processSearchQuery(this.search.getLastQuery());
+        this.search.writeTextToTextField(textInTextField);
     }
 
     private hideTypeahead() {

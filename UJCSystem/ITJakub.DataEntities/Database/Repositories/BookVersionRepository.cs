@@ -71,7 +71,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where(
                             responsible =>
                                 responsible.Text == text && responsible.ResponsibleType.Id == responsibleType.Id)
-                        .Take(1)
                         .SingleOrDefault<Responsible>();
             }
         }
@@ -85,9 +84,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                     session.QueryOver<ResponsibleType>()
                         .Where(
                             respType =>
-                                respType.Text == responsibleTypeText ||
+                                respType.Text == responsibleTypeText &&
                                 respType.Type == responsibleTypeEnum)
-                        .Take(1)
                         .SingleOrDefault<ResponsibleType>();
             }
         }

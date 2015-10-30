@@ -288,6 +288,9 @@
     <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.css">
       <DependentUpon>itjakub.audiobooks.less</DependentUpon>
     </Content>
+    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.min.css">
+      <DependentUpon>itjakub.audiobooks.css</DependentUpon>
+    </Content>
     <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
