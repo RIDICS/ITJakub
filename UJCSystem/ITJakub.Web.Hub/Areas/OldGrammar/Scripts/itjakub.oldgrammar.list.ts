@@ -9,7 +9,9 @@ $(document).ready(() => {
     var categoryIds = new Array();
 
     function sortOrderChanged() {
-        search.processSearch();
+        var textInTextField = search.getTextFromTextField();
+        search.processSearchQuery(search.getLastQuery());
+        search.writeTextToTextField(textInTextField);
     }
     
     function hideTypeahead() {
@@ -18,7 +20,7 @@ $(document).ready(() => {
 
     var bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Grammar,"OldGrammar/OldGrammar/GetListConfiguration");
 
-    function editionAdvancedSearchPaged(json: string, pageNumber: number) {
+    function advancedSearchPaged(json: string, pageNumber: number) {
         hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
@@ -43,9 +45,9 @@ $(document).ready(() => {
         });
     }
 
-    function editionBasicSearchPaged(text: string, pageNumber: number) {
+    function basicSearchPaged(text: string, pageNumber: number) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
         var count = bibliographyModule.getBooksCountOnPage();
@@ -71,15 +73,15 @@ $(document).ready(() => {
     function pageClickCallbackForBiblModule(pageNumber: number) {
 
         if (search.isLastQueryJson()) {
-            editionAdvancedSearchPaged(search.getLastQuery(), pageNumber);
+            advancedSearchPaged(search.getLastQuery(), pageNumber);
         } else {
-            editionBasicSearchPaged(search.getLastQuery(), pageNumber);
+            basicSearchPaged(search.getLastQuery(), pageNumber);
         }
     }
 
-    function editionBasicSearch(text: string) {
+    function basicSearch(text: string) {
         hideTypeahead();
-        if (typeof text === "undefined" || text === null || text === "") return;
+        //if (typeof text === "undefined" || text === null || text === "") return;
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
@@ -97,7 +99,7 @@ $(document).ready(() => {
         });
     }
 
-    function editionAdvancedSearch(json: string) {
+    function advancedSearch(json: string) {
         hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
 
@@ -126,7 +128,7 @@ $(document).ready(() => {
     enabledOptions.push(SearchTypeEnum.Editor);
     enabledOptions.push(SearchTypeEnum.Dating);
 
-    search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
+    search = new Search(<any>$("#listSearchDiv")[0], advancedSearch, basicSearch);
     search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");
@@ -159,8 +161,9 @@ $(document).ready(() => {
         var selectedIds = editionsSelector.getSelectedIds();
         bookIds = selectedIds.selectedBookIds;
         categoryIds = selectedIds.selectedCategoryIds;
-        search.processSearchQuery("%"); //search for all by default criteria (title)
-        search.writeTextToTextField("");
+        search.processSearch();
+        //search.processSearchQuery("%"); //search for all by default criteria (title)
+        //search.writeTextToTextField("");
     };
 
     editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories", true, callbackDelegate);

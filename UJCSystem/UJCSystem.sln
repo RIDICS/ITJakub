@@ -15,9 +15,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MainService", "ITJakub.MainService", "{5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Lemmatization", "ITJakub.Lemmatization", "{1E2AFC91-8173-47AC-B7D4-799C5BF555F6}"
-	ProjectSection(SolutionItems) = preProject
-		ITJakub.BatchImport.Client\ViewModel\FileViewModel.cs = ITJakub.BatchImport.Client\ViewModel\FileViewModel.cs
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Clients", "ITJakub.Clients", "{53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}"
 EndProject

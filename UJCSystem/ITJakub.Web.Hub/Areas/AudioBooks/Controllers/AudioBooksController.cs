@@ -156,9 +156,11 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+
+            if(!string.IsNullOrEmpty(text))
             {
-                new WordListCriteriaContract
+                var wordListCriteria = new WordListCriteriaContract
                 {
                     Key = CriteriaKey.Title,
                     Disjunctions = new List<WordCriteriaContract>
@@ -168,8 +170,10 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                             Contains = new List<string> {text}
                         }
                     }
-                }
-            };
+                };
+
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -194,7 +198,18 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
-                new WordListCriteriaContract
+                new ResultCriteriaContract
+                {
+                    Start = start,
+                    Count = count,
+                    Sorting = (SortEnum) sortingEnum,
+                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
+                }
+            };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                var wordListCriteria = new WordListCriteriaContract
                 {
                     Key = CriteriaKey.Title,
                     Disjunctions = new List<WordCriteriaContract>
@@ -204,15 +219,10 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                             Contains = new List<string> {text}
                         }
                     }
-                },
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-                }
-            };
+                };
+
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {

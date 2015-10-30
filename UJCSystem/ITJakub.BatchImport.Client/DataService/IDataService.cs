@@ -11,7 +11,7 @@ namespace ITJakub.BatchImport.Client.DataService
 
         void LoadAllItems(Action<List<FileViewModel>, Exception> callback, string folderPath);
 
-        void ProcessItems(Action<string, Exception> callback);
+        void ProcessItems(string username, string password, int threadCount, Action<string, Exception> callback);
     }
 
     public class DesignDataService : IDataService
@@ -25,7 +25,7 @@ namespace ITJakub.BatchImport.Client.DataService
             }, null);
         }
 
-        public void ProcessItems(Action<string, Exception> callback)
+        public void ProcessItems(string username, string password, int threadCount, Action<string, Exception> callback)
         {
         }
     }

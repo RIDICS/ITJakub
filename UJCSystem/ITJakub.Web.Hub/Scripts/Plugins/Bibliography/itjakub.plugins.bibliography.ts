@@ -1,6 +1,7 @@
 ﻿/// <reference path="itjakub.plugins.bibliography.variableInterpreter.ts" />
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
+/// <reference path="../Sort/itjakub.plugins.sort.ts" />
 /// <reference path="../itjakub.plugins.pagination.ts" />
 
 class BibliographyModule {
@@ -69,7 +70,7 @@ class BibliographyModule {
     public showBooks(books: IBookInfo[]) {
         this.clearBooks();
         this.clearLoading();
-        if (books.length > 0) {
+        if (typeof books !== "undefined" && books !== null && books.length > 0) {
             var rootElement: HTMLUListElement = document.createElement('ul');
             $(rootElement).addClass('bib-listing');
             $.each(books, (index, book: IBookInfo) => {

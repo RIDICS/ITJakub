@@ -148,10 +148,10 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick": "searchBookReadClicked(this)"
+        "onclick": "searchProfLitBookReadClicked(this)"
       },
       "read-button": {
-        "onclick": "searchBookReadClicked(this)"
+        "onclick": "searchProfLitBookReadClicked(this)"
       },
       "variables": {
         "$test": {

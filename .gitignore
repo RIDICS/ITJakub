@@ -67,9 +67,7 @@ packages/
 #Logs
 [Ll]ogs/
 *.svclog
-Database/Extist-Development/local.properties
-UJCSystem/ITJakub.Xml.Conversion/Ujc.Ovj.Ooxml.Conversion.Test/Data/Output/
-UJCSystem/ITJakub.Xml.Conversion/Ujc.Ovj.Ooxml.Conversion.Test/Data/Temp/
+
 
 #typescript
 *js.[Mm]ap

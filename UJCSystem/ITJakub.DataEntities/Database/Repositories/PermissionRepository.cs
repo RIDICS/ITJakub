@@ -211,6 +211,15 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual void CreateSpecialPermission(SpecialPermission permission)
+        {
+            using (var session = GetSession())
+            {
+                session.Save(permission);
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
         {
             using (var session = GetSession())
@@ -324,6 +333,68 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<SpecialPermission>();
 
                 return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<AutoImportCategoryPermission> GetAutoimportPermissionsByCategoryIdList(IEnumerable<int> categoryIds)
+        {
+            using (var session = GetSession())
+            {
+                AutoImportCategoryPermission autoimportPermissionAlias = null;
+                Category categoryAlias = null;
+
+                var permissions = session.QueryOver(() => autoimportPermissionAlias)
+                    .JoinQueryOver(x => autoimportPermissionAlias.Category, () => categoryAlias)
+                    .AndRestrictionOn(() => categoryAlias.Id).IsInG(categoryIds)
+                    .List<AutoImportCategoryPermission>();
+
+                return permissions;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<Group> GetGroupsBySpecialPermissionIds(IEnumerable<int> specialPermissionIds)
+        {
+            using (var session = GetSession())
+            {
+                Group groupAlias = null;
+                SpecialPermission specialPermissionAlias = null;
+
+                var groups = session.QueryOver(() => groupAlias)
+                    .JoinQueryOver(x => groupAlias.SpecialPermissions, () => specialPermissionAlias)
+                    .AndRestrictionOn(() => specialPermissionAlias.Id).IsInG(specialPermissionIds)
+                    .List<Group>();
+
+                return groups;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual void CreatePermissionIfNotExist(Permission permission)
+        {
+            using (var session = GetSession())
+            {
+                var tmpPermission = FindPermissionByBookAndGroup(permission.Book.Id, permission.Group.Id);
+                if (tmpPermission == null)
+                {
+                    session.Save(permission);
+                }
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual Permission FindPermissionByBookAndGroup(long bookId, int groupId)
+        {
+            using (var session = GetSession())
+            {
+                return
+                    session.QueryOver<Permission>()
+                        .Where(
+                            permission =>
+                                permission.Book.Id == bookId &&
+                                permission.Group.Id == groupId)
+                        .SingleOrDefault<Permission>();
             }
         }
     }

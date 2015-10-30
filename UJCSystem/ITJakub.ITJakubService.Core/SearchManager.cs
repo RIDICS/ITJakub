@@ -170,10 +170,7 @@ namespace ITJakub.ITJakubService.Core
                     bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
                 }
 
-
                 var resultContractList = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
-
-
 
                 foreach (var resultContract in resultContractList)
                 {

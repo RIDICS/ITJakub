@@ -5,7 +5,6 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
-using ResponsibleType = ITJakub.DataEntities.Database.Entities.Enums.ResponsibleType;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
@@ -40,12 +39,16 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     xmlReader.LocalName.Equals("resp"))
                 {
                     xmlReader.Read(); //read text value
-                    string value = xmlReader.Value;
-                    responsible.ResponsibleType = new DataEntities.Database.Entities.ResponsibleType
+                    var responsibleTypeText = xmlReader.Value;
+                    var responsibleTypeType = ParseEnum<ResponsibleTypeEnum>(responsibleTypeText);
+                    var tmpResponsibleType = new ResponsibleType
                     {
-                        Text = value,
-                        Type = ParseEnum<ResponsibleType>(value)
+                        Text = responsibleTypeText,
+                        Type = responsibleTypeType
                     };
+
+                    m_bookVersionRepository.CreateResponsibleTypeIfNotExist(tmpResponsibleType);
+                    responsible.ResponsibleType = m_bookVersionRepository.FindResponsibleType(responsibleTypeText, responsibleTypeType);
                 }
 
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
@@ -55,7 +58,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 }
             }
 
-            responsible = m_bookVersionRepository.FindResponsible(responsible.Text, responsible.ResponsibleType) ?? responsible;
+            responsible = m_bookVersionRepository.FindResponsible(responsible.Text, responsible.ResponsibleType) ??
+                          responsible;
             bookVersion.Responsibles.Add(responsible);
         }
     }

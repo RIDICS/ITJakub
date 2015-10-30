@@ -42,11 +42,11 @@ namespace ITJakub.DataEntities.Database.Entities
             return Id.GetHashCode();
         }
     }
-    public enum SyndicationItemType
+    public enum SyndicationItemType:byte
     {       
-        Combined,
-        Web,
-        MobileApps,
+        Combined = 0,
+        Web = 1,
+        MobileApps = 2,
 
     }
 }

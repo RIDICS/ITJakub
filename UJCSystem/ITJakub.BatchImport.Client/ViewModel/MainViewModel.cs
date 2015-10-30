@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Threading;
@@ -7,30 +8,32 @@ using ITJakub.BatchImport.Client.DataService;
 
 namespace ITJakub.BatchImport.Client.ViewModel
 {
-    /// <summary> 
-    /// This class contains properties that the main View can data bind to. 
-    /// <para> 
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel. 
-    /// </para> 
-    /// <para> 
-    /// You can also use Blend to data bind with the tool's support. 
-    /// </para> 
-    /// <para> 
-    /// See http://www.galasoft.ch/mvvm 
-    /// </para> 
-    /// </summary> 
+    /// <summary>
+    ///     This class contains properties that the main View can data bind to.
+    ///     <para>
+    ///         Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
+    ///     </para>
+    ///     <para>
+    ///         You can also use Blend to data bind with the tool's support.
+    ///     </para>
+    ///     <para>
+    ///         See http://www.galasoft.ch/mvvm
+    ///     </para>
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService m_dataService;
         private string m_folderPath;
+        private int m_threadCount;
+        private string m_userName;
 
-        /// <summary> 
-        /// Initializes a new instance of the MainViewModel class. 
-        /// </summary> 
+        /// <summary>
+        ///     Initializes a new instance of the MainViewModel class.
+        /// </summary>
         public MainViewModel(IDataService dataService)
         {
             m_dataService = dataService;
-
+            ThreadCount = 5;
 
             InitializeData();
             InitializeCommands();
@@ -56,16 +59,38 @@ namespace ITJakub.BatchImport.Client.ViewModel
             }
         }
 
-        public RelayCommand ConvertCommand { get; set; }
+        public string UserName
+        {
+            get { return m_userName; }
+            set
+            {
+                m_userName = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public int ThreadCount
+        {
+            get { return m_threadCount; }
+            set
+            {
+                m_threadCount = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
+        public RelayCommand<PasswordBox> ConvertCommand { get; set; }
 
         public RelayCommand LoadItemsCommand { get; set; }
 
         public ObservableCollection<FileViewModel> FileItems { get; set; }
 
+      
 
         private void InitializeCommands()
         {
-            ConvertCommand = new RelayCommand(ConvertSelectedPath);
+            ConvertCommand = new RelayCommand<PasswordBox>(ConvertSelectedPath);
             LoadItemsCommand = new RelayCommand(LoadItems);
         }
 
@@ -93,9 +118,9 @@ namespace ITJakub.BatchImport.Client.ViewModel
             //item = item.ToLowerInvariant(); 
         }
 
-        private void ConvertSelectedPath()
+        private void ConvertSelectedPath(PasswordBox passwordBox)
         {
-            m_dataService.ProcessItems((resultProcessed, error) =>
+            m_dataService.ProcessItems(UserName, passwordBox.Password, ThreadCount, (resultProcessed, error) =>
             {
                 if (error != null)
                     return;

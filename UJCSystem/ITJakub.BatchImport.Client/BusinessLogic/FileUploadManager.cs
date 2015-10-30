@@ -14,11 +14,8 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
     {
         private readonly CommunicationProvider m_communicationProvider;
         private const string DefaultUploadMessage = "Uploaded by BatchImport client";        
-        private const string UserName = "test";
-        private const string Password = "PW:testtest";
-
-        
-
+        //private const string UserName = "test";
+        //private const string Password = "PW:testtest";        
 
         public FileUploadManager(CommunicationProvider communicationProvider)
         {
@@ -27,8 +24,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
 
 
         private ConcurrentQueue<FileModel> m_files = new ConcurrentQueue<FileModel>();
-        //private List<FileModel> m_files;        
-        private int MaxDegreeOfParallelism = 5;
+        //private List<FileModel> m_files;                
 
         public void AddFilesForUpload(Action<List<FileViewModel>, Exception> callback, string folderPath)
         {
@@ -50,33 +46,28 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         }
 
 
-        public void ProcessAllItems(Action<string, Exception> callback)
-        {
-            //var allTasks = new List<Task>();
-
-            ParallelLoopResult result = Parallel.ForEach(m_files, new ParallelOptions {MaxDegreeOfParallelism = MaxDegreeOfParallelism}, model=> ProcessFile(model, callback));
-            
-
-
-            //Parallel.ForEach(m_files, ProcessFile, new ParallelOptions() {MaxDegreeOfParallelism = 5})
-            //foreach (var file in m_files)
-            //{
-            //    allTasks.Add(Task.Factory.StartNew(() => ProcessFile(file)));
-            //}
-
-            //Task.WaitAll(allTasks.ToArray());
+        public void ProcessAllItems(string username, string password, int threadCount, Action<string, Exception> callback)
+        {            
+            var formattedPassword = m_communicationProvider.GetFormattedPasswordAsAuthToken(password);
+            ParallelLoopResult result = Parallel.ForEach(m_files, 
+                new ParallelOptions {MaxDegreeOfParallelism = threadCount }, 
+                model=> ProcessFile(model, username, formattedPassword, callback));            
         }
+    
 
-        private void ProcessFile(FileModel file, Action<string, Exception> callback)
+        private void ProcessFile(FileModel file, string username, string password, Action<string, Exception> callback)
         {
             
             var session = Guid.NewGuid().ToString();
-            using (var client = m_communicationProvider.GetStreamingClientAuthenticated(UserName, Password))
+
+            using (var client = m_communicationProvider.GetStreamingClientAuthenticated(username, password))
             {
                 file.CurrentState = FileStateType.Uploading;
                 using (var dataStream = GetDataStream(file.FullPath))
                 {
-                    var contract = new UploadResourceContract
+                    try
+                    {
+                        var contract = new UploadResourceContract
                     {
                         FileName = file.FileName,
                         Data = dataStream,
@@ -84,24 +75,30 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                     };
 
                     client.AddResource(contract);
+                    }
+                    catch (Exception)
+                    {
+                        file.CurrentState = FileStateType.Error;
+                        return;
+                        //throw;
+                    }
                 }
             }
 
             file.CurrentState = FileStateType.Processing;
 
-            using (var client = m_communicationProvider.GetAuthenticatedClient(UserName, Password))
+            using (var client = m_communicationProvider.GetAuthenticatedClient(username, password))
             {
                 try
                 {
                     client.ProcessSession(session, DefaultUploadMessage);
+                    file.CurrentState = FileStateType.Done;
                 }
                 catch (Exception)
                 {
                     file.CurrentState = FileStateType.Error;
-                    //throw;
-                }
-
-                file.CurrentState = FileStateType.Done;
+                    return;
+                }                
             }
 
             callback(file.FullPath, null);
@@ -110,7 +107,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         private Stream GetDataStream(string fullPath)
         {
             return new FileStream(fullPath, FileMode.Open);
-        }
+        }     
     }
 
     public class FileModel

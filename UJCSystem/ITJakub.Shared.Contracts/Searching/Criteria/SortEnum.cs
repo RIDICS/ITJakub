@@ -10,8 +10,6 @@ namespace ITJakub.Shared.Contracts.Searching.Criteria
         [EnumMember]
         Title = 1,
         [EnumMember]
-        Editor = 2,
-        [EnumMember]
-        Dating = 3,
+        Dating = 2,
     }
 }

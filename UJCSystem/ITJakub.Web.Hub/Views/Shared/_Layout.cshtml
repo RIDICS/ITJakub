@@ -45,7 +45,7 @@
 
 <div id="main-plugins-menu" class="main-plugins-menu">
 <ul>
-<li class="has-sub">
+<li id="dictionaries-menu" class="has-sub">
     <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
         <span>Slovníky</span></a>
     <ul>
@@ -75,7 +75,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="editions-menu" class="has-sub">
     <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
         <span>Edice</span></a>
     <ul>
@@ -105,7 +105,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="corpus-menu" class="has-sub">
     <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
         <span>Korpusy</span></a>
     <ul>
@@ -131,7 +131,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="grammars-menu" class="has-sub">
     <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
         <span>Mluvnice</span></a>
     <ul>
@@ -157,7 +157,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="professional-menu" class="has-sub">
     <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
         <span>Odborná literatura</span></a>
     <ul>
@@ -184,7 +184,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="bibliographies-menu" class="has-sub">
     <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
         <span>Bibliografie</span></a>
     <ul>
@@ -202,7 +202,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="cardifiles-menu" class="has-sub">
     <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
         <span>Kartotéky</span></a>
     <ul>
@@ -228,7 +228,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="audio-menu" class="has-sub">
     <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
         <span>Audioknihy</span></a>
     <ul>
@@ -246,7 +246,7 @@
         </li>
     </ul>
 </li>
-<li class="has-sub">
+<li id="tools-menu" class="has-sub">
     <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
         <span>Pomůcky</span></a>
     <ul>
@@ -266,7 +266,7 @@
 </li>
 @if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
 {
-    <li class="has-sub last">
+    <li id="admin-menu" class="has-sub last">
         <a href='#'>
             <span>Administrace</span>
         </a>

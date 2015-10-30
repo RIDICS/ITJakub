@@ -11,12 +11,14 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
     public class CategoryProcessor : ConcreteInstanceProcessorBase<Category>
     {
         private readonly CategoryRepository m_categoryRepository;
+        private readonly PermissionRepository m_permissionRepository;
 
-        public CategoryProcessor(CategoryRepository categoryRepository,
+        public CategoryProcessor(CategoryRepository categoryRepository, PermissionRepository permissionRepository,
             XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
             m_categoryRepository = categoryRepository;
+            m_permissionRepository = permissionRepository;
         }
 
         protected override string NodeName
@@ -59,6 +61,13 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 }
 
                 m_categoryRepository.SaveOrUpdate(category);
+                var newlyCreatedCategory = m_categoryRepository.FindByXmlId(category.XmlId);
+                var newAutoimportPermission = new AutoImportCategoryPermission
+                {
+                    Category = newlyCreatedCategory,
+                    AutoImportIsAllowed = true
+                };
+                m_permissionRepository.CreateSpecialPermission(newAutoimportPermission);
             }
 
             base.ProcessElement(bookVersion, category, xmlReader);
