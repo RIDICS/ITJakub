@@ -70,7 +70,7 @@ class BibliographyModule {
     public showBooks(books: IBookInfo[]) {
         this.clearBooks();
         this.clearLoading();
-        if (books.length > 0) {
+        if (typeof books !== "undefined" && books !== null && books.length > 0) {
             var rootElement: HTMLUListElement = document.createElement('ul');
             $(rootElement).addClass('bib-listing');
             $.each(books, (index, book: IBookInfo) => {

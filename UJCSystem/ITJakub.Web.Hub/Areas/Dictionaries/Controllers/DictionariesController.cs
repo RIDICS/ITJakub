@@ -140,10 +140,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult SearchBasicResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContractBasic = new List<SearchCriteriaContract>
+            var searchContractBasic = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
             {
-                CreateWordListContract(CriteriaKey.Headword, text)
-            };
+                searchContractBasic.Add(CreateWordListContract(CriteriaKey.Headword, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -160,10 +162,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult SearchBasicFulltextResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContractFulltext = new List<SearchCriteriaContract>
+            var searchContractFulltext = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
             {
-                CreateWordListContract(CriteriaKey.HeadwordDescription, text)
-            };
+                searchContractFulltext.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -180,9 +184,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var searchContract = new List<SearchCriteriaContract>
             {
-                CreateWordListContract(CriteriaKey.Headword, text),
                 CreateResultCriteriaContract(start, count)
             };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                searchContract.Add(CreateWordListContract(CriteriaKey.Headword, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
@@ -197,9 +205,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var searchContract = new List<SearchCriteriaContract>
             {
-                CreateWordListContract(CriteriaKey.HeadwordDescription, text),
                 CreateResultCriteriaContract(start, count)
             };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                searchContract.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
@@ -439,10 +451,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult DictionaryBasicSearchResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
             {
-                CreateWordListContract(CriteriaKey.Title, text)
-            };
+                listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -460,9 +474,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
-                CreateWordListContract(CriteriaKey.Title, text),
                 CreateResultCriteriaContract(start, count, sortingEnum, sortAsc)
             };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
