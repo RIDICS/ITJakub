@@ -1,52 +1,73 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using ITJakub.MobileApps.Client.Fillwords.DataContract;
-using ITJakub.MobileApps.Client.Fillwords.ViewModel;
-using ITJakub.MobileApps.Client.Fillwords.ViewModel.Enum;
+using ITJakub.MobileApps.Client.Fillwords2.DataContract;
+using ITJakub.MobileApps.Client.Fillwords2.ViewModel;
+using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Data;
+using ITJakub.MobileApps.Client.Fillwords2.ViewModel.Enum;
 using ITJakub.MobileApps.Client.Shared.Communication;
 using ITJakub.MobileApps.Client.Shared.Data;
 using ITJakub.MobileApps.Client.Shared.Enum;
 using Newtonsoft.Json;
 
-namespace ITJakub.MobileApps.Client.Fillwords.DataService
+namespace ITJakub.MobileApps.Client.Fillwords2.DataService
 {
     public class TaskManager
     {
         private const string EvaluationMessageType = "Evaluation";
         private const PollingInterval ResultsPollingInterval = PollingInterval.Slow;
+
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private readonly IPollingService m_pollingService;
-        private TaskViewModel m_currentTaskViewModel;
         private bool m_currentTaskFinished;
+        private TaskViewModel m_currentTaskViewModel;
         private DateTime m_lastUserResultTime;
         private Action<ObservableCollection<UserResultViewModel>, Exception> m_resultCallback;
-
+        
         public TaskManager(ISynchronizeCommunication applicationCommunication)
         {
             m_applicationCommunication = applicationCommunication;
             m_pollingService = applicationCommunication.PollingService;
         }
-        
-        public async void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<OptionsViewModel> optionsList, Action<Exception> callback)
+
+        public async void CreateTask(string taskName, string taskDescription, string bookRtfContent, IList<WordOptionsViewModel> wordOptionsList, Action<Exception> callback)
         {
             var taskContract = new FillwordsTaskContract
             {
                 DocumentRtf = bookRtfContent,
-                Options = new List<FillwordsTaskContract.WordOptionsTaskContract>(optionsList.Select(model => new FillwordsTaskContract.WordOptionsTaskContract
-                {
-                    WordList = model.List.Select(viewModel => viewModel.Word).ToList(),
-                    WordPosition = model.WordPosition,
-                    CorrectAnswer = model.CorrectAnswer
-                }))
+                Options = new List<FillwordsTaskContract.WordOptionsTaskContract>()
             };
+
+            foreach (var wordOption in wordOptionsList)
+            {
+                var wordOptionContract = new FillwordsTaskContract.WordOptionsTaskContract
+                {
+                    WordPosition = wordOption.WordPosition,
+                    CorrectAnswer = wordOption.SelectedWord,
+                    OptionList = new List<FillwordsTaskContract.OptionTaskContract>()
+                };
+                taskContract.Options.Add(wordOptionContract);
+
+                foreach (var letterOptionViewModel in wordOption.Options)
+                {
+                    var optionContract = new FillwordsTaskContract.OptionTaskContract
+                    {
+                        StartPosition = letterOptionViewModel.StartPosition,
+                        EndPosition = letterOptionViewModel.EndPosition,
+                        AnswerType = letterOptionViewModel.AnswerTypeViewModel.AnswerType,
+                        Options = new List<string>()
+                    };
+                    wordOptionContract.OptionList.Add(optionContract);
+                }
+            }
+            
             var data = JsonConvert.SerializeObject(taskContract);
 
             try
             {
-                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords, taskName, taskDescription, data);
+                await m_applicationCommunication.CreateTaskAsync(ApplicationType.Fillwords2, taskName, taskDescription, data);
                 callback(null);
             }
             catch (ClientCommunicationException exception)
@@ -64,55 +85,94 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             if (taskData == null)
                 return;
 
+            var wordOptions = new List<SimpleWordOptionsViewModel>();
+            foreach (var wordOptionsContract in taskData.Options)
+            {
+                var wordOption = new SimpleWordOptionsViewModel
+                {
+                    CorrectAnswer = wordOptionsContract.CorrectAnswer,
+                    WordPosition = wordOptionsContract.WordPosition,
+                    Options = new ObservableCollection<LetterOptionViewModel>()
+                };
+                wordOptions.Add(wordOption);
+
+                var optionList = new List<LetterOptionViewModel>();
+                foreach (var optionContract in wordOptionsContract.OptionList)
+                {
+                    var option = new LetterOptionViewModel
+                    {
+                        StartPosition = optionContract.StartPosition,
+                        EndPosition = optionContract.EndPosition,
+                        AnswerTypeViewModel = new AnswerTypeViewModel{AnswerType = optionContract.AnswerType},
+                        Options = optionContract.Options
+                    };
+                    optionList.Add(option);
+                }
+                wordOption.Options = new ObservableCollection<LetterOptionViewModel>(optionList.OrderBy(x => x.StartPosition));
+            }
+
             m_currentTaskFinished = false;
             m_currentTaskViewModel = new TaskViewModel
             {
                 DocumentRtf = taskData.DocumentRtf,
-                Options = new ObservableCollection<OptionsViewModel>(taskData.Options.Select(contract => new OptionsViewModel
-                {
-                    CorrectAnswer = contract.CorrectAnswer,
-                    WordPosition = contract.WordPosition,
-                    List = new ObservableCollection<OptionViewModel>(contract.WordList.Select(s => new OptionViewModel
-                    {
-                        Word = s
-                    }))
-                }).OrderBy(model => model.WordPosition))
+                Options = new ObservableCollection<SimpleWordOptionsViewModel>(wordOptions.OrderBy(x => x.WordPosition))
             };
-
             callback(m_currentTaskViewModel);
         }
 
         public async void EvaluateTask(Action<EvaluationResultViewModel, Exception> callback)
         {
             int correctAnswerCount = 0;
+            int optionsCount = 0;
             int index = 0;
             var taskOptionsList = m_currentTaskViewModel.Options;
-            var answerList = new List<string>();
-            var evaluatedAnswers = new AnswerState[taskOptionsList.Count];
+            var answerList = new List<FillwordsEvaluationContract.AnswerContract>();
 
-            foreach (var optionsViewModel in taskOptionsList)
+            foreach (var wordOptionsViewModel in taskOptionsList)
             {
-                answerList.Add(optionsViewModel.SelectedAnswer);
-                
-                if (optionsViewModel.SelectedAnswer == optionsViewModel.CorrectAnswer)
+                var answerContract = new FillwordsEvaluationContract.AnswerContract
                 {
-                    evaluatedAnswers[index++] = AnswerState.Correct;
-                    correctAnswerCount++;
+                    Answer = wordOptionsViewModel.SelectedAnswer
+                };
+                answerList.Add(answerContract);
+
+                var correctCount = 0;
+                foreach (var letterOptionViewModel in wordOptionsViewModel.Options)
+                {
+                    var correctLetters = wordOptionsViewModel.CorrectAnswer.Substring(
+                        letterOptionViewModel.StartPosition,
+                        letterOptionViewModel.EndPosition - letterOptionViewModel.StartPosition);
+
+                    if (letterOptionViewModel.SelectedAnswer == correctLetters)
+                        correctCount++;
+                }
+
+                if (correctCount == 0)
+                {
+                    answerContract.AnswerState = AnswerState.Incorrect;
+                }
+                else if (correctCount == wordOptionsViewModel.Options.Count)
+                {
+                    answerContract.AnswerState = AnswerState.Correct;
                 }
                 else
                 {
-                    evaluatedAnswers[index++] = AnswerState.Incorrect;
+                    answerContract.AnswerState = AnswerState.PartlyCorrect;
                 }
+
+                correctAnswerCount += correctCount;
+                optionsCount += wordOptionsViewModel.Options.Count;
+                index++;
             }
 
             try
             {
-                await SaveEvaluation(answerList, correctAnswerCount);
+                await SaveEvaluation(answerList, correctAnswerCount, optionsCount);
 
                 index = 0;
                 foreach (var optionsViewModel in taskOptionsList)
                 {
-                    optionsViewModel.AnswerState = evaluatedAnswers[index++];
+                    optionsViewModel.AnswerState = answerList[index++].AnswerState;
                 }
 
                 var evaluationResult = new EvaluationResultViewModel
@@ -121,7 +181,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                     UserResult = new UserResultViewModel
                     {
                         CorrectAnswers = correctAnswerCount,
-                        TotalAnswers = taskOptionsList.Count
+                        TotalAnswers = optionsCount
                     }
                 };
 
@@ -134,16 +194,17 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             }
         }
 
-        private async Task SaveEvaluation(IList<string> answerList, int correctAnswerCount)
+        private async Task SaveEvaluation(List<FillwordsEvaluationContract.AnswerContract> answerList, int correctAnswerCount, int optionsCount)
         {
             var evaluationObject = new FillwordsEvaluationContract
             {
                 CorrectAnswers = correctAnswerCount,
+                OptionsCount = optionsCount,
                 AnswerList = answerList
             };
             var serializedEvaluation = JsonConvert.SerializeObject(evaluationObject);
 
-            await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords, EvaluationMessageType, serializedEvaluation);
+            await m_applicationCommunication.SendObjectAsync(ApplicationType.Fillwords2, EvaluationMessageType, serializedEvaluation);
         }
 
         private ObservableCollection<UserResultViewModel> ProcessResults(IList<ObjectDetails> results)
@@ -157,12 +218,10 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 for (int i = 0; i < deserializedObject.AnswerList.Count; i++)
                 {
                     var answer = deserializedObject.AnswerList[i];
-                    var correctAnswer = m_currentTaskViewModel.Options[i].CorrectAnswer;
-                    
                     var answerViewModel = new ResultAnswerViewModel
                     {
-                        Answer = answer,
-                        IsCorrect = answer == correctAnswer
+                        Answer = answer.Answer,
+                        AnswerState = answer.AnswerState
                     };
                     answerList.Add(answerViewModel);
                 }
@@ -170,7 +229,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 var userResultViewModel = new UserResultViewModel
                 {
                     CorrectAnswers = deserializedObject.CorrectAnswers,
-                    TotalAnswers = deserializedObject.AnswerList.Count,
+                    TotalAnswers = deserializedObject.OptionsCount,
                     UserInfo = objectDetails.Author,
                     Answers = answerList,
                     IsTaskSubmited = true
@@ -189,7 +248,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             return outputCollection;
         }
 
-        private void FillMyAnswers(IEnumerable<string> myAnswers)
+        private void FillMyAnswers(IList<FillwordsEvaluationContract.AnswerContract> myAnswers)
         {
             var answersEnumerator = myAnswers.GetEnumerator();
             var optionsEnumerator = m_currentTaskViewModel.Options.GetEnumerator();
@@ -197,11 +256,9 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
             while (answersEnumerator.MoveNext() && optionsEnumerator.MoveNext())
             {
                 var currentOptions = optionsEnumerator.Current;
-                
-                currentOptions.UpdateSelectedAnswer(answersEnumerator.Current);
-                currentOptions.AnswerState = currentOptions.SelectedAnswer == currentOptions.CorrectAnswer
-                    ? AnswerState.Correct
-                    : AnswerState.Incorrect;
+
+                currentOptions.SelectedAnswer = answersEnumerator.Current.Answer;
+                currentOptions.AnswerState = answersEnumerator.Current.AnswerState;
             }
         }
 
@@ -212,7 +269,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 ResetLastRequestTime();
                 var results =
                     await
-                        m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords, m_lastUserResultTime,
+                        m_applicationCommunication.GetObjectsAsync(ApplicationType.Fillwords2, m_lastUserResultTime,
                             EvaluationMessageType);
 
                 var resultViewModels = ProcessResults(results);
@@ -231,7 +288,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
         public void StartPollingResults(Action<ObservableCollection<UserResultViewModel>, Exception> callback)
         {
             m_resultCallback = callback;
-            m_pollingService.RegisterForSynchronizedObjects(ResultsPollingInterval, ApplicationType.Fillwords, m_lastUserResultTime, EvaluationMessageType, PollingResultsCallback);
+            m_pollingService.RegisterForSynchronizedObjects(ResultsPollingInterval, ApplicationType.Fillwords2, m_lastUserResultTime, EvaluationMessageType, PollingResultsCallback);
         }
 
         private void PollingResultsCallback(IList<ObjectDetails> objectList, Exception exception)
@@ -241,7 +298,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
                 m_resultCallback(null, exception);
                 return;
             }
-            
+
             m_resultCallback(ProcessResults(objectList), null);
         }
 

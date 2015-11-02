@@ -44,6 +44,8 @@ namespace ITJakub.MobileApps.Client.Books.View.Control
 
             var oldIsReadonlyState = richEditBox.IsReadOnly;
             richEditBox.IsReadOnly = false;
+            richEditBox.Document.GetRange(0, richEditBox.Document.Selection.StoryLength).CharacterFormat.BackgroundColor
+                = richEditBox.Document.GetDefaultCharacterFormat().BackgroundColor;
             richEditBox.Document.SetText(TextSetOptions.FormatRtf, richEditBox.DocumentRtf);
             richEditBox.IsReadOnly = oldIsReadonlyState;
 

@@ -5,7 +5,7 @@ BEGIN TRAN
 INSERT INTO [dbo].[Application]
            ([Name])
      VALUES
-           ('Chat'), ('Hangman'), ('Crosswords'), ('SynchronizedReading'), ('Fillwords')
+           ('Chat'), ('Hangman'), ('Crosswords'), ('SynchronizedReading'), ('Fillwords'), ('Fillwords2')
 
 
 INSERT INTO [dbo].[DatabaseVersion]
