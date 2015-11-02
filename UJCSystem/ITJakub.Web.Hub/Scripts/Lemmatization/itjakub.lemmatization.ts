@@ -376,6 +376,7 @@ class LemmatizationCharacteristicTable {
         var tableDiv = document.createElement("div");
         var editCharacteristicDiv = document.createElement("div");
         var editCharacteristicButton = document.createElement("button");
+        var deleteCharacteristicButton = document.createElement("button");
         var delimeter = document.createElement("hr");
 
         $(editCharacteristicButton)
@@ -385,8 +386,15 @@ class LemmatizationCharacteristicTable {
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });
+        $(deleteCharacteristicButton)
+            .addClass("lemmatization-edit")
+            .text("Smazat")
+            .click(() => {
+                this.delete();
+            });
         $(editCharacteristicDiv)
-            .append(editCharacteristicButton);
+            .append(editCharacteristicButton)
+            .append(deleteCharacteristicButton);
 
         $(morphologicalLabelDiv)
             .addClass("lemmatization-label")
@@ -455,6 +463,7 @@ class LemmatizationCharacteristicTable {
 
         if (!this.canEdit) {
             editCharacteristicButton.remove();
+            deleteCharacteristicButton.remove();
             th1.remove();
         }
 
@@ -467,6 +476,11 @@ class LemmatizationCharacteristicTable {
 
         this.descriptionDiv = descriptionContentDiv;
         this.morphologicalSpan = morphologicalContentSpan;
+    }
+
+    private delete() {
+        //todo remove on server
+        $(this.container).empty();
     }
 
     private addNewEmptyRow() {
@@ -495,7 +509,10 @@ class LemmatizationCanonicalForm {
     private containerType: HTMLDivElement;
     private containerDescription: HTMLDivElement;
     private editButton: HTMLButtonElement;
+    private deleteButton: HTMLButtonElement;
     private hyperLemmatization: LemmatizationHyperCanonicalForm;
+    private tableRow1: HTMLTableRowElement;
+    private tableRow2: HTMLTableRowElement;
 
     constructor(tokenCharacteristicId: number, tableBody: HTMLTableSectionElement, canEdit: boolean, canonicalForm: ICanonicalForm = null) {
         this.tableBody = tableBody;
@@ -515,7 +532,9 @@ class LemmatizationCanonicalForm {
         var containerType = document.createElement("div");
         var containerDescription = document.createElement("div");
         var editButton = document.createElement("button");
+        var deleteButton = document.createElement("button");
         var editButtonContent = document.createElement("span");
+        var deleteButtonContent = document.createElement("span");
         $(editButtonContent)
             .addClass("glyphicon")
             .addClass(this.canonicalForm ? "glyphicon-pencil" : "glyphicon-plus");
@@ -527,14 +546,25 @@ class LemmatizationCanonicalForm {
                 this.showCreateDialog();
         });
 
+        $(deleteButtonContent)
+            .addClass("glyphicon")
+            .addClass("glyphicon-trash");
+        $(deleteButton).append(deleteButtonContent);
+        $(deleteButton).click(() => {
+            this.delete();
+        });
+
         if (this.canonicalForm) {
             $(containerCanonicalForm).text(this.canonicalForm.Text);
             $(containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
             $(containerDescription).text(this.canonicalForm.Description);
+        } else {
+            $(deleteButton).addClass("hidden");
         }
 
 
         $(td1).addClass("column-commands")
+            .append(deleteButton)
             .append(editButton);
         $(td2).append(containerCanonicalForm);
         $(td3).append(containerType);
@@ -619,6 +649,7 @@ class LemmatizationCanonicalForm {
         this.containerType = containerType;
         this.containerDescription = containerDescription;
         this.editButton = editButton;
+        this.deleteButton = deleteButton;
 
         this.hyperLemmatization = new LemmatizationHyperCanonicalForm();
         this.hyperLemmatization.containerName = containerHyperForm;
@@ -626,6 +657,31 @@ class LemmatizationCanonicalForm {
         this.hyperLemmatization.containerDescription = containerHyperDescription;
         this.hyperLemmatization.editButton = editHyperButton;
         this.hyperLemmatization.setButton = setHyperButton;
+
+        this.tableRow1 = tr;
+        this.tableRow2 = hyperTr;
+    }
+
+    private delete() {
+        //TODO remove from server
+        $(this.tableRow2).remove();
+        $(this.tableRow1).remove();
+    }
+
+    private removeHyperItem() {
+        //todo remove from server
+
+        this.canonicalForm.HyperCanonicalForm = null;
+
+        var item = this.hyperLemmatization;
+        $(item.editButton).addClass("hidden");
+        $(item.containerDescription).text("");
+        $(item.containerName).text("");
+        $(item.containerType).text("");
+
+        $("#newHyperCanonicalFormDialog").modal("hide");
+        // TODO remove also in other canonical forms - use reload
+        // TODO use reload mechanism after item editation and hyperCanonicalForm assignment
     }
 
     private showCreateDialog() {
@@ -671,6 +727,10 @@ class LemmatizationCanonicalForm {
         $("#save-hyper").off("click");
         $("#save-hyper").click(() => {
             this.createHyperItem();
+        });
+        $("#remove-hyper").off("click");
+        $("#remove-hyper").click(() => {
+            this.removeHyperItem();
         });
 
         $("#new-hyper").val("");
@@ -864,6 +924,7 @@ class LemmatizationCanonicalForm {
         $(this.editButton).children()
             .removeClass("glyphicon-plus")
             .addClass("glyphicon-pencil");
+        $(this.deleteButton).removeClass("hidden");
         $(this.hyperLemmatization.setButton).removeClass("hidden");
 
         if (canonicalForm.HyperCanonicalForm != null) {
