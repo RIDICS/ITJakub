@@ -7,6 +7,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate.Criterion;
+using NHibernate.Mapping;
 using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -248,6 +249,25 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Where( () => bookVersionAlias.Id == bookVersionId)
                         .List<Category>();
                 return categories;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetAllBookIdsByBookType(BookTypeEnum currentBookType)
+        {
+            using (var session = GetSession())
+            {
+
+                //var topSelect = session.QueryOver<Category>().Where(c=> c.BookType)
+                Category catAlias = null;
+                BookVersion bookVersionAlias = null;
+                Book bookAlias = null;
+                return session.QueryOver<Category>(() => catAlias)
+                    .JoinQueryOver(c => c.BookType).Where(bt => bt.Type == currentBookType)
+                    .JoinQueryOver(() => catAlias.BookVersions, () => bookVersionAlias)
+                    .JoinQueryOver(() => bookVersionAlias.Book, () => bookAlias)
+                    .Where(() => bookVersionAlias.Id == bookAlias.LastVersion.Id)                    
+                    .Select(Projections.Property(() => bookAlias.Id)).List<long>();
             }
         }
     }
