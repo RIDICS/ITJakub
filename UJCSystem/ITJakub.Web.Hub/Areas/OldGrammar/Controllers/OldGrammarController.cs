@@ -16,8 +16,10 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
     [RouteArea("OldGrammar")]
-    public class OldGrammarController : BaseController
+    public class OldGrammarController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Grammar; } }
+
         public ActionResult Index()
         {
             return View("List");
@@ -119,7 +121,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTermsByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -128,7 +130,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Grammar);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -137,7 +139,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Grammar, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -146,7 +148,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var editionsWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Grammar);
+                var editionsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
                 return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
             }
         }

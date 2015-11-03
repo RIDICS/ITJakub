@@ -14,8 +14,10 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 {
     [RouteArea("BohemianTextBank")]
-    public class BohemianTextBankController : BaseController
+    public class BohemianTextBankController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.TextBank; } }
+
         public ActionResult Index()
         {
             return View("List");
@@ -87,7 +89,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
 
                 return Json(booksWithCategories, JsonRequestBehavior.AllowGet);
             }
@@ -382,7 +384,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.TextBank);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -391,7 +393,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.TextBank, null, null);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

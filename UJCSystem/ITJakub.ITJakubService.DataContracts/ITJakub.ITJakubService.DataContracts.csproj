@@ -72,6 +72,10 @@
     <Compile Include="TermContract.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
+      <Project>{67B4DDA0-4340-4D05-9A22-831DA43E70F8}</Project>
+      <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
       <Name>ITJakub.Shared.Contracts</Name>

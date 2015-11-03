@@ -589,7 +589,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract bookType)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract? bookType)
         {
             try
             {

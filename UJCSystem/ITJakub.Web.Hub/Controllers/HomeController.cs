@@ -109,7 +109,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadDictionaryHeadwords(null, null, query);
+                var result = client.GetTypeaheadDictionaryHeadwords(null, null, query, null);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
     }

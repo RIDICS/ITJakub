@@ -375,7 +375,7 @@ namespace ITJakub.ITJakubService.Core
         }
 
         public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query,
-            BookTypeEnumContract bookType)
+            BookTypeEnumContract? bookType)
         {
             var currentBookType = Mapper.Map<BookTypeEnum>(bookType);
             var bookIds = GetCompleteBookIdList(selectedCategoryIds, selectedBookIds, currentBookType);
@@ -439,12 +439,14 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnum currentBookType)
+        private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnum? currentBookType)
         {
             //Get all books for current module
             if (selectedBookIds == null && selectedCategoryIds == null)
             {
-                return m_categoryRepository.GetAllBookIdsByBookType(currentBookType);
+                if(currentBookType.HasValue)
+                    return m_categoryRepository.GetAllBookIdsByBookType(currentBookType.Value);
+                return m_categoryRepository.GetAllBookIds();
             }
 
             if (selectedCategoryIds != null && selectedCategoryIds.Count > 0)

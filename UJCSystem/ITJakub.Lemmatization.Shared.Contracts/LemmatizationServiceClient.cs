@@ -11,6 +11,10 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public LemmatizationServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         public IList<TokenContract> GetTypeaheadToken(string query)
         {
             try

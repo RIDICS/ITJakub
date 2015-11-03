@@ -258,7 +258,6 @@ namespace ITJakub.DataEntities.Database.Repositories
             using (var session = GetSession())
             {
 
-                //var topSelect = session.QueryOver<Category>().Where(c=> c.BookType)
                 Category catAlias = null;
                 BookVersion bookVersionAlias = null;
                 Book bookAlias = null;
@@ -268,6 +267,15 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(() => bookVersionAlias.Book, () => bookAlias)
                     .Where(() => bookVersionAlias.Id == bookAlias.LastVersion.Id)                    
                     .Select(Projections.Property(() => bookAlias.Id)).List<long>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<long> GetAllBookIds()
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<Book>().Select(book => book.Id).List<long>();
             }
         }
     }

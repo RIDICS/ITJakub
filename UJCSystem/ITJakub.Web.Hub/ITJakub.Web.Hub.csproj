@@ -214,6 +214,7 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
     <Compile Include="Areas\Tools\BundleConfig.cs" />
     <Compile Include="Areas\Tools\Controllers\ToolsController.cs" />
