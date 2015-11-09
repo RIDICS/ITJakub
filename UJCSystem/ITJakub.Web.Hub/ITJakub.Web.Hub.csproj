@@ -214,6 +214,7 @@
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
+    <Compile Include="Areas\OldGrammar\Models\TermCategoriesWithTermsModel.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
     <Compile Include="Areas\Tools\BundleConfig.cs" />
@@ -677,6 +678,7 @@
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\ListTerms.cshtml" />
     <None Include="compilerconfig.json" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
@@ -764,7 +766,6 @@
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
-    <Folder Include="Areas\OldGrammar\Models\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
     <Folder Include="Areas\ProfessionalLiterature\Models\" />
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />

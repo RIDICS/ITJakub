@@ -7,6 +7,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Web.Hub.Areas.OldGrammar.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models;
@@ -33,6 +34,18 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         public ActionResult List()
         {
             return View();
+        }
+
+        public ActionResult ListTerms()
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var termCategories = client.GetTermCategoriesWithTerms();
+                return View(new TermCategoriesWithTermsModel
+                {
+                    TermCategories = termCategories
+                });
+            }
         }
 
         public ActionResult Information()

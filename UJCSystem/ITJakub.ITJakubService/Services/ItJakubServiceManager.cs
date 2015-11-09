@@ -360,6 +360,11 @@ namespace ITJakub.ITJakubService.Services
             m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
         }
 
+        public IList<TermCategoryContract> GetTermCategoriesWithTerms()
+        {
+            return m_bookManager.GetTermCategoriesWithTerms();
+        }
+
         #endregion
 
         public void Dispose()

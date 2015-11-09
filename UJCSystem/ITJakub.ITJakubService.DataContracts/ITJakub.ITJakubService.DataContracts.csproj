@@ -69,6 +69,7 @@
     <Compile Include="Contracts\ProcessedFileInfoContract.cs" />
     <Compile Include="IITJakubServiceStreamed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TermCategoryContract.cs" />
     <Compile Include="TermContract.cs" />
   </ItemGroup>
   <ItemGroup>
