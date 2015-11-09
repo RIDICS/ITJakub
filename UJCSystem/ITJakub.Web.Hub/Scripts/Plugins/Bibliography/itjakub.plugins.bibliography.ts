@@ -179,6 +179,7 @@ class BibliographyModule {
 }
 
 interface IBookInfo {
+    BookId: number;
     BookXmlId: string;
     BookType: BookTypeEnum;
     Title: string;

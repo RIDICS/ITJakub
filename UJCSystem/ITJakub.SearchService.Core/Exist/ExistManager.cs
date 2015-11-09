@@ -244,7 +244,7 @@ namespace ITJakub.SearchService.Core.Exist
 
         public string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat)
         {
-            return m_communicationManager.GetE
+            return m_communicationManager.GetBookEditionNote(bookId, versionId, outputFormat);
         }
     }
 }
