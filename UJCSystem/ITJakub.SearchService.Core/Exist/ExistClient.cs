@@ -35,6 +35,7 @@ namespace ITJakub.SearchService.Core.Exist
             return Task.Run(() => m_httpClient.SendAsync(httpRequestMessage))
                 .ContinueWith(task =>
                 {
+                    //var message = Task.Run(() => task.Result.Content.ReadAsStringAsync()).Result; //content message for debug purposes
                     task.Result.EnsureSuccessStatusCode();
                     return task.Result.Content;
                 });

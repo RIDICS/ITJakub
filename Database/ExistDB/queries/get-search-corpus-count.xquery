@@ -68,10 +68,12 @@ let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version
 (:~ TODO: dodat řazení, více proledávaných elementů :)
 (:let $documents := search:get-query-documents-matches($collection, $queries):)
 
-let $hits := search:get-query-document-hits($collection, $queries)
+(:let $hits := search:get-query-document-hits($collection, $queries):)
 
+let $hits := search:get-search-corpus-hits($collection, $queries)
+let $hits-count := count($hits)
 (:let $hits-count := search:get-match-count($hits):)
 
-let $hits-count := local:get-match-count-mock($hits)
+(:let $hits-count := local:get-match-count-mock($hits):)
 
 return $hits-count

@@ -33,9 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
@@ -58,9 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

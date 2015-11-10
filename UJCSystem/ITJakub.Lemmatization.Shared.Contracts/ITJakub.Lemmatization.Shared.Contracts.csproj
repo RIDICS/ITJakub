@@ -34,7 +34,7 @@
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
       <Private>True</Private>
     </Reference>

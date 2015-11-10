@@ -3,7 +3,12 @@ import module namespace search = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/se
 import module namespace kwic="http://exist-db.org/xquery/kwic";
 import module namespace coll = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/collection" at "../modules/collection.xqm";
 import module namespace trans = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/transformation" at "../modules/transformation.xqm";
+import module namespace qry = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/querying" at "../modules/querying.xqm";
 
+import module namespace tic="http://vokabular.ujc.cas.cz/ns/it-jakub/xquery/tic" at "../modules/tic.xqm";
+
+
+declare namespace itji="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/info";
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace nlp = "http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0";
 declare namespace itj = "http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/exist";
@@ -20,7 +25,49 @@ declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare option exist:serialize "highlight-matches=elements";
 
 
-declare option output:cdata-section-elements "*:Notes *:Before *:After *:string";
+(:declare option output:cdata-section-elements "*:Before *:After *:string";:)
+
+
+    declare function local:get-matches-tic($hits as node()*, $query-terms as element(query-terms)) {
+    	let $kwic := $query-terms/kwic
+    	let $relevant-hits := subsequence($hits, $kwic/@start, $kwic/@count)
+    	
+    	let $xsl-path := $trans:transformation-path || "matchToCorpusHtml.xsl"
+        let $template := doc(escape-html-uri($xsl-path)) 
+        
+        let $template-notes-path := $trans:transformation-path || "matchToCorpusHtmlNotes.xsl"
+	    let $template-notes := doc($template-notes-path)
+
+
+    	
+	return 
+	<CorpusSearchResultContractList xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results"
+		xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:a="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+		<SearchResults>
+		{
+		for $hit at $position in $relevant-hits
+		let $xml-id := string($hit/ancestor::tei:TEI/@n)
+		let $version-id := substring-after($hit/ancestor::tei:TEI/@change, '#')
+		
+		let $match := tic:get-tic($hit, $kwic/@context-length)
+			return 
+				<CorpusSearchResultContract  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+					<BookXmlId>{$xml-id}</BookXmlId>
+						{	
+						let $pb := local:prepare-pb($hit)
+						let $l := local:prepare-l($hit)
+						let $bible := local:prepare-bible($hit)
+                        return (<HitResultContext  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
+								{local:prepare-match-from-info($match, $template, $template-notes)}
+						</HitResultContext>, $pb, $l, $bible)								
+					}
+					<VersionId>{$version-id}</VersionId>
+				</CorpusSearchResultContract>
+		}
+		</SearchResults>
+		</CorpusSearchResultContractList>
+    };
 
 declare function local:get-matches-mock($hits as node()*, 
 	$kwic-start as xs:int, 
@@ -120,6 +167,29 @@ declare function local:prepare-l($hit as node()?) as node()? {
 	</VerseResultContext>
 	else ()
 };
+
+declare function local:prepare-match-from-info($match as element(itji:result),
+$template as item(), $template-notes as node()) as node()* {
+	let $before := $match/itji:before
+	let $hit := $match/itji:match
+	let $after := $match/itji:after
+		
+	let $notes-before := local:tranform-match-to-html($before, $template-notes)
+	let $notes-after := local:tranform-match-to-html($after, $template-notes)
+	
+	let $before := local:tranform-match-to-html($before, $template)
+    let $hit := local:tranform-match-to-html($hit, $template)
+	let $after := local:tranform-match-to-html($after, $template)
+	
+	return ($after, $before, $hit, ($notes-before, $notes-after))
+};
+
+declare function local:tranform-match-to-html($element as element(), $template as item()) {
+    let $result := transform:transform($element, $template, ())
+    return $result
+};
+
+
 
 declare function local:prepare-match($match as element(p)) as node()* {
 	let $before := $match/span[@class='previous']/text()
@@ -306,52 +376,17 @@ for $document in $result-documents
 
 
 let $query-criteria-param := request:get-parameter("serializedSearchCriteria", $search:default-search-criteria)
-let $query-criteria := util:parse($query-criteria-param) (: ve vyšších verzích parse-xml :)
 
-let $queries := search:get-queries-from-search-criteria($query-criteria)
+let $query-terms := qry:get-query-terms($query-criteria-param)
 
+let $result := $query-terms
 
-let $result-params := $query-criteria/r:ResultSearchCriteriaContract/r:ResultSpecifications
-
-(:~ od jakého záznamu se vracejí výsledky, tj. knihy :)
-let $result-start := if($result-params/sc:Start) then
-		if($result-params/sc:Start[@i:nil='true']) then
-			1 
-		else xs:int($result-params/sc:Start) else 
-			1
-(:~ kolik záznamů má být ve vraceném výsledku; 0 znamená všechny; pokud je číslo větší než celkový počet záznamů, vrátí se všechny :)
-let $result-count := if($result-params/sc:Count) then
-	if($result-params/sc:Count[@i:nil='true']) then
-			0
-	else xs:int($result-params/sc:Count) else 
-			25
-
-(:~ od jakého záznamu se vracejí doklady s výskytem hledaného výrazu :)
-let $kwic-start := if($result-params/sc:HitSettingsContract/sc:Start) then xs:int($result-params/sc:HitSettingsContract/sc:Start) else 1
-(:~ kolik záznamů s doklady s výskytem hledaného výrazu se vrací; pokud je číslo větší než celkový počet dokladů, vrátí se všechny :)
-let $kwic-count := if($result-params/sc:HitSettingsContract/sc:Count) then xs:int($result-params/sc:HitSettingsContract/sc:Count) else 3
-(:~ počet znaků zleva a zprava pro zobrazení dokladů :)
-let $kwic-context-length := if($result-params/sc:HitSettingsContract/sc:ContextLength) then xs:int($result-params/sc:HitSettingsContract/sc:ContextLength) else 50
-
-(:~ kriterium použité pro seřazení výsledků :)
-let $sort-criterion := if($result-params/sc:Sorting) then
-	if($result-params/sc:Sorting[@i:nil='true']) then
-		"Title"
-	else $result-params/sc:Sorting/text() 
-	else "Title"
-	
-(:~ kriterium použité pro seřazení výsledků :)
-let $sort-direction := if($result-params/sc:Direction) then $result-params/sc:Direction/text() else "Ascending" (: Descending :)
-
-
-
-
-(:~ pomocná proměnná; vrací všechny požadované knihy z dotazu :)
-let $books := $query-criteria/r:ResultSearchCriteriaContract/r:ResultBooks/a:BookVersionPairContract
+let $books := $query-terms/documents/document
 (:~ sekvence všech identifikátorů zdrojů, které se mají prohledat :)
-let $book-ids := $books/a:Guid/text()
+let $book-ids := $books/@id
 (:~ sekvence všech verzí zdrojů, které se mají prohledat; upraveno tak, aby se dalo odkazovat na hodnotu @change :)
-let $book-version-ids := $books/a:VersionId/concat('#', text())
+let $book-version-ids := $books/@version-id
+
 
 (:~ relativní cesta k prohledávané kolekci :)
 let $collection-path := $coll:collection-path
@@ -360,25 +395,39 @@ let $collection := collection($collection-path)
 
 let $collection := $collection[./tei:TEI[@n = $book-ids][@change = $book-version-ids]] 
 
-let $kwic-config := <config width="{$kwic-context-length}" preserve-space="yes" format="kwic"/>
+(:let $kwic-config := $query-terms/kwic/config:)
 
 (:~ dokumenty, které obsahují hledaný výraz :)
 (:~ TODO: dodat řazení, více proledávaných elementů :)
+let $queries := $query-terms/queries
 let $documents := search:get-query-documents-matches($collection, $queries)
 let $sorted-documents := for $document in $documents 
 	order by number($document/tei:TEI/tei:teiHeader//tei:origDate/@notBefore),
 		number($document/tei:TEI/tei:teiHeader//tei:origDate/@notAfter) 
 	return $document
-	
-let $result-documents := if($result-count = 0) then
-		subsequence($sorted-documents, $result-start)
+
+let $result := $query-terms/result
+(:
+let $result-documents := if($result/@count = 0) then
+		subsequence($sorted-documents, $result/@start)
 	else
-		subsequence($sorted-documents, $result-start, $result-count)
+		subsequence($sorted-documents, $result/@start, $result/@count):)
 
+let $hits := $documents//tei:w[ft:query(., $queries/query, $search:query-options)]
 
-let $hits := search:get-query-document-hits($result-documents, $queries)
+(:let $hits := if($result/@count = 0) then
+		subsequence($hits, $result/@start)
+	else
+		subsequence($hits, $result/@start, $result/@count):)
 
-let $matches := local:get-matches-mock($hits, $kwic-start, $kwic-count, $kwic-context-length)
+(:let $hits := search:get-query-document-hits($result-documents, $queries):)
+
+(:let $kwic := $query-terms/kwic:)
+(:let $matches := local:get-matches-mock($hits, $kwic/@start, $kwic/@count, $kwic/@context-length):)
+let $matches := local:get-matches-tic($hits, $query-terms)
+
+(:let $matches := <empy />:)
+let $result := $matches
 
 (:
 let $summary := local:get-match-summary($hits)
@@ -393,11 +442,19 @@ let $step := transform:transform($matches, $template, ())
 
 (:let $result := $step:)
 
-let $xslt-path2 := $trans:transformation-path || "resultToContractCorpusHtml.xsl"
-(:let $result := $xslt-path:)
-let $result := trans:transform-document($step, "Html", $xslt-path2)
+let $xslt-path2 := $trans:transformation-path || "resultToContractCorpusHtml-2.xsl"
+
+(:let $result := $query-terms:)
+
+let $template := doc(escape-html-uri($xslt-path2))
+let $step := transform:stream-transform($step, $template, ())
+
+let $result := $step
+(:let $result := trans:transform-document($step, "Html", $xslt-path2):)
 
 (:let $result := $matches:)
+
+
 (:let $result := $step:)
 
 (:let $result := <dates xmlns="http://www.tei-c.org/ns/1.0">

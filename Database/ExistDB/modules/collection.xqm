@@ -52,10 +52,12 @@ declare function coll:get-latest-document-version-metadata($document-id as xs:st
     
     let $documents := for $document in $documents
     	order by $document[count(/tei:teiHeader/tei:revisionDesc/tei:change)] (: get first version :)
-    	return $document 
-    return if($document[1]) then
-    		$document[1] (: get first version :)
-    	else response:set-status-code(404)
+    	return $document
+    return if ($documents) then
+    	if($documents[1]) then
+    			$documents[1] (: get first version :)
+    		else response:set-status-code(404)
+    else response:set-status-code(404)
 
 };
 

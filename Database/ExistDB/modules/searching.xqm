@@ -692,6 +692,11 @@ declare function search:get-match-count($hits as node()*) as xs:int {
 (:	sum(for $hit in $hits return text:match-count($hit)):)
 } ;
 
+declare function search:get-search-corpus-hits($root as node()*,
+		$queries as element()) as node()* {
+	let $hits := $root//tei:w[ft:query(., $queries/query, $search:query-options)]
+	return $hits
+} ;
 
 (:~ převede vyhledávací kritéria na seznam dotazů query pro fulltextové vyhledávání :)
 declare function search:get-queries-from-search-criteria($search-criteria  as node()*) as element() {
