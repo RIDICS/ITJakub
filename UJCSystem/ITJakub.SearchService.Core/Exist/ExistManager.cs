@@ -242,9 +242,13 @@ namespace ITJakub.SearchService.Core.Exist
         }
 
 
-        public string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat)
+        public string GetBookEditionNote(string bookId, string versionId, string transformationName,
+            OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
-            return m_communicationManager.GetBookEditionNote(bookId, versionId, outputFormat);
+            var xslPath = m_existResourceManager.GetTransformationUri(transformationName, outputFormat,
+                transformationLevel, bookId, versionId);
+            return m_communicationManager.GetBookEditionNote(bookId, versionId, 
+                Enum.GetName(typeof(OutputFormatEnumContract), outputFormat), xslPath);
         }
     }
 }

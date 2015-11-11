@@ -174,10 +174,15 @@ namespace ITJakub.ITJakubService.Core
             {
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
-
+            
             var book = m_bookRepository.FindBookById(bookId);
             var bookVersion = m_bookRepository.GetLastVersionForBookByBookId(bookId);
-            var editionNoteText = m_searchServiceClient.GetBookEditionNote(book.Guid, bookVersion.VersionId, resultFormat);
+            var bookType = m_bookVersionRepository.GetBookTypeByBookVersionId(bookVersion.Id);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType.Type);
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+
+            var editionNoteText = m_searchServiceClient.GetBookEditionNote(book.Guid, bookVersion.VersionId, transformationName, resultFormat, transformationLevel);
 
             return editionNoteText;
         }

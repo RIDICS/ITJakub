@@ -95,6 +95,11 @@ namespace ITJakub.SearchService.Core.Exist
             return GetPageByXmlId(bookId, versionId, pageXmlId, outputFormat, null);
         }
 
+        public string GetBookEditionNote(string bookId, string versionId, string outputFormat)
+        {
+            return GetBookEditionNote(bookId, versionId, outputFormat, null);
+        }
+
         public string ListSearchEditionsResults(string serializedSearchCriteria)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
@@ -170,11 +175,11 @@ namespace ITJakub.SearchService.Core.Exist
             return int.Parse(result);
         }
 
-        public string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat)
+        public string GetBookEditionNote(string bookId, string versionId, string outputFormat, string xslPath)
         {
             var commInfo = m_uriCache.GetCommunicationInfoForMethod();
             var uri = GetCompleteUri(commInfo, null);
-            var content = GetContentKeyValuePairs(commInfo, null, bookId, versionId, outputFormat);
+            var content = GetContentKeyValuePairs(commInfo, xslPath, bookId, versionId, outputFormat);
             var noteText = m_existClient.SendRequestGetResponseAsString(commInfo, uri, content).Result;
             return noteText;
         }

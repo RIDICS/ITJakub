@@ -60,6 +60,6 @@ namespace ITJakub.Shared.Contracts
             string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
 
         [OperationContract]
-        string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat);
+        string GetBookEditionNote(string bookId, string versionId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
     }
 }

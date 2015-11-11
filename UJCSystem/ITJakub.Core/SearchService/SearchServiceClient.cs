@@ -414,11 +414,11 @@ namespace ITJakub.Core.SearchService
             }
         }
 
-        public string GetBookEditionNote(string bookGuid, string versionId, OutputFormatEnumContract outputFormat)
+        public string GetBookEditionNote(string bookGuid, string versionId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
         {
             try
             {
-                return Channel.GetBookEditionNote(bookGuid, versionId, outputFormat);
+                return Channel.GetBookEditionNote(bookGuid, versionId, transformationName, outputFormat, transformationLevel);
             }
             catch (CommunicationException ex)
             {
