@@ -85,6 +85,6 @@ namespace ITJakub.SearchService.Core.Exist
 
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Post, XqueryName = "get-edition-note.xquery")]
-        string GetBookEditionNote(string bookId, string versionId, OutputFormatEnumContract outputFormat);
+        string GetBookEditionNote(string bookId, string versionId, string outputFormat);
     }
 }
