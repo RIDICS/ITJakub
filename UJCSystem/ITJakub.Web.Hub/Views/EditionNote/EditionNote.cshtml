@@ -8,5 +8,9 @@
 }
 
 <div id="edition-note-content" class="content-container top-offset-without-submenu">
-    @ViewData["noteText"]
+    <h1>Ediční poznámka</h1>
+
+    <p>
+    @MvcHtmlString.Create(@ViewData["noteText"].ToString())
+    </p>
 </div>
