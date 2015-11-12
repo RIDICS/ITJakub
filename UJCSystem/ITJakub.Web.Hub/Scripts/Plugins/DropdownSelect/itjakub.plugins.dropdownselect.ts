@@ -28,11 +28,11 @@ class DropDownSelectCallbackDelegate {
     dataLoadedCallback: (rootCategoryId) => void;
 
     constructor() {
-        this.mockup();
+        this.makeDefaults();
     }
 
     //working callbacks for advanced search
-    private mockup() {
+    private makeDefaults() {
         this.getTypeFromResponseCallback = (response): string => {
             return response["type"];
         };

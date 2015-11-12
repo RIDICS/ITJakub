@@ -9,6 +9,9 @@
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
 
+    private static selectedBookUrlKey = "selectedBookIds";
+    private static selectedCategoryUrlKey = "selectedCategoryIds";
+
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
@@ -400,16 +403,20 @@
         for (var i = 0; i < selectedBooks.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
-            resultString += "selectedBookIds=" + selectedBooks[i].Id;
+            resultString += this.selectedBookUrlKey + "=" + selectedBooks[i].Id;
         }
 
         for (var i = 0; i < selectedCategories.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
-            resultString += "selectedCategoryIds=" + selectedCategories[i].Id;
+            resultString += this.selectedCategoryUrlKey + "=" + selectedCategories[i].Id;
         }
 
         return resultString;
+    }
+
+    setStateFromUrlString(urlString: string){
+        //TODO
     }
 }
 
@@ -448,7 +455,7 @@ interface IDropDownBookResult {
     Title: string;
     CategoryIds: Array<number>;
 }
-
+    
 interface IDropDownCategoryResult {
     Id: number;
     Description: string;
