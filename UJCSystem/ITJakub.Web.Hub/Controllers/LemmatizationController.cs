@@ -1,30 +1,36 @@
 ﻿using System.Web.Mvc;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public class LemmatizationController : BaseController
     {
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult Index()
         {
             return View("Lemmatization");
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult Lemmatization()
         {
             return View("Lemmatization");
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization)]
         public ActionResult LemmatizationList()
         {
             return View("LemmatizationList");
         }
 
+        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
         public ActionResult Derivation()
         {
             return View("Derivation");
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTypeaheadToken(string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -34,6 +40,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult CreateToken(string token, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -43,6 +50,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTokenCharacteristic(long tokenId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -52,6 +60,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult AddTokenCharacteristic(long tokenId, string morphologicalCharacteristic, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -61,6 +70,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTypeaheadCanonicalForm(CanonicalFormTypeContract type, string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -70,6 +80,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTypeaheadHyperCanonicalForm(HyperCanonicalFormTypeContract type, string query)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -79,6 +90,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult CreateCanonicalForm(long tokenCharacteristicId, CanonicalFormTypeContract type, string text, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -88,6 +100,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult AddCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -97,6 +110,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult CreateHyperCanonicalForm(long canonicalFormId, HyperCanonicalFormTypeContract type, string text, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -106,6 +120,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult SetHyperCanonicalForm(long canonicalFormId, long hyperCanonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -115,6 +130,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult EditToken(long tokenId, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -124,6 +140,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult EditTokenCharacteristic(long tokenCharacteristicId, string morphologicalCharacteristic, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -133,6 +150,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult EditCanonicalForm(long canonicalFormId, string text, CanonicalFormTypeContract type, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -142,6 +160,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult EditHyperCanonicalForm(long hyperCanonicalFormId, string text, HyperCanonicalFormTypeContract type, string description)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -151,6 +170,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTokenCount()
         {
             using (var client = GetLemmationzationServiceClient())
@@ -160,6 +180,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTokenList(int start, int count)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -169,6 +190,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization+","+CustomRole.CanEditLemmatization)]
         public ActionResult GetToken(long tokenId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -178,6 +200,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization + "," +CustomRole.CanDerivateLemmatization)]
         public ActionResult GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())
@@ -187,6 +210,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization + "," + CustomRole.CanDerivateLemmatization)]
         public ActionResult GetCanonicalFormDetail(long canonicalFormId)
         {
             using (var client = GetLemmationzationServiceClient())

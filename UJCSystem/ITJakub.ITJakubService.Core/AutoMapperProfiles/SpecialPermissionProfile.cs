@@ -43,6 +43,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<EditLemmatizationPermission, EditLemmatizationPermissionContract>()
                 .ForMember(dest => dest.CanEditLemmatization, opts => opts.MapFrom(src => src.CanEditLemmatization));
+
+            CreateMap<DerivateLemmatizationPermission, DerivateLemmatizationPermissionContract>()
+                .ForMember(dest => dest.CanDerivateLemmatization, opts => opts.MapFrom(src => src.CanDerivateLemmatization));
         }
     }
 }

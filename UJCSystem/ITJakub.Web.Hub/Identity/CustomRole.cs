@@ -9,5 +9,6 @@ namespace ITJakub.Web.Hub.Identity
         public const string CanManageFeedbacks = "CanManageFeedbacks";
         public const string CanReadLemmatization = "CanReadLemmatization";
         public const string CanEditLemmatization = "CanEditLemmatization";
+        public const string CanDerivateLemmatization = "CanDerivateLemmatization";
     }
 }

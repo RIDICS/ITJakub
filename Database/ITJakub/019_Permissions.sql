@@ -26,7 +26,7 @@ BEGIN TRAN;
 	
 	CREATE TABLE [dbo].[SpecialPermission](
 		[Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_SpecialPermission(Id)] PRIMARY KEY,
-		[PermissionType] varchar(20) NOT NULL,
+		[PermissionType] varchar(25) NOT NULL,
 		[PermissionCategorization] tinyint NOT NULL,
 		[CanUploadBook] bit NULL,
 		[CanManagePermissions] bit NULL,
@@ -39,7 +39,8 @@ BEGIN TRAN;
 		[AutoimportCategory] int NULL CONSTRAINT [FK_SpecialPermission(AutoimportCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
 		[CanEditLemmatization] bit NULL,
 		[CanReadLemmatization] bit NULL,
-		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization]) 
+		[CanDerivateLemmatization] bit NULL,
+		CONSTRAINT [UQ_SpecialPermission(All)] UNIQUE ([PermissionType],[CanUploadBook],[CanManagePermissions],[CanAddNews],[CanManageFeedbacks],[CanReadCardFile],[CardFileId],[CardFileName],[AutoImportAllowed],[AutoimportCategory],[CanEditLemmatization],[CanReadLemmatization],[CanDerivateLemmatization]) 
 	);
 
 	CREATE TABLE [dbo].[SpecialPermission_Group](
@@ -61,7 +62,8 @@ BEGIN TRAN;
 	    CanAddNews,
 	    CanManageFeedbacks,
 		CanEditLemmatization,
-		CanReadLemmatization
+		CanReadLemmatization,
+		CanDerivateLemmatization
 	)
 	VALUES
 	(
@@ -73,7 +75,8 @@ BEGIN TRAN;
 	    NULL, -- CanAddNews - bit
 	    NULL, -- CanManageFeedbacks - bit
 		NULL, -- CanEditLemmatization - bit
-		NULL -- CanReadLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
 	),(
 		-- Id - int
 	    'UploadBook', -- PermissionType - varchar
@@ -83,7 +86,8 @@ BEGIN TRAN;
 	    NULL, -- CanAddNews - bit
 	    NULL, -- CanManageFeedbacks - bit
 		NULL, -- CanEditLemmatization - bit
-		NULL -- CanReadLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
 	),(
 		-- Id - int
 	    'News', -- PermissionType - varchar
@@ -93,7 +97,8 @@ BEGIN TRAN;
 	    1, -- CanAddNews - bit
 	    NULL, -- CanManageFeedbacks - bit
 		NULL, -- CanEditLemmatization - bit
-		NULL -- CanReadLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
 	),(
 		-- Id - int
 	    'Feedback', -- PermissionType - varchar
@@ -103,7 +108,8 @@ BEGIN TRAN;
 	    NULL, -- CanAddNews - bit
 	    1, -- CanManageFeedbacks - bit
 		NULL, -- CanEditLemmatization - bit
-		NULL -- CanReadLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
 	),(
 		-- Id - int
 	    'EditLemmatization', -- PermissionType - varchar
@@ -113,7 +119,8 @@ BEGIN TRAN;
 	    NULL, -- CanAddNews - bit
 	    NULL, -- CanManageFeedbacks - bit
 		1, -- CanEditLemmatization - bit
-		NULL -- CanReadLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
 	),(
 		-- Id - int
 	    'ReadLemmatization', -- PermissionType - varchar
@@ -123,7 +130,19 @@ BEGIN TRAN;
 	    NULL, -- CanAddNews - bit
 	    NULL, -- CanManageFeedbacks - bit
 		NULL, -- CanEditLemmatization - bit
-		1 -- CanReadLemmatization - bit
+		1, -- CanReadLemmatization - bit
+		NULL -- CanDerivateLemmatization - bit
+	),(
+		-- Id - int
+	    'DerivateLemmatization', -- PermissionType - varchar
+		0, -- PermissionCategorization - tinyint
+	    NULL, -- CanUploadBook - bit
+	    NULL, -- CanManagePermissions - bit
+	    NULL, -- CanAddNews - bit
+	    NULL, -- CanManageFeedbacks - bit
+		NULL, -- CanEditLemmatization - bit
+		NULL, -- CanReadLemmatization - bit
+		1 -- CanDerivateLemmatization - bit
 	)
 
 	INSERT INTO dbo.SpecialPermission

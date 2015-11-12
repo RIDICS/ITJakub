@@ -567,6 +567,7 @@ class SpecialPermissionTextResolver {
     private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
     private static readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
     private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
+    private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -587,6 +588,8 @@ class SpecialPermissionTextResolver {
                 return "Prohlížení lematizace";
             case this.editLemmatizationPermission:
                 return "Úprava lematizace";
+            case this.derivateLemmatizationPermission:
+                return "Derivace hláskových podob";
             default:
                 return "Neznámé právo";
         }
@@ -612,6 +615,8 @@ class SpecialPermissionTextResolver {
                 return "Prohlížení lematizace";
             case this.editLemmatizationPermission:
                 return "Úprava lematizace";
+            case this.derivateLemmatizationPermission:
+                return "Derivace hláskových podob";
             default:
                 return "Neznámé právo";
         }
