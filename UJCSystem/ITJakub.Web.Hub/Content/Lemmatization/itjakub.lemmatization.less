@@ -1,6 +1,7 @@
 ﻿@import "../ITJakub.DefaultTheme.less";
 @label-width: 80px;
 @label-big-width: 125px;
+@derivation-select-width: 160px;
 
 hr {
     border-color: #BBBBBB;
@@ -131,6 +132,18 @@ hr {
 }
 
 .derivation-select {
-    min-height: 24px;
     min-width: 100px;
+    width: @derivation-select-width;
+    float: left;
+    border-radius: 0;
+}
+
+.derivation-search-bar {
+    width: 60%;
+    margin-left: @derivation-select-width + 5px;
+}
+
+.loading-background, .loading {
+    background: url(../../../Content/Images/small_trans_loading.gif) no-repeat center;
+    height: 40px;
 }

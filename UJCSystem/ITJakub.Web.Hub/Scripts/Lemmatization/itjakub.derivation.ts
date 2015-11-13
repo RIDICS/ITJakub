@@ -100,17 +100,28 @@
         for (var i = 0; i < this.idList.length; i++) {
             var tr = document.createElement("tr");
             var td = document.createElement("td");
-            $(td).addClass("column-canonical-form");
-            $(tr).append(td);
-            tr.setAttribute("data-id", String(this.idList[i]));
+            $(td).addClass("column-canonical-form")
+                .addClass("loading")
+                .attr("colspan", 3);
+            $(tr).addClass("lazy-loading")
+                .append(td)
+                .attr("data-id", this.idList[i])
+                .bind("appearing", event => {
+                    this.onTableRowAppear(event);
+                });
+            
             $(this.tbody).append(tr);
-        }
-        for (var i = 0; i < this.idList.length; i++) {
-            var id = this.idList[i];
-            this.loadCanonicalForm(id);
         }
 
         $(this.container).append(table);
+    }
+
+    private onTableRowAppear(event: JQueryEventObject) {
+        var tr = event.target;
+        var id = $(tr).data("id");
+        $(tr).unbind("appearing")
+            .removeClass("lazy-loading");
+        this.loadCanonicalForm(id);
     }
 
     private loadCanonicalForm(id: number) {
