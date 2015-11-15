@@ -195,5 +195,23 @@ namespace ITJakub.Web.Hub.Controllers
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult DeleteTokenCharacteristic(long tokenCharacteristicId)
+        {
+            m_serviceClient.DeleteTokenCharacteristic(tokenCharacteristicId);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
+        {
+            m_serviceClient.RemoveCanonicalForm(tokenCharacteristicId, canonicalFormId);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult RemoveHyperCanonicalForm(long canonicalFormId)
+        {
+            m_serviceClient.RemoveHyperCanonicalForm(canonicalFormId);
+            return Json(new {}, JsonRequestBehavior.AllowGet);
+        }
     }
 }

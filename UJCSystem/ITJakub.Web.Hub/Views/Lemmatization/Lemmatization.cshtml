@@ -35,7 +35,7 @@
         <span class="lemmatization-description" id="specificTokenDescription"></span>
     </div>
     <div>
-        <button class="lemmatization-edit" id="showEditToken">Upravit</button>
+        <button class="lemmatization-edit lemmatiazation-small-left-space" id="showEditToken">Upravit</button>
     </div>
 </div>
 <div class="content hidden">
@@ -550,6 +550,9 @@
                     <li>
                         <a href="#tab2-create-new" data-toggle="tab">Vytvoření nové</a>
                     </li>
+                    <li>
+                        <a href="#tab2-remove" data-toggle="tab">Odebrat</a>
+                    </li>
                 </ul>
 
                 <div class="tab-content">
@@ -593,6 +596,16 @@
                                 <label for="new-hyper-description" class="col-md-3 control-label">Popis</label>
                                 <div class="col-md-8">
                                     <textarea class="form-control" id="new-hyper-description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab2-remove" class="tab-pane">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-3 control-label"></div>
+                                <div>
+                                    <button type="button" class="btn btn-default lemmatization-button" id="remove-hyper">Odebrat hyperkanonickou formu</button>
                                 </div>
                             </div>
                         </div>
