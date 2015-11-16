@@ -10,6 +10,7 @@ $(document).ready(() => {
     const urlSortAscKey = "sortAsc";
     const urlSortCriteriaKey = "sortCriteria";
 
+    var readyForInit = false;
     var booksCountOnPage = 5;
 
     var bookIdsInQuery = new Array();
@@ -19,6 +20,37 @@ $(document).ready(() => {
     var selectedCategoryIds = new Array();
 
     var bibliographyModule: BibliographyModule;
+    var editionsSelector: DropDownSelect2;
+
+    function initializeFromUrlParams() {
+        if (readyForInit) {
+
+            var selected = getQueryStringParameterByName(urlSelectionKey);
+
+            if (selected) {
+                editionsSelector.setStateFromUrlString(selected);    
+            }
+
+            var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
+            var sortCriteria = getQueryStringParameterByName(urlSortCriteriaKey);
+
+            if (sortedAsc && sortCriteria) {
+                bibliographyModule.setSortedAsc(sortedAsc === "true");
+                bibliographyModule.setSortCriteria(<SortEnum>SortEnum[sortCriteria]);
+            }
+
+            var searched = getQueryStringParameterByName(urlSearchKey);
+            search.processSearchQuery(searched);
+
+            var page = getQueryStringParameterByName(urlPageKey);
+            if (page) {
+                pageClickCallbackForBiblModule(parseInt(page));    
+            }
+            
+        } else {
+            readyForInit = true;
+        }
+    }
 
     function actualizeSelectedBooksAndCategoriesInQuery() {
         bookIdsInQuery = selectedBookIds;
@@ -38,7 +70,6 @@ $(document).ready(() => {
         typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
     });
 
-    var editionsSelector: DropDownSelect2;
     var callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
         selectedBookIds = new Array();
@@ -64,6 +95,7 @@ $(document).ready(() => {
         selectedBookIds = selectedIds.selectedBookIds;
         selectedCategoryIds = selectedIds.selectedCategoryIds;
         search.processSearch();
+        initializeFromUrlParams();
         //search.processSearchQuery("%"); //search for all by default criteria (title)
         //search.writeTextToTextField("");
     };
@@ -94,6 +126,8 @@ $(document).ready(() => {
                 bibliographyModule.showBooks(response.books);
                 updateQueryStringParameter(urlSearchKey, json);
                 updateQueryStringParameter(urlPageKey, pageNumber);
+                updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -121,6 +155,8 @@ $(document).ready(() => {
                 bibliographyModule.showBooks(response.books);
                 updateQueryStringParameter(urlSearchKey, text);
                 updateQueryStringParameter(urlPageKey, pageNumber);
+                updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -136,8 +172,6 @@ $(document).ready(() => {
 
     function sortOrderChanged() {
         bibliographyModule.showPage(1);
-        updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
-        updateQueryStringParameter(urlSortCriteriaKey, bibliographyModule.getSortCriteria());
     }
 
     bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition, "Editions/Editions/GetListConfiguration");
@@ -161,6 +195,8 @@ $(document).ready(() => {
                 bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, text);
                 updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(editionsSelector.getState()));
+                updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -185,6 +221,8 @@ $(document).ready(() => {
                 bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, json);
                 updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(editionsSelector.getState()));
+                updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -199,7 +237,7 @@ $(document).ready(() => {
     search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
     search.makeSearch(enabledOptions);
 
-
+    initializeFromUrlParams();
 
 });
 

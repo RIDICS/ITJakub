@@ -173,8 +173,16 @@ class BibliographyModule {
         return this.sortBar.isSortedAsc();
     }
 
+    public setSortedAsc(isSortedAsc: boolean) {
+        this.sortBar.setSortedAsc(isSortedAsc);
+    }
+
     public getSortCriteria(): SortEnum {
         return this.sortBar.getSortCriteria();
+    }
+
+    public setSortCriteria(sortCriteria: SortEnum) {
+        return this.sortBar.setSortCriteria(sortCriteria);
     }
 }
 
