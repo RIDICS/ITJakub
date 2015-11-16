@@ -23,7 +23,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     public class TokenCharacteristicDetailContract : TokenCharacteristicContract
     {
         [DataMember]
-        public IList<CanonicalFormContract> CanonicalFormList { get; set; }
+        public IList<CanonicalFormTypeaheadContract> CanonicalFormList { get; set; }
     }
 
     [DataContract]

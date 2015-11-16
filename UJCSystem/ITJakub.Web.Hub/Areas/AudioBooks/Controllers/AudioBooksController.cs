@@ -16,8 +16,13 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
     [RouteArea("AudioBooks")]
-    public class AudioBooksController : BaseController
+    public class AudioBooksController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType
+        {
+            get { return BookTypeEnumContract.AudioBook; }
+        }
+
         public ActionResult Index()
         {
             return View("List");
@@ -79,7 +84,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.AudioBook);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -88,7 +93,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.AudioBook, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -97,7 +102,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.AudioBook);
+                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
                 return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
             }
         }

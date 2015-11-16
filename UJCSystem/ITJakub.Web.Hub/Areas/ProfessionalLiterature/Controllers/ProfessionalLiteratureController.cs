@@ -16,8 +16,9 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 {
     [RouteArea("ProfessionalLiterature")]
-    public class ProfessionalLiteratureController : BaseController
+    public class ProfessionalLiteratureController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType { get {return BookTypeEnumContract.ProfessionalLiterature;} }
 
         public ActionResult Index()
         {
@@ -130,7 +131,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.ProfessionalLiterature);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -139,7 +140,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.ProfessionalLiterature, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -148,7 +149,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.ProfessionalLiterature);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
                 return Json(booksWithCategories, JsonRequestBehavior.AllowGet);
             }
         }

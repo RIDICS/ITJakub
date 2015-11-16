@@ -16,8 +16,13 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
     [RouteArea("Editions")]
-    public class EditionsController : BaseController
+    public class EditionsController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType
+        {
+            get { return BookTypeEnumContract.Edition; }
+        }
+
         // GET: Editions/Editions
         public ActionResult Index()
         {
@@ -135,7 +140,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.Edition);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -144,7 +149,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.Edition, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -153,7 +158,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.Edition);
+                var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
                 return Json(grammarsWithCategories, JsonRequestBehavior.AllowGet);
             }
         }
@@ -304,7 +309,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     }
                 }
             };
-            
+
             if (!string.IsNullOrEmpty(text))
             {
                 var wordListCriteria = new WordListCriteriaContract
@@ -355,7 +360,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     }
                 }
             };
-            
+
             if (!string.IsNullOrEmpty(text))
             {
                 var wordListCriteria = new WordListCriteriaContract

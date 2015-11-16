@@ -98,11 +98,30 @@
             .append(tbody);
 
         for (var i = 0; i < this.idList.length; i++) {
-            var id = this.idList[i];
-            this.loadCanonicalForm(id);
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            $(td).addClass("column-canonical-form")
+                .addClass("loading")
+                .attr("colspan", 3);
+            $(tr).addClass("lazy-loading")
+                .append(td)
+                .attr("data-id", this.idList[i])
+                .bind("appearing", event => {
+                    this.onTableRowAppear(event);
+                });
+            
+            $(this.tbody).append(tr);
         }
 
         $(this.container).append(table);
+    }
+
+    private onTableRowAppear(event: JQueryEventObject) {
+        var tr = event.target;
+        var id = $(tr).data("id");
+        $(tr).unbind("appearing")
+            .removeClass("lazy-loading");
+        this.loadCanonicalForm(id);
     }
 
     private loadCanonicalForm(id: number) {
@@ -123,11 +142,11 @@
 
     private processCanonicalForm(canonicalForm: IInverseCanonicalForm) {
         var rows = 1;
-        var tr = document.createElement("tr");
+        var tr = $("tr[data-id=\"" + canonicalForm.Id + "\"]", this.tbody);
         var td1 = document.createElement("td");
         $(td1).text(canonicalForm.Text);
-        tr.appendChild(td1);
-        this.tbody.appendChild(tr);
+        tr.empty();
+        tr.append(td1);
 
         var characteristicCount = canonicalForm.CanonicalFormFor.length;
         if (characteristicCount > 1)
@@ -135,23 +154,22 @@
         for (var i = 0; i < characteristicCount; i++) {
             var characteristic = canonicalForm.CanonicalFormFor[i];
             if (i > 0) {
-                tr = document.createElement("tr");
-                this.tbody.appendChild(tr);
+                var lastTr = tr;
+                tr = $(document.createElement("tr"));
+                lastTr.after(tr);
             }
 
             var td2 = document.createElement("td");
             $(td2).text(characteristic.MorphologicalCharacteristic);
-            tr.appendChild(td2);
+            tr.append(td2);
 
             var td3 = document.createElement("td");
             $(td3).text(characteristic.Token.Text);
-            tr.appendChild(td3);
+            tr.append(td3);
         }
 
         $(td1).attr("rowspan", rows);
     }
-
-    
 }
 
 interface IInverseTokenCharacteristic {

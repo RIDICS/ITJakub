@@ -165,6 +165,13 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<TermContract>>(terms);
         }
 
+        public IList<TermCategoryContract> GetTermCategoriesWithTerms()
+        {
+            var termCategoriesWithTerms = m_bookRepository.GetTermCategoriesWithTerms();
+            return Mapper.Map<IList<TermCategoryContract>>(termCategoriesWithTerms);
+        }
+
+
         public string GetBookEditionNote(long bookId, OutputFormatEnumContract resultFormat)
         {
             m_authorizationManager.AuthorizeBook(bookId);

@@ -26,6 +26,13 @@ function initSearch() {
         search.writeTextToTextField(textInTextField);
     }
 
+    var sortBarContainer = "#listResultsHeader";
+
+    $(sortBarContainer).empty();
+    var sortBar = new SortBar(sortOrderChanged);
+    var sortBarHtml = sortBar.makeSortBar(sortBarContainer);
+    $(sortBarContainer).append(sortBarHtml);
+
     function showLoading() {
         $("#result-table").hide();
         $("#result-abbrev-table").hide();
@@ -180,8 +187,8 @@ function initSearch() {
 
         if (typeof json === "undefined" || json === null || json === "") return;
         const start = (pageNumber - 1) * resultsCountOnPage;
-        const sortingEnum = SortEnum.Title; //TODO
-        const sortAsc = true; //TODO
+        var sortingEnum = sortBar.getSortCriteria();
+        var sortAsc = sortBar.isSortedAsc();
 
         showLoading();
 
@@ -203,8 +210,8 @@ function initSearch() {
 
         //if (typeof text === "undefined" || text === null || text === "") return;
         const start = (pageNumber - 1) * resultsCountOnPage;
-        const sortingEnum = SortEnum.Title; //TODO
-        const sortAsc = true; //TODO
+        var sortingEnum = sortBar.getSortCriteria();
+        var sortAsc = sortBar.isSortedAsc();
 
         showLoading();
 

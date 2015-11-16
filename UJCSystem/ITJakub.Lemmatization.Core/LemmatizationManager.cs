@@ -198,5 +198,27 @@ namespace ITJakub.Lemmatization.Core
             var contract = Mapper.Map<TokenContract>(result);
             return contract;
         }
+
+        public void DeleteTokenCharacteristic(long tokenCharacteristicId)
+        {
+            var tokenCharacteristic = m_repository.Load<TokenCharacteristic>(tokenCharacteristicId);
+            m_repository.Delete(tokenCharacteristic);
+        }
+
+        public void RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
+        {
+            var tokenCharacteristic = m_repository.GetTokenCharacteristicWithCanonicalForms(tokenCharacteristicId);
+            var canonicalForm = m_repository.Load<CanonicalForm>(canonicalFormId);
+
+            tokenCharacteristic.CanonicalForms.Remove(canonicalForm);
+            m_repository.Update(tokenCharacteristic);
+        }
+
+        public void RemoveHyperCanonicalForm(long canonicalFormId)
+        {
+            var canonicalForm = m_repository.FindById<CanonicalForm>(canonicalFormId);
+            canonicalForm.HyperCanonicalForm = null;
+            m_repository.Update(canonicalForm);
+        }
     }
 }

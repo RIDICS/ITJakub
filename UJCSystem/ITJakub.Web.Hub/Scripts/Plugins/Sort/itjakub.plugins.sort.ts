@@ -10,7 +10,7 @@
         this.sortChangeCallback = sortChangeCallback;
     }
 
-    public makeSortBar(booksContainer: string, sortBarContainer: string): HTMLDivElement {
+    public makeSortBar(sortBarContainer: string): HTMLDivElement {
         var sortBarDiv: HTMLDivElement = document.createElement('div');
         $(sortBarDiv).addClass('bib-sortbar');
 
