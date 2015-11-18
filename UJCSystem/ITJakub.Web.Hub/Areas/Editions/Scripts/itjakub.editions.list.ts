@@ -182,7 +182,8 @@ $(document).ready(() => {
 
 
     function createPagination(booksCount: number) {
-        if (initPage) {
+        var pages = booksCount / booksCountOnPage;
+        if (initPage && initPage <= pages) {
             bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, booksCount, initPage);
         } else {
             bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, booksCount);    
