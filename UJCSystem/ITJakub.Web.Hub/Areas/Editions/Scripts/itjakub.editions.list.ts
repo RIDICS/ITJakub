@@ -11,6 +11,8 @@ $(document).ready(() => {
     const urlSortCriteriaKey = "sortCriteria";
 
     var readyForInit = false;
+    var notInitialized = true;
+
     var booksCountOnPage = 5;
 
     var bookIdsInQuery = new Array();
@@ -25,12 +27,14 @@ $(document).ready(() => {
     var initPage: number = null;
 
     function initializeFromUrlParams() {
-        if (readyForInit) {
+        if (readyForInit && notInitialized) {
 
-            var selected = getQueryStringParameterByName(urlSelectionKey);
+            notInitialized = false;
 
-            if (selected) {
-                editionsSelector.setStateFromUrlString(selected);    
+            var page = getQueryStringParameterByName(urlPageKey);
+
+            if (page) {
+                initPage = parseInt(page);
             }
 
             var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
@@ -41,10 +45,10 @@ $(document).ready(() => {
                 bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
             }
 
-            var page = getQueryStringParameterByName(urlPageKey);
+            var selected = getQueryStringParameterByName(urlSelectionKey);
 
-            if (page) {
-                initPage = parseInt(page);
+            if (selected) {
+                editionsSelector.setStateFromUrlString(selected);    
             }
 
             var searched = getQueryStringParameterByName(urlSearchKey);

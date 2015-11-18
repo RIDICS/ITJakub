@@ -149,12 +149,14 @@ class DropDownSelect {
         this.makeHeader(dropDownDiv);
         this.makeBody(dropDownDiv);
 
-        $(document).click((event) => {
+        $(document).unbind("click.dropdown");
+        $(document).bind("click.dropdown", (event) => {
             if (!$(event.target).parents().is(dropDownDiv)) {
                 this.hideBody();
             }
         });
 
+        $(this.dropDownSelectContainer).empty();
         $(this.dropDownSelectContainer).append(dropDownDiv);
     }
 
