@@ -144,11 +144,11 @@ class BibliographyModule {
         this.paginator.goToPage(pageNumber);
     }
 
-    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number) {
+    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number, initPageNumber: number = 1) {
         this.booksCount = booksCount;
         this.booksOnPage = booksOnPage;
         this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
-        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback, initPageNumber);
 
     }
 

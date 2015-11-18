@@ -22,6 +22,8 @@ $(document).ready(() => {
     var bibliographyModule: BibliographyModule;
     var editionsSelector: DropDownSelect2;
 
+    var initPage: number = null;
+
     function initializeFromUrlParams() {
         if (readyForInit) {
 
@@ -36,21 +38,23 @@ $(document).ready(() => {
 
             if (sortedAsc && sortCriteria) {
                 bibliographyModule.setSortedAsc(sortedAsc === "true");
-                bibliographyModule.setSortCriteria(<SortEnum>SortEnum[sortCriteria]);
+                bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+            }
+
+            var page = getQueryStringParameterByName(urlPageKey);
+
+            if (page) {
+                initPage = parseInt(page);
             }
 
             var searched = getQueryStringParameterByName(urlSearchKey);
             search.processSearchQuery(searched);
-
-            var page = getQueryStringParameterByName(urlPageKey);
-            if (page) {
-                pageClickCallbackForBiblModule(parseInt(page));    
-            }
             
         } else {
             readyForInit = true;
         }
     }
+
 
     function actualizeSelectedBooksAndCategoriesInQuery() {
         bookIdsInQuery = selectedBookIds;
@@ -176,6 +180,15 @@ $(document).ready(() => {
 
     bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", sortOrderChanged, BookTypeEnum.Edition, "Editions/Editions/GetListConfiguration");
 
+
+    function createPagination(booksCount: number) {
+        if (initPage) {
+            bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, booksCount, initPage);
+        } else {
+            bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, booksCount);    
+        }
+    }
+
     function editionBasicSearch(text: string) {
         hideTypeahead();
         actualizeSelectedBooksAndCategoriesInQuery();
@@ -192,7 +205,7 @@ $(document).ready(() => {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+                createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, text);
                 updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(editionsSelector.getState()));
                 updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
@@ -217,8 +230,7 @@ $(document).ready(() => {
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
-
-                bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, response["count"]); //enable pagination
+                createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, json);
                 updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(editionsSelector.getState()));
                 updateQueryStringParameter(urlSortAscKey, bibliographyModule.isSortedAsc());
