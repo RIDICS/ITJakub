@@ -63,7 +63,7 @@ class BibliographyModule {
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
         this.sortBar = new SortBar(this.sortChangeCallback);
-        var sortBarHtml = this.sortBar.makeSortBar(<any>this.booksContainer, this.sortBarContainer);
+        var sortBarHtml = this.sortBar.makeSortBar(this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
 

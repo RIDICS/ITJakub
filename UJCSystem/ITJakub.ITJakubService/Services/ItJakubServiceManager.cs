@@ -5,6 +5,7 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
@@ -132,9 +133,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadTitles(query);
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract? bookType)
         {
-            return m_searchManager.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
+            return m_searchManager.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, bookType);
         }
 
         public IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType)
@@ -154,25 +155,25 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetTypeaheadTermsByBookType(query, bookType, selectedCategoryIds, selectedBookIds);
         }
 
-        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnumContract bookType)
         {
-            return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
+            return m_searchManager.GetHeadwordCount(selectedCategoryIds, selectedBookIds, bookType);
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count, BookTypeEnumContract bookType)
         {
-            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
+            return m_searchManager.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count, bookType);
         }
 
-        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract bookType)
         {
-            return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
+            return m_searchManager.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, bookType);
         }
 
-        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId)
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId, BookTypeEnumContract bookType)
         {
             return m_searchManager.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId,
-                headwordEntryXmlId);
+                headwordEntryXmlId, bookType);
         }
 
         public HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget)
@@ -357,6 +358,11 @@ namespace ITJakub.ITJakubService.Services
         public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
         {
             m_newsManager.CreateNewSyndicationItem(title, content, url, itemType, username);
+        }
+
+        public IList<TermCategoryContract> GetTermCategoriesWithTerms()
+        {
+            return m_bookManager.GetTermCategoriesWithTerms();
         }
 
         #endregion

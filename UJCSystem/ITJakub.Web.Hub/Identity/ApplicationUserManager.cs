@@ -150,6 +150,11 @@ namespace ITJakub.Web.Hub.Identity
                 claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditLemmatization));
             }
 
+            if (specialPermissions.OfType<DerivateLemmatizationPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanDerivateLemmatization));
+            }
+
             return claims;
         }
     }

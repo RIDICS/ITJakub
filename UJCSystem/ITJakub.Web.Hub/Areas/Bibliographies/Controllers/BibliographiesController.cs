@@ -7,8 +7,13 @@ using ITJakub.Web.Hub.Models;
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {
     [RouteArea("Bibliographies")]
-    public class BibliographiesController : BaseController
+    public class BibliographiesController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType
+        {
+            get { return BookTypeEnumContract.BibliographicalItem; }
+        }
+
         public ActionResult Index()
         {
             return View("Search");
@@ -84,7 +89,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.BibliographicalItem);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -93,7 +98,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.BibliographicalItem, null, null);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

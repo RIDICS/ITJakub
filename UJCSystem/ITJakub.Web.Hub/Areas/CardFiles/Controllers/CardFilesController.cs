@@ -14,8 +14,13 @@ using Microsoft.Ajax.Utilities;
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
     [RouteArea("CardFiles")]
-    public class CardFilesController : BaseController
+    public class CardFilesController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType
+        {
+            get { return BookTypeEnumContract.CardFile; }
+        }
+
         public ActionResult Index()
         {
             return View("List");
@@ -53,7 +58,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                             Title = cardFile.Name,
                             BookXmlId = cardFile.Id,
                             SubTitle = cardFile.Description,
-                            BookType = BookTypeEnumContract.CardFile
+                            BookType = AreaBookType
                         });
                     }
                 }

@@ -1,6 +1,7 @@
 using System;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.Lemmatization.Shared.Contracts;
 
 namespace ITJakub.Web.Hub
 {
@@ -12,6 +13,10 @@ namespace ITJakub.Web.Hub
         private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
         //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
         private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
+
+        private const string LemmatizationServiceEndpointName = "LemmatizationService";
+
+
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)
         {
@@ -56,6 +61,10 @@ namespace ITJakub.Web.Hub
             return client;
         }
 
-   
+
+        public LemmatizationServiceClient GetLemmatizationClient()
+        {
+            return new LemmatizationServiceClient(LemmatizationServiceEndpointName);
+        }
     }
 }

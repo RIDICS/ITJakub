@@ -52,16 +52,16 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<SearchResultContract> SearchByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias);
 
         [OperationContract]
-        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds);
+        int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnumContract bookType);
 
         [OperationContract]
-        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count);
+        HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count, BookTypeEnumContract bookType);
 
         [OperationContract]
-        long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+        long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract bookType);
 
         [OperationContract]
-        long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId);
+        long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId, BookTypeEnumContract bookType);
 
         [OperationContract]
         HeadwordListContract SearchHeadwordByCriteria(IEnumerable<SearchCriteriaContract> searchCriterias, DictionarySearchTarget searchTarget);
@@ -135,7 +135,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<string> GetTypeaheadTitles(string query);
 
         [OperationContract]
-        IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query);
+        IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract? bookType);
 
         [OperationContract]
         IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnumContract bookType);
@@ -286,5 +286,8 @@ namespace ITJakub.ITJakubService.DataContracts
         void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username);
 
         #endregion
+
+        [OperationContract]
+        IList<TermCategoryContract> GetTermCategoriesWithTerms();
     }
 }

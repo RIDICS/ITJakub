@@ -163,5 +163,11 @@ namespace ITJakub.ITJakubService.Core
             var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
             return Mapper.Map<IList<TermContract>>(terms);
         }
+
+        public IList<TermCategoryContract> GetTermCategoriesWithTerms()
+        {
+            var termCategoriesWithTerms = m_bookRepository.GetTermCategoriesWithTerms();
+            return Mapper.Map<IList<TermCategoryContract>>(termCategoriesWithTerms);
+        }
     }
 }

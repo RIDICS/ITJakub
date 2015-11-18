@@ -437,6 +437,10 @@
       <Project>{9754f9bd-7148-4600-8a98-c39b4073fe4d}</Project>
       <Name>ITJakub.MobileApps.Client.Crosswords</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ITJakub.MobileApps.Client.Fillwords2\ITJakub.MobileApps.Client.Fillwords2.csproj">
+      <Project>{e11a4a42-6531-4044-9ec6-fc217b21d924}</Project>
+      <Name>ITJakub.MobileApps.Client.Fillwords2</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.MobileApps.Client.Fillwords\ITJakub.MobileApps.Client.Fillwords.csproj">
       <Project>{8f75b6a6-735e-4de1-b2ae-25002a327674}</Project>
       <Name>ITJakub.MobileApps.Client.Fillwords</Name>

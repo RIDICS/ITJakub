@@ -630,5 +630,18 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return books;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermCategory> GetTermCategoriesWithTerms()
+        {
+            using (var session = GetSession())
+            {
+                var termCategories = session.QueryOver<TermCategory>()
+                    .Fetch(x => x.Terms).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List<TermCategory>();
+                return termCategories;
+            }
+        }
     }
 }
