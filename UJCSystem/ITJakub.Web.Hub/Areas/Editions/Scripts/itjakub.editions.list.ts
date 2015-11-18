@@ -64,7 +64,6 @@ $(document).ready(() => {
 
     }
 
-
     function actualizeSelectedBooksAndCategoriesInQuery() {
         bookIdsInQuery = selectedBookIds;
         categoryIdsInQuery = selectedCategoryIds;
@@ -108,8 +107,6 @@ $(document).ready(() => {
         selectedBookIds = selectedIds.selectedBookIds;
         selectedCategoryIds = selectedIds.selectedCategoryIds;
         initializeFromUrlParams();
-        //search.processSearchQuery("%"); //search for all by default criteria (title)
-        //search.writeTextToTextField("");
     };
 
     editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Editions/Editions/GetEditionsWithCategories", true, callbackDelegate);
