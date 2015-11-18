@@ -41,6 +41,7 @@
         </div>
     </div>
 </div>
+<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization)) {@Html.Raw("EditLemmatization")} "></div>
 
 <div id="main-plugins-menu" class="main-plugins-menu">
 <ul>

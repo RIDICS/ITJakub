@@ -1,5 +1,6 @@
 ﻿function initLemmatization(tokenId: string) {
-    var lemmatization = new Lemmatization("#mainContainer", true);
+    var canEdit = isUserInRole(RoleEnum.EditLemmatization);
+    var lemmatization = new Lemmatization("#mainContainer", canEdit);
     lemmatization.make();
 
     if (tokenId)

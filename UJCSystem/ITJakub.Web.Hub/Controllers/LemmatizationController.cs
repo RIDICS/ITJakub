@@ -220,22 +220,34 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult DeleteTokenCharacteristic(long tokenCharacteristicId)
         {
-            m_serviceClient.DeleteTokenCharacteristic(tokenCharacteristicId);
-            return Json(new {}, JsonRequestBehavior.AllowGet);
+            using (var client = GetLemmationzationServiceClient())
+            {
+                client.DeleteTokenCharacteristic(tokenCharacteristicId);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
         {
-            m_serviceClient.RemoveCanonicalForm(tokenCharacteristicId, canonicalFormId);
-            return Json(new {}, JsonRequestBehavior.AllowGet);
+            using (var client = GetLemmationzationServiceClient())
+            {
+                client.RemoveCanonicalForm(tokenCharacteristicId, canonicalFormId);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
 
+        [Authorize(Roles = CustomRole.CanEditLemmatization)]
         public ActionResult RemoveHyperCanonicalForm(long canonicalFormId)
         {
-            m_serviceClient.RemoveHyperCanonicalForm(canonicalFormId);
-            return Json(new {}, JsonRequestBehavior.AllowGet);
+            using (var client = GetLemmationzationServiceClient())
+            {
+                client.RemoveHyperCanonicalForm(canonicalFormId);
+                return Json(new {}, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }
