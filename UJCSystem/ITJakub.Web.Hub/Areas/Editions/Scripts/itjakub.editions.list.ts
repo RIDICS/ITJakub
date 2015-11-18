@@ -47,16 +47,21 @@ $(document).ready(() => {
 
             var selected = getQueryStringParameterByName(urlSelectionKey);
 
-            if (selected) {
-                editionsSelector.setStateFromUrlString(selected);    
-            }
-
             var searched = getQueryStringParameterByName(urlSearchKey);
-            search.processSearchQuery(searched);
+            search.writeTextToTextField(searched);
+
+            if (selected) {
+                editionsSelector.setStateFromUrlString(selected);
+            } else {
+                search.processSearch(); //if not explicitly selected 
+            }
             
+        } else if (!notInitialized) {
+                search.processSearch();
         } else {
             readyForInit = true;
         }
+
     }
 
 
@@ -102,7 +107,6 @@ $(document).ready(() => {
         var selectedIds = editionsSelector.getSelectedIds();
         selectedBookIds = selectedIds.selectedBookIds;
         selectedCategoryIds = selectedIds.selectedCategoryIds;
-        search.processSearch();
         initializeFromUrlParams();
         //search.processSearchQuery("%"); //search for all by default criteria (title)
         //search.writeTextToTextField("");
