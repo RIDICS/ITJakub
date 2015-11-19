@@ -13,6 +13,7 @@ function initSearch() {
     const urlSelectionKey = "selected";
     const urlSortAscKey = "sortAsc";
     const urlSortCriteriaKey = "sortCriteria";
+    const urlContextSizeKey = "contextSize";
 
     var readyForInit = false;
     var notInitialized = true;
@@ -49,6 +50,11 @@ function initSearch() {
 
             if (page) {
                 initPage = parseInt(page);
+            }
+
+            var contextSize = getQueryStringParameterByName(urlContextSizeKey);
+            if (contextSize) {
+                $("#contextPositionsSelect").val(contextSize);
             }
 
             var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
@@ -274,6 +280,7 @@ function initSearch() {
                 updateQueryStringParameter(urlPageKey, pageNumber);
                 updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
                 updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+                updateQueryStringParameter(urlContextSizeKey, contextLength);
             },error: response => {
                 printErrorMessage(defaultErrorMessage);
             }
@@ -303,6 +310,7 @@ function initSearch() {
                 updateQueryStringParameter(urlPageKey, pageNumber);
                 updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
                 updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+                updateQueryStringParameter(urlContextSizeKey, contextLength);
             }, error: response => {
                 printErrorMessage(defaultErrorMessage);
             }
@@ -311,7 +319,7 @@ function initSearch() {
 
     function searchForPageNumber(pageNumber: number) {
         actualPage = pageNumber;
-        const contextLength = $("#contextPositionsSelect").val();
+        var contextLength = $("#contextPositionsSelect").val();
         if (search.isLastQueryJson()) {
             corpusAdvancedSearchPaged(search.getLastQuery(), pageNumber, contextLength);
         } else {
