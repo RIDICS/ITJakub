@@ -1,35 +1,30 @@
 ﻿using System.Web.Mvc;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Identity;
 
-namespace ITJakub.Web.Hub.Controllers
+namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
 {
     public class LemmatizationController : BaseController
     {
-        [Authorize(Roles = CustomRole.CanEditLemmatization)]
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult Index()
         {
             return View("Lemmatization");
         }
 
-        [Authorize(Roles = CustomRole.CanEditLemmatization)]
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult Lemmatization()
         {
             return View("Lemmatization");
         }
 
         [Authorize(Roles = CustomRole.CanReadLemmatization)]
-        public ActionResult LemmatizationList()
+        public ActionResult List()
         {
-            return View("LemmatizationList");
+            return View("List");
         }
-
-        [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
-        public ActionResult Derivation()
-        {
-            return View("Derivation");
-        }
-
+        
         [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult GetTypeaheadToken(string query)
         {

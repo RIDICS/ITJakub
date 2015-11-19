@@ -280,19 +280,19 @@
         }
         else if (User.IsInRole(CustomRole.CanEditLemmatization))
         {
-            <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = ""})">
+            <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = "Lemmatization"})">
                 <span>Administrace</span>
             </a>
         }
         else if (User.IsInRole(CustomRole.CanReadLemmatization))
         {
-            <a href="@Url.Action("LemmatizationList", "Lemmatization", new {area = ""})">
+            <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
                 <span>Administrace</span>
             </a>
         }
         else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
         {
-            <a href="@Url.Action("Derivation", "Lemmatization", new {area = ""})">
+            <a href="@Url.Action("Derivation", "Derivation", new {area = "Derivation"})">
                 <span>Administrace</span>
             </a>
         }
@@ -333,7 +333,7 @@
             @if (User.IsInRole(CustomRole.CanEditLemmatization))
             {
                 <li>
-                    <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = ""})">
+                    <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = "Lemmatization"})">
                         <span>Lemmatizace</span>
                     </a>
                 </li>
@@ -342,7 +342,7 @@
             @if (User.IsInRole(CustomRole.CanReadLemmatization))
             {
                 <li>
-                    <a href="@Url.Action("LemmatizationList", "Lemmatization", new {area = ""})">
+                    <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
                         <span>Lemmatizace - procházení</span>
                     </a>
                 </li>
@@ -351,7 +351,7 @@
             @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
             {
                 <li>
-                    <a href="@Url.Action("Derivation", "Lemmatization", new {area = ""})">
+                    <a href="@Url.Action("Derivation", "Derivation", new {area = "Derivation"})">
                         <span>Derivace hláskových podob</span>
                     </a>
                 </li>
