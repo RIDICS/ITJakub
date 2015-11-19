@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
@@ -152,6 +155,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
                 listSearchCriteriaContracts.Add(wordCriteriaList);
             }
+            else
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -256,6 +263,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
                 listSearchCriteriaContracts.Add(wordListCriteria);
             }
+            else
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -276,6 +287,12 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
+            {
+                throw new ArgumentException("search in text can't be ommited");
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -352,6 +369,11 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
+            {
+                throw new ArgumentException("search in text can't be ommited");
+            }
 
             listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {

@@ -253,7 +253,7 @@ class CorpusList {
     }
 
     private createPagination(booksCount: number) {
-        var pages = booksCount / this.bookCountPerPage;
+        var pages = Math.ceil(booksCount / this.bookCountPerPage);
         if (this.initPage && this.initPage <= pages) {
             this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, booksCount, this.initPage);
         } else {
