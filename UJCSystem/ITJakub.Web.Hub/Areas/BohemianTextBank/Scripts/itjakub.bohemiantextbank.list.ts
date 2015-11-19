@@ -9,10 +9,23 @@ class CorpusList {
     private bookCountPerPage: number;
     private search: Search;
     private typeaheadSearchBox: SearchBox;
-    private edition: DropDownSelect2;
+    private bookSelector: DropDownSelect2;
     private bibliographyModule: BibliographyModule;
-    private bookIds: Array<number>;
-    private categoryIds: Array<number>;
+    private selectedBookIds: Array<number>;
+    private selectedCategoryIds: Array<number>;
+
+    private urlSearchKey = "search";
+    private urlPageKey = "page";
+    private urlSelectionKey = "selected";
+    private urlSortAscKey = "sortAsc";
+    private urlSortCriteriaKey = "sortCriteria";
+
+    private readyForInit = false;
+    private notInitialized = true;
+    private initPage: number = null;
+
+    private bookIdsInQuery = new Array();
+    private categoryIdsInQuery = new Array();
 
     constructor(bookCountPerPage: number) {
         this.bookCountPerPage = bookCountPerPage;
@@ -46,20 +59,19 @@ class CorpusList {
             this.typeaheadSearchBox.create();
             this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
-            var selectedIds = this.edition.getSelectedIds();
-            this.bookIds = selectedIds.selectedBookIds;
-            this.categoryIds = selectedIds.selectedCategoryIds;
+            var selectedIds = this.bookSelector.getSelectedIds();
+            this.selectedBookIds = selectedIds.selectedBookIds;
+            this.selectedCategoryIds = selectedIds.selectedCategoryIds;
         };
         callbackDelegate.dataLoadedCallback = () => {
-            var selectedIds = this.edition.getSelectedIds();
-            this.bookIds = selectedIds.selectedBookIds;
-            this.categoryIds = selectedIds.selectedCategoryIds;
-            this.search.processSearch();
-            //this.search.processSearchQuery("%"); //search for all by default criteria (title)
-            //this.search.writeTextToTextField("");
+            var selectedIds = this.bookSelector.getSelectedIds();
+            this.selectedBookIds = selectedIds.selectedBookIds;
+            this.selectedCategoryIds = selectedIds.selectedCategoryIds;
+            this.initializeFromUrlParams();
         };
-        this.edition = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
-        this.edition.makeDropdown();
+
+        this.bookSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
+        this.bookSelector.makeDropdown();
 
         this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", () => { this.sortOrderChanged() }, BookTypeEnum.TextBank);
 
@@ -67,6 +79,52 @@ class CorpusList {
         $(".searchbar-input.tt-input").change(() => { //prevent clearing input value on blur() 
             this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
         });
+
+        this.initializeFromUrlParams();
+    }
+
+    private initializeFromUrlParams() {
+
+        if (this.readyForInit && this.notInitialized) {
+
+            this.notInitialized = false;
+
+            var page = getQueryStringParameterByName(this.urlPageKey);
+
+            if (page) {
+                this.initPage = parseInt(page);
+            }
+
+            var sortedAsc = getQueryStringParameterByName(this.urlSortAscKey);
+            var sortCriteria = getQueryStringParameterByName(this.urlSortCriteriaKey);
+
+            if (sortedAsc && sortCriteria) {
+                this.bibliographyModule.setSortedAsc(sortedAsc === "true");
+                this.bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+            }
+
+            var selected = getQueryStringParameterByName(this.urlSelectionKey);
+
+            var searched = getQueryStringParameterByName(this.urlSearchKey);
+            this.search.writeTextToTextField(searched);
+
+            if (selected) {
+                this.bookSelector.setStateFromUrlString(selected);
+            } else {
+                this.search.processSearch(); //if not explicitly selected 
+            }
+
+        } else if (!this.notInitialized) {
+            this.search.processSearch();
+        } else {
+            this.readyForInit = true;
+        }
+
+    }
+
+    private actualizeSelectedBooksAndCategoriesInQuery() {
+        this.bookIdsInQuery = this.selectedBookIds;
+        this.categoryIdsInQuery = this.selectedCategoryIds;
     }
 
     private advancedSearchPaged(json: string, pageNumber: number) {
@@ -85,11 +143,15 @@ class CorpusList {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchPaged",
-            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 this.bibliographyModule.showBooks(response["results"]);
+                updateQueryStringParameter(this.urlSearchKey, json);
+                updateQueryStringParameter(this.urlPageKey, pageNumber);
+                updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -110,11 +172,15 @@ class CorpusList {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchPaged",
-            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 this.bibliographyModule.showBooks(response["results"]);
+                updateQueryStringParameter(this.urlSearchKey, text);
+                updateQueryStringParameter(this.urlPageKey, pageNumber);
+                updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -130,6 +196,7 @@ class CorpusList {
 
     private basicSearch(text: string) {
         this.hideTypeahead();
+        this.actualizeSelectedBooksAndCategoriesInQuery();
         //if (typeof text === "undefined" || text === null || text === "") return;
 
         this.bibliographyModule.clearBooks();
@@ -139,11 +206,15 @@ class CorpusList {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchCount",
-            data: { text: text, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            data: { text: text, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
-                this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, response["count"]); //enable pagination
+                this.createPagination(response["count"]); //enable pagination
+                updateQueryStringParameter(this.urlSearchKey, text);
+                updateQueryStringParameter(this.urlSelectionKey, DropDownSelect2.getUrlStringFromState(this.bookSelector.getState()));
+                updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
             }
         });
     }
@@ -151,6 +222,7 @@ class CorpusList {
     private advancedSearch(json: string) {
         this.hideTypeahead();
         if (typeof json === "undefined" || json === null || json === "") return;
+        this.actualizeSelectedBooksAndCategoriesInQuery();
 
         this.bibliographyModule.clearBooks();
         this.bibliographyModule.showLoading();
@@ -159,23 +231,34 @@ class CorpusList {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: this.bookIds, selectedCategoryIds: this.categoryIds },
+            data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
-                this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, response["count"]); //enable pagination
+                this.createPagination(response["count"]); //enable pagination
+                updateQueryStringParameter(this.urlSearchKey, json);
+                updateQueryStringParameter(this.urlSelectionKey, DropDownSelect2.getUrlStringFromState(this.bookSelector.getState()));
+                updateQueryStringParameter(this.urlSortAscKey, this.bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(this.urlSortCriteriaKey, this.bibliographyModule.getSortCriteria());
             }
         });
     }
 
     private sortOrderChanged() {
-        var textInTextField = this.search.getTextFromTextField();
-        this.search.processSearchQuery(this.search.getLastQuery());
-        this.search.writeTextToTextField(textInTextField);
+        this.bibliographyModule.showPage(1);
     }
 
     private hideTypeahead() {
         $(".twitter-typeahead").find(".tt-menu").hide();
+    }
+
+    private createPagination(booksCount: number) {
+        var pages = booksCount / this.bookCountPerPage;
+        if (this.initPage && this.initPage <= pages) {
+            this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, booksCount, this.initPage);
+        } else {
+            this.bibliographyModule.createPagination(this.bookCountPerPage, (pageNumber: number) => { this.pageClickCallbackForBiblModule(pageNumber) }, booksCount);
+        }
     }
 
 }
