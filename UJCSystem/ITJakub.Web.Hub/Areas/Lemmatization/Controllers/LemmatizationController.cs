@@ -19,7 +19,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization.Controllers
             return View("Lemmatization");
         }
 
-        [Authorize(Roles = CustomRole.CanReadLemmatization)]
+        [Authorize(Roles = CustomRole.CanReadLemmatization + "," + CustomRole.CanEditLemmatization)]
         public ActionResult List()
         {
             return View("List");

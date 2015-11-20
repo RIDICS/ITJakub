@@ -330,17 +330,13 @@
                 </li>
             }
 
-            @if (User.IsInRole(CustomRole.CanEditLemmatization))
+            @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
             {
                 <li>
                     <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
                         <span>Lemmatizace</span>
                     </a>
                 </li>
-            }
-
-            @if (User.IsInRole(CustomRole.CanReadLemmatization))
-            {
                 <li>
                     <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
                         <span>Lemmatizace - procházení</span>
