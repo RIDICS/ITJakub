@@ -280,7 +280,7 @@
         }
         else if (User.IsInRole(CustomRole.CanEditLemmatization))
         {
-            <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = "Lemmatization"})">
+            <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
                 <span>Administrace</span>
             </a>
         }
@@ -292,7 +292,7 @@
         }
         else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
         {
-            <a href="@Url.Action("Derivation", "Derivation", new {area = "Derivation"})">
+            <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
                 <span>Administrace</span>
             </a>
         }
@@ -333,7 +333,7 @@
             @if (User.IsInRole(CustomRole.CanEditLemmatization))
             {
                 <li>
-                    <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = "Lemmatization"})">
+                    <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
                         <span>Lemmatizace</span>
                     </a>
                 </li>
@@ -351,7 +351,7 @@
             @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
             {
                 <li>
-                    <a href="@Url.Action("Derivation", "Derivation", new {area = "Derivation"})">
+                    <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
                         <span>Derivace hláskových podob</span>
                     </a>
                 </li>
