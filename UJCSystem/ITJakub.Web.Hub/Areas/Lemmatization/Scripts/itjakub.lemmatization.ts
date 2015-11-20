@@ -92,7 +92,7 @@ class Lemmatization {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetToken",
             data: {
                 tokenId: tokenId
             },
@@ -118,7 +118,7 @@ class Lemmatization {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenCharacteristic",
             data: {
                 tokenId: this.currentTokenItem.Id
             },
@@ -169,7 +169,7 @@ class Lemmatization {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/CreateToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/CreateToken",
             data: JSON.stringify({
                 token: token,
                 description: description
@@ -197,7 +197,7 @@ class Lemmatization {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditToken",
             data: JSON.stringify({
                 tokenId: this.currentTokenItem.Id,
                 description: description
@@ -305,7 +305,7 @@ class LemmatizationCharacteristicEditor {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/AddTokenCharacteristic",
             data: JSON.stringify({
                 tokenId: this.tokenId,
                 morphologicalCharacteristic: this.currentValue,
@@ -333,7 +333,7 @@ class LemmatizationCharacteristicEditor {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditTokenCharacteristic",
             data: JSON.stringify({
                 tokenCharacteristicId: this.tokenCharacteristic.Id,
                 morphologicalCharacteristic: this.currentValue,
@@ -489,7 +489,7 @@ class LemmatizationCharacteristicTable {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/DeleteTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/DeleteTokenCharacteristic",
             data: JSON.stringify({
                 tokenCharacteristicId: this.item.Id
             }),
@@ -686,7 +686,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/RemoveCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/RemoveCanonicalForm",
             data: JSON.stringify({
                 tokenCharacteristicId: this.tokenCharacteristicId,
                 canonicalFormId: this.canonicalForm.Id
@@ -704,7 +704,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/RemoveHyperCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/RemoveHyperCanonicalForm",
             data: JSON.stringify({
                 canonicalFormId: this.canonicalForm.Id
             }),
@@ -805,7 +805,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/CreateCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/CreateCanonicalForm",
                 data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     text: name,
@@ -828,7 +828,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/AddCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/AddCanonicalForm",
                 data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     canonicalFormId: currentItem.Id
@@ -851,7 +851,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/CreateHyperCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/CreateHyperCanonicalForm",
                 data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     text: name,
@@ -874,7 +874,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/SetHyperCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/SetHyperCanonicalForm",
                 data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     hyperCanonicalFormId: currentItem.Id
@@ -896,7 +896,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditCanonicalForm",
             data: JSON.stringify({
                 canonicalFormId: this.canonicalForm.Id,
                 text: text,
@@ -920,7 +920,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditHyperCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditHyperCanonicalForm",
             data: JSON.stringify({
                 hyperCanonicalFormId: this.canonicalForm.HyperCanonicalForm.Id,
                 text: text,
@@ -1143,7 +1143,7 @@ class LemmatizationSearchBox {
     constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
         this.inputField = inputFieldElement;
         this.suggestionTemplate = suggestionTemplate;
-        this.urlWithController = getBaseUrl() + "Lemmatization";
+        this.urlWithController = getBaseUrl() + "Lemmatization/Lemmatization";
 
         this.options = {
             hint: true,
