@@ -57,11 +57,6 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/news/javascript").Include(
                 "~/Scripts/News/itjakub.news.js"));
 
-            bundles.Add(new ScriptBundle("~/itjakub/lemmatization/javascript").Include(
-                "~/Scripts/Lemmatization/itjakub.lemmatization.js",
-                "~/Scripts/Lemmatization/itjakub.lemmatization.list.js",
-                "~/Scripts/Lemmatization/itjakub.derivation.js"));
-            
             bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
                 "~/Scripts/Permission/itjakub.permission.user.js",
                 "~/Scripts/Permission/itjakub.permission.typeahead.js"));
@@ -88,9 +83,6 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
               "~/Content/themes/base/*.css"));
-
-            bundles.Add(new StyleBundle("~/itjakub/lemmatization/css")
-                .Include("~/Content/Lemmatization/itjakub.lemmatization.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

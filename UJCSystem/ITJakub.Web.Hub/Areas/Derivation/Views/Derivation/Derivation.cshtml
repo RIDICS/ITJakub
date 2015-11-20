@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Derivace hláskových podob";
+}
+@section styles{
+    @Styles.Render("~/itjakub/derivation/css")
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/derivation/javascript")
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        var derivation = new Derivation("#mainContainer");
+        derivation.make();
+    });
+</script>
+
+<h2>Derivace hláskových podob</h2>
+
+<div>
+    <select id="type-select" class="form-control derivation-select"></select>
+</div>
+<div class="derivation-search-bar">
+    <div class="derivation-main-buttons">
+        <button id="loadButton" class="btn btn-default derivation-button hidden">Načíst</button>
+    </div>
+    <div class="derivation-search">
+        <input type="text" class="form-control derivation-search-input" id="mainSearchInput"/>
+    </div>
+</div>
+
+<div class="content">
+    <div>
+        <span class="derivation-label derivation-label-description">Popis: </span>
+        <span class="derivation-description" id="descriptionContainer"></span>
+    </div>
+
+    <div id="mainContainer"></div>
+</div>
+

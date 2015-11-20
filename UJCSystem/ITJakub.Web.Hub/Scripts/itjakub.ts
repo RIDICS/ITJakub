@@ -51,6 +51,16 @@ function convertDate(date: string): Date {
     return new Date(parseInt(date.substr(6)));
 }
 
+enum RoleEnum {
+    EditLemmatization = 0
+}
+
+function isUserInRole(role: RoleEnum) {
+    var paramRoleString = RoleEnum[role].toString();
+    var rolesString = $("#permissions-div").data("roles");
+    return rolesString.indexOf(paramRoleString) >= 0;
+}
+
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);

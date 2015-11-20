@@ -38,7 +38,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetTokenCount",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenCount",
             data: {},
             dataType: "json",
             contentType: "application/json",
@@ -55,7 +55,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetTokenList",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenList",
             data: {
                 start: pageNumber - 1,
                 count: this.tokenPerPage
