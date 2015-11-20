@@ -156,33 +156,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<SearchResultContract> Search(string term)
-        {
-            try
-            {
-                return Channel.Search(term);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             try

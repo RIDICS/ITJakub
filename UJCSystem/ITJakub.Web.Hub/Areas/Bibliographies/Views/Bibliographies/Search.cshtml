@@ -3,38 +3,31 @@
 }
 @section scripts{
     @Scripts.Render("~/itjakub/bibliographies/javascript")
-
-    @*<script src="@Url.Content("~/Areas/Bibliographies/Scripts/itjakub.bibliographies.List.ts")"></script>*@
 }
 
 @{
     ViewBag.Title = "Bibliografie - Vyhledávání";
 }
 
-<div id="biblListHeader">
-    <div id="biblListSearchDiv" style="float: left; width: 70%">
-        <form role="form" class="form-horizontal">
-            <div class="form-group searchbar">
-                <div class="searchbar-buttons">
-                    <button id="searchButton" type="button" class="btn btn-default searchbar-button">
-                        Vyhledat
-                    </button>
-                    <button type="button" class="btn btn-default searchbar-button">
-                        Pokročilé
-                    </button>
-                </div>
-                <div class="searchbar-inputs">
-                    <input type="text" class="form-control searchbar-input" id="searchbox" placeholder="Hledat..." style="max-width: 100%;"/>
-                </div>
-            </div>
-        </form>
+<div id="listHeader">
+    <div id="listSearchDiv" style="float: left; width: 70%">
     </div>
     <div style="float: left; margin-left: 50px;">
         Řadit podle
-        <div id="biblListResultsHeader" style="display: inline-block">
+        <div id="listResultsHeader" style="display: inline-block">
         </div>
     </div>
 </div>
 
-<div id="biblListResults" style="">
+
+<div id="dropdownSelectDiv" style="margin-top: 50px; clear: both;">
 </div>
+
+<div id="listResults" style="clear: both;">
+</div>
+
+<script>
+    $(document).ready(function(){
+        initBiblSearch();
+    });
+</script>

@@ -34,9 +34,6 @@ namespace ITJakub.ITJakubService.DataContracts
         #endregion
 
         [OperationContract]
-        IList<SearchResultContract> Search(string term); // TODO probably remove
-
-        [OperationContract]
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
         [OperationContract]

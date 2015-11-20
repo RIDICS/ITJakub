@@ -779,8 +779,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.ts" />
-    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
-    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
+    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.search.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.list.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.search.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
