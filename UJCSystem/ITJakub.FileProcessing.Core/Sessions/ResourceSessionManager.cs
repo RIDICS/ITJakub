@@ -146,7 +146,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             if (Directory.Exists(m_rootFolderPath))
             {
-                Directory.Delete(m_rootFolderPath, true);    
+                Directory.Delete(m_rootFolderPath, true);
             }
 
             m_disposed = true;

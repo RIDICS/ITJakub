@@ -136,6 +136,7 @@ function initSearch() {
             var bibleVerseContext = result["BibleVerseResultContext"];
             var contextStructure = pageContext["ContextStructure"];
             var bookXmlId = result["BookXmlId"];
+            var bookId = result["BookId"];
             var pageXmlId = pageContext["PageXmlId"];
             var acronym = result["Acronym"];
             var notes = result["Notes"];
@@ -143,6 +144,7 @@ function initSearch() {
             var tr = document.createElement("tr");
             $(tr).addClass("search-result");
             $(tr).data("bookXmlId", bookXmlId);
+            $(tr).data("bookId", bookId);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
             $(tr).data("author", result["Author"]);
             $(tr).data("title", result["Title"]);
@@ -444,6 +446,10 @@ function initSearch() {
         document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;
         document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
         document.getElementById("detail-abbrev").innerHTML = typeof $(tableRow).data("acronym") !== "undefined" && $(tableRow).data("acronym") !== null ? $(tableRow).data("acronym") : undefinedReplaceString;
+
+        //Edition note
+        var editionNoteAnchor: HTMLAnchorElement = <HTMLAnchorElement>(document.getElementById("detail-edition-note-href"));
+        editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + $(tableRow).data("bookId");
 
         var folioHref = document.createElement("a");
         folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookXmlId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageXmlId");

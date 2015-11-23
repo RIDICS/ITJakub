@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
-using ITJakub.MobileApps.MobileContracts.News;
 
 namespace ITJakub.MobileApps.MobileContracts
 {

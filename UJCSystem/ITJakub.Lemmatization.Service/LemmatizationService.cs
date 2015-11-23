@@ -114,5 +114,20 @@ namespace ITJakub.Lemmatization.Service
         {
             return m_lemmatizationManager.GetCanonicalFormDetail(canonicalFormId);
         }
+
+        public void DeleteTokenCharacteristic(long tokenCharacteristicId)
+        {
+            m_lemmatizationManager.DeleteTokenCharacteristic(tokenCharacteristicId);
+        }
+
+        public void RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
+        {
+            m_lemmatizationManager.RemoveCanonicalForm(tokenCharacteristicId, canonicalFormId);
+        }
+
+        public void RemoveHyperCanonicalForm(long canonicalFormId)
+        {
+            m_lemmatizationManager.RemoveHyperCanonicalForm(canonicalFormId);
+        }
     }
 }

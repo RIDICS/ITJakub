@@ -41,6 +41,7 @@
         </div>
     </div>
 </div>
+<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization)) {@Html.Raw("EditLemmatization")} "></div>
 
 <div id="main-plugins-menu" class="main-plugins-menu">
 <ul>
@@ -277,6 +278,24 @@
                 <span>Administrace</span>
             </a>
         }
+        else if (User.IsInRole(CustomRole.CanEditLemmatization))
+        {
+            <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanReadLemmatization))
+        {
+            <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+        {
+            <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                <span>Administrace</span>
+            </a>
+        }
         else if (User.IsInRole(CustomRole.CanManagePermissions))
         {
             <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
@@ -311,21 +330,28 @@
                 </li>
             }
 
-            <li>
-                <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = ""})">
-                    <span>Lemmatizace</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("LemmatizationList", "Lemmatization", new {area = ""})">
-                    <span>Lemmatizace - procházení</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Derivation", "Lemmatization", new {area = ""})">
-                    <span>Derivace hláskových podob</span>
-                </a>
-            </li>
+            @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                        <span>Lemmatizace</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                        <span>Lemmatizace - procházení</span>
+                    </a>
+                </li>
+            }
+
+            @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                        <span>Derivace hláskových podob</span>
+                    </a>
+                </li>
+            }
 
             @if (User.IsInRole(CustomRole.CanManagePermissions))
             {
@@ -340,7 +366,6 @@
                     </a>
                 </li>
             }
-
 
             @if (User.IsInRole(CustomRole.CanManageFeedbacks))
             {

@@ -82,5 +82,9 @@ namespace ITJakub.SearchService.Core.Exist
         [OperationContract]
         [ExistQuery(Method = HttpMethodType.Post, XqueryName = "get-search-corpus-count.xquery")]
         int GetSearchCorpusCount(string serializedSearchCriteria);
+
+        [OperationContract]
+        [ExistQuery(Method = HttpMethodType.Post, XqueryName = "get-edition-note.xquery")]
+        string GetBookEditionNote(string bookId, string versionId, string outputFormat);
     }
 }

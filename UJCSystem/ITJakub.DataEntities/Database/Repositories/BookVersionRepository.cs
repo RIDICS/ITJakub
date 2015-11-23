@@ -768,5 +768,21 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return terms;
             }
         }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookType GetBookTypeByBookVersionId(long bookVersionId)
+        {
+            BookVersion bookVersionAlias = null;
+
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<BookType>()
+                    .JoinAlias(x => x.BookVersions, () => bookVersionAlias)
+                    .Where(x => bookVersionAlias.Id == bookVersionId)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
     }
 }

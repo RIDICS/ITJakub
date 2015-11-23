@@ -8,6 +8,9 @@ namespace ITJakub.Shared.Contracts.Searching.Results
     public class CorpusSearchResultContract
     {
         [DataMember]
+        public long BookId { get; set; }
+
+        [DataMember]
         public string BookXmlId { get; set; }
 
         [DataMember]

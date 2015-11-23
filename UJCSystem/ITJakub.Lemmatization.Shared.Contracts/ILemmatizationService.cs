@@ -62,5 +62,14 @@ namespace ITJakub.Lemmatization.Shared.Contracts
 
         [OperationContract]
         InverseCanonicalFormContract GetCanonicalFormDetail(long canonicalFormId);
+
+        [OperationContract]
+        void DeleteTokenCharacteristic(long tokenCharacteristicId);
+
+        [OperationContract]
+        void RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId);
+
+        [OperationContract]
+        void RemoveHyperCanonicalForm(long canonicalFormId);
     }
 }

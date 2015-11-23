@@ -120,4 +120,14 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual bool CanEditLemmatization { get; set; }
     }
+
+    public class DerivateLemmatizationPermission : SpecialPermission
+    {
+        public DerivateLemmatizationPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
+        public virtual bool CanDerivateLemmatization { get; set; }
+    }
 }

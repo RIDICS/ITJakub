@@ -365,6 +365,11 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetTermCategoriesWithTerms();
         }
 
+        public string GetBookEditionNote(long bookId, OutputFormatEnumContract outputFormat)
+        {
+            return m_bookManager.GetBookEditionNote(bookId, outputFormat);
+        }
+
         #endregion
 
         public void Dispose()

@@ -25,4 +25,10 @@
             <xsl:apply-templates select="//tei:note" mode="notes"/>
         </div>
     </xsl:template>
+    <xsl:template match="tei:div[@type= 'editorial']//tei:w">
+        <xsl:apply-templates/>
+    </xsl:template>
+    <xsl:template match="tei:div[@type= 'editorial']//tei:pc">
+        <xsl:apply-templates/>
+    </xsl:template>
 </xsl:stylesheet>

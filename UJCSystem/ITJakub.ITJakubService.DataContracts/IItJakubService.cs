@@ -286,5 +286,8 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<TermCategoryContract> GetTermCategoriesWithTerms();
+
+        [OperationContract]
+        string GetBookEditionNote(long bookId, OutputFormatEnumContract outputFormat);
     }
 }

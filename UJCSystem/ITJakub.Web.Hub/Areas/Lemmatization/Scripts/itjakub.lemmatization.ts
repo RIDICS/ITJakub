@@ -1,5 +1,6 @@
 ﻿function initLemmatization(tokenId: string) {
-    var lemmatization = new Lemmatization("#mainContainer", true);
+    var canEdit = isUserInRole(RoleEnum.EditLemmatization);
+    var lemmatization = new Lemmatization("#mainContainer", canEdit);
     lemmatization.make();
 
     if (tokenId)
@@ -91,7 +92,7 @@ class Lemmatization {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetToken",
             data: {
                 tokenId: tokenId
             },
@@ -110,12 +111,16 @@ class Lemmatization {
         $("#specificToken").text(tokenItem.Text);
         $("#specificTokenDescription").text(tokenItem.Description);
 
+        this.loadTokenCharacteristic();
+    }
+    
+    private loadTokenCharacteristic() {
         $.ajax({
             type: "GET",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/GetTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/GetTokenCharacteristic",
             data: {
-                tokenId: tokenItem.Id
+                tokenId: this.currentTokenItem.Id
             },
             dataType: "json",
             contentType: "application/json",
@@ -132,7 +137,7 @@ class Lemmatization {
             var containerDiv = document.createElement("div");
             var characteristicItem = list[i];
             var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, characteristicItem, containerDiv, this.canEdit);
-            characteristicTable.make();
+            characteristicTable.make(this.loadTokenCharacteristic.bind(this));
 
             $(this.mainContainer).append(containerDiv);
         }
@@ -141,7 +146,7 @@ class Lemmatization {
     private addNewCharacteristic(item: ITokenCharacteristic) {
         var containerDiv = document.createElement("div");
         var characteristicTable = new LemmatizationCharacteristicTable(this.lemmatizationCharacteristic, item, containerDiv, this.canEdit);
-        characteristicTable.make();
+        characteristicTable.make(this.loadTokenCharacteristic.bind(this));
 
         $(this.mainContainer).append(containerDiv);
     }
@@ -164,7 +169,7 @@ class Lemmatization {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/CreateToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/CreateToken",
             data: JSON.stringify({
                 token: token,
                 description: description
@@ -192,7 +197,7 @@ class Lemmatization {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditToken",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditToken",
             data: JSON.stringify({
                 tokenId: this.currentTokenItem.Id,
                 description: description
@@ -300,7 +305,7 @@ class LemmatizationCharacteristicEditor {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/AddTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/AddTokenCharacteristic",
             data: JSON.stringify({
                 tokenId: this.tokenId,
                 morphologicalCharacteristic: this.currentValue,
@@ -328,7 +333,7 @@ class LemmatizationCharacteristicEditor {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditTokenCharacteristic",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditTokenCharacteristic",
             data: JSON.stringify({
                 tokenCharacteristicId: this.tokenCharacteristic.Id,
                 morphologicalCharacteristic: this.currentValue,
@@ -356,6 +361,7 @@ class LemmatizationCharacteristicTable {
     private item: ITokenCharacteristic;
     private descriptionDiv: HTMLDivElement;
     private morphologicalSpan: HTMLSpanElement;
+    private reloadCallback: () => void;
     
     constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement, canEdit: boolean) {
         this.canEdit = canEdit;
@@ -364,7 +370,8 @@ class LemmatizationCharacteristicTable {
         this.item = item;
     }
 
-    make() {
+    make(reloadCallback: () => void) {
+        this.reloadCallback = reloadCallback;
         $(this.container).empty();
 
         var morphologicalDiv = document.createElement("div");
@@ -376,6 +383,7 @@ class LemmatizationCharacteristicTable {
         var tableDiv = document.createElement("div");
         var editCharacteristicDiv = document.createElement("div");
         var editCharacteristicButton = document.createElement("button");
+        var deleteCharacteristicButton = document.createElement("button");
         var delimeter = document.createElement("hr");
 
         $(editCharacteristicButton)
@@ -385,8 +393,15 @@ class LemmatizationCharacteristicTable {
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });
+        $(deleteCharacteristicButton)
+            .addClass("lemmatization-edit")
+            .text("Smazat")
+            .click(() => {
+                this.delete();
+            });
         $(editCharacteristicDiv)
-            .append(editCharacteristicButton);
+            .append(editCharacteristicButton)
+            .append(deleteCharacteristicButton);
 
         $(morphologicalLabelDiv)
             .addClass("lemmatization-label")
@@ -447,7 +462,7 @@ class LemmatizationCharacteristicTable {
         for (var i = 0; i < this.item.CanonicalFormList.length; i++) {
             var canonicalFormItem = this.item.CanonicalFormList[i];
             var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, tbody, this.canEdit, canonicalFormItem);
-            canonicalForm.make(this.addNewEmptyRow.bind(this));
+            canonicalForm.make(this.addNewEmptyRow.bind(this), this.reloadCallback);
         }
         this.addNewEmptyRow();
 
@@ -455,6 +470,7 @@ class LemmatizationCharacteristicTable {
 
         if (!this.canEdit) {
             editCharacteristicButton.remove();
+            deleteCharacteristicButton.remove();
             th1.remove();
         }
 
@@ -469,12 +485,28 @@ class LemmatizationCharacteristicTable {
         this.morphologicalSpan = morphologicalContentSpan;
     }
 
+    private delete() {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/Lemmatization/DeleteTokenCharacteristic",
+            data: JSON.stringify({
+                tokenCharacteristicId: this.item.Id
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                $(this.container).empty();
+            }
+        });
+    }
+
     private addNewEmptyRow() {
         if (!this.canEdit)
             return;
 
         var canonicalForm = new LemmatizationCanonicalForm(this.item.Id, this.tbody, this.canEdit);
-        canonicalForm.make(this.addNewEmptyRow.bind(this));
+        canonicalForm.make(this.addNewEmptyRow.bind(this), this.reloadCallback);
     }
 
     private updateUiAfterSave() {
@@ -487,6 +519,7 @@ class LemmatizationCanonicalForm {
     private static searchBox: LemmatizationSearchBox;
     private static hyperSearchBox: LemmatizationSearchBox;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
+    private reloadCallback: () => void;
     private canEdit: boolean;
     private tableBody: HTMLTableSectionElement;
     private canonicalForm: ICanonicalForm;
@@ -495,7 +528,10 @@ class LemmatizationCanonicalForm {
     private containerType: HTMLDivElement;
     private containerDescription: HTMLDivElement;
     private editButton: HTMLButtonElement;
+    private deleteButton: HTMLButtonElement;
     private hyperLemmatization: LemmatizationHyperCanonicalForm;
+    private tableRow1: HTMLTableRowElement;
+    private tableRow2: HTMLTableRowElement;
 
     constructor(tokenCharacteristicId: number, tableBody: HTMLTableSectionElement, canEdit: boolean, canonicalForm: ICanonicalForm = null) {
         this.tableBody = tableBody;
@@ -504,8 +540,9 @@ class LemmatizationCanonicalForm {
         this.tokenCharacteristicId = tokenCharacteristicId;
     }
 
-    make(newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void) {
+    make(newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void, reloadCallback: () => void) {
         this.newCanonicalFormCreatedCallback = newCanonicalFormCreatedCallback;
+        this.reloadCallback = reloadCallback;
         var tr = document.createElement("tr");
         var td1 = document.createElement("td");
         var td2 = document.createElement("td");
@@ -515,7 +552,9 @@ class LemmatizationCanonicalForm {
         var containerType = document.createElement("div");
         var containerDescription = document.createElement("div");
         var editButton = document.createElement("button");
+        var deleteButton = document.createElement("button");
         var editButtonContent = document.createElement("span");
+        var deleteButtonContent = document.createElement("span");
         $(editButtonContent)
             .addClass("glyphicon")
             .addClass(this.canonicalForm ? "glyphicon-pencil" : "glyphicon-plus");
@@ -527,14 +566,25 @@ class LemmatizationCanonicalForm {
                 this.showCreateDialog();
         });
 
+        $(deleteButtonContent)
+            .addClass("glyphicon")
+            .addClass("glyphicon-trash");
+        $(deleteButton).append(deleteButtonContent);
+        $(deleteButton).click(() => {
+            this.remove();
+        });
+
         if (this.canonicalForm) {
             $(containerCanonicalForm).text(this.canonicalForm.Text);
             $(containerType).text(LemmatizationCanonicalForm.typeToString(this.canonicalForm.Type));
             $(containerDescription).text(this.canonicalForm.Description);
+        } else {
+            $(deleteButton).addClass("hidden");
         }
 
 
         $(td1).addClass("column-commands")
+            .append(deleteButton)
             .append(editButton);
         $(td2).append(containerCanonicalForm);
         $(td3).append(containerType);
@@ -619,6 +669,7 @@ class LemmatizationCanonicalForm {
         this.containerType = containerType;
         this.containerDescription = containerDescription;
         this.editButton = editButton;
+        this.deleteButton = deleteButton;
 
         this.hyperLemmatization = new LemmatizationHyperCanonicalForm();
         this.hyperLemmatization.containerName = containerHyperForm;
@@ -626,6 +677,53 @@ class LemmatizationCanonicalForm {
         this.hyperLemmatization.containerDescription = containerHyperDescription;
         this.hyperLemmatization.editButton = editHyperButton;
         this.hyperLemmatization.setButton = setHyperButton;
+
+        this.tableRow1 = tr;
+        this.tableRow2 = hyperTr;
+    }
+
+    private remove() {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/Lemmatization/RemoveCanonicalForm",
+            data: JSON.stringify({
+                tokenCharacteristicId: this.tokenCharacteristicId,
+                canonicalFormId: this.canonicalForm.Id
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                $(this.tableRow2).remove();
+                $(this.tableRow1).remove();
+            }
+        });
+    }
+
+    private removeHyperItem() {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Lemmatization/Lemmatization/RemoveHyperCanonicalForm",
+            data: JSON.stringify({
+                canonicalFormId: this.canonicalForm.Id
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                this.canonicalForm.HyperCanonicalForm = null;
+
+                var item = this.hyperLemmatization;
+                $(item.editButton).addClass("hidden");
+                $(item.containerDescription).text("");
+                $(item.containerName).text("");
+                $(item.containerType).text("");
+
+                $("#newHyperCanonicalFormDialog").modal("hide");
+                
+                this.reloadCallback();
+            }
+        });
     }
 
     private showCreateDialog() {
@@ -672,6 +770,10 @@ class LemmatizationCanonicalForm {
         $("#save-hyper").click(() => {
             this.createHyperItem();
         });
+        $("#remove-hyper").off("click");
+        $("#remove-hyper").click(() => {
+            this.removeHyperItem();
+        });
 
         $("#new-hyper").val("");
         $("#new-hyper-description").val("");
@@ -703,7 +805,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/CreateCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/CreateCanonicalForm",
                 data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     text: name,
@@ -726,7 +828,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/AddCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/AddCanonicalForm",
                 data: JSON.stringify({
                     tokenCharacteristicId: this.tokenCharacteristicId,
                     canonicalFormId: currentItem.Id
@@ -749,7 +851,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/CreateHyperCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/CreateHyperCanonicalForm",
                 data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     text: name,
@@ -772,7 +874,7 @@ class LemmatizationCanonicalForm {
             $.ajax({
                 type: "POST",
                 traditional: true,
-                url: getBaseUrl() + "Lemmatization/SetHyperCanonicalForm",
+                url: getBaseUrl() + "Lemmatization/Lemmatization/SetHyperCanonicalForm",
                 data: JSON.stringify({
                     canonicalFormId: this.canonicalForm.Id,
                     hyperCanonicalFormId: currentItem.Id
@@ -794,7 +896,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditCanonicalForm",
             data: JSON.stringify({
                 canonicalFormId: this.canonicalForm.Id,
                 text: text,
@@ -805,6 +907,7 @@ class LemmatizationCanonicalForm {
             contentType: "application/json",
             success: () => {
                 this.updateAfterItemEdit(text, formType, description);
+                this.reloadCallback();
             }
         });
     }
@@ -817,7 +920,7 @@ class LemmatizationCanonicalForm {
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Lemmatization/EditHyperCanonicalForm",
+            url: getBaseUrl() + "Lemmatization/Lemmatization/EditHyperCanonicalForm",
             data: JSON.stringify({
                 hyperCanonicalFormId: this.canonicalForm.HyperCanonicalForm.Id,
                 text: text,
@@ -828,6 +931,7 @@ class LemmatizationCanonicalForm {
             contentType: "application/json",
             success: () => {
                 this.updateAfterHyperItemEdit(text, formType, description);
+                this.reloadCallback();
             }
         });
     }
@@ -864,6 +968,7 @@ class LemmatizationCanonicalForm {
         $(this.editButton).children()
             .removeClass("glyphicon-plus")
             .addClass("glyphicon-pencil");
+        $(this.deleteButton).removeClass("hidden");
         $(this.hyperLemmatization.setButton).removeClass("hidden");
 
         if (canonicalForm.HyperCanonicalForm != null) {
@@ -905,6 +1010,7 @@ class LemmatizationCanonicalForm {
         $(this.hyperLemmatization.editButton).removeClass("hidden");
 
         $("#newHyperCanonicalFormDialog").modal("hide");
+        this.reloadCallback();
     }
 
     static init() {
@@ -1037,7 +1143,7 @@ class LemmatizationSearchBox {
     constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
         this.inputField = inputFieldElement;
         this.suggestionTemplate = suggestionTemplate;
-        this.urlWithController = getBaseUrl() + "Lemmatization";
+        this.urlWithController = getBaseUrl() + "Lemmatization/Lemmatization";
 
         this.options = {
             hint: true,

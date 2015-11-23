@@ -11,6 +11,7 @@ namespace ITJakub.Shared.Contracts
     [KnownType(typeof (AutoImportCategoryPermissionContract))]
     [KnownType(typeof (ReadLemmatizationPermissionContract))]
     [KnownType(typeof (EditLemmatizationPermissionContract))]
+    [KnownType(typeof (DerivateLemmatizationPermissionContract))]
     public class SpecialPermissionContract
     {
         [DataMember]
@@ -80,5 +81,12 @@ namespace ITJakub.Shared.Contracts
     {
         [DataMember]
         public bool CanEditLemmatization { get; set; }
+    }
+
+    [DataContract]
+    public class DerivateLemmatizationPermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool CanDerivateLemmatization { get; set; }
     }
 }

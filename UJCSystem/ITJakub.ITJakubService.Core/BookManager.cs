@@ -6,6 +6,7 @@ using System.ServiceModel;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
+using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
@@ -168,6 +169,29 @@ namespace ITJakub.ITJakubService.Core
         {
             var termCategoriesWithTerms = m_bookRepository.GetTermCategoriesWithTerms();
             return Mapper.Map<IList<TermCategoryContract>>(termCategoriesWithTerms);
+        }
+
+
+        public string GetBookEditionNote(long bookId, OutputFormatEnumContract resultFormat)
+        {
+            m_authorizationManager.AuthorizeBook(bookId);
+
+            OutputFormat outputFormat;
+            if (!Enum.TryParse(resultFormat.ToString(), true, out outputFormat))
+            {
+                throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
+            }
+            
+            var book = m_bookRepository.FindBookById(bookId);
+            var bookVersion = m_bookRepository.GetLastVersionForBookByBookId(bookId);
+            var bookType = m_bookVersionRepository.GetBookTypeByBookVersionId(bookVersion.Id);
+            var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType.Type);
+            var transformationName = transformation.Name;
+            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+
+            var editionNoteText = m_searchServiceClient.GetBookEditionNote(book.Guid, bookVersion.VersionId, transformationName, resultFormat, transformationLevel);
+
+            return editionNoteText;
         }
     }
 }
