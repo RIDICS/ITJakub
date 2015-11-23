@@ -108,7 +108,9 @@ namespace ITJakub.MobileApps.Client.MainApp.ViewModel.GroupList
                 }
 
                 m_dataService.SetCurrentGroup(result.GroupId, GroupType.Owner);
-                m_submitAction?.Invoke();
+                
+                if (m_submitAction != null)
+                    m_submitAction.Invoke();
 
                 NewGroupName = string.Empty;
                 IsFlyoutOpen = false;
