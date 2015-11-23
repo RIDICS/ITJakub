@@ -211,9 +211,11 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
             {
-                new WordListCriteriaContract
+                var wordListCriteria = new WordListCriteriaContract
                 {
                     Key = CriteriaKey.Title,
                     Disjunctions = new List<WordCriteriaContract>
@@ -223,8 +225,9 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
                             Contains = new List<string> {text}
                         }
                     }
-                }
-            };
+                };
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -244,9 +247,11 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
             {
-                new WordListCriteriaContract
+                var wordListCriteria = new WordListCriteriaContract
                 {
                     Key = CriteriaKey.Fulltext,
                     Disjunctions = new List<WordCriteriaContract>
@@ -256,8 +261,9 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
                             Contains = new List<string> {text}
                         }
                     }
-                }
-            };
+                };
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -280,17 +286,6 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
-                new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                },
                 new ResultCriteriaContract
                 {
                     Start = start,
@@ -305,6 +300,22 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
                     }
                 }
             };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                var wordListCriteria = new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Title,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                };
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -326,17 +337,6 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>
             {
-                new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                },
                 new ResultCriteriaContract
                 {
                     Start = start,
@@ -351,6 +351,22 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
                     }
                 }
             };
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                var wordListCriteria = new WordListCriteriaContract
+                {
+                    Key = CriteriaKey.Fulltext,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                };
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
