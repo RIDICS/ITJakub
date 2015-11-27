@@ -325,11 +325,11 @@
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.min.css">
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Derivation\Content\itjakub.lemmatization.css">
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.css">
       <DependentUpon>itjakub.derivation.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Derivation\Content\itjakub.lemmatization.min.css">
-      <DependentUpon>itjakub.lemmatization.css</DependentUpon>
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.min.css">
+      <DependentUpon>itjakub.derivation.css</DependentUpon>
     </Content>
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
@@ -355,11 +355,17 @@
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
       <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.min.css">
+      <DependentUpon>itjakub.professionalliterature.content.css</DependentUpon>
+    </Content>
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
       <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
     </Content>
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.css">
       <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
+      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
     <Content Include="Areas\Tools\Content\itjakub.tools.css">
       <DependentUpon>itjakub.tools.less</DependentUpon>
@@ -400,6 +406,9 @@
     </Content>
     <Content Include="Content\Permission\itjakub.permission.css">
       <DependentUpon>itjakub.permission.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Permission\itjakub.permission.min.css">
+      <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
@@ -699,6 +708,9 @@
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Derivation\Content\itjakub.derivation.less" />
     <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
@@ -918,9 +930,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets'))" />
   </Target>
-  <Import Project="..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" />
+  <Import Project="..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

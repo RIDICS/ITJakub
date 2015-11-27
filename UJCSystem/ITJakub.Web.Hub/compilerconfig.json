@@ -40,16 +40,8 @@
     "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.content.less"
   },
   {
-    "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
-    "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less"
-  },
-  {
     "outputFile": "Areas/Derivation/Content/itjakub.derivation.css",
     "inputFile": "Areas/Derivation/Content/itjakub.derivation.less"
-  },
-  {
-    "outputFile": "Areas/Tools/Content/itjakub.tools.css",
-    "inputFile": "Areas/Tools/Content/itjakub.tools.less"
   },
   {
     "outputFile": "Content/ITJakub.DefaultTheme.css",
@@ -114,5 +106,9 @@
   {
     "outputFile": "Content/Permission/itjakub.permission.css",
     "inputFile": "Content/Permission/itjakub.permission.less"
+  },
+  {
+    "outputFile": "Areas/Tools/Content/itjakub.tools.css",
+    "inputFile": "Areas/Tools/Content/itjakub.tools.less"
   }
 ]
