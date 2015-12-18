@@ -79,3 +79,4 @@ packages/
 
 #Store publish
 [Aa]ppPackages/
+*.csdat
