@@ -8,8 +8,6 @@
             <xd:p>Transformace interního formátu s korpusovými výskty do podoby kontraktu</xd:p>
         </xd:desc>
     </xd:doc>
-	
-	
     <xsl:strip-space elements="*"/>
     <xsl:output method="xml" indent="yes"/>
     <xsl:template match="/">

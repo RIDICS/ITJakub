@@ -8,9 +8,6 @@
             <xd:p>Escapování HTML znaků kvůli deserializaci kontraktu v C#</xd:p>
         </xd:desc>
     </xd:doc>
-    
-    
-    
     <xsl:template match="/">
         <xsl:apply-templates/>
     </xsl:template>
@@ -29,6 +26,4 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
-    
-    
 </xsl:stylesheet>

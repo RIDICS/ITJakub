@@ -136,9 +136,7 @@
     </xd:doc>
     <xsl:template match="tei:note" mode="real">
         <xsl:choose>
-            <xsl:when test="parent::vw:fragment or parent::tei:body">
-				
-            </xsl:when>
+            <xsl:when test="parent::vw:fragment or parent::tei:body"/>
             <xsl:when test="@place='end'">
                 <simple-link>
                     <xsl:attribute name="internal-destination">

@@ -46,6 +46,19 @@
     </xsl:template>
     <xd:doc>
         <xd:desc>
+            <xd:p>Šablona pro informaci o grantové podpoře.</xd:p>
+        </xd:desc>
+    </xd:doc>
+    <xsl:template match="tei:div[@type='editorial' and @subtype='grant']">
+        <xsl:element name="div">
+            <xsl:attribute name="class">
+                <xsl:text>editorial grant</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates/>
+        </xsl:element>
+    </xsl:template>
+    <xd:doc>
+        <xd:desc>
             <xd:p>Šablona pro incipit a explicit.</xd:p>
         </xd:desc>
     </xd:doc>

@@ -139,7 +139,7 @@ xquery version "3.0";
 
     declare function tic:get-chunk-before($node as node(), $context-length as xs:integer) as node()* {
        
-       let $next-node := subsequence(reverse($node/preceding-sibling::tei:w), 1, 20)[last()]
+       let $next-node := subsequence(reverse($node/preceding-sibling::tei:w), 1, $context-length)[last()]
        let $text := $node/ancestor::tei:text
        let $fragment := if($next-node) then
             tic:milestone-chunk-ns($next-node, $node, $text)
@@ -148,7 +148,7 @@ xquery version "3.0";
     };
 
     declare function tic:get-chunk-after($node as node(), $context-length as xs:integer) as node()* {
-       let $next-node := subsequence($node/following-sibling::tei:w, 1, 20)[last()] (:subsequence($node/following-sibling::tei:w, 1, $context-length)[last()]:)
+       let $next-node := subsequence($node/following-sibling::tei:w, 1, $context-length)[last()] (:subsequence($node/following-sibling::tei:w, 1, $context-length)[last()]:)
        let $text := $node/ancestor::tei:text
        let $fragment := if($next-node) then
         tic:milestone-chunk-ns($node, $next-node, $text)
@@ -233,7 +233,6 @@ xquery version "3.0";
     };
     
        declare function tic:get-tic($node as node(), $context-length as xs:integer) {
-        let $info := tic:make-info(0, $context-length)
         let $after-node := $node/following::node()[1]
         let $after := tic:get-chunk-after($after-node, $context-length)
         let $before := tic:get-chunk-before($node, $context-length)
