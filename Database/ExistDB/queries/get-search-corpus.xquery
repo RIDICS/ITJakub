@@ -33,6 +33,54 @@ declare option exist:serialize "highlight-matches=elements";
 
     };
     
+    
+    declare function local:get-tick-mock-test($hit as node()) as node() {
+    
+(:    let $parent := local:get-tick-mock-parent($hit):)
+    
+    let $parent := $hit/ancestor::tei:p | $hit/ancestor::tei:l | $hit/ancestor::tei:head
+    
+    let $text := $hit/ancestor::tei:text
+
+    let $following := if($hit/following-sibling::*[1]) then
+            $hit/following-sibling::*[1]
+        else 
+            $hit
+            
+    let $starting-node := if($parent/node()[1] eq $parent/node()[last()]) then
+            $parent/node()[1]/node()[1]
+        else
+            $parent/node()[1]
+
+    let $ending-node := if($parent/node()[1] eq $parent/node()[last()]) then
+            $parent/node()[1]/node()[last()]
+        else
+            $parent/node()[last()]
+
+(:    let $before-count := count($hit/preceding-sibling::w |$hit/preceding-sibling::pc) :)
+
+(:    let $before := tic:milestone-chunk-ns($parent/node()[1], $hit, $text)
+    let $after := tic:milestone-chunk-ns($following, $parent/node()[last()], $text)
+:)
+(:    let $before := $parent:)
+(:    let $after := $parent:)
+    let $node := $hit
+    
+    return
+    <itj:result xmlns="http://www.tei-c.org/ns/1.0" 
+            xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" 
+            xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/info">
+            <itj:starting-node>{$starting-node}</itj:starting-node>
+            <itj:ending-node>{$ending-node}</itj:ending-node>
+            <itj:parent>{$parent}</itj:parent>
+            <itj:parent-first>{$parent/node()[1]}</itj:parent-first>
+            <itj:parent-last>{$parent/node()[1]}</itj:parent-last>
+            <itj:following>{$following}</itj:following>
+
+</itj:result>
+        
+    };
+    
 
     declare function local:get-tick-mock($hit as node()) as node() {
     
@@ -49,8 +97,19 @@ declare option exist:serialize "highlight-matches=elements";
 
 (:    let $before-count := count($hit/preceding-sibling::w |$hit/preceding-sibling::pc) :)
 
-    let $before := tic:milestone-chunk-ns($parent/node()[1], $hit, $text)
-    let $after := tic:milestone-chunk-ns($following, $parent/node()[last()], $text)
+    let $starting-node := if($parent/node()[1] eq $parent/node()[last()]) then
+            $parent/node()[1]/node()[1]
+        else
+            $parent/node()[1]
+
+    let $ending-node := if($parent/node()[1] eq $parent/node()[last()]) then
+            $parent/node()[1]/node()[last()]
+        else
+            $parent/node()[last()]
+
+
+    let $before := tic:milestone-chunk-ns($starting-node, $hit, $text)
+    let $after := tic:milestone-chunk-ns($following, $ending-node, $text)
 (:    let $before := $parent:)
 (:    let $after := $parent:)
     let $node := $hit
@@ -236,13 +295,15 @@ declare option exist:serialize "highlight-matches=elements";
     let $documents := local:get-documents($query-terms)
 
     let $hits := local:get-hits($documents, $query-terms)
-    (:let $hits := subsequence($hits, 125, 1)
+(:    let $hits := subsequence($hits, 45, 1)
     return <hits xmlns="http://www.tei-c.org/ns/1.0"  xmlns:exist="http://exist.sourceforge.net/NS/exist">
     {
-    for $hit in $hits 
+    for $hit in $hits
+        return local:get-tick-mock-test($hit)
      return <hit n="{$hit/ancestor::tei:TEI/@n}"> {$hit, $hit/ancestor::tei:p | $hit/ancestor::tei:l | $hit/ancestor::tei:head } </hit>
      }
     </hits>:)
+
 (:    return $hits:)
     
     let $matches := local:get-matches-tic($hits, $query-terms)
