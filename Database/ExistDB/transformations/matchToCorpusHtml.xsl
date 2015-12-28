@@ -52,4 +52,30 @@
             <xsl:apply-templates/>
         </span>
     </xsl:template>
+    <xsl:template match="tei:p | tei:head | tei:div | tei:l">
+        <xsl:choose>
+            <xsl:when test="ancestor::itj:after"/>
+            <xsl:otherwise>
+                <xsl:variable name="n">
+                    <xsl:choose>
+                        <xsl:when test="@n">
+                            <xsl:value-of select="concat(' cislo=', @n)"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+                <span class="itj-structure-start">
+                    <xsl:value-of select="concat('&amp;lt;', local-name(), $n, '&amp;gt;')"/>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:apply-templates/>
+        <xsl:choose>
+            <xsl:when test="ancestor::itj:before"/>
+            <xsl:otherwise>
+                <span class="itj-structure-end">
+                    <xsl:value-of select="concat('&amp;lt;/', local-name(), '&amp;gt;')"/>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 </xsl:stylesheet>

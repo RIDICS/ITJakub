@@ -24,6 +24,48 @@ declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 
 declare option exist:serialize "highlight-matches=elements";
 
+    declare function local:get-tick-mock-parent($hit as node()) as node() {
+        let $result := if($hit/self::tei:p or $hit/self::tei:l) then
+            $hit
+        else
+            local:get-tick-mock-parent($hit/parent::*[1])
+    return $hit
+
+    };
+    
+
+    declare function local:get-tick-mock($hit as node()) as node() {
+    
+(:    let $parent := local:get-tick-mock-parent($hit):)
+    
+    let $parent := $hit/ancestor::tei:p | $hit/ancestor::tei:l | $hit/ancestor::tei:head
+    
+    let $text := $hit/ancestor::tei:text
+
+    let $following := if($hit/following-sibling::*[1]) then
+            $hit/following-sibling::*[1]
+        else 
+            $hit
+
+(:    let $before-count := count($hit/preceding-sibling::w |$hit/preceding-sibling::pc) :)
+
+    let $before := tic:milestone-chunk-ns($parent/node()[1], $hit, $text)
+    let $after := tic:milestone-chunk-ns($following, $parent/node()[last()], $text)
+(:    let $before := $parent:)
+(:    let $after := $parent:)
+    let $node := $hit
+    
+    return
+    <itj:result xmlns="http://www.tei-c.org/ns/1.0" 
+            xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0" 
+            xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0/info">
+        <itj:before>{$before}</itj:before>
+        <itj:match>{$node}</itj:match>
+        <itj:after>{$after}</itj:after>
+        </itj:result>
+        
+    };
+
     declare function local:get-matches-tic($hits as node()*, $query-terms as element(query-terms)) {
     	let $kwic := $query-terms/kwic
     	let $relevant-hits := subsequence($hits, $kwic/@start, $kwic/@count)
@@ -46,7 +88,8 @@ declare option exist:serialize "highlight-matches=elements";
 		let $xml-id := string($hit/ancestor::tei:TEI/@n)
 		let $version-id := substring-after($hit/ancestor::tei:TEI/@change, '#')
 		
-		let $match := tic:get-tic($hit, $kwic/@context-length)
+(:		let $match := tic:get-tic($hit, $kwic/@context-length):)
+        let $match := local:get-tick-mock($hit)
 			return 
 				<CorpusSearchResultContract  xmlns="http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results">
 					<BookXmlId>{$xml-id}</BookXmlId>
@@ -182,7 +225,7 @@ declare option exist:serialize "highlight-matches=elements";
     
     declare function local:get-hits($documents as item()*, $query-terms as element()) {
         let $queries := $query-terms/queries
-        let $hits := $documents//tei:w[ft:query(., $queries/query, $search:query-options)]
+        let $hits := $documents//tei:w[ft:query(., $queries/query, $search:query-options)][@xml:id]
         return $hits
     };
 
@@ -193,6 +236,13 @@ declare option exist:serialize "highlight-matches=elements";
     let $documents := local:get-documents($query-terms)
 
     let $hits := local:get-hits($documents, $query-terms)
+    (:let $hits := subsequence($hits, 125, 1)
+    return <hits xmlns="http://www.tei-c.org/ns/1.0"  xmlns:exist="http://exist.sourceforge.net/NS/exist">
+    {
+    for $hit in $hits 
+     return <hit n="{$hit/ancestor::tei:TEI/@n}"> {$hit, $hit/ancestor::tei:p | $hit/ancestor::tei:l | $hit/ancestor::tei:head } </hit>
+     }
+    </hits>:)
 (:    return $hits:)
     
     let $matches := local:get-matches-tic($hits, $query-terms)
@@ -200,7 +250,4 @@ declare option exist:serialize "highlight-matches=elements";
 
     let $result := local:transform-results-to-html($matches)
     return $result
-    
-    
-    
     

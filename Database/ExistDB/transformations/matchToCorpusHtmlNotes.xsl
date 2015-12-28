@@ -24,7 +24,7 @@
             <span class="note-ref">
                 <xsl:value-of select="@n"/>
             </span>
-            <xsl:apply-templates/>
+            <xsl:apply-templates mode="notes"/>
         </a:string>
     </xsl:template>
 </xsl:stylesheet>
