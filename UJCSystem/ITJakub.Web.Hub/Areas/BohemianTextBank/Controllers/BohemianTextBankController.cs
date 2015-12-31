@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
@@ -14,8 +17,10 @@ using Newtonsoft.Json;
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 {
     [RouteArea("BohemianTextBank")]
-    public class BohemianTextBankController : BaseController
+    public class BohemianTextBankController : AreaController
     {
+        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.TextBank; } }
+
         public ActionResult Index()
         {
             return View("List");
@@ -87,7 +92,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(BookTypeEnumContract.TextBank);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
 
                 return Json(booksWithCategories, JsonRequestBehavior.AllowGet);
             }
@@ -149,6 +154,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 };
 
                 listSearchCriteriaContracts.Add(wordCriteriaList);
+            }
+            else
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
             }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
@@ -254,6 +263,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
                 listSearchCriteriaContracts.Add(wordListCriteria);
             }
+            else
+            {
+                throw new ArgumentException("text can't be null in fulltext search");
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -274,6 +287,12 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
+            {
+                throw new ArgumentException("search in text can't be ommited");
+            }
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -351,6 +370,11 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
 
+            if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
+            {
+                throw new ArgumentException("search in text can't be ommited");
+            }
+
             listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
                 Sorting = (SortEnum) sortingEnum,
@@ -382,7 +406,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, BookTypeEnumContract.TextBank);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -391,7 +415,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, BookTypeEnumContract.TextBank, null, null);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

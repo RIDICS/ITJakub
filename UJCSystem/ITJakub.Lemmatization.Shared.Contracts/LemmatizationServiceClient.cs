@@ -11,6 +11,10 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public LemmatizationServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         public IList<TokenContract> GetTypeaheadToken(string query)
         {
             try
@@ -484,6 +488,84 @@ namespace ITJakub.Lemmatization.Shared.Contracts
             try
             {
                 return Channel.GetCanonicalFormDetail(canonicalFormId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void DeleteTokenCharacteristic(long tokenCharacteristicId)
+        {
+            try
+            {
+                Channel.DeleteTokenCharacteristic(tokenCharacteristicId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void RemoveCanonicalForm(long tokenCharacteristicId, long canonicalFormId)
+        {
+            try
+            {
+                Channel.RemoveCanonicalForm(tokenCharacteristicId, canonicalFormId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void RemoveHyperCanonicalForm(long canonicalFormId)
+        {
+            try
+            {
+                Channel.RemoveHyperCanonicalForm(canonicalFormId);
             }
             catch (CommunicationException ex)
             {

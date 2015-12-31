@@ -9,6 +9,9 @@
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
 
+    private static selectedBookUrlKey = "selectedBookIds";
+    private static selectedCategoryUrlKey = "selectedCategoryIds";
+
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
@@ -400,16 +403,37 @@
         for (var i = 0; i < selectedBooks.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
-            resultString += "selectedBookIds=" + selectedBooks[i].Id;
+            resultString += DropDownSelect2.selectedBookUrlKey + "=" + selectedBooks[i].Id;
         }
 
         for (var i = 0; i < selectedCategories.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
-            resultString += "selectedCategoryIds=" + selectedCategories[i].Id;
+            resultString += DropDownSelect2.selectedCategoryUrlKey + "=" + selectedCategories[i].Id;
         }
 
         return resultString;
+    }
+
+    setStateFromUrlString(urlString: string) {
+        var selectedBooksAndCategories: string[] = urlString.split("&");
+        var bookIds = new Array<number>();
+        var categoryIds = new Array<number>();
+
+        for (var i = 0; i < selectedBooksAndCategories.length; i++) {
+            var item = selectedBooksAndCategories[i];
+            var indexOfEqualSign = item.indexOf("=");
+            var name = item.slice(0, indexOfEqualSign);
+            var value = parseInt(item.slice(indexOfEqualSign + 1, item.length));
+
+            if (name === DropDownSelect2.selectedBookUrlKey) {
+                bookIds.push(value);
+            } else if (name === DropDownSelect2.selectedCategoryUrlKey) {
+                categoryIds.push(value);
+            }
+        }
+
+        this.makeAndRestore(categoryIds, bookIds);
     }
 }
 
@@ -448,7 +472,7 @@ interface IDropDownBookResult {
     Title: string;
     CategoryIds: Array<number>;
 }
-
+    
 interface IDropDownCategoryResult {
     Id: number;
     Description: string;

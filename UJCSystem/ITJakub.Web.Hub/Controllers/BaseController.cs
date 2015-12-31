@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
+using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Identity;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -36,6 +37,11 @@ namespace ITJakub.Web.Hub.Controllers
             var password = GetCommunicationToken();
 
             return m_communication.GetStreamingClientAuthenticated(username, password);
+        }
+
+        public LemmatizationServiceClient GetLemmationzationServiceClient()
+        {
+            return m_communication.GetLemmatizationClient();
         }
 
         private bool IsUserLoggedIn()

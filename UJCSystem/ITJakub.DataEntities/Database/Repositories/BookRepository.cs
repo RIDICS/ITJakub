@@ -31,6 +31,19 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual Book FindBookById(long bookId)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<Book>()
+                    .Where(x => x.Id == bookId)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual BookVersion GetLastVersionForBook(string bookGuid)
         {
             using (var session = GetSession())
@@ -41,6 +54,24 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var result = session.QueryOver(() => bookVersionAlias)
                     .JoinQueryOver(x => x.Book, () => bookAlias)
                     .Where(x => x.Guid == bookGuid)
+                    .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual BookVersion GetLastVersionForBookByBookId(long bookId)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
+                var result = session.QueryOver(() => bookVersionAlias)
+                    .JoinQueryOver(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.Id == bookId)
                     .And(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
                     .SingleOrDefault();
 
@@ -110,6 +141,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .SingleOrDefault<BookVersion>();
             }
         }
+
 
         [Transaction(TransactionMode.Requires)]
         public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat, BookTypeEnum requestedBookType)
@@ -628,6 +660,19 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<Book>();
 
                 return books;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual IList<TermCategory> GetTermCategoriesWithTerms()
+        {
+            using (var session = GetSession())
+            {
+                var termCategories = session.QueryOver<TermCategory>()
+                    .Fetch(x => x.Terms).Eager
+                    .TransformUsing(Transformers.DistinctRootEntity)
+                    .List<TermCategory>();
+                return termCategories;
             }
         }
     }

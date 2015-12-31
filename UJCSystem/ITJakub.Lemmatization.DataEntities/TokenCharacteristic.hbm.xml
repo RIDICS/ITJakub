@@ -16,7 +16,7 @@
 
     <many-to-one name="Token" class="Token" cascade="save-update"/>
 
-    <bag name="CanonicalForms" cascade="all" table="CanonicalForm_TokenCharacteristic">
+    <bag name="CanonicalForms" cascade="save-update" table="CanonicalForm_TokenCharacteristic">
       <key column ="TokenCharacteristic"/>
       <many-to-many class="CanonicalForm" column="CanonicalForm"/>
     </bag>

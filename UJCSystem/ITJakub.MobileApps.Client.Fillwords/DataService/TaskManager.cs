@@ -16,7 +16,7 @@ namespace ITJakub.MobileApps.Client.Fillwords.DataService
     public class TaskManager
     {
         private const string EvaluationMessageType = "Evaluation";
-        private const PollingInterval ResultsPollingInterval = PollingInterval.VerySlow;
+        private const PollingInterval ResultsPollingInterval = PollingInterval.Slow;
         private readonly ISynchronizeCommunication m_applicationCommunication;
         private readonly IPollingService m_pollingService;
         private TaskViewModel m_currentTaskViewModel;

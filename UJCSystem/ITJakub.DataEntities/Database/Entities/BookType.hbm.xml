@@ -7,9 +7,9 @@
     <property name="Type">
       <column name="Type" sql-type="smallint" not-null="true" />
     </property>
-    <bag name="Books" inverse="true">
-      <key column="BookType" />
-      <one-to-many class="Book" />
+    <bag name="BookVersions" inverse="true">
+      <key column="DefaultBookType" />
+      <one-to-many class="BookVersion" />
     </bag>
     <bag name="Transformations" inverse="true">
       <key column="BookType" />

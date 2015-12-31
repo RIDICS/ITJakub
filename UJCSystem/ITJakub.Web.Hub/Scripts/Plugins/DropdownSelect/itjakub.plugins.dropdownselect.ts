@@ -28,11 +28,11 @@ class DropDownSelectCallbackDelegate {
     dataLoadedCallback: (rootCategoryId) => void;
 
     constructor() {
-        this.mockup();
+        this.makeDefaults();
     }
 
     //working callbacks for advanced search
-    private mockup() {
+    private makeDefaults() {
         this.getTypeFromResponseCallback = (response): string => {
             return response["type"];
         };
@@ -149,12 +149,14 @@ class DropDownSelect {
         this.makeHeader(dropDownDiv);
         this.makeBody(dropDownDiv);
 
-        $(document).click((event) => {
+        $(document).unbind("click.dropdown");
+        $(document).bind("click.dropdown", (event) => {
             if (!$(event.target).parents().is(dropDownDiv)) {
                 this.hideBody();
             }
         });
 
+        $(this.dropDownSelectContainer).empty();
         $(this.dropDownSelectContainer).append(dropDownDiv);
     }
 

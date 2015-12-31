@@ -414,6 +414,32 @@ namespace ITJakub.Core.SearchService
             }
         }
 
+        public string GetBookEditionNote(string bookGuid, string versionId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel)
+        {
+            try
+            {
+                return Channel.GetBookEditionNote(bookGuid, versionId, transformationName, outputFormat, transformationLevel);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;

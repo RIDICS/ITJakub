@@ -6,8 +6,29 @@ function initSearch() {
     var resultsCountOnPage = 30;
     var paginationMaxVisibleElements = 5;
 
-    var bookIds = new Array();
-    var categoryIds = new Array();
+    var defaultErrorMessage = "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+
+    const urlSearchKey = "search";
+    const urlPageKey = "page";
+    const urlSelectionKey = "selected";
+    const urlSortAscKey = "sortAsc";
+    const urlSortCriteriaKey = "sortCriteria";
+    const urlContextSizeKey = "contextSize";
+
+    var readyForInit = false;
+    var notInitialized = true;
+
+    var bookIdsInQuery = new Array();
+    var categoryIdsInQuery = new Array();
+
+    var selectedBookIds = new Array();
+    var selectedCategoryIds = new Array();
+    
+    var booksSelector: DropDownSelect2;
+    var sortBar: SortBar;
+    var paginator: Pagination;
+
+    var initPage: number = null;
 
     $("#commentCheckbox").change(() => {
         var checkbox = $("#commentCheckbox");
@@ -20,11 +41,64 @@ function initSearch() {
         }
     });
 
-    function sortOrderChanged() {
-        var textInTextField = search.getTextFromTextField();
-        search.processSearchQuery(search.getLastQuery());
-        search.writeTextToTextField(textInTextField);
+    function initializeFromUrlParams() {
+        if (readyForInit && notInitialized) {
+
+            notInitialized = false;
+
+            var page = getQueryStringParameterByName(urlPageKey);
+
+            if (page) {
+                initPage = parseInt(page);
+            }
+
+            var contextSize = getQueryStringParameterByName(urlContextSizeKey);
+            if (contextSize) {
+                $("#contextPositionsSelect").val(contextSize);
+            }
+
+            var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
+            var sortCriteria = getQueryStringParameterByName(urlSortCriteriaKey);
+
+            if (sortedAsc && sortCriteria) {
+                sortBar.setSortedAsc(sortedAsc === "true");
+                sortBar.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+            }
+
+            var selected = getQueryStringParameterByName(urlSelectionKey);
+
+            var searched = getQueryStringParameterByName(urlSearchKey);
+            search.writeTextToTextField(searched);
+
+            if (selected) {
+                booksSelector.setStateFromUrlString(selected);
+            }
+
+        } else if (!notInitialized) {
+            search.processSearch();
+        } else {
+            readyForInit = true;
+        }
+
     }
+
+    function actualizeSelectedBooksAndCategoriesInQuery() {
+        bookIdsInQuery = selectedBookIds;
+        categoryIdsInQuery = selectedCategoryIds;
+    }
+
+    function sortOrderChanged() {
+        if (paginator) {
+            paginator.goToPage(1);    
+        }
+    }
+
+    var sortBarContainer = "#listResultsHeader";
+
+    $(sortBarContainer).empty();
+    sortBar = new SortBar(sortOrderChanged);
+    var sortBarHtml = sortBar.makeSortBar(sortBarContainer);
+    $(sortBarContainer).append(sortBarHtml);
 
     function showLoading() {
         $("#result-table").hide();
@@ -34,11 +108,20 @@ function initSearch() {
         $("#corpus-search-results-table-div-loader").addClass("loader");
     }
 
+
     function hideLoading() {
         $("#corpus-search-results-table-div-loader").removeClass("loader");
         $("#corpus-search-results-table-div-loader").hide();
         $("#result-abbrev-table").show();
         $("#result-table").show();
+    }
+
+    function printErrorMessage(message: string) {
+        hideLoading();
+        var corpusErrorDiv = $("#corpus-search-results-table-div-loader");
+        $(corpusErrorDiv).empty();
+        $(corpusErrorDiv).html(message);
+        $(corpusErrorDiv).show();
     }
 
     function fillResultsIntoTable(results: Array<any>) {
@@ -53,6 +136,7 @@ function initSearch() {
             var bibleVerseContext = result["BibleVerseResultContext"];
             var contextStructure = pageContext["ContextStructure"];
             var bookXmlId = result["BookXmlId"];
+            var bookId = result["BookId"];
             var pageXmlId = pageContext["PageXmlId"];
             var acronym = result["Acronym"];
             var notes = result["Notes"];
@@ -60,6 +144,7 @@ function initSearch() {
             var tr = document.createElement("tr");
             $(tr).addClass("search-result");
             $(tr).data("bookXmlId", bookXmlId);
+            $(tr).data("bookId", bookId);
             $(tr).data("versionXmlId", result["VersionXmlId"]);
             $(tr).data("author", result["Author"]);
             $(tr).data("title", result["Title"]);
@@ -178,8 +263,8 @@ function initSearch() {
 
         if (typeof json === "undefined" || json === null || json === "") return;
         const start = (pageNumber - 1) * resultsCountOnPage;
-        const sortingEnum = SortEnum.Title; //TODO
-        const sortAsc = true; //TODO
+        var sortingEnum = sortBar.getSortCriteria();
+        var sortAsc = sortBar.isSortedAsc();
 
         showLoading();
 
@@ -187,22 +272,29 @@ function initSearch() {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusPaged",
-            data: { json: json, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            data: { json: json, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 hideLoading();
                 fillResultsIntoTable(response["results"]);
+                updateQueryStringParameter(urlSearchKey, json);
+                updateQueryStringParameter(urlPageKey, pageNumber);
+                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+                updateQueryStringParameter(urlContextSizeKey, contextLength);
+            },error: response => {
+                printErrorMessage(defaultErrorMessage);
             }
         });
     }
 
     function corpusBasicSearchPaged(text: string, pageNumber: number, contextLength: number) {
 
-        //if (typeof text === "undefined" || text === null || text === "") return;
+        if (typeof text === "undefined" || text === null || text === "") return;
         const start = (pageNumber - 1) * resultsCountOnPage;
-        const sortingEnum = SortEnum.Title; //TODO
-        const sortAsc = true; //TODO
+        var sortingEnum = sortBar.getSortCriteria();
+        var sortAsc = sortBar.isSortedAsc();
 
         showLoading();
 
@@ -210,19 +302,26 @@ function initSearch() {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextPaged",
-            data: { text: text, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            data: { text: text, start: start, count: resultsCountOnPage, contextLength: contextLength, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 hideLoading();
                 fillResultsIntoTable(response["results"]);
+                updateQueryStringParameter(urlSearchKey, text);
+                updateQueryStringParameter(urlPageKey, pageNumber);
+                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+                updateQueryStringParameter(urlContextSizeKey, contextLength);
+            }, error: response => {
+                printErrorMessage(defaultErrorMessage);
             }
         });
     }
 
     function searchForPageNumber(pageNumber: number) {
         actualPage = pageNumber;
-        const contextLength = $("#contextPositionsSelect").val();
+        var contextLength = $("#contextPositionsSelect").val();
         if (search.isLastQueryJson()) {
             corpusAdvancedSearchPaged(search.getLastQuery(), pageNumber, contextLength);
         } else {
@@ -231,16 +330,25 @@ function initSearch() {
     }
 
     function createPagination(resultsCount: number) {
-        const paginatorContainer = document.getElementById("paginationContainer");
-        const paginator = new Pagination(<any>paginatorContainer, paginationMaxVisibleElements);
-        paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber);
+        var paginatorContainer = document.getElementById("paginationContainer");
+        paginator = new Pagination(<any>paginatorContainer, paginationMaxVisibleElements);
+
+        var pages = Math.ceil(resultsCount / resultsCountOnPage);
+
+        if (initPage && initPage <= pages) {
+            paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber, initPage);
+        } else {
+            paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber);
+        }
+
         const totalResultsDiv = document.getElementById("totalResultCountDiv");
         totalResultsDiv.innerHTML = resultsCount.toString();
     }
 
     function corpusBasicSearchCount(text: string) {
 
-        //if (typeof text === "undefined" || text === null || text === "") return;
+        if (typeof text === "undefined" || text === null || text === "") return;
+        actualizeSelectedBooksAndCategoriesInQuery();
 
         showLoading();
 
@@ -248,31 +356,44 @@ function initSearch() {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchFulltextCount",
-            data: { text: text, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            data: { text: text, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 var count = response["count"];
                 createPagination(count);
+                updateQueryStringParameter(urlSearchKey, text);
+                updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(booksSelector.getState()));
+                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+            }, error: response => {
+                printErrorMessage(defaultErrorMessage);
             }
         });
     }
 
     function corpusAdvancedSearchCount(json: string) {
-        if (typeof json === "undefined" || json === null || json === "") return;
 
+        if (typeof json === "undefined" || json === null || json === "") return;
+        actualizeSelectedBooksAndCategoriesInQuery();
         showLoading();
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchCorpusResultsCount",
-            data: { json: json, selectedBookIds: bookIds, selectedCategoryIds: categoryIds },
+            data: { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
             success: response => {
                 var count = response["count"];
                 createPagination(count);
+                updateQueryStringParameter(urlSearchKey, json);
+                updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(booksSelector.getState()));
+                updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
+                updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
+            }, error: response => {
+                printErrorMessage(defaultErrorMessage);
             }
         });
     }
@@ -290,32 +411,32 @@ function initSearch() {
 
     search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
     search.makeSearch(enabledOptions);
-
-    var editionsSelector: DropDownSelect2;
+    
     const callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
-        bookIds = new Array();
+        selectedBookIds = new Array();
 
         for (var i = 0; i < state.SelectedItems.length; i++) {
-            bookIds.push(state.SelectedItems[i].Id);
+            selectedBookIds.push(state.SelectedItems[i].Id);
         }
 
-        categoryIds = new Array();
+        selectedCategoryIds = new Array();
 
         for (var i = 0; i < state.SelectedCategories.length; i++) {
-            categoryIds.push(state.SelectedCategories[i].Id);
+            selectedCategoryIds.push(state.SelectedCategories[i].Id);
         }
 
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
     };
     callbackDelegate.dataLoadedCallback = () => {
-        var selectedIds = editionsSelector.getSelectedIds();
-        bookIds = selectedIds.selectedBookIds;
-        categoryIds = selectedIds.selectedCategoryIds;
+        var selectedIds = booksSelector.getSelectedIds();
+        selectedBookIds = selectedIds.selectedBookIds;
+        selectedCategoryIds = selectedIds.selectedCategoryIds;
+        initializeFromUrlParams();
     };
 
-    editionsSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
-    editionsSelector.makeDropdown();
+    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
+    booksSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {
         var undefinedReplaceString = "&lt;Nezadáno&gt;";
@@ -325,6 +446,10 @@ function initSearch() {
         document.getElementById("detail-dating").innerHTML = typeof $(tableRow).data("dating") !== "undefined" && $(tableRow).data("dating") !== null ? $(tableRow).data("dating") : undefinedReplaceString;
         document.getElementById("detail-dating-century").innerHTML = undefinedReplaceString; //TODO ask where is this info stored
         document.getElementById("detail-abbrev").innerHTML = typeof $(tableRow).data("acronym") !== "undefined" && $(tableRow).data("acronym") !== null ? $(tableRow).data("acronym") : undefinedReplaceString;
+
+        //Edition note
+        var editionNoteAnchor: HTMLAnchorElement = <HTMLAnchorElement>(document.getElementById("detail-edition-note-href"));
+        editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + $(tableRow).data("bookId");
 
         var folioHref = document.createElement("a");
         folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookXmlId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageXmlId");
@@ -365,4 +490,6 @@ function initSearch() {
     $("#corpus-search-results-abbrev-table-div").scroll((event: Event) => {
         $("#corpus-search-results-table-div").scrollTop($(event.target).scrollTop());
     });
+
+    initializeFromUrlParams();
 }

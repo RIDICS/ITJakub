@@ -8,6 +8,7 @@
         Hangman,
         Crosswords,
         Fillwords,
-        SynchronizedReading
+        SynchronizedReading,
+        Fillwords2
     }
 }

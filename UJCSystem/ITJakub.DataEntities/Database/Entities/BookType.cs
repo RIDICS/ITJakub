@@ -7,8 +7,10 @@ namespace ITJakub.DataEntities.Database.Entities
     public class BookType : IEquatable<BookType>
     {
         public virtual int Id { get; set; }
+
         public virtual BookTypeEnum Type { get; set; }
-        public virtual IList<Book> Books { get; set; }
+        public virtual IList<BookVersion> BookVersions { get; set; }
+
         public virtual IList<Transformation> Transformations { get; set; }
 
         public virtual bool Equals(BookType other)

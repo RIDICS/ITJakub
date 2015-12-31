@@ -156,33 +156,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<SearchResultContract> Search(string term)
-        {
-            try
-            {
-                return Channel.Search(term);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search failed with: {0}", ex);
-                throw;
-            }
-
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search failed with: {0}", ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("Search timeouted with: {0}", ex);
-                throw;
-            }
-        }
-
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             try
@@ -589,12 +562,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
-            string query)
+        public IList<string> GetTypeaheadDictionaryHeadwords(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract? bookType)
         {
             try
             {
-                return Channel.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query);
+                return Channel.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -700,11 +672,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
+        public int GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetHeadwordCount(selectedCategoryIds, selectedBookIds);
+                return Channel.GetHeadwordCount(selectedCategoryIds, selectedBookIds, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -727,12 +699,12 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
-            int start, int count)
+        public HeadwordListContract GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int start, int count,
+            BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count);
+                return Channel.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, count, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -755,11 +727,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        public long GetHeadwordRowNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, BookTypeEnumContract bookType)
         {
             try
             {
-                return Channel.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query);
+                return Channel.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -782,13 +754,12 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds,
-            string headwordBookId, string headwordEntryXmlId)
+        public long GetHeadwordRowNumberById(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string headwordBookId, string headwordEntryXmlId, BookTypeEnumContract bookType)
         {
             try
             {
                 return Channel.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId,
-                    headwordEntryXmlId);
+                    headwordEntryXmlId, bookType);
             }
             catch (CommunicationException ex)
             {
@@ -2058,7 +2029,56 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public IList<TermCategoryContract> GetTermCategoriesWithTerms()
+        {
+            try
+            {
+                return Channel.GetTermCategoriesWithTerms();
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
 
-
+        public string GetBookEditionNote(long bookId, OutputFormatEnumContract outputFormat)
+        {
+            try
+            {
+                return Channel.GetBookEditionNote(bookId, outputFormat);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
     }
 }

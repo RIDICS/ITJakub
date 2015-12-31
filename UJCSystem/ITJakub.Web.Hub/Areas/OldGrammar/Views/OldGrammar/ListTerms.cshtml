@@ -1,0 +1,28 @@
+﻿@model ITJakub.Web.Hub.Areas.OldGrammar.Models.TermCategoriesWithTermsModel
+@section styles{
+    @Styles.Render("~/itjakub/oldgrammar/css")
+}
+
+@{
+    ViewBag.Title = "Mluvnice - Seznam termínů";
+}
+
+<div>
+    <h1>Seznam termínů</h1>
+    <div id="terms-list">
+        @foreach (var termCategory in @Model.TermCategories)
+        {
+            <div class="term-category">
+                <div class="term-category-header"><span class="term-category-name">@termCategory.Name</span></div>
+                <div class="term-category-body">
+                    <ul>
+                        @foreach (var term in @termCategory.Terms)
+                        {
+                            <li><a href=@string.Format("/OldGrammar/OldGrammar/Search?search={0}", @Uri.EscapeDataString(@term.Text))>@term.Text</a></li>
+                        }
+                    </ul>
+                 </div>
+            </div>
+        }
+    </div>
+</div>

@@ -58,5 +58,8 @@ namespace ITJakub.Shared.Contracts
         [OperationContract]
         string GetEditionPageFromSearch(IList<SearchCriteriaContract> searchCriterias, string bookId,
             string versionId, string pageXmlId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
+
+        [OperationContract]
+        string GetBookEditionNote(string bookId, string versionId, string transformationName, OutputFormatEnumContract outputFormat, ResourceLevelEnumContract transformationLevel);
     }
 }

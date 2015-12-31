@@ -1,5 +1,4 @@
 ﻿@using ITJakub.Web.Hub.Identity
-@using Microsoft.AspNet.Identity
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,6 +41,7 @@
         </div>
     </div>
 </div>
+<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization)) {@Html.Raw("EditLemmatization")} "></div>
 
 <div id="main-plugins-menu" class="main-plugins-menu">
 <ul>
@@ -146,6 +146,11 @@
         <li>
             <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
                 <span>Vyhledávání</span></a>
+        </li>
+        <li>
+            <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
+                <span>Seznam termínů</span>
+            </a>
         </li>
         <li>
             <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
@@ -267,9 +272,54 @@
 @if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
 {
     <li id="admin-menu" class="has-sub last">
-        <a href='#'>
-            <span>Administrace</span>
-        </a>
+        @if (User.IsInRole(CustomRole.CanUploadBooks))
+        {
+            <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanEditLemmatization))
+        {
+            <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanReadLemmatization))
+        {
+            <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+        {
+            <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanManagePermissions))
+        {
+            <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanManageFeedbacks))
+        {
+            <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
+                <span>Administrace</span>
+            </a>
+        }
+        else if (User.IsInRole(CustomRole.CanAddNews))
+        {
+            <a href='@Url.Action("Add", "News", new {area = ""})'>
+                <span>Administrace</span>
+            </a>
+        }
+        else
+        {
+            <a href='#'>
+                <span>Administrace</span>
+            </a>
+        }
         <ul>
             @if (User.IsInRole(CustomRole.CanUploadBooks))
             {
@@ -280,20 +330,28 @@
                 </li>
             }
 
-            <li>
-                <a href="@Url.Action("Lemmatization", "Lemmatization", new {area = ""})">
-                    <span>Lemmatizace</span></a>
-            </li>
-            <li>
-                <a href="@Url.Action("LemmatizationList", "Lemmatization", new {area = ""})">
-                    <span>Lemmatizace - procházení</span>
-                </a>
-            </li>
-            <li>
-                <a href="@Url.Action("Derivation", "Lemmatization", new {area = ""})">
-                    <span>Derivace hláskových podob</span>
-                </a>
-            </li>
+            @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                        <span>Lemmatizace</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                        <span>Lemmatizace - procházení</span>
+                    </a>
+                </li>
+            }
+
+            @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+            {
+                <li>
+                    <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                        <span>Derivace hláskových podob</span>
+                    </a>
+                </li>
+            }
 
             @if (User.IsInRole(CustomRole.CanManagePermissions))
             {
@@ -308,7 +366,6 @@
                     </a>
                 </li>
             }
-
 
             @if (User.IsInRole(CustomRole.CanManageFeedbacks))
             {
@@ -385,11 +442,11 @@
                                                   var now = DateTime.Now;
                                                   var releaseDate = new DateTime(2015, 1, 1);
                                                   var difference = now - releaseDate;
-                                                  DateTime age = DateTime.MinValue + difference; //Min value is 1.1. 0001
+                                                  var age = DateTime.MinValue + difference; //Min value is 1.1. 0001
 
-                                                  int years = age.Year - 1;
-                                                  int months = age.Month - 1;
-                                                  int days = age.Day - 1;
+                                                  var years = age.Year - 1;
+                                                  var months = age.Month - 1;
+                                                  var days = age.Day - 1;
 
                                                   @: @years lety, @months měsíci a @days dny
                                               }

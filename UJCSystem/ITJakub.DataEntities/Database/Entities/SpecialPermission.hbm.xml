@@ -101,5 +101,14 @@
       
     </subclass>
     
+    <subclass name="DerivateLemmatizationPermission"
+      discriminator-value="DerivateLemmatization">
+
+      <property name="CanDerivateLemmatization">
+        <column name="CanDerivateLemmatization" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
   </class>
 </hibernate-mapping>

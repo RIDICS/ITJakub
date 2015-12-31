@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace ITJakub.Lemmatization.Shared.Contracts
 {
     [DataContract]
-    [KnownType(typeof(CanonicalFormContract))]
+    [KnownType(typeof(CanonicalFormTypeaheadContract))]
     [KnownType(typeof(InverseCanonicalFormContract))]
-    public class CanonicalFormTypeaheadContract
+    public class CanonicalFormContract
     {
         [DataMember]
         public long Id { get; set; }
@@ -22,14 +22,14 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     }
 
     [DataContract]
-    public class CanonicalFormContract : CanonicalFormTypeaheadContract
+    public class CanonicalFormTypeaheadContract : CanonicalFormContract
     {
         [DataMember]
         public HyperCanonicalFormContract HyperCanonicalForm { get; set; }
     }
 
     [DataContract]
-    public class InverseCanonicalFormContract : CanonicalFormTypeaheadContract
+    public class InverseCanonicalFormContract : CanonicalFormContract
     {
         [DataMember]
         public IList<InverseTokenCharacteristicContract> CanonicalFormFor { get; set; }

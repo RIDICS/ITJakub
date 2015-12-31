@@ -3,21 +3,27 @@
     private actualSortOptionValue: SortEnum;
     private sortChangeCallback: () => void;
 
+    private ascSortOrder = 1;
+    private descSortOrder = -1;
+
+    private sortBarContainer: JQuery;
 
     constructor(sortChangeCallback: () => void) {
-        this.actualSortOrder = 1;
+        this.actualSortOrder = this.ascSortOrder;
         this.actualSortOptionValue = SortEnum.Title;
         this.sortChangeCallback = sortChangeCallback;
     }
 
-    public makeSortBar(booksContainer: string, sortBarContainer: string): HTMLDivElement {
+    public makeSortBar(sortBarContainer: string): HTMLDivElement {
+        this.sortBarContainer = $(sortBarContainer);
+
         var sortBarDiv: HTMLDivElement = document.createElement('div');
         $(sortBarDiv).addClass('bib-sortbar');
 
         var select: HTMLSelectElement = document.createElement('select');
 
         $(select).change(() => {
-            var selectedOptionValue: string = $(sortBarContainer).find('div.bib-sortbar').find('select').find("option:selected").val();
+            var selectedOptionValue: string = this.sortBarContainer.find('div.bib-sortbar').find('select').find("option:selected").val();
             this.changeSortCriteria(parseInt(selectedOptionValue));
         });
 
@@ -53,7 +59,7 @@
     }
 
     private changeSortOrder() {
-        this.actualSortOrder = -this.actualSortOrder;
+        this.actualSortOrder = (this.actualSortOrder === this.ascSortOrder) ? this.descSortOrder : this.ascSortOrder;
         this.sortingChanged();
     }
 
@@ -74,12 +80,34 @@
     }
 
     public isSortedAsc(): boolean {
-        return this.actualSortOrder > 0;
+        return this.actualSortOrder === this.ascSortOrder;
+    }
+
+    public setSortedAsc(sortAsc: boolean) {
+        this.actualSortOrder = sortAsc ? this.ascSortOrder : this.descSortOrder;
+        this.actualizeSortOrderButton();
     }
 
     public getSortCriteria(): SortEnum {
         return this.actualSortOptionValue;
     }
+
+    public setSortCriteria(sortCriteria: SortEnum) {
+        this.actualSortOptionValue = sortCriteria;
+        this.actualizeSelectedOption();
+    }
+
+    private actualizeSelectedOption() {
+        this.sortBarContainer.find('div.bib-sortbar').find('select').val(this.actualSortOptionValue.toString());
+    }
+
+    private actualizeSortOrderButton() {
+        var sordOrderButtonIcon = this.sortBarContainer.find('div.bib-sortbar').find('.sort-button').find(".glyphicon");
+        $(sordOrderButtonIcon).removeClass("glyphicon-arrow-up glyphicon-arrow-down");
+        this.isSortedAsc() ? $(sordOrderButtonIcon).addClass("glyphicon-arrow-up") : $(sordOrderButtonIcon).addClass("glyphicon-arrow-down");
+    }
+
+    
 }
 
 /*

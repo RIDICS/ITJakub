@@ -213,7 +213,16 @@
     <Compile Include="Areas\CardFiles\CardFilesAreaRegistration.cs" />
     <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
     <Compile Include="Areas\CardFiles\RouteConfig.cs" />
+    <Compile Include="Areas\Derivation\BundleConfig.cs" />
+    <Compile Include="Areas\Derivation\Controllers\DerivationController.cs" />
+    <Compile Include="Areas\Derivation\DerivationAreaRegistration.cs" />
+    <Compile Include="Areas\Derivation\RouteConfig.cs" />
     <Compile Include="Areas\Dictionaries\BundleConfig.cs" />
+    <Compile Include="Areas\Lemmatization\BundleConfig.cs" />
+    <Compile Include="Areas\Lemmatization\LemmatizationAreaRegistration.cs" />
+    <Compile Include="Areas\Lemmatization\RouteConfig.cs" />
+    <Compile Include="Areas\OldGrammar\Models\TermCategoriesWithTermsModel.cs" />
+    <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
     <Compile Include="Areas\Tools\BundleConfig.cs" />
     <Compile Include="Areas\Tools\Controllers\ToolsController.cs" />
@@ -227,10 +236,11 @@
     <Compile Include="AutoMapperProfiles\WordCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\WordListCriteriaDescriptionProfile.cs" />
     <Compile Include="Container.cs" />
-    <Compile Include="Controllers\LemmatizationController.cs" />
+    <Compile Include="Areas\Lemmatization\Controllers\LemmatizationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="CommunicationProvider.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
+    <Compile Include="Controllers\EditionNoteController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
@@ -315,6 +325,12 @@
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.min.css">
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.css">
+      <DependentUpon>itjakub.derivation.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.min.css">
+      <DependentUpon>itjakub.derivation.css</DependentUpon>
+    </Content>
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
     </Content>
@@ -339,11 +355,17 @@
     <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
       <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
     </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.min.css">
+      <DependentUpon>itjakub.professionalliterature.content.css</DependentUpon>
+    </Content>
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
       <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
     </Content>
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.css">
       <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
+    </Content>
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
+      <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
     <Content Include="Areas\Tools\Content\itjakub.tools.css">
       <DependentUpon>itjakub.tools.less</DependentUpon>
@@ -376,14 +398,17 @@
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
-    <Content Include="Content\Lemmatization\itjakub.lemmatization.css">
+    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.css">
       <DependentUpon>itjakub.lemmatization.less</DependentUpon>
     </Content>
-    <Content Include="Content\Lemmatization\itjakub.lemmatization.min.css">
+    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
     <Content Include="Content\Permission\itjakub.permission.css">
       <DependentUpon>itjakub.permission.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Permission\itjakub.permission.min.css">
+      <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
@@ -676,7 +701,16 @@
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\ListTerms.cshtml" />
+    <Content Include="Areas\Lemmatization\Views\web.config" />
+    <Content Include="Areas\Derivation\Views\web.config" />
+    <Content Include="Areas\Lemmatization\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.less" />
     <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
@@ -694,7 +728,7 @@
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
     <Content Include="Content\Plugins\ITJakub.Pagination.less" />
-    <Content Include="Content\Lemmatization\itjakub.lemmatization.less" />
+    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.less" />
     <Content Include="Content\Permission\itjakub.permission.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
@@ -742,13 +776,14 @@
     <Content Include="Views\Home\Links.cshtml" />
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
-    <Content Include="Views\Lemmatization\Lemmatization.cshtml" />
-    <Content Include="Views\Lemmatization\LemmatizationList.cshtml" />
+    <Content Include="Areas\Lemmatization\Views\Lemmatization\Lemmatization.cshtml" />
+    <Content Include="Areas\Lemmatization\Views\Lemmatization\List.cshtml" />
     <Content Include="Views\Feedback\Feedback.cshtml" />
     <Content Include="Views\Permission\UserPermission.cshtml" />
     <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
-    <Content Include="Views\Lemmatization\Derivation.cshtml" />
+    <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
+    <Content Include="Views\EditionNote\EditionNote.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -760,10 +795,13 @@
     <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
+    <Folder Include="Areas\Derivation\Models\" />
+    <Folder Include="Areas\Derivation\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
-    <Folder Include="Areas\OldGrammar\Models\" />
+    <Folder Include="Areas\Lemmatization\Models\" />
+    <Folder Include="Areas\Lemmatization\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
     <Folder Include="Areas\ProfessionalLiterature\Models\" />
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
@@ -777,8 +815,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.ts" />
-    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.List.ts" />
-    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.ts" />
+    <TypeScriptCompile Include="Areas\Bibliographies\Scripts\itjakub.bibliographies.search.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.list.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiantextbank.search.ts" />
     <TypeScriptCompile Include="Areas\CardFiles\Scripts\itjakub.cardfileManager.ts" />
@@ -794,9 +831,9 @@
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.search.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.list.ts" />
     <TypeScriptCompile Include="Areas\Tools\Scripts\itjakub.tools.ts" />
-    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.derivation.ts" />
-    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.list.ts" />
-    <TypeScriptCompile Include="Scripts\Lemmatization\itjakub.lemmatization.ts" />
+    <TypeScriptCompile Include="Areas\Derivation\Scripts\itjakub.derivation.ts" />
+    <TypeScriptCompile Include="Areas\Lemmatization\Scripts\itjakub.lemmatization.list.ts" />
+    <TypeScriptCompile Include="Areas\Lemmatization\Scripts\itjakub.lemmatization.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.interfaces.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
@@ -893,9 +930,9 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets'))" />
+    <Error Condition="!Exists('..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets'))" />
   </Target>
-  <Import Project="..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.7.265\build\BuildWebCompiler.targets')" />
+  <Import Project="..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets" Condition="Exists('..\packages\BuildWebCompiler.1.8.270\build\BuildWebCompiler.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

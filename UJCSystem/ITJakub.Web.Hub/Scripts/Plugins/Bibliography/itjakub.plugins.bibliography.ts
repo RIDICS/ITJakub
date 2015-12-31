@@ -63,7 +63,7 @@ class BibliographyModule {
         this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
         $(this.sortBarContainer).empty();
         this.sortBar = new SortBar(this.sortChangeCallback);
-        var sortBarHtml = this.sortBar.makeSortBar(<any>this.booksContainer, this.sortBarContainer);
+        var sortBarHtml = this.sortBar.makeSortBar(this.sortBarContainer);
         $(this.sortBarContainer).append(sortBarHtml);
     }
 
@@ -144,11 +144,11 @@ class BibliographyModule {
         this.paginator.goToPage(pageNumber);
     }
 
-    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number) {
+    public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number, initPageNumber: number = 1) {
         this.booksCount = booksCount;
         this.booksOnPage = booksOnPage;
         this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
-        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback);
+        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback, initPageNumber);
 
     }
 
@@ -173,12 +173,21 @@ class BibliographyModule {
         return this.sortBar.isSortedAsc();
     }
 
+    public setSortedAsc(isSortedAsc: boolean) {
+        this.sortBar.setSortedAsc(isSortedAsc);
+    }
+
     public getSortCriteria(): SortEnum {
         return this.sortBar.getSortCriteria();
+    }
+
+    public setSortCriteria(sortCriteria: SortEnum) {
+        return this.sortBar.setSortCriteria(sortCriteria);
     }
 }
 
 interface IBookInfo {
+    BookId: number;
     BookXmlId: string;
     BookType: BookTypeEnum;
     Title: string;
