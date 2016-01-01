@@ -1,8 +1,8 @@
 ﻿
 
 interface IPrintableItem {
-    Name: string,
-    Description: string,
+    Name: string;
+    Description: string;
 }
 
 

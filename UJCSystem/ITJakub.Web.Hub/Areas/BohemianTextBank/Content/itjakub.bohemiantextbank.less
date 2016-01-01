@@ -21,6 +21,10 @@
     display: block;
     padding-top: 15px;
     margin-bottom: 15px;
+
+    .itj-structure-start, .itj-structure-end {
+        display: none;
+    }
 }
 
 /*.corpus-search-results-div{
@@ -244,6 +248,16 @@
     height: 20px;
 }
 
+.corpus-search-div.show-language .itj-foreign{
+    font-style: italic;
+}
+
+.corpus-search-div.show-structure {
+
+    .itj-structure-start, .itj-structure-end {
+        display: inline;
+    }
+}
 
 .bib-listing-books-div.loader {
     margin-top: 30vh;
