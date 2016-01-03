@@ -234,7 +234,7 @@ function initSearch() {
                 $(notesTr).addClass("notes");
 
                 var tdNotes = document.createElement("td");
-                tdNotes.colSpan = 3;
+                tdNotes.colSpan = 2;
 
 
                 for (var j = 0; j < notes.length; j++) {
