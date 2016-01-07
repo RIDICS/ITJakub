@@ -22,7 +22,7 @@
     padding-top: 15px;
     margin-bottom: 15px;
 
-    .itj-structure-start, .itj-structure-end {
+    .itj-structure-start, .itj-structure-end, .itj-structure-pb {
         display: none;
     }
 }
@@ -258,9 +258,17 @@
 
 .corpus-search-div.show-structure {
 
-    .itj-structure-start, .itj-structure-end {
+    .itj-structure-start, .itj-structure-end, .itj-structure-pb {
         display: inline;
         color: rgb(56, 74, 182);
+    }
+
+    .itj-structure-pb:before {
+        content: '[';
+    }
+    
+    .itj-structure-pb:after {
+        content: ']';
     }
 }
 
