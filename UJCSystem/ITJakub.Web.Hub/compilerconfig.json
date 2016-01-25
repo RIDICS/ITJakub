@@ -110,5 +110,9 @@
   {
     "outputFile": "Areas/Tools/Content/itjakub.tools.css",
     "inputFile": "Areas/Tools/Content/itjakub.tools.less"
+  },
+  {
+    "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
+    "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less"
   }
 ]
