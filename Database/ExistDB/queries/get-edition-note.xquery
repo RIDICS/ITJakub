@@ -45,4 +45,5 @@ let $transformation :=
 
 return if($transformation) then
 	$transformation
+	else if (not($fragment)) then response:set-status-code(204)
 	else response:set-status-code(404)
