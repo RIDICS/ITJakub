@@ -70,6 +70,11 @@ class Search {
         $(searchbarButtonsDiv).addClass("searchbar-buttons");
         $(formGroupDiv).append(searchbarButtonsDiv);
 
+        var resetDiv = document.createElement('div');
+        resetDiv.style.width = '100%';
+        resetDiv.style.clear = 'both';
+        formGroupDiv.appendChild(resetDiv);
+
         var searchButton = document.createElement("button");
         searchButton.type = "button";
         searchButton.innerHTML = "Vyhledat";
@@ -109,14 +114,24 @@ class Search {
         } 
 
         var searchbarInputDiv = document.createElement("div");
-        $(searchbarInputDiv).addClass("regex-searchbar-inputs");
+        $(searchbarInputDiv).addClass("regex-searchbar-inputs input_container");
         $(formGroupDiv).append(searchbarInputDiv);
+
+        var inputKeyboardContainerDiv = document.createElement("div");
+        inputKeyboardContainerDiv.classList.add("input_container");
+        searchbarInputDiv.appendChild(inputKeyboardContainerDiv);
 
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
         searchbarInput.placeholder = "Hledat...";
-        $(searchbarInput).addClass("form-control searchbar-input");
-        $(searchbarInputDiv).append(searchbarInput);
+        searchbarInput.setAttribute("data-keyboard-id", "0");
+        var searchbarInputClassList = searchbarInput.classList;
+        searchbarInputClassList.add("form-control");
+        searchbarInputClassList.add("searchbar-input");
+        searchbarInputClassList.add("keyboard-input");
+        //$(searchbarInput).addClass("form-control searchbar-input keyboard-input");
+        inputKeyboardContainerDiv.appendChild(searchbarInput);
+        //$(searchbarInputDiv).append(searchbarInput);
 
         this.searchInputTextbox = searchbarInput;
 
@@ -152,6 +167,8 @@ class Search {
             this.processSearch();
         });
 
+        var keyboardComponent = KeyboardManager.getKeyboard("0");
+        keyboardComponent.registerInput(searchbarInput);
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -1765,9 +1782,19 @@ class RegExWordInput {
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
-        $(this.conditionInput).addClass("form-control");
-        $(this.conditionInput).addClass("regexsearch-condition-input");
-        lineDiv.appendChild(this.conditionInput);
+        this.conditionInput.classList.add("form-control");
+        this.conditionInput.classList.add("regexsearch-condition-input");
+        this.conditionInput.classList.add("keyboard-input");
+        this.conditionInput.setAttribute("data-keyboard-id", "0");
+
+        var inputKeyboardContainerDiv = document.createElement("div");
+        inputKeyboardContainerDiv.classList.add("input_container");
+        lineDiv.appendChild(inputKeyboardContainerDiv);
+
+        inputKeyboardContainerDiv.appendChild(this.conditionInput);
+
+        var keyboardComponent = KeyboardManager.getKeyboard("0");
+        keyboardComponent.registerInput(this.conditionInput);
 
         var regExButton = document.createElement("button");
         $(regExButton).text("R");
@@ -1781,7 +1808,7 @@ class RegExWordInput {
                 $(this.regexButtonsDiv).slideUp("fast");
             }
         });
-        lineDiv.appendChild(regExButton);
+        inputKeyboardContainerDiv.appendChild(regExButton);
 
         var removeButton = HtmlItemsFactory.createButton("");
         var removeGlyph = document.createElement("span");

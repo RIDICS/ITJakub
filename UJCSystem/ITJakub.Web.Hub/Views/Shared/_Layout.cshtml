@@ -15,6 +15,8 @@
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse">
 
+    <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
+
 <div class="container page-body-content">
 
 @*top fixed part*@
@@ -41,7 +43,9 @@
         </div>
     </div>
 </div>
-<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization)) {@Html.Raw("EditLemmatization")} "></div>
+<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
+                                                                                                      {@Html.Raw("EditLemmatization")
+                                                                                                      } "></div>
 
 <div id="main-plugins-menu" class="main-plugins-menu">
 <ul>
@@ -396,6 +400,7 @@
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryui")
 @Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/keyboardLayout")
 @Scripts.Render("~/itjakub/javascript")
 @Scripts.Render("~/bundles/dropzonescripts")
 @Scripts.Render("~/bundles/typeahead")

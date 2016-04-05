@@ -114,5 +114,9 @@
   {
     "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
     "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less"
+  },
+  {
+    "outputFile": "Content/Plugins/Keyboard/keyboard.css",
+    "inputFile": "Content/Plugins/Keyboard/keyboard.less"
   }
 ]

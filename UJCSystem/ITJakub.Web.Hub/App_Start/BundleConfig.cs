@@ -36,6 +36,11 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                 "~/Scripts/typeahead.bundle.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/keyboardLayout").Include(
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboard.js",
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
@@ -71,7 +76,8 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
-                "~/Content/site.css"));
+                "~/Content/site.css",
+                "~/Content/Plugins/Keyboard/keyboard.css"));
 
             bundles.Add(new StyleBundle("~/Content/cookiescss").Include("~/Scripts/cookies/css/jquery-eu-cookie-law-popup.css"));
 

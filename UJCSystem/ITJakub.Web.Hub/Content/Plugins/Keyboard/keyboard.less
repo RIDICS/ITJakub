@@ -1,0 +1,114 @@
+﻿.keyboard_overflow_container {
+    display: block;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+}
+
+.keyboard_container {
+    position: relative;
+    display: none;
+    border: 1px solid #888888;
+    box-shadow: 5px 5px 5px #888888;
+    padding: 10px;
+    background-color: white;
+    z-index: 999;
+}
+
+.keyboardHideButton {
+    margin-top: 2px;
+    margin-right: 2px;
+}
+
+ul.keyboard-tabs {
+    margin-bottom: 10px;
+}
+
+.keyboard-cell:hover {
+    cursor: pointer;
+}
+
+.disabled-cell {
+    background-color: #E0E3DA;
+}
+
+.disabled-cell:hover {
+    cursor: not-allowed;
+}
+
+.second-button {
+    float: right;
+    margin-right: 8%;
+    font-size: 80%;
+    color: #6B6B6B;
+}
+
+.default-button {
+    font-size: 120%;
+    float: left;
+    margin-left: 30%;
+    margin-top: 1em;
+}
+
+.keyboard-input {
+    width: 100%;
+    height: 35px;
+    margin: 0;
+    padding-right: 40px;
+}
+
+.input_container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.keyboard-icon-img:hover {
+    cursor: pointer;
+}
+
+.pin-button {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 2%;
+    right: 5%;
+}
+
+#main_container {
+    position: relative;
+    margin-top: 20%;
+    width: 1000px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.keyboard-component {
+    width: 0;    
+    height: 0;
+    /*position: fixed;*/
+    top: 0;
+    left: 0;
+}
+
+.tabs {
+    line-height: 0;
+
+    .nav-tabs {
+        height: 42px;
+        overflow: auto;
+        width: 90%;
+        margin-top: 0;
+
+        &>li {
+            &>a {
+                height: 42px;
+            }
+        }
+    }
+
+    .tab-content {
+        line-height: normal;
+    }
+}
