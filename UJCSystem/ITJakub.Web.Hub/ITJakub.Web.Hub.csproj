@@ -417,13 +417,7 @@
     <Content Include="Content\Permission\itjakub.permission.min.css">
       <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
-    <None Include="Content\Plugins\Keyboard\keyboard.less" />
-    <Content Include="Content\Plugins\Keyboard\keyboard.css">
-      <DependentUpon>keyboard.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Plugins\Keyboard\keyboard.min.css">
-      <DependentUpon>keyboard.css</DependentUpon>
-    </Content>
+    <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>

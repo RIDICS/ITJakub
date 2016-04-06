@@ -7,15 +7,9 @@
         Name: string;
         Id: string,
         Url: string;
-    }>=[];
-
-    private defaultImageStyle={
-        "position": "absolute",
-        "width": "19px",
-        "height": "11px",
-        "top": "35%",
-        "right": "4%"
-    };
+    }> = [];
+    private loaded=false;
+    
     private keyboardShowLeftSpace=40;
 
     constructor(private component: HTMLElement, private loadedKeyboards: Array<Keyboard>, private componentPrefix: string="keyboard-", private resourceRoot="") {
@@ -50,8 +44,6 @@
     }
 
     createKeyboardHtml(hidden: boolean = false): HTMLDivElement {
-        var overflowContainer = document.createElement('div');
-        overflowContainer.classList.add('keyboard_overflow_container');
         var container=document.createElement('div');
         container.classList.add( 'keyboard_container');
         container.id= `${this.componentPrefix}container-${this.id}`;
@@ -70,9 +62,7 @@
             $(container).hide();
         }
 
-        overflowContainer.appendChild(container);
-
-        return overflowContainer;
+        return container;
     }
 
     public setInput(input: JQuery): KeyboardComponent {
@@ -96,13 +86,7 @@
         image.src = `${this.resourceRoot}Content/Images/klavesnice.gif`;
         image.alt = "Show keyboard";
         image.classList.add("keyboard-icon-img");
-
-        for (let attr in this.defaultImageStyle) {
-            if (this.defaultImageStyle.hasOwnProperty(attr)) {
-                image.style.setProperty(attr, this.defaultImageStyle[attr]);
-            }
-        }
-
+        
         return image;
     }
 
@@ -126,17 +110,21 @@
     }
 
     protected toggleKeyboard(event?: JQueryEventObject) {
-        var keyboard = this.getKeyboard();
+        const keyboard = this.getKeyboard();
 
         if (keyboard.css("display") == "none") {
-            var input=this.getInput();
+            const input = this.getInput();
+
+            if (!this.loaded) {
+                this.executeScripts();
+            }
 
             if (event) {
-                var inputOffset = input.offset();
-                var parentOffset = keyboard.parent().offset();
-                var newTop = inputOffset.top - parentOffset.top + input.outerHeight();
-                var newLeft = inputOffset.left - parentOffset.left;
-                
+                const inputOffset = input.offset();
+                const parentOffset = keyboard.parent().offset();
+                const newTop = inputOffset.top - parentOffset.top + input.outerHeight();
+                const newLeft = inputOffset.left - parentOffset.left;
+
                 keyboard.css({
                     top: newTop + "px",
                     left: newLeft + "px"
@@ -149,7 +137,7 @@
             // reset div position
             keyboard.css({
                 'left': this.originalLeft,
-                'top': this.origionalTop 
+                'top': this.origionalTop
             });
         }
     }
@@ -170,7 +158,14 @@
         return $(`#${this.componentPrefix}component-${this.id}`);
     }
 
-    public executeScripts(listLink) {
+    getApiUrl(): string {
+        return this.getComponent().attr("data-keyboard-api-url");
+    }
+
+    public executeScripts() {
+        this.loaded = true;
+        var listLink = this.getApiUrl();
+
         var keyboard = this.getKeyboard();
 
         var thisComponent: KeyboardComponent = this;
@@ -181,7 +176,10 @@
             },
             stop() {
                 keyboard.css("cursor", "default");
-            }
+            },
+            containment: "body",
+            appendTo: "body",
+            cursor: "move" 
         });
 
         // data storage

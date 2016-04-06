@@ -1,0 +1,116 @@
+﻿.keyboard-component {
+    width: 0;    
+    height: 0;
+    /*position: fixed;*/
+    top: 0;
+    left: 0;
+    
+    .keyboard_container {
+        position: relative;
+        display: none;
+        border: 1px solid #888888;
+        box-shadow: 5px 5px 5px #888888;
+        padding: 10px;
+        background-color: white;
+        z-index: 999;
+    }
+
+    .keyboardHideButton {
+        margin-top: 2px;
+        margin-right: 2px;
+    }
+
+    ul.keyboard-tabs {
+        margin-bottom: 10px;
+    }
+
+    .keyboard-cell:hover {
+        cursor: pointer;
+        background-color: #EEE;
+    }
+
+    .disabled-cell {
+        background-color: #E0E3DA;
+    }
+
+    .disabled-cell:hover {
+        cursor: not-allowed;
+    }
+
+    .second-button {
+        float: right;
+        margin-right: 8%;
+        font-size: 80%;
+        color: #6B6B6B;
+    }
+
+    .default-button {
+        font-size: 120%;
+        float: left;
+        margin-left: 30%;
+        margin-top: 1em;
+    }
+
+    .pin-button {
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        top: 8px;
+        right: 5%;
+    }
+
+    .tabs {
+        line-height: 0;
+
+        .nav-tabs {
+            height: 42px;
+            overflow: auto;
+            width: 90%;
+            margin-top: 0;
+
+            &>li {
+                &>a {
+                    height: 42px;
+                }
+            }
+        }
+
+        .tab-content {
+            line-height: normal;
+        }
+    }
+}
+
+.keyboard-icon-img {
+    width: 19px;
+    height: 11px;
+}
+.input_container {
+    width: auto;
+    height: auto;
+    position: relative;
+
+    .keyboard-input {
+        margin: 0;
+        padding-right: 40px;
+    }
+    .keyboard-icon-img {
+        position: absolute;
+        top: 35%;
+        right: 4%;
+    }
+}
+
+.regex-word-input-textbox {
+    .regexsearch-condition-input {
+        margin-right: -59px;
+    }
+    .keyboard-icon-img {
+        position: relative;
+        top: -1px;
+    }
+}
+
+.keyboard-icon-img:hover {
+    cursor: pointer;
+}
