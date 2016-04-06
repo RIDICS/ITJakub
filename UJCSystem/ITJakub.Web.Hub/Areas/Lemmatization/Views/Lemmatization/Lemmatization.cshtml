@@ -11,6 +11,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         initLemmatization("@Request["tokenId"]");
+
+        var keyboardComponent = KeyboardManager.getKeyboard("0");
+        keyboardComponent.registerInputs($("#mainSearchInput"));
     });
 </script>
 
@@ -22,7 +25,7 @@
         <button id="loadButton" class="btn btn-default lemmatization-button hidden">Načíst</button>
     </div>
     <div class="lemmatization-search">
-        <input type="text" class="form-control lemmatization-search-input" id="mainSearchInput"/>
+        <input type="text" class="form-control lemmatization-search-input keyboard-input" id="mainSearchInput" data-keyboard-id="0"/>
     </div>
 </div>
 <div class="content hidden lemmatization-token-info">
