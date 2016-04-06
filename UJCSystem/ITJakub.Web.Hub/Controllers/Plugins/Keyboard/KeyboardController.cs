@@ -69,11 +69,13 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Keyboard
         ///     Requested return format: [{name: "Čeština", id: "csCS", url: "localhost/layout.xml"}, {...},...]
         /// </summary>
         /// <returns></returns>
+        ///[OutputCache(Duration = 60, VaryByParam = "none")]
         public ActionResult GetLayoutList()
         {
             return Json(JsonConvert.SerializeObject(m_layoutKeys.Value.Values), JsonRequestBehavior.AllowGet);
         }
 
+        ///[OutputCache(Duration = 60, VaryByParam = "layoutId")]
         public ActionResult GetLayout(string layoutId)
         {
             return Json(m_layouts.Value[layoutId], JsonRequestBehavior.AllowGet);
