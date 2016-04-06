@@ -36,6 +36,11 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                 "~/Scripts/typeahead.bundle.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/keyboardLayout").Include(
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboard.js",
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
+                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",

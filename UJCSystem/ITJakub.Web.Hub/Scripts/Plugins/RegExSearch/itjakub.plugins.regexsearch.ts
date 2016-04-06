@@ -55,26 +55,31 @@ class Search {
         this.enabledOptions = enabledOptions;
 
         var searchAreaDiv = document.createElement("div");
-        $(searchAreaDiv).addClass("regex-search-div");
+        searchAreaDiv.classList.add("regex-search-div");
 
         var form: HTMLFormElement = document.createElement("form");
-        $(form).attr("role", "form");
-        $(form).addClass("form-horizontal");
-        $(searchAreaDiv).append(form);
+        form.setAttribute("role", "form");
+        
+        form.classList.add("form-horizontal");
+        searchAreaDiv.appendChild(form);
 
         var formGroupDiv = document.createElement("div");
-        $(formGroupDiv).addClass("form-group searchbar");
-        $(form).append(formGroupDiv);
+        formGroupDiv.classList.add("form-group");
+        formGroupDiv.classList.add("searchbar");
+        form.appendChild(formGroupDiv);
 
         var searchbarButtonsDiv = document.createElement("div");
-        $(searchbarButtonsDiv).addClass("searchbar-buttons");
-        $(formGroupDiv).append(searchbarButtonsDiv);
-
+        searchbarButtonsDiv.classList.add("searchbar-buttons");
+        formGroupDiv.appendChild(searchbarButtonsDiv);
+        
         var searchButton = document.createElement("button");
         searchButton.type = "button";
+        console.log(searchButton);
         searchButton.innerHTML = "Vyhledat";
-        $(searchButton).addClass("btn btn-default searchbar-button");
-        $(searchbarButtonsDiv).append(searchButton);
+        searchButton.classList.add("btn");
+        searchButton.classList.add("btn-default");
+        searchButton.classList.add("searchbar-button");
+        searchbarButtonsDiv.appendChild(searchButton);
 
         this.searchButton = searchButton;
 
@@ -83,14 +88,18 @@ class Search {
             var advancedButton = document.createElement("button");
             advancedButton.type = "button";
             advancedButton.innerHTML = "Pokročilé";
-            $(advancedButton).addClass("btn btn-default searchbar-button");
-            $(searchbarButtonsDiv).append(advancedButton);
+            advancedButton.classList.add("btn");
+            advancedButton.classList.add("btn-default");
+            advancedButton.classList.add("searchbar-button");
+            searchbarButtonsDiv.appendChild(advancedButton);
 
             this.advancedButton = advancedButton;
 
             var advancedButtonSpanCarrot = document.createElement("span");
-            $(advancedButtonSpanCarrot).addClass("glyphicon glyphicon-chevron-down regexsearch-button-glyph");
-            $(advancedButton).append(advancedButtonSpanCarrot);
+            advancedButtonSpanCarrot.classList.add("glyphicon");
+            advancedButtonSpanCarrot.classList.add("glyphicon-chevron-down");
+            advancedButtonSpanCarrot.classList.add("regexsearch-button-glyph");
+            advancedButton.appendChild(advancedButtonSpanCarrot);
 
             $(this.advancedButton).click(() => {
                 $(this.advancedButton).css("visibility", "hidden");
@@ -101,22 +110,31 @@ class Search {
                         this.advancedRegexEditor.importJson(textboxValue);
                     }
                     $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
-                    $(this.searchInputTextbox).prop('disabled', true);
-                    $(this.searchButton).prop('disabled', true);
+                    $(this.searchInputTextbox).prop("disabled", true);
+                    $(this.searchButton).prop("disabled", true);
                 }
             });
 
         } 
 
         var searchbarInputDiv = document.createElement("div");
-        $(searchbarInputDiv).addClass("regex-searchbar-inputs");
-        $(formGroupDiv).append(searchbarInputDiv);
+        searchbarInputDiv.classList.add("regex-searchbar-inputs");
+        searchbarInputDiv.classList.add("input_container");
+        formGroupDiv.appendChild(searchbarInputDiv);
+
+        var inputKeyboardContainerDiv = document.createElement("div");
+        inputKeyboardContainerDiv.classList.add("input_container");
+        searchbarInputDiv.appendChild(inputKeyboardContainerDiv);
 
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
         searchbarInput.placeholder = "Hledat...";
-        $(searchbarInput).addClass("form-control searchbar-input");
-        $(searchbarInputDiv).append(searchbarInput);
+        searchbarInput.setAttribute("data-keyboard-id", "0");
+        var searchbarInputClassList = searchbarInput.classList;
+        searchbarInputClassList.add("form-control");
+        searchbarInputClassList.add("searchbar-input");
+        searchbarInputClassList.add("keyboard-input");
+        searchbarInputDiv.appendChild(searchbarInput);
 
         this.searchInputTextbox = searchbarInput;
 
@@ -131,8 +149,8 @@ class Search {
         });
 
         var searchbarAdvancedEditor = document.createElement("div");
-        $(searchbarInputDiv).addClass("regex-searchbar-advanced-editor");
-        $(searchAreaDiv).append(searchbarAdvancedEditor);
+        searchbarInputDiv.classList.add("regex-searchbar-advanced-editor");
+        searchAreaDiv.appendChild(searchbarAdvancedEditor);
 
         this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
 
@@ -143,7 +161,7 @@ class Search {
             this.advancedRegexEditor.makeRegExSearch();
             $(this.searchbarAdvancedEditorContainer).hide();
         } else {
-            $(searchbarInputDiv).addClass("no-advanced");
+            searchbarInputDiv.classList.add("no-advanced");
         }
 
         $(this.container).append(searchAreaDiv);
@@ -152,6 +170,8 @@ class Search {
             this.processSearch();
         });
 
+        var keyboardComponent = KeyboardManager.getKeyboard("0");
+        keyboardComponent.registerInput(searchbarInput);
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -161,8 +181,8 @@ class Search {
 
     closeAdvancedSearchEditor() {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation);      //hide advanced search
-        $(this.searchInputTextbox).prop('disabled', false);
-        $(this.searchButton).prop('disabled', false);
+        $(this.searchInputTextbox).prop("disabled", false);
+        $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
         $(this.searchInputTextbox).focus();
     }
@@ -1726,10 +1746,10 @@ class RegExWordInput {
 
     makeRegExInput() {
         var mainDiv = document.createElement("div");
-        $(mainDiv).addClass("reg-ex-word-input");
+        mainDiv.classList.add("reg-ex-word-input");
 
         var lineDiv = document.createElement("div");
-        $(lineDiv).addClass("regex-word-input-textbox");
+        lineDiv.classList.add("regex-word-input-textbox");
 
         var editorDiv = document.createElement("div");
         this.editorDiv = editorDiv;
@@ -1737,14 +1757,13 @@ class RegExWordInput {
         var conditionTitleDiv = document.createElement("div");
         conditionTitleDiv.innerHTML = "Podmínka";
         editorDiv.appendChild(conditionTitleDiv);
-
-
+        
         var conditionTypeDiv = document.createElement("div");
-        $(conditionTypeDiv).addClass("regexsearch-condition-type-div");
+        conditionTypeDiv.classList.add("regexsearch-condition-type-div");
         editorDiv.appendChild(conditionTypeDiv);
 
         var conditionSelect = document.createElement("select");
-        $(conditionSelect).addClass("regexsearch-condition-select");
+        conditionSelect.classList.add("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
         conditionSelect.appendChild(HtmlItemsFactory.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
@@ -1765,9 +1784,15 @@ class RegExWordInput {
 
         this.conditionInput = document.createElement("input");
         this.conditionInput.type = "text";
-        $(this.conditionInput).addClass("form-control");
-        $(this.conditionInput).addClass("regexsearch-condition-input");
+        this.conditionInput.classList.add("form-control");
+        this.conditionInput.classList.add("regexsearch-condition-input");
+        this.conditionInput.classList.add("keyboard-input");
+        this.conditionInput.setAttribute("data-keyboard-id", "0");
+        
         lineDiv.appendChild(this.conditionInput);
+        
+        var keyboardComponent = KeyboardManager.getKeyboard("0");
+        keyboardComponent.registerInput(this.conditionInput);
 
         var regExButton = document.createElement("button");
         $(regExButton).text("R");

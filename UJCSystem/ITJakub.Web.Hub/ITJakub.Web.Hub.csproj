@@ -243,12 +243,14 @@
     <Compile Include="Controllers\EditionNoteController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\Plugins\Keyboard\KeyboardController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
+    <Compile Include="Models\Plugins\Keyboard\LayoutListItem.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
     <Compile Include="Areas\Editions\BundleConfig.cs" />
@@ -395,6 +397,7 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\klavesnice.gif" />
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
@@ -404,12 +407,17 @@
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
+    <Content Include="Content\KeyboardLayouts\cs_quertz.xml" />
+    <Content Include="Content\KeyboardLayouts\cyrilic.xml" />
+    <Content Include="Content\KeyboardLayouts\greek_qwerty.xml" />
+    <Content Include="Content\KeyboardLayouts\Vokabular_def.xml" />
     <Content Include="Content\Permission\itjakub.permission.css">
       <DependentUpon>itjakub.permission.less</DependentUpon>
     </Content>
     <Content Include="Content\Permission\itjakub.permission.min.css">
       <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
+    <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
@@ -730,6 +738,9 @@
     <Content Include="Content\Plugins\ITJakub.Pagination.less" />
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.less" />
     <Content Include="Content\Permission\itjakub.permission.less" />
+    <None Include="Content\KeyboardLayouts\layoutdefinition.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
@@ -847,6 +858,9 @@
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.ts" />
     <TypeScriptCompile Include="Scripts\Home\itjakub.home.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\DropdownSelect\itjakub.plugins.dropdownselect2.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Keyboard\itjakub.plugins.keyboard.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Keyboard\itjakub.plugins.keyboardComponent.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Keyboard\itjakub.plugins.keyboardManager.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.searchbox.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.configuration.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Bibliography\itjakub.plugins.bibliography.factories.ts" />
