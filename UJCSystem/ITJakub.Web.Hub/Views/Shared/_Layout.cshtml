@@ -13,7 +13,7 @@
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", false)
 </head>
-<body class="eupopup eupopup-fixedtop eupopup-color-inverse">
+<body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookPageByXmlId", "Reader",  new {area = ""})">
 
     <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
 

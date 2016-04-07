@@ -11,6 +11,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 {
     public class ReaderController : BaseController
     {
+        public ActionResult HasBookPageByXmlId(string bookId, string pageXmlId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                return Json(new {HasBookPage = client.HasBookPageByXmlId(bookId, pageXmlId) }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
         {
             using (var client = GetMainServiceClient())

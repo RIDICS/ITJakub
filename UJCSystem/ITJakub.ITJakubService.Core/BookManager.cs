@@ -38,6 +38,17 @@ namespace ITJakub.ITJakubService.Core
             m_authorizationManager = authorizationManager;
         }
 
+        public bool HasBookPageByXmlId(string bookGuid, string versionId)
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("Start MainService (BookManager) get version '{0}' of book '{1}'", versionId,
+                    bookGuid);
+
+            m_authorizationManager.AuthorizeBook(bookGuid);
+
+            return m_bookVersionRepository.CountBookPageByXmlId(bookGuid, versionId) > 0;
+        }
+
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat,
             BookTypeEnumContract bookTypeContract)
         {
@@ -101,11 +112,11 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<BookInfoWithPagesContract>(bookVersion);
         }
 
-        public bool HasBookImage(string bookXmlId)
+        public bool HasBookImage(string bookXmlId, string versionId)
         {
             m_authorizationManager.AuthorizeBook(bookXmlId);
 
-            return m_bookVersionRepository.CountBookImageByXmlId(bookXmlId) > 0;
+            return m_bookVersionRepository.CountBookImageByXmlId(bookXmlId, versionId) > 0;
         }
 
         public Stream GetBookPageImage(string bookXmlId, int position)

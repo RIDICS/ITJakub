@@ -67,6 +67,26 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public bool HasBookPageByXmlId(string documentId, string versionId)
+        {
+            try
+            {
+                return Channel.HasBookPageByXmlId(documentId, versionId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("HasBookPageByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("HasBookPageByXmlId timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public string GetBookPageByXmlId(string documentId, string pageXmlId, OutputFormatEnumContract resultFormat,
             BookTypeEnumContract bookTypeContract)
         {
@@ -183,11 +203,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public bool HasBookImage(string bookXmlId)
+        public bool HasBookImage(string bookXmlId, string versionId)
         {
             try
             {
-                return Channel.HasBookImage(bookXmlId);
+                return Channel.HasBookImage(bookXmlId, versionId);
             }
             catch (CommunicationException ex)
             {

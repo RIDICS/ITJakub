@@ -104,7 +104,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
-        public virtual int CountBookImageByXmlId(string bookXmlId)
+        public virtual int CountBookPageByXmlId(string bookXmlId, string versionId)
         {
             using (var session = GetSession())
             {
@@ -113,12 +113,33 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 var bookImages =
                     session.QueryOver<BookPage>()
-                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(bookPage => bookPage.BookVersion, () => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         .Where(
-                            x =>
-                                bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id &&
-                                x.Image != null)
+                            bookPage =>
+                                bookAlias.Guid == bookXmlId && bookVersionAlias.VersionId == versionId &&
+                                bookPage.XmlResource != null)
+                        .RowCount();
+                return bookImages;
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
+        public virtual int CountBookImageByXmlId(string bookXmlId, string versionId)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+
+                var bookImages =
+                    session.QueryOver<BookPage>()
+                        .JoinAlias(bookPage => bookPage.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
+                        .Where(
+                            bookPage =>
+                                bookAlias.Guid == bookXmlId && bookVersionAlias.VersionId == versionId &&
+                                bookPage.Image != null)
                         .RowCount();
                 return bookImages;
             }
@@ -134,12 +155,12 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 var bookPage =
                     session.QueryOver<BookPage>()
-                        .JoinAlias(x => x.BookVersion, () => bookVersionAlias)
+                        .JoinAlias(page => page.BookVersion, () => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
                         .Where(
-                            x =>
+                            page =>
                                 bookAlias.Guid == bookXmlId && bookAlias.LastVersion.Id == bookVersionAlias.Id &&
-                                x.Position == position)
+                                page.Position == position)
                         .SingleOrDefault<BookPage>();
                 return bookPage;
             }

@@ -73,6 +73,11 @@ namespace ITJakub.ITJakubService.Services
             return m_permissionManager.GetAllCategoryContent(categoryId);
         }
 
+        public bool HasBookPageByXmlId(string bookGuid, string pageXmlId)
+        {
+            return m_bookManager.HasBookPageByXmlId(bookGuid, pageXmlId);
+        }
+
         public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat, bookTypeContract);
@@ -98,9 +103,9 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.Search(term);
         }
 
-        public bool HasBookImage(string bookXmlId)
+        public bool HasBookImage(string bookXmlId, string versionId)
         {
-            return m_bookManager.HasBookImage(bookXmlId);
+            return m_bookManager.HasBookImage(bookXmlId, versionId);
         }
 
         public Stream GetBookPageImage(string bookXmlId, int position)

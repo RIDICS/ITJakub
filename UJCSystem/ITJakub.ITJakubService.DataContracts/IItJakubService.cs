@@ -18,6 +18,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IEnumerable<AuthorDetailContract> GetAllAuthors();
 
         [OperationContract]
+        bool HasBookPageByXmlId(string bookGuid, string versionId);
+
+        [OperationContract]
         string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
 
         [OperationContract]
@@ -38,6 +41,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
+
+        [OperationContract]
+        bool HasBookImage(string bookXmlId, string versionId);
 
         [OperationContract]
         Stream GetBookPageImage(string bookXmlId, int position);
