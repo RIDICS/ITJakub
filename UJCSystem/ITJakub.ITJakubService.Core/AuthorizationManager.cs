@@ -14,71 +14,82 @@ namespace ITJakub.ITJakubService.Core
     public class AuthorizationManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly PermissionRepository m_permissionRepository;        
+        private readonly PermissionRepository m_permissionRepository;
         private readonly UserManager m_userManager;
 
-        public AuthorizationManager(UserManager userManager, UserRepository userRepository, PermissionRepository permissionRepository)
-        {            
+        public AuthorizationManager(UserManager userManager, UserRepository userRepository,
+            PermissionRepository permissionRepository)
+        {
             m_userManager = userManager;
             m_permissionRepository = permissionRepository;
         }
-  
+
 
         public void CheckUserCanAddNews()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.Action);
             var newsPermissions = specialPermissions.OfType<NewsPermission>();
             if (!newsPermissions.Any(x => x.CanAddNews))
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to add news", user.UserName));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission to add news", user.UserName));
             }
-
         }
 
         public void CheckUserCanManageFeedbacks()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.Action);
             var feedbackPermissions = specialPermissions.OfType<FeedbackPermission>();
             if (!feedbackPermissions.Any(x => x.CanManageFeedbacks))
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to manage feedbacks", user.UserName));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission to manage feedbacks", user.UserName));
             }
-
-        } 
+        }
 
         public void CheckUserCanManagePermissions()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.Action);
             var managePermissionsPermissions = specialPermissions.OfType<ManagePermissionsPermission>();
             if (!managePermissionsPermissions.Any(x => x.CanManagePermissions))
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to manage permissions", user.UserName));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission to manage permissions",
+                        user.UserName));
             }
-        } 
+        }
 
         public void CheckUserCanUploadBook()
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.Action);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.Action);
             var uploadBookPermissions = specialPermissions.OfType<UploadBookPermission>();
             if (!uploadBookPermissions.Any(x => x.CanUploadBook))
             {
                 return; //HACK check can upload books.
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to upload books", user.UserName));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission to upload books", user.UserName));
             }
         }
 
         public void CheckUserCanViewCardFile(string cardFileId)
         {
             var user = m_userManager.GetCurrentUser();
-            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile);
+            var specialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                SpecialPermissionCategorization.CardFile);
             var cardFilePermissions = specialPermissions.OfType<CardFilePermission>();
             if (!cardFilePermissions.Any(x => x.CanReadCardFile && x.CardFileId == cardFileId))
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission to read cardfile with id '{1}'", user.UserName, cardFileId));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission to read cardfile with id '{1}'",
+                        user.UserName, cardFileId));
             }
         }
 
@@ -86,22 +97,28 @@ namespace ITJakub.ITJakubService.Core
         public void AuthorizeBook(string bookXmlId)
         {
             var user = m_userManager.GetCurrentUser();
-            var filtered = m_permissionRepository.GetFilteredBookXmlIdListByUserPermissions(user.Id, new List<string> {bookXmlId});
-            if (filtered == null)
+            var filtered = m_permissionRepository.GetFilteredBookXmlIdListByUserPermissions(user.Id,
+                new List<string> {bookXmlId});
+            if (filtered == null || filtered.Count == 0)
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission on book with xmlId '{1}'", user.UserName,
-                    bookXmlId));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission on book with xmlId '{1}'",
+                        user.UserName,
+                        bookXmlId));
             }
         }
 
         public void AuthorizeBook(long bookId)
         {
             var user = m_userManager.GetCurrentUser();
-            var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id, new List<long> {bookId});
-            if (filtered == null)
+            var filtered = m_permissionRepository.GetFilteredBookIdListByUserPermissions(user.Id,
+                new List<long> {bookId});
+            if (filtered == null || filtered.Count == 0)
             {
-                throw new AuthorizationException(string.Format("User with username '{0}' does not have permission on book with id '{1}'", user.UserName,
-                    bookId));
+                throw new AuthorizationException(
+                    string.Format("User with username '{0}' does not have permission on book with id '{1}'",
+                        user.UserName,
+                        bookId));
             }
         }
 
@@ -176,12 +193,12 @@ namespace ITJakub.ITJakubService.Core
                 return;
             }
 
-            var cardFileSpecialPermissions = m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id, SpecialPermissionCategorization.CardFile).OfType<CardFilePermission>();
+            var cardFileSpecialPermissions =
+                m_permissionRepository.GetSpecialPermissionsByUserAndType(user.Id,
+                    SpecialPermissionCategorization.CardFile).OfType<CardFilePermission>();
             var allowedCardFileIds = cardFileSpecialPermissions.Where(x => x.CanReadCardFile).Select(x => x.CardFileId);
             cardFilesContracts = cardFilesContracts.Where(x => allowedCardFileIds.Contains(x.Id)).ToList();
         }
-
-
     }
 
     public class AuthorizationException : Exception

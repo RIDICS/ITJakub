@@ -6,7 +6,6 @@ using System.ServiceModel;
 using AutoMapper;
 using ITJakub.Core;
 using ITJakub.Core.SearchService;
-using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
@@ -22,13 +21,15 @@ namespace ITJakub.ITJakubService.Core
     public class BookManager
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly AuthorizationManager m_authorizationManager;
         private readonly BookRepository m_bookRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly FileSystemManager m_fileSystemManager;
-        private readonly AuthorizationManager m_authorizationManager;
         private readonly SearchServiceClient m_searchServiceClient;
 
-        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository, BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager, AuthorizationManager authorizationManager)
+        public BookManager(SearchServiceClient searchServiceClient, BookRepository bookRepository,
+            BookVersionRepository bookVersionRepository, FileSystemManager fileSystemManager,
+            AuthorizationManager authorizationManager)
         {
             m_searchServiceClient = searchServiceClient;
             m_bookRepository = bookRepository;
@@ -37,7 +38,8 @@ namespace ITJakub.ITJakubService.Core
             m_authorizationManager = authorizationManager;
         }
 
-        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
+        public string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat,
+            BookTypeEnumContract bookTypeContract)
         {
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Start MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId,
@@ -65,7 +67,8 @@ namespace ITJakub.ITJakubService.Core
                 transformationName, resultFormat, transformationLevel);
 
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId, bookGuid);
+                m_log.DebugFormat("End MainService (BookManager) get page xmlId '{0}' of book '{1}'", pageXmlId,
+                    bookGuid);
 
             return pageText;
         }
@@ -128,7 +131,8 @@ namespace ITJakub.ITJakubService.Core
             return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
         }
 
-        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
+        public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId,
+            OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract)
         {
             m_authorizationManager.AuthorizeBook(bookGuid);
 
@@ -142,8 +146,9 @@ namespace ITJakub.ITJakubService.Core
             var bookVersion = m_bookRepository.GetLastVersionForBookWithType(bookGuid);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType);
             var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
-            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId, xmlEntryId, transformationName, resultFormat, transformationLevel);
+            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
+            var dictionaryEntryText = m_searchServiceClient.GetDictionaryEntryByXmlId(bookGuid, bookVersion.VersionId,
+                xmlEntryId, transformationName, resultFormat, transformationLevel);
 
             return dictionaryEntryText;
         }
@@ -158,7 +163,7 @@ namespace ITJakub.ITJakubService.Core
             return bookContract;
         }
 
-        public IList<TermContract> GetTermsOnPage(string bookXmlId,string pageXmlId)
+        public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
         {
             m_authorizationManager.AuthorizeBook(bookXmlId);
             var terms = m_bookVersionRepository.GetTermsOnPage(bookXmlId, pageXmlId);
@@ -181,15 +186,16 @@ namespace ITJakub.ITJakubService.Core
             {
                 throw new ArgumentException(string.Format("Result format : '{0}' unknown", resultFormat));
             }
-            
+
             var book = m_bookRepository.FindBookById(bookId);
             var bookVersion = m_bookRepository.GetLastVersionForBookByBookId(bookId);
             var bookType = m_bookVersionRepository.GetBookTypeByBookVersionId(bookVersion.Id);
             var transformation = m_bookRepository.FindTransformation(bookVersion, outputFormat, bookType.Type);
             var transformationName = transformation.Name;
-            var transformationLevel = (ResourceLevelEnumContract)transformation.ResourceLevel;
+            var transformationLevel = (ResourceLevelEnumContract) transformation.ResourceLevel;
 
-            var editionNoteText = m_searchServiceClient.GetBookEditionNote(book.Guid, bookVersion.VersionId, transformationName, resultFormat, transformationLevel);
+            var editionNoteText = m_searchServiceClient.GetBookEditionNote(book.Guid, bookVersion.VersionId,
+                transformationName, resultFormat, transformationLevel);
 
             return editionNoteText;
         }
