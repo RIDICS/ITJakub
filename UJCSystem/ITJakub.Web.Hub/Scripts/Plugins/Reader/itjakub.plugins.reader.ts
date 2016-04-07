@@ -180,9 +180,9 @@ class ReaderModule {
         });
 
         var sliderTooltip: HTMLDivElement = document.createElement('div');
-        $(sliderTooltip).addClass('tooltip top slider-tip');
+        sliderTooltip.classList.add('tooltip', 'top', 'slider-tip');
         var arrowTooltip: HTMLDivElement = document.createElement('div');
-        $(arrowTooltip).addClass('tooltip-arrow');
+        arrowTooltip.classList.add('tooltip-arrow');
         sliderTooltip.appendChild(arrowTooltip);
 
         var innerTooltip: HTMLDivElement = document.createElement('div');
@@ -191,28 +191,28 @@ class ReaderModule {
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
 
-        var sliderHandle = $(slider).find('.ui-slider-handle');
-        $(sliderHandle).append(sliderTooltip);
-        $(sliderHandle).hover((event) => {
+        var sliderHandle:JQuery = $(slider).find('.ui-slider-handle');
+        sliderHandle.append(sliderTooltip);
+        sliderHandle.hover((event) => {
             $(event.target).find('.slider-tip').stop(true, true);
             $(event.target).find('.slider-tip').show();
         });
-        $(sliderHandle).mouseout((event) => {
+        sliderHandle.mouseout((event) => {
             $(event.target).find('.slider-tip').fadeOut(1000);
         });
         controlsDiv.appendChild(slider);
 
         var pagingDiv: HTMLDivElement = document.createElement('div');
-        $(pagingDiv).addClass('paging');
+        pagingDiv.classList.add('paging');
 
         var pageInputDiv: HTMLDivElement = document.createElement('div');
-        $(pageInputDiv).addClass('page-input');
+        pageInputDiv.classList.add('page-input');
 
         var pageInputText = document.createElement("input");
         pageInputText.setAttribute("type", "text");
         pageInputText.setAttribute("id", "pageInputText");
         pageInputText.setAttribute("placeholder", "Přejít na stranu...");
-        $(pageInputText).addClass('page-input-text');
+        pageInputText.classList.add('page-input-text');
         pageInputDiv.appendChild(pageInputText);
 
         var pageInputButton = document.createElement("button");
@@ -250,10 +250,13 @@ class ReaderModule {
 
         this.activateTypeahead(pageInputText);
 
-        pagingDiv.appendChild(pageInputDiv);
+        var paginationUlHelper=document.createElement("div");
 
         var paginationUl: HTMLUListElement = document.createElement('ul');
-        $(paginationUl).addClass('pagination pagination-sm');
+        paginationUl.classList.add("pagination", "pagination-sm");
+
+        var toLeft = document.createElement("ul");
+        toLeft.classList.add("page-navigation-container","page-navigation-container-left");
 
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('page-navigation page-navigation-left');
@@ -266,7 +269,7 @@ class ReaderModule {
             return false;
         });
         liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
+        toLeft.appendChild(liElement);
 
         liElement = document.createElement('li');
         $(liElement).addClass('page-navigation page-navigation-left');
@@ -279,7 +282,7 @@ class ReaderModule {
             return false;
         });
         liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
+        toLeft.appendChild(liElement);
 
         liElement = document.createElement('li');
         $(liElement).addClass('page-navigation page-navigation-left');
@@ -292,7 +295,49 @@ class ReaderModule {
             return false;
         });
         liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
+        toLeft.appendChild(liElement);
+
+        var toRight = document.createElement("ul");
+        toRight.classList.add("page-navigation-container","page-navigation-container-right");
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex + 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>>';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.actualPageIndex + 5, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
+
+        liElement = document.createElement('li');
+        $(liElement).addClass('page-navigation page-navigation-right');
+        anchor = document.createElement('a');
+        anchor.href = '#';
+        anchor.innerHTML = '>|';
+        $(anchor).click((event: Event) => {
+            event.stopPropagation();
+            this.moveToPageNumber(this.pages.length - 1, true);
+            return false;
+        });
+        liElement.appendChild(anchor);
+        toRight.appendChild(liElement);
 
         liElement = document.createElement('li');
         $(liElement).addClass('more-pages more-pages-left');
@@ -320,46 +365,12 @@ class ReaderModule {
         liElement.innerHTML = '...';
         paginationUl.appendChild(liElement);
 
-        liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
-        anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.innerHTML = '>';
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
-
-        liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
-        anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.innerHTML = '>>';
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.actualPageIndex + 5, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
-
-        liElement = document.createElement('li');
-        $(liElement).addClass('page-navigation page-navigation-right');
-        anchor = document.createElement('a');
-        anchor.href = '#';
-        anchor.innerHTML = '>|';
-        $(anchor).click((event: Event) => {
-            event.stopPropagation();
-            this.moveToPageNumber(this.pages.length - 1, true);
-            return false;
-        });
-        liElement.appendChild(anchor);
-        paginationUl.appendChild(liElement);
-
-        pagingDiv.appendChild(paginationUl);
+        var listingContainer = document.createElement("div");
+        listingContainer.classList.add("page-navigation-container-helper");
+        listingContainer.appendChild(toLeft);
+        listingContainer.appendChild(toRight);
+        paginationUlHelper.appendChild(paginationUl);
+        listingContainer.appendChild(paginationUlHelper);
 
         var buttonsDiv: HTMLDivElement = document.createElement("div");
         $(buttonsDiv).addClass('buttons');
@@ -497,9 +508,16 @@ class ReaderModule {
                 buttonsDiv.appendChild(contentButton);
         }
 
+        pagingDiv.appendChild(pageInputDiv);
         pagingDiv.appendChild(buttonsDiv);
+        pagingDiv.appendChild(listingContainer);
 
         controlsDiv.appendChild(pagingDiv);
+
+        var resetDiv = document.createElement("div");
+        resetDiv.classList.add("reset");
+        controlsDiv.appendChild(resetDiv);
+
         return controlsDiv;
     }
 
@@ -719,7 +737,7 @@ class ReaderModule {
             var itemPageIndex = $(this).data("page-index");
             return (itemPageIndex >= pageIndex - displayOnLeft && itemPageIndex <= pageIndex + displayOnRight);
         });
-        $(displayedPages).css('display', 'inherit');
+        $(displayedPages).css('display', 'inline-block');
         $(actualPage).addClass('page-active');
 
     }

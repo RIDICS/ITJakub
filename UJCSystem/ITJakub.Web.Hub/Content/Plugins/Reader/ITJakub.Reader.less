@@ -13,7 +13,177 @@ html,body {
 }
 
 .reader-controls {
-    height: 85px;
+    //height: 85px;
+
+    .ui-slider {
+        background: @item-background-color;
+        height: 5px;
+        width: 95%;
+        margin-left: 2.5%;
+        border: none;
+
+        > .ui-slider-handle {
+            background: gray;
+            border-radius: 50%;
+            border: none;
+            top: -.5em;
+        }
+    }
+    span.ui-slider-handle:focus {
+        outline: 0;
+    }
+
+    .slider-tip {
+        opacity: 1;
+        width: 100px;
+        bottom: 120%;
+        margin-left: -3.5em;
+    }
+    .tooltip-inner {
+        background-color: @item-background-color;
+        color: white;
+    }
+    .tooltip-arrow {
+        border-top-color: @item-background-color !important;
+    }
+
+    .page-input-button {
+        border-radius: 0;
+        background-color: @item-background-color;
+        color: white;
+        height: 25px;
+        padding: 2px;
+        margin-top: 3px;
+        width: 30px;
+
+        &:hover {
+            background-color: lightgray;
+            color: black;
+        }
+    }
+
+    .page-input-text {
+        height: 25px;
+        width: 120px;
+        padding: 2px;
+        border: 1px solid lightgray;
+        border-right: none;
+        outline: 0;
+    }
+
+    .paging {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .page-input {
+        float: left;
+        margin-top: 20px;
+        margin-left: 2.5%;
+    }
+
+    .page-navigation-container-helper {
+        clear: both;
+    }
+    ul {
+        &.page-navigation-container {
+            &.page-navigation-container-right {
+                float: right;
+                padding: 0 40px 0 0;
+            }
+            &.page-navigation-container-left {
+                float: left;
+            }
+
+            > li {
+                min-width: 24px;
+                display: inline-block;
+                padding: 5px 2px;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -o-user-select: none;
+                user-select: none;
+
+                > a {
+                    font-weight: bold;
+                }
+            }
+        }
+        &.pagination {
+            margin-top: 15px;
+            margin-bottom: 15px;
+
+             > li {
+                min-width: 50px;
+                padding: 5px 5px;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -o-user-select: none;
+                user-select: none;
+
+                .page-navigation {
+                    padding: 5px;
+                    width: 20px;
+                }
+                > a {
+                    font-size: 15px;
+                    border: none;
+                    float: none;
+
+                    &:hover {
+                        background: none;
+                    }
+                }
+                &.page-navigation > a {
+                    font-weight: bold;
+                    padding-left: 2px;
+                    padding-right: 2px;
+                }
+                &.page-active > a {
+                    font-weight: bold;
+                    font-size: 17px;
+                    color: @item-background-color;
+                }
+            }
+        }
+    }
+
+    .buttons {
+        float: right;
+        padding-top: 5px;
+
+        button {
+            color: gray;
+            background: none;
+            border: none;
+            outline: 0;
+            text-align: center;
+            width: 72px;
+            font-size: 0.9em;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+
+            &:hover {
+                color: @item-background-color;
+            }
+        }
+        span.glyphicon {
+            font-size: 2em;
+        }
+    }
+
+    .bookmark {
+        color: red;
+        z-index: 1;
+        top: -2px;
+        position: absolute;
+        margin-left: -7px;
+    }
 }
 
 .reader-body-container {
@@ -23,161 +193,11 @@ html,body {
     padding: 0;
 }
 
-.reader-controls .ui-slider {
-    background: @item-background-color;
-    height: 5px;
-    width: 95%;
-    margin-left: 2.5%;
-    border: none;
-}
-
-.reader-controls .ui-slider > .ui-slider-handle {
-    background: gray;
-    border-radius: 50%;
-    border: none;
-    top: -.5em;
-}
-
-.reader-controls span.ui-slider-handle:focus {
-    outline: 0;
-}
-
-.reader-controls .slider-tip {
-    opacity: 1;
-    width: 100px;
-    bottom: 120%;
-    margin-left: -3.5em;
-}
-
-.reader-controls .tooltip-inner {
-    background-color: @item-background-color;
-    color: white;
-}
-
-.reader-controls .tooltip-arrow {
-    border-top-color: @item-background-color !important;
-}
-
 .title {
     font-size: 24px;
     font-weight: 500;
     margin-bottom: 5px;
     margin-left: 10px;
-}
-
-.reader-controls .page-input-button {
-    border-radius: 0;
-    background-color: @item-background-color;
-    color: white;
-    height: 25px;
-    padding: 2px;
-    margin-top: 3px;
-    width: 30px;
-}
-
-.reader-controls .page-input-button:hover {
-    background-color: lightgray;
-    color: black;
-}
-
-.reader-controls .page-input-text {
-    height: 25px;
-    width: 120px;
-    padding: 2px;
-    border: 1px solid lightgray;
-    border-right: none;
-    outline: 0;
-}
-
-.reader-controls .paging {
-    margin-top: 10px;
-    text-align: center;
-}
-
-.reader-controls .page-input {
-    float: left;
-    margin-top: 20px;
-    margin-left: 2.5%;
-}
-
-.reader-controls ul.pagination {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.reader-controls ul.pagination > li {
-    min-width: 50px;
-    padding: 5px 5px;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-
-.reader-controls ul.pagination > li.page-navigation {
-    padding: 5px;
-    width: 20px;
-}
-
-.reader-controls ul.pagination > li > a {
-    float: left;
-        font-size: 15px;
-    border: none;
-    float: none;
-}
-
-.reader-controls ul.pagination > li.page-navigation > a {
-    font-weight: bold;
-    padding-left: 2px;
-    padding-right: 2px;
-}
-
-.reader-controls ul.pagination > li.page-active > a {
-    font-weight: bold;
-    font-size: 17px;
-    color: @item-background-color;
-}
-
-.reader-controls ul.pagination > li > a:hover {
-    background: none;
-}
-
-
-.reader-controls .buttons {
-    float: right;
-    padding-top: 5px;
-}
-
-.reader-controls .buttons button {
-    color: gray;
-    background: none;
-    border: none;
-    outline: 0;
-    text-align: center;
-    width: 72px;
-    font-size: 0.9em;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    user-select: none;
-}
-
-.reader-controls .buttons button:hover {
-    color: @item-background-color;
-}
-
-.reader-controls .buttons span.glyphicon {
-    font-size: 2em;
-}
-
-.reader-controls .bookmark {
-    color: red;
-    z-index: 1;
-    top: -2px;
-    position: absolute;
-    margin-left: -7px;
 }
 
 /*TODO move stop cotrols div command change positioning*/
@@ -454,14 +474,14 @@ html,body {
   margin-left: 5px;
 }
 
-.reader-text div{
+.reader-text div {
     display: inline;
-}
 
-.reader-text div.page-name {
-    text-align: center;
-    font-size: 1.1em;
-    display: none;    
+    &.page-name {
+        text-align: center;
+        font-size: 1.1em;
+        display: none;    
+    }
 }
 
 .reader-text-show-page-names div.page-name {
@@ -519,7 +539,7 @@ html,body {
   margin-top: 2px;
 }
 
-.reader-text.show-notes  span.note-ref {
+.reader-text.show-notes span.note-ref {
     display: inline;
     background-color: #FFF380;
     margin-left: 2px;
