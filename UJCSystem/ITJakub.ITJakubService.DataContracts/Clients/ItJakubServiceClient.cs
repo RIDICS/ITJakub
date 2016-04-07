@@ -183,6 +183,33 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public bool HasBookImage(string bookXmlId)
+        {
+            try
+            {
+                return Channel.HasBookImage(bookXmlId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("HasBookImage failed with: {0}", ex);
+                throw;
+            }
+
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("HasBookImage failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("HasBookImage timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
             try

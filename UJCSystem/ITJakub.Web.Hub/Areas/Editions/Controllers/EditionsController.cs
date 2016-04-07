@@ -65,6 +65,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return File(fullPath, "application/json", fullPath);
         }
 
+        public ActionResult HasBookImage(string bookId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                return Json(new {HasBookImage = client.HasBookImage(bookId)});
+            }
+        }
         public FileResult GetBookImage(string bookId, int position)
         {
             using (var client = GetMainServiceClient())

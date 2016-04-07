@@ -98,6 +98,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.Search(term);
         }
 
+        public bool HasBookImage(string bookXmlId)
+        {
+            return m_bookManager.HasBookImage(bookXmlId);
+        }
+
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
             return m_bookManager.GetBookPageImage(bookXmlId, position);

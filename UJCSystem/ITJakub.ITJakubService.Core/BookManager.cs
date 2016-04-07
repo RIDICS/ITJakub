@@ -101,6 +101,13 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<BookInfoWithPagesContract>(bookVersion);
         }
 
+        public bool HasBookImage(string bookXmlId)
+        {
+            m_authorizationManager.AuthorizeBook(bookXmlId);
+
+            return m_bookVersionRepository.CountBookImageByXmlId(bookXmlId) > 0;
+        }
+
         public Stream GetBookPageImage(string bookXmlId, int position)
         {
             m_authorizationManager.AuthorizeBook(bookXmlId);

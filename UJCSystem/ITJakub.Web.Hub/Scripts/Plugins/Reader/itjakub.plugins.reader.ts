@@ -1229,8 +1229,25 @@ class SettingsPanel extends LeftSidePanel {
 
         var buttonsDiv = window.document.createElement("div");
         $(buttonsDiv).addClass("reader-settings-buttons-area");
+        
         buttonsDiv.appendChild(textButton);
-        buttonsDiv.appendChild(imageButton);
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            data: JSON.stringify({ bookId: rootReference.parentReader.bookId }),
+            url: rootReference.parentReader.readerContainer.getAttribute("data-has-image-url"),
+            dataType: "json",
+            contentType: "application/json",
+            success: (response: { HasBookImage: boolean }) => {
+                if (response.HasBookImage) {
+                    buttonsDiv.appendChild(imageButton);
+                }
+            },
+            error: (response) => {
+                console.error(response);
+            }
+        });
 
         var checkboxesDiv = window.document.createElement("div");
         $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
