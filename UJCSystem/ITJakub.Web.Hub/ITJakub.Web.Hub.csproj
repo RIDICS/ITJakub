@@ -764,6 +764,19 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\npm.js" />
+    <Content Include="Scripts\Plugins\Zoommaster\daisy.jpg" />
+    <Content Include="Scripts\Plugins\Zoommaster\demo.html" />
+    <Content Include="Scripts\Plugins\Zoommaster\grab.cur" />
+    <Content Include="Scripts\Plugins\Zoommaster\grabbed.cur" />
+    <Content Include="Scripts\Plugins\Zoommaster\icon.png" />
+    <TypeScriptCompile Include="Scripts\Plugins\Wheelzoom\wheelzoom.d.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Zoommaster\jquery.zoom.d.ts" />
+    <Content Include="Scripts\Plugins\Zoommaster\jquery.zoom.js" />
+    <Content Include="Scripts\Plugins\Zoommaster\jquery.zoom.min.js" />
+    <Content Include="Scripts\Plugins\Zoommaster\roxy.jpg" />
+    <Content Include="Scripts\Plugins\Wheelzoom\daisy.jpg" />
+    <Content Include="Scripts\Plugins\Wheelzoom\demo.html" />
+    <Content Include="Scripts\Plugins\Wheelzoom\wheelzoom.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\typeahead.bundle.js" />
@@ -795,6 +808,12 @@
     <Content Include="Views\News\AddNews.cshtml" />
     <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
     <Content Include="Views\EditionNote\EditionNote.cshtml" />
+    <Content Include="Scripts\Plugins\Wheelzoom\LICENSE.md" />
+    <Content Include="Scripts\Plugins\Wheelzoom\readme.md" />
+    <Content Include="Scripts\Plugins\Zoommaster\bower.json" />
+    <Content Include="Scripts\Plugins\Zoommaster\LICENSE.md" />
+    <Content Include="Scripts\Plugins\Zoommaster\package.json" />
+    <Content Include="Scripts\Plugins\Zoommaster\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -74,7 +74,6 @@ class Search {
         
         var searchButton = document.createElement("button");
         searchButton.type = "button";
-        console.log(searchButton);
         searchButton.innerHTML = "Vyhledat";
         searchButton.classList.add("btn");
         searchButton.classList.add("btn-default");
