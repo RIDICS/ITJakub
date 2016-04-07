@@ -980,27 +980,27 @@ class SidePanel {
         this.identificator = identificator;
         this.headerName = headerName;
         this.isDraggable = false;
-        var sidePanelDiv: HTMLDivElement = document.createElement('div');
+        var sidePanelDiv: HTMLDivElement = document.createElement("div");
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
 
-        var panelHeaderDiv: HTMLDivElement = document.createElement('div');
-        $(panelHeaderDiv).addClass('reader-left-panel-header');
+        var panelHeaderDiv: HTMLDivElement = document.createElement("div");
+        $(panelHeaderDiv).addClass("reader-left-panel-header");
 
         var nameSpan = document.createElement("span");
-        $(nameSpan).addClass('panel-header-name');
-        $(nameSpan).append(headerName);
-        $(panelHeaderDiv).append(nameSpan);
+        $(nameSpan).addClass("panel-header-name");
+        nameSpan.innerHTML=headerName;
+        panelHeaderDiv.appendChild(nameSpan);
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
             var sidePanelCloseButton = document.createElement("button");
-            $(sidePanelCloseButton).addClass('close-button');
+            $(sidePanelCloseButton).addClass("close-button");
             $(sidePanelCloseButton).click((event: Event) => {
                 this.onCloseButtonClick(sidePanelDiv);
             });
 
             var closeSpan = document.createElement("span");
-            $(closeSpan).addClass('glyphicon glyphicon-remove');
+            $(closeSpan).addClass("glyphicon glyphicon-remove");
             $(sidePanelCloseButton).append(closeSpan);
 
             this.closeButton = sidePanelCloseButton;
@@ -1011,13 +1011,13 @@ class SidePanel {
         if(showPanelButtonList.indexOf(PanelButtonEnum.Pin) >= 0)
         {
             var panelPinButton = document.createElement("button");
-            $(panelPinButton).addClass('pin-button');
+            $(panelPinButton).addClass("pin-button");
             $(panelPinButton).click((event: Event) => {
                 this.onPinButtonClick(sidePanelDiv);
             });
 
             var pinSpan = document.createElement("span");
-            $(pinSpan).addClass('glyphicon glyphicon-pushpin');
+            $(pinSpan).addClass("glyphicon glyphicon-pushpin");
             $(panelPinButton).append(pinSpan);
 
             this.pinButton = panelPinButton;
@@ -1027,14 +1027,14 @@ class SidePanel {
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
             var newWindowButton = document.createElement("button");
-            $(newWindowButton).addClass('new-window-button');
+            $(newWindowButton).addClass("new-window-button");
             $(newWindowButton).click((event: Event) => {
                 this.onNewWindowButtonClick(sidePanelDiv);
             });
 
             var windowSpan = document.createElement("span");
-            $(windowSpan).addClass('glyphicon glyphicon-new-window');
-            $(newWindowButton).append(windowSpan);
+            $(windowSpan).addClass("glyphicon glyphicon-new-window");
+            newWindowButton.appendChild(windowSpan);
 
             this.newWindowButton = newWindowButton;
 
@@ -1045,8 +1045,8 @@ class SidePanel {
 
         this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
-
-        $(sidePanelDiv).append(panelBodyDiv);
+        
+        sidePanelDiv.appendChild(panelBodyDiv);
 
         $(sidePanelDiv).mousedown((event: Event) => {
             this.parentReader.populatePanelOnTop(this);
@@ -1061,7 +1061,7 @@ class SidePanel {
     protected  makePanelBody(innerContent, rootReference, window: Window): HTMLDivElement {
         var panelBodyDiv: HTMLDivElement = window.document.createElement('div');
         $(panelBodyDiv).addClass('reader-left-panel-body');
-        $(panelBodyDiv).append(innerContent);
+        panelBodyDiv.appendChild(innerContent);
         return panelBodyDiv;
     }
 
@@ -1523,20 +1523,58 @@ class ImagePanel extends RightSidePanel {
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
-        var imageContainerDiv: HTMLDivElement = window.document.createElement('div');
-        $(imageContainerDiv).addClass('reader-image-container');
+        var imageContainerDiv: HTMLDivElement = window.document.createElement("div");
+        imageContainerDiv.classList.add('reader-image-container');
         return imageContainerDiv;
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
         var pagePosition = pageIndex + 1;
         $(this.innerContent).empty();
+      
+        
         var image: HTMLImageElement = document.createElement("img");
+        image.classList.add("reader-image");
         image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
-        $(this.innerContent).append(image);
-        if (typeof this.windowBody !== 'undefined') {
+
+        this.innerContent.appendChild(image);
+
+        var zoomOnClick = false;
+
+        var img = new Image();
+        img.onload = () => {
+            var $innerContent = $(this.innerContent);
+
+            if (zoomOnClick) {
+                $innerContent.zoom({ on: "click" });
+            } else {
+                image.setAttribute("data-image-src", image.src);
+                wheelzoom(image);
+
+                var lastWidth = $innerContent.width();
+                var lastHeight = $innerContent.height();
+                $(window).resize(() => {
+                    var newWidth = $innerContent.width();
+                    var newHeight = $innerContent.height();
+
+                    if (lastWidth != newWidth || lastHeight != newHeight) {
+                        image.src=image.getAttribute("data-image-src");
+
+                        console.log(image);
+                        wheelzoom(image);
+
+                        lastWidth = newWidth;
+                        lastHeight = newHeight;
+                    }
+                });
+                
+            }
+        };
+        img.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+
+        if (typeof this.windowBody !== "undefined") {
             $(this.windowBody).empty();
-            $(this.windowBody).append(image);
+            this.windowBody.appendChild(image);
         }
     }
 }
