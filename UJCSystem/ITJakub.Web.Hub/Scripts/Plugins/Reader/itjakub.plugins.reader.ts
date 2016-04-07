@@ -169,8 +169,11 @@ class ReaderModule {
             slide: (event, ui) => {
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').stop(true, true);
                 $(event.target).find('.ui-slider-handle').find('.slider-tip').show();
-                $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value].text);
-
+                if (this.pages[ui.value] !== undefined) {
+                    $(event.target).find('.ui-slider-handle').find('.tooltip-inner').html("Strana: " + this.pages[ui.value].text);
+                } else {
+                    console.error("missing page "+ui.value);
+                }
             },
             change: (event: Event, ui: JQueryUI.SliderUIParams) => {
                 if (this.actualPageIndex !== ui.value) {
@@ -187,7 +190,12 @@ class ReaderModule {
 
         var innerTooltip: HTMLDivElement = document.createElement('div');
         $(innerTooltip).addClass('tooltip-inner');
-        $(innerTooltip).html("Strana: " + this.pages[0].text);
+        if (this.pages[0] !== undefined) {
+            $(innerTooltip).html("Strana: " + this.pages[0].text);
+        }
+        else {
+            console.error("missing page " + 0);
+        }
         sliderTooltip.appendChild(innerTooltip);
         $(sliderTooltip).hide();
 
@@ -232,8 +240,13 @@ class ReaderModule {
                 }
             }
 
-            var page: BookPage = this.pages[pageIndex];
-            this.moveToPage(page.xmlId, true);
+            if (this.pages[pageIndex] !== undefined) {
+                var page: BookPage = this.pages[pageIndex];
+                this.moveToPage(page.xmlId, true);
+            }
+            else {
+                console.error("missing page " + pageIndex);
+            }
         });
 
         pageInputDiv.appendChild(pageInputButton);
