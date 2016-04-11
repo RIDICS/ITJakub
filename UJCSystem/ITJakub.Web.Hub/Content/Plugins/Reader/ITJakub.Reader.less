@@ -468,6 +468,11 @@ html,body {
     label {
         font-weight: normal;
     }
+    div {
+        input[disabled] + label {
+            cursor: not-allowed;
+        }
+    }
 }
 
 .reader-settings-checkboxes-area input{
