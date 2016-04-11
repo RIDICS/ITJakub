@@ -447,10 +447,15 @@ html,body {
     background-color: @item-background-color;
     margin: 1px;
     height: 28px;
-}
 
-.reader-settings-button:hover {
-    color: black;    
+    &:hover {
+        color: black;    
+    }
+    &[disabled] {
+        color: white;
+        background-color: gray;
+        cursor: not-allowed;
+    }
 }
 
 .reader-settings-buttons-area {
@@ -459,6 +464,10 @@ html,body {
 
 .reader-settings-checkboxes-area {
     margin-top: 5px;
+
+    label {
+        font-weight: normal;
+    }
 }
 
 .reader-settings-checkboxes-area input{

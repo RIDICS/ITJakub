@@ -1311,17 +1311,10 @@ class SettingsPanel extends LeftSidePanel {
 
         var buttonsDiv = window.document.createElement("div");
         $(buttonsDiv).addClass("reader-settings-buttons-area");
-
-        console.log(rootReference.parentReader);
-
-        rootReference.parentReader.hasBookPage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, () => {
-            buttonsDiv.appendChild(textButton);
-        });
-
-        rootReference.parentReader.hasBookImage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, () => {
-            buttonsDiv.appendChild(imageButton);
-        });
-
+        
+        buttonsDiv.appendChild(textButton);
+        buttonsDiv.appendChild(imageButton);
+        
         var checkboxesDiv = window.document.createElement("div");
         $(checkboxesDiv).addClass("reader-settings-checkboxes-area");
 
@@ -1340,10 +1333,12 @@ class SettingsPanel extends LeftSidePanel {
 
         });
 
-        var showPageNameSpan: HTMLSpanElement = window.document.createElement("span");
-        showPageNameSpan.innerHTML = "Zobrazit číslování stránek";
+        var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
+        showPageNameLabel.innerHTML = "Zobrazit číslování stránek";
         showPageCheckboxDiv.appendChild(showPageNameCheckbox);
-        showPageCheckboxDiv.appendChild(showPageNameSpan);
+        showPageCheckboxDiv.appendChild(showPageNameLabel);
+        showPageNameCheckbox.id = "checkbox-show-page-numbers";
+        showPageNameLabel.setAttribute("for", showPageNameCheckbox.id);
 
         var showPageOnNewLineDiv: HTMLDivElement = window.document.createElement("div");
         var showPageOnNewLineCheckbox: HTMLInputElement = window.document.createElement("input");
@@ -1359,10 +1354,12 @@ class SettingsPanel extends LeftSidePanel {
             }
         });
 
-        var showPageOnNewLineSpan: HTMLSpanElement = window.document.createElement("span");
-        showPageOnNewLineSpan.innerHTML = "Zalamovat stránky";
+        var showPageOnNewLineLabel: HTMLLabelElement = window.document.createElement("label");
+        showPageOnNewLineLabel.innerHTML = "Zalamovat stránky";
         showPageOnNewLineDiv.appendChild(showPageOnNewLineCheckbox);
-        showPageOnNewLineDiv.appendChild(showPageOnNewLineSpan);
+        showPageOnNewLineDiv.appendChild(showPageOnNewLineLabel);
+        showPageOnNewLineCheckbox.id = "checkbox-page-breaks";
+        showPageOnNewLineLabel.setAttribute("for", showPageOnNewLineCheckbox.id);
 
         var showCommentCheckboxDiv: HTMLDivElement = window.document.createElement("div");
         var showCommentCheckbox: HTMLInputElement = window.document.createElement("input");
@@ -1378,10 +1375,22 @@ class SettingsPanel extends LeftSidePanel {
             }
         });
 
-        var showCommentSpan: HTMLSpanElement = window.document.createElement("span");
-        showCommentSpan.innerHTML = "Zobrazit komentáře";
+        var showCommentLabel: HTMLLabelElement = window.document.createElement("label");
+        showCommentLabel.innerHTML = "Zobrazit komentáře";
         showCommentCheckboxDiv.appendChild(showCommentCheckbox);
-        showCommentCheckboxDiv.appendChild(showCommentSpan);
+        showCommentCheckboxDiv.appendChild(showCommentLabel);
+        showCommentCheckbox.id = "checkbox-show-comment";
+        showCommentLabel.setAttribute("for",showCommentCheckbox.id);
+
+        rootReference.parentReader.hasBookPage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, null, () => {
+            textButton.disabled = true;
+            showPageNameCheckbox.disabled = true;
+            showPageOnNewLineCheckbox.disabled = true;
+            showCommentCheckbox.disabled = true;
+        });
+        rootReference.parentReader.hasBookImage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, null, () => {
+            imageButton.disabled = true;
+        });
 
         checkboxesDiv.appendChild(showPageCheckboxDiv);
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
