@@ -2109,7 +2109,7 @@ class TermsPanel extends LeftSidePanel {
                         this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
                     }
 
-                    if (terms.length === 0) {
+                    if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
                         $(this.termsOrderedList).addClass("no-items");
                         $(this.termsOrderedList).append("Na této stránce se nenachází žádné téma");
                     }
