@@ -1667,7 +1667,13 @@ class ImagePanel extends RightSidePanel {
         image.classList.add("reader-image");
         image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
 
-        this.innerContent.appendChild(image);
+        var imageLink: HTMLAnchorElement = document.createElement("a");
+        imageLink.classList.add("no-click-href");
+        imageLink.href = image.src;
+        imageLink.onclick = (event: MouseEvent) => { return event.ctrlKey;};
+
+        imageLink.appendChild(image);
+        this.innerContent.appendChild(imageLink);
 
         var zoomOnClick = false;
 
