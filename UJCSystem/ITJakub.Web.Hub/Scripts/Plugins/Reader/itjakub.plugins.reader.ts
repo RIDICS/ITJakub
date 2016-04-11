@@ -126,6 +126,72 @@ class ReaderModule {
         this.moveToPageNumber(0, false); //load first page
     }
 
+    protected hasBookPageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+
+    hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
+        if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                data: JSON.stringify({ bookId: bookId, versionId: bookVersionId }),
+                url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response: { HasBookPage: boolean }) => {
+                    if (this.hasBookPageCache[bookId] === undefined) {
+                        this.hasBookPageCache[bookId] = {};
+                    }
+                    this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
+                    if (response.HasBookPage && onTrue !== null) {
+                        onTrue();
+                    } else if (!response.HasBookPage && onFalse !== null) {
+                        onFalse();
+                    }
+                },
+                error: (response) => {
+                    console.error(response);
+                }
+            });
+        } else if (this.hasBookPageCache[bookId][bookVersionId] && onTrue !== null) {
+            onTrue();
+        } else if (!this.hasBookPageCache[bookId][bookVersionId] && onFalse !== null) {
+            onFalse();
+        }
+    }
+
+    protected hasBookImageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+
+    hasBookImage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
+        if (this.hasBookImageCache[bookId] === undefined || this.hasBookImageCache[bookId][bookVersionId] === undefined) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                data: JSON.stringify({ bookId: bookId, versionId: bookVersionId }),
+                url: this.readerContainer.getAttribute("data-has-image-url"),
+                dataType: "json",
+                contentType: "application/json",
+                success: (response: { HasBookImage: boolean }) => {
+                    if (this.hasBookImageCache[bookId] === undefined) {
+                        this.hasBookImageCache[bookId] = {};
+                    }
+                    this.hasBookImageCache[bookId][bookVersionId] = response.HasBookImage;
+                    if (response.HasBookImage && onTrue !== null) {
+                        onTrue();
+                    } else if (!response.HasBookImage && onFalse !== null) {
+                        onFalse();
+                    }
+                },
+                error: (response) => {
+                    console.error(response);
+                }
+            });
+        } else if (this.hasBookImageCache[bookId][bookVersionId] && onTrue !== null) {
+            onTrue();
+        } else if (!this.hasBookImageCache[bookId][bookVersionId] && onFalse !== null) {
+            onFalse();
+        }
+    }
+
     getBookXmlId(): string {
         return this.bookId;
     }
@@ -634,31 +700,47 @@ class ReaderModule {
         var bodyContainerDiv: HTMLDivElement = document.createElement('div');
         $(bodyContainerDiv).addClass('reader-body-container content-container');
 
+        var textPanel: TextPanel = null;
         if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
-
-            var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
-            this.rightSidePanels.push(textPanel);
-            this.textPanel = textPanel;
-
-            bodyContainerDiv.appendChild(textPanel.panelHtml);   
-
+            textPanel = this.appendTextPanel(bodyContainerDiv);
         }
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.ImagePanel) >= 0) {
+            var imagePanel: ImagePanel =this.appendImagePanel(bodyContainerDiv);
 
-            var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
-            this.rightSidePanels.push(imagePanel);
-            this.imagePanel = imagePanel;
-
-            if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {       //Text panel is higher priority
-                $(imagePanel.panelHtml).hide();    
+            if (textPanel !== null && this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {
+                this.hasBookPage(this.bookId, this.versionId, null, () => {
+                    $(textPanel.panelHtml).hide();
+                    $(imagePanel.panelHtml).show();
+                });
             }
-            
-            bodyContainerDiv.appendChild(imagePanel.panelHtml);
-
         }
 
         return bodyContainerDiv;
+    }
+
+    protected appendTextPanel(bodyContainerDiv: HTMLDivElement): TextPanel {
+        var textPanel: TextPanel = new TextPanel(this.textPanelIdentificator, this, this.showMainPanelsButtonList);
+        this.rightSidePanels.push(textPanel);
+        this.textPanel = textPanel;
+
+        bodyContainerDiv.appendChild(textPanel.panelHtml);
+
+        return textPanel;
+    }
+
+    protected appendImagePanel(bodyContainerDiv: HTMLDivElement): ImagePanel {
+        var imagePanel: ImagePanel = new ImagePanel(this.imagePanelIdentificator, this, this.showMainPanelsButtonList);
+        this.rightSidePanels.push(imagePanel);
+        this.imagePanel = imagePanel;
+
+        if (this.showPanelList.indexOf(ReaderPanelEnum.TextPanel) >= 0) {       //Text panel is higher priority
+            $(imagePanel.panelHtml).hide();
+        }
+
+        bodyContainerDiv.appendChild(imagePanel.panelHtml);
+
+        return imagePanel;
     }
 
     moveToPageNumber(pageIndex: number, scrollTo: boolean) {
@@ -1232,38 +1314,12 @@ class SettingsPanel extends LeftSidePanel {
 
         console.log(rootReference.parentReader);
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ bookId: rootReference.parentReader.bookId, versionId: rootReference.parentReader.versionId }),
-            url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
-            dataType: "json",
-            contentType: "application/json",
-            success: (response: { HasBookPage: boolean }) => {
-                if (response.HasBookPage) {
-                    buttonsDiv.appendChild(textButton);
-                }
-            },
-            error: (response) => {
-                console.error(response);
-            }
+        rootReference.parentReader.hasBookPage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, () => {
+            buttonsDiv.appendChild(textButton);
         });
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ bookId: rootReference.parentReader.bookId, versionId: rootReference.parentReader.versionId }),
-            url: rootReference.parentReader.readerContainer.getAttribute("data-has-image-url"),
-            dataType: "json",
-            contentType: "application/json",
-            success: (response: { HasBookImage: boolean }) => {
-                if (response.HasBookImage) {
-                    buttonsDiv.appendChild(imageButton);
-                }
-            },
-            error: (response) => {
-                console.error(response);
-            }
+        rootReference.parentReader.hasBookImage(rootReference.parentReader.bookId, rootReference.parentReader.versionId, () => {
+            buttonsDiv.appendChild(imageButton);
         });
 
         var checkboxesDiv = window.document.createElement("div");
@@ -1710,13 +1766,16 @@ class TextPanel extends RightSidePanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
-            this.displayPage(this.parentReader.pages[pageIndex - j], false);
-        }
-        for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
-            this.displayPage(this.parentReader.pages[pageIndex + i], false);
-        }
-        this.displayPage(this.parentReader.pages[pageIndex], scrollTo);
+        //fetch page only if exist
+        this.parentReader.hasBookPage(this.parentReader.bookId, this.parentReader.versionId, () => {
+            for (var j = 1; pageIndex - j >= 0 && j <= this.preloadPagesBefore; j++) {
+                this.displayPage(this.parentReader.pages[pageIndex - j], false);
+            }
+            for (var i = 1; pageIndex + i < this.parentReader.pages.length && i <= this.preloadPagesAfter; i++) {
+                this.displayPage(this.parentReader.pages[pageIndex + i], false);
+            }
+            this.displayPage(this.parentReader.pages[pageIndex], scrollTo); 
+        });
     }
 
     displayPage(page: BookPage, scrollTo: boolean) {

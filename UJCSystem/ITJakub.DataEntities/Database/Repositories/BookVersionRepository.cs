@@ -111,7 +111,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
 
-                var bookImages =
+                var bookPages =
                     session.QueryOver<BookPage>()
                         .JoinAlias(bookPage => bookPage.BookVersion, () => bookVersionAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
@@ -120,7 +120,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                                 bookAlias.Guid == bookXmlId && bookVersionAlias.VersionId == versionId &&
                                 bookPage.XmlResource != null)
                         .RowCount();
-                return bookImages;
+                return bookPages;
             }
         }
 
