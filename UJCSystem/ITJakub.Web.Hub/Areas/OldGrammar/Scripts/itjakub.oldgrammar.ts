@@ -9,15 +9,17 @@
         $(".twitter-typeahead").find(".tt-menu").hide();
     };
 
-    var readerPanels = [ReaderPanelEnum.ImagePanel, ReaderPanelEnum.TermsPanel];
-    var leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
-    var mainPanelButtons = [PanelButtonEnum.Pin];
-
-    var readerPlugin = new ReaderModule(<any>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
+    const readerPanels = [ReaderPanelEnum.ImagePanel, ReaderPanelEnum.TermsPanel];
+    const leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
+    const mainPanelButtons = [PanelButtonEnum.Pin];
+    
+    var readerPlugin = new ReaderModule(<HTMLDivElement>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     readerPlugin.setTermPanelCallback((xmlId: string, text: string) => {
         window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;
     });
+    
+    readerPlugin.changeSidePanelVisibility(readerPlugin.termsPanelIdentificator, 'left');
 
     var search: Search;
     
