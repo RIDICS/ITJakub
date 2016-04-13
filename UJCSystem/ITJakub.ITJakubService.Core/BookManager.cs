@@ -217,5 +217,15 @@ namespace ITJakub.ITJakubService.Core
 
             return editionNoteText;
         }
+
+        public long GetBookIdByXmlId(string bookGuid)
+        {
+            var book = m_bookRepository.FindBookByGuid(bookGuid);
+            var bookId = book.Id;
+
+            m_authorizationManager.AuthorizeBook(bookId);
+
+            return bookId;
+        }
     }
 }

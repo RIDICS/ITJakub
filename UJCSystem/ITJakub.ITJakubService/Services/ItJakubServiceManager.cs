@@ -83,6 +83,11 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookPageByXmlId(bookGuid, pageXmlId, resultFormat, bookTypeContract);
         }
 
+        public long GetBookIdByXmlId(string bookGuid)
+        {
+            return m_bookManager.GetBookIdByXmlId(bookGuid);
+        }
+
         public IEnumerable<BookPageContract> GetBookPageList(string bookGuid)
         {
             return m_bookManager.GetBookPagesList(bookGuid);

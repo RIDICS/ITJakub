@@ -24,6 +24,9 @@ namespace ITJakub.ITJakubService.DataContracts
         string GetBookPageByXmlId(string bookGuid, string pageXmlId, OutputFormatEnumContract resultFormat, BookTypeEnumContract bookTypeContract);
 
         [OperationContract]
+        long GetBookIdByXmlId(string bookGuid);
+
+        [OperationContract]
         IEnumerable<BookPageContract> GetBookPageList(string bookGuid);
 
         [OperationContract]

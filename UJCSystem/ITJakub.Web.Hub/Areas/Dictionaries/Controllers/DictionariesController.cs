@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Mime;
 using System.Web.Mvc;
+using System.Web.WebPages;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
@@ -36,8 +38,19 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View();
         }
 
-        public ActionResult Listing()
+        public ActionResult Listing(string xmlId, string[] books)
         {
+            if (!xmlId.IsEmpty())
+            {
+                using (var client = GetMainServiceClient())
+                {
+                    var bookId = client.GetBookIdByXmlId(xmlId);
+                    var bookArrId = string.Format("[{0}]", bookId);
+
+                    return RedirectToAction("Listing", "Dictionaries", new { books = bookArrId });
+                }
+            }
+
             return View();
         }
 

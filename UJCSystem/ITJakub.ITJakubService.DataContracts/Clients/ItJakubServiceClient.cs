@@ -108,6 +108,26 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public long GetBookIdByXmlId(string bookGuid)
+        {
+            try
+            {
+                return Channel.GetBookIdByXmlId(bookGuid);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookIdByXmlId failed with: {0}", ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("GetBookIdByXmlId timeouted with: {0}", ex);
+                throw;
+            }
+        }
+
         public IEnumerable<BookPageContract> GetBookPageList(string documentId)
         {
             try
