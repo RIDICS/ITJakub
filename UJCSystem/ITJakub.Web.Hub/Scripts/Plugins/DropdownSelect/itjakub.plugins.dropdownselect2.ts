@@ -38,8 +38,7 @@
         };
         callbackDelegate.getLeafItemTextCallback = (item) => {
             return this.books[item].name;
-        }
-
+        };
         this.isLoaded = false;
     }
 

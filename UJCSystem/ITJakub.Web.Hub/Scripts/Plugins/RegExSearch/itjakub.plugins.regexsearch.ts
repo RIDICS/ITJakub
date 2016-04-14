@@ -134,7 +134,7 @@ class Search {
         searchbarInputClassList.add("searchbar-input");
         searchbarInputClassList.add("keyboard-input");
         searchbarInputDiv.appendChild(searchbarInput);
-
+        
         this.searchInputTextbox = searchbarInput;
 
         $(this.searchInputTextbox).keypress((event: any) => {
