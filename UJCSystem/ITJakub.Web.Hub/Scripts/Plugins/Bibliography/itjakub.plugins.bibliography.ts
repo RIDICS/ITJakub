@@ -15,8 +15,8 @@ class BibliographyModule {
 
     private paginator: Pagination;
     private paginatorContainer: HTMLDivElement;
-    private booksCount : number;
-    private booksOnPage: number;
+    private booksCount : number = 0;
+    private booksOnPage: number = 10;
 
     private sortBar: SortBar;
 
