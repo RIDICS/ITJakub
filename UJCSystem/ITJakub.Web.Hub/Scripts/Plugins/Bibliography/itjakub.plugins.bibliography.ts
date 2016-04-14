@@ -24,6 +24,9 @@ class BibliographyModule {
 
     private defaultConfigurationUrl = "Bibliography/GetConfiguration";
 
+    private isConfigurationLoad=false;
+    private onConfigurationLoad: Array<() => any>=[];
+
     constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string) {
         this.resultsContainer = $(resultsContainer);
         this.sortChangeCallback = sortChangeCallback;
@@ -47,24 +50,26 @@ class BibliographyModule {
             configDownloadPath = customConfigurationPath;
         }
 
-        var configObj;
         $.ajax({
             type: "GET",
             traditional: true,
-            async: false,
             url: getBaseUrl() + configDownloadPath,
             dataType: 'json',
             contentType: 'application/json',
             success: (response) => {
-                configObj = response;
+                this.configurationManager = new ConfigurationManager(response);
+                this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
+                $(this.sortBarContainer).empty();
+                this.sortBar = new SortBar(this.sortChangeCallback);
+                var sortBarHtml = this.sortBar.makeSortBar(this.sortBarContainer);
+                $(this.sortBarContainer).append(sortBarHtml);
+
+                this.isConfigurationLoad = true;
+                for (let i = 0; i < this.onConfigurationLoad.length; i++) {
+                    this.onConfigurationLoad[i]();
+                }
             }
         });
-        this.configurationManager = new ConfigurationManager(configObj);
-        this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
-        $(this.sortBarContainer).empty();
-        this.sortBar = new SortBar(this.sortChangeCallback);
-        var sortBarHtml = this.sortBar.makeSortBar(this.sortBarContainer);
-        $(this.sortBarContainer).append(sortBarHtml);
     }
 
     public showBooks(books: IBookInfo[]) {
@@ -110,31 +115,39 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var bibFactory: BibliographyFactory;
-        if (typeof this.forcedBookType == 'undefined') {
-            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+        var doOnConfigurationLoad=() => {
+            var bibFactory: BibliographyFactory;
+            if (typeof this.forcedBookType == 'undefined') {
+                bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
+            } else {
+                bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+            }
+
+            var panel = bibFactory.makeLeftPanel(bibItem);
+            if (panel != null) visibleContent.appendChild(panel);
+
+            panel = bibFactory.makeRightPanel(bibItem);
+            if (panel != null) visibleContent.appendChild(panel);
+
+            panel = bibFactory.makeMiddlePanel(bibItem);
+            if (panel != null) visibleContent.appendChild(panel);
+
+            $(liElement).append(visibleContent);
+
+            var hiddenContent: HTMLDivElement = document.createElement('div');
+            $(hiddenContent).addClass('hidden-content');
+
+            panel = bibFactory.makeBottomPanel(bibItem);
+            if (panel != null) hiddenContent.appendChild(panel);
+
+            $(liElement).append(hiddenContent);
+        };
+        
+        if (this.isConfigurationLoad) {
+            doOnConfigurationLoad();
         } else {
-            bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+            this.onConfigurationLoad.push(doOnConfigurationLoad.bind(this));
         }
-
-        var panel = bibFactory.makeLeftPanel(bibItem);
-        if (panel != null) visibleContent.appendChild(panel);
-
-        panel = bibFactory.makeRightPanel(bibItem);
-        if (panel != null) visibleContent.appendChild(panel);
-
-        panel = bibFactory.makeMiddlePanel(bibItem);
-        if (panel != null) visibleContent.appendChild(panel);
-
-        $(liElement).append(visibleContent);
-
-        var hiddenContent: HTMLDivElement = document.createElement('div');
-        $(hiddenContent).addClass('hidden-content');
-
-        panel = bibFactory.makeBottomPanel(bibItem);
-        if (panel != null) hiddenContent.appendChild(panel);
-
-        $(liElement).append(hiddenContent);
 
         return liElement;
 
