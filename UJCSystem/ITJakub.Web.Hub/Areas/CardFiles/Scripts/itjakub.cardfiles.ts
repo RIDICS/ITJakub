@@ -1,4 +1,4 @@
-﻿function createSearch(){
+﻿function createSearch() {
     var callbackDelegate = createDelegate();
     var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", true, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
@@ -51,8 +51,8 @@
                     traditional: true,
                     data: { cardFileId: selectedCardFileItem.Id, headword: searchedHeadword },
                     url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
-                    dataType: 'json',
-                    contentType: 'application/json',
+                    dataType: "json",
+                    contentType: "application/json",
                     success: (response) => {
                         shouldShowErrorMessage = false;
                         $(serverErrorDiv).hide();
@@ -147,8 +147,8 @@ function createListing() {
         traditional: true,
         data: { },
         url: getBaseUrl()+"CardFiles/CardFiles/CardFiles",
-        dataType: 'json',
-        contentType: 'application/json',
+        dataType: "json",
+        contentType: "application/json",
         success: (response) => {
             var cardFiles = response["cardFiles"];
             for (var i = 0; i < cardFiles.length; i++) {
@@ -166,8 +166,8 @@ function createListing() {
 
             var cardFileId = getQueryStringParameterByName("cardFileId");
             if(cardFileId){
-            $(cardFileSelector).find("option:selected").removeAttr('selected');
-            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop('selected', 'selected');
+            $(cardFileSelector).find("option:selected").removeAttr("selected");
+            $(cardFileSelector).find("option[value =" + cardFileId + "]").prop("selected", "selected");
             }
 
             $(cardFileSelector).show();
@@ -191,8 +191,8 @@ function createListing() {
             traditional: true,
             data: { cardFileId: cardFileIdListed},
             url: getBaseUrl()+"CardFiles/CardFiles/Buckets",
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: (response) => {
                 var buckets = response["buckets"];
                 for (var i = 0; i < buckets.length; i++) {
@@ -230,36 +230,35 @@ function sortOrderChanged() {
     //TODO make ordering
 }
 
-function createList() {
+function initCardList() {
     var bibliographyModule = new BibliographyModule("#cardFilesListResults", "#cardFilesResultsHeader", sortOrderChanged);
 
-       $('#searchButton').click(() => {
-           var text = $('#searchbox').val();
-           bibliographyModule.clearBooks();
-           bibliographyModule.showLoading();
-           $.ajax({
-               type: "GET",
-               traditional: true,
-               url: getBaseUrl()+"CardFiles/CardFiles/SearchList",
-               data: { term: text },
-               dataType: 'json',
-               contentType: 'application/json',
-               success(response) {
-                   bibliographyModule.showBooks(response.books);
-               }
-           });
+    $("#searchButton").click(() => {
+        var text = $("#searchbox").val();
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "CardFiles/CardFiles/SearchList",
+            data: { term: text },
+            dataType: "json",
+            contentType: "application/json",
+            success(response) {
+                bibliographyModule.showBooks(response.books);
+            }
+        });
     });
 
     $("#searchbox").keypress((event: any) => {
-           var keyCode = event.which || event.keyCode;
-           if (keyCode === 13) {     //13 = Enter
-               $(this.searchButton).click();
-               event.preventDefault();
-               event.stopPropagation();
-               return false;
-           }
-     });
+        var keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {     //13 = Enter
+            $(this.searchButton).click();
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+    });
 
-    $('#searchButton').click();
-
+    $("#searchButton").click();
 }
