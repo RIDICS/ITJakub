@@ -101,8 +101,8 @@ class DictionaryViewer {
             $(this.headwordDescriptionContainer).empty();
 
             var noEntryFoundDiv = document.createElement("div");
-            $(noEntryFoundDiv).text("Žádné výsledky k zobrazení");
-            $(noEntryFoundDiv).addClass("dictionary-list-empty");
+            noEntryFoundDiv.innerHTML = "Žádné výsledky k zobrazení";
+            noEntryFoundDiv.classList.add("dictionary-list-empty");
             $(this.headwordListContainer).append(noEntryFoundDiv);
 
             return;
