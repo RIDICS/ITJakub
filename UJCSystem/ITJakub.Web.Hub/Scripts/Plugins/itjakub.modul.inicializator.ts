@@ -17,20 +17,40 @@
     protected notInitialized = true;
 
     protected configuration: IModulInicializatorConfiguration;
-    protected defaultConfiguration={
+    protected defaultConfiguration = {
+        base: {
+            url: {
+                searchKey: "search",
+                pageKey: "page",
+                selectionKey: "selected",
+                sortAscKey: "sortAsc",
+                sortCriteriaKey: "sortCriteria"
+            }
+        },
         bibliographyModule: {
+            resultsContainer: "#listResults",
+            sortBarContainer: "#listResultsHeader",
             sortChangeCallback: this.sortOrderChanged.bind(this),
             forcedBookType: null,
             customConfigurationPath: null
         },
         search: {
+            container: document.getElementById("listSearchDiv") as HTMLDivElement,
             processSearchJsonCallback: this.editionAdvancedSearchPaged.bind(this),
             processSearchTextCallback: this.editionBasicSearch.bind(this)
         },
         searchBox: {
+            inputFieldElement: ".searchbar-input",
+            searchBoxInputSelector: ".searchbar-input.tt-input",
             dataSet: {
+                name: "Title",
+                groupHeader: "Název",
                 parameterUrlString: null
             }
+        },
+        dropDownSelect: {
+            dropDownSelectContainer: "#dropdownSelectDiv",
+            showStar: true
         }
     };
     
@@ -385,24 +405,24 @@
 }
 
 interface IModulInicializatorConfiguration {
-    base: {
-        url: {
-            searchKey: string;
-            pageKey: string;
-            selectionKey: string;
-            sortAscKey: string;
-            sortCriteriaKey: string;
+    base?: {
+        url?: {
+            searchKey?: string;
+            pageKey?: string;
+            selectionKey?: string;
+            sortAscKey?: string;
+            sortCriteriaKey?: string;
         };
     };
     bibliographyModule: {
-        resultsContainer: string;
-        sortBarContainer: string;
+        resultsContainer?: string;
+        sortBarContainer?: string;
         sortChangeCallback?: () => void;
         forcedBookType?: BookTypeEnum;
         customConfigurationPath?: string;
     };
     search: {
-        container: HTMLDivElement;
+        container?: HTMLDivElement;
         processSearchJsonCallback?: (jsonData: string, pageNumber?:number) => void;
         processSearchTextCallback?: (text: string) => void;
 
@@ -410,22 +430,22 @@ interface IModulInicializatorConfiguration {
     };
     searchBox: IModulInicializatorConfigurationSearchBox;
     dropDownSelect: {
-        dropDownSelectContainer: string;
+        dropDownSelectContainer?: string;
         dataUrl: string;
-        showStar: boolean;
+        showStar?: boolean;
     };
 }
 
 interface IModulInicializatorConfigurationSearchBox {
-    inputFieldElement: string;
+    inputFieldElement?: string;
     controllerPath: string;
 
-    dataSet: {
-        name: string;
-        groupHeader: string;
+    dataSet?: {
+        name?: string;
+        groupHeader?: string;
         parameterUrlString?: string;
     };
-    searchBoxInputSelector: string;
+    searchBoxInputSelector?: string;
     searchUrl: IModulInicializatorConfigurationSearchBoxSearchUrl;
 }
 

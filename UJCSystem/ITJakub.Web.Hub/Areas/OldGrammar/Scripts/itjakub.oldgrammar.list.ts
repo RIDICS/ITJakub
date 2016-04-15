@@ -1,22 +1,10 @@
 ﻿$(document).ready(() => {
     const modulInicializator = new ModulInicializator({
-        base: {
-            url: {
-                searchKey: "search",
-                pageKey: "page",
-                selectionKey: "selected",
-                sortAscKey: "sortAsc",
-                sortCriteriaKey: "sortCriteria"
-            }
-        },
         bibliographyModule: {
-            resultsContainer: "#listResults",
-            sortBarContainer: "#listResultsHeader",
             forcedBookType: BookTypeEnum.Grammar,
             customConfigurationPath: "OldGrammar/OldGrammar/GetListConfiguration"
         },
         search: {
-            container: document.getElementById("listSearchDiv") as HTMLDivElement,
             enabledOptions: [
                 SearchTypeEnum.Title,
                 SearchTypeEnum.Author,
@@ -25,14 +13,8 @@
             ]
         },
         searchBox: {
-            inputFieldElement: ".searchbar-input",
             controllerPath: "OldGrammar/OldGrammar",
 
-            dataSet: {
-                name: "Title",
-                groupHeader: "Název"
-            },
-            searchBoxInputSelector: ".searchbar-input.tt-input",
             searchUrl: {
                 advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                 text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",
@@ -40,9 +22,7 @@
             }
         },
         dropDownSelect: {
-            dropDownSelectContainer: "#dropdownSelectDiv",
-            dataUrl: getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories",
-            showStar: true
+            dataUrl: getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories"
         }
     });
     modulInicializator.init();
