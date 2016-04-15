@@ -296,12 +296,6 @@
 
     protected createDropDownSelect(searchBox: SearchBox) {
         const callbackDelegate = new DropDownSelectCallbackDelegate();
-        const dropDownSelect = new DropDownSelect2(
-            this.configuration.dropDownSelect.dropDownSelectContainer,
-            this.configuration.dropDownSelect.dataUrl,
-            this.configuration.dropDownSelect.showStar,
-            callbackDelegate
-        );
 
         callbackDelegate.selectedChangedCallback = (state: State) => {
             this.selectedBookIds = new Array();
@@ -326,6 +320,14 @@
             searchBox.create();
             searchBox.value($(this.configuration.searchBox.searchBoxInputSelector).val());
         };
+
+        const dropDownSelect = new DropDownSelect2(
+            this.configuration.dropDownSelect.dropDownSelectContainer,
+            this.configuration.dropDownSelect.dataUrl,
+            this.configuration.dropDownSelect.showStar,
+            callbackDelegate
+        );
+        
         callbackDelegate.dataLoadedCallback = () => {
             var selectedIds = dropDownSelect.getSelectedIds();
 
