@@ -11,6 +11,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature
                 "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/professionalliterature/listjs").Include(
+                "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.modul.inicializator.js",
                 "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.list.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/professionalliterature/searchjs").Include(
