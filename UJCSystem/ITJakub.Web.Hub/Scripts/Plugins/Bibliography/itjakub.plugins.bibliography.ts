@@ -72,12 +72,22 @@ class BibliographyModule {
         });
     }
 
+    public runAsyncOnLoad(callback:()=>any) {
+        if (this.isConfigurationLoad) {
+            callback();
+        } else {
+            this.onConfigurationLoad.push(callback);
+        }
+
+        return this.isConfigurationLoad;
+    }
+
     public showBooks(books: IBookInfo[]) {
         this.clearBooks();
         this.clearLoading();
         if (typeof books !== "undefined" && books !== null && books.length > 0) {
             var rootElement: HTMLUListElement = document.createElement('ul');
-            $(rootElement).addClass('bib-listing');
+            rootElement.classList.add('bib-listing');
             $.each(books, (index, book: IBookInfo) => {
                 var bibliographyHtml = this.makeBibliography(book);
                 rootElement.appendChild(bibliographyHtml);

@@ -7,6 +7,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank
         internal static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/itjakub/bohemiantextbank/javascript").Include(
+                "~/Areas/BohemianTextBank/Scripts/itjakub.bohemiatextbank.modul.inicializator.js",
                 "~/Areas/BohemianTextBank/Scripts/itjakub.bohemiantextbank.search.js",
                 "~/Areas/BohemianTextBank/Scripts/itjakub.bohemiantextbank.list.js"));
 

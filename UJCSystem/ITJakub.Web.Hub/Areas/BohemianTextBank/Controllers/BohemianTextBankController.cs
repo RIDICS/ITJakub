@@ -225,7 +225,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
             }
         }
 

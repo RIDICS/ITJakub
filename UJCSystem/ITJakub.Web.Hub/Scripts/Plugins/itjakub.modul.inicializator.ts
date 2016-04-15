@@ -41,6 +41,7 @@
 
     protected parseConfig(config, defaultConfiguration) {
         const typeOf = typeof defaultConfiguration;
+        const typeOfConfig = typeof config;
 
         switch (typeOf) {
         case "array":
@@ -59,7 +60,19 @@
 
         case "number":
         case "string":
-            config = defaultConfiguration;
+            if (config === undefined) {
+                config = defaultConfiguration;
+            }
+
+            break;
+        case "function":
+            if (config === undefined) {
+                config = defaultConfiguration;
+            } else if (typeOfConfig == "function") {
+                config = config.bind(this);
+            } else {
+                console.error(`Config is not typeof function`, defaultConfiguration, config);
+            }
 
             break;
 
@@ -162,27 +175,29 @@
         //if (typeof text === "undefined" || text === null || text === "") return;
 
         var bibliographyModule = this.getBibliographyModule();
-        const start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
-        const count = bibliographyModule.getBooksCountOnPage();
-        const sortAsc = bibliographyModule.isSortedAsc();
-        const sortingEnum = bibliographyModule.getSortCriteria();
-        bibliographyModule.clearBooks();
-        bibliographyModule.showLoading();
+        bibliographyModule.runAsyncOnLoad(() => {
+            const start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+            const count = bibliographyModule.getBooksCountOnPage();
+            const sortAsc = bibliographyModule.isSortedAsc();
+            const sortingEnum = bibliographyModule.getSortCriteria();
+            bibliographyModule.clearBooks();
+            bibliographyModule.showLoading();
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: this.configuration.searchBox.searchUrl.text,
-            data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
-            dataType: "json",
-            contentType: "application/json",
-            success: response => {
-                bibliographyModule.showBooks(response.books);
-                updateQueryStringParameter(this.configuration.base.url.searchKey, text);
-                updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
-                updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
-                updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
-            }
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                url: this.configuration.searchBox.searchUrl.text,
+                data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
+                dataType: "json",
+                contentType: "application/json",
+                success: response => {
+                    bibliographyModule.showBooks(response.books);
+                    updateQueryStringParameter(this.configuration.base.url.searchKey, text);
+                    updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
+                    updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
+                    updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+                }
+            });
         });
     }
 
@@ -352,7 +367,6 @@
             const searched = getQueryStringParameterByName(this.configuration.base.url.searchKey);
 
             search.writeTextToTextField(searched);
-            console.log(search);
 
             if (selected) {
                 dropDownSelect.setStateFromUrlString(selected);
@@ -387,30 +401,34 @@ interface IModulInicializatorConfiguration {
     };
     search: {
         container: HTMLDivElement;
-        processSearchJsonCallback?: (jsonData: string) => void;
+        processSearchJsonCallback?: (jsonData: string, pageNumber?:number) => void;
         processSearchTextCallback?: (text: string) => void;
 
         enabledOptions: Array<SearchTypeEnum>;
     };
-    searchBox: {
-        inputFieldElement: string;
-        controllerPath: string;
-
-        dataSet: {
-            name: string;
-            groupHeader: string;
-            parameterUrlString?: string;
-        };
-        searchBoxInputSelector: string;
-        searchUrl: {
-            advanced: string;
-            text: string;
-            textCount: string;
-        };
-    };
+    searchBox: IModulInicializatorConfigurationSearchBox;
     dropDownSelect: {
         dropDownSelectContainer: string;
         dataUrl: string;
         showStar: boolean;
     };
+}
+
+interface IModulInicializatorConfigurationSearchBox {
+    inputFieldElement: string;
+    controllerPath: string;
+
+    dataSet: {
+        name: string;
+        groupHeader: string;
+        parameterUrlString?: string;
+    };
+    searchBoxInputSelector: string;
+    searchUrl: IModulInicializatorConfigurationSearchBoxSearchUrl;
+}
+
+interface IModulInicializatorConfigurationSearchBoxSearchUrl {
+    advanced: string;
+    text: string;
+    textCount: string;
 }

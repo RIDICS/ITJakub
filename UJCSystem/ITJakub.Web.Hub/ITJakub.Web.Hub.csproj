@@ -769,6 +769,7 @@
     <Content Include="Scripts\Plugins\Zoommaster\grab.cur" />
     <Content Include="Scripts\Plugins\Zoommaster\grabbed.cur" />
     <Content Include="Scripts\Plugins\Zoommaster\icon.png" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Wheelzoom\wheelzoom.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Zoommaster\jquery.zoom.d.ts" />
