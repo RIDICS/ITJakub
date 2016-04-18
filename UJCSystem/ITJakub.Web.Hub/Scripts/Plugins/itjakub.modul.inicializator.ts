@@ -128,7 +128,8 @@
             this.configuration.bibliographyModule.sortBarContainer,
             this.configuration.bibliographyModule.sortChangeCallback,
             this.configuration.bibliographyModule.forcedBookType,
-            this.configuration.bibliographyModule.customConfigurationPath
+            this.configuration.bibliographyModule.customConfigurationPath,
+            this
         );
     }
 
@@ -138,7 +139,7 @@
 
     //---------------------------------------------------
 
-    protected getSearch() {
+    public getSearch() {
         if (this.search === undefined) {
             this.search = this.createSearch();
         }

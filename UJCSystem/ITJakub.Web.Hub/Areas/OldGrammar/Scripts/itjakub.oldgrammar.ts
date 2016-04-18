@@ -117,15 +117,19 @@
 }
 
 function listGrammarBookReadClicked(target) {
-    var bookId = $(target).parents("li.list-item").attr("data-bookid");
-    if (search.isLastQueryJson()) {     //only text seach criteria we should propagate
-        window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
-    } else {
-        window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId;
+    return context => {
+        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
+            window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery();
+        } else {
+            window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId;
+        }
     }
 }
 
 function searchGrammarBookReadClicked(target) {
-    var bookId = $(target).parents("li.list-item").attr("data-bookid");
-    window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery();
+    return context => {
+        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery();
+    }
 }

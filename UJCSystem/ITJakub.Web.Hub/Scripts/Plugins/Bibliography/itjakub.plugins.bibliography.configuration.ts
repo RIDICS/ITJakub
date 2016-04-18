@@ -78,8 +78,10 @@ class RightPanelConfiguration extends Configuration {
 
     getInfoButtonUrl(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject['info-button']['url'], bibItem); }
     getInfoButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject['info-button']['onclick'], bibItem); }
+    getInfoButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject['info-button']['onclick-callable'], bibItem); }
     getReadButtonUrl(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject["read-button"]["url"], bibItem); }
     getReadButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["onclick"], bibItem); }
+    getReadButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["onclick-callable"], bibItem); }
 
 
 }

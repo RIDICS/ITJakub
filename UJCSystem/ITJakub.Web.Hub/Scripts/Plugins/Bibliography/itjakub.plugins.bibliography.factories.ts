@@ -1,38 +1,49 @@
 ﻿class BibliographyFactoryResolver {
-    private factories: BibliographyFactory[];
-
-
-    constructor(booksConfigurations: Object) {
-        this.factories = new Array();
-        this.factories[BookTypeEnum.Edition] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Edition, booksConfigurations["Edition"])); //TODO make enum bookType, BookTypeConfiguration should make config manager
-        this.factories[BookTypeEnum.Dictionary] = new DictionaryFactory(new BookTypeConfiguration(BookTypeEnum.Dictionary, booksConfigurations["Dictionary"]));
-        this.factories[BookTypeEnum.TextBank] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, booksConfigurations["TextBank"]));
-        this.factories[BookTypeEnum.CardFile] = new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.CardFile, booksConfigurations["CardFile"]));
-        this.factories[BookTypeEnum.Grammar] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Grammar, booksConfigurations["Grammar"]));
-        this.factories[BookTypeEnum.BibliographicalItem] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.BibliographicalItem, booksConfigurations["BibliographicalItem"]));
-        this.factories[BookTypeEnum.ProfessionalLiterature] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.ProfessionalLiterature, booksConfigurations["ProfessionalLiterature"]));
-        this.factories[BookTypeEnum.AudioBook] = new BasicFactory(new BookTypeConfiguration(BookTypeEnum.AudioBook, booksConfigurations["AudioBook"]));
-        //this.factories['Default'] = new BibliographyFactory(new BookTypeConfiguration("Default", booksConfigurations["Default"]));
-
-    }
+    private factories: BibliographyFactory[]=[];
+    
+    constructor(protected booksConfigurations: Object, protected modulInicializator?: ModulInicializator) {}
 
     public getFactoryForType(bookType: BookTypeEnum): BibliographyFactory {
-        if (typeof this.factories[bookType]!== 'undefined'){
+        if (this.factories[bookType] === undefined) {
+            this.factories[bookType] = this.createFactory(bookType);
+        }
+
+        if (this.factories[bookType] !== undefined) {
             return this.factories[bookType];
         }
-        //return this.factories['Default'];
+
         return null;
     }
 
+    protected createFactory(bookType: BookTypeEnum): BibliographyFactory {
+        switch (bookType) {
+            case BookTypeEnum.Edition:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Edition, this.booksConfigurations["Edition"]), this.modulInicializator); //TODO make enum bookType, BookTypeConfiguration should make config manager
+            case BookTypeEnum.Dictionary:
+                return new DictionaryFactory(new BookTypeConfiguration(BookTypeEnum.Dictionary, this.booksConfigurations["Dictionary"]), this.modulInicializator);
+            case BookTypeEnum.TextBank:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.TextBank, this.booksConfigurations["TextBank"]), this.modulInicializator);
+            case BookTypeEnum.CardFile:
+                return new CardFileFactory(new BookTypeConfiguration(BookTypeEnum.CardFile, this.booksConfigurations["CardFile"]), this.modulInicializator);
+            case BookTypeEnum.Grammar:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.Grammar, this.booksConfigurations["Grammar"]), this.modulInicializator);
+            case BookTypeEnum.BibliographicalItem:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.BibliographicalItem, this.booksConfigurations["BibliographicalItem"]), this.modulInicializator);
+            case BookTypeEnum.ProfessionalLiterature:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.ProfessionalLiterature, this.booksConfigurations["ProfessionalLiterature"]), this.modulInicializator);
+            case BookTypeEnum.AudioBook:
+                return new BasicFactory(new BookTypeConfiguration(BookTypeEnum.AudioBook, this.booksConfigurations["AudioBook"]), this.modulInicializator);
 
+            default:
+                console.error(`Unknown book type: ${bookType}`);
+                return null;
+        }
+    }
 }
 
 class BibliographyFactory {
-    configuration: BookTypeConfiguration;
 
-    constructor(configuration) {
-        this.configuration = configuration;
-    }
+    constructor(public configuration: BookTypeConfiguration, public modulInicializator?: ModulInicializator) {}
 
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
@@ -40,6 +51,10 @@ class BibliographyFactory {
         return leftPanel;
     }
 
+    protected runEvalResponse(callback: (context:Object)=>any) {
+        callback({ search: this.modulInicializator.getSearch() });
+    }
+    
     makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
         if (!this.configuration.containsRightPanel()) return null;
         var config = this.configuration.getRightPanelConfig();
@@ -54,11 +69,16 @@ class BibliographyFactory {
             var spanBook: HTMLSpanElement = document.createElement('span');
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
-            $(bookButton).click((event) => {
+            $(bookButton).click((event: JQueryEventObject) => {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
+                var buttonScriptCallable = config.getReadButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
-                } else {
+                }
+                else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
+                    this.runEvalResponse(eval(buttonScriptCallable));
+                }
+                else {
                     window.location.href = config.getReadButtonUrl(bookInfo);
                 }
             });
@@ -72,12 +92,17 @@ class BibliographyFactory {
             var spanInfo: HTMLSpanElement = document.createElement('span');
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
-            $(infoButton).click((event) => {
+            $(infoButton).click((event: JQueryEventObject) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
+                var buttonScriptCallable = config.getInfoButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
                     eval(buttonScript);
-                } else {
-                    window.location.href = config.getInfoButtonUrl(bookInfo);
+                }
+                else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
+                    this.runEvalResponse(eval(buttonScriptCallable));
+                }
+                else {
+                    window.location.href = config.getReadButtonUrl(bookInfo);
                 }
             });
             rightPanel.appendChild(infoButton);
@@ -162,20 +187,9 @@ class BibliographyFactory {
     }
 }
 
-class BasicFactory extends BibliographyFactory {
-
-    constructor(configuration: BookTypeConfiguration) {
-        super(configuration);
-    }
-
-}
+class BasicFactory extends BibliographyFactory {}
 
 class DictionaryFactory extends BibliographyFactory {
-
-    constructor(configuration: BookTypeConfiguration) {
-        super(configuration);
-    }
-
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
@@ -215,11 +229,6 @@ class DictionaryFactory extends BibliographyFactory {
 }
 
 class CardFileFactory extends BibliographyFactory {
-
-    constructor(configuration: BookTypeConfiguration) {
-        super(configuration);
-    }
-
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');

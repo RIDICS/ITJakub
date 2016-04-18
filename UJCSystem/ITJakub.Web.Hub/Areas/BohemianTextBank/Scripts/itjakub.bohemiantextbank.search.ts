@@ -1,5 +1,4 @@
-﻿var search: Search;
-var actualPage: number;
+﻿var actualPage: number;
 
 function initSearch() {
 
@@ -456,7 +455,7 @@ function initSearch() {
     enabledOptions.push(SearchTypeEnum.Term);
     enabledOptions.push(SearchTypeEnum.TokenDistance);
 
-    search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
+    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
     search.makeSearch(enabledOptions);
     
     const callbackDelegate = new DropDownSelectCallbackDelegate();

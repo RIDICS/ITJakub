@@ -148,10 +148,10 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick": "listProfLitBookReadClicked(this)"
+        "onclick-callback": "listProfLitBookReadClicked(this)"
       },
       "read-button": {
-        "onclick": "listProfLitBookReadClicked(this)"
+        "onclick-callback": "listProfLitBookReadClicked(this)"
       },
       "variables": {
         "$test": {

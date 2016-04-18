@@ -27,7 +27,7 @@ class BibliographyModule {
     private isConfigurationLoad=false;
     private onConfigurationLoad: Array<() => any>=[];
 
-    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string) {
+    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string, protected modulInicializator?:ModulInicializator) {
         this.resultsContainer = $(resultsContainer);
         this.sortChangeCallback = sortChangeCallback;
 
@@ -43,8 +43,7 @@ class BibliographyModule {
         this.forcedBookType = forcedBookType;
 
         //Download configuration
-
-        var configDownloadPath = this.defaultConfigurationUrl;
+        let configDownloadPath = this.defaultConfigurationUrl;
 
         if (typeof customConfigurationPath !== "undefined" && customConfigurationPath !== null && customConfigurationPath !== "") {
             configDownloadPath = customConfigurationPath;
@@ -58,7 +57,7 @@ class BibliographyModule {
             contentType: 'application/json',
             success: (response) => {
                 this.configurationManager = new ConfigurationManager(response);
-                this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations());
+                this.bibliographyFactoryResolver = new BibliographyFactoryResolver(this.configurationManager.getBookTypeConfigurations(), this.modulInicializator);
                 $(this.sortBarContainer).empty();
                 this.sortBar = new SortBar(this.sortChangeCallback);
                 var sortBarHtml = this.sortBar.makeSortBar(this.sortBarContainer);

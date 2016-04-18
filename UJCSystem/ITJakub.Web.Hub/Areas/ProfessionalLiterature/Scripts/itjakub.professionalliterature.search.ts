@@ -1,7 +1,4 @@
-﻿
-var search: Search;
-
-$(document).ready(() => {
+﻿$(document).ready(() => {
 
     const urlSearchKey = "search";
     const urlPageKey = "page";
@@ -235,7 +232,7 @@ $(document).ready(() => {
     enabledOptions.push(SearchTypeEnum.Heading);
     enabledOptions.push(SearchTypeEnum.Sentence);
 
-    search = new Search(<any>$("#listSearchDiv")[0], professionalLiteratureAdvancedSearch, professionalLiteratureBasicSearch);
+    var search = new Search(<any>$("#listSearchDiv")[0], professionalLiteratureAdvancedSearch, professionalLiteratureBasicSearch);
     search.makeSearch(enabledOptions);
 
     initializeFromUrlParams();
