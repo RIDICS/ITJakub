@@ -353,6 +353,7 @@
 
             this.selectedBookIds = selectedIds.selectedBookIds;
             this.selectedCategoryIds = selectedIds.selectedCategoryIds;
+            $("#listResults").removeClass("loader");
             this.initializeFromUrlParams();
         };
 
@@ -368,34 +369,35 @@
             this.notInitialized = false;
 
             const bibliographyModule = this.getBibliographyModule();
-            const search = this.getSearch();
-            const dropDownSelect = this.getDropDownSelect();
+            bibliographyModule.runAsyncOnLoad(function() {
+                const search = this.getSearch();
+                const dropDownSelect = this.getDropDownSelect();
 
-            const page = getQueryStringParameterByName(this.configuration.base.url.pageKey);
+                const page = getQueryStringParameterByName(this.configuration.base.url.pageKey);
 
-            if (page) {
-                this.initPage = parseInt(page);
-            }
+                if (page) {
+                    this.initPage = parseInt(page);
+                }
 
-            const sortedAsc = getQueryStringParameterByName(this.configuration.base.url.sortAscKey);
-            const sortCriteria = getQueryStringParameterByName(this.configuration.base.url.sortCriteriaKey);
+                const sortedAsc = getQueryStringParameterByName(this.configuration.base.url.sortAscKey);
+                const sortCriteria = getQueryStringParameterByName(this.configuration.base.url.sortCriteriaKey);
 
-            if (sortedAsc && sortCriteria) {
-                bibliographyModule.setSortedAsc(sortedAsc === "true");
-                bibliographyModule.setSortCriteria(((sortCriteria) as any) as SortEnum);
-            }
+                if (sortedAsc && sortCriteria) {
+                    bibliographyModule.setSortedAsc(sortedAsc === "true");
+                    bibliographyModule.setSortCriteria(((sortCriteria) as any) as SortEnum);
+                }
 
-            const selected = getQueryStringParameterByName(this.configuration.base.url.selectionKey);
-            const searched = getQueryStringParameterByName(this.configuration.base.url.searchKey);
+                const selected = getQueryStringParameterByName(this.configuration.base.url.selectionKey);
+                const searched = getQueryStringParameterByName(this.configuration.base.url.searchKey);
 
-            search.writeTextToTextField(searched);
+                search.writeTextToTextField(searched);
 
-            if (selected) {
-                dropDownSelect.setStateFromUrlString(selected);
-            } else {
-                search.processSearch(); //if not explicitly selected 
-            }
-
+                if (selected) {
+                    dropDownSelect.setStateFromUrlString(selected);
+                } else {
+                    search.processSearch(); //if not explicitly selected 
+                }
+            }.bind(this));
         } else if (!this.notInitialized) {
             this.getSearch().processSearch();
         } else {

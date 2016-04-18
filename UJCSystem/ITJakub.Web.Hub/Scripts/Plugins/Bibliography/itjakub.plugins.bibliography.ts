@@ -88,16 +88,16 @@ class BibliographyModule {
         if (typeof books !== "undefined" && books !== null && books.length > 0) {
             var rootElement: HTMLUListElement = document.createElement('ul');
             rootElement.classList.add('bib-listing');
+            this.booksContainer.appendChild(rootElement);
             $.each(books, (index, book: IBookInfo) => {
                 var bibliographyHtml = this.makeBibliography(book);
                 rootElement.appendChild(bibliographyHtml);
             });
-            $(this.booksContainer).append(rootElement);
         } else {
             var divElement: HTMLDivElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
             divElement.innerHTML = "Žádné výsledky k zobrazení";
-            $(this.booksContainer).append(divElement);
+            this.booksContainer.appendChild(divElement);
         }
 
     }
@@ -125,7 +125,7 @@ class BibliographyModule {
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
 
-        var doOnConfigurationLoad=() => {
+        this.runAsyncOnLoad(()=> {
             var bibFactory: BibliographyFactory;
             if (typeof this.forcedBookType == 'undefined') {
                 bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
@@ -133,31 +133,25 @@ class BibliographyModule {
                 bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
             }
 
-            var panel = bibFactory.makeLeftPanel(bibItem);
-            if (panel != null) visibleContent.appendChild(panel);
+            var leftPanel = bibFactory.makeLeftPanel(bibItem);
+            if (leftPanel != null) visibleContent.appendChild(leftPanel);
 
-            panel = bibFactory.makeRightPanel(bibItem);
-            if (panel != null) visibleContent.appendChild(panel);
+            var rightPanel = bibFactory.makeRightPanel(bibItem);
+            if (rightPanel != null) visibleContent.appendChild(rightPanel);
 
-            panel = bibFactory.makeMiddlePanel(bibItem);
-            if (panel != null) visibleContent.appendChild(panel);
+            var middlePanel = bibFactory.makeMiddlePanel(bibItem);
+            if (middlePanel != null) visibleContent.appendChild(middlePanel);
 
             $(liElement).append(visibleContent);
 
             var hiddenContent: HTMLDivElement = document.createElement('div');
             $(hiddenContent).addClass('hidden-content');
 
-            panel = bibFactory.makeBottomPanel(bibItem);
-            if (panel != null) hiddenContent.appendChild(panel);
+            var bottomPanel = bibFactory.makeBottomPanel(bibItem);
+            if (bottomPanel != null) hiddenContent.appendChild(bottomPanel);
 
             $(liElement).append(hiddenContent);
-        };
-        
-        if (this.isConfigurationLoad) {
-            doOnConfigurationLoad();
-        } else {
-            this.onConfigurationLoad.push(doOnConfigurationLoad.bind(this));
-        }
+        });
 
         return liElement;
 
