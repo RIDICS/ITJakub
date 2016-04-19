@@ -1,10 +1,18 @@
 ﻿class BohemiaTextBankModulInicializator extends ListModulInicializator {
     protected configuration: IBohemiaTextBankModulInicializatorConfiguration;
 
+    private bohemiaDefaultConfiguration = {
+        search: {
+            processSearchJsonCallback: this.advancedSearch.bind(this)
+        }
+    }
+
     constructor(configuration: IBohemiaTextBankModulInicializatorConfiguration) {
         super(configuration);
+    }
 
-        this.configuration.search.processSearchJsonCallback = this.advancedSearch.bind(this);
+    protected getDefaultConfiguration() {
+        return this.parseConfig(this.bohemiaDefaultConfiguration, super.getDefaultConfiguration());
     }
 
     protected advancedSearch(json: string) {

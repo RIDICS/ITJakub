@@ -1,10 +1,18 @@
 ﻿class ProfessionalLiteratureModulInicializator extends ListModulInicializator {
     protected configuration: IProfessionalLiteratureModulInicializatorConfiguration;
+    
+    private professionalDefaultConfiguration = {
+        search: {
+            processSearchJsonCallback: this.advancedSearch.bind(this)
+        }
+    }
 
     constructor(configuration: IProfessionalLiteratureModulInicializatorConfiguration) {
         super(configuration);
+    }
 
-        this.configuration.search.processSearchJsonCallback = this.advancedSearch.bind(this);
+    protected getDefaultConfiguration() {
+        return this.parseConfig(this.professionalDefaultConfiguration, super.getDefaultConfiguration());
     }
 
     protected advancedSearch(json: string) {

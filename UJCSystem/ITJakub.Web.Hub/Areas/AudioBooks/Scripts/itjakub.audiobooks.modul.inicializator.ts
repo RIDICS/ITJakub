@@ -1,10 +1,18 @@
 ﻿class AudioBooksModulInicializator extends ListModulInicializator {
     protected configuration: IAudioBooksModulInicializatorConfiguration;
+    
+    private audioBooksDefaultConfiguration = {
+        search: {
+            processSearchJsonCallback: this.advancedSearch.bind(this)
+        }
+    }
 
     constructor(configuration: IAudioBooksModulInicializatorConfiguration) {
         super(configuration);
+    }
 
-        this.configuration.search.processSearchJsonCallback = this.advancedSearch.bind(this);
+    protected getDefaultConfiguration() {
+        return this.parseConfig(this.audioBooksDefaultConfiguration, super.getDefaultConfiguration());
     }
 
     protected advancedSearch(json: string) {
