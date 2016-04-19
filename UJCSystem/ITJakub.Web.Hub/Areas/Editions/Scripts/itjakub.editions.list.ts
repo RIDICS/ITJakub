@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-        const modulInicializator = new ModulInicializator({
+    const modulInicializator = new ListModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Edition,
                 customConfigurationPath: "Editions/Editions/GetListConfiguration"

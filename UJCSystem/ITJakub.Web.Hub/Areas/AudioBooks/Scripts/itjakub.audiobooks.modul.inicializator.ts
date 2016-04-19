@@ -1,4 +1,4 @@
-﻿class AudioBooksModulInicializator extends ModulInicializator {
+﻿class AudioBooksModulInicializator extends ListModulInicializator {
     protected configuration: IAudioBooksModulInicializatorConfiguration;
 
     constructor(configuration: IAudioBooksModulInicializatorConfiguration) {

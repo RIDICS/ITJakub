@@ -148,10 +148,10 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick-callback": "searchGrammarBookReadClicked(this)"
+        "onclick-callable": "searchGrammarBookReadClicked(this)"
       },
       "read-button": {
-        "onclick-callback": "searchGrammarBookReadClicked(this)"
+        "onclick-callable": "searchGrammarBookReadClicked(this)"
       },
       "variables": {
         "$test": {

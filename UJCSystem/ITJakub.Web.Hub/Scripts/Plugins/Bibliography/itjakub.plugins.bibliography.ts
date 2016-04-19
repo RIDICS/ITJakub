@@ -27,7 +27,7 @@ class BibliographyModule {
     private isConfigurationLoad=false;
     private onConfigurationLoad: Array<() => any>=[];
 
-    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string, protected modulInicializator?:ModulInicializator) {
+    constructor(resultsContainer: string, sortBarContainer: string, sortChangeCallback: () => void, forcedBookType?: BookTypeEnum, customConfigurationPath?: string, protected modulInicializator?: ListModulInicializator) {
         this.resultsContainer = $(resultsContainer);
         this.sortChangeCallback = sortChangeCallback;
 

@@ -1,4 +1,4 @@
-﻿class ProfessionalLiteratureModulInicializator extends ModulInicializator {
+﻿class ProfessionalLiteratureModulInicializator extends ListModulInicializator {
     protected configuration: IProfessionalLiteratureModulInicializatorConfiguration;
 
     constructor(configuration: IProfessionalLiteratureModulInicializatorConfiguration) {

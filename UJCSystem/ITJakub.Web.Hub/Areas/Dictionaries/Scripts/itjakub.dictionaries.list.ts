@@ -1,6 +1,6 @@
 ﻿function initDictionaryList(bookXmlId: string) {
     $(document).ready(() => {
-        const modulInicializator = new ModulInicializator({
+        const modulInicializator = new ListModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Dictionary
             },

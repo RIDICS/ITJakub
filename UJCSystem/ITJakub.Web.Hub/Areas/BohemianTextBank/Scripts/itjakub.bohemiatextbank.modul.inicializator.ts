@@ -1,4 +1,4 @@
-﻿class BohemiaTextBankModulInicializator extends ModulInicializator {
+﻿class BohemiaTextBankModulInicializator extends ListModulInicializator {
     protected configuration: IBohemiaTextBankModulInicializatorConfiguration;
 
     constructor(configuration: IBohemiaTextBankModulInicializatorConfiguration) {

@@ -148,10 +148,10 @@
     },
     "right-panel": {
       "info-button": {
-        "onclick-callback": "searchBookReadClicked(this)"
+        "onclick-callable": "searchBookReadClicked(this)"
       },
       "read-button": {
-        "onclick-callback": "searchBookReadClicked(this)"
+        "onclick-callable": "searchBookReadClicked(this)"
       },
       "variables": {
         "$test": {
