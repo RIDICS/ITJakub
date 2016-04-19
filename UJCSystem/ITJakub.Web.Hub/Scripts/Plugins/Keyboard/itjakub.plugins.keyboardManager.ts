@@ -5,9 +5,7 @@
     function findContainer(key: string) {
         return $(`.component.keyboard-component[data-keyboard-id="${key}"]`).get(0);
     }
-
     
-
     export function getKeyboard(keyboard: string, lazy: boolean=true): KeyboardComponent {
         if (typeof keyboardMap[keyboard] == "undefined") {
             keyboardMap[keyboard] = new KeyboardComponent(findContainer(keyboard), loadedKeyboards, "keyboard-", "/");

@@ -84,6 +84,15 @@
 .keyboard-icon-img {
     width: 19px;
     height: 11px;
+
+    &.disabled {
+        opacity: 0.4;
+        filter: alpha(opacity=40); /* For IE8 and earlier */
+
+        &:hover {
+            cursor: not-allowed;
+        }
+    }
 }
 .input_container {
     width: auto;

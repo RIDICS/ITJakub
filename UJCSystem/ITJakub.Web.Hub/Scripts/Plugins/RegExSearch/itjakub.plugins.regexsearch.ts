@@ -104,12 +104,14 @@ class Search {
                 $(this.advancedButton).css("visibility", "hidden");
 
                 if ($(this.searchbarAdvancedEditorContainer).is(":hidden")) {       //show advanced search
-                    var textboxValue = $(this.searchInputTextbox).val();
+                    var $searchInputTextbox = $(this.searchInputTextbox);
+                    var textboxValue = $searchInputTextbox.val();
                     if (this.isValidJson(textboxValue)) {
                         this.advancedRegexEditor.importJson(textboxValue);
                     }
                     $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
-                    $(this.searchInputTextbox).prop("disabled", true);
+                    $searchInputTextbox.prop("disabled", true);
+                    $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").addClass("disabled");
                     $(this.searchButton).prop("disabled", true);
                 }
             });
@@ -120,11 +122,7 @@ class Search {
         searchbarInputDiv.classList.add("regex-searchbar-inputs");
         searchbarInputDiv.classList.add("input_container");
         formGroupDiv.appendChild(searchbarInputDiv);
-
-        var inputKeyboardContainerDiv = document.createElement("div");
-        inputKeyboardContainerDiv.classList.add("input_container");
-        searchbarInputDiv.appendChild(inputKeyboardContainerDiv);
-
+        
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
         searchbarInput.placeholder = "Hledat...";
@@ -180,10 +178,12 @@ class Search {
 
     closeAdvancedSearchEditor() {
         $(this.searchbarAdvancedEditorContainer).slideUp(this.speedAnimation);      //hide advanced search
-        $(this.searchInputTextbox).prop("disabled", false);
+        var $searchInputTextbox=$(this.searchInputTextbox);
+        $searchInputTextbox.prop("disabled", false);
+        $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").removeClass("disabled");
         $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
-        $(this.searchInputTextbox).focus();
+        $searchInputTextbox.focus();
     }
 
     public writeTextToTextField(text: string) {

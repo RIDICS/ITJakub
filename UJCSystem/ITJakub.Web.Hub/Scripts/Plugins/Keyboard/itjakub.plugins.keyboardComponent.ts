@@ -94,16 +94,20 @@
         if (image === null || image === undefined) {
             image = this.createImage();
         }
-        const clonedImage = image.cloneNode(true);
+        const clonedImage: HTMLImageElement = <HTMLImageElement>image.cloneNode(true);
         var jElement = $(element);
 
         element.addEventListener("focus", () => {
-            this.setInput(jElement);
+            if (!clonedImage.classList.contains("disabled")) {
+                this.setInput(jElement);
+            }
         });
 
         clonedImage.addEventListener("click", (event: JQueryEventObject) => {
-            this.setInput(jElement);
-            this.toggleKeyboard(event);
+            if (!clonedImage.classList.contains("disabled")) {
+                this.setInput(jElement);
+                this.toggleKeyboard(event);
+            }
         });
 
         element.parentElement.appendChild(clonedImage);
