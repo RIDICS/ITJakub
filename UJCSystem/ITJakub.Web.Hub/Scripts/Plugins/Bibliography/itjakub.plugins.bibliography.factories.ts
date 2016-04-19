@@ -1,7 +1,7 @@
 ﻿class BibliographyFactoryResolver {
     private factories: BibliographyFactory[]=[];
     
-    constructor(protected booksConfigurations: Object, protected modulInicializator?: ListModulInicializator) {}
+    constructor(protected booksConfigurations: Object, protected modulInicializator?: ModulInicializator) {}
 
     public getFactoryForType(bookType: BookTypeEnum): BibliographyFactory {
         if (this.factories[bookType] === undefined) {
@@ -43,7 +43,7 @@
 
 class BibliographyFactory {
 
-    constructor(public configuration: BookTypeConfiguration, public modulInicializator?: ListModulInicializator) {}
+    constructor(public configuration: BookTypeConfiguration, public modulInicializator?: ModulInicializator) {}
 
     makeLeftPanel(bookInfo: IBookInfo): HTMLDivElement {
         var leftPanel: HTMLDivElement = document.createElement('div');

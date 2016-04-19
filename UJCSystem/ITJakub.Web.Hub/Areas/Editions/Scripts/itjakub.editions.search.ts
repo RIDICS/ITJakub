@@ -1,4 +1,43 @@
-﻿$(document).ready(() => {
+﻿$(document).ready(
+    () => {
+    /*    const modulInicializator = new SearchModulInicializator({
+            bibliographyModule: {
+                forcedBookType: BookTypeEnum.Edition,
+                customConfigurationPath: "Editions/Editions/GetSearchConfiguration"
+            },
+            search: {
+                enabledOptions: [
+                    SearchTypeEnum.Title,
+                    SearchTypeEnum.Author,
+                    SearchTypeEnum.Editor,
+                    SearchTypeEnum.Dating,
+                    SearchTypeEnum.Fulltext,
+                    SearchTypeEnum.TokenDistance,
+                    SearchTypeEnum.Heading,
+                    SearchTypeEnum.Sentence
+                ]
+            },
+            searchBox: {
+                controllerPath: "Editions/Editions",
+
+                searchUrl: {
+                    advanced: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
+                    text: getBaseUrl() + "Editions/Editions/TextSearchFulltextPaged",
+                    textCount: getBaseUrl() + "Editions/Editions/TextSearchFulltextCount",
+                    advancedCount: getBaseUrl() +"Editions/Editions/AdvancedSearchResultsCount"
+                }
+            },
+            dropDownSelect: {
+                dataUrl: getBaseUrl() + "Editions/Editions/GetEditionsWithCategories"
+            }
+        });
+        modulInicializator.init();
+    */
+        foo();
+    }
+);
+
+var foo = () => {
 
     const urlSearchKey = "search";
     const urlPageKey = "page";
@@ -26,24 +65,18 @@
         if (readyForInit && notInitialized) {
 
             notInitialized = false;
-
-            var page = getQueryStringParameterByName(urlPageKey);
-
+            const page = getQueryStringParameterByName(urlPageKey);
             if (page) {
                 initPage = parseInt(page);
             }
-
-            var sortedAsc = getQueryStringParameterByName(urlSortAscKey);
-            var sortCriteria = getQueryStringParameterByName(urlSortCriteriaKey);
-
+            const sortedAsc = getQueryStringParameterByName(urlSortAscKey);
+            const sortCriteria = getQueryStringParameterByName(urlSortCriteriaKey);
             if (sortedAsc && sortCriteria) {
                 bibliographyModule.setSortedAsc(sortedAsc === "true");
-                bibliographyModule.setSortCriteria(<SortEnum>(<any>(sortCriteria)));
+                bibliographyModule.setSortCriteria(((sortCriteria) as any) as SortEnum);
             }
-
-            var selected = getQueryStringParameterByName(urlSelectionKey);
-
-            var searched = getQueryStringParameterByName(urlSearchKey);
+            const selected = getQueryStringParameterByName(urlSelectionKey);
+            const searched = getQueryStringParameterByName(urlSearchKey);
             search.writeTextToTextField(searched);
 
             if (selected) {
@@ -92,12 +125,10 @@
     function editionAdvancedSearchPaged(json: string, pageNumber: number) {
 
         if (typeof json === "undefined" || json === null || json === "") return;
-
-        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
-        var count = bibliographyModule.getBooksCountOnPage();
-        var sortAsc = bibliographyModule.isSortedAsc();
-        var sortingEnum = bibliographyModule.getSortCriteria();
-
+        const start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        const count = bibliographyModule.getBooksCountOnPage();
+        const sortAsc = bibliographyModule.isSortedAsc();
+        const sortingEnum = bibliographyModule.getSortCriteria();
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
 
@@ -106,8 +137,8 @@
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
             data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 bibliographyModule.showBooks(response.books);
                 updateQueryStringParameter(urlSearchKey, json);
@@ -121,12 +152,10 @@
     function editionBasicSearchPaged(text: string, pageNumber: number) {
 
         //if (typeof text === "undefined" || text === null || text === "") return;
-
-        var start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
-        var count = bibliographyModule.getBooksCountOnPage();
-        var sortAsc = bibliographyModule.isSortedAsc();
-        var sortingEnum = bibliographyModule.getSortCriteria();
-
+        const start = (pageNumber - 1) * bibliographyModule.getBooksCountOnPage();
+        const count = bibliographyModule.getBooksCountOnPage();
+        const sortAsc = bibliographyModule.isSortedAsc();
+        const sortingEnum = bibliographyModule.getSortCriteria();
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
 
@@ -135,8 +164,8 @@
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchFulltextPaged",
             data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 bibliographyModule.showBooks(response.books);
                 updateQueryStringParameter(urlSearchKey, text);
@@ -164,7 +193,7 @@
 
 
     function createPagination(booksCount: number) {
-        var pages = Math.ceil(booksCount / booksCountOnPage);
+        const pages = Math.ceil(booksCount / booksCountOnPage);
         if (initPage && initPage <= pages) {
             bibliographyModule.createPagination(booksCountOnPage, pageClickCallbackForBiblModule, booksCount, initPage);
         } else {
@@ -184,8 +213,8 @@
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchFulltextCount",
             data: { text: text, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
-            dataType: 'json',
-            contentType: 'application/json',
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, text);
@@ -203,14 +232,14 @@
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
-        
+
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
-            data: { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery},
-            dataType: 'json',
-            contentType: 'application/json',
+            data: { json: json, selectedBookIds: bookIdsInQuery, selectedCategoryIds: categoryIdsInQuery },
+            dataType: "json",
+            contentType: "application/json",
             success: response => {
                 createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(urlSearchKey, json);
@@ -231,9 +260,8 @@
     enabledOptions.push(SearchTypeEnum.Heading);
     enabledOptions.push(SearchTypeEnum.Sentence);
 
-    var search = new Search(<any>$("#listSearchDiv")[0], editionAdvancedSearch, editionBasicSearch);
+    var search = new Search($("#listSearchDiv")[0] as any, editionAdvancedSearch, editionBasicSearch);
     search.makeSearch(enabledOptions);
 
     initializeFromUrlParams();
-});
-
+};
