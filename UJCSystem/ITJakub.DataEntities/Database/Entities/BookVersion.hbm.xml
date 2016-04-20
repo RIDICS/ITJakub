@@ -128,5 +128,19 @@
       <one-to-many class="BookAccessory"/>
     </bag>
     
+    <bag name="LiteraryOriginals" table="BookVersion_LiteraryOriginal" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="LiteraryOriginal" column="LiteraryOriginal" />
+    </bag>
+    
+    <bag name="LiteraryKinds" table="BookVersion_LiteraryKind" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="LiteraryKind" column="LiteraryKind" />
+    </bag>
+
+    <bag name="LiteraryGenres" table="BookVersion_LiteraryGenre" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion" />
+      <many-to-many class="LiteraryGenre" column="LiteraryGenre" />
+    </bag>
   </class>
 </hibernate-mapping>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="ITJakub.DataEntities" namespace="ITJakub.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="LiteraryOriginal" table="[LiteraryOriginal]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    <property name="Name" />
+
+    <bag name="BookVersions" table="BookVersion_LiteraryOriginal" inverse="true" lazy="true">
+      <key column="LiteraryOriginal" />
+      <many-to-many class="BookVersion" column="BookVersion" />
+    </bag>
+  </class>
+</hibernate-mapping>

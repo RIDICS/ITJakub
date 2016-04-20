@@ -71,6 +71,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
+    <Compile Include="Database\Entities\LiteraryOriginal.cs" />
+    <Compile Include="Database\Entities\LiteraryGenre.cs" />
     <Compile Include="Database\Entities\BookAccessory.cs" />
     <Compile Include="Database\Entities\BookHeadword.cs" />
     <Compile Include="Database\Entities\Enums\SpecialPermissionCategorization.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Database\Entities\Enums\FeedbackSortEnum.cs" />
     <Compile Include="Database\Entities\Enums\VisibilityEnum.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
+    <Compile Include="Database\Entities\LiteraryKind.cs" />
     <Compile Include="Database\Entities\NewsSyndicationItem.cs" />
     <Compile Include="Database\Entities\SpecialPermission.cs" />
     <Compile Include="Database\Entities\RecordingBase.cs" />
@@ -223,6 +226,19 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\SpecialPermission.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\LiteraryGenre.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\LiteraryKind.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\LiteraryOriginal.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

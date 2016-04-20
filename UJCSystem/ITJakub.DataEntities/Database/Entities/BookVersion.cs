@@ -63,6 +63,13 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<BookAccessory> Accessories { get; set; }
 
+        public virtual IList<LiteraryOriginal> LiteraryOriginals { get; set; }
+
+        public virtual IList<LiteraryKind> LiteraryKinds { get; set; }
+
+        public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
+
+
         public virtual bool Equals(BookVersion other)
         {
             if (ReferenceEquals(null, other)) return false;

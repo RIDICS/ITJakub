@@ -78,6 +78,20 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         [DataMember]
         public IList<PageDescriptionContract> TermsPageHits { get; set; }
 
+        [DataMember]
+        public string RelicAbbreviation { get; set; }
+
+        [DataMember]
+        public string SourceAbbreviation { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryOriginals { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryKinds { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryGenres { get; set; }
 
         public virtual string ToXml()
         {

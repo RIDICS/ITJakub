@@ -14,9 +14,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<BookVersion, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opts => opts.MapFrom(src => src.Book.Id))
                 .ForMember(dest => dest.BookXmlId, opts => opts.MapFrom(src => src.Book.Guid))
-                .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId)) 
-                .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(src => src.CreateTime)) 
-                .ForMember(dest => dest.CreateTimeString, opts => opts.MapFrom(src => src.CreateTime.ToString(CultureInfo.InvariantCulture))) 
+                .ForMember(dest => dest.VersionXmlId, opts => opts.MapFrom(src => src.VersionId))
+                .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(src => src.CreateTime))
+                .ForMember(dest => dest.CreateTimeString, opts => opts.MapFrom(src => src.CreateTime.ToString(CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.Copyright, opts => opts.MapFrom(src => src.Copyright))
                 .ForMember(dest => dest.PublishDate, opts => opts.MapFrom(src => src.PublishDate))
                 .ForMember(dest => dest.PublishPlace, opts => opts.MapFrom(src => src.PublishPlace))
@@ -28,7 +28,12 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
                 .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
-                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor))); //TODO add category
+                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor))) //TODO add category
+                .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.BookBibls.Where(x => x.SubType == "original-text").Select(x => x.Text).First()))
+                .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.BookBibls.Where(x => x.SubType == "source").Select(x => x.Text).First()))
+                .ForMember(dest => dest.LiteraryOriginals, opt => opt.MapFrom(src => src.LiteraryOriginals.Select(x=>x.Name)))
+                .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.LiteraryKinds.Select(x=>x.Name)))
+                .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.LiteraryGenres.Select(x=>x.Name)));
         }
     }
 }

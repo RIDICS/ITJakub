@@ -3,21 +3,15 @@ using System.Collections.Generic;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
-    public class Book : IEquatable<Book>
+    public class LiteraryGenre : IEquatable<LiteraryGenre>
     {
         public virtual long Id { get; set; }
-
-        public virtual BookVersion LastVersion { get; set; }
-
-        public virtual string Guid { get; set; }        
+        
+        public virtual string Name { get; set; }        
 
         public virtual IList<BookVersion> BookVersions { get; set; }
-
-        public virtual IList<Permission> Permissions { get; set; }
-
-        public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
-
-        public virtual bool Equals(Book other)
+        
+        public virtual bool Equals(LiteraryGenre other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -29,7 +23,7 @@ namespace ITJakub.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Book) obj);
+            return Equals((LiteraryGenre) obj);
         }
 
         public override int GetHashCode()

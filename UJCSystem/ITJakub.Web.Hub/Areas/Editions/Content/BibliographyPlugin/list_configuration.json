@@ -90,7 +90,7 @@
             },
             {
               "label": "Předloha",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "Zkratka památky",
@@ -102,11 +102,11 @@
             },
             {
               "label": "Literární druh",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "Literární žánr",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "Poslední úprava edice",
@@ -142,6 +142,24 @@
           "type": "array",
           "scope": "Editors",
           "pattern": "{Text}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }
