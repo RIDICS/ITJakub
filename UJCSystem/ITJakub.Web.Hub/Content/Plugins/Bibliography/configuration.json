@@ -523,7 +523,7 @@
       }
     }
   },
-   "Grammar": {
+  "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
@@ -686,7 +686,8 @@
       }
 
     }
-  },"ProfessionalLiterature": {
+  },
+  "ProfessionalLiterature": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",

@@ -1,7 +1,8 @@
 ﻿$(document).ready(() => {
     const modulInicializator = new ProfessionalLiteratureModulInicializator({
         bibliographyModule: {
-            forcedBookType: BookTypeEnum.ProfessionalLiterature
+            forcedBookType: BookTypeEnum.ProfessionalLiterature,
+            customConfigurationPath: "ProfessionalLiterature/ProfessionalLiterature/GetListConfiguration"
         },
         search: {
             enabledOptions: [
