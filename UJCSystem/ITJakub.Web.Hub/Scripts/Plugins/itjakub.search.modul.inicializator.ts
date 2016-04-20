@@ -1,53 +1,20 @@
 ﻿class SearchModulInicializator extends ModulInicializator {
 
     protected configuration: ISearchModulInicializatorConfiguration;
-
-    protected searchDefaultConfiguration={
-        search: {
-            processSearchJsonCallback: this.editionAdvancedSearch.bind(this) 
-        }  
-    };
-
+    
     constructor(configuration: ISearchModulInicializatorConfiguration) {
         super(configuration);
     }
 
-    protected createDropDownSelect(searchBox: SearchBox) {
-        const callbackDelegate = new DropDownSelectCallbackDelegate();
-
-        callbackDelegate.selectedChangedCallback = (state: State) => {
-            this.selectedBookIds = new Array();
-
-            for (let i = 0; i < state.SelectedItems.length; i++) {
-                this.selectedBookIds.push(state.SelectedItems[i].Id);
+    protected getDefaultConfiguration() {
+        return this.parseConfig({
+            base: {
+                autosearch: false
+            },
+            search: {
+                processSearchJsonCallback: this.editionAdvancedSearch.bind(this)
             }
-
-            this.selectedCategoryIds = new Array();
-
-            for (let i = 0; i < state.SelectedCategories.length; i++) {
-                this.selectedCategoryIds.push(state.SelectedCategories[i].Id);
-            }
-        };
-
-        const dropDownSelect = new DropDownSelect2(
-            this.configuration.dropDownSelect.dropDownSelectContainer,
-            this.configuration.dropDownSelect.dataUrl,
-            this.configuration.dropDownSelect.showStar,
-            callbackDelegate
-        );
-
-        callbackDelegate.dataLoadedCallback = () => {
-            var selectedIds = dropDownSelect.getSelectedIds();
-
-            this.selectedBookIds = selectedIds.selectedBookIds;
-            this.selectedCategoryIds = selectedIds.selectedCategoryIds;
-            $("#listResults").removeClass("loader");
-            this.initializeFromUrlParams();
-        };
-
-        dropDownSelect.makeDropdown();
-
-        return dropDownSelect;
+        }, super.getDefaultConfiguration());
     }
 
     protected editionAdvancedSearch(json: string) {
@@ -61,7 +28,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.searchBox.searchUrl.advanced,
+            url: this.configuration.search.url.advanced,
             data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
@@ -77,13 +44,13 @@
 }
 
 interface ISearchModulInicializatorConfiguration extends IModulInicializatorConfiguration {
-    searchBox: ISearchModulInicializatorConfigurationSearchBox;
+    search: ISearchModulInicializatorConfigurationSearch;
 }
 
-interface ISearchModulInicializatorConfigurationSearchBox extends IModulInicializatorConfigurationSearchBox {
-    searchUrl: ISearchModulInicializatorConfigurationSearchBoxSearchUrl;
+interface ISearchModulInicializatorConfigurationSearch extends IModulInicializatorConfigurationSearch {
+    url: ISearchModulInicializatorConfigurationSearchUrl;
 }
 
-interface ISearchModulInicializatorConfigurationSearchBoxSearchUrl extends IModulInicializatorConfigurationSearchBoxSearchUrl {
+interface ISearchModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
     advancedCount: string;
 }

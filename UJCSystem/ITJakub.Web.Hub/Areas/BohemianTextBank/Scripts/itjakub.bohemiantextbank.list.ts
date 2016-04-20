@@ -14,17 +14,16 @@
                 SearchTypeEnum.Sentence,
                 SearchTypeEnum.Term,
                 SearchTypeEnum.TokenDistance
-            ]
-        },
-        searchBox: {
-            controllerPath: "BohemianTextBank/BohemianTextBank",
-
-            searchUrl: {
+            ],
+            url: {
                 advanced: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchPaged",
                 text: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchPaged",
                 textCount: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchCount",
                 advancedCount: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchResultsCount"
             }
+        },
+        searchBox: {
+            controllerPath: "BohemianTextBank/BohemianTextBank"
         },
         dropDownSelect: {
             dataUrl: getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories"

@@ -10,16 +10,15 @@
                 SearchTypeEnum.Author,
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
-            ]
-        },
-        searchBox: {
-            controllerPath: "OldGrammar/OldGrammar",
-
-            searchUrl: {
+            ],
+            url: {
                 advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                 text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",
                 textCount: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchCount"
             }
+        },
+        searchBox: {
+            controllerPath: "OldGrammar/OldGrammar"
         },
         dropDownSelect: {
             dataUrl: getBaseUrl() + "OldGrammar/OldGrammar/GetGrammarsWithCategories"

@@ -9,16 +9,16 @@
                 SearchTypeEnum.Author,
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
-            ]
-        },
-        searchBox: {
-            controllerPath: "ProfessionalLiterature/ProfessionalLiterature",
-            searchUrl: {
+            ],
+            url: {
                 advanced: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchPaged",
                 text: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchPaged",
                 textCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchCount",
                 advancedCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchResultsCount"
             }
+        },
+        searchBox: {
+            controllerPath: "ProfessionalLiterature/ProfessionalLiterature"
         },
         dropDownSelect: {
             dataUrl: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/GetProfessionalLiteratureWithCategories"

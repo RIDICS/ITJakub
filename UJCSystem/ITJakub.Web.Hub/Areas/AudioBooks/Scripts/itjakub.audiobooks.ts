@@ -9,16 +9,16 @@
                 SearchTypeEnum.Author,
                 SearchTypeEnum.Editor,
                 SearchTypeEnum.Dating
-            ]
-        },
-        searchBox: {
-            controllerPath: "AudioBooks/AudioBooks",
-            searchUrl: {
+            ],
+            url: {
                 advanced: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchPaged",
                 text: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchPaged",
                 textCount: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchCount",
                 advancedCount: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchResultsCount"
             }
+        },
+        searchBox: {
+            controllerPath: "AudioBooks/AudioBooks"
         },
         dropDownSelect: {
             dataUrl: getBaseUrl() + "AudioBooks/AudioBooks/GetAudioWithCategories"

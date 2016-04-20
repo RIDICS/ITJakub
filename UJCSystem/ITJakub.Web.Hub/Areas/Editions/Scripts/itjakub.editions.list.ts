@@ -10,16 +10,15 @@
                     SearchTypeEnum.Author,
                     SearchTypeEnum.Editor,
                     SearchTypeEnum.Dating
-                ]
-            },
-            searchBox: {
-                controllerPath: "Editions/Editions",
-
-                searchUrl: {
+                ],
+                url: {
                     advanced: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
                     text: getBaseUrl() + "Editions/Editions/TextSearchPaged",
                     textCount: getBaseUrl() + "Editions/Editions/TextSearchCount"
                 }
+            },
+            searchBox: {
+                controllerPath: "Editions/Editions"
             },
             dropDownSelect: {
                 dataUrl: getBaseUrl() + "Editions/Editions/GetEditionsWithCategories"

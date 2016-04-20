@@ -19,6 +19,7 @@
     protected configuration: IModulInicializatorConfiguration;
     protected defaultConfiguration = {
         base: {
+            autosearch: true,
             url: {
                 searchKey: "search",
                 pageKey: "page",
@@ -38,15 +39,6 @@
             container: document.getElementById("listSearchDiv") as HTMLDivElement,
             processSearchJsonCallback: this.editionAdvancedSearchPaged.bind(this),
             processSearchTextCallback: this.editionBasicSearch.bind(this)
-        },
-        searchBox: {
-            inputFieldElement: ".searchbar-input",
-            searchBoxInputSelector: ".searchbar-input.tt-input",
-            dataSet: {
-                name: "Title",
-                groupHeader: "Název",
-                parameterUrlString: null
-            }
         },
         dropDownSelect: {
             dropDownSelectContainer: "#dropdownSelectDiv",
@@ -87,6 +79,7 @@
 
                 break;
 
+            case "boolean":
             case "number":
             case "string":
                 if (config === undefined) {
@@ -115,7 +108,6 @@
     public init() {
         this.getBibliographyModule();
         this.getSearch();
-        this.getSearchBox();
         this.getDropDownSelect();
 
         this.initializeFromUrlParams();
@@ -186,7 +178,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.searchBox.searchUrl.advanced,
+            url: this.configuration.search.url.advanced,
             data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
@@ -216,7 +208,7 @@
             $.ajax({
                 type: "GET",
                 traditional: true,
-                url: this.configuration.searchBox.searchUrl.text,
+                url: this.configuration.search.url.text,
                 data: { text: text, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
                 dataType: "json",
                 contentType: "application/json",
@@ -270,7 +262,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.searchBox.searchUrl.textCount,
+            url: this.configuration.search.url.textCount,
             data: { text: text, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
@@ -286,45 +278,15 @@
 
     //---------------------------------------------------
 
-    protected getSearchBox() {
-        if (this.searchBox === undefined) {
-            this.searchBox = this.createSearchBox();
-        }
-
-        return this.searchBox;
-    }
-
-    protected createSearchBox() {
-        var searchBox = new SearchBox(
-            this.configuration.searchBox.inputFieldElement,
-            this.configuration.searchBox.controllerPath
-        );
-        searchBox.addDataSet(
-            this.configuration.searchBox.dataSet.name,
-            this.configuration.searchBox.dataSet.groupHeader
-        );
-        searchBox.create();
-        var searchBoxOnput = $(this.configuration.searchBox.searchBoxInputSelector);
-        searchBox.value(searchBoxOnput.val());
-
-        searchBoxOnput.change(() => { //prevent clearing input value on blur() 
-            searchBox.value(searchBoxOnput.val());
-        });
-
-        return searchBox;
-    }
-
-    //---------------------------------------------------
-
     protected getDropDownSelect() {
         if (this.dropDownSelect === undefined) {
-            this.dropDownSelect = this.createDropDownSelect(this.getSearchBox());
+            this.dropDownSelect = this.createDropDownSelect();
         }
 
         return this.dropDownSelect;
     }
 
-    protected createDropDownSelect(searchBox: SearchBox) {
+    protected createDropDownSelect() {
         const callbackDelegate = new DropDownSelectCallbackDelegate();
 
         callbackDelegate.selectedChangedCallback = (state: State) => {
@@ -339,16 +301,6 @@
             for (let i = 0; i < state.SelectedCategories.length; i++) {
                 this.selectedCategoryIds.push(state.SelectedCategories[i].Id);
             }
-
-            var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
-            searchBox.clearAndDestroy();
-            searchBox.addDataSet(
-                this.configuration.searchBox.dataSet.name,
-                this.configuration.searchBox.dataSet.groupHeader,
-                parametersUrl
-            );
-            searchBox.create();
-            searchBox.value($(this.configuration.searchBox.searchBoxInputSelector).val());
         };
 
         const dropDownSelect = new DropDownSelect2(
@@ -379,7 +331,7 @@
             this.notInitialized = false;
 
             const bibliographyModule = this.getBibliographyModule();
-            bibliographyModule.runAsyncOnLoad(function () {
+            bibliographyModule.runAsyncOnLoad(() =>{
                 const search = this.getSearch();
                 const dropDownSelect = this.getDropDownSelect();
 
@@ -404,10 +356,10 @@
 
                 if (selected) {
                     dropDownSelect.setStateFromUrlString(selected);
-                } else {
+                } else if (this.configuration.base.autosearch) {
                     search.processSearch(); //if not explicitly selected 
                 }
-            }.bind(this));
+            });
         } else if (!this.notInitialized) {
             this.getSearch().processSearch();
         } else {
@@ -418,6 +370,7 @@
 
 interface IModulInicializatorConfiguration {
     base?: {
+        autosearch?:boolean;
         url?: {
             searchKey?: string;
             pageKey?: string;
@@ -433,14 +386,7 @@ interface IModulInicializatorConfiguration {
         forcedBookType?: BookTypeEnum;
         customConfigurationPath?: string;
     };
-    search: {
-        container?: HTMLDivElement;
-        processSearchJsonCallback?: (jsonData: string, pageNumber?:number) => void;
-        processSearchTextCallback?: (text: string) => void;
-
-        enabledOptions: Array<SearchTypeEnum>;
-    };
-    searchBox: IModulInicializatorConfigurationSearchBox;
+    search: IModulInicializatorConfigurationSearch;
     dropDownSelect: {
         dropDownSelectContainer?: string;
         dataUrl: string;
@@ -448,20 +394,17 @@ interface IModulInicializatorConfiguration {
     };
 }
 
-interface IModulInicializatorConfigurationSearchBox {
-    inputFieldElement?: string;
-    controllerPath: string;
+interface IModulInicializatorConfigurationSearch {
+    container?: HTMLDivElement;
+    processSearchJsonCallback?: (jsonData: string, pageNumber?:number) => void;
+    processSearchTextCallback?: (text: string) => void;
 
-    dataSet?: {
-        name?: string;
-        groupHeader?: string;
-        parameterUrlString?: string;
-    };
-    searchBoxInputSelector?: string;
-    searchUrl: IModulInicializatorConfigurationSearchBoxSearchUrl;
+    enabledOptions: Array<SearchTypeEnum>;
+
+    url: IModulInicializatorConfigurationSearchUrl;
 }
 
-interface IModulInicializatorConfigurationSearchBoxSearchUrl {
+interface IModulInicializatorConfigurationSearchUrl {
     advanced: string;
     text: string;
     textCount: string;

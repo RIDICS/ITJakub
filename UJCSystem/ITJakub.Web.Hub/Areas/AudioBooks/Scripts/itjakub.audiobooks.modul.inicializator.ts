@@ -1,18 +1,16 @@
 ﻿class AudioBooksModulInicializator extends ListModulInicializator {
     protected configuration: IAudioBooksModulInicializatorConfiguration;
     
-    private audioBooksDefaultConfiguration = {
-        search: {
-            processSearchJsonCallback: this.advancedSearch.bind(this)
-        }
-    }
-
     constructor(configuration: IAudioBooksModulInicializatorConfiguration) {
         super(configuration);
     }
 
     protected getDefaultConfiguration() {
-        return this.parseConfig(this.audioBooksDefaultConfiguration, super.getDefaultConfiguration());
+        return this.parseConfig({
+            search: {
+                processSearchJsonCallback: this.advancedSearch.bind(this)
+            }
+        }, super.getDefaultConfiguration());
     }
 
     protected advancedSearch(json: string) {
@@ -27,7 +25,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.searchBox.searchUrl.advancedCount,
+            url: this.configuration.search.url.advancedCount,
             data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
@@ -56,7 +54,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.searchBox.searchUrl.advanced,
+            url: this.configuration.search.url.advanced,
             data: { json: json, start: start, count: count, sortingEnum: sortingEnum, sortAsc: sortAsc, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
@@ -71,14 +69,14 @@
     }
 }
 
-interface IAudioBooksModulInicializatorConfiguration extends IModulInicializatorConfiguration {
-    searchBox: IAudioBooksModulInicializatorConfigurationSearchBox;
+interface IAudioBooksModulInicializatorConfiguration extends IListModulInicializatorConfiguration {
+    search: IAudioBooksModulInicializatorConfigurationSearch;
 }
 
-interface IAudioBooksModulInicializatorConfigurationSearchBox extends IModulInicializatorConfigurationSearchBox {
-    searchUrl: IAudioBooksModulInicializatorConfigurationSearchBoxSearchUrl;
+interface IAudioBooksModulInicializatorConfigurationSearch extends IModulInicializatorConfigurationSearch {
+    url: IAudioBooksModulInicializatorConfigurationSearchUrl;
 }
 
-interface IAudioBooksModulInicializatorConfigurationSearchBoxSearchUrl extends IModulInicializatorConfigurationSearchBoxSearchUrl {
+interface IAudioBooksModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
     advancedCount: string;
 }
