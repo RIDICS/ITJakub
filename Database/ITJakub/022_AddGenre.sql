@@ -42,6 +42,12 @@ BEGIN TRAN;
 	   CONSTRAINT [PK_BookVersion_LiteraryOriginal(LiteraryOriginal)_BookVersion_LiteraryOriginal(Book)] PRIMARY KEY ([LiteraryOriginal], [BookVersion])
     )
 
+    DROP TABLE [dbo].[BookBibl];
+
+    ALTER TABLE [dbo].[BookVersion] ADD
+	   [RelicAbbreviation] varchar(100) NULL,
+	   [SourceAbbreviation] nvarchar(255) NULL
+
     INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion )
     VALUES

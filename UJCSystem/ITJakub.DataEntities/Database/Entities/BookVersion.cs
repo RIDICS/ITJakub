@@ -37,12 +37,14 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual string Acronym { get; set; }
 
+        public virtual string RelicAbbreviation { get; set; }
+
+        public virtual string SourceAbbreviation { get; set; }
+
         public virtual IList<Category> Categories { get; set; }
 
         public virtual IList<ManuscriptDescription> ManuscriptDescriptions { get; set; }
-
-        public virtual IList<BookBibl> BookBibls { get; set; }
-
+        
         public virtual IList<Keyword> Keywords { get; set; }
 
         public virtual IList<Author> Authors { get; set; }

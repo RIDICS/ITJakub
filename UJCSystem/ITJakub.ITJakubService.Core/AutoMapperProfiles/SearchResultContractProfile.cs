@@ -29,8 +29,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
                 .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor))) //TODO add category
-                .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.BookBibls.Where(x => x.SubType == "original-text").Select(x => x.Text).FirstOrDefault()))
-                .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.BookBibls.Where(x => x.SubType == "source").Select(x => x.Text).FirstOrDefault()))
+                .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))
+                .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.SourceAbbreviation))
                 .ForMember(dest => dest.LiteraryOriginals, opt => opt.MapFrom(src => src.LiteraryOriginals.Select(x=>x.Name)))
                 .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.LiteraryKinds.Select(x=>x.Name)))
                 .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.LiteraryGenres.Select(x=>x.Name)));

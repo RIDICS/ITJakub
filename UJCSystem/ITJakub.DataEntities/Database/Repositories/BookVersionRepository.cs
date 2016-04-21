@@ -313,7 +313,6 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
-                BookBibl bookBiblAlias = null;
                 ManuscriptDescription manuscriptDescriptionAlias = null;
                 Responsible responsibleAlias = null;
                 ResponsibleType responsibleTypeAlias = null;
@@ -439,14 +438,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
                     .Left.JoinAlias(() => bookVersionAlias.LiteraryGenres, () => genreAlias)
                     .Fetch(x => x.LiteraryGenres).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.BookBibls, () => bookBiblAlias)
-                    .Fetch(x => x.BookBibls).Eager
                     .Future<BookVersion>();
 
                 var result = futureResult.ToList();

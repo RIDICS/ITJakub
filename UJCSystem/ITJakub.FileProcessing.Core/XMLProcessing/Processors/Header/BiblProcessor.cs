@@ -1,14 +1,18 @@
 using System.Collections.Generic;
+using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
+using log4net;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
     public class BiblProcessor : ListProcessorBase
     {
+        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
         public BiblProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
@@ -27,21 +31,33 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             }
             else
             {
-                var bookBibl = new BookBibl
+                if (xmlReader.GetAttribute("type") == "acronym")
                 {
-                    Type = xmlReader.GetAttribute("type"),
-                    SubType = xmlReader.GetAttribute("subtype"),
-                };
+                    switch (xmlReader.GetAttribute("subtype"))
+                    {
+                        case "original-text":
+                            bookVersion.RelicAbbreviation = GetInnerContentAsString(xmlReader);
 
-                bookBibl.BiblType = ParseEnum<BiblType>(bookBibl.Type);
-                bookBibl.Text = GetInnerContentAsString(xmlReader);
+                            break;
 
+                        case "source":
+                            bookVersion.SourceAbbreviation = GetInnerContentAsString(xmlReader);
 
-                if (bookVersion.BookBibls == null) bookVersion.BookBibls = new List<BookBibl>();
-                bookVersion.BookBibls.Add(bookBibl);
+                            break;
 
-                if (bookBibl.Type == "acronym")
-                    bookVersion.Acronym = bookBibl.Text;
+                        default:
+                            if (m_log.IsDebugEnabled)
+                                m_log.DebugFormat("Unknown bibl subtype attribute '${0}'",
+                                    xmlReader.GetAttribute("subtype"));
+
+                            break;
+                    }
+                }
+                else
+                {
+                    if (m_log.IsDebugEnabled)
+                        m_log.DebugFormat("Unknown bibl type attribute '${0}'", xmlReader.GetAttribute("type"));
+                }
             }
         }
     }

@@ -116,7 +116,6 @@
     <Compile Include="Database\Entities\Enums\AvailabilityStatus.cs" />
     <Compile Include="Database\Entities\Enums\BiblType.cs" />
     <Compile Include="Database\Entities\Book.cs" />
-    <Compile Include="Database\Entities\BookBibl.cs" />
     <Compile Include="Database\Entities\BookType.cs" />
     <Compile Include="Database\Entities\BookVersion.cs" />
     <Compile Include="Database\Entities\Category.cs" />
@@ -156,9 +155,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Transformation.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Database\Entities\BookBibl.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\Publisher.hbm.xml" />

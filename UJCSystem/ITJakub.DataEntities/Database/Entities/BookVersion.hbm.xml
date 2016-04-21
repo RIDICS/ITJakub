@@ -63,6 +63,10 @@
       <column name="Acronym" sql-type="varchar" not-null="false" />
     </property>
 
+    <property name="RelicAbbreviation" />
+    
+    <property name="SourceAbbreviation" />
+
     <bag name="ManuscriptDescriptions" cascade="all-delete-orphan" lazy="true">
       <key column="BookVersion" />
       <one-to-many class="ManuscriptDescription" />
