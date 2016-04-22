@@ -96,6 +96,7 @@
     <Compile Include="Database\Entities\Track.cs" />
     <Compile Include="Database\Entities\Permission.cs" />
     <Compile Include="Database\HeadwordCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Repositories\KeywordRepository.cs" />
     <Compile Include="Database\Repositories\PermissionRepository.cs" />
     <Compile Include="Database\Repositories\NewsRepository.cs" />
     <Compile Include="Database\Repositories\TermRepository.cs" />

@@ -150,6 +150,12 @@
 			<xsl:apply-templates />
 		</term>
 	</xsl:template>
+
+  <xsl:template match="ev:Predloha" mode="term">
+    <term type="literary-original">
+      <xsl:apply-templates />
+    </term>
+  </xsl:template>
 	
 	<xsl:template match="ev:Pramen/ev:Zkratka" mode="bibl">
 		<bibl type="acronym" subtype="source">

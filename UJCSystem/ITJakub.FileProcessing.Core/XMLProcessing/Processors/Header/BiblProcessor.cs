@@ -25,30 +25,34 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 
         protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
         {
-            if (!xmlReader.HasAttributes)
+            var type = xmlReader.GetAttribute("type");
+            var subType = xmlReader.GetAttribute("subtype");
+            var hasAttributes = xmlReader.HasAttributes;
+            var content = GetInnerContentAsString(xmlReader);
+
+            if (!hasAttributes)
             {
-                bookVersion.BiblText = GetInnerContentAsString(xmlReader);
+                bookVersion.BiblText = content;
             }
             else
             {
-                if (xmlReader.GetAttribute("type") == "acronym")
+                if (type == "acronym")
                 {
-                    switch (xmlReader.GetAttribute("subtype"))
+                    switch (subType)
                     {
                         case "original-text":
-                            bookVersion.RelicAbbreviation = GetInnerContentAsString(xmlReader);
+                            bookVersion.RelicAbbreviation = content;
 
                             break;
 
                         case "source":
-                            bookVersion.SourceAbbreviation = GetInnerContentAsString(xmlReader);
+                            bookVersion.SourceAbbreviation = content;
 
                             break;
 
                         default:
                             if (m_log.IsDebugEnabled)
-                                m_log.DebugFormat("Unknown bibl subtype attribute '${0}'",
-                                    xmlReader.GetAttribute("subtype"));
+                                m_log.DebugFormat("Unknown bibl subtype attribute '${0}'", subType);
 
                             break;
                     }
@@ -56,7 +60,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 else
                 {
                     if (m_log.IsDebugEnabled)
-                        m_log.DebugFormat("Unknown bibl type attribute '${0}'", xmlReader.GetAttribute("type"));
+                        m_log.DebugFormat("Unknown bibl type attribute '${0}'", type);
                 }
             }
         }

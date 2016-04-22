@@ -77,11 +77,6 @@
       <one-to-many class="Keyword" />
     </bag>
     
-    <bag name="BookBibls" cascade="all-delete-orphan">
-      <key column="BookVersion" />
-      <one-to-many class="BookBibl" />
-    </bag>
-    
     <bag name="BookPages" cascade="all-delete-orphan" lazy="extra">
       <key column="BookVersion" />
       <one-to-many class="BookPage" />
