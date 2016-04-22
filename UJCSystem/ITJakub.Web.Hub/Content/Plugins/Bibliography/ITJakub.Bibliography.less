@@ -53,6 +53,25 @@ ul.bib-listing li.list-item .right-panel {
     align-items: center;
     text-align: center;
     position: relative;
+
+    .content-button {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        margin-left: -20px; /* half size of button + padding*/
+    }
+
+    button, .button {
+        background-color: transparent;
+        border: none;
+        color: white;
+        outline: none!important;
+        box-shadow:none !important;
+
+        &> span{
+            font-size:20px;
+        }
+    }
 }
 
 ul.bib-listing li.list-item .hidden-content {
@@ -69,23 +88,6 @@ ul.bib-listing li.list-item .hidden-content .bottom-panel .body{
      padding: 10px 5px 10px 30px;
 }
 
-
-ul.bib-listing li.list-item .right-panel .content-button {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    margin-left: -20px; /* half size of button + padding*/
-    
-}
-
-ul.bib-listing li.list-item .right-panel button{
-    background-color: transparent;
-    border: none;
-    color: white;
-    outline: none!important;
-    box-shadow:none !important;
-}
-
 ul.bib-listing li.list-item .left-panel button, ul.listing li.list-item .left-panel input{
     background-color: transparent;
     border: none;
@@ -100,10 +102,6 @@ ul.bib-listing li.list-item .left-panel button> span{
     font-size:14px;
     margin: 0;
     padding: 0;
-}
-
-ul.bib-listing li.list-item .right-panel button> span{
-    font-size:20px;
 }
 
 ul.bib-listing li.list-item .table{

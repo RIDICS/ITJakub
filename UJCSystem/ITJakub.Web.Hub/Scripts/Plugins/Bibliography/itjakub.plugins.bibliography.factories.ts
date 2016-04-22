@@ -63,13 +63,14 @@ class BibliographyFactory {
         $(rightPanel).addClass('right-panel');
 
         if (config.containsReadButton()) {
-            var bookButton: HTMLButtonElement = document.createElement('button');
-            bookButton.type = 'button';
-            $(bookButton).addClass('btn btn-sm book-button');
+            var bookButton: HTMLAnchorElement = document.createElement('a');
+            var $bookButton = $(bookButton);
+            $bookButton.addClass('btn btn-sm book-button button');
             var spanBook: HTMLSpanElement = document.createElement('span');
             $(spanBook).addClass('glyphicon glyphicon-book');
             bookButton.appendChild(spanBook);
-            $(bookButton).click((event: JQueryEventObject) => {
+            $bookButton.attr("href", "#");
+            $bookButton.click((event: JQueryEventObject) => {
                 var buttonScript = config.getReadButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getReadButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
@@ -86,13 +87,15 @@ class BibliographyFactory {
         }
 
         if (config.containsInfoButton()) {
-            var infoButton: HTMLButtonElement = document.createElement('button');
+            var infoButton: HTMLAnchorElement = document.createElement('a');
+            var $infoButton = $(infoButton);
             infoButton.type = 'button';
-            $(infoButton).addClass('btn btn-sm information-button');
+            $infoButton.addClass('btn btn-sm information-button button');
             var spanInfo: HTMLSpanElement = document.createElement('span');
             $(spanInfo).addClass('glyphicon glyphicon-info-sign');
             infoButton.appendChild(spanInfo);
-            $(infoButton).click((event: JQueryEventObject) => {
+            $infoButton.attr("href", "#");
+            $infoButton.click((event: JQueryEventObject) => {
                 var buttonScript = config.getInfoButtonOnClick(bookInfo);
                 var buttonScriptCallable = config.getInfoButtonOnClickCallable(bookInfo);
                 if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
