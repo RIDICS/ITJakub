@@ -20,6 +20,7 @@
     protected defaultConfiguration = {
         base: {
             autosearch: true,
+            searchOnFill: true,
             url: {
                 searchKey: "search",
                 pageKey: "page",
@@ -356,7 +357,10 @@
 
                 if (selected) {
                     dropDownSelect.setStateFromUrlString(selected);
-                } else if (this.configuration.base.autosearch) {
+                } else if (this.configuration.base.autosearch || (
+                    this.configuration.base.searchOnFill
+                    && search.getTextFromTextField().length > 0
+                )) {
                     search.processSearch(); //if not explicitly selected 
                 }
             });
@@ -370,7 +374,8 @@
 
 interface IModulInicializatorConfiguration {
     base?: {
-        autosearch?:boolean;
+        autosearch?: boolean;
+        searchOnFill?: boolean;
         url?: {
             searchKey?: string;
             pageKey?: string;
