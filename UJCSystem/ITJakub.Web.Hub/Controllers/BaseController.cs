@@ -49,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers
             return User.Identity.IsAuthenticated;            
         }
 
-        private string GetUserName()
+        protected string GetUserName()
         {
             return User.Identity.Name;
         }

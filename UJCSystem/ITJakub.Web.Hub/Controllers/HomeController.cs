@@ -63,13 +63,17 @@ namespace ITJakub.Web.Hub.Controllers
         public ActionResult Feedback(FeedbackViewModel model)
         {
            
-                using (var client = GetMainServiceClient())
+            using (var client = GetMainServiceClient())
+            {
+                if (Request.IsAuthenticated)
+                {
+                    client.CreateFeedback(model.Text, GetUserName(), FeedbackCategoryEnumContract.None);
+                }
+                else
                 {
                     client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);
                 }
-
-          
-
+            }
 
             return View("Index");
         }
