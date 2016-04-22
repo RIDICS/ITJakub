@@ -61,6 +61,18 @@ function isUserInRole(role: RoleEnum) {
     return rolesString.indexOf(paramRoleString) >= 0;
 }
 
+function onClickHref(event:JQueryEventObject, targetUrl) {
+    if (event.ctrlKey || event.which == 2) {
+        event.preventDefault();
+
+        window.open(targetUrl, '_blank');
+
+        return false;
+    } else {
+        window.location.href = targetUrl;
+    }
+}
+
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);

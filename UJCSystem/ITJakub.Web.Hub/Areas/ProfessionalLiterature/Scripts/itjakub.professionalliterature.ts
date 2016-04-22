@@ -179,9 +179,9 @@ function listProfLitBookReadClicked(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-bookid");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
-            window.location.href = getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery();
+            onClickHref(context.event, getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
-            window.location.href = getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId;
+            onClickHref(context.event, getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId);
         }
     }
 }
@@ -189,6 +189,6 @@ function listProfLitBookReadClicked(target) {
 function searchProfLitBookReadClicked(target) {
     return context => {
         var bookId = $(target).parents("li.list-item").attr("data-bookid");
-        window.location.href = getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery();
+        onClickHref(context.event, getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     }
 }

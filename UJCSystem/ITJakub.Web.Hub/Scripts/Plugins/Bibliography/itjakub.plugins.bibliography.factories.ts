@@ -51,8 +51,8 @@ class BibliographyFactory {
         return leftPanel;
     }
 
-    protected runEvalResponse(callback: (context:Object)=>any) {
-        callback({ search: this.modulInicializator.getSearch() });
+    protected runEvalResponse(event: JQueryEventObject, callback: (context:Object)=>any) {
+        callback({ search: this.modulInicializator.getSearch(), event: event });
     }
     
     makeRightPanel(bookInfo: IBookInfo): HTMLDivElement {
@@ -76,10 +76,10 @@ class BibliographyFactory {
                     eval(buttonScript);
                 }
                 else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
-                    this.runEvalResponse(eval(buttonScriptCallable));
+                    this.runEvalResponse(event, eval(buttonScriptCallable));
                 }
                 else {
-                    window.location.href = config.getReadButtonUrl(bookInfo);
+                    onClickHref(event, config.getReadButtonUrl(bookInfo));
                 }
             });
             rightPanel.appendChild(bookButton);
@@ -99,10 +99,10 @@ class BibliographyFactory {
                     eval(buttonScript);
                 }
                 else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
-                    this.runEvalResponse(eval(buttonScriptCallable));
+                    this.runEvalResponse(event, eval(buttonScriptCallable));
                 }
                 else {
-                    window.location.href = config.getReadButtonUrl(bookInfo);
+                    onClickHref(event, config.getReadButtonUrl(bookInfo));
                 }
             });
             rightPanel.appendChild(infoButton);
