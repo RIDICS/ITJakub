@@ -1861,12 +1861,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             {
                 return Channel.GetPageBookmarks(bookId, userName);
             }
-
-
-
-
-
-
             catch (CommunicationException ex)
             {
                 if (m_log.IsErrorEnabled)

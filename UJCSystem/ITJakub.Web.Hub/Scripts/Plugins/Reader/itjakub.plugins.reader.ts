@@ -613,6 +613,13 @@ class ReaderModule {
     }
 
     private loadBookmarks() {
+        const bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
+        for (var xmlId in bookmarks) {
+            if (bookmarks.hasOwnProperty(xmlId)) {
+                this.loadBookmark(bookmarks[xmlId], true);
+            }
+        }
+
         if (isUserLoggedIn()) {
             $.ajax({
                 type: "GET",
@@ -622,7 +629,7 @@ class ReaderModule {
                 dataType: 'json',
                 contentType: 'application/json',
                 success: (response) => {
-                    var bookmarks = response["bookmarks"];
+                    const bookmarks = response["bookmarks"];
                     for (var i = 0; i < bookmarks.length; i++) {
                         this.loadBookmark(bookmarks[i]);
                     }
@@ -631,20 +638,18 @@ class ReaderModule {
                 }
             });
         } 
-
-        var bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
-        for (var xmlId in bookmarks) {
-            if (bookmarks.hasOwnProperty(xmlId)) {
-                this.loadBookmark(bookmarks[xmlId], true);
-            }
-        }
     }
 
-    private loadBookmark(actualBookmark: { PageXmlId: string }, local: boolean=false) {
+    private loadBookmark(actualBookmark: { PageXmlId: string, Title?:string }, local: boolean=false) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
             if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
                 var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, local);
+
+                if (actualBookmark.Title !== undefined && actualBookmark.Title !== null && actualBookmark.Title.length > 0) {
+                    bookmarkSpan.title = actualBookmark.Title;
+                }
+
                 this.showBookmark(bookmarkSpan);
                 break;
             }
@@ -873,7 +878,29 @@ class ReaderModule {
     }
 
     showBookmark(bookmarkHtml: HTMLSpanElement) {
-        $(this.readerContainer).find('.slider').append(bookmarkHtml);
+        $(this.readerContainer).find('.slider').append(bookmarkHtml).promise();
+    }
+
+    getBookmarks():JQuery {
+        const slider = $(this.readerContainer).find(".slider");
+        const bookmarks = $(slider).find(".bookmark");
+
+        const bookMap = {};
+
+        for (let i = 0; i < bookmarks.length; i++) {
+            let bookmark = bookmarks[i];
+            bookMap[$(bookmark).data("pageXmlId")] = bookmark;
+        }
+
+        const outputBooks = [];
+        for (let j = 0; j < this.pages.length; j++) {
+            let page = this.pages[j];
+            if (bookMap[page.xmlId] !== undefined) {
+                outputBooks.push(bookMap[page.xmlId]);
+            }
+        }
+
+        return $(outputBooks);
     }
 
     addBookmark() {
@@ -883,6 +910,18 @@ class ReaderModule {
         var useOnline: boolean = isUserLoggedIn();
 
         var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, !useOnline);
+
+        const postShowAction = () => {
+            const $bookmarksContainer = $(".reader-bookmarks-container");
+            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.settingsPanel.createBookmarkList(
+                    $bookmarksContainer.parent().get(0),
+                    this.settingsPanel,
+                    !useOnline,
+                    useOnline
+                );
+            }
+        };
 
         if (useOnline) {
             $.ajax({
@@ -894,6 +933,7 @@ class ReaderModule {
                 contentType: 'application/json',
                 success: (response) => {
                     this.showBookmark(bookmarkSpan);
+                    postShowAction();
                 },
                 error: (response) => {
                 }
@@ -901,31 +941,75 @@ class ReaderModule {
         } else {
             this.storage.update(`reader-bookmarks-${this.bookId}`, page.xmlId, { BookId: this.bookId, PageXmlId: page.xmlId });
             this.showBookmark(bookmarkSpan);
+            postShowAction();
+        }
+    }
+
+    setBookmarkTitle(targetBookmark: HTMLSpanElement, title: string) {
+        targetBookmark.title = title;
+        const $targetBookmark=$(targetBookmark);
+
+        var useOnline: boolean = isUserLoggedIn();
+
+        useOnline = useOnline && !$targetBookmark.hasClass("bookmark-local");
+
+        if (useOnline) {
+            //TODO persit
+        } else {
+            this.storage.update(
+                `reader-bookmarks-${this.bookId}`,
+                $targetBookmark.data("pageXmlId"),
+                {
+                    BookId: this.bookId,
+                    PageXmlId: $targetBookmark.data("pageXmlId"),
+                    Title: title
+                }
+            );
         }
     }
 
     removeBookmark(): boolean {
-        var slider = $(this.readerContainer).find('.slider');
-        var bookmarks = $(slider).find('.bookmark');
+        const bookmarks = this.getBookmarks();
 
         if (typeof bookmarks === 'undefined' || bookmarks == null || bookmarks.length === 0) {
             return false;
         }
 
         var actualPage: BookPage = this.pages[this.actualPageIndex];
-        var targetBookmark = $(bookmarks).filter(function (index) {
+        var targetBookmark:JQuery = $(bookmarks).filter(function (index) {
             return $(this).data("page-xmlId") === actualPage.xmlId;
         });
 
-        if (typeof targetBookmark === 'undefined' || targetBookmark == null || targetBookmark.length === 0) {
+        if (targetBookmark === undefined || targetBookmark == null || targetBookmark.length === 0) {
             return false;
         }
 
+        const localBookmark = targetBookmark.filter(function (index) {
+            return $(this).hasClass("bookmark-local");
+        });
+        const onlineBookmark = targetBookmark.filter(function (index) {
+            return !$(this).hasClass("bookmark-local");
+        });
+        
         var useOnline: boolean = isUserLoggedIn();
 
-        useOnline = useOnline && $(targetBookmark).hasClass("bookmark-local");
+        const localLength = localBookmark.length;
+        const onlineLength = onlineBookmark.length;
 
-        if (useOnline) {
+        const postRemoveAction = () => {
+            const $bookmarksContainer = $(".reader-bookmarks-container");
+            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.settingsPanel.createBookmarkList(
+                    $bookmarksContainer.parent().get(0),
+                    this.settingsPanel,
+                    localLength > 0,
+                    onlineLength > 0
+                );
+            }
+        };
+
+        //remove online bookmark only if not exist local
+        if (useOnline && localBookmark.length == 0) {
             $.ajax({
                 type: "POST",
                 traditional: true,
@@ -934,16 +1018,22 @@ class ReaderModule {
                 dataType: 'json',
                 contentType: 'application/json',
                 success: (response) => {
-                    $(targetBookmark).remove();
+                    onlineBookmark.remove();
+
+                    postRemoveAction();
                 },
                 error: (response) => {
                 }
-            });
-        } else {
-            this.storage.update(`reader-bookmarks-${this.bookId}`, actualPage.xmlId, null);
-            $(targetBookmark).remove();
+            }); 
         }
 
+        if (localLength > 0) {
+            this.storage.update(`reader-bookmarks-${this.bookId}`, actualPage.xmlId, null);
+            localBookmark.remove();
+
+            postRemoveAction();
+        }
+        
         return true;
     }
 
@@ -1328,8 +1418,9 @@ class SettingsPanel extends LeftSidePanel {
         var textButtonSpan = window.document.createElement("span");
         $(textButtonSpan).addClass("glyphicon glyphicon-text-size");
         var textButton = window.document.createElement("button");
-        $(textButton).addClass("reader-settings-button");
-        $(textButton).append(textButtonSpan);
+        var $textButton = $(textButton);
+        $textButton.addClass("reader-settings-button");
+        $textButton.append(textButtonSpan);
 
         $(textButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.textPanelIdentificator, "");
@@ -1339,8 +1430,9 @@ class SettingsPanel extends LeftSidePanel {
         var imageButtonSpan = window.document.createElement("span");
         $(imageButtonSpan).addClass("glyphicon glyphicon-picture");
         var imageButton = window.document.createElement("button");
-        $(imageButton).addClass("reader-settings-button");
-        $(imageButton).append(imageButtonSpan);
+        var $imageButton = $(imageButton);
+        $imageButton.addClass("reader-settings-button");
+        $imageButton.append(imageButtonSpan);
 
         $(imageButton).click((event: Event) => {
             rootReference.parentReader.changeSidePanelVisibility(rootReference.parentReader.imagePanelIdentificator, "");
@@ -1361,14 +1453,13 @@ class SettingsPanel extends LeftSidePanel {
         showPageNameCheckbox.type = "checkbox";
 
         $(showPageNameCheckbox).change((eventData: Event) => {
-            var readerText = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
+            var readerText:JQuery = $("#" + this.parentReader.textPanelIdentificator).find(".reader-text");
             var currentTarget: HTMLInputElement = <HTMLInputElement>(eventData.currentTarget);
             if (currentTarget.checked) {
-                $(readerText).addClass("reader-text-show-page-names");
+                readerText.addClass("reader-text-show-page-names");
             } else {
-                $(readerText).removeClass("reader-text-show-page-names");
+                readerText.removeClass("reader-text-show-page-names");
             }
-
         });
 
         var showPageNameLabel: HTMLLabelElement = window.document.createElement("label");
@@ -1436,7 +1527,115 @@ class SettingsPanel extends LeftSidePanel {
         var innerContent: HTMLDivElement = window.document.createElement("div");
         innerContent.appendChild(buttonsDiv);
         innerContent.appendChild(checkboxesDiv);
+
+        this.createBookmarkList(innerContent, rootReference);
+
         return innerContent;
+    }
+
+    public createBookmarkList(
+        innerContent: HTMLElement,
+        rootReference: SidePanel,
+        reinitLocal: boolean = true,
+        reinitOnline: boolean = true
+    ) {
+        const $bookmarksContainer = $(innerContent).children(".reader-bookmarks-container");
+        let bookmarksContainer: HTMLDivElement;
+
+        if ($(innerContent).children(".reader-bookmarks-container").length == 0) {
+            bookmarksContainer = document.createElement("div");
+            bookmarksContainer.classList.add("reader-bookmarks-container");
+            innerContent.appendChild(bookmarksContainer);
+        }
+        else {
+            $bookmarksContainer.empty();
+            bookmarksContainer = <HTMLDivElement>$bookmarksContainer.get(0);
+        }
+
+        var bookmarksHead = document.createElement("h2");
+        bookmarksHead.innerHTML = "Záložky";
+        bookmarksHead.classList.add("reader-bookmarks-head");
+        bookmarksContainer.appendChild(bookmarksHead);
+
+        var bookmarksContent = document.createElement("div");
+        bookmarksContent.classList.add("reader-bookmarks-content");
+        bookmarksContainer.appendChild(bookmarksContent);
+
+        const bookmarks = rootReference.parentReader.getBookmarks();
+        
+        const localBookmarks = bookmarks.filter(function (index) {
+            return $(this).hasClass("bookmark-local");
+        });
+        const onlineBookmarks = bookmarks.filter(function (index) {
+            return !$(this).hasClass("bookmark-local");
+        });
+
+        const localBookmarkContainer = document.createElement("ul");
+        localBookmarkContainer.classList.add("reader-bookmarks-content-list", "reader-bookmarks-content-list-local");
+        bookmarksContent.appendChild(localBookmarkContainer);
+
+        for (let i = 0; i < localBookmarks.length; i++) {
+            localBookmarkContainer.appendChild(this.createBookmark(localBookmarks[i], rootReference));
+        }
+
+        if (isUserLoggedIn()) {
+            const onlineBookmarkContainer = document.createElement("ul");
+            onlineBookmarkContainer.classList.add("reader-bookmarks-content-list", "reader-bookmarks-content-list-online");
+            bookmarksContent.appendChild(onlineBookmarkContainer);
+
+            for (let i = 0; i < onlineBookmarks.length; i++) {
+                onlineBookmarkContainer.appendChild(this.createBookmark(onlineBookmarks[i], rootReference));
+            }
+        }
+    }
+
+    protected createBookmark(bookmark: HTMLElement, rootReference: SidePanel) {
+        const $bookmark = $(bookmark);
+        const bookmarkItem = document.createElement("li");
+        bookmarkItem.classList.add("reader-bookmarks-content-item");
+
+        const page = document.createElement("a");
+        page.href = "#";
+        page.innerHTML = $bookmark.data("pageName");
+        page.classList.add("reader-bookmarks-content-item-page");
+
+        page.addEventListener("click", () => {
+            rootReference.parentReader.moveToPage($bookmark.data("page-xmlId"), true);
+        });
+
+        bookmarkItem.appendChild(page);
+        bookmarkItem.appendChild(document.createTextNode(" "));
+
+        const titleContainer = document.createElement("span");
+        titleContainer.classList.add("reader-bookmarks-content-item-title-container");
+        bookmarkItem.appendChild(titleContainer);
+
+        const title = document.createElement("span");
+        this.setBookmarkTitle(title, bookmark, rootReference, bookmark.title);
+        title.classList.add("reader-bookmarks-content-item-title");
+        
+        titleContainer.addEventListener("click", () => {
+            this.setBookmarkTitle(title, bookmark, rootReference, prompt("Zvolte název záložky"));
+        });
+
+        titleContainer.appendChild(title);
+        titleContainer.appendChild(document.createTextNode(" "));
+
+        const titleEdit = document.createElement("span");
+        titleEdit.classList.add("glyphicon", "glyphicon-pencil");
+        titleContainer.appendChild(titleEdit);
+        
+        return bookmarkItem;
+    }
+
+    protected setBookmarkTitle(titleItem: HTMLElement, bookmark: HTMLElement, rootReference: SidePanel, title: string) {
+        rootReference.parentReader.setBookmarkTitle(bookmark, title);
+
+        if (title.length == 0) {
+            title = "&lt;bez názvu&gt;";
+        }
+
+        titleItem.innerHTML = title;
     }
 }
 

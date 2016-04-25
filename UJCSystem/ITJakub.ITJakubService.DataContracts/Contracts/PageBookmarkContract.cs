@@ -11,5 +11,8 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts
 
         [DataMember]
         public int PagePosition { get; set; }
+
+        [DataMember]
+        public string Title { get; set; }
     }
 }

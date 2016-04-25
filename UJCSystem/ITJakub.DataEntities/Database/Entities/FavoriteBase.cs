@@ -35,6 +35,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual int PagePosition { get; set; }
 
+        public virtual string Title { get; set; }
+
         public virtual Book Book { get; set; }
     }
 

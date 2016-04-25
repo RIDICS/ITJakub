@@ -31,7 +31,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         {
             CreateMap<PageBookmark, PageBookmarkContract>()
                 .ForMember(dest => dest.PagePosition, opt => opt.MapFrom(src => src.PagePosition))
-                .ForMember(dest => dest.PageXmlId, opt => opt.MapFrom(src => src.PageXmlId));
+                .ForMember(dest => dest.PageXmlId, opt => opt.MapFrom(src => src.PageXmlId))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title));
         }
     }
 

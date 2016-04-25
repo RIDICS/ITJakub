@@ -113,8 +113,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
             {
                 var bookmarsList = client.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
-                return Json(new {bookmarks = bookmarsList}, JsonRequestBehavior.AllowGet)
-                    ;
+                return Json(new {bookmarks = bookmarsList}, JsonRequestBehavior.AllowGet);
             }
         }
     }
