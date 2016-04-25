@@ -41,7 +41,7 @@ class ReaderModule {
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
+    constructor(protected storage: IStorage, readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
@@ -613,31 +613,42 @@ class ReaderModule {
     }
 
     private loadBookmarks() {
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: { bookId: this.bookId },
-            url: getBaseUrl() + "Reader/GetAllBookmarks",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-
-                var bookmarks = response["bookmarks"];
-                for (var i = 0; i < bookmarks.length; i++) {
-                    var actualBookmark = bookmarks[i];
-                    for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
-                        var actualPage = this.pages[pageIndex];
-                        if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
-                            var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
-                            this.showBookmark(bookmarkSpan);
-                            break;
-                        }
+        if (isUserLoggedIn()) {
+            $.ajax({
+                type: "GET",
+                traditional: true,
+                data: { bookId: this.bookId },
+                url: getBaseUrl() + "Reader/GetAllBookmarks",
+                dataType: 'json',
+                contentType: 'application/json',
+                success: (response) => {
+                    var bookmarks = response["bookmarks"];
+                    for (var i = 0; i < bookmarks.length; i++) {
+                        this.loadBookmark(bookmarks[i]);
                     }
+                },
+                error: (response) => {
                 }
-            },
-            error: (response) => {
+            });
+        } else {
+            var bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
+            for (var xmlId in bookmarks) {
+                if (bookmarks.hasOwnProperty(xmlId)) {
+                    this.loadBookmark(bookmarks[xmlId]);
+                }
             }
-        });
+        }
+    }
+
+    private loadBookmark(actualBookmark) {
+        for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
+            var actualPage = this.pages[pageIndex];
+            if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
+                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                this.showBookmark(bookmarkSpan);
+                break;
+            }
+        }
     }
 
     private existSidePanel(sidePanelIdentificator: string): boolean {
@@ -858,19 +869,24 @@ class ReaderModule {
         var page: BookPage = this.pages[pageIndex];
         var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
-            url: getBaseUrl() + "Reader/AddBookmark",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                this.showBookmark(bookmarkSpan);
-            },
-            error: (response) => {
-            }
-        });
+        if (isUserLoggedIn()) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
+                url: getBaseUrl() + "Reader/AddBookmark",
+                dataType: 'json',
+                contentType: 'application/json',
+                success: (response) => {
+                    this.showBookmark(bookmarkSpan);
+                },
+                error: (response) => {
+                }
+            });
+        } else {
+            this.storage.update(`reader-bookmarks-${this.bookId}`, page.xmlId, { BookId: this.bookId, PageXmlId: page.xmlId });
+            this.showBookmark(bookmarkSpan);
+        }
     }
 
     removeBookmark(): boolean {
@@ -890,23 +906,26 @@ class ReaderModule {
             return false;
         }
 
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
-            url: getBaseUrl() + "Reader/RemoveBookmark",
-            dataType: 'json',
-            contentType: 'application/json',
-            success: (response) => {
-                $(targetBookmark).remove();
-            },
-            error: (response) => {
-            }
-        });
+        if (isUserLoggedIn()) {
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                data: JSON.stringify({ bookId: this.bookId, pageXmlId: actualPage.xmlId }),
+                url: getBaseUrl() + "Reader/RemoveBookmark",
+                dataType: 'json',
+                contentType: 'application/json',
+                success: (response) => {
+                    $(targetBookmark).remove();
+                },
+                error: (response) => {
+                }
+            });
+        } else {
+            this.storage.update(`reader-bookmarks-${this.bookId}`, actualPage.xmlId, null);
+            $(targetBookmark).remove();
+        }
 
         return true;
-
-
     }
 
     repaint() {

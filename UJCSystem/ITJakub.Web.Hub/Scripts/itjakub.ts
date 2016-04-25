@@ -55,6 +55,10 @@ enum RoleEnum {
     EditLemmatization = 0
 }
 
+function isUserLoggedIn() {
+    return $("#permissions-div").data("is-authenticated") === "True";
+}
+
 function isUserInRole(role: RoleEnum) {
     var paramRoleString = RoleEnum[role].toString();
     var rolesString = $("#permissions-div").data("roles");
@@ -76,4 +80,3 @@ function onClickHref(event:JQueryEventObject, targetUrl) {
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);
-

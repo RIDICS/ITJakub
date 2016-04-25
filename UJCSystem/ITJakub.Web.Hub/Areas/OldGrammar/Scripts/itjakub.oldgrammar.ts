@@ -13,7 +13,7 @@
     const leftPanelButtons = [PanelButtonEnum.Pin, PanelButtonEnum.Close];
     const mainPanelButtons = [PanelButtonEnum.Pin];
     
-    var readerPlugin = new ReaderModule(<HTMLDivElement>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
+    var readerPlugin = new ReaderModule(StorageManager.getInstance().getStorage(), <HTMLDivElement>$("#ReaderDiv")[0], readerPageChangedCallback, readerPanels, leftPanelButtons, mainPanelButtons);
     readerPlugin.makeReader(bookXmlId, versionXmlId, bookTitle, pageList);
     readerPlugin.setTermPanelCallback((xmlId: string, text: string) => {
         window.location.href = getBaseUrl() + "OldGrammar/OldGrammar/Search?search=" + text;

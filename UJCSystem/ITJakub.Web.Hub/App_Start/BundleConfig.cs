@@ -41,6 +41,11 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
                 "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/storage").Include(
+                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.manager.js",
+                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
+                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/imagezoom").Include(
                 "~/Scripts/Plugins/Wheelzoom/wheelzoom.js",
                 "~/Scripts/Plugins/Zoommaster/jquery.zoom.min.js"));
