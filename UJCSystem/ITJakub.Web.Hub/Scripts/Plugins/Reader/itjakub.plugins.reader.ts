@@ -630,21 +630,21 @@ class ReaderModule {
                 error: (response) => {
                 }
             });
-        } else {
-            var bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
-            for (var xmlId in bookmarks) {
-                if (bookmarks.hasOwnProperty(xmlId)) {
-                    this.loadBookmark(bookmarks[xmlId]);
-                }
+        } 
+
+        var bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
+        for (var xmlId in bookmarks) {
+            if (bookmarks.hasOwnProperty(xmlId)) {
+                this.loadBookmark(bookmarks[xmlId], true);
             }
         }
     }
 
-    private loadBookmark(actualBookmark) {
+    private loadBookmark(actualBookmark: { PageXmlId: string }, local: boolean=false) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
             if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
-                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId);
+                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, local);
                 this.showBookmark(bookmarkSpan);
                 break;
             }
@@ -848,15 +848,27 @@ class ReaderModule {
 
     }
 
-    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string): HTMLSpanElement {
+    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, local: boolean=false): HTMLSpanElement {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
-        $(bookmarkSpan).addClass('glyphicon glyphicon-bookmark bookmark');
-        $(bookmarkSpan).data('page-index', pageIndex);
-        $(bookmarkSpan).data('page-name', pageName);
-        $(bookmarkSpan).data('page-xmlId', pageXmlId);
+        var $bookmarkSpan = $(bookmarkSpan);
+
+        $bookmarkSpan.addClass('glyphicon glyphicon-bookmark bookmark');
+        $bookmarkSpan.data('page-index', pageIndex);
+        $bookmarkSpan.data('page-name', pageName);
+        $bookmarkSpan.data('page-xmlId', pageXmlId);
+
+        $bookmarkSpan.click(() => {
+            this.moveToPage(pageXmlId, true);
+        });
+
+        if (local) {
+            $bookmarkSpan.addClass("bookmark-local");
+        }
+
         var computedPosition = (positionStep * pageIndex);
-        $(bookmarkSpan).css('left', computedPosition + '%');
+        $bookmarkSpan.css('left', computedPosition + '%');
+
         return bookmarkSpan;
     }
 
@@ -867,9 +879,12 @@ class ReaderModule {
     addBookmark() {
         var pageIndex: number = this.actualPageIndex;
         var page: BookPage = this.pages[pageIndex];
-        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId);
 
-        if (isUserLoggedIn()) {
+        var useOnline: boolean = isUserLoggedIn();
+
+        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, !useOnline);
+
+        if (useOnline) {
             $.ajax({
                 type: "POST",
                 traditional: true,
@@ -906,7 +921,11 @@ class ReaderModule {
             return false;
         }
 
-        if (isUserLoggedIn()) {
+        var useOnline: boolean = isUserLoggedIn();
+
+        useOnline = useOnline && $(targetBookmark).hasClass("bookmark-local");
+
+        if (useOnline) {
             $.ajax({
                 type: "POST",
                 traditional: true,
