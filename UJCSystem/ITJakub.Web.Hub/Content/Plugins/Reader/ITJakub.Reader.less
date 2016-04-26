@@ -484,6 +484,47 @@ html,body {
     margin-right: 5px;
 }
 
+.reader-bookmarks-container {
+    .reader-bookmarks-head {
+        text-align: center;
+    }
+    .reader-bookmarks-pagination {
+        text-align:center;
+    }
+    .reader-bookmarks-content-list {
+        display: inline-block;
+        margin-left: 12px;
+        padding-left: 0;
+
+        .reader-bookmarks-content-item{
+            .reader-bookmarks-content-item-page {
+
+            }
+
+            &:before {
+                content: "";
+                display: inline-block;
+                width: 12px;
+                height: 12px;
+                margin-right: 2px;
+            }
+            &.reader-bookmarks-content-item-local {
+                &:before {
+                    background-color: purple;
+                }
+            }
+            &.reader-bookmarks-content-item-online {
+                &:before {
+                    background-color: red;
+                }
+            }
+        }
+        &.hide {
+            display: none;
+        }
+    }
+}
+
 .content-item {
     clear: both;
 }
