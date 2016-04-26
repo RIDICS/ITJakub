@@ -25,6 +25,8 @@
       <property name="PageXmlId" />
 
       <property name="PagePosition" />
+      
+      <property name="Title" />
 
       <many-to-one name="Book"
                    column="BookmarkBook"

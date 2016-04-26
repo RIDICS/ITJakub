@@ -67,6 +67,28 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionMode.Requires)]
+        public virtual IList<PageBookmark> GetPageBookmarkByPageXmlId(string bookId, string pageXmlId, string userName)
+        {
+            using (var session = GetSession())
+            {
+                
+                PageBookmark pageBookmarkAlias = null;
+                User userAlias = null;
+                Book bookAlias = null;
+
+                return session.QueryOver(() => pageBookmarkAlias)
+                    .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)
+                    .JoinQueryOver(() => pageBookmarkAlias.User, () => userAlias)
+                    .Where(
+                        () =>
+                            userAlias.UserName == userName
+                            && bookAlias.Guid == bookId
+                            && pageBookmarkAlias.PageXmlId == pageXmlId)
+                    .List<PageBookmark>();
+            }
+        }
+
+        [Transaction(TransactionMode.Requires)]
         public virtual void DeleteHeadwordBookmark(string bookId, string entryXmlId, string userName)
         {
             using (var session = GetSession())

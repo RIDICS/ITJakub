@@ -1907,6 +1907,32 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public bool SetPageBookmarkTitle(string bookId, string pageName,string title, string userName)
+        {
+            try
+            {
+                return Channel.SetPageBookmarkTitle(bookId, pageName, title, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public void RemovePageBookmark(string bookId, string pageName, string userName)
         {
             try

@@ -946,6 +946,7 @@ class ReaderModule {
     }
 
     setBookmarkTitle(targetBookmark: HTMLSpanElement, title: string) {
+        var useOnlineUpdate: boolean = targetBookmark.title != title;
         targetBookmark.title = title;
         const $targetBookmark=$(targetBookmark);
 
@@ -954,7 +955,27 @@ class ReaderModule {
         useOnline = useOnline && !$targetBookmark.hasClass("bookmark-local");
 
         if (useOnline) {
-            //TODO persit
+            if (useOnlineUpdate) {
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    data: JSON.stringify({
+                        bookId: this.bookId,
+                        pageXmlId: $targetBookmark.data("pageXmlId"),
+                        title: title
+                    }),
+                    url: getBaseUrl() + "Reader/SetBookmakTitle",
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: (response) => {
+                    },
+                    error: (response) => {
+                        if (response.status == 400) {
+                            alert("Nebylo možné upravit titulek záložky, záložka byla odstraněna.");
+                        }
+                    }
+                });
+            }
         } else {
             this.storage.update(
                 `reader-bookmarks-${this.bookId}`,

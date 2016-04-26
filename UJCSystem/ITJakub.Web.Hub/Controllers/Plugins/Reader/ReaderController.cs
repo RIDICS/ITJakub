@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
@@ -98,6 +99,21 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
                 client.AddPageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
             return Json(new {});
+        }
+
+        public ActionResult SetBookmakTitle(string bookId, string pageXmlId, string title)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var successSave=client.SetPageBookmarkTitle(bookId, pageXmlId, title, HttpContext.User.Identity.Name);
+
+                if (!successSave)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
+
+                return Json(new {});
+            }
         }
 
 

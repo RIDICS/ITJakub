@@ -263,6 +263,9 @@ namespace ITJakub.ITJakubService.DataContracts
         void AddPageBookmark(string bookId, string pageName, string userName);
 
         [OperationContract]
+        bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName);
+
+        [OperationContract]
         void RemovePageBookmark(string bookId, string pageName, string userName);
 
         [OperationContract]
