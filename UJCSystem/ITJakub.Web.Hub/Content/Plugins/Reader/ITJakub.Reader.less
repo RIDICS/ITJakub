@@ -178,7 +178,7 @@ html,body {
     }
 
     .bookmark {
-        color: red;
+        color: #FD4F31;
         z-index: 1;
         top: 5px;
         position: absolute;
@@ -485,37 +485,83 @@ html,body {
 }
 
 .reader-bookmarks-container {
+    margin-top: 6px;
+    border-top: 1px solid #E5E5E5;
+
     .reader-bookmarks-head {
         text-align: center;
+    }
+    .bookmark-toggles { 
+        label {
+            font-weight: normal;
+        }
+        .bookmark-ico {
+            
+        }
+        .bookmark-ico-online {
+            color: @reader-bookmark-ico-online;
+        }
+        .bookmark-ico-offline {
+            color: @reader-bookmark-ico-local;
+        }
     }
     .reader-bookmarks-pagination {
         text-align:center;
     }
+    .reader-bookmarks-content {
+        margin-top: 12px;
+    }
     .reader-bookmarks-content-list {
-        display: inline-block;
+        display: block;
+        margin-top: 2px;
         margin-left: 12px;
         padding-left: 0;
 
-        .reader-bookmarks-content-item{
+        .reader-bookmarks-content-item {
+            margin-bottom: 7px;
+            width: 100%;
+            display: inline-block;
+            clear: both;
+
+            .bookmark-remote-ico {
+                color: gray;
+                float: right;
+
+                &:hover {
+                    color: black;
+                    text-decoration: none;
+                }
+            }
+            .edit-button {
+                color: lightgray;
+            }
             .reader-bookmarks-content-item-page {
 
             }
-
-            &:before {
-                content: "";
-                display: inline-block;
-                width: 12px;
-                height: 12px;
-                margin-right: 2px;
+            .bookmark-ico {
+                margin-right: 4px;
+            }
+            .reader-bookmarks-content-item-title-input {
+                &.hide {
+                    display: none;
+                }
+            }
+            .edit-button {
+                display: none;
             }
             &.reader-bookmarks-content-item-local {
-                &:before {
-                    background-color: purple;
+                .bookmark-ico {
+                    color: @reader-bookmark-ico-local;
                 }
             }
             &.reader-bookmarks-content-item-online {
-                &:before {
-                    background-color: red;
+                .bookmark-ico {
+                    color: @reader-bookmark-ico-online;
+                }
+            }
+            &:hover {
+                .edit-button {
+                    display: inline;
                 }
             }
         }
@@ -677,7 +723,7 @@ div.dummy-page {
     overflow-y: auto;
 }
 
-.reader-terms-result-div h2, .reader-search-result-div h2 {
+.reader-terms-result-div h2, .reader-search-result-div h2, .reader-bookmarks-container h2, h2.reader-view-head {
     font-size: 16px;
     font-weight: bold;
     text-align: center;
