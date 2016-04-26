@@ -24,8 +24,11 @@ class Pagination {
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
 
-        for (var i = 1; i <= this.pageCount; i++) {
-            var pageLi = this.createPageElement(String(i), i);
+        for (let i = 1; i <= this.pageCount; i++) {
+            const pageLi = this.createPageElement(i.toString(), i);
+            if (i == defaultPageNumber) {
+                pageLi.classList.add("active");
+            }
             paginationUl.appendChild(pageLi);
         }
 
