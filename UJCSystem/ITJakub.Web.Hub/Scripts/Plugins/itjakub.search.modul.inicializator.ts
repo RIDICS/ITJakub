@@ -28,7 +28,7 @@
         $.ajax({
             type: "GET",
             traditional: true,
-            url: this.configuration.search.url.advanced,
+            url: this.configuration.search.url.advancedCount,
             data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
             dataType: "json",
             contentType: "application/json",
