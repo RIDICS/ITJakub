@@ -554,10 +554,12 @@ class DictionaryViewer {
         style.type = "text/css";
         style.appendChild(document.createTextNode(css));
         doc.head.appendChild(style);
-
+        
         printWindow.focus();
-        $(printWindow).ready(() => {
-            printWindow.print();
+
+        $(printWindow.document).ready(() => {
+            //hack: not exist event CSSready
+            setTimeout(()=> { printWindow.print(); }, 2000);
         });
     }
 }
