@@ -7,6 +7,11 @@
     <xsl:strip-space elements="*"/>
     <xsl:output indent="yes"/>
     <xsl:variable name="book-type" select="''"/>
+    <xsl:template match="tei:l">
+        <span class="itj-line" data-nlp-type="{name()}">
+            <xsl:apply-templates/>
+        </span>
+    </xsl:template>
     <xsl:template match="tei:w">
         <span data-nlp-type="{name()}" data-nlp-lemma="{@nlp:lemma}">
             <xsl:apply-templates/>
