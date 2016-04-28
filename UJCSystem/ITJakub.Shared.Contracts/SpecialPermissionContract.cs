@@ -12,6 +12,7 @@ namespace ITJakub.Shared.Contracts
     [KnownType(typeof (ReadLemmatizationPermissionContract))]
     [KnownType(typeof (EditLemmatizationPermissionContract))]
     [KnownType(typeof (DerivateLemmatizationPermissionContract))]
+    [KnownType(typeof (EditionPrintPermissionContract))]
     public class SpecialPermissionContract
     {
         [DataMember]
@@ -88,5 +89,12 @@ namespace ITJakub.Shared.Contracts
     {
         [DataMember]
         public bool CanDerivateLemmatization { get; set; }
+    }
+
+    [DataContract]
+    public class EditionPrintPermissionContract : SpecialPermissionContract
+    {
+        [DataMember]
+        public bool CanEditionPrintText { get; set; }
     }
 }
