@@ -13,7 +13,7 @@ declare namespace exist = "http://exist.sourceforge.net/NS/exist";
 declare function vw:getPageByXmlId($document as node(), $page-xml-id as xs:string)
     as element() {
     let $start-point := $document/id($page-xml-id)    
-    let $end-point := $start-point/following::tei:pb[1][not(@ed)] (: pouze originální stránky, nikoli strany edice :)
+    let $end-point := $start-point/following::tei:pb[not(@ed)][1] (: pouze originální stránky, nikoli strany edice :)
     let $end-point := if($end-point) then $end-point else $start-point/following::tei:pb[1] 
     return vw:getPagesProcess($start-point, $end-point)
     
@@ -22,7 +22,7 @@ declare function vw:getPageByXmlId($document as node(), $page-xml-id as xs:strin
 declare function vw:getPageInPosition($document as node(), $page-position as xs:integer)
     as element() {
     let $start-point := $document/descendant::tei:pb[$page-position]    
-    let $end-point := $start-point/following::tei:pb[1][not(@ed)] (: pouze originální stránky, nikoli strany edice :)
+    let $end-point := $start-point/following::tei:pb[not(@ed)][1] (: pouze originální stránky, nikoli strany edice :)
     let $end-point := if($end-point) then $end-point else $start-point/following::tei:pb[1] 
     return vw:getPagesProcess($start-point, $end-point)
     
@@ -97,23 +97,23 @@ declare function vw:getPageNamesList($document as node())
 
 declare function vw:get-document-fragment($document as node(), $start as xs:string, 
 $end as xs:string, $page-xml-id as xs:string, $page-position as xs:string) as node() {
-	let $documentFragment :=
-	if (string-length($start) > 0) then
+    let $documentFragment :=
+    if (string-length($start) > 0) then
         if (string-length($end) > 0) then
             vw:getPages($document, $start, $end)
         else
             vw:getPage($document, $start)
     else
-		if(string-length($page-xml-id) > 0) then
-			vw:getPageByXmlId($document, $page-xml-id)
-		else
-			vw:getPageInPosition($document, $page-position)
-			
-	return $documentFragment
+        if(string-length($page-xml-id) > 0) then
+            vw:getPageByXmlId($document, $page-xml-id)
+        else
+            vw:getPageInPosition($document, $page-position)
+            
+    return $documentFragment
 };
 
 declare function vw:get-pages-only($document as node(), $start as xs:string, $end as xs:string) as node() {
-	<empty />
+    <empty />
 };
 declare function vw:get-page-only($document as node(), $start as xs:string) as node() {
 <empty />
@@ -131,21 +131,17 @@ declare function vw:get-page-in-position-only($document as node(), $page-positio
 
 declare function vw:get-document-fragment-only($document as node(), $start as xs:string, 
 $end as xs:string, $page-xml-id as xs:string, $page-position as xs:string) as node() {
-	let $documentFragment :=
-	if (string-length($start) > 0) then
+    let $documentFragment :=
+    if (string-length($start) > 0) then
         if (string-length($end) > 0) then
             vw:get-pages-only($document, $start, $end)
         else
             vw:get-page-only($document, $start)
     else
-		if(string-length($page-xml-id) > 0) then
-			vw:get-page-by-xml-id-only($document, $page-xml-id)
-		else
-			vw:get-page-in-position-only($document, $page-position)
-			
-	return $documentFragment
+        if(string-length($page-xml-id) > 0) then
+            vw:get-page-by-xml-id-only($document, $page-xml-id)
+        else
+            vw:get-page-in-position-only($document, $page-position)
+            
+    return $documentFragment
 };
-    
-
-    
-    
