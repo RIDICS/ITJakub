@@ -127,9 +127,23 @@ class ReaderModule {
     }
 
     protected hasBookPageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+    protected hasBookPageCallOnSuccess: { [key: string]: { [key: string]: Array<()=>any>; }; } = {};
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
-        if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+        if (this.hasBookPageCache[bookId] !== undefined && this.hasBookPageCache[bookId][bookVersionId + "_loading"]) {
+            this.hasBookPageCallOnSuccess[bookId][bookVersionId].push(() => {
+                this.hasBookPage(bookId, bookVersionId, onTrue, onFalse);
+            });
+        }
+        else if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+            if (this.hasBookPageCache[bookId] === undefined) {
+                this.hasBookPageCache[bookId] = {};
+                this.hasBookPageCache[bookId][bookVersionId + "_loading"] = true;
+
+                this.hasBookPageCallOnSuccess[bookId] = {};
+                this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
+            }
+
             $.ajax({
                 type: "POST",
                 traditional: true,
