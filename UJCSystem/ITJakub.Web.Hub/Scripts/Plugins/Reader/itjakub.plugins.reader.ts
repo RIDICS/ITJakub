@@ -152,18 +152,24 @@ class ReaderModule {
                 dataType: "json",
                 contentType: "application/json",
                 success: (response: { HasBookPage: boolean }) => {
-                    if (this.hasBookPageCache[bookId] === undefined) {
-                        this.hasBookPageCache[bookId] = {};
-                    }
                     this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
+                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+
                     if (response.HasBookPage && onTrue !== null) {
                         onTrue();
                     } else if (!response.HasBookPage && onFalse !== null) {
                         onFalse();
                     }
+
+                    while (this.hasBookPageCallOnSuccess[bookId][bookVersionId].length) {
+                        this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
+                    }
                 },
                 error: (response) => {
                     console.error(response);
+
+                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+                    this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
                 }
             });
         } else if (this.hasBookPageCache[bookId][bookVersionId] && onTrue !== null) {
@@ -1259,6 +1265,8 @@ class SidePanel {
     isDraggable: boolean;
     documentWindow: Window;
 
+    protected panelHeaderDiv: HTMLDivElement;
+
     public constructor(identificator: string, headerName: string, parentReader: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         this.parentReader = parentReader;
         this.identificator = identificator;
@@ -1268,13 +1276,13 @@ class SidePanel {
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
 
-        var panelHeaderDiv: HTMLDivElement = document.createElement("div");
-        $(panelHeaderDiv).addClass("reader-left-panel-header");
+        this.panelHeaderDiv = document.createElement("div");
+        this.panelHeaderDiv.classList.add("reader-left-panel-header");
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("panel-header-name");
         nameSpan.innerHTML=headerName;
-        panelHeaderDiv.appendChild(nameSpan);
+        this.panelHeaderDiv.appendChild(nameSpan);
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
             var sidePanelCloseButton = document.createElement("button");
@@ -1289,7 +1297,7 @@ class SidePanel {
 
             this.closeButton = sidePanelCloseButton;
 
-            panelHeaderDiv.appendChild(sidePanelCloseButton);
+            this.panelHeaderDiv.appendChild(sidePanelCloseButton);
         }
 
         if(showPanelButtonList.indexOf(PanelButtonEnum.Pin) >= 0)
@@ -1306,7 +1314,7 @@ class SidePanel {
 
             this.pinButton = panelPinButton;
 
-            panelHeaderDiv.appendChild(panelPinButton);   
+            this.panelHeaderDiv.appendChild(panelPinButton);   
         }
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
@@ -1322,10 +1330,10 @@ class SidePanel {
 
             this.newWindowButton = newWindowButton;
 
-            panelHeaderDiv.appendChild(newWindowButton);
+            this.panelHeaderDiv.appendChild(newWindowButton);
         }
 
-        sidePanelDiv.appendChild(panelHeaderDiv);
+        sidePanelDiv.appendChild(this.panelHeaderDiv);
 
         this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
@@ -2142,6 +2150,20 @@ class TextPanel extends RightSidePanel {
         super(identificator, "Text", readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
+
+        if (readerModule.readerContainer.getAttribute("data-can-print")==="True") {
+            const sidePanelPrintButton = document.createElement("button");
+            sidePanelPrintButton.classList.add("print-button");
+            sidePanelPrintButton.addEventListener("click", (event: Event) => {
+                //this.onCloseButtonClick(sidePanelPrintButton);
+            });
+
+            const printSpan = document.createElement("span");
+            printSpan.classList.add("glyphicon","glyphicon-print");
+            sidePanelPrintButton.appendChild(printSpan);
+
+            this.panelHeaderDiv.appendChild(sidePanelPrintButton);
+        }
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
