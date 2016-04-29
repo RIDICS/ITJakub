@@ -357,7 +357,7 @@ html,body {
     width: auto;
 }
 
-.close-button, .pin-button, .new-window-button {
+.close-button, .pin-button, .new-window-button, .print-button {
     float: right;
     color: lightgray;
     display: inline-block;
@@ -368,10 +368,10 @@ html,body {
     margin-left: 5px;
     text-align: center;
     vertical-align: middle;
-}
 
-.close-button:hover, .pin-button:hover, .new-window-button:hover {
-    color: @item-background-color;
+    &:hover {
+        color: @item-background-color;
+    }
 }
 
 .reader-left-panel-header {

@@ -775,6 +775,7 @@
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Progress\itjakub.plugins.progress.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.localstorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.cookiestorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.istorage.ts" />

@@ -12,5 +12,6 @@ namespace ITJakub.Web.Hub.Models
         public IList<BookPageContract> BookPages { get; set; }
         public string SearchText { get; set; }
         public string InitPageXmlId { get; set; }
+        public bool CanPrintEdition { get; set; }
     }
 }
