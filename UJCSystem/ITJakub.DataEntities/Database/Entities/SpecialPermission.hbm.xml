@@ -110,5 +110,13 @@
       
     </subclass>
     
+    <subclass name="EditionPrintTextPermission" discriminator-value="EditionPrintText">
+
+      <property name="CanEditionPrintText">
+        <column name="CanEditionPrintText" sql-type="bit" not-null="true" />
+      </property>
+      
+    </subclass>
+    
   </class>
 </hibernate-mapping>

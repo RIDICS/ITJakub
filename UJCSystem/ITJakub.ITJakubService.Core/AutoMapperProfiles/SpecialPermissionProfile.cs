@@ -46,6 +46,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<DerivateLemmatizationPermission, DerivateLemmatizationPermissionContract>()
                 .ForMember(dest => dest.CanDerivateLemmatization, opts => opts.MapFrom(src => src.CanDerivateLemmatization));
+
+            CreateMap<EditionPrintTextPermission, EditionPrintPermissionContract>()
+                .ForMember(dest => dest.CanEditionPrintText, opts => opts.MapFrom(src => src.CanEditionPrintText));
         }
     }
 }

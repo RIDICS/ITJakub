@@ -127,9 +127,23 @@ class ReaderModule {
     }
 
     protected hasBookPageCache: { [key: string]: { [key: string]: boolean; }; } = {};
+    protected hasBookPageCallOnSuccess: { [key: string]: { [key: string]: Array<()=>any>; }; } = {};
 
     hasBookPage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
-        if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+        if (this.hasBookPageCache[bookId] !== undefined && this.hasBookPageCache[bookId][bookVersionId + "_loading"]) {
+            this.hasBookPageCallOnSuccess[bookId][bookVersionId].push(() => {
+                this.hasBookPage(bookId, bookVersionId, onTrue, onFalse);
+            });
+        }
+        else if (this.hasBookPageCache[bookId] === undefined || this.hasBookPageCache[bookId][bookVersionId] === undefined) {
+            if (this.hasBookPageCache[bookId] === undefined) {
+                this.hasBookPageCache[bookId] = {};
+                this.hasBookPageCache[bookId][bookVersionId + "_loading"] = true;
+
+                this.hasBookPageCallOnSuccess[bookId] = {};
+                this.hasBookPageCallOnSuccess[bookId][bookVersionId] = [];
+            }
+
             $.ajax({
                 type: "POST",
                 traditional: true,
@@ -138,18 +152,24 @@ class ReaderModule {
                 dataType: "json",
                 contentType: "application/json",
                 success: (response: { HasBookPage: boolean }) => {
-                    if (this.hasBookPageCache[bookId] === undefined) {
-                        this.hasBookPageCache[bookId] = {};
-                    }
                     this.hasBookPageCache[bookId][bookVersionId] = response.HasBookPage;
+                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+
                     if (response.HasBookPage && onTrue !== null) {
                         onTrue();
                     } else if (!response.HasBookPage && onFalse !== null) {
                         onFalse();
                     }
+
+                    while (this.hasBookPageCallOnSuccess[bookId][bookVersionId].length) {
+                        this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
+                    }
                 },
                 error: (response) => {
                     console.error(response);
+
+                    this.hasBookPageCache[bookId][bookVersionId + "_loading"] = false;
+                    this.hasBookPageCallOnSuccess[bookId][bookVersionId].pop()();
                 }
             });
         } else if (this.hasBookPageCache[bookId][bookVersionId] && onTrue !== null) {
@@ -1245,6 +1265,8 @@ class SidePanel {
     isDraggable: boolean;
     documentWindow: Window;
 
+    protected panelHeaderDiv: HTMLDivElement;
+
     public constructor(identificator: string, headerName: string, parentReader: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         this.parentReader = parentReader;
         this.identificator = identificator;
@@ -1254,13 +1276,13 @@ class SidePanel {
         sidePanelDiv.id = identificator;
         this.decorateSidePanel(sidePanelDiv);
 
-        var panelHeaderDiv: HTMLDivElement = document.createElement("div");
-        $(panelHeaderDiv).addClass("reader-left-panel-header");
+        this.panelHeaderDiv = document.createElement("div");
+        this.panelHeaderDiv.classList.add("reader-left-panel-header");
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("panel-header-name");
         nameSpan.innerHTML=headerName;
-        panelHeaderDiv.appendChild(nameSpan);
+        this.panelHeaderDiv.appendChild(nameSpan);
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.Close) >= 0) {
             var sidePanelCloseButton = document.createElement("button");
@@ -1275,7 +1297,7 @@ class SidePanel {
 
             this.closeButton = sidePanelCloseButton;
 
-            panelHeaderDiv.appendChild(sidePanelCloseButton);
+            this.panelHeaderDiv.appendChild(sidePanelCloseButton);
         }
 
         if(showPanelButtonList.indexOf(PanelButtonEnum.Pin) >= 0)
@@ -1292,7 +1314,7 @@ class SidePanel {
 
             this.pinButton = panelPinButton;
 
-            panelHeaderDiv.appendChild(panelPinButton);   
+            this.panelHeaderDiv.appendChild(panelPinButton);   
         }
 
         if (showPanelButtonList.indexOf(PanelButtonEnum.ToNewWindow) >= 0) {
@@ -1308,10 +1330,10 @@ class SidePanel {
 
             this.newWindowButton = newWindowButton;
 
-            panelHeaderDiv.appendChild(newWindowButton);
+            this.panelHeaderDiv.appendChild(newWindowButton);
         }
 
-        sidePanelDiv.appendChild(panelHeaderDiv);
+        sidePanelDiv.appendChild(this.panelHeaderDiv);
 
         this.innerContent = this.makeBody(this, window);
         var panelBodyDiv = this.makePanelBody(this.innerContent, this, window);
@@ -2128,6 +2150,20 @@ class TextPanel extends RightSidePanel {
         super(identificator, "Text", readerModule, showPanelButtonList);
         this.preloadPagesBefore = 5;
         this.preloadPagesAfter = 10;
+
+        if (readerModule.readerContainer.getAttribute("data-can-print")==="True") {
+            const sidePanelPrintButton = document.createElement("button");
+            sidePanelPrintButton.classList.add("print-button");
+            sidePanelPrintButton.addEventListener("click", (event: Event) => {
+                this.onPrintButtonClick(sidePanelPrintButton);
+            });
+
+            const printSpan = document.createElement("span");
+            printSpan.classList.add("glyphicon","glyphicon-print");
+            sidePanelPrintButton.appendChild(printSpan);
+
+            this.panelHeaderDiv.appendChild(sidePanelPrintButton);
+        }
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -2195,18 +2231,26 @@ class TextPanel extends RightSidePanel {
         });
     }
 
-    displayPage(page: BookPage, scrollTo: boolean, multipleDownload:boolean=false) {
+    displayPage(page: BookPage, scrollTo: boolean, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded: boolean = !($(pageDiv).hasClass("unloaded"));
         var pageSearchUnloaded: boolean = $(pageDiv).hasClass("search-unloaded");
         var pageLoading: boolean = $(pageDiv).hasClass("loading");
         if (!pageLoading) {
             if (pageSearchUnloaded) {
-                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
-            } else if (!pageLoaded) {
-                this.downloadPageByXmlId(page);
+                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page, onSuccess, onFailed);
+            }
+            else if (!pageLoaded) {
+                this.downloadPageByXmlId(page, onSuccess, onFailed);
+            }
+            else if (onSuccess!==null) {
+                onSuccess();
             }
         }
+        else if (onSuccess !== null) {
+            onSuccess();
+        }
+
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
@@ -2240,7 +2284,7 @@ class TextPanel extends RightSidePanel {
         this.parentReader.moveToPageNumber(pageIndex, true);
     }
 
-    private downloadPageByXmlId(page: BookPage) {
+    private downloadPageByXmlId(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
@@ -2267,16 +2311,24 @@ class TextPanel extends RightSidePanel {
                 if (this.parentReader.clickedMoveToPage) {
                     this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
                 }
+
+                if (onSuccess != null) {
+                    onSuccess();
+                }
             },
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+
+                if (onFailed != null) {
+                    onFailed();
+                }
             }
         });
     }
 
-    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, multipleDownload:boolean=false) {
+    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
@@ -2306,11 +2358,18 @@ class TextPanel extends RightSidePanel {
                     this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
                 }
 
+                if (onSuccess != null) {
+                    onSuccess();
+                }
             },
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+
+                if (onFailed != null) {
+                    onFailed();
+                }
             }
         });
     }
@@ -2318,6 +2377,90 @@ class TextPanel extends RightSidePanel {
     public setSearchedQuery(query: string, isJson: boolean) {
         this.query = query;
         this.queryIsJson = isJson;
+    }
+
+    private onPrintButtonClick(button: HTMLButtonElement) {
+        const loadedPages: Array<boolean> = [];
+        const progress = new Progress("print-progress-bar", "Probíhá příprava díla pro tisk",
+        {
+            body: {
+                showLoading: true,
+                afterLoadingText: "Připravuji"
+            },
+            update: {
+                field: ProgressUpdateField.BodyAfterLoading,
+                valueCallback: (value:number, max:number) => {
+                    return `Zpracováno ${value} z ${max}`;
+                }
+            }
+        });
+        progress.show();
+
+        for (let i = 1; i < this.parentReader.pages.length; i++) {
+            const j = i;
+
+            const onFailed = () => {
+                loadedPages[j] = false;
+
+                this.displayPage(this.parentReader.pages[j], false, () => {
+                    loadedPages[j] = true;
+
+                    this.onLoadPage(loadedPages, progress);
+                }, onFailed);
+            };
+
+            onFailed();
+        }
+    }
+
+    private onLoadPage(loadedPages: Array<boolean>, progress: Progress) {
+        let success = 0;
+        let failed = 0;
+
+        for (let i = 1; i < loadedPages.length; i++) {
+            if (loadedPages[i]) {
+                success++;
+            }
+            else {
+                failed++;
+            }
+        }
+        
+        progress.update(success, this.parentReader.pages.length - 1);
+
+        if (success === this.parentReader.pages.length - 1) {
+            progress.hide();
+
+            this.printBook();
+        }
+    }
+
+    private printBook() {
+        const bookContent = this.innerContent.innerHTML;
+        var printWindow = window.open("", "", "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes");
+        var doc = printWindow.document;
+
+        doc.write("<div>");
+        doc.write(bookContent);
+        doc.write("</div>");
+        doc.close();
+
+        $("link, style").each((index, element) => {
+            $(doc.head).append($(element).clone());
+        });
+
+        const css = "body { background-color: white; padding: 0 10px; }";
+        const style = doc.createElement("style");
+        style.type = "text/css";
+        style.appendChild(document.createTextNode(css));
+        doc.head.appendChild(style);
+
+        printWindow.focus();
+
+        $(printWindow.document).ready(() => {
+            //hack: not exist event CSSready
+            setTimeout(() => { printWindow.print(); }, 2000);
+        });
     }
 }
 

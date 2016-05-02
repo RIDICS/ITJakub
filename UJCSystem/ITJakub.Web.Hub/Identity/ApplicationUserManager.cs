@@ -155,6 +155,11 @@ namespace ITJakub.Web.Hub.Identity
                 claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanDerivateLemmatization));
             }
 
+            if (specialPermissions.OfType<EditionPrintPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditionPrint));
+            }
+
             return claims;
         }
     }

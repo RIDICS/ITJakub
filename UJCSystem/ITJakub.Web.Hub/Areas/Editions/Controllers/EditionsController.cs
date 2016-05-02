@@ -48,7 +48,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookTitle = book.Title,
                         BookPages = book.BookPages,
                         SearchText = searchText,
-                        InitPageXmlId = page
+                        InitPageXmlId = page,
+                        CanPrintEdition = User.IsInRole("CanEditionPrint")
                     });
             }
         }
