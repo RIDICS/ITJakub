@@ -2430,7 +2430,37 @@ class TextPanel extends RightSidePanel {
 
         if (success === this.parentReader.pages.length - 1) {
             progress.hide();
+
+            this.printBook();
         }
+    }
+
+    private printBook() {
+        const bookContent = this.innerContent.innerHTML;
+        var printWindow = window.open("", "", "toolbar=no,location=no,status=no,menubar=no,scrollbars=yes");
+        var doc = printWindow.document;
+
+        doc.write("<div>");
+        doc.write(bookContent);
+        doc.write("</div>");
+        doc.close();
+
+        $("link, style").each((index, element) => {
+            $(doc.head).append($(element).clone());
+        });
+
+        const css = "body { background-color: white; padding: 0 10px; }";
+        const style = doc.createElement("style");
+        style.type = "text/css";
+        style.appendChild(document.createTextNode(css));
+        doc.head.appendChild(style);
+
+        printWindow.focus();
+
+        $(printWindow.document).ready(() => {
+            //hack: not exist event CSSready
+            setTimeout(() => { printWindow.print(); }, 2000);
+        });
     }
 }
 
