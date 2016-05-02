@@ -3,6 +3,7 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	exclude-result-prefixes="xd"
 	version="1.0">
+	<xsl:variable name="lomitko" select="'/'"/>
 	<xsl:template match="foliace">
 		<xsl:call-template name="zpracujFoliaci">
 			<xsl:with-param name="konciMezerou" select="substring(., string-length(.), 1) = ' '" />
@@ -15,6 +16,23 @@
 		<xsl:param name="konciMezerou" />
 		<xsl:param name="cislo" />
 		<xsl:choose>
+			<xsl:when test="contains($cislo, $lomitko)">
+				<xsl:call-template name="zpracujFoliaci">
+					<xsl:with-param name="cislo" select="substring-before($cislo, $lomitko)" />
+					<xsl:with-param name="konciMezerou" select="$konciMezerou" />
+				</xsl:call-template>
+				<xsl:call-template name="zpracujFoliaci">
+					<xsl:with-param name="cislo" select="substring-after($cislo, $lomitko)" />
+					<xsl:with-param name="konciMezerou" select="$konciMezerou" />
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="$cislo = 'b' or $cislo = 'a'">
+				<xsl:call-template name="vlozCislo">
+					<xsl:with-param name="cislo" select="$cislo" />
+					<xsl:with-param name="prvek" select="'cb'" />
+					<xsl:with-param name="mezera" select="$konciMezerou" />
+				</xsl:call-template>
+			</xsl:when>
 			<!-- DODĚLAT i ostatní případy, kdy může obsahovat 'st.' a 'ed.' -->
 			<xsl:when test="not(contains($cislo, 'ed.')) and (contains($cislo, ' bis ') or contains($cislo, ' ter ')) ">
 				<xsl:call-template name="vlozCislo">

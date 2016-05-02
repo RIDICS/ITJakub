@@ -28,11 +28,12 @@
 	<xsl:template match="text[@xml:space='preserve']">
 		<xsl:choose>
 			<xsl:when test=". = ' '">
-				<xsl:element name="seg">
+				<xsl:text> </xsl:text>
+				<!--<xsl:element name="seg">
 					<xsl:attribute name="type"><xsl:text>space</xsl:text></xsl:attribute>
 					<xsl:copy-of select="@*"/>
 					<xsl:apply-templates />
-				</xsl:element>
+				</xsl:element>-->
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:apply-templates />		

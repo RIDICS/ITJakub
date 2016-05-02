@@ -40,6 +40,7 @@
 			<xsl:choose>
 				<xsl:when test="local-name() = 'id'"><xsl:text>xml:id</xsl:text></xsl:when>
 				<xsl:when test="local-name() = 'lang'"><xsl:text>xml:lang</xsl:text></xsl:when>
+				<xsl:when test="local-name() = 'space'"><xsl:text>xml:space</xsl:text></xsl:when>
 				<xsl:otherwise><xsl:value-of select="local-name()"/></xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>

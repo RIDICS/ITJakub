@@ -9,6 +9,7 @@
 	</xd:doc>
   <xsl:output omit-xml-declaration="no" indent="yes"/>
   <xsl:strip-space elements="*"/>
+	<xsl:preserve-space elements="text"/>
 	<xsl:include href="Kopirovani_prvku.xsl"/>
 	
 	<xsl:template match="/">

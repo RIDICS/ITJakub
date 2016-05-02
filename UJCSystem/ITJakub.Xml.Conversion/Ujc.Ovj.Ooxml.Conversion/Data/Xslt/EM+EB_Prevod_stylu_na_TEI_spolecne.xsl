@@ -70,6 +70,9 @@
 	<!-- Kvůli chybě v AltovaXML je potřeba dávat v mixed content xml:space="preserve" i do prázdného elementu -->
 	<xsl:template match="torzo" xml:space="default">
 		<xsl:element name="seg">
+			<xsl:attribute name="space" namespace="http://www.w3.org/XML/1998/namespace">
+				<xsl:text>preserve</xsl:text>
+			</xsl:attribute>
 			<xsl:copy-of select="@*" />
 			<xsl:attribute name="type">
 				<xsl:text>fragment</xsl:text>
@@ -85,9 +88,16 @@
 				<xsl:otherwise>
 					<xsl:value-of select="substring-before(text(), '…')" />
 					<xsl:element name="gap" />
-					<hi>
+					<xsl:choose>
+						<xsl:when test="substring-after(text(), '…') = ' '">
+							<xsl:value-of select="' '"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<hi xml:space="preserve">
 						<xsl:value-of select="substring-after(text(), '…')" />
 					</hi>
+						</xsl:otherwise>
+					</xsl:choose>
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:if test="poznamka">
@@ -379,6 +389,7 @@
 			<xsl:apply-templates />
 		</xsl:element>-->
 		<xsl:element name="div">
+		<!--<xsl:element name="p">-->
 			<xsl:copy-of select="@*" />
 			<xsl:attribute name="type">
 				<xsl:text>impresum</xsl:text>
@@ -434,6 +445,14 @@
 	<xsl:template match="transliterace_rozepsani_zkratky">
 		<xsl:if test="$exportovatTransliteraci = 'true()'">
 			<xsl:apply-templates select="." mode="export" />
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template match="transliterace/rozepsani_zkratky">
+		<xsl:if test="$exportovatTransliteraci = 'true()'">
+			<xsl:element name="expan">
+				<xsl:apply-templates select="." mode="export" />
+			</xsl:element>
 		</xsl:if>
 	</xsl:template>
 

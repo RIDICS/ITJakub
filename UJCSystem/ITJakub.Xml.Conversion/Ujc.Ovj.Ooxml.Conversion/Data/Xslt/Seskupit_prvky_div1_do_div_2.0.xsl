@@ -42,6 +42,22 @@
 			</xsl:choose>
 		</xsl:copy>
 	</xsl:template>
+	
+	<xsl:template match="body/div">
+		<xsl:copy>
+			<xsl:copy-of select="@*" />
+			<xsl:choose>
+				<xsl:when test="div1">
+					<xsl:for-each-group select="*" group-adjacent="if (self::div1) then 0 else position()">
+						<xsl:apply-templates select="." />
+					</xsl:for-each-group>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates />
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>
+	</xsl:template>
 
 	<xsl:template match="div1">
 		<div>

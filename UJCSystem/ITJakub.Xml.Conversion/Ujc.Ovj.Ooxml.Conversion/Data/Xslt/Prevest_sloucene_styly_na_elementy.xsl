@@ -42,6 +42,13 @@
 		</xsl:element>
 	</xsl:template>
 	
+	<xsl:template match="interni_poznamka_dolni_index">
+		<xsl:element name="interni_poznamka">
+				<xsl:element name="dolni_index">
+					<xsl:value-of select="."/>
+				</xsl:element>
+		</xsl:element>
+	</xsl:template>
 	
 	<xsl:template match="transliterace_rozepsani_zkratky">
 		<xsl:element name="transliterace">
@@ -146,5 +153,14 @@
 		</xsl:element>
 	</xsl:template>
 	
-		
+	<xd:doc>
+		<xd:desc></xd:desc>
+	</xd:doc>
+	<xsl:template match="popisek_k_obrazku_torzo">
+		<xsl:element name="popisek_k_obrazku">
+			<xsl:element name="torzo">
+				<xsl:value-of select="."/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
 </xsl:stylesheet>

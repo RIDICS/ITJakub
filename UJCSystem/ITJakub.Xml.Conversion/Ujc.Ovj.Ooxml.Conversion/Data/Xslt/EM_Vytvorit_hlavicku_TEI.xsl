@@ -150,12 +150,6 @@
 			<xsl:apply-templates />
 		</term>
 	</xsl:template>
-
-  <xsl:template match="ev:Predloha" mode="term">
-    <term type="literary-original">
-      <xsl:apply-templates />
-    </term>
-  </xsl:template>
 	
 	<xsl:template match="ev:Pramen/ev:Zkratka" mode="bibl">
 		<bibl type="acronym" subtype="source">
@@ -171,9 +165,11 @@
 	
 	
 	<xsl:template name="listBibl">
+		<xsl:if test="ev:Hlava/ev:Pamatka/ev:Zkratka | ev:Hlava/ev:Pamatka/ev:Pramen/ev:Zkratka">
 		<listBibl>
 			<xsl:apply-templates select="ev:Hlava/ev:Pamatka/ev:Zkratka | ev:Hlava/ev:Pamatka/ev:Pramen/ev:Zkratka" mode="bibl" />
 		</listBibl>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template name="identifikaceRukopisu">

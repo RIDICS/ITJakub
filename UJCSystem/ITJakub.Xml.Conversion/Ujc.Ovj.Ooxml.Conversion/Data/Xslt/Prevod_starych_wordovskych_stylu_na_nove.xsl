@@ -85,4 +85,18 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xsl:template match="Popisek_obrazku">
+		<xsl:element name="Titulek_obrazku">
+			<xsl:copy-of select="@*"/>
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
+	
+	<!-- Word 2016 zavedl styl Podnadpis, takže náš styl přejmenovává -->
+	<xsl:template match="Podnadpis1">
+		<xsl:element name="Podnadpis">
+			<xsl:apply-templates/>
+		</xsl:element>
+	</xsl:template>
+	
 </xsl:stylesheet>
