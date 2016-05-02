@@ -68,6 +68,15 @@
                 const afterLoadingText = document.createElement("span");
                 afterLoadingText.innerHTML = this.contentConfiguration.body.afterLoadingText;
 
+                afterLoadingText.classList.add("modal-text");
+
+                if (
+                    this.contentConfiguration.body.afterLoadingTextPosition !== undefined
+                    && this.contentConfiguration.body.afterLoadingTextPosition === ProgressTextPosition.Center
+                ) {
+                    afterLoadingText.classList.add("modal-text-center");
+                }
+
                 this.modalBody.appendChild(afterLoadingText);
 
                 if (this.contentConfiguration.update.field === ProgressUpdateField.BodyAfterLoading) {
@@ -115,14 +124,20 @@ interface IProgressConfiguration {
         title?: string;
         showLoading?: boolean;
         afterLoadingText?: string;
+        afterLoadingTextPosition?: ProgressTextPosition; //default left
     };
     update?: {
         field?: ProgressUpdateField;
         valueCallback?: (value: number, max:number)=>string;
-    }
+    };
 }
 
 enum ProgressUpdateField {
     BodyTitle,
     BodyAfterLoading
+}
+
+enum ProgressTextPosition {
+    Center,
+    Left
 }
