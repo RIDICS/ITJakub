@@ -2155,7 +2155,7 @@ class TextPanel extends RightSidePanel {
             const sidePanelPrintButton = document.createElement("button");
             sidePanelPrintButton.classList.add("print-button");
             sidePanelPrintButton.addEventListener("click", (event: Event) => {
-                //this.onCloseButtonClick(sidePanelPrintButton);
+                this.onPrintButtonClick(sidePanelPrintButton);
             });
 
             const printSpan = document.createElement("span");
@@ -2231,18 +2231,26 @@ class TextPanel extends RightSidePanel {
         });
     }
 
-    displayPage(page: BookPage, scrollTo: boolean, multipleDownload:boolean=false) {
+    displayPage(page: BookPage, scrollTo: boolean, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageDiv = document.getElementById(page.xmlId);
         var pageLoaded: boolean = !($(pageDiv).hasClass("unloaded"));
         var pageSearchUnloaded: boolean = $(pageDiv).hasClass("search-unloaded");
         var pageLoading: boolean = $(pageDiv).hasClass("loading");
         if (!pageLoading) {
             if (pageSearchUnloaded) {
-                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page);
-            } else if (!pageLoaded) {
-                this.downloadPageByXmlId(page);
+                this.downloadSearchPageByXmlId(this.query, this.queryIsJson, page, onSuccess, onFailed);
+            }
+            else if (!pageLoaded) {
+                this.downloadPageByXmlId(page, onSuccess, onFailed);
+            }
+            else if (onSuccess!==null) {
+                onSuccess();
             }
         }
+        else if (onSuccess !== null) {
+            onSuccess();
+        }
+
         if (scrollTo) {
             this.scrollTextToPositionFromTop(0);
             var topOffset = $(pageDiv).offset().top;
@@ -2276,7 +2284,7 @@ class TextPanel extends RightSidePanel {
         this.parentReader.moveToPageNumber(pageIndex, true);
     }
 
-    private downloadPageByXmlId(page: BookPage) {
+    private downloadPageByXmlId(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
@@ -2303,16 +2311,24 @@ class TextPanel extends RightSidePanel {
                 if (this.parentReader.clickedMoveToPage) {
                     this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
                 }
+
+                if (onSuccess != null) {
+                    onSuccess();
+                }
             },
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "'");
+
+                if (onFailed != null) {
+                    onFailed();
+                }
             }
         });
     }
 
-    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, multipleDownload:boolean=false) {
+    private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
         var pageContainer = document.getElementById(page.xmlId);
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
@@ -2342,11 +2358,18 @@ class TextPanel extends RightSidePanel {
                     this.parentReader.moveToPageNumber(this.parentReader.actualPageIndex, true);
                 }
 
+                if (onSuccess != null) {
+                    onSuccess();
+                }
             },
             error: (response) => {
                 $(pageContainer).empty();
                 $(pageContainer).removeClass("loading");
                 $(pageContainer).append("Chyba při načítání stránky '" + page.text + "' s výsledky vyhledávání");
+
+                if (onFailed != null) {
+                    onFailed();
+                }
             }
         });
     }
@@ -2354,6 +2377,60 @@ class TextPanel extends RightSidePanel {
     public setSearchedQuery(query: string, isJson: boolean) {
         this.query = query;
         this.queryIsJson = isJson;
+    }
+
+    private onPrintButtonClick(button: HTMLButtonElement) {
+        const loadedPages: Array<boolean> = [];
+        const progress = new Progress("print-progress-bar", "Probíhá příprava díla pro tisk",
+        {
+            body: {
+                showLoading: true,
+                afterLoadingText: "Připravuji"
+            },
+            update: {
+                field: ProgressUpdateField.BodyAfterLoading,
+                valueCallback: (value:number, max:number) => {
+                    return `Zpracováno ${value} z ${max}`;
+                }
+            }
+        });
+        progress.show();
+
+        for (let i = 1; i < this.parentReader.pages.length; i++) {
+            const j = i;
+
+            const onFailed = () => {
+                loadedPages[j] = false;
+
+                this.displayPage(this.parentReader.pages[j], false, () => {
+                    loadedPages[j] = true;
+
+                    this.onLoadPage(loadedPages, progress);
+                }, onFailed);
+            };
+
+            onFailed();
+        }
+    }
+
+    private onLoadPage(loadedPages: Array<boolean>, progress: Progress) {
+        let success = 0;
+        let failed = 0;
+
+        for (let i = 1; i < loadedPages.length; i++) {
+            if (loadedPages[i]) {
+                success++;
+            }
+            else {
+                failed++;
+            }
+        }
+        
+        progress.update(success, this.parentReader.pages.length - 1);
+
+        if (success === this.parentReader.pages.length - 1) {
+            progress.hide();
+        }
     }
 }
 

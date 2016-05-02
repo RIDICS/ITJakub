@@ -1,13 +1,16 @@
 ﻿class Progress {
-    printModal:HTMLDivElement;
-    $printModal:JQuery;
+    printModal: HTMLDivElement;
+    $printModal: JQuery;
 
     modalDialog: HTMLDivElement;
     modalBody: HTMLDivElement;
 
-    protected created=false;
+    protected created = false;
+    protected updateableField=null;
 
-    constructor(protected containerId: string, protected title: string, protected contentConfiguration: IProgressConfiguration = {}) {
+    constructor(protected containerId: string,
+        protected title: string,
+        protected contentConfiguration: IProgressConfiguration = {}) {
         this.printModal = document.createElement("div");
         this.printModal.id = this.containerId;
         this.printModal.classList.add("modal", "fade");
@@ -47,12 +50,29 @@
                 bodyTitle.innerHTML = this.contentConfiguration.body.title;
 
                 this.modalBody.appendChild(bodyTitle);
+
+                if (this.contentConfiguration.update.field === ProgressUpdateField.BodyTitle) {
+                    this.updateableField = bodyTitle;
+                }
             }
-            if (this.contentConfiguration.body.showLoading !== undefined && this.contentConfiguration.body.showLoading) {
+            if (this.contentConfiguration.body
+                .showLoading !==
+                undefined &&
+                this.contentConfiguration.body.showLoading) {
                 const modalLoading = document.createElement("div");
                 modalLoading.classList.add("loading", "loading-modal");
 
                 this.modalBody.appendChild(modalLoading);
+            }
+            if (this.contentConfiguration.body.afterLoadingText !== undefined) {
+                const afterLoadingText = document.createElement("span");
+                afterLoadingText.innerHTML = this.contentConfiguration.body.afterLoadingText;
+
+                this.modalBody.appendChild(afterLoadingText);
+
+                if (this.contentConfiguration.update.field === ProgressUpdateField.BodyAfterLoading) {
+                    this.updateableField = afterLoadingText;
+                }
             }
         }
 
@@ -61,7 +81,7 @@
         this.$printModal.modal({
             backdrop: "static"
         });
-        
+
         this.created = true;
     }
 
@@ -71,20 +91,38 @@
         }
 
         this.$printModal.modal("show");
+
+        return this;
     }
 
     update(value: number, max: number) {
+        if (this.updateableField !== null && this.contentConfiguration.update.valueCallback !== undefined) {
+            this.updateableField.innerHTML = this.contentConfiguration.update.valueCallback(value, max);
+        }
 
+        return this;
     }
 
     hide() {
         this.$printModal.modal("hide");
+
+        return this;
     }
 }
 
 interface IProgressConfiguration {
     body?: {
         title?: string;
-        showLoading?:boolean;
+        showLoading?: boolean;
+        afterLoadingText?: string;
     };
+    update?: {
+        field?: ProgressUpdateField;
+        valueCallback?: (value: number, max:number)=>string;
+    }
+}
+
+enum ProgressUpdateField {
+    BodyTitle,
+    BodyAfterLoading
 }
