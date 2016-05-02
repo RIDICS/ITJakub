@@ -784,3 +784,51 @@ div.dummy-page {
 a.no-click-href {
     cursor: default;
 }
+
+.loading-background, .loading {
+    background: url(../../../Content/Images/loading.gif) no-repeat top;
+}
+
+.modal-text {
+    margin-top: 10px;
+}
+.modal-text-center {
+    text-align: center;
+    display: block;
+}
+
+@media print {
+    body {
+        padding-top: 0;
+    }
+    .header-content {
+        min-height: 0;
+        height: 0;
+        overflow: hidden;
+    }
+    .container.module-content {
+        margin-top: 0;
+    }
+    #SearchDiv {
+        display: none;
+    }
+    .reader-controls.content-container {
+        display: none;
+    }
+    .reader-left-panel-header {
+        display: none;
+    }
+    .reader .fullscreen-button {
+        display: none;
+    }
+    .reader-text-container{
+        height: auto;
+        overflow: visible;
+    }
+    .footer {
+        display: none;
+    }
+    .modal {
+        display: none;
+    }
+}
