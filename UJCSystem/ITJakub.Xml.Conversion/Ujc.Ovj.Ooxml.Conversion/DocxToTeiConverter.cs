@@ -106,6 +106,12 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			IPrepis prepis = glsPrepisy[0];
 
+		    if (prepis.FazeZpracovani < FazeZpracovani.Exportovat)
+		    {
+                _result.Errors.Add(new DocumentNotInRequredStateException("Dokument s uvedeným jménem souboru není připraven pro export."));
+                return _result;
+            }
+
 			documentType = GetDocumentType(prepis.TypPrepisu);
 			_documentId = prepis.GUID;
 
