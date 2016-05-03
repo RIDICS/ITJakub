@@ -82198,7 +82198,7 @@
  <Prepis>
   <Hlava>
    <Pamatka>
-    <Titul />
+    <Titul>Slovník staročeský (GbSlov)</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -82233,12 +82233,15 @@
    <Editori />
   </Hlava>
   <Hlavicka>
-   <Titul />
+   <Autor>Jan Gebauer</Autor>
+   <Titul>Slovník staročeský (GbSlov)</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
    <InstituceUlozeni />
    <Signatura />
-   <EditoriPrepisuText />
-   <EditoriPrepisu />
+   <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Boris Lehečka</string>
+   </EditoriPrepisu>
   </Hlavicka>
   <Soubor>
    <Nazev>GbSlov.docx</Nazev>
@@ -82250,11 +82253,12 @@
    <KontrolniSoucet>83F6560DF3CF85C346C0EE8523866807</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{A60FF9E4-36F0-4770-89AB-E710121B8D4E}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82323,11 +82327,12 @@
    <KontrolniSoucet>CFCC8E5C5ABA1BCCB1781759EC0C5A05</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{585EE6E5-20B2-4B1C-BA08-4BBA6E85EC19}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82396,11 +82401,12 @@
    <KontrolniSoucet>6650CB83CA7CF26BA5ED4623AB200C78</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{3C4AA4E7-F564-4E67-8A73-E922D2B6B1F8}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82469,11 +82475,12 @@
    <KontrolniSoucet>D698C5A6DF329951F09BCFA726142628</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{AE37C0A1-7E37-4EA4-B626-9CE922A45959}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82542,11 +82549,12 @@
    <KontrolniSoucet>F867A000BEDB043EC8020740EE8E61D8</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{ED3882E9-80D2-4DE6-BFE9-D2042039A023}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82615,11 +82623,12 @@
    <KontrolniSoucet>7B0552B49776E8D5524400643097B3EC</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{66840F46-647B-441C-9AD0-833CE31037D3}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82688,11 +82697,12 @@
    <KontrolniSoucet>5FEC749E7B3D9F6682467DC05E037CAE</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{005DE92F-2FFB-472F-9B5E-D8F079B4CE74}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
@@ -82761,11 +82771,12 @@
    <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
+   <GUID>{C4A1BF35-2599-4783-9620-8EA2C278F197}</GUID>
    <FazeZpracovani>Odlozeno</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <Transliterovane>false</Transliterovane>
