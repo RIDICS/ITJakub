@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Prepisy xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.daliboris.cz/schemata/prepisy.xsd">
  <Prepis>
   <Hlava>
@@ -82102,7 +82102,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{08BE3E56-77D0-46C1-80BB-C1346B757BE5}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82178,7 +82178,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{1ADA5193-4375-4269-8222-D8BE81D597DB}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82198,6 +82198,7 @@
  <Prepis>
   <Hlava>
    <Pamatka>
+    <Autor>Jan Gebauer</Autor>
     <Titul>Slovník staročeský (GbSlov)</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
@@ -82236,6 +82237,7 @@
    <Autor>Jan Gebauer</Autor>
    <Titul>Slovník staročeský (GbSlov)</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
@@ -82254,7 +82256,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{A60FF9E4-36F0-4770-89AB-E710121B8D4E}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82273,6 +82275,7 @@
  <Prepis>
   <Hlava>
    <Pamatka>
+    <Autor>Jaromír Bělič, Adolf Kamiš, Karel Kučera</Autor>
     <Titul>STAROČESKÝ SLOVNÍK</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
@@ -82308,8 +82311,10 @@
    <Editori />
   </Hlava>
   <Hlavicka>
+   <Autor>Jaromír Bělič, Adolf Kamiš, Karel Kučera</Autor>
    <Titul>STAROČESKÝ SLOVNÍK</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>Jaroslav Malinský</EditoriPrepisuText>
@@ -82328,7 +82333,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{585EE6E5-20B2-4B1C-BA08-4BBA6E85EC19}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82384,6 +82389,7 @@
   <Hlavicka>
    <Titul>einleitung</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>SLAVLING</EditoriPrepisuText>
@@ -82402,7 +82408,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{3C4AA4E7-F564-4E67-8A73-E922D2B6B1F8}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82458,6 +82464,7 @@
   <Hlavicka>
    <Titul>|A1r</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
@@ -82476,7 +82483,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{AE37C0A1-7E37-4EA4-B626-9CE922A45959}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82532,6 +82539,7 @@
   <Hlavicka>
    <Titul>a p</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>PosAm</EditoriPrepisuText>
@@ -82550,7 +82558,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{ED3882E9-80D2-4DE6-BFE9-D2042039A023}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82606,6 +82614,7 @@
   <Hlavicka>
    <Titul>Staročeský slovník</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni>Staročeský slovník</InstituceUlozeni>
    <Signatura />
    <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
@@ -82624,7 +82633,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{66840F46-647B-441C-9AD0-833CE31037D3}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82680,6 +82689,7 @@
   <Hlavicka>
    <Titul>Staročeský slovník</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni>Staročeský slovník</InstituceUlozeni>
    <Signatura />
    <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
@@ -82698,7 +82708,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{005DE92F-2FFB-472F-9B5E-D8F079B4CE74}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
@@ -82754,6 +82764,7 @@
   <Hlavicka>
    <Titul>|A1r Vocabularium</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
    <Signatura />
    <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
@@ -82772,7 +82783,7 @@
   </Soubor>
   <Zpracovani>
    <GUID>{C4A1BF35-2599-4783-9620-8EA2C278F197}</GUID>
-   <FazeZpracovani>Odlozeno</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
