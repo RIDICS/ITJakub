@@ -213,9 +213,9 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 		/// <param name="sectionId">Indentifikátor oblasti, jejíž šablony se mají načíst.</param>
 		/// <param name="transformationFilesDirectory"></param>
 		/// <returns></returns>
-		public static IList<IXsltTransformer> GetXsltTransformers(string transformationFile, string sectionId, string transformationFilesDirectory)
+		public static IList<IXsltTransformer> GetXsltTransformers(string transformationFile, string sectionId, string transformationFilesDirectory, bool throwException = false)
 		{
-			return GetXsltTransformers(transformationFile, sectionId, transformationFilesDirectory, new XsltTransformerSettings());
+			return GetXsltTransformers(transformationFile, sectionId, transformationFilesDirectory, new XsltTransformerSettings(), throwException);
 		}
 
 		/// <summary>
@@ -236,9 +236,9 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 		/// <param name="sectionId">Indentifikátor oblasti, jejíž šablony se mají načíst.</param>
 		/// <param name="transformationFilesDirectory"></param>
 		/// <returns></returns>
-		public static List<string> GetTransformationFilePaths(string transformationFile, string sectionId, string transformationFilesDirectory)
+		public static List<string> GetTransformationFilePaths(string transformationFile, string sectionId, string transformationFilesDirectory, bool throwException = false)
 		{
-			List<string> kroky = TransformationFilePathsImplementationXmlDocument(transformationFile, sectionId, transformationFilesDirectory);
+			List<string> kroky = TransformationFilePathsImplementationXmlDocument(transformationFile, sectionId, transformationFilesDirectory, throwException);
 			return kroky;
 		}
 
@@ -250,7 +250,8 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 
 		private static List<string> TransformationFilePathsImplementationXmlDocument(string transformationFile, 
 			string sectionId, 
-			string transformationFilesDirectory)
+			string transformationFilesDirectory,
+            bool throwException=false)
 		{
 			const string xmlNamespace = "http://www.w3.org/XML/1998/namespace";
 			const string transformationsNamespace = "http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0";
@@ -274,7 +275,15 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 
 			document.Load(transformationFile);
 			XmlNode transformations = document.SelectSingleNode("/" + transformationsElement, manager);
-			if (transformations == null) return kroky;
+		    if (transformations == null)
+		    {
+		        if (throwException)
+		        {
+		            throw new XsltTransformatinException(String.Format("Transformations element '{0}' not found in '{1}'", transformationsElement, transformationFile));
+		        }
+
+		        return kroky;
+		    }
 
 			//
 			// Pravidla pro kombinvání cest:
@@ -300,7 +309,15 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			}
 
 			XmlNode transformation = document.SelectSingleNode("//" + transformationElement + "[@xml:id='" + sectionId + "']", manager);
-			if (transformation == null) return kroky;
+		    if (transformation == null)
+		    {
+                if (throwException)
+                {
+                    throw new XsltTransformatinNotFoundSectionException(String.Format("Section '{0}' not found in '{1}'", sectionId, transformationFile));
+                }
+
+                return kroky;
+		    }
 			if (transformation.Attributes != null)
 			{
 				string transformationDirectory = null;
@@ -345,9 +362,9 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 		}
 
 		public static IList<IXsltTransformer> GetXsltTransformers(string transformationFile, string sectionId, 
-			string transformationFilesDirectory, XsltTransformerSettings xsltTransformerSettings)
+			string transformationFilesDirectory, XsltTransformerSettings xsltTransformerSettings, bool throwException = false)
 		{
-			List<string> steps = GetTransformationFilePaths(transformationFile, sectionId, transformationFilesDirectory);
+			List<string> steps = GetTransformationFilePaths(transformationFile, sectionId, transformationFilesDirectory, throwException);
 			IList<IXsltTransformer> transformers = new List<IXsltTransformer>();
 			foreach (string step in steps)
 			{

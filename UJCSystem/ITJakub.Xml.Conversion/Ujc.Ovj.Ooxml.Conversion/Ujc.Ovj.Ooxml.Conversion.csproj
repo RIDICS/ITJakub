@@ -56,9 +56,13 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\GbSlov_OldToTeiP5.xsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Xslt\StcS_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\StcS_Rename.xsl" />
     <Content Include="Data\Xslt\TEI_CategoryReference.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -157,7 +161,7 @@
     <Content Include="Data\Xslt\Seskupit_prvky_pred_nadpisem_2.0.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\Xslt\StcS_Rename.xsl">
+    <Content Include="Data\Xslt\GbSlov_Rename.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\Xslt\Subsumovat_elementy_k_predchozimu_prvku.xsl">

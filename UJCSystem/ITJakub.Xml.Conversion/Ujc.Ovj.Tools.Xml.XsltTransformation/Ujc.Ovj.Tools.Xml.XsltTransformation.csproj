@@ -45,6 +45,7 @@
     <Compile Include="MicrosoftXsltTransformer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XsltInformation.cs" />
+    <Compile Include="XsltTransformatinExceptions.cs" />
     <Compile Include="XsltTransformationProcess.cs" />
     <Compile Include="XsltTransformerFactory.cs" />
   </ItemGroup>

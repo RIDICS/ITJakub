@@ -37,17 +37,17 @@ namespace Daliboris.Slovniky
 		/// Upraví hranice heslové stati, seskupí všechny prvky heslové stati do elementu &lt;entry&gt;. Využívá při tom značku &lt;entryend&gt;
 		/// </summary>
 		/// <exception cref="ArgumentNullException">Vyvolá výjimku, pokud nejsou zadány vstupní nebo výstupní soubor.</exception>
-		public override void UpravitHraniceHesloveStati()
+		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile)
 		{
 			//výchozí imnplementace se hodí pro ESSČ
 			string sChyba = null;
-			if (base.VstupniSoubor == null || base.VystupniSoubor == null)
+			if (inputFile == null || outputFile == null)
 			{
 				throw new ArgumentNullException("Nebyly zadány vhodné názvy vstupního nebo výstupního souboru.");
 			}
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 
 					/*
@@ -176,9 +176,9 @@ namespace Daliboris.Slovniky
 		/// <summary>
 		/// Konsoliduje heslovou stať. Přidá informace, seskupí významy.
 		/// </summary>
-		public override void KonsolidovatHeslovouStat()
+		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile)
 		{
-			KonsolidovatHeslovouStat(1);
+			KonsolidovatHeslovouStat(inputFile, outputFile, 1);
 		}
 
 		/// <summary>
@@ -193,14 +193,14 @@ namespace Daliboris.Slovniky
 		/// 8) Přiřadí heslové stati oblast použití (public, internal) na základě údajů v rámci akce
 		/// </summary>
 		/// <param name="iVychoziID">Výchozí pořadové číslo heslové stati.</param>
-		public void KonsolidovatHeslovouStat(int iVychoziID)
+		public void KonsolidovatHeslovouStat(string inputFile, string outputFile, int iVychoziID)
 		{
 
 			int iEntry = iVychoziID - 1;
 			string sSource = null;
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 
 					xw.WriteStartDocument(true);

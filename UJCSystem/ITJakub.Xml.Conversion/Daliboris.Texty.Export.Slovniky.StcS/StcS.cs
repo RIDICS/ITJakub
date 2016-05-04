@@ -27,15 +27,15 @@ namespace Daliboris.Slovniky
 		/// <summary>
 		/// Upraví hranice heslové stati. Ohraničí jednotlivé části značkou &lt;entry&gt; a v rámci heslové stati seskupí významy podřazené značce &lt;senseGrp&gt;.
 		/// </summary>
-		public override void UpravitHraniceHesloveStati()
+		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile)
 		{
-			if (base.VstupniSoubor == null || base.VystupniSoubor == null)
+			if (inputFile == null || outputFile == null)
 			{
 				throw new ArgumentNullException("Nebyly zadány vhodné názvy vstupního nebo výstupního souboru.");
 			}
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 
 
@@ -229,18 +229,18 @@ namespace Daliboris.Slovniky
 		}
 
 
-		public override void KonsolidovatHeslovouStat()
+		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile)
 		{
-			KonsolidovatHeslovouStat(1);
+			KonsolidovatHeslovouStat(inputFile, outputFile, 1);
 		}
-		public void KonsolidovatHeslovouStat(int iVychoziID)
+		public void KonsolidovatHeslovouStat(string inputFile, string outputFile, int iVychoziID)
 		{
 
 			int iEntry = iVychoziID - 1;
 			string sSource = null;
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 

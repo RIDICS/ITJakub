@@ -22,8 +22,6 @@ namespace ITJakub.DataEntities.Database.Repositories
     [Transactional]
     public class BookVersionRepository : NHibernateTransactionalDao
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
         public BookVersionRepository(ISessionManager sessManager)
             : base(sessManager)
         {

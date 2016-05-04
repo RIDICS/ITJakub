@@ -93,13 +93,13 @@ namespace Daliboris.Slovniky
 		/// Ohraničí heslové stati náležející k jednomu písmenu značkou &lt;div1&gt;.
 		/// Původní element <remarks>milestone</remarks> přemění na element <remarks>div1</remarks>.
 		/// </summary>
-		public virtual void SeskupitHeslaPismene()
+		public virtual void SeskupitHeslaPismene(string inputFile, string outputFile)
 		{
 			Dictionary<string, string> gdcPismena = Heslar.IDPismenAbecedy();
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					bool bJinaNezPrvni = false;
@@ -176,11 +176,11 @@ namespace Daliboris.Slovniky
 
 		}
 
-		public abstract void UpravitHraniceHesloveStati();
+		public abstract void UpravitHraniceHesloveStati(string inputFile, string outputFile);
 
 
 		//jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
-		public abstract void KonsolidovatHeslovouStat();
+		public abstract void KonsolidovatHeslovouStat(string inputFile, string outputFile);
 		#endregion
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace Daliboris.Slovniky
 		/// Na základě předcházející informace o zdroji se pokus odkázat na heslo v konkrétním zdroji.
 		/// </remarks>
 		/// </summary>
-		public virtual void UpravitOdkazy()
+		public virtual void UpravitOdkazy(string inputFile, string outputFile)
 		{
 			string strPredchoziZdroj = null;
 
@@ -204,9 +204,9 @@ namespace Daliboris.Slovniky
 			gdcSlovniky.Add("SSL", "SSL"); //slovník středověké latiny - tyto odkazy by se neměly kontrolovat; nebo jo?
 
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					while (r.Read())
@@ -365,16 +365,16 @@ namespace Daliboris.Slovniky
 
 		#region Identifikace zkratek
 
-		public virtual void IdentifikovatZkratky(string strAdresarZkratek)
+		public virtual void IdentifikovatZkratky(string inputFile, string outputFile, string strAdresarZkratek)
 		{
 			string strDictionary = null;
 			string strPredchoziKapitalky = null;
 			string strPredchoziZkratka = null;
 
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					Zkratky zkrZkratky = new Zkratky();
@@ -629,6 +629,7 @@ namespace Daliboris.Slovniky
 		#region Rozdělení slovníků do souborů
 		public virtual void RozdelitEntryDoSouboru(string[] strTagy,
 			string strAtributID,
+            string inputFile,
 			string sVystupniAdresar,
 			string sVystupniSoubor,
 			String strXPathPopis)
@@ -658,7 +659,7 @@ namespace Daliboris.Slovniky
 
 				xObsah.WriteStartDocument();
 				xObsah.WriteStartElement("obsah");
-				xObsah.WriteAttributeString("soubor", mstrVstupniSoubor);
+				xObsah.WriteAttributeString("soubor", inputFile);
 				xObsah.WriteAttributeString("zpracovano", DateTime.Now.ToString());
 			}
 
@@ -668,7 +669,7 @@ namespace Daliboris.Slovniky
 			string strID = "";
 			try
 			{
-				reader = new XmlTextReader(mstrVstupniSoubor);
+				reader = new XmlTextReader(inputFile);
 				//string strHesla = null;
 
 				while (reader.Read())
