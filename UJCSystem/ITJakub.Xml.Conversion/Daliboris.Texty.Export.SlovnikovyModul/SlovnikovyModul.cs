@@ -29,7 +29,15 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 		private void ExportujImpl(IEnumerable<IPrepis> prpPrepisy)
 		{
 			IPrepis first = (from p in prpPrepisy select p).FirstOrDefault();
-			string start = first.Soubor.NazevBezPripony.Substring(0, first.Soubor.NazevBezPripony.IndexOf("_")).ToLowerInvariant();
+
+		    var underscorePosition = first.Soubor.NazevBezPripony.IndexOf("_", StringComparison.Ordinal);
+		    var start = first.Soubor.NazevBezPripony;
+		    if (underscorePosition > 0)
+		    {
+		        start = start.Substring(0, underscorePosition);
+		    }
+
+            start = start.ToLowerInvariant();
 
 			IList<IXsltTransformer> step01 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step01"), Nastaveni.SlozkaXslt);
 			IList<IXsltTransformer> step02 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step02"), Nastaveni.SlozkaXslt);
