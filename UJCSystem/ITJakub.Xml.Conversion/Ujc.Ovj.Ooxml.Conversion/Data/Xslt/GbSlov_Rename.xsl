@@ -2,20 +2,191 @@
 <axsl:stylesheet xmlns:axsl="http://www.w3.org/1999/XSL/Transform" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
    <axsl:output indent="yes" method="xml" standalone="yes"/>
    <axsl:strip-space elements="*"/>
+   <axsl:preserve-space elements="text location refsource" />
    <axsl:template match="/">
       <axsl:apply-templates/>
    </axsl:template>
    <xsl:template match="body">
       <dictionary>
          <axsl:attribute name="name">
-            <axsl:text>StcS</axsl:text>
+            <axsl:text>GbSlov</axsl:text>
          </axsl:attribute>
          <axsl:apply-templates/>
       </dictionary>
    </xsl:template>
 		
-		
-		
+   <axsl:template match="Zahlavi_strany">
+      <axsl:element name="pb">
+         <axsl:attribute name="n">
+            <axsl:value-of select="cislo_strany"/>
+         </axsl:attribute>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="cislo_strany">
+      <axsl:element name="pb">
+         <axsl:attribute name="n">
+            <axsl:value-of select="text()"/>
+         </axsl:attribute>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="cislo_homonyma">
+      <axsl:element name="hom">
+         <axsl:attribute name="id">
+            <axsl:value-of select="text()" />
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="heslove_slovo_zkracene_delimitator">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="form">
+            <axsl:text>short</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+	
+   <axsl:template match="Heslova_stat">
+      <axsl:element name="entry">
+         <axsl:attribute name="type">
+            <axsl:text>full</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="Odkazova_stat">
+      <axsl:element name="entry">
+         <axsl:attribute name="type">
+            <axsl:text>ref</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="heslove_slovo_delimitator">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="heslove_slovo_rozepsane_delimitator">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="form">
+            <axsl:text>restored</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="tucne">
+      <axsl:element name="text">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="delimitator">
+      <axsl:element name="delim">
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="delimitator_kurziva">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>it</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="vyznam">
+      <axsl:element name="def">
+         <axsl:attribute name="rend">
+            <axsl:text>it</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+
+   <axsl:template match="slovni_druh">
+      <axsl:element name="pos">
+         <axsl:attribute name="rend">
+            <axsl:text>norm</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="podhesli">
+      <axsl:element name="hw">
+         <axsl:attribute name="rend">
+            <axsl:text>snserif</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="type">
+            <axsl:text>subentry</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="podhesli_rozepsane">
+      <axsl:element name="hw">
+         <axsl:attribute name="type">
+            <axsl:text>subentry</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="form">
+            <axsl:text>restored</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="podhesli_zkracene">
+      <axsl:element name="hw">
+         <axsl:attribute name="type">
+            <axsl:text>subentry</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="form">
+            <axsl:text>short</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="podhesli_delimitator">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>snserif</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="slovni_druh_kurziva">
+      <axsl:element name="pos">
+         <axsl:attribute name="rend">
+            <axsl:text>it</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+
    <axsl:template match="Heslove_zahlavi">
       <axsl:element name="entryhead">
          <axsl:apply-templates/>
@@ -122,6 +293,18 @@
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
+   
+   <axsl:template match="delimitator_tucne_zkracene">
+      <axsl:element name="delim">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:attribute name="form">
+            <axsl:text>restored</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
 		
    <axsl:template match="rozepsane_delimitator_tucne">
       <axsl:element name="delim">
@@ -134,17 +317,7 @@
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
-		
-		
-   <axsl:template match="delimitator_kurziva">
-      <axsl:element name="delim">
-         <axsl:attribute name="rend">
-            <axsl:text>it</axsl:text>
-         </axsl:attribute>
-         <axsl:apply-templates/>
-      </axsl:element>
-   </axsl:template>
-		
+			
    <axsl:template match="delimitator_vyznamu">
       <axsl:element name="delim">
          <axsl:apply-templates/>
@@ -408,6 +581,21 @@
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
+   
+   <axsl:template match="charakteristika">
+      <axsl:element name="gloss">
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
+   
+   <axsl:template match="charakteristika_kurziva">
+      <axsl:element name="gloss">
+         <axsl:attribute name="rend">
+            <axsl:text>it</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
 		
    <axsl:template match="nemecky_doklad">
       <axsl:element name="ex">
@@ -507,6 +695,15 @@
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
+   
+   <axsl:template match="odkaz_tucne">
+      <axsl:element name="xref">
+         <axsl:attribute name="rend">
+            <axsl:text>bo</axsl:text>
+         </axsl:attribute>
+         <axsl:apply-templates/>
+      </axsl:element>
+   </axsl:template>
 		
 		
 		
@@ -565,9 +762,9 @@
 		
    <axsl:template match="pramen">
       <axsl:element name="refsource">
-         <axsl:attribute name="type">
+         <!--<axsl:attribute name="type">
             <axsl:text>pram</axsl:text>
-         </axsl:attribute>
+         </axsl:attribute>-->
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
@@ -663,13 +860,7 @@
          <axsl:apply-templates/>
       </axsl:element>
    </axsl:template>
-		
-   <axsl:template match="vyznam">
-      <axsl:element name="def">
-         <axsl:apply-templates/>
-      </axsl:element>
-   </axsl:template>
-		
+				
    <axsl:template match="vyznamove_zahlavi">
       <axsl:element name="val">
          <axsl:apply-templates/>

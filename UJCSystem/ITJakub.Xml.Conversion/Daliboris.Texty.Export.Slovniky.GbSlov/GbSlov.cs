@@ -20,8 +20,10 @@ namespace Daliboris.Slovniky
 		{
 		    File.Copy(inputFile, outputFile);
 
-			//u MSS není potřeba nic upracovat, protože heslová stať zabírá vždy jeden odstavec
-		}
+            //u MSS není potřeba nic upracovat, protože heslová stať zabírá vždy jeden odstavec
+
+            
+        }
 
 		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile) {
 			int iEntry = 0;
