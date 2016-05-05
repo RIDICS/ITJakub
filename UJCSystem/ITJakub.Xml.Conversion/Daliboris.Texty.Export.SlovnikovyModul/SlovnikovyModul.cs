@@ -42,20 +42,13 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
             var xsltSteps = new Queue<IList<IXsltTransformer>>();
             
-            for (int i = 1; true; i++)
+            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(Nastaveni.SouborTransformaci, String.Format("{0}-step", fileName)))
 		    {
-		        try
-		        {
-		            xsltSteps.Enqueue(
-		                XsltTransformerFactory.GetXsltTransformers(
-		                    Nastaveni.SouborTransformaci,
-		                    String.Format("{0}-step{1:00}", fileName, i),
-		                    Nastaveni.SlozkaXslt, true));
-		        }
-		        catch (XsltTransformatinNotFoundSectionException)
-		        {
-		            break;
-		        }
+                xsltSteps.Enqueue(
+		            XsltTransformerFactory.GetXsltTransformers(
+		                Nastaveni.SouborTransformaci,
+                        transformationFile,
+		                Nastaveni.SlozkaXslt, true));
 		    }
             
 			foreach (IPrepis prepis in prpPrepisy)

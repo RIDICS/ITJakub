@@ -22,12 +22,15 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 	public class XsltTransformerFactory
 	{
 
-		public const string XmlNamespace = "http://www.w3.org/XML/1998/namespace";
+		const string m_xmlNamespace = "http://www.w3.org/XML/1998/namespace";
 
-		const string xslUri = "http://www.w3.org/1999/XSL/Transform";
+		const string m_xslUri = "http://www.w3.org/1999/XSL/Transform";
+
+        const string m_transformationsPrefix = "xt";
+        const string m_transformationElement = m_transformationsPrefix + ":" + "transformation";
 
 
-		public static IXsltInformation GetXsltInformation(string xmlFile)
+        public static IXsltInformation GetXsltInformation(string xmlFile)
 		{
 
 			XsltInformation xsltInfo = new XsltInformation(xmlFile);
@@ -52,7 +55,7 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			readerSettings.ValidationEventHandler += settings_ValidationEventHandler;
 
 			XmlNamespaceManager manager = new XmlNamespaceManager(new NameTable());
-			manager.AddNamespace("xml", XmlNamespace);
+			manager.AddNamespace("xml", m_xmlNamespace);
 
 
 			using (XmlReader reader = XmlReader.Create(xmlFile, readerSettings))
@@ -61,7 +64,7 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 				while (reader.Read())
 				{
 
-					if (reader.NodeType == XmlNodeType.Element && reader.NamespaceURI == xslUri)
+					if (reader.NodeType == XmlNodeType.Element && reader.NamespaceURI == m_xslUri)
 					{
 						bool isEmptyElement = reader.IsEmptyElement;
 
@@ -248,42 +251,84 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			return TransformationFilePathsImplementationXmlDocument(transformationFile, sectionId, null);
 		}
 
-		private static List<string> TransformationFilePathsImplementationXmlDocument(string transformationFile, 
+	    private static XmlDocument GetTransformationsFileXml(string transformationFile, ref XmlNamespaceManager manager, ref XmlNode transformations)
+	    {
+            const string transformationsNamespace = "http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0";
+            
+            const string transformationsElement = m_transformationsPrefix + ":" + "transformations";
+            
+            if (transformationFile == null) return null;
+
+            XmlDocument document = new XmlDocument();
+            manager = new XmlNamespaceManager(document.NameTable);
+
+            manager.AddNamespace("xml", m_xmlNamespace);
+            manager.AddNamespace(m_transformationsPrefix, transformationsNamespace);
+
+            document.Load(transformationFile);
+            transformations = document.SelectSingleNode("/" + transformationsElement, manager);
+            if (transformations == null)
+            {
+                throw new XsltTransformatinException(String.Format("Transformations element '{0}' not found in '{1}'", transformationsElement, transformationFile));
+            }
+
+	        return document;
+	    }
+
+	    public static List<string> GetTransformationFromTransformationsFile(string transformationFile, string sectionPrefix)
+	    {
+	        var transformation = new List<string>();
+
+            XmlNamespaceManager manager = null;
+            XmlNode transformations = null;
+            var document = GetTransformationsFileXml(transformationFile, ref manager, ref transformations);
+
+	        var xmlNodeList = document.SelectNodes(String.Format("//{0}[starts-with(@xml:id,'{1}')]", m_transformationElement, sectionPrefix), manager);
+	        if (xmlNodeList != null)
+	        {
+	            for (var i = 0; i < xmlNodeList.Count; i++)
+	            {
+	                var node=xmlNodeList.Item(i);
+	                if (node?.Attributes != null)
+	                {
+	                    transformation.Add(node.Attributes["xml:id"].Value);
+	                }
+	            }
+	        }
+
+	        return transformation;
+	    }
+
+	    private static List<string> TransformationFilePathsImplementationXmlDocument(string transformationFile, 
 			string sectionId, 
 			string transformationFilesDirectory,
             bool throwException=false)
 		{
-			const string xmlNamespace = "http://www.w3.org/XML/1998/namespace";
-			const string transformationsNamespace = "http://vokabular.ujc.cas.cz/ns/xslt-transformation/1.0";
-			const string transformationsPrefix = "xt";
-			const string transformationsElement = transformationsPrefix + ":" + "transformations";
-			const string transformationElement = transformationsPrefix + ":" + "transformation";
-			const string stepElement = transformationsPrefix + ":" + "step";
-			const string directoryAttribute = "directory";
-			const string fileAttribute = "file";
-			const string repeatAttribute = "repeat";
+            const string directoryAttribute = "directory";
+            
+            const string stepElement = m_transformationsPrefix + ":" + "step";
 
-			if (transformationFile == null) return null;
-			List<string> kroky = new List<string>();
+            const string fileAttribute = "file";
+            const string repeatAttribute = "repeat";
 
+            List<string> kroky = new List<string>();
+		    XmlDocument document;
+		    XmlNamespaceManager manager = null;
+            XmlNode transformations = null;
 
-			XmlDocument document = new XmlDocument();
-			XmlNamespaceManager manager = new XmlNamespaceManager(document.NameTable);
-
-			manager.AddNamespace("xml", xmlNamespace);
-			manager.AddNamespace(transformationsPrefix, transformationsNamespace);
-
-			document.Load(transformationFile);
-			XmlNode transformations = document.SelectSingleNode("/" + transformationsElement, manager);
-		    if (transformations == null)
+            try
 		    {
-		        if (throwException)
-		        {
-		            throw new XsltTransformatinException(String.Format("Transformations element '{0}' not found in '{1}'", transformationsElement, transformationFile));
-		        }
-
-		        return kroky;
+		        document = GetTransformationsFileXml(transformationFile, ref manager, ref transformations);
 		    }
+		    catch (XsltTransformatinException)
+		    {
+                if (throwException)
+                {
+                    throw;
+                }
+
+                return kroky;
+            }
 
 			//
 			// Pravidla pro kombinvání cest:
@@ -295,20 +340,19 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			//
 			string mainDirectory = null;
 
-			if (transformations.Attributes != null)
-				mainDirectory = (transformations.Attributes[directoryAttribute] == null) ? null : transformations.Attributes[directoryAttribute].Value;
+		    if (transformations.Attributes != null)
+		    {
+		        mainDirectory = transformations.Attributes[directoryAttribute]?.Value;
+		    }
 
-			if (transformationFilesDirectory != null && mainDirectory != null)
-			{
-				if (Path.IsPathRooted(mainDirectory))
-					mainDirectory = transformationFilesDirectory;
-				else
-				{
-					mainDirectory = Path.GetFullPath(Path.Combine(transformationFilesDirectory, mainDirectory));
-				}
-			}
+		    if (transformationFilesDirectory != null && mainDirectory != null)
+		    {
+		        mainDirectory = Path.IsPathRooted(mainDirectory)
+		            ? transformationFilesDirectory
+		            : Path.GetFullPath(Path.Combine(transformationFilesDirectory, mainDirectory));
+		    }
 
-			XmlNode transformation = document.SelectSingleNode("//" + transformationElement + "[@xml:id='" + sectionId + "']", manager);
+		    var transformation = document.SelectSingleNode("//" + m_transformationElement + "[@xml:id='" + sectionId + "']", manager);
 		    if (transformation == null)
 		    {
                 if (throwException)
