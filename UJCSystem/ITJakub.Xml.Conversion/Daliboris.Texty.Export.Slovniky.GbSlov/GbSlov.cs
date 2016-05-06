@@ -58,16 +58,21 @@ namespace Daliboris.Slovniky
 
 							}
 						}
-						else if (r.NodeType == XmlNodeType.EndElement) {
-							switch (r.Name) {
-								case "entry":
-									break;
-								default:
-									Transformace.SerializeNode(r, xw);
-									break;
-							}
+						else if (r.NodeType == XmlNodeType.EndElement)
+						{
+						    switch (r.Name)
+						    {
+						        case "entry":
+						            break;
+						        default:
+						            Transformace.SerializeNode(r, xw);
+						            break;
+						    }
 						}
-						else { Transformace.SerializeNode(r, xw); }
+						else
+						{
+						    Transformace.SerializeNode(r, xw);
+						}
 
 					}
 

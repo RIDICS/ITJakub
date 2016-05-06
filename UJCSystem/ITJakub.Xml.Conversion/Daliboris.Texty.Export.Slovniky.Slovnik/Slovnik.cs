@@ -130,7 +130,7 @@ namespace Daliboris.Slovniky
 										//chyba
 										sText = "XX";
 									else
-										sID = sText.Replace(".", "").Replace(",", "").ToUpper();
+										sID = sText.Replace(".", "").Replace(",", "").ToUpper().Trim();
 									if (gdcPismena.ContainsKey(sID))
 										xw.WriteAttributeString("id", gdcPismena[sID]);
 									else
