@@ -14,9 +14,9 @@
     <xsl:strip-space elements="*"/>
     
     <xsl:template match="/">
-        <TEI n="{{1ADA5193-4375-4269-8222-D8BE81D597DB}}">
+        <TEI n="{{A60FF9E4-36F0-4770-89AB-E710121B8D4E}}">
             <teiHeader>
-                <fileDesc n="{{1ADA5193-4375-4269-8222-D8BE81D597DB}}">
+                <fileDesc n="{{A60FF9E4-36F0-4770-89AB-E710121B8D4E}}">
                     <titleStmt>
                         <title>Staročeský slovník</title>
                     </titleStmt>
