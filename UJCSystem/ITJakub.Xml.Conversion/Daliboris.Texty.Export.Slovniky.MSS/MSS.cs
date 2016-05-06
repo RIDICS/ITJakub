@@ -2,35 +2,31 @@
 using System.Xml;
 using Daliboris.Pomucky.Xml;
 
-namespace Daliboris.Slovniky
-{
-	public class GbSlov : Slovnik {
+namespace Daliboris.Slovniky {
+	public class MSS : Slovnik {
 
-		public GbSlov() {
+		public MSS() {
 		}
-		public GbSlov(string strVstupniSoubor) {
+		public MSS(string strVstupniSoubor) {
 			base.VstupniSoubor = strVstupniSoubor;
 		}
-		public GbSlov(string strVstupniSoubor, string strVystupniSoubor) {
+		public MSS(string strVstupniSoubor, string strVystupniSoubor) {
 			base.VstupniSoubor = strVstupniSoubor;
 			base.VystupniSoubor = strVystupniSoubor;
 		}
 
-		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile)
-		{
-		    File.Copy(inputFile, outputFile);
+		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile) {
+            File.Copy(inputFile, outputFile);
 
             //u MSS není potřeba nic upracovat, protože heslová stať zabírá vždy jeden odstavec
-        }
-
+		}
 		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile) {
 			int iEntry = 0;
 			string sSource = null;
 			using (XmlReader r = Objekty.VytvorXmlReader(inputFile)) {
 				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile)) {
-					
-
 					xw.WriteStartDocument(true);
+					
 
 					while (r.Read()) {
 						if (r.NodeType == XmlNodeType.Element) {
@@ -56,21 +52,16 @@ namespace Daliboris.Slovniky
 
 							}
 						}
-						else if (r.NodeType == XmlNodeType.EndElement)
-						{
-						    switch (r.Name)
-						    {
-						        case "entry":
-						            break;
-						        default:
-						            Transformace.SerializeNode(r, xw);
-						            break;
-						    }
+						else if (r.NodeType == XmlNodeType.EndElement) {
+							switch (r.Name) {
+								case "entry":
+									break;
+								default:
+									Transformace.SerializeNode(r, xw);
+									break;
+							}
 						}
-						else
-						{
-						    Transformace.SerializeNode(r, xw);
-						}
+						else { Transformace.SerializeNode(r, xw); }
 
 					}
 
@@ -78,7 +69,8 @@ namespace Daliboris.Slovniky
 			}
 		}
 
-		private void ZkonsolidujEntry(ref XmlDocument xd, string sSlovnikID, int iEntry) {
+		private void ZkonsolidujEntry(ref XmlDocument xd, string sSlovnikID, int iEntry)
+		{
 
 			if (xd.DocumentElement == null)
 				return;
@@ -95,15 +87,18 @@ namespace Daliboris.Slovniky
 			//Zjišťuje typ heslové stati (uvedený v atributu type u značky entryhead)
 
 			XmlNode xn = xd.SelectSingleNode("//entryhead");
-			if (xn != null) {
+			if (xn != null)
+			{
 				//Pokud existuje atibut type existuje, jeho hodnota se přiřadí ke značce entry
-				if (xn.Attributes.Count == 1) {
-					xa = (XmlAttribute)xn.Attributes[0].Clone();
+				if (xn.Attributes.Count == 1)
+				{
+					xa = (XmlAttribute) xn.Attributes[0].Clone();
 					xd.DocumentElement.Attributes.Append(xa);
 					//nakonec se atribut type u značky entryhead odstraní (byl tam jenom kvůli generování z Wordu)
 					xn.Attributes.Remove(xn.Attributes[0]);
 				}
-				else {
+				else
+				{
 					//pokud entryhead atribut nemá, jde o plnohodnotnou heslovou stať
 					xa = xd.CreateAttribute("type");
 					xa.Value = "full";
@@ -115,9 +110,9 @@ namespace Daliboris.Slovniky
 			xn = xd.SelectSingleNode("//hw");
 			xa = xd.CreateAttribute("defaulthw");
 			xa.Value = xn.InnerText.TrimEnd(Slovnik.CarkaTeckaMezeraStrednik).TrimEnd();
-			string sVychoziHeslo = xa.Value;
 			xd.DocumentElement.Attributes.Append(xa);
 
+			string sVychoziHeslo = xa.Value;
 			xa = xd.CreateAttribute("defaulthwsort");
 			xa.Value = Slovnik.HesloBezKrizkuAHvezdicky(sVychoziHeslo);
 			xd.DocumentElement.Attributes.Append(xa);
@@ -125,19 +120,24 @@ namespace Daliboris.Slovniky
 
 			//každému heslovému slovu se přiřadí identifikátor
 			XmlNodeList xnl = xd.SelectNodes("//hw");
-			for (int i = 0; i < xnl.Count; i++) {
+			for (int i = 0; i < xnl.Count; i++)
+			{
 				string sIdHw = (i + 1).ToString();
 				xa = xd.CreateAttribute("id");
 				xa.Value = "en" + iEntry.ToString("000000") + ".hw" + sIdHw;
 				xnl[i].Attributes.Append(xa);
-				xn = xd.SelectSingleNode("//hom");
-				if (xn != null) {
-					string sHomonymum = xn.InnerText;
+				string sHeslo = xnl[i].InnerText;
+
+				//identifikovat číslo homonyma
+				int iHomonymum = sHeslo.IndexOfAny(Slovnik.IndexyCislic);
+				if (iHomonymum > 0) {
+					string sHomonymum = sHeslo.Substring(iHomonymum, 1);
 					xa = xd.CreateAttribute("hom");
-					xa.Value = sHomonymum.Substring(0, 1);
+					xa.Value = sHomonymum;
 					xnl[i].Attributes.Append(xa);
 				}
 			}
 		}
+
 	}
 }
