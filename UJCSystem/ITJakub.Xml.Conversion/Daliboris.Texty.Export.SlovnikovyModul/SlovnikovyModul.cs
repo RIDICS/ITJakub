@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Daliboris.Slovniky;
@@ -143,7 +142,11 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                 case "gbslov":
 					slovnik = new GbSlov();
 					break;
-			}
+
+                case "mss":
+                    slovnik = new MSS();
+                    break;
+            }
 
 			return slovnik;
 		}

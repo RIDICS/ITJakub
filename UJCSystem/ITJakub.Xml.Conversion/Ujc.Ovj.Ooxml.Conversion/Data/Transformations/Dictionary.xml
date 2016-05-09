@@ -30,6 +30,16 @@
 	<transformation xml:id="gbslov-step03" >
 		<step file="GbSlov_OldToTeiP5.xsl" />
 	</transformation>
+
+  <transformation xml:id="mss-step01" >
+    <step file="MSS_Rename.xsl" />
+  </transformation>
+  <transformation xml:id="mss-step02" >
+    <step file="Odstranit_mezery_mezi_elementy.xsl" />
+  </transformation>
+  <transformation xml:id="mss-step03" >
+    <step file="MSS_OldToTeiP5.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />

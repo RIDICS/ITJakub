@@ -56,6 +56,12 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\MSS_Rename.xsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\Xslt\MSS_OldToTeiP5.xsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\Xslt\GbSlov_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
