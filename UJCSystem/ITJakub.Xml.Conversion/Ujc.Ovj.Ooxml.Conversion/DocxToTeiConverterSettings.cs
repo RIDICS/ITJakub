@@ -24,7 +24,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <summary>
 		/// Full path to input file (DOCX).
 		/// </summary>
-		public string InputFilePath { get; set; }
+		public string[] InputFilesPath { get; set; }
 
 		/// <summary>
 		/// List of full paths to input files (DOCX). 

@@ -11,22 +11,28 @@ namespace Daliboris.Texty.Export
 	public abstract class ExportBase
 	{
 		protected ExportBase() { }
-		protected ExportBase(IExportNastaveni nastaveni)
+		protected ExportBase(IExportNastaveni nastaveni, IList<string> xmlOutputFiles)
 		{
 			Nastaveni = nastaveni;
-		}
+            XmlOutputFiles = xmlOutputFiles;
+        }
 
 		private static Logger _logger = LogManager.GetCurrentClassLogger();
 
 		public IExportNastaveni Nastaveni { get; set; }
 
-		public void Exportuj(IExportNastaveni emnNastaveni) {
+	    public IList<string> XmlOutputFiles;
+
+
+        public void Exportuj(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles) {
 			Nastaveni = emnNastaveni;
-			Exportuj();
+            XmlOutputFiles = xmlOutputFiles;
+
+            Exportuj();
 		}
 
 		public abstract void Exportuj();
-		public abstract void Exportuj(IPrepis prpPrepisy);
+		public abstract void Exportuj(IPrepis prpPrepisy, IList<string> xmlOutputFiles);
 
 		public void Zaloguj(string zprava)
 		{

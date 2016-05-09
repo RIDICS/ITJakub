@@ -47,6 +47,10 @@
     <Compile Include="SlovnikovyModulNastaveni.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
       <Project>{A612C779-BE2B-44F2-9C86-BD5324F1F8B6}</Project>
       <Name>Daliboris.Texty.Evidence.Rozhrani</Name>

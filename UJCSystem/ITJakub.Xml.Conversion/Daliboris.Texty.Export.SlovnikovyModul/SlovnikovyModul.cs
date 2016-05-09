@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using Daliboris.Slovniky;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
+using Daliboris.Pomucky.Xml;
 
 namespace Daliboris.Texty.Export.SlovnikovyModul
 {
@@ -17,16 +19,16 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
 		}
 
-		public SlovnikovyModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
+		public SlovnikovyModul(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles) : base(emnNastaveni, xmlOutputFiles)
 		{
 		}
 
-		public override void Exportuj(IPrepis prpPrepis)
+		public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
 		{
-			ExportujImpl(prpPrepis);
+			ExportujImpl(prpPrepis, xmlOutputFiles);
 		}
 
-		private void ExportujImpl(IPrepis prepis)
+		private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles)
 		{
 		    var underscorePosition = prepis.Soubor.NazevBezPripony.IndexOf("_", StringComparison.Ordinal);
 		    var fileName = prepis.Soubor.NazevBezPripony;
@@ -53,18 +55,25 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			string vystupniSoubor = null;
 			
 			var casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
-			var souborBezPripony = prepis.Soubor.NazevBezPripony;
+
+            var souborBezPripony = prepis.Soubor.NazevBezPripony;
 			var fullFileName = souborBezPripony + ".xml";
 
+		    var inputFilePath = Path.Combine(Nastaveni.VstupniSlozka, fullFileName);
             var konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, fullFileName);
 
-            try
+		    if (xmlOutputFiles.Count > 1)
+		    {
+		        CombineInputXml(xmlOutputFiles, inputFilePath);
+		    }
+
+		    try
 			{
 				var step = 0;
                     
 				var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 				var parameters = new NameValueCollection();
-				ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, fullFileName), step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+				ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
 
 				vystupniSoubor = step00File;
 
@@ -121,10 +130,49 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 	    {
             const string fileNameFormat = "{0}_{1:00}.xml";
 
-            return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step++));
+            return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
         }
 
-		Slovnik GetDictionaryObject(string dictionaryAcronym)
+	    private void CombineInputXml(IList<string> xmlOutputFiles, string inputFilePath, string sourceTag="body")
+	    {
+	        var xws = new XmlWriterSettings
+	        {
+	            CloseOutput = true,
+	            Encoding = System.Text.Encoding.UTF8,
+	            Indent = true,
+	            IndentChars = " "
+            };
+
+	        using (var xw = XmlWriter.Create(inputFilePath, xws))
+	        {
+	            xw.WriteStartDocument();
+	            xw.WriteStartElement(sourceTag);
+
+	            foreach (var xmlOutputFile in xmlOutputFiles)
+	            {
+	                using (var xr = XmlReader.Create(xmlOutputFile))
+	                {
+	                    xr.MoveToContent();
+
+	                    while (xr.Read())
+	                    {
+	                        if (xr.NodeType == XmlNodeType.Element && xr.Name != sourceTag)
+	                        {
+	                            xw.WriteNode(xr, false);
+	                        }
+	                    }
+	                }
+	            }
+
+	            xw.WriteEndElement();
+	            xw.WriteEndDocument();
+	            xw.Flush();
+	            xw.Close();
+	        }
+	    }
+
+
+        Slovnik GetDictionaryObject(string dictionaryAcronym)
 		{
 			Slovnik slovnik = null;
 			switch (dictionaryAcronym)

@@ -14,7 +14,7 @@ namespace Daliboris.Texty.Export
 
 		public EdicniModul() { }
 
-		public EdicniModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
+		public EdicniModul(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles) : base(emnNastaveni, xmlOutputFiles)
 		{ }
 
 		/*
@@ -95,7 +95,7 @@ namespace Daliboris.Texty.Export
 			
 		}
 
-		public override void Exportuj(IPrepis prpPrepis)
+		public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
 		{
 			ExportujImpl(prpPrepis);
 		}

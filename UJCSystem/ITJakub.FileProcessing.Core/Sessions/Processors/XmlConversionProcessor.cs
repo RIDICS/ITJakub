@@ -27,9 +27,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var inputFileResource =
-                resourceSessionDirector.Resources.First(
-                    resource => resource.ResourceType == ResourceType.SourceDocument);
+            var inputFilesResource =resourceSessionDirector.Resources.Where(resource => resource.ResourceType == ResourceType.SourceDocument).OrderBy(r=>r.FileName, StringComparer.CurrentCultureIgnoreCase);
+            var inputFileResource = inputFilesResource.First();
 
             string metaDataFileName;
             if (resourceSessionDirector.Resources.Any(x => x.ResourceType == ResourceType.UploadedMetadata))
@@ -63,7 +62,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var settings = new DocxToTeiConverterSettings
             {
                 Debug = false,
-                InputFilePath = inputFileResource.FullPath,
+                InputFilesPath = inputFilesResource.Select(p=>p.FullPath).ToArray(),
                 MetadataFilePath = m_conversionMetadataPath,
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,

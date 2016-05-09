@@ -15,7 +15,7 @@ namespace Daliboris.Texty.Export
     {
         #region Overrides of ExportBase
 
-        public ModulMluvnic(IExportNastaveni nastaveni) : base(nastaveni)
+        public ModulMluvnic(IExportNastaveni nastaveni, IList<string> xmlOutputFiles) : base(nastaveni, xmlOutputFiles)
         {
         }
 
@@ -24,10 +24,9 @@ namespace Daliboris.Texty.Export
             throw new NotImplementedException();
         }
 
-        public override void Exportuj(IPrepis prpPrepis)
+        public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
         {
             ExportujImpl(prpPrepis);
-            
         }
 
         private void ExportujImpl(IPrepis prepis)
