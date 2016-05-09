@@ -82168,7 +82168,7 @@
    </EditoriPrepisu>
   </Hlavicka>
   <Soubor>
-   <Nazev>StcS_N.docx</Nazev>
+   <Nazev>StcS.docx</Nazev>
    <Adresar>D:\Slovniky\Word</Adresar>
    <FormatWordu>Docx</FormatWordu>
    <Zmeneno>2015-01-18T21:29:10.4946778+01:00</Zmeneno>
@@ -82579,158 +82579,8 @@
   <Identifikator>392</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
- <Prepis>
-  <Hlava>
-   <Pamatka>
-    <Titul>Staročeský slovník</Titul>
-    <Datace>
-     <Stoleti>0</Stoleti>
-     <PolovinaStoleti>0</PolovinaStoleti>
-     <Desetileti>0</Desetileti>
-     <Rok>0</Rok>
-     <RelativniChronologie>0</RelativniChronologie>
-     <NePredRokem>0</NePredRokem>
-     <NePoRoce>0</NePoRoce>
-    </Datace>
-    <Pramen>
-     <Ulozeni>
-      <Instituce>Staročeský slovník</Instituce>
-      <Signatura />
-     </Ulozeni>
-     <Datace>
-      <Stoleti>0</Stoleti>
-      <PolovinaStoleti>0</PolovinaStoleti>
-      <Desetileti>0</Desetileti>
-      <Rok>0</Rok>
-      <RelativniChronologie>0</RelativniChronologie>
-      <NePredRokem>0</NePredRokem>
-      <NePoRoce>0</NePoRoce>
-     </Datace>
-     <Typ>Rukopis</Typ>
-    </Pramen>
-    <Edice>
-     <Editori />
-     <Typ>Edice</Typ>
-    </Edice>
-   </Pamatka>
-   <Predloha typ="Neznamy" />
-   <Editori />
-  </Hlava>
-  <Hlavicka>
-   <Titul>Staročeský slovník</Titul>
-   <TypPredlohy>Neznamy</TypPredlohy>
-   <TypPredlohyText>neznámý</TypPredlohyText>
-   <InstituceUlozeni>Staročeský slovník</InstituceUlozeni>
-   <Signatura />
-   <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
-   <EditoriPrepisu>
-    <string>Boris Lehečka</string>
-   </EditoriPrepisu>
-  </Hlavicka>
-  <Soubor>
-   <Nazev>StcS_O.docx</Nazev>
-   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
-   <FormatWordu>Docx</FormatWordu>
-   <Zmeneno>2015-06-08T16:44:23+02:00</Zmeneno>
-   <Velikost>5020053</Velikost>
-   <CisloRevize>0</CisloRevize>
-   <KontrolniSoucet>7B0552B49776E8D5524400643097B3EC</KontrolniSoucet>
-  </Soubor>
-  <Zpracovani>
-   <GUID>{66840F46-647B-441C-9AD0-833CE31037D3}</GUID>
-   <FazeZpracovani>Exportovat</FazeZpracovani>
-   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
-   <Neexportovat>false</Neexportovat>
-   <Exporty />
-   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
-   <PrvniExporty />
-   <ObjemDat>0</ObjemDat>
-   <Transliterovane>false</Transliterovane>
-   <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni />
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
-   <Publikace />
-  </Zpracovani>
-  <Identifikator>393</Identifikator>
-  <TypPrepisu>slovník</TypPrepisu>
- </Prepis>
- <Prepis>
-  <Hlava>
-   <Pamatka>
-    <Titul>Staročeský slovník</Titul>
-    <Datace>
-     <Stoleti>0</Stoleti>
-     <PolovinaStoleti>0</PolovinaStoleti>
-     <Desetileti>0</Desetileti>
-     <Rok>0</Rok>
-     <RelativniChronologie>0</RelativniChronologie>
-     <NePredRokem>0</NePredRokem>
-     <NePoRoce>0</NePoRoce>
-    </Datace>
-    <Pramen>
-     <Ulozeni>
-      <Instituce>Staročeský slovník</Instituce>
-      <Signatura />
-     </Ulozeni>
-     <Datace>
-      <Stoleti>0</Stoleti>
-      <PolovinaStoleti>0</PolovinaStoleti>
-      <Desetileti>0</Desetileti>
-      <Rok>0</Rok>
-      <RelativniChronologie>0</RelativniChronologie>
-      <NePredRokem>0</NePredRokem>
-      <NePoRoce>0</NePoRoce>
-     </Datace>
-     <Typ>Rukopis</Typ>
-    </Pramen>
-    <Edice>
-     <Editori />
-     <Typ>Edice</Typ>
-    </Edice>
-   </Pamatka>
-   <Predloha typ="Neznamy" />
-   <Editori />
-  </Hlava>
-  <Hlavicka>
-   <Titul>Staročeský slovník</Titul>
-   <TypPredlohy>Neznamy</TypPredlohy>
-   <TypPredlohyText>neznámý</TypPredlohyText>
-   <InstituceUlozeni>Staročeský slovník</InstituceUlozeni>
-   <Signatura />
-   <EditoriPrepisuText>Boris Lehečka</EditoriPrepisuText>
-   <EditoriPrepisu>
-    <string>Boris Lehečka</string>
-   </EditoriPrepisu>
-  </Hlavicka>
-  <Soubor>
-   <Nazev>StcS_P.docx</Nazev>
-   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
-   <FormatWordu>Docx</FormatWordu>
-   <Zmeneno>2015-06-08T16:44:23+02:00</Zmeneno>
-   <Velikost>6186539</Velikost>
-   <CisloRevize>0</CisloRevize>
-   <KontrolniSoucet>5FEC749E7B3D9F6682467DC05E037CAE</KontrolniSoucet>
-  </Soubor>
-  <Zpracovani>
-   <GUID>{005DE92F-2FFB-472F-9B5E-D8F079B4CE74}</GUID>
-   <FazeZpracovani>Exportovat</FazeZpracovani>
-   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
-   <Neexportovat>false</Neexportovat>
-   <Exporty />
-   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
-   <PrvniExporty />
-   <ObjemDat>0</ObjemDat>
-   <Transliterovane>false</Transliterovane>
-   <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni />
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
-   <Publikace />
-  </Zpracovani>
-  <Identifikator>394</Identifikator>
-  <TypPrepisu>slovník</TypPrepisu>
- </Prepis>
+ 
+ 
  <Prepis>
   <Hlava>
    <Pamatka>

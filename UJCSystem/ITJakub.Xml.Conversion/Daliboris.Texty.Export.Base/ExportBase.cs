@@ -26,7 +26,7 @@ namespace Daliboris.Texty.Export
 		}
 
 		public abstract void Exportuj();
-		public abstract void Exportuj(IEnumerable<IPrepis> prpPrepisy);
+		public abstract void Exportuj(IPrepis prpPrepisy);
 
 		public void Zaloguj(string zprava)
 		{

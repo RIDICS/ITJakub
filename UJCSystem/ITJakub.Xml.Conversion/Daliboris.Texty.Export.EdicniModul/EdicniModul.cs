@@ -31,7 +31,7 @@ namespace Daliboris.Texty.Export
 
 		public override void Exportuj()
 		{
-			IList<IPrepis> prps = Nastaveni.Prepisy;
+			IPrepis prepis = Nastaveni.Prepis;
 
 			const string sSlozkaXslt = @"D:\!UJC\OVJ\Texty\Konverze\Xslt\";
 			List<string> glsXslt = new List<string>();
@@ -74,9 +74,7 @@ namespace Daliboris.Texty.Export
 
 			//glsXslt.Add(sSlozkaXslt + "EM_Ukazka_s_hlavickou" + ".xsl");
 
-
-			foreach (IPrepis prp in prps)
-			{
+            
 				//EdicniModulUpravy ups = new EdicniModulUpravy();
 				//if (prp.LiterarniZanr != "biblický text") continue;
 				//if (prp.NazevSouboru != "BiblKladrGn.docx") continue;
@@ -85,25 +83,24 @@ namespace Daliboris.Texty.Export
 				//if (prp.NazevSouboru != "CestKabK.docx") continue;
 				try
 				{
-					EdicniModulUpravy.Uprav(prp, Nastaveni, glsXslt);
+					EdicniModulUpravy.Uprav(prepis, Nastaveni, glsXslt);
 				}
 				catch (Exception e)
 				{
-					Zaloguj(String.Format("Chyba: {0} [{1}]", prp.Soubor.Nazev, e.Message), true);
+					Zaloguj(String.Format("Chyba: {0} [{1}]", prepis.Soubor.Nazev, e.Message), true);
 					//Console.WriteLine();
 				}
 
 				//prp.Zpracovani.ZaevidujExport(ZpusobVyuziti.EdicniModul, DateTime.Now);
-			}
-
+			
 		}
 
-		public override void Exportuj(IEnumerable<IPrepis> prpPrepisy)
+		public override void Exportuj(IPrepis prpPrepis)
 		{
-			ExportujImpl(prpPrepisy);
+			ExportujImpl(prpPrepis);
 		}
 
-		private void ExportujImpl(IEnumerable<IPrepis> prpPrepisy)
+		private void ExportujImpl(IPrepis prepis)
 		{
 			IList<IXsltTransformer> header = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, "header", Nastaveni.SlozkaXslt);
 			IList<IXsltTransformer> front = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, "front", Nastaveni.SlozkaXslt);
@@ -115,80 +112,73 @@ namespace Daliboris.Texty.Export
 
 
 			IUpravy ekup = new EdicniModulUpravy(Nastaveni);
-			foreach (IPrepis prepis in prpPrepisy)
+			
+			ekup.NastavVychoziHodnoty();
+			Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
+
+			string strVystup = null;
+			string sKonecnyVystup = null;
+
+			DateTime casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
+			string souborBezPripony = prepis.Soubor.NazevBezPripony;
+			try
 			{
-				ekup.NastavVychoziHodnoty();
-				Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
+				const string csPriponaXml = ".xml";
+				sKonecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, prepis.Soubor.NazevBezPripony + csPriponaXml);
 
-				string strVystup = null;
-				string sKonecnyVystup = null;
+				FileInfo fi = new FileInfo(sKonecnyVystup);
+			    if (fi.Exists && fi.CreationTime == casExportu)
+			        return;
 
-				DateTime casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
-				string souborBezPripony = prepis.Soubor.NazevBezPripony;
-				try
-				{
-					const string csPriponaXml = ".xml";
-					sKonecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, prepis.Soubor.NazevBezPripony + csPriponaXml);
+			    string headerFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "header"));
+			    var parameters = new NameValueCollection {{"soubor", prepis.Soubor.Nazev}};
+			    ApplyTransformations(Nastaveni.SouborMetadat, headerFile, header, Nastaveni.DocasnaSlozka, parameters);
 
-					FileInfo fi = new FileInfo(sKonecnyVystup);
-					if (fi.Exists && fi.CreationTime == casExportu)
-						continue;
+				string frontFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "front"));
+				ApplyTransformations(Nastaveni.SouborMetadat, frontFile, front, Nastaveni.DocasnaSlozka, parameters);
 
-					string headerFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "header"));
-					NameValueCollection parameters = new NameValueCollection();
-					parameters.Add("soubor", prepis.Soubor.Nazev);
-					ApplyTransformations(Nastaveni.SouborMetadat, headerFile, header, Nastaveni.DocasnaSlozka, parameters);
+			    parameters = new NameValueCollection{{"exportovatTransliteraci", prepis.Zpracovani.Transliterovane ? "true()" : "false()"}};
+			    string bodyFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "body"));
+				ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, souborBezPripony + csPriponaXml),
+					bodyFile, body, Nastaveni.DocasnaSlozka, parameters);
 
-					string frontFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "front"));
-					ApplyTransformations(Nastaveni.SouborMetadat, frontFile, front, Nastaveni.DocasnaSlozka, parameters);
+				parameters.Add("hlavicka", headerFile);
+				parameters.Add("zacatek", frontFile);
 
-					parameters = new NameValueCollection();
-					parameters.Add("exportovatTransliteraci", prepis.Zpracovani.Transliterovane ? "true()" : "false()");
-					string bodyFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "body"));
-					ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, souborBezPripony + csPriponaXml),
-						bodyFile, body, Nastaveni.DocasnaSlozka, parameters);
-
-					parameters.Add("hlavicka", headerFile);
-					parameters.Add("zacatek", frontFile);
-
-					string combineFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "joining"));
-					ApplyTransformations(bodyFile, combineFile, joining, Nastaveni.DocasnaSlozka, parameters);
+				string combineFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "joining"));
+				ApplyTransformations(bodyFile, combineFile, joining, Nastaveni.DocasnaSlozka, parameters);
 
 
-					parameters = new NameValueCollection();
-					string afterCombineFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "afterJoining"));
-					ApplyTransformations(combineFile, afterCombineFile, afterJoining, Nastaveni.DocasnaSlozka, parameters);
+				parameters = new NameValueCollection();
+				string afterCombineFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "afterJoining"));
+				ApplyTransformations(combineFile, afterCombineFile, afterJoining, Nastaveni.DocasnaSlozka, parameters);
 
-					List<UpravaSouboruXml> lsup = new List<UpravaSouboruXml>();
+				List<UpravaSouboruXml> lsup = new List<UpravaSouboruXml>();
 
-					lsup.Add(EdicniModulUpravy.PresunoutMezeryVneTagu);
-					lsup.Add(EdicniModulUpravy.PridatMezeryZaTagyPoInterpunkci);
-                    lsup.Add(EdicniModulUpravy.RozdelitNaSlova);
-					//lsup.Add(Upravy.UpravitTextTypograficky);
-					EdicniModulUpravy eu = ekup as EdicniModulUpravy;
-					strVystup = ekup.ProvedUpravy(prepis, afterCombineFile, lsup);
-				}
-				catch (Exception e)
-				{
-					Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
-
-				}
-				finally
-				{
-					if (strVystup != null)
-					{
-						if (sKonecnyVystup != null && File.Exists(sKonecnyVystup))
-							File.Delete(sKonecnyVystup);
-						File.Copy(strVystup, sKonecnyVystup);
-						File.SetCreationTime(sKonecnyVystup, casExportu);
-
-						if (Nastaveni.SmazatDocasneSoubory)
-							ekup.SmazDocasneSoubory();
-					}
-				}
-
+				lsup.Add(EdicniModulUpravy.PresunoutMezeryVneTagu);
+				lsup.Add(EdicniModulUpravy.PridatMezeryZaTagyPoInterpunkci);
+                lsup.Add(EdicniModulUpravy.RozdelitNaSlova);
+				//lsup.Add(Upravy.UpravitTextTypograficky);
+				EdicniModulUpravy eu = ekup as EdicniModulUpravy;
+				strVystup = ekup.ProvedUpravy(prepis, afterCombineFile, lsup);
 			}
+			catch (Exception e)
+			{
+				Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
+			}
+			finally
+			{
+				if (strVystup != null)
+				{
+					if (File.Exists(sKonecnyVystup))
+						File.Delete(sKonecnyVystup);
+					File.Copy(strVystup, sKonecnyVystup);
+					File.SetCreationTime(sKonecnyVystup, casExportu);
 
+					if (Nastaveni.SmazatDocasneSoubory)
+						ekup.SmazDocasneSoubory();
+				}
+			}
 		}
 
 		private void ExportujImplOld(IEnumerable<IPrepis> prpPrepisy)

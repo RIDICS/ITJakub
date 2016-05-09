@@ -18,46 +18,40 @@ namespace Daliboris.Texty.Export {
 		}
 
 		public override void Uprav(IPrepis prepis) {
-
-
-
 			string strDocasnaSlozka = Nastaveni.DocasnaSlozka ?? Path.GetTempPath();
 
 			Dictionary<string, XslCompiledTransform> gdxc = NactiTransformacniKroky();
-			foreach (IPrepis prp in Nastaveni.Prepisy) {
+		    
+			string sCesta = Path.Combine(Nastaveni.VstupniSlozka, Nastaveni.Prepis.Soubor.Nazev);
+			sCesta = sCesta.Replace(".docx", ".xml");
+			FileInfo fi = new FileInfo(sCesta);
+			if (!fi.Exists) {
+				throw new FileNotFoundException("Zadaný soubor '" + sCesta + "' neexistuje.");
+			}
 
-				string sCesta = Path.Combine(Nastaveni.VstupniSlozka, prp.Soubor.Nazev);
-				sCesta = sCesta.Replace(".docx", ".xml");
-				FileInfo fi = new FileInfo(sCesta);
-				if (!fi.Exists) {
-					throw new FileNotFoundException("Zadaný soubor '" + sCesta + "' neexistuje.");
+			List<string> glsVystupy = new List<string>(Nastaveni.TransformacniKroky.Count);
+			string strNazev = fi.Name.Substring(0, fi.Name.Length - fi.Extension.Length);
+
+			int iKrok = 0;
+			string strVstup = sCesta;
+			foreach (TransformacniKrok krok in Nastaveni.TransformacniKroky) {
+				iKrok++;
+
+				string strVystup = Path.Combine(strDocasnaSlozka, String.Format("{0}_{1:00}.xml", strNazev, iKrok));
+				glsVystupy.Add(strVystup);
+
+				if (krok.Parametry != null) {
+					//foreach (KeyValuePair<string, string> kvp in krok.Parametry)
+					//{
+					//  switch (kvp.Key)
+					//  {
+					//    case "soubor":
+
+					//  }
+					//}
 				}
-
-				List<string> glsVystupy = new List<string>(Nastaveni.TransformacniKroky.Count);
-				string strNazev = fi.Name.Substring(0, fi.Name.Length - fi.Extension.Length);
-
-				int iKrok = 0;
-				string strVstup = sCesta;
-				foreach (TransformacniKrok krok in Nastaveni.TransformacniKroky) {
-					iKrok++;
-
-					string strVystup = Path.Combine(strDocasnaSlozka, String.Format("{0}_{1:00}.xml", strNazev, iKrok));
-					glsVystupy.Add(strVystup);
-
-					if (krok.Parametry != null) {
-						//foreach (KeyValuePair<string, string> kvp in krok.Parametry)
-						//{
-						//  switch (kvp.Key)
-						//  {
-						//    case "soubor":
-
-						//  }
-						//}
-					}
-					gdxc[krok.Sablona].Transform(strVstup, strVystup);
-					strVstup = strVystup;
-
-				}
+				gdxc[krok.Sablona].Transform(strVstup, strVystup);
+				strVstup = strVystup;
 			}
 		}
 

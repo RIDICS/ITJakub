@@ -94,18 +94,16 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
             ResolveDefaultSettingsValues(ConverterSettings);
 
-            List<IPrepis> glsPrepisy = GetPrepisy(ConverterSettings, inputFileName);
+            IPrepis prepis = GetPrepisy(ConverterSettings, inputFileName);
 
-			if (glsPrepisy == null || glsPrepisy.Count == 0 || glsPrepisy[0] == null)
+			if (prepis == null)
 			{
 				//dokument v evidenci neexistuje, nabídnout zanesení dokumentu do evidence
 				// mělo by stačit přiřazení typu dokumentu
-				_result.Errors.Add(new DocumentNotInEvidenceException("Dokument s uvedeným jménem souboru neexistuje v evidenci."));
+				_result.Errors.Add(new DocumentNotInEvidenceException(String.Format("Dokument s uvedeným jménem souboru '{0}' neexistuje v evidenci.", inputFileName)));
 				return _result;
 			}
-
-			IPrepis prepis = glsPrepisy[0];
-
+            
 		    if (prepis.FazeZpracovani < FazeZpracovani.Exportovat)
 		    {
                 _result.Errors.Add(new DocumentNotInRequredStateException("Dokument s uvedeným jménem souboru není připraven pro export."));
@@ -155,7 +153,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (!Directory.Exists(finalOutputDirectory))
 				Directory.CreateDirectory(finalOutputDirectory);
 
-            IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, glsPrepisy);
+            IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, prepis);
 			ExportBase export = GetExportModule(documentType, exportSettings);
 
 			if (export == null || exportSettings == null)
@@ -166,7 +164,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			try
 			{
-				export.Exportuj(exportSettings.Prepisy);
+				export.Exportuj(exportSettings.Prepis);
 				_result.IsConverted = true;
 			}
 			catch (Exception exception)
@@ -622,7 +620,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			string xsltTransformationsDirectoryPath,
 			string xsltTemplatesDirectoryPath,
 			AdresarovaStruktura ads,
-			List<IPrepis> glsPrepisy)
+			IPrepis prepis)
 		{
 			string xsltTransformationFilePath = Path.Combine(xsltTransformationsDirectoryPath, documentType + XmlExtension);
 			IExportNastaveni exportSettings = null;
@@ -630,11 +628,11 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			{
 				case "Edition":
 				case "ProfessionalLiterature":
-					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, glsPrepisy);
+					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
 					break;
 				case "Dictionary":
 					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads,
-						glsPrepisy);
+                        prepis);
 					break;
 			}
 			return exportSettings;
@@ -642,7 +640,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		private static IExportNastaveni GetEdicniModulNastaveni(DocxToTeiConverterSettings settings,
 			string xsltTransformationFilePath,
 			string xsltTemplatesPath,
-			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+			AdresarovaStruktura ads, IPrepis prepis)
 		{
 			IExportNastaveni nastaveni = new EdicniModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
@@ -650,8 +648,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
 			nastaveni.VystupniSlozka = ads.DejVystup;
 			nastaveni.DocasnaSlozka = ads.DejTemp;
-			nastaveni.Prepisy = glsPrepisy;
-			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+            nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
 
 			nastaveni.SouborMetadat = settings.MetadataFilePath;
 			return nastaveni;
@@ -660,7 +658,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		private static IExportNastaveni GetDictionarySettings(DocxToTeiConverterSettings settings,
 			string xsltTransformationFilePath,
 			string xsltTemplatesPath,
-			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+			AdresarovaStruktura ads, IPrepis prepis)
 		{
 			IExportNastaveni nastaveni = new SlovnikovyModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
@@ -668,8 +666,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
 			nastaveni.VystupniSlozka = ads.DejVystup;
 			nastaveni.DocasnaSlozka = ads.DejTemp;
-			nastaveni.Prepisy = glsPrepisy;
-			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+			nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
 
 			nastaveni.SouborMetadat = settings.MetadataFilePath;
 			return nastaveni;
@@ -695,13 +693,22 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			document.Save(docxToXmlOutput);
 		}
 
-		private static List<IPrepis> GetPrepisy(DocxToTeiConverterSettings settings, string inputFileName)
+		private static IPrepis GetPrepisy(DocxToTeiConverterSettings settings, string inputFileName)
 		{
-			List<IPrepis> glsPrepisy = new List<IPrepis>();
-			Prepisy prepisy = Perzistence.NacistZXml(settings.MetadataFilePath);
-			Prepis prepis = (from p in prepisy where p.Soubor.Nazev == inputFileName select p).FirstOrDefault();
-			glsPrepisy.Add(prepis);
-			return glsPrepisy;
+            var searchedFileName = inputFileName;
+            var extensionDotPosition = inputFileName.LastIndexOf('.');
+            if (extensionDotPosition > 0)
+            {
+                searchedFileName = String.Format("{0}.{1}",
+                    inputFileName.Substring(0, extensionDotPosition).Split('_').First(),
+                    inputFileName.Substring(extensionDotPosition + 1, inputFileName.Length - extensionDotPosition - 1));
+            }
+            
+			var prepisy = Perzistence.NacistZXml(settings.MetadataFilePath);
+			var prepis = prepisy.FirstOrDefault(p => p.Soubor.Nazev == inputFileName) ??
+			             prepisy.FirstOrDefault(p =>p.Soubor.Nazev == searchedFileName);
+            
+			return prepis;
 		}
 
 		private void ConvertDocxToXml(List<IPrepis> prepisy, string outputDirectory, string docxToXmlFilePath)

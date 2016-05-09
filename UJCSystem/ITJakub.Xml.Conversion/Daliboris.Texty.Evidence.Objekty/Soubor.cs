@@ -61,7 +61,17 @@ namespace Daliboris.Texty.Evidence
 			}
 		}
 
-		public static bool operator ==(Soubor rhs, Soubor lhs)
+        public string Pripona
+        {
+            get
+            {
+                int iTecka = Nazev.LastIndexOf('.');
+                if (iTecka == -1) return null;
+                return Nazev.Substring(iTecka + 1, Nazev.Length - iTecka - 1);
+            }
+        }
+
+        public static bool operator ==(Soubor rhs, Soubor lhs)
 		{
 			if (rhs.Adresar == lhs.Adresar && rhs.FormatWordu == lhs.FormatWordu && rhs.Nazev == lhs.Nazev &&
 				  rhs.Zmeneno == lhs.Zmeneno)

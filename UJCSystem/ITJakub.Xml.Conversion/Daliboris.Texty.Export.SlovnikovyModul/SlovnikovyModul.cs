@@ -21,17 +21,15 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 		{
 		}
 
-		public override void Exportuj(IEnumerable<IPrepis> prpPrepisy)
+		public override void Exportuj(IPrepis prpPrepis)
 		{
-			ExportujImpl(prpPrepisy);
+			ExportujImpl(prpPrepis);
 		}
 
-		private void ExportujImpl(IEnumerable<IPrepis> prpPrepisy)
+		private void ExportujImpl(IPrepis prepis)
 		{
-			IPrepis first = (from p in prpPrepisy select p).FirstOrDefault();
-
-		    var underscorePosition = first.Soubor.NazevBezPripony.IndexOf("_", StringComparison.Ordinal);
-		    var fileName = first.Soubor.NazevBezPripony;
+		    var underscorePosition = prepis.Soubor.NazevBezPripony.IndexOf("_", StringComparison.Ordinal);
+		    var fileName = prepis.Soubor.NazevBezPripony;
 		    if (underscorePosition > 0)
 		    {
 		        fileName = fileName.Substring(0, underscorePosition);
@@ -50,71 +48,71 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 		                Nastaveni.SlozkaXslt, true));
 		    }
             
-			foreach (IPrepis prepis in prpPrepisy)
+			Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
+
+			string vystupniSoubor = null;
+			
+			var casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
+			var souborBezPripony = prepis.Soubor.NazevBezPripony;
+			var fullFileName = souborBezPripony + ".xml";
+
+            var konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, fullFileName);
+
+            try
 			{
-				Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
+				var step = 0;
+                    
+				var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+				var parameters = new NameValueCollection();
+				ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, fullFileName), step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
 
-				string vystupniSoubor = null;
-				
+				vystupniSoubor = step00File;
 
-				var casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
-				var souborBezPripony = prepis.Soubor.NazevBezPripony;
-			    var fullFileName = souborBezPripony + ".xml";
-
-                var konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, fullFileName);
-
-                try
+				var slovnik = GetDictionaryObject(fileName);
+				var fileTransformationSource= step00File;
+                
+                if (slovnik != null)
 				{
-					var step = 0;
-                    
-				    var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-					var parameters = new NameValueCollection();
-					ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, fullFileName), step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+				    var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+				    var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+				    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+				    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 
-					vystupniSoubor = step00File;
+				    slovnik.SeskupitHeslaPismene(step00File, step01File);
+				    slovnik.UpravitHraniceHesloveStati(step01File, step02File);
+				    slovnik.KonsolidovatHeslovouStat(step02File, step03File);
+				    slovnik.UpravitOdkazy(step03File, step04File);
 
-					var slovnik = GetDictionaryObject(fileName);
-                    
-					var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-					var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-                    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-                    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    fileTransformationSource = step04File;
+                }
 
-                    slovnik.SeskupitHeslaPismene(step00File, step01File);
-                    slovnik.UpravitHraniceHesloveStati(step01File, step02File);
-                    slovnik.KonsolidovatHeslovouStat(step02File, step03File);
-                    slovnik.UpravitOdkazy(step03File, step04File);
-                    
-				    var fileTransformationSource = step04File;
-
-				    parameters = new NameValueCollection();
-				    while (xsltSteps.Count > 0)
-				    {
-                        var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+				parameters = new NameValueCollection();
+				while (xsltSteps.Count > 0)
+				{
+                    var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
                         
-                        ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
 
-                        fileTransformationSource = fileTransformationTarget;
-				    }
-
-					vystupniSoubor = fileTransformationSource;
+                    fileTransformationSource = fileTransformationTarget;
 				}
-				catch (Exception e)
-				{
-					Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
-				}
-				finally
-				{
-					if (vystupniSoubor != null)
-					{
-						if (File.Exists(konecnyVystup))
-							File.Delete(konecnyVystup);
-						File.Copy(vystupniSoubor, konecnyVystup);
-						File.SetCreationTime(konecnyVystup, casExportu);
 
-						//if (Nastaveni.SmazatDocasneSoubory)
-						//	ekup.SmazDocasneSoubory();
-					}
+				vystupniSoubor = fileTransformationSource;
+			}
+			catch (Exception e)
+			{
+				Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
+			}
+			finally
+			{
+				if (vystupniSoubor != null)
+				{
+					if (File.Exists(konecnyVystup))
+						File.Delete(konecnyVystup);
+					File.Copy(vystupniSoubor, konecnyVystup);
+					File.SetCreationTime(konecnyVystup, casExportu);
+
+					//if (Nastaveni.SmazatDocasneSoubory)
+					//	ekup.SmazDocasneSoubory();
 				}
 			}
 		}

@@ -24,31 +24,27 @@ namespace Daliboris.Texty.Export
             throw new NotImplementedException();
         }
 
-        public override void Exportuj(IEnumerable<IPrepis> prpPrepisy)
+        public override void Exportuj(IPrepis prpPrepis)
         {
-            ExportujImpl(prpPrepisy);
+            ExportujImpl(prpPrepis);
             
         }
 
-        private void ExportujImpl(IEnumerable<IPrepis> prepisy)
+        private void ExportujImpl(IPrepis prepis)
         {
             IList<IXsltTransformer> body = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, "body", Nastaveni.SlozkaXslt);
             string konecnyVystup = null;
             
+            const string csPriponaXml = ".xml";
 
-            foreach (IPrepis prepis in prepisy)
-            {
-                const string csPriponaXml = ".xml";
+            DateTime casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
+            string souborBezPripony = prepis.Soubor.NazevBezPripony;
 
-                DateTime casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
-                string souborBezPripony = prepis.Soubor.NazevBezPripony;
+            konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, prepis.Soubor.NazevBezPripony + csPriponaXml);
 
-                konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, prepis.Soubor.NazevBezPripony + csPriponaXml);
-
-                string headerFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "header"));
-                NameValueCollection parameters = new NameValueCollection();
-                ApplyTransformations(Nastaveni.SouborMetadat, headerFile, body, Nastaveni.DocasnaSlozka, parameters);
-            }
+            string headerFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "header"));
+            NameValueCollection parameters = new NameValueCollection();
+            ApplyTransformations(Nastaveni.SouborMetadat, headerFile, body, Nastaveni.DocasnaSlozka, parameters);
         }
 
         #endregion
