@@ -244,52 +244,61 @@ namespace Daliboris.Slovniky
 				{
 					xw.WriteStartDocument(true);
 
+				    bool skipReading = false;
 
-					while (r.Read())
+					while (skipReading || r.Read())
 					{
-						if (r.NodeType == XmlNodeType.Element)
-						{
-							switch (r.Name)
-							{
-								case "entry":
-									XmlDocument xd = new XmlDocument();
-									XmlNode xn = xd.ReadNode(r);
-									if (xn != null)
-										xd.AppendChild(xn);
-									if (xd.DocumentElement != null)
-										if (!xd.DocumentElement.IsEmpty)
-										{
-											ZkonsolidujEntry(ref xd, sSource, ++iEntry);
-											xd.WriteContentTo(xw);
-										}
+					    skipReading = false;
 
-									break;
-								case "dictionary":
-									sSource = r.GetAttribute("name");
-									goto default;
-								default:
-									Transformace.SerializeNode(r, xw);
-									break;
+					    switch (r.NodeType)
+					    {
+					        case XmlNodeType.Element:
+					            switch (r.Name)
+					            {
+					                case "entry":
+					                    XmlDocument xd = new XmlDocument();
+					                    XmlNode xn = xd.ReadNode(r);
+					                    if (xn != null)
+					                        xd.AppendChild(xn);
+					                    if (xd.DocumentElement != null)
+					                        if (!xd.DocumentElement.IsEmpty)
+					                        {
+					                            ZkonsolidujEntry(ref xd, sSource, ++iEntry);
+					                            xd.WriteContentTo(xw);
+					                        }
 
-							}
-						}
-						else if (r.NodeType == XmlNodeType.EndElement)
-						{
-							switch (r.Name)
-							{
-								case "entry":
-									break;
-								default:
-									Transformace.SerializeNode(r, xw);
-									break;
-							}
-						}
+					                    if (r.NodeType == XmlNodeType.Element || r.NodeType == XmlNodeType.EndElement)
+					                        skipReading = true;
 
+					                    break;
+					                case "dictionary":
+					                    sSource = r.GetAttribute("name");
+					                    goto default;
+					                default:
+					                    Transformace.SerializeNode(r, xw);
+					                    break;
 
-						else { Transformace.SerializeNode(r, xw); }
+					            }
 
+					            break;
+
+					        case XmlNodeType.EndElement:
+					            switch (r.Name)
+					            {
+					                case "entry":
+					                    break;
+					                default:
+					                    Transformace.SerializeNode(r, xw);
+					                    break;
+					            }
+
+					            break;
+
+					        default:
+					            Transformace.SerializeNode(r, xw);
+					            break;
+					    }
 					}
-
 				}
 			}
 

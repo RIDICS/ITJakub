@@ -111,7 +111,7 @@ namespace Daliboris.Slovniky {
 				oi.Prefix = sbHeslo[0].ToString();
 				sbHeslo.Remove(0, 1);
 			}
-			if ("¹²³".IndexOf(sbHeslo[sbHeslo.Length - 1]) > -1)
+			if ("¹²³⁺".IndexOf(sbHeslo[sbHeslo.Length - 1]) > -1)
 			{
 				oi.Homonymum = sbHeslo[sbHeslo.Length - 1].ToString();
 				sbHeslo.Remove(sbHeslo.Length - 1, 1);
