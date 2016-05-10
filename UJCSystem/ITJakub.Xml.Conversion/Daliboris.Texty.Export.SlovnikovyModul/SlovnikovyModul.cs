@@ -192,7 +192,12 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                 case "mss":
                     slovnik = new MSS();
                     break;
-            }
+
+                case "pohl":
+			        slovnik = null;
+
+			        break;
+			}
 
 			return slovnik;
 		}

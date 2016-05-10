@@ -40,6 +40,14 @@
   <transformation xml:id="mss-step03" >
     <step file="MSS_OldToTeiP5.xsl" />
   </transformation>
+
+  <transformation xml:id="pohl-step01" >
+    <!--<step file="PohlGramSlov1756_Prevod-stylu.xsl" />
+    <step file="PohlGramSlov1756_Notes.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov1756_Hlavicka.xsl" />-->
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
