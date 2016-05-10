@@ -71,6 +71,10 @@
       <Project>{52d3d792-3904-4b0c-8bf7-c278c763a801}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.GbSlov</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.JgSlov\Daliboris.Texty.Export.Slovniky.JgSlov.csproj">
+      <Project>{188ed7ac-8ec1-4c32-97e6-270ed0e7f40a}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.JgSlov</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.MSS\Daliboris.Texty.Export.Slovniky.MSS.csproj">
       <Project>{cd83ea74-89f9-4573-ba08-7e958a240b5e}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.MSS</Name>
