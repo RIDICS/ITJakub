@@ -82,11 +82,12 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			//cesta ke konvertovanému souboru
 			//cesta k souboru s metadaty
 			//funkce/delegát pro načítání verzí souboru
-		private static void MakeConversion(string conversionDirectoryFullName, string documentName, string metadataFilePath)
-		{
-			DocxToTeiConverterSettings settings = new DocxToTeiConverterSettings();
-			settings.InputFilePath = Path.Combine(conversionDirectoryFullName, documentName);
-			settings.MetadataFilePath = metadataFilePath;
+	    private static void MakeConversion(string conversionDirectoryFullName, string documentName, string metadataFilePath)
+	    {
+	        DocxToTeiConverterSettings settings = new DocxToTeiConverterSettings();
+            settings.InputFilesPath = new[] { Path.Combine(conversionDirectoryFullName, documentName)};
+
+	        settings.MetadataFilePath = metadataFilePath;
 			settings.GetVersionList = GetVersions();
 			String.Format("Úprava souboru k {0:g}", DateTime.Now);
 			DoConversion(settings);
@@ -98,19 +99,19 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			DocxToTeiConverterSettings settings = new DocxToTeiConverterSettings();
 			settings.TempDirectoryPath = Path.Combine(dataDirectory, "Temp");
 			settings.MetadataFilePath = Path.Combine(dataDirectory, "Input", "Evidence.xml");
-			settings.InputFilePath = Path.Combine(dataDirectory, "Input", documentName + ".docx");
-			settings.OutputFilePath = Path.Combine(dataDirectory, "Output", documentName + ".xml");
+            settings.InputFilesPath = new []{ Path.Combine(dataDirectory, "Input", documentName + ".docx") };
+            settings.OutputFilePath = Path.Combine(dataDirectory, "Output", documentName + ".xml");
 			String.Format("Úprava souboru k {0:g}", DateTime.Now);
 			settings.GetVersionList = GetVersions();
 			DocxToTeiConverter converter = new DocxToTeiConverter();
 			ConversionResult result = converter.Convert(settings);
 			if (result.IsConverted)
 			{
-				logger.Info("File {0} converted.", settings.InputFilePath);
+				logger.Info("File {0} converted.", settings.InputFilesPath);
 			}
 			else
 			{
-				logger.Info("File {0} not converted.", settings.InputFilePath);
+				logger.Info("File {0} not converted.", settings.InputFilesPath.ToString());
 				logger.Info("Errors: {0}", result.Errors);
 			}
 		}
@@ -131,8 +132,8 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			string name = "Albetanus_Knizky_o_radnem_mluveni";
 			settings.TempDirectoryPath = Path.Combine(dataDirectory, "Temp");
 			settings.MetadataFilePath = Path.Combine(dataDirectory, "Input", "Evidence.xml");
-			settings.InputFilePath = Path.Combine(dataDirectory, "Input", name + ".docx");
-			settings.OutputFilePath = Path.Combine(dataDirectory, "Output", name + ".xml");
+            settings.InputFilesPath = new[] { Path.Combine(dataDirectory, "Input", name + ".docx") };
+            settings.OutputFilePath = Path.Combine(dataDirectory, "Output", name + ".xml");
 			String.Format("Úprava souboru k {0:g}", DateTime.Now);
 			settings.SplitDocumentByPageBreaks = true;
 			settings.GetVersionList = GetVersions();
@@ -145,11 +146,11 @@ namespace Ujc.Ovj.Ooxml.Conversion.Test
 			ConversionResult result = converter.Convert(settings);
 			if (result.IsConverted)
 			{
-				logger.Info("File {0} converted.", settings.InputFilePath);
+				logger.Info("File {0} converted.", settings.InputFilesPath.ToString());
 			}
 			else
 			{
-				logger.Info("File {0} not converted.", settings.InputFilePath);
+				logger.Info("File {0} not converted.", settings.InputFilesPath.ToString());
 				logger.Error("Errors: {0}", result.Errors.Count);
 				foreach (Exception error in result.Errors)
 				{

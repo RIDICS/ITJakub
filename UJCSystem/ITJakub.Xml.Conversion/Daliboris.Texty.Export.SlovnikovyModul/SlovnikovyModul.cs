@@ -9,6 +9,7 @@ using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
 using Daliboris.Pomucky.Xml;
+using Daliboris.Slovniky.Svoboda;
 
 namespace Daliboris.Texty.Export.SlovnikovyModul
 {
@@ -195,6 +196,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
                 case "jgslov":
                     slovnik = new JgSlov();
+                    break;
+
+                case "indexsvob":
+                    slovnik = new IndexSvob();
                     break;
 
                 case "pohl":

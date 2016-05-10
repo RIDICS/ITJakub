@@ -87,6 +87,10 @@
       <Project>{132f9406-f111-478f-9325-d312c401ebbb}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.StcS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Svoboda\Daliboris.Texty.Export.Slovniky.Svoboda.csproj">
+      <Project>{0adaee4e-3099-4037-b245-836851b8c096}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Svoboda</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
       <Project>{9339ED5B-312F-4AAF-9DF6-31B6C3169C48}</Project>
       <Name>Daliboris.Texty.Export.Transformace</Name>
