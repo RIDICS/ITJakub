@@ -1,17 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <NugetExecutable>V:\Nastroje\NuGet\NuGet.exe</NugetExecutable>
+    <NuspecFile>Objects.csproj</NuspecFile>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{188ED7AC-8EC1-4C32-97E6-270ED0E7F40A}</ProjectGuid>
+    <ProjectGuid>{516328EF-FA82-42AC-8A97-4A7CA20FFD74}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Daliboris.Slovniky</RootNamespace>
-    <AssemblyName>Daliboris.Slovniky.JgSlov</AssemblyName>
+    <RootNamespace>Ujc.Ovj.ChangeEngine.Objects</RootNamespace>
+    <AssemblyName>Ujc.Ovj.ChangeEngine.Objects</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
   </PropertyGroup>
@@ -34,59 +41,64 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
+    <OutputPath>bin\x64\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JgSlov.cs" />
+    <Compile Include="AppliedChange.cs" />
+    <Compile Include="Change.cs" />
+    <Compile Include="ChangeBase.cs" />
+    <Compile Include="ChangedToken.cs" />
+    <Compile Include="ChangedTokens.cs" />
+    <Compile Include="ChangedTokenSet.cs" />
+    <Compile Include="ChangeException.cs" />
+    <Compile Include="ChangeFormat.cs" />
+    <Compile Include="ChangeOptions.cs" />
+    <Compile Include="ChangeRuleSet.cs" />
+    <Compile Include="Changes.cs" />
+    <Compile Include="Expressions.cs" />
+    <Compile Include="FileManager.cs" />
+    <Compile Include="IApplicable.cs" />
+    <Compile Include="IChange.cs" />
+    <Compile Include="IChangeException.cs" />
+    <Compile Include="IExpression.cs" />
+    <Compile Include="IExpressionOccurrence.cs" />
+    <Compile Include="IOccurrence.cs" />
+    <Compile Include="ISpellchecking.cs" />
+    <Compile Include="Expression.cs" />
+    <Compile Include="Occurrences.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Occurrence.cs" />
+    <Compile Include="SetBase.cs" />
+    <Compile Include="Spellchecking.cs" />
+    <Compile Include="SpellcheckStatus.cs" />
+    <Compile Include="Token.cs" />
+    <Compile Include="TokenBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
-      <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
-      <Name>Daliboris.Pomucky.Xml</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
-      <Project>{56b8bc06-0be8-4045-94df-6844aa49e523}</Project>
-      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Transkriptor.Objekty\Daliboris.Transkripce.Objekty.csproj">
-      <Project>{2890bd2d-9511-4503-bb1a-01b7493eade0}</Project>
-      <Name>Daliboris.Transkripce.Objekty</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Daliboris.Transkriptor.Rozhrani\Daliboris.Transkriptor.Rozhrani.csproj">
-      <Project>{d68f920d-02e7-43d4-af48-c2bb70900b11}</Project>
-      <Name>Daliboris.Transkriptor.Rozhrani</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Ujc.Ovj.ChangeEngine.Objects\Ujc.Ovj.ChangeEngine.Objects.csproj">
-      <Project>{516328ef-fa82-42ac-8a97-4a7ca20ffd74}</Project>
-      <Name>Ujc.Ovj.ChangeEngine.Objects</Name>
-    </ProjectReference>
+    <None Include="ChangeEngineObjects.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -96,4 +108,8 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <Target Name="AfterBuild">
+    <Exec Command="&quot;$(NugetExecutable)&quot; pack $(NuspecFile)" />
+    <Exec Command="xcopy /Y *.nupkg V:\Nuget" />
+  </Target>
 </Project>

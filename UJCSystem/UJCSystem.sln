@@ -237,6 +237,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Rozsireni
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Statistiky.Frekvence", "ITJakub.Xml.Conversion\Daliboris.Statistiky.Frekvence\Daliboris.Statistiky.Frekvence.csproj", "{6749364D-0D5E-4897-89A5-B713E3338420}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.ChangeEngine.Objects", "ITJakub.Xml.Conversion\Ujc.Ovj.ChangeEngine.Objects\Ujc.Ovj.ChangeEngine.Objects.csproj", "{516328EF-FA82-42AC-8A97-4A7CA20FFD74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_StcSOCR|Any CPU = Debug_StcSOCR|Any CPU
@@ -3338,6 +3340,46 @@ Global
 		{6749364D-0D5E-4897-89A5-B713E3338420}.Release|x64.Build.0 = Release|Any CPU
 		{6749364D-0D5E-4897-89A5-B713E3338420}.Release|x86.ActiveCfg = Release|x86
 		{6749364D-0D5E-4897-89A5-B713E3338420}.Release|x86.Build.0 = Release|x86
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|Any CPU.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|Any CPU.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|ARM.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|ARM.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|Mixed Platforms.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|x64.ActiveCfg = Debug|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|x64.Build.0 = Debug|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|x86.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug_StcSOCR|x86.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|ARM.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|x64.ActiveCfg = Debug|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|x64.Build.0 = Debug|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Debug|x86.Build.0 = Debug|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|Any CPU.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|Any CPU.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|ARM.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|ARM.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|Mixed Platforms.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|x64.ActiveCfg = Release|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|x64.Build.0 = Release|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|x86.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.JenTest|x86.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|ARM.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|ARM.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|x64.ActiveCfg = Release|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|x64.Build.0 = Release|x64
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|x86.ActiveCfg = Release|Any CPU
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -3425,6 +3467,7 @@ Global
 		{0ADAEE4E-3099-4037-B245-836851B8C096} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}
 		{6B988B2D-BD47-4040-A41E-B9AB679B2571} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{6749364D-0D5E-4897-89A5-B713E3338420} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{516328EF-FA82-42AC-8A97-4A7CA20FFD74} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

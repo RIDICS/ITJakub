@@ -7,6 +7,7 @@ using System.Text;
 using System.Xml;
 using Daliboris.Transkripce;
 using Daliboris.Transkripce.Objekty;
+using Ujc.Ovj.ChangeEngine.Objects;
 
 namespace Daliboris.Slovniky
 {
@@ -32,7 +33,6 @@ namespace Daliboris.Slovniky
 	    /// <param name="changeRuleSetFile"></param>
 	    public void TestExtrahujHesla(string identifikatorDilu, string changeRuleSetFile)
         {
-            /*
             XmlWriterSettings xws = new XmlWriterSettings();
             xws.Indent = true;
             Dictionary<string, Guid> identifikatory = new Dictionary<string, Guid>(10000);
@@ -160,7 +160,6 @@ namespace Daliboris.Slovniky
                 xw.WriteEndElement(); //TEI
                 xw.WriteEndDocument();
             }
-            */
         }
 
         private string UppercaseFirst(string word)

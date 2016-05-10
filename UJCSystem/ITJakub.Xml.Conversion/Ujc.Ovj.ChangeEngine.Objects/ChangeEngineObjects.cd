@@ -1,0 +1,158 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.AppliedChange" BaseTypeListCollapsed="true">
+    <Position X="4.75" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAgAAIAAAAEAAAAIAAAAAAAAAAAiA=</HashCode>
+      <FileName>AppliedChange.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Expression">
+    <Position X="0.75" Y="13.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAEAAQAAiAAAAAAAIAAABAAEA=</HashCode>
+      <FileName>Expression.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Expressions">
+    <Position X="9.75" Y="2.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Expressions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.FileManager">
+    <Position X="5.25" Y="3.75" Width="5" />
+    <TypeIdentifier>
+      <HashCode>gAAIAAAAAAAAAAAAAACAQAAAAAAAAAAAAgAAAACAAAA=</HashCode>
+      <FileName>FileManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Change">
+    <Position X="5.75" Y="13" Width="6" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAgAAAAAgAAIIAAAAAAAAIEAAAAAAAAAAiA=</HashCode>
+      <FileName>Change.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.ChangeBase">
+    <Position X="1" Y="18.5" Width="6.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAACQABAAAAAAAAAAEAAAAACAAAAAAAAAAABAAGA=</HashCode>
+      <FileName>ChangeBase.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.ChangedToken">
+    <Position X="0.5" Y="7.75" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAgAAAAAAAAAAAAAABAAAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>ChangedToken.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.ChangedTokens">
+    <Position X="9.75" Y="10.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChangedTokens.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.ChangeException" BaseTypeListCollapsed="true">
+    <Position X="5.5" Y="10.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAQAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChangeException.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.ChangeOptions" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="10.5" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAgAAAAAAAAAAAAIAAAAAAAAAAAiA=</HashCode>
+      <FileName>ChangeOptions.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Changes">
+    <Position X="9.75" Y="8" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAABAAAAAAAAAAAAAAAAAAAAQAAAQAAAAAAAA=</HashCode>
+      <FileName>Changes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Spellchecking" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="3.75" Width="4.25" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Spellchecking.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.Token">
+    <Position X="6" Y="8" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Token.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ujc.Ovj.ChangeEngine.Objects.TokenBase">
+    <Position X="1" Y="5.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAAAAAAABAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>TokenBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Ujc.Ovj.ChangeEngine.Objects.IApplicable">
+    <Position X="1.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IApplicable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ujc.Ovj.ChangeEngine.Objects.IExpression">
+    <Position X="1.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IExpression.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ujc.Ovj.ChangeEngine.Objects.IChange">
+    <Position X="3.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAABAACA=</HashCode>
+      <FileName>IChange.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ujc.Ovj.ChangeEngine.Objects.IChangeException">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>IChangeException.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Ujc.Ovj.ChangeEngine.Objects.ISpellchecking">
+    <Position X="10" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ISpellchecking.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Ujc.Ovj.ChangeEngine.Objects.ChangeFormat">
+    <Position X="6" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ChangeFormat.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Ujc.Ovj.ChangeEngine.Objects.SpellcheckStatus">
+    <Position X="8.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAIAAIAAA=</HashCode>
+      <FileName>SpellcheckStatus.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -56,6 +56,12 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\Pohl-TEI-to-Html.xsl" />
+    <Content Include="Data\Xslt\PohlGramSlov1756_Hlavicka.xsl" />
+    <Content Include="Data\Xslt\PohlGramSlov1756_Notes.xsl" />
+    <Content Include="Data\Xslt\PohlGramSlov1756_Prevod-stylu.xsl" />
+    <Content Include="Data\Xslt\PohlGramSlov1783_Hlavicka.xsl" />
+    <Content Include="Data\Xslt\PohlGramSlov1783_Prevod-stylu.xsl" />
     <Content Include="Data\Xslt\Pohl_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -68,6 +74,11 @@
     <Content Include="Data\Xslt\GbSlov_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\Seskupit_obsah_shodnych_prvku.xsl" />
+    <Content Include="Data\Xslt\Seskupit_obsah_shodnych_prvku_cit.xsl" />
+    <Content Include="Data\Xslt\Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <Content Include="Data\Xslt\Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <Content Include="Data\Xslt\Seskupit_prvky_do_div_2.0_head2.xsl" />
     <Content Include="Data\Xslt\StcS_OldToTeiP5.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -79,6 +90,7 @@
   <ItemGroup>
     <Content Include="Data\Transformations\Dictionary.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Data\Transformations\Edition.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -542,6 +554,7 @@
     <Content Include="Data\Xslt\Upravit_obsah_prvku_cell.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\Upravit_obsah_prvku_unclear_2.0.xsl" />
     <Content Include="Data\Xslt\Upravit_transliteraci.xsl">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

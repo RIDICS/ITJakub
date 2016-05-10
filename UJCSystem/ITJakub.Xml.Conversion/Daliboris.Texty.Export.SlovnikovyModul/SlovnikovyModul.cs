@@ -202,7 +202,8 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                     slovnik = new IndexSvob();
                     break;
 
-                case "pohl":
+                case "pohlgramslov1756":
+                case "pohlgramslov1783":
 			        slovnik = null;
 
 			        break;
