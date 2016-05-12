@@ -23,6 +23,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
         const string ContinueAttributeName = "continue";
         const string TrueValue = "true";
 
+        const string TeiPrefix = "tei:";
         const string EdAttrubuteName = "ed";
         const string NAttributeName = "n";
         const string ChangeAttributeName = "change";
@@ -242,7 +243,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
                                     _currentSplitInfo = new PageBreakSplitInfo(_sourceDocumentInfo);
                                 }
 
-                                if (element.Name == PbElementName)
+                                if (element.Name == PbElementName || element.Name == TeiPrefix + PbElementName)
                                 {
                                     bool editionPagebreak = element.Attributes.AttributeExists(String.Empty, EdAttrubuteName);
                                     //TODO načíst do stacku první element pb, i když je z jiného stránkování

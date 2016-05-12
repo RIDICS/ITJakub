@@ -2,8 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
 	xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:xml="http://www.w3.org/XML/1998/namespace"
 	exclude-result-prefixes="xd tei" version="2.0">
-	<xsl:import href="Unknown_element.xsl" />
+	<xsl:import href="COMMON_Unknown_element.xsl" />
 	<xsl:import href="Vokab1550_Prevod-stylu.xsl"/>
 	<xsl:import href="Pagina.xsl"/>
 	<xd:doc scope="stylesheet">

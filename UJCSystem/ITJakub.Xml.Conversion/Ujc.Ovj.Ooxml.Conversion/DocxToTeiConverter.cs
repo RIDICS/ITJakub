@@ -701,10 +701,11 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			XNamespace tei = "http://www.tei-c.org/ns/1.0";
 			XDocument document = XDocument.Load(docxToXmlOutput);
 
-			XElement revisionElement = document.Element(tei + "TEI").Element(tei + "teiHeader").Element(tei + "revisionDesc");
-			if (revisionElement == null)
+            XElement teiHeader = document.Element(tei + "TEI").Element(tei + "teiHeader");
+			XElement revisionElement = teiHeader.Element(tei + "revisionDesc");
+
+            if (revisionElement == null)
 			{
-				XElement teiHeader = document.Element(tei + "TEI").Element(tei + "teiHeader");
 				revisionElement = new XElement(tei + "revisionDesc");
 				foreach (VersionInfoSkeleton version in previousVersions)
 				{
@@ -712,7 +713,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				}
 				teiHeader.Add(revisionElement);
 			}
-			document.Root.Add(new XAttribute("change", "#" + currentVersionInfoSkeleton.Id));
+		    var teiN = document.Root.Attribute("n");
+
+            if (teiN==null)
+            {
+                var fileDesc = teiHeader.Element(tei+ "fileDesc");
+                document.Root.Add(new XAttribute("n", fileDesc.Attribute("n").Value));
+            }
+
+            document.Root.Add(new XAttribute("change", "#" + currentVersionInfoSkeleton.Id));
 			document.Save(docxToXmlOutput);
 		}
 

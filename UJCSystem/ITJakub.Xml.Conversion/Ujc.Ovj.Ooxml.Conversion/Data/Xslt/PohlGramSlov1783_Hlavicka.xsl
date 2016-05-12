@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
     xmlns:tei="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xd tei" version="1.0">
+    exclude-result-prefixes="xd tei" version="2.0">
     
     <xd:doc scope="stylesheet">
         <xd:desc>
