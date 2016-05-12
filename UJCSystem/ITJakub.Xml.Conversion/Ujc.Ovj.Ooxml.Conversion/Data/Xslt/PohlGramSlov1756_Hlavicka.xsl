@@ -2,7 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
     xmlns:tei="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xd tei" version="2.0">
+    xmlns="http://www.tei-c.org/ns/1.0"
+    exclude-result-prefixes="xd" version="2.0">
+    
+    <xsl:include href="TEI_Common.xsl"/>
     
     <xd:doc scope="stylesheet">
         <xd:desc>
@@ -27,9 +30,9 @@
 </xsl:text>
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:call-template name="insert-header" />
-            <tei:text>
+            <text>
                 <xsl:copy-of select="tei:body"/>
-            </tei:text>
+            </text>
         </TEI>
     </xsl:template>
     
@@ -37,7 +40,7 @@
         <teiHeader xmlns="http://www.tei-c.org/ns/1.0" xml:id="PohlSlov1756" n="PohlSlov1756">
             <fileDesc n="{{1C7772C7-BDF5-4378-8992-42232980AF44}}">
                 <titleStmt>
-                    <title type="translit">Česko-německý slovnář oder Böhmisch-Deutsches Wörter-Buch</title>
+                    <title>Česko-německý slovnář oder Böhmisch-Deutsches Wörter-Buch</title>
                     <author>
                         <forename>Jan Václav</forename>
                         <surname>Pohl</surname>
@@ -94,6 +97,7 @@
                     </msDesc>
                 </sourceDesc>
             </fileDesc>
+            <xsl:call-template name="InsertEndocingDesc"/>
             <encodingDesc>
                 <projectDesc>
                     <p>Viz Knihopis č. 14094 (<ref target="http://db.knihopis.org/l.dll?cll~14351">http://db.knihopis.org/l.dll?cll~14351</ref>), Jungmannova <hi rend="italic">Historie literatury české</hi> V. 28.</p>
@@ -117,6 +121,9 @@
 -->
             </encodingDesc>
             <profileDesc>
+                <textClass>
+                    <catRef target="#taxonomy-dictionary-contemporary #output-dictionary"/>
+                </textClass>
                 <langUsage>
                     <language ident="cs" usage="80">čeština</language>
                     <language ident="de" usage="20">němčina</language>

@@ -2,7 +2,10 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
     xmlns:tei="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xd tei" version="2.0">
+    xmlns="http://www.tei-c.org/ns/1.0"
+    exclude-result-prefixes="xd" version="2.0">
+    
+    <xsl:include href="TEI_Common.xsl"/>
     
     <xd:doc scope="stylesheet">
         <xd:desc>
@@ -27,9 +30,9 @@
 </xsl:text>
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:call-template name="insert-header" />
-            <tei:text>
+            <text>
                 <xsl:copy-of select="tei:body"/>
-            </tei:text>
+            </text>
         </TEI>
     </xsl:template>
     
@@ -97,6 +100,7 @@
                     </msDesc>
                 </sourceDesc>
             </fileDesc>
+            <xsl:call-template name="InsertEndocingDesc"/>
             <encodingDesc>
                 <projectDesc>
                     <p>Viz Knihopis č. 14097 (<ref target="http://db.knihopis.org/l.dll?cll~14354">http://db.knihopis.org/l.dll?cll~14354</ref>), Jungmannova <hi rend="italic">Historie literatury české</hi> V. 28.</p>
@@ -119,6 +123,9 @@
 -->
             </encodingDesc>
             <profileDesc>
+                <textClass>
+                    <catRef target="#taxonomy-dictionary-contemporary #output-dictionary"/>
+                </textClass>
                 <langUsage>
                     <language ident="cs" usage="80">čeština</language>
                     <language ident="de" usage="20">němčina</language>

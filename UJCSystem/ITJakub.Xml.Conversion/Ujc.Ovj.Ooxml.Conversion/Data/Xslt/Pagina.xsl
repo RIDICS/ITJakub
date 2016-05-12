@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
-	xmlns:tei="http://www.tei-c.org/ns/1.0"
-	exclude-result-prefixes="xd tei" version="1.0">
+	xmlns="http://www.tei-c.org/ns/1.0"
+	exclude-result-prefixes="xd" version="1.0">
 	<xsl:template match="pagina | foliace">
 		<xsl:variable name="number" select="normalize-space(.)"/>
 		<xsl:variable name="column">
@@ -30,42 +30,42 @@
 			
 		</xsl:variable>
 		<xsl:if test="string-length(normalize-space(.)) &gt; 0">
-			<!--<tei:pb>
+			<!--<pb>
 				<xsl:attribute name="n">
 					<xsl:value-of select="normalize-space(translate(., '[]', ''))"/>
 				</xsl:attribute>
 				<xsl:if test="string-length(translate(., '[]', '')) &gt; string-length(normalize-space(translate(., '[]', '')))">
 					<xsl:attribute name="rend"><xsl:text>space</xsl:text></xsl:attribute>
 				</xsl:if>
-			</tei:pb>-->
+			</pb>-->
 			<xsl:choose>
 				<xsl:when test="$column = 'b'">
-					<tei:cb n="{$column}">
+					<cb n="{$column}">
 						<xsl:call-template name="rend-space"/>
-					</tei:cb>
+					</cb>
 				</xsl:when>
 				<xsl:otherwise>
-					<tei:pb>
+					<pb>
 						<xsl:attribute name="n">
 							<xsl:value-of select="$page"/>
 						</xsl:attribute>
 						<xsl:call-template name="rend-space"/>
-					</tei:pb>
+					</pb>
 					<xsl:if test="$column != ''">
-						<tei:cb n="{$column}">
+						<cb n="{$column}">
 							<xsl:call-template name="rend-space"/>
-						</tei:cb>
+						</cb>
 					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
-<!--			<tei:pb>
+<!--			<pb>
 				<xsl:attribute name="n">
 					<xsl:value-of select="$page"/>
 				</xsl:attribute>
 				<xsl:if test="string-length(translate(., '[]', '')) &gt; string-length(normalize-space(translate(., '[]', '')))">
 					<xsl:attribute name="rend"><xsl:text>space</xsl:text></xsl:attribute>
 				</xsl:if>
-			</tei:pb>-->
+			</pb>-->
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="rend-space">

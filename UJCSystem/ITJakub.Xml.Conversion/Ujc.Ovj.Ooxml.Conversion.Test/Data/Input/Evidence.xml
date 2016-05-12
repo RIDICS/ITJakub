@@ -82661,7 +82661,8 @@
  <Prepis>
   <Hlava>
    <Pamatka>
-    <Titul>Česko-německý slovnář</Titul>
+    <Autor>Jan Václav Pohl</Autor>
+    <Titul>Česko-německý slovnář 56</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -82696,7 +82697,8 @@
    <Editori />
   </Hlava>
   <Hlavicka>
-   <Titul>Česko-německý slovnář</Titul>
+   <Autor>Jan Václav Pohl</Autor>
+   <Titul>Česko-německý slovnář 56</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
    <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
@@ -82709,14 +82711,14 @@
   <Soubor>
    <Nazev>PohlGramSlov1756.docx</Nazev>
    <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
-   <FormatWordu>Doc</FormatWordu>
+   <FormatWordu>Docx</FormatWordu>
    <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
    <Velikost>583168</Velikost>
    <CisloRevize>0</CisloRevize>
    <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
-   <GUID>{A29E586C-BBEE-40DD-98DB-C0EF321CB048}</GUID>
+   <GUID>{1C7772C7-BDF5-4378-8992-42232980AF44}</GUID>
    <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
@@ -82731,13 +82733,14 @@
    <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
-  <Identifikator>395</Identifikator>
+  <Identifikator>396</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
  <Prepis>
   <Hlava>
    <Pamatka>
-    <Titul>Česko-německý slovnář</Titul>
+    <Autor>Jan Václav Pohl</Autor>
+    <Titul>Česko-německý slovnář 83</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -82772,7 +82775,8 @@
    <Editori />
   </Hlava>
   <Hlavicka>
-   <Titul>Česko-německý slovnář</Titul>
+   <Autor>Jan Václav Pohl</Autor>
+   <Titul>Česko-německý slovnář 83</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
    <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
@@ -82785,14 +82789,14 @@
   <Soubor>
    <Nazev>PohlGramSlov1783.docx</Nazev>
    <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
-   <FormatWordu>Doc</FormatWordu>
+   <FormatWordu>Docx</FormatWordu>
    <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
    <Velikost>583168</Velikost>
    <CisloRevize>0</CisloRevize>
    <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
   </Soubor>
   <Zpracovani>
-   <GUID>{6101D570-335F-4B2B-9D87-A6B3F35F3C9F}</GUID>
+   <GUID>{D6E8DFCD-7AFD-4035-A169-4D70002B83CD}</GUID>
    <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
@@ -82807,7 +82811,7 @@
    <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
-  <Identifikator>395</Identifikator>
+  <Identifikator>397</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
 </Prepisy>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
-	xmlns:tei="http://www.tei-c.org/ns/1.0"
-	exclude-result-prefixes="xd tei" version="2.0">
+	xmlns="http://www.tei-c.org/ns/1.0"
+	exclude-result-prefixes="xd" version="2.0">
 	<xsl:import href="PohlGramSlov1756_Prevod-stylu.xsl"/>
 	<xd:doc scope="stylesheet">
         <xd:desc>
@@ -34,17 +34,17 @@
         <xsl:comment> PohlSlov1783_Prevod-Stylu </xsl:comment>
 <xsl:text xml:space="preserve">
 </xsl:text>
-        	<tei:body>
+        	<body>
             	<xsl:apply-templates/>
-        	</tei:body>
+        	</body>
     </xsl:template>
 
 
 	<xsl:template match="Podnadpis/cestina"> 
-		<tei:choice>
+		<choice>
 			<xsl:apply-templates select="preceding-sibling::transkripce[1]" mode="transcription" />
-			<tei:orig xml:lang="cs-x-translit"><xsl:apply-templates /></tei:orig>
-		</tei:choice>
+			<orig xml:lang="cs-x-translit"><xsl:apply-templates /></orig>
+		</choice>
 	</xsl:template>
 	
 	<xsl:template match="Pismeno">
@@ -54,9 +54,9 @@
 	</xsl:template>
 	
 	<xsl:template match="Pismeno/nemcina">
-		<tei:foreign xml:lang="de">
+		<foreign xml:lang="de">
 			<xsl:apply-templates/>
-		</tei:foreign>
+		</foreign>
 	</xsl:template>
 	
 	<!-- delimitátor ekvivalentů (tabulátor) -->
@@ -80,7 +80,7 @@
 				
 			</xsl:when>
 			<xsl:otherwise>
-				<tei:label xml:lang="de"><xsl:apply-templates /></tei:label>				
+				<label xml:lang="de"><xsl:apply-templates /></label>				
 			</xsl:otherwise>
 		</xsl:choose>
 		
@@ -88,41 +88,41 @@
 	
 	<xsl:template match="metajazyk[. = '&#9;']" mode="transliteration" />
 	<xsl:template match="metajazyk" mode="transliteration">
-		<tei:seg><tei:label xml:lang="de"><xsl:apply-templates /></tei:label></tei:seg>
+		<seg><label xml:lang="de"><xsl:apply-templates /></label></seg>
 	</xsl:template>
 
 	<xsl:template match="cestina_vytceny_vyraz" />
 <!--	<xsl:template match="cestina_vytceny_vyraz">
-		<tei:orig xml:lang="cs-x-translit">
-		<tei:supplied>
+		<orig xml:lang="cs-x-translit">
+		<supplied>
 				<xsl:apply-templates />
-		</tei:supplied>
-		</tei:orig>
+		</supplied>
+		</orig>
 	</xsl:template>-->
 	
 	<xsl:template match="cestina_vytceny_vyraz" mode="transliteration">
-		<tei:orig xml:lang="cs-x-translit">
-			<tei:supplied><xsl:apply-templates /></tei:supplied>
-		</tei:orig>
+		<orig xml:lang="cs-x-translit">
+			<supplied><xsl:apply-templates /></supplied>
+		</orig>
 	</xsl:template>
 	
 	<xsl:template match="nemcina_vytceny_vyraz">
-		<tei:cit type="translation" xml:lang="de">
-			<tei:quote><tei:supplied><xsl:apply-templates /></tei:supplied></tei:quote>
-		</tei:cit>
+		<cit type="translation" xml:lang="de">
+			<quote><supplied><xsl:apply-templates /></supplied></quote>
+		</cit>
 	</xsl:template>
 	
 	<xsl:template match="doplneny_text_nemcina">
-		<tei:cit type="translation" xml:lang="de">
-			<tei:quote><tei:unclear><tei:supplied><xsl:apply-templates /></tei:supplied></tei:unclear></tei:quote>
-		</tei:cit>
+		<cit type="translation" xml:lang="de">
+			<quote><unclear><supplied><xsl:apply-templates /></supplied></unclear></quote>
+		</cit>
 	</xsl:template>
 	
 	<xsl:template match="Heslova_stat/transkripce">
-		<tei:form>
-			<tei:orth xml:lang="cs" >
-				<tei:choice>
-					<tei:reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></tei:reg>
+		<form>
+			<orth xml:lang="cs" >
+				<choice>
+					<reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></reg>
 					<xsl:choose>
 						<xsl:when test="count(following-sibling::nemcina[1]/preceding-sibling::node()) &lt; count(following-sibling::nemcina_vytceny_vyraz[1]/preceding-sibling::node())">
 							<xsl:apply-templates select="following-sibling::nemcina[1]/preceding-sibling::* except self::* except preceding-sibling::*" mode="transliteration" />
@@ -137,21 +137,21 @@
 							<xsl:apply-templates select="following-sibling::nemcina[1]/preceding-sibling::* except self::* except preceding-sibling::*" mode="transliteration" />
 						</xsl:otherwise>
 					</xsl:choose>
-				</tei:choice>
-			</tei:orth>
-		</tei:form>
+				</choice>
+			</orth>
+		</form>
 	</xsl:template>
 	
 	<xsl:template match="Heslova_stat/transkripce" mode="transliteration">
-		<tei:reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></tei:reg>
+		<reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></reg>
 	</xsl:template>
 	
 	<xsl:template match="Heslova_stat/transkripce[position() &gt; 1]" />
 	
 	<xsl:template match="doplneny_text" mode="transliteration">
-		<tei:orig xml:lang="cs-x-translit">
-			<tei:unclear><tei:supplied><xsl:apply-templates /></tei:supplied></tei:unclear>
-		</tei:orig>
+		<orig xml:lang="cs-x-translit">
+			<unclear><supplied><xsl:apply-templates /></supplied></unclear>
+		</orig>
 	</xsl:template>
 	
 	<xsl:template match="doplneny_text" />

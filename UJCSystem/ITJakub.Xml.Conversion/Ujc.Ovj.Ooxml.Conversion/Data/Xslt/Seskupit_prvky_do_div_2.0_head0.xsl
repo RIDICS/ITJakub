@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet exclude-result-prefixes="xs xd tei" version="2.0" 
+<xsl:stylesheet exclude-result-prefixes="xs xd" version="2.0" 
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns="http://www.tei-c.org/ns/1.0"
     >
     <xd:doc scope="stylesheet">
         <xd:desc>
@@ -32,7 +32,7 @@
         <xsl:apply-templates />
     </xsl:template>
     
-    <xsl:template match="tei:body">
+    <xsl:template match="body">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:for-each-group select="*" group-starting-with="head0">
@@ -42,14 +42,14 @@
     </xsl:template>
     
     <xsl:template match="head0" mode="group">
-        <tei:div>
+        <div>
             <!--<head><xsl:value-of select="." /></head>-->
-            <tei:head><xsl:apply-templates /></tei:head>
+            <head><xsl:apply-templates /></head>
             <xsl:copy-of select="current-group() except ."></xsl:copy-of>
-        </tei:div>
+        </div>
     </xsl:template>
     
-    <xsl:template match="tei:p | tei:entryFree | tei:item | tei:div | tei:titlePage  | tei:note | tei:ref" mode="group">
+    <xsl:template match="p | entryFree | item | div | titlePage  | note | ref" mode="group">
         <xsl:copy-of select="current-group()" />
     </xsl:template>
  
