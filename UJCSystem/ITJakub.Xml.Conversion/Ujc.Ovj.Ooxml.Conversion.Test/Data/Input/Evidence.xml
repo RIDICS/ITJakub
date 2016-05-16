@@ -82814,4 +82814,394 @@
   <Identifikator>397</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Josef Jungmann</Autor>
+    <Titul>Slovník česko-německý A-J</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Josef Jungmann</Autor>
+   <Titul>Slovník česko-německý A-J</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>JgSlov01.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{7AC74E21-53E9-4E4D-A7CC-CA739A962E58}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>398</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Josef Jungmann</Autor>
+    <Titul>Slovník česko-německý K-O</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Josef Jungmann</Autor>
+   <Titul>Slovník česko-německý K-O</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>JgSlov02.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{44BA5794-DF0F-4A30-A1C6-47CE2E83055C}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>399</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Josef Jungmann</Autor>
+    <Titul>Slovník česko-německý P-R</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Josef Jungmann</Autor>
+   <Titul>Slovník česko-německý P-R</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>JgSlov03.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{DF2376C7-46E8-48A6-A63C-EF9ABF8C71CA}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>400</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Josef Jungmann</Autor>
+    <Titul>Slovník česko-německý S-U</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Josef Jungmann</Autor>
+   <Titul>Slovník česko-německý S-U</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>JgSlov04.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{F01FA035-099D-4A53-A48A-878D76A1324A}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>401</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Josef Jungmann</Autor>
+    <Titul>Slovník česko-německý V-Z</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Josef Jungmann</Autor>
+   <Titul>Slovník česko-německý V-Z</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>JgSlov05.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{DB921B03-F9F3-4898-9C94-225DCC2AD5E7}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>402</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
 </Prepisy>
