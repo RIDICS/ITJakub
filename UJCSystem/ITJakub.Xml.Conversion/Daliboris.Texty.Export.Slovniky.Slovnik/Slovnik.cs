@@ -87,13 +87,18 @@ namespace Daliboris.Slovniky
 			return sVychozi;
 		}
 
-		#region Základní funkce pro úpravu exportovaného textu slovníku z Wordu
-		
-		/// <summary>
-		/// Ohraničí heslové stati náležející k jednomu písmenu značkou &lt;div1&gt;.
-		/// Původní element <remarks>milestone</remarks> přemění na element <remarks>div1</remarks>.
-		/// </summary>
-		public virtual void SeskupitHeslaPismene(string inputFile, string outputFile)
+        #region Základní funkce pro úpravu exportovaného textu slovníku z Wordu
+        
+	    public virtual void SeskupitHeslaPismene(string inputFile, string outputFile, string filenameWithoutExtension)
+	    {
+	        SeskupitHeslaPismene(inputFile, outputFile);
+	    }
+
+        /// <summary>
+        /// Ohraničí heslové stati náležející k jednomu písmenu značkou &lt;div1&gt;.
+        /// Původní element <remarks>milestone</remarks> přemění na element <remarks>div1</remarks>.
+        /// </summary>
+        public virtual void SeskupitHeslaPismene(string inputFile, string outputFile)
 		{
 			Dictionary<string, string> gdcPismena = Heslar.IDPismenAbecedy();
 
@@ -176,22 +181,36 @@ namespace Daliboris.Slovniky
 
 		}
 
-		public abstract void UpravitHraniceHesloveStati(string inputFile, string outputFile);
+        public virtual void UpravitHraniceHesloveStati(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            UpravitHraniceHesloveStati(inputFile, outputFile);
+        }
 
+        public abstract void UpravitHraniceHesloveStati(string inputFile, string outputFile);
 
-		//jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
-		public abstract void KonsolidovatHeslovouStat(string inputFile, string outputFile);
-		#endregion
+        public virtual void KonsolidovatHeslovouStat(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            KonsolidovatHeslovouStat(inputFile, outputFile);
+        }
 
-		/// <summary>
-		/// Zpracuje odkazy &lt;xref&gt;, aby byly co nejjednoznačněji určitelné.
-		/// <remarks>Pokud odkaz ve značce &lt;xref&gt; neobsahuje jednoznačnou identifikaci odkazu pomocí source a target,
-		/// extrahuje informace o heslovém slově (oddělí čísla homonym, morfologii, hvězdičku na začátku ap.)
-		/// a vytvoří odkaz na samotné heslové slovo.
-		/// Na základě předcházející informace o zdroji se pokus odkázat na heslo v konkrétním zdroji.
-		/// </remarks>
-		/// </summary>
-		public virtual void UpravitOdkazy(string inputFile, string outputFile)
+        //jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
+        public abstract void KonsolidovatHeslovouStat(string inputFile, string outputFile);
+        #endregion
+
+        public virtual void UpravitOdkazy(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            UpravitOdkazy(inputFile, outputFile);
+        }
+
+        /// <summary>
+        /// Zpracuje odkazy &lt;xref&gt;, aby byly co nejjednoznačněji určitelné.
+        /// <remarks>Pokud odkaz ve značce &lt;xref&gt; neobsahuje jednoznačnou identifikaci odkazu pomocí source a target,
+        /// extrahuje informace o heslovém slově (oddělí čísla homonym, morfologii, hvězdičku na začátku ap.)
+        /// a vytvoří odkaz na samotné heslové slovo.
+        /// Na základě předcházející informace o zdroji se pokus odkázat na heslo v konkrétním zdroji.
+        /// </remarks>
+        /// </summary>
+        public virtual void UpravitOdkazy(string inputFile, string outputFile)
 		{
 			string strPredchoziZdroj = null;
 

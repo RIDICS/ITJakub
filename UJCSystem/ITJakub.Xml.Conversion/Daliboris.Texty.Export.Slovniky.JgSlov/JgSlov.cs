@@ -11,27 +11,24 @@ using Ujc.Ovj.ChangeEngine.Objects;
 
 namespace Daliboris.Slovniky
 {
-    public class JgSlov : Slovnik
+    public class JgSlov : MockDictionary
     {
+        readonly string m_changeRuleSetFile= Path.Combine(Environment.CurrentDirectory, @"Xmr\", "JgSlov_pravidla_v4.xmr");
 
         public JgSlov() { }
 
-        public JgSlov(string vstupniSoubor)
+        public override void SeskupitHeslaPismene(string inputFile, string outputFile, string filenameWithoutExtension)
         {
-            base.VstupniSoubor = vstupniSoubor;
-        }
-        public JgSlov(string vstupniSoubor, string vystupniSoubor)
-        {
-            base.VstupniSoubor = vstupniSoubor;
-            base.VystupniSoubor = vystupniSoubor;
+            TestExtrahujHesla(inputFile, outputFile, filenameWithoutExtension, m_changeRuleSetFile);
+            //File.Copy(inputFile, outputFile);
         }
 
-	    /// <summary>
-	    /// Extrahuje hesla a podheslí z 
-	    /// </summary>
-	    /// <param name="identifikatorDilu"> </param>
-	    /// <param name="changeRuleSetFile"></param>
-	    public void TestExtrahujHesla(string identifikatorDilu, string changeRuleSetFile)
+        /// <summary>
+        /// Extrahuje hesla a podheslí z 
+        /// </summary>
+        /// <param name="identifikatorDilu"> </param>
+        /// <param name="changeRuleSetFile"></param>
+        public void TestExtrahujHesla(string inputFile, string outputFile, string identifikatorDilu, string changeRuleSetFile)
         {
             XmlWriterSettings xws = new XmlWriterSettings();
             xws.Indent = true;
@@ -43,7 +40,7 @@ namespace Daliboris.Slovniky
 
 		    ChangeRuleSet changeRuleSet = ChangeRuleSet.Load(changeRuleSetFile);
 
-            using (XmlWriter xw = XmlWriter.Create(VystupniSoubor, xws))
+            using (XmlWriter xw = XmlWriter.Create(outputFile, xws))
             {
                 xw.WriteStartDocument();
                 xw.WriteStartElement("TEI", "http://www.tei-c.org/ns/1.0");
@@ -56,7 +53,7 @@ namespace Daliboris.Slovniky
                 xw.WriteStartElement("facsimile");
                 xw.WriteAttributeString("n", identifikatorDilu);
 
-                using (XmlReader xr = XmlReader.Create(VstupniSoubor))
+                using (XmlReader xr = XmlReader.Create(inputFile))
                 {
                     string pagina = "0";
                     string pismeno = "M";
@@ -389,7 +386,7 @@ namespace Daliboris.Slovniky
         /// <summary>
         /// Uloží termíny do samostatného souboru, odstraní prázdné xmlns, pouze s jedinečnými identifikátory
         /// </summary>
-        public void TestExtrahujTerminy()
+        public void TestExtrahujTerminy(string inputFile, string outputFile)
         {
             XmlWriterSettings xws = new XmlWriterSettings();
             XmlNamespaceManager namespaceManager = new XmlNamespaceManager(new NameTable());
@@ -398,12 +395,12 @@ namespace Daliboris.Slovniky
             xws.Indent = true;
             Dictionary<string, string> identifikatory = new Dictionary<string, string>(10000);
             List<string> heslaPaginy = null;
-            using (XmlWriter xw = XmlWriter.Create(VystupniSoubor, xws))
+            using (XmlWriter xw = XmlWriter.Create(outputFile, xws))
             {
                 xw.WriteStartDocument();
                 xw.WriteStartElement("terms");
 
-                using (XmlReader xr = XmlReader.Create(VstupniSoubor))
+                using (XmlReader xr = XmlReader.Create(inputFile))
                 {
                     xr.MoveToContent();
                 Dalsi:
@@ -448,17 +445,7 @@ namespace Daliboris.Slovniky
             //return slozka + cislo;
             return cislo;
         }
-
-        public override void UpravitHraniceHesloveStati(string inputFile, string outputFile)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void KonsolidovatHeslovouStat(string inputFile, string outputFile)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /*
         private static Transformator NactiNovaPravidla(string sSoubor)
         {

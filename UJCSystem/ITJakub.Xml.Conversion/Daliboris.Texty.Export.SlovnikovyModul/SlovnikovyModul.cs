@@ -71,15 +71,22 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 		    try
 			{
 				var step = 0;
-                    
-				var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-				var parameters = new NameValueCollection();
-				ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
 
-				vystupniSoubor = step00File;
+			    vystupniSoubor = inputFilePath;
+
+			    NameValueCollection parameters;
+
+			    if (xsltSteps.Count > 0)
+			    {
+			        var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+			        parameters = new NameValueCollection();
+			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+
+                    vystupniSoubor = step00File;
+                }
 
 				var slovnik = GetDictionaryObject(fileName);
-				var fileTransformationSource= step00File;
+				var fileTransformationSource= vystupniSoubor;
                 
                 if (slovnik != null)
 				{
@@ -88,15 +95,15 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 				    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 				    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 
-				    slovnik.SeskupitHeslaPismene(step00File, step01File);
-				    slovnik.UpravitHraniceHesloveStati(step01File, step02File);
-				    slovnik.KonsolidovatHeslovouStat(step02File, step03File);
-				    slovnik.UpravitOdkazy(step03File, step04File);
+				    slovnik.SeskupitHeslaPismene(vystupniSoubor, step01File, souborBezPripony);
+				    slovnik.UpravitHraniceHesloveStati(step01File, step02File, souborBezPripony);
+				    slovnik.KonsolidovatHeslovouStat(step02File, step03File, souborBezPripony);
+				    slovnik.UpravitOdkazy(step03File, step04File, souborBezPripony);
 
                     fileTransformationSource = step04File;
                 }
 
-				parameters = new NameValueCollection();
+                parameters = new NameValueCollection();
 				while (xsltSteps.Count > 0)
 				{
                     var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
