@@ -46,6 +46,7 @@
     <step file="PohlGramSlov1756_Notes.xsl" />
     <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
     <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
     <step file="PohlGramSlov1756_Hlavicka.xsl" />
   </transformation>
 
@@ -58,6 +59,7 @@
     <step file="Seskupit_obsah_shodnych_prvku.xsl" />
     <step file="Seskupit_obsah_shodnych_prvku_cit.xsl" />
     <step file="Upravit_obsah_prvku_unclear_2.0.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
     <step file="PohlGramSlov1783_Hlavicka.xsl" />
   </transformation>
 	

@@ -34,6 +34,8 @@
     
     <xsl:template match="tei:body/tei:div/tei:div">
         <xsl:copy>
+            <xsl:copy-of select="@*" />
+            
             <xsl:for-each-group select="*" group-starting-with="head2">
                 <xsl:apply-templates select="." mode="group" />
             </xsl:for-each-group>
@@ -48,11 +50,15 @@
         </xsl:copy>
     </xsl:template>-->
     
-    <xsl:template match="head2" mode="group">
-        <tei:div>
-            <tei:head><xsl:apply-templates /></tei:head>
+    <xsl:template match="tei:head2" mode="group">
+        <xsl:element name="div" xmlns="http://www.tei-c.org/ns/1.0">
+            <xsl:attribute name="xml:id">
+                <xsl:value-of select="concat(parent::tei:div[1]/@xml:id,'.div-', position())"/>
+            </xsl:attribute>
+            
+            <head><xsl:apply-templates /></head>
             <xsl:copy-of select="current-group() except ."></xsl:copy-of>
-        </tei:div>
+        </xsl:element>
     </xsl:template>
     
 <!--    <xsl:template match="head0" mode="group">

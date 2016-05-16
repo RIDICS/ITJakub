@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet 
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
+	xmlns:tei="http://www.tei-c.org/ns/1.0"
 	xmlns="http://www.tei-c.org/ns/1.0"
-	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
-	xmlns:xml="http://www.w3.org/XML/1998/namespace"
-	exclude-result-prefixes="xd" version="2.0">
-	
+	exclude-result-prefixes="xd tei" version="2.0">
 	<xsl:import href="COMMON_Unknown_element.xsl" />
 	<xsl:import href="Vokab1550_Prevod-stylu.xsl"/>
 	<xsl:import href="Pagina.xsl"/>
@@ -55,9 +53,12 @@
     </xsl:template>-->
 
     <xsl:template match="Heslova_stat">
-    	<entryFree>
-            <xsl:apply-templates/>
-        </entryFree>
+    	<xsl:element name="entryFree">
+    		<xsl:attribute name="xml:id">
+    			<xsl:value-of select="concat('en', substring(string(1000001 + count(preceding-sibling::Heslova_stat)), 2))"/>
+    		</xsl:attribute>
+    		<xsl:apply-templates/>
+    	</xsl:element>
     </xsl:template>
 
 
@@ -65,16 +66,19 @@
 		<xsl:variable name="ekvivalent-position">
 			<xsl:value-of select="count(following-sibling::nemcina[1]/preceding-sibling::node())"/>
 		</xsl:variable>
-		<form>
+		<xsl:element name="form">
+			<xsl:attribute name="xml:id">
+				<xsl:value-of select="concat('en', substring(string(1000001 + count(parent::*/preceding-sibling::Heslova_stat)), 2), '.hw1')"/>
+			</xsl:attribute>
 			<orth xml:lang="cs" >
 				<choice>
-				<reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></reg>
-				<!--<xsl:apply-templates select="following-sibling::*[following-sibling::nemcina]" mode="transliteration" />-->
-<!--					<xsl:apply-templates select="following-sibling::node()[position() &lt; $ekvivalent-position]" mode="transliteration" />-->
+					<reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></reg>
+					<!--<xsl:apply-templates select="following-sibling::*[following-sibling::nemcina]" mode="transliteration" />-->
+					<!--					<xsl:apply-templates select="following-sibling::node()[position() &lt; $ekvivalent-position]" mode="transliteration" />-->
 					<xsl:apply-templates select="following-sibling::nemcina[1]/preceding-sibling::* except self::* except preceding-sibling::*" mode="transliteration" />
 				</choice>
 			</orth>
-		</form>
+		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="cestina" mode="transliteration">
@@ -137,8 +141,8 @@
 	<xsl:template match="poznamka_pod_carou" />
 	
 	<xsl:template match="footnote_text/cestina">
-<!--			<xsl:element name="tei:cit" namespace="http://www.tei-c.org/ns/1.0">-->
-				<xsl:element name="tei:sic" namespace="http://www.tei-c.org/ns/1.0">
+<!--			<xsl:element name="cit" namespace="http://www.tei-c.org/ns/1.0">-->
+				<xsl:element name="sic" namespace="http://www.tei-c.org/ns/1.0">
 					<xsl:attribute name="xml:lang">
 						<xsl:text>cs-x-translit</xsl:text>
 					</xsl:attribute>
@@ -148,8 +152,8 @@
 	</xsl:template>
 	
 	<xsl:template match="footnote_text/nemcina">
-		<!--			<xsl:element name="tei:cit" namespace="http://www.tei-c.org/ns/1.0">-->
-		<xsl:element name="tei:sic" namespace="http://www.tei-c.org/ns/1.0">
+		<!--			<xsl:element name="cit" namespace="http://www.tei-c.org/ns/1.0">-->
+		<xsl:element name="sic" namespace="http://www.tei-c.org/ns/1.0">
 			<xsl:attribute name="xml:lang">
 				<xsl:text>de</xsl:text>
 			</xsl:attribute>

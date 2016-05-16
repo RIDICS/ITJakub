@@ -2,8 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
-    xmlns="http://www.tei-c.org/ns/1.0"
-    exclude-result-prefixes="xs xd"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    exclude-result-prefixes="xs xd tei"
     version="1.0">
     <xsl:import href="Kopirovani_prvku.xsl"/>
     
@@ -20,28 +20,28 @@
         <xsl:apply-templates />
     </xsl:template>
     
-    <xsl:template match="orig[following-sibling::*[1]/self::note]">
+    <xsl:template match="tei:orig[following-sibling::*[1]/self::tei:note]">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates />
-            <xsl:copy-of select="following-sibling::note"/>
+            <xsl:copy-of select="following-sibling::tei:note"/>
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match="quote[following::*[1]/self::note]">
+    <xsl:template match="tei:quote[following::*[1]/self::tei:note]">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
             <xsl:apply-templates />
-            <xsl:copy-of select="following::*[1]/self::note"/>
+            <xsl:copy-of select="following::*[1]/self::tei:note"/>
         </xsl:copy>
     </xsl:template>
     
 
-    <xsl:template match="note[not(preceding-sibling::*[1]/self::pb)]" />
+    <xsl:template match="tei:note[not(preceding-sibling::*[1]/self::tei:pb)]" />
         
     
     
     
-<!--    <xsl:template match="note[preceding-sibling::*[1]/self::form]" />-->
+<!--    <xsl:template match="tei:note[preceding-sibling::*[1]/self::tei:form]" />-->
     
 </xsl:stylesheet>

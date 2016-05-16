@@ -23,39 +23,28 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 		}
 
 		#region Vlastnosti
-
-		/// <summary>
-		/// Soubor XML, pro nějž se má vytvořit obsah
-		/// </summary>
-		public string XmlFile { get; set; }
-
+        
 		/// <summary>
 		/// Složka, do níž se uloží jednotlivé části rozděleného souboru
 		/// </summary>
 		public string OutputDirectory { get; set; }
-
-		/// <summary>
-		/// Počáteční element, od něhož začne rozdělování souboru na menší části
-		/// </summary>
-		public string StartingElement { get; set; }
-
+        
 		#endregion
 
 		#region Metody
 
-		public TableOfContentResult MakeTableOfContent()
+		public TableOfContentResult MakeTableOfContent(string XmlFile, string StartingElement)
 		{
-
 			TableOfContentResult result = new TableOfContentResult();
 
-			result.HeadwordsList = GetHeadwordsListItems();
-			result.Sections = GetTableOfContentItems();
+			result.HeadwordsList = GetHeadwordsListItems(XmlFile, StartingElement);
+			result.Sections = GetTableOfContentItems(XmlFile, StartingElement);
 			return result;
 
 		#endregion
 		}
 
-		private List<TableOfContentItem> GetTableOfContentItems()
+		private List<TableOfContentItem> GetTableOfContentItems(string XmlFile, string StartingElement)
 		{
 			List<TableOfContentItem> tocItems = new List<TableOfContentItem>();
 			using (XmlReader reader = XmlReader.Create(XmlFile))
@@ -153,7 +142,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 			return tocItems;
 		}
 
-		protected List<HeadwordsListItem> GetHeadwordsListItems()
+		protected List<HeadwordsListItem> GetHeadwordsListItems(string XmlFile, string StartingElement)
 		{
 			List<HeadwordsListItem> headwords = new List<HeadwordsListItem>();
 			bool isFormUsed = false;
@@ -185,6 +174,7 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 							}
 						if (!splittingStarted)
 							continue;
+
 						switch (elementName)
 						{
 							case "pb":
@@ -251,10 +241,9 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 										}
 									}
 								}
-								if (elementName == "form")
-									currentHwItem = currentHwItem;
-								else
+								if (elementName != "form")
 									currentHwItem = tocItem;
+
 								break;
 						}
 					}

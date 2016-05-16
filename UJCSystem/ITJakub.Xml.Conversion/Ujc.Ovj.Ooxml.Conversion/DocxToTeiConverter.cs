@@ -221,9 +221,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			TableOfContentResult tocResult = null;
 			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
-			tocBuilder.XmlFile = xmlFinalOutputPath;
-			tocBuilder.StartingElement = "body";
-			tocResult = tocBuilder.MakeTableOfContent();
+			tocResult = tocBuilder.MakeTableOfContent(xmlFinalOutputPath, "body");
 
 			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, 
                 xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
@@ -369,7 +367,12 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		{
 			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
 
-			var items = from item in result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null)
+			var items = from item in result.Descendants(nsTei + "item").Where(
+			    item =>
+			    {
+			        return item.Element(nsTei + "list") == null;
+			    }
+                )
 									select new
 									{
 										EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
@@ -698,8 +701,12 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		private void WriteListChange(string docxToXmlOutput, IEnumerable<VersionInfoSkeleton> previousVersions, VersionInfoSkeleton currentVersionInfoSkeleton)
 		{
-			XNamespace tei = "http://www.tei-c.org/ns/1.0";
-			XDocument document = XDocument.Load(docxToXmlOutput);
+		    XNamespace tei = XNamespace.Get("http://www.tei-c.org/ns/1.0");
+            //"http://www.tei-c.org/ns/1.0";
+
+            XDocument document = XDocument.Load(docxToXmlOutput);
+
+            //document.Root.Attribute("xmlns:tei")
 
             XElement teiHeader = document.Element(tei + "TEI").Element(tei + "teiHeader");
 			XElement revisionElement = teiHeader.Element(tei + "revisionDesc");

@@ -43,7 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IUpravy.cs" />
+    <Compile Include="PohlGramDictionary.cs" />
     <Compile Include="Slovnik.cs" />
+    <Compile Include="MockDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Zkratka.cs" />
   </ItemGroup>
