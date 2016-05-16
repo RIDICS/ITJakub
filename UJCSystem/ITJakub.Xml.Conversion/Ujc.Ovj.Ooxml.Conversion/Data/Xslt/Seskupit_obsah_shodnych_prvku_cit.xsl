@@ -14,6 +14,8 @@
         </xd:desc>
     </xd:doc>
     
+    <xsl:output indent="yes" />
+    
     <xsl:template match="/">
         <xsl:text xml:space="preserve">
 </xsl:text>

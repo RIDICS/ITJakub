@@ -29,17 +29,17 @@
 </xsl:text>
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:call-template name="insert-header" />
-            <text>
+            <text xmlns="http://www.tei-c.org/ns/1.0">
                 <xsl:copy-of select="tei:body"/>
             </text>
         </TEI>
     </xsl:template>
     
     <xsl:template name="insert-header">
-        <teiHeader xmlns="http://www.tei-c.org/ns/1.0" xml:id="PohlSlov1756" n="PohlSlov1756">
+        <teiHeader xmlns="http://www.tei-c.org/ns/1.0" xml:id="PohlSlov1783" n="PohlSlov1783">
             <fileDesc n="{{D6E8DFCD-7AFD-4035-A169-4D70002B83CD}}">
                 <titleStmt>
-                    <title type="translit">Slovnik řeči česke</title>
+                    <title>Slovnik řeči česke</title>
                     <author>
                         <forename>Jan Václav</forename>
                         <surname>Pohl</surname>

@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
 	xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns="http://www.tei-c.org/ns/1.0"
 	exclude-result-prefixes="xd tei" version="2.0">
 	<xsl:import href="PohlGramSlov1756_Prevod-stylu.xsl"/>
 	<xd:doc scope="stylesheet">
@@ -118,7 +119,7 @@
 		</cit>
 	</xsl:template>
 	
-	<xsl:template match="Heslova_stat/transkripce">
+	<xsl:template match="Heslova_stat/transkripce" priority="5">
 		<xsl:element name="form">
 			<xsl:attribute name="xml:id">
 				<xsl:value-of select="concat('en', substring(string(1000001 + count(parent::*/preceding-sibling::Heslova_stat)), 2), '.hw1')"/>
@@ -149,7 +150,7 @@
 		<reg xml:lang="cs-x-transcr"><xsl:apply-templates select="text()" /></reg>
 	</xsl:template>
 	
-	<xsl:template match="Heslova_stat/transkripce[position() &gt; 1]" />
+	<xsl:template match="Heslova_stat/transkripce[position() &gt; 1]" priority="10" />
 	
 	<xsl:template match="doplneny_text" mode="transliteration">
 		<orig xml:lang="cs-x-translit">

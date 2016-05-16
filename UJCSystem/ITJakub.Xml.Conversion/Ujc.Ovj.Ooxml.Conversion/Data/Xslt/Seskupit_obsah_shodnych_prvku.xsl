@@ -14,6 +14,8 @@
         </xd:desc>
     </xd:doc>
     
+    <xsl:output indent="yes" />
+    
     <xsl:template match="/">
         <xsl:text xml:space="preserve">
 </xsl:text>
@@ -45,8 +47,8 @@
     
     <xsl:template match="tei:entryFree">
         <xsl:copy>
-            <xsl:for-each-group select="*"
-                group-adjacent="if (self::tei:cit) then 0 else position()">
+            <xsl:copy-of select="@*" />
+            <xsl:for-each-group select="*" group-adjacent="if (self::tei:cit) then 0 else position()">
                 <xsl:apply-templates select="."/>
             </xsl:for-each-group>
         </xsl:copy>
