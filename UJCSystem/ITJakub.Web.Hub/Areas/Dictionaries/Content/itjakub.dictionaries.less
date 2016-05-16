@@ -344,6 +344,15 @@ a.dictionary-result-headword-book {
     font-family: 'Times New Roman', Times, serif;
     text-align: justify;
     font-size: 120%;
+
+    span[lang="cs"] {
+        &:after {
+            content: " ";
+        }
+    }
+    span[lang="de"] {
+        font-style: italic;
+    }
 }
 
 .bo {
