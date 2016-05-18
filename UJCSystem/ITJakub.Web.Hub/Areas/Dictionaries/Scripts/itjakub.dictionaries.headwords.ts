@@ -31,8 +31,10 @@
         if (state.IsOnlyRootSelected)
             state.SelectedCategories = [];
 
-        dictionaryViewerWrapper.loadHeadwordList(state);
-        updateSearchBox(state);
+        dictionaryViewerWrapper.callAfterFavouriteHeadwordsInit(() => {
+            dictionaryViewerWrapper.loadHeadwordList(state);
+            updateSearchBox(state);
+        });
     };
 
     var dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, callbackDelegate);
@@ -73,8 +75,10 @@
             }
         });
     });
-    
-    dictionaryViewerWrapper.loadDefault(selectedCategoryIds, selectedBookIds, defaultPageNumber);
+
+    dictionaryViewerWrapper.callAfterFavouriteHeadwordsInit(() => {
+        dictionaryViewerWrapper.loadDefault(selectedCategoryIds, selectedBookIds, defaultPageNumber);
+    });
 };
 
 class DictionaryViewerListWrapper {
@@ -98,6 +102,10 @@ class DictionaryViewerListWrapper {
 
         this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
         this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
+    }
+
+    callAfterFavouriteHeadwordsInit(callback: () => any) {
+        this.favoriteHeadwords.callAfterInit(callback);
     }
 
     private goToPageWithHeadword(bookId: string, entryXmlId: string) {
