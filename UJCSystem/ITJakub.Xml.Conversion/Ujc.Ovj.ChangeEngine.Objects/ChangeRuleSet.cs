@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Xml.Serialization;
 
 namespace Ujc.Ovj.ChangeEngine.Objects
@@ -123,6 +124,12 @@ namespace Ujc.Ovj.ChangeEngine.Objects
 		}
 
 		public static ChangeRuleSet Load(string file)
+		{
+			FileManager manager = new FileManager();
+			return manager.LoadChangeRuleSet(file);
+		}
+
+        public static ChangeRuleSet Load(Stream file)
 		{
 			FileManager manager = new FileManager();
 			return manager.LoadChangeRuleSet(file);

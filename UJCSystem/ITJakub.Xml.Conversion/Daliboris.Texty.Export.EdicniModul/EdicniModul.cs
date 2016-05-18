@@ -92,7 +92,6 @@ namespace Daliboris.Texty.Export
 				}
 
 				//prp.Zpracovani.ZaevidujExport(ZpusobVyuziti.EdicniModul, DateTime.Now);
-			
 		}
 
 		public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)

@@ -208,25 +208,32 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			_result.MetadataFilePath = settings.OutputMetadataFilePath;
                 //GetConversionMetadataFileFullPath(settings.OutputFilePath);
 
-			SplittingResult splittingResult = null;
-		    if (settings.SplitDocumentByPageBreaks)
-			{
-				splittingResult = SplitDocumentByPageBreaks(xmlFinalOutputPath, fileNameWithoutExtension);
-				if (!splittingResult.IsSplitted)
-				{
-					_result.IsConverted = false;
-					_result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
-				}
-			}
+            if (export.UsePersonalizedXmdGenerator)
+            {
+                export.GenerateConversionMetadataFile(documentType, xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+            }
+            else
+            {
+                SplittingResult splittingResult = null;
+                if (settings.SplitDocumentByPageBreaks)
+                {
+                    splittingResult = SplitDocumentByPageBreaks(xmlFinalOutputPath, fileNameWithoutExtension);
+                    if (!splittingResult.IsSplitted)
+                    {
+                        _result.IsConverted = false;
+                        _result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
+                    }
+                }
 
-			TableOfContentResult tocResult = null;
-			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
-			tocResult = tocBuilder.MakeTableOfContent(xmlFinalOutputPath, "body");
+                TableOfContentResult tocResult = null;
+                ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
+                tocResult = tocBuilder.MakeTableOfContent(xmlFinalOutputPath, "body");
 
-			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, 
-                xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+                GenerateConversionMetadataFile(splittingResult, tocResult, documentType,
+                    xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+            }
 
-			if (!settings.Debug)
+            if (!settings.Debug)
 			{
 				try
 				{

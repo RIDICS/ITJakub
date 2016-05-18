@@ -37,6 +37,11 @@ namespace Ujc.Ovj.ChangeEngine.Objects
             return DeserializeObjectFromXml<ChangeRuleSet>(filePath) as ChangeRuleSet;
         }
 
+        public ChangeRuleSet LoadChangeRuleSet(Stream fileStream)
+        {
+            return DeserializeObjectFromXml<ChangeRuleSet>(fileStream) as ChangeRuleSet;
+        }
+
         public void SaveChangeRuleSet(ChangeRuleSet ruleset, string filePath)
         {
             SaveChangeRuleSet(ruleset, filePath, false);
@@ -51,13 +56,19 @@ namespace Ujc.Ovj.ChangeEngine.Objects
 
         public static object DeserializeObjectFromXml<T>(string filePath)
         {
-            object result;
+            return DeserializeObjectFromXml<T>(new StreamReader(filePath));
+        }
+
+        public static object DeserializeObjectFromXml<T>(Stream fileStream)
+        {
+            return DeserializeObjectFromXml<T>(new StreamReader(fileStream));
+        }
+
+        public static object DeserializeObjectFromXml<T>(StreamReader sr)
+        {
             XmlSerializer xs = new XmlSerializer(typeof(T));
-            using (StreamReader sr = new StreamReader(filePath))
-            {
-                result = (T)xs.Deserialize(sr);
-            }
-            return result;
+            
+            return (T)xs.Deserialize(sr);
         }
 
         public static void SerializeObjectToXml<T>(T item, string filePath)

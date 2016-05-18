@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Daliboris.Pomucky.Xml;
+using Daliboris.Texty.Export;
+using Daliboris.Texty.Export.Rozhrani;
 using DPXT = Daliboris.Pomucky.Xml.Transformace;
 //using Daliboris.Texty.Export.Rozhrani;
 //using System.Web;
@@ -17,8 +19,9 @@ namespace Daliboris.Slovniky
 {
 	public abstract class Slovnik : IUpravy
 	{
+        public bool UsePersonalizedXmdGenerator { get; protected set; } = false;
 
-		private string mstrChyby;
+        private string mstrChyby;
 		private string mstrVstupniSoubor;
 		private string mstrVystupniSoubor;
 
@@ -1230,5 +1233,16 @@ namespace Daliboris.Slovniky
 
 			return new string(a);
 		}
-	}
+
+        public virtual void GenerateConversionMetadataFile(
+            ExportBase export,
+            IExportNastaveni settings,
+            string documentType,
+            string finalOutputFileFullPath,
+            string finalOutputFileName,
+            string finalOutputMetadataFileName)
+        {
+
+        }
+    }
 }

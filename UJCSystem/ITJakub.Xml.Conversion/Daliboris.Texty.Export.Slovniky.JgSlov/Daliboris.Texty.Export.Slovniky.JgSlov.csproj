@@ -71,6 +71,14 @@
       <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
       <Name>Daliboris.Pomucky.Xml</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Base\Daliboris.Texty.Export.Base.csproj">
+      <Project>{3179D827-1C9E-4291-8399-9D9A2BAFE374}</Project>
+      <Name>Daliboris.Texty.Export.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
+      <Project>{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}</Project>
+      <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
       <Project>{56b8bc06-0be8-4045-94df-6844aa49e523}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
@@ -87,9 +95,42 @@
       <Project>{516328ef-fa82-42ac-8a97-4a7ca20ffd74}</Project>
       <Name>Ujc.Ovj.ChangeEngine.Objects</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.csproj">
+      <Project>{3E64D878-8E98-465B-9FA9-A90D1D3B97B1}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj">
+      <Project>{70259678-BEA1-44D4-BD7F-85A60D683B8B}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Xmr\JgSlov_pravidla_v4.xmr" />
+    <EmbeddedResource Include="Xmr\JgSlov_pravidla_v4.xmr">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xml\JgSlov01.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov02.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov03.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov04.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov05.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Ujc.Ovj.Ooxml.Conversion\Data\Xslt\TEI_ClassificationDeclarations.xsl">
+      <Link>Xls\TEI_ClassificationDeclarations.xsl</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

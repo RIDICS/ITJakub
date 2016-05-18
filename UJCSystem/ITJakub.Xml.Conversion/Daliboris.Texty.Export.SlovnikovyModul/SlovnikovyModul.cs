@@ -29,27 +29,50 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			ExportujImpl(prpPrepis, xmlOutputFiles);
 		}
 
-		private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles)
-		{
-		    var underscorePosition = prepis.Soubor.NazevBezPripony.IndexOf("_", StringComparison.Ordinal);
-		    var fileName = prepis.Soubor.NazevBezPripony;
-		    if (underscorePosition > 0)
-		    {
-		        fileName = fileName.Substring(0, underscorePosition);
-		    }
+	    private string GetSimplifiedFilename(IPrepis prepis)
+	    {
+	        return GetSimplifiedFilename(prepis.Soubor.NazevBezPripony, false);
+	    }
 
-            fileName = fileName.ToLowerInvariant();
 
+        private string GetSimplifiedFilename(string fileName, bool hasExtension = true)
+	    {
+            if (hasExtension)
+            {
+                var dotPosition = fileName.LastIndexOf(".", StringComparison.Ordinal);
+                fileName = fileName.Substring(0, dotPosition);
+            }
+
+            var underscorePosition = fileName.IndexOf("_", StringComparison.Ordinal);
+            if (underscorePosition > 0)
+            {
+                fileName = fileName.Substring(0, underscorePosition);
+            }
+
+            return fileName.ToLowerInvariant();
+        }
+
+	    private Queue<IList<IXsltTransformer>> GetTransformationList(string transformationPrefix)
+	    {
             var xsltSteps = new Queue<IList<IXsltTransformer>>();
-            
-            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(Nastaveni.SouborTransformaci, String.Format("{0}-step", fileName)))
-		    {
+
+            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(Nastaveni.SouborTransformaci, transformationPrefix))
+            {
                 xsltSteps.Enqueue(
-		            XsltTransformerFactory.GetXsltTransformers(
-		                Nastaveni.SouborTransformaci,
+                    XsltTransformerFactory.GetXsltTransformers(
+                        Nastaveni.SouborTransformaci,
                         transformationFile,
-		                Nastaveni.SlozkaXslt, true));
-		    }
+                        Nastaveni.SlozkaXslt, true));
+            }
+
+	        return xsltSteps;
+	    }
+
+        private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles)
+		{
+		    var fileName = GetSimplifiedFilename(prepis);
+
+            var xsltSteps = GetTransformationList(String.Format("{0}-step", fileName));
             
 			Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
 
@@ -89,8 +112,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 				var fileTransformationSource= vystupniSoubor;
                 
                 if (slovnik != null)
-				{
-				    var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                {
+                    UsePersonalizedXmdGenerator = slovnik.UsePersonalizedXmdGenerator;
+
+                    var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 				    var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 				    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
 				    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
@@ -132,9 +157,9 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 					//	ekup.SmazDocasneSoubory();
 				}
 			}
-		}
+        }
 
-	    protected string GetTempFile(string tempDirectory, string sourceFile, int step)
+	    private string GetTempFile(string tempDirectory, string sourceFile, int step)
 	    {
             const string fileNameFormat = "{0}_{1:00}.xml";
 
@@ -201,7 +226,11 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                     slovnik = new MSS();
                     break;
 
-                case "jgslov":
+                case "jgslov01":
+                case "jgslov02":
+                case "jgslov03":
+                case "jgslov04":
+                case "jgslov05":
                     slovnik = new JgSlov();
                     break;
 
@@ -218,5 +247,17 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
 			return slovnik;
 		}
-	}
+
+        public override void GenerateConversionMetadataFile(
+            string documentType,
+            string finalOutputFileFullPath,
+            string finalOutputFileName,
+            string finalOutputMetadataFileName)
+        {
+            var fileName = GetSimplifiedFilename(finalOutputFileName);
+            var dictionary = GetDictionaryObject(fileName);
+
+            dictionary.GenerateConversionMetadataFile(this, Nastaveni, documentType, finalOutputFileFullPath, finalOutputFileName, finalOutputMetadataFileName);
+        }
+    }
 }

@@ -62,6 +62,10 @@
     <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
     <step file="PohlGramSlov1783_Hlavicka.xsl" />
   </transformation>
+  
+  <transformation xml:id="jgslov-xmd-step01" >
+    <step file="JgSlov2Xmd.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />

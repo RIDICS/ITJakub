@@ -2,10 +2,6 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <NugetExecutable>V:\Nastroje\NuGet\NuGet.exe</NugetExecutable>
-    <NuspecFile>Objects.csproj</NuspecFile>
-  </PropertyGroup>
-  <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{516328EF-FA82-42AC-8A97-4A7CA20FFD74}</ProjectGuid>
@@ -108,8 +104,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <Target Name="AfterBuild">
-    <Exec Command="&quot;$(NugetExecutable)&quot; pack $(NuspecFile)" />
-    <Exec Command="xcopy /Y *.nupkg V:\Nuget" />
-  </Target>
 </Project>

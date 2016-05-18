@@ -1,34 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Xml;
+using Daliboris.Texty.Export;
+using Daliboris.Texty.Export.Rozhrani;
 using Daliboris.Transkripce;
 using Daliboris.Transkripce.Objekty;
 using Ujc.Ovj.ChangeEngine.Objects;
+using Ujc.Ovj.Tools.Xml.XsltTransformation;
 
 namespace Daliboris.Slovniky
 {
     public class JgSlov : MockDictionary
     {
-        readonly string m_changeRuleSetFile= Path.Combine(Environment.CurrentDirectory, @"Xmr\", "JgSlov_pravidla_v4.xmr");
+        public JgSlov()
+        {
+            UsePersonalizedXmdGenerator = true;
+        }
 
-        public JgSlov() { }
-
+        readonly string m_changeRuleSetFile= "Daliboris.Slovniky.Xmr.JgSlov_pravidla_v4.xmr";
+        
         public override void SeskupitHeslaPismene(string inputFile, string outputFile, string filenameWithoutExtension)
         {
-            TestExtrahujHesla(inputFile, outputFile, filenameWithoutExtension, m_changeRuleSetFile);
-            //File.Copy(inputFile, outputFile);
+            var fiOutputFile = new FileInfo(outputFile);
+            var outputFileName = fiOutputFile.Name.Substring(0, fiOutputFile.Name.Length - fiOutputFile.Extension.Length);
+            var keywordFile = Path.Combine(fiOutputFile.DirectoryName, String.Format("{0}_Keyword{1}", outputFileName, fiOutputFile.Extension));
+
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            TestExtrahujHesla(inputFile, keywordFile, filenameWithoutExtension, assembly.GetManifestResourceStream(m_changeRuleSetFile));
+            
+            var termFile = Path.Combine(fiOutputFile.DirectoryName, String.Format("{0}_Term{1}", outputFileName, fiOutputFile.Extension));
+            TestExtrahujTerminy(keywordFile, termFile);
+
+            TestSloucitFacsimileATerminy(assembly.GetManifestResourceStream(String.Format("Daliboris.Slovniky.Xml.{0}.xml", filenameWithoutExtension)), keywordFile, outputFile);
         }
+        
 
         /// <summary>
         /// Extrahuje hesla a podheslí z 
         /// </summary>
-        /// <param name="identifikatorDilu"> </param>
+        /// <param name="identifikatorDilu"></param>
         /// <param name="changeRuleSetFile"></param>
-        public void TestExtrahujHesla(string inputFile, string outputFile, string identifikatorDilu, string changeRuleSetFile)
+        public void TestExtrahujHesla(string inputFile, string outputFile, string identifikatorDilu, Stream changeRuleSetFile)
         {
             XmlWriterSettings xws = new XmlWriterSettings();
             xws.Indent = true;
@@ -264,8 +282,12 @@ namespace Daliboris.Slovniky
 				</msDesc>
 			</sourceDesc>
 		</fileDesc>
+        {8}
 		<profileDesc>
-			<langUsage>
+            <textClass>
+                <catRef target='#taxonomy-dictionary-contemporary #output-dictionary' />
+            </textClass>
+            <langUsage>
 				<language ident='cs' usage='80'>čeština</language>
 				<language ident='de' usage='20'>němčina</language>
                 <language ident='la' usage='10'>latina</language>
@@ -327,14 +349,18 @@ namespace Daliboris.Slovniky
                 zkratka = "JgSlov 5";
             }
 
-            return string.Format(hlavicka, dilTranskr, vroceni, guid, identifikatorTeiHeader, signatura, zkratka, dilTranslit, aktualizace);
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            var xmlDocument=new XmlDocument();
+            xmlDocument.Load(assembly.GetManifestResourceStream("Daliboris.Slovniky.Xls.TEI_ClassificationDeclarations.xsl"));
+            string classDesc = xmlDocument.GetElementsByTagName("classDecl")[0].OuterXml;
+            return string.Format(hlavicka, dilTranskr, vroceni, guid, identifikatorTeiHeader, signatura, zkratka, dilTranslit, aktualizace, classDesc);
         }
 
         /// <summary>
         /// Termíny = vstupní soubor, facsimile = výstupní soubor.
         /// </summary>
         /// <param name="vystup"></param>
-        public void TestSloucitFacsimileATerminy(string facsimileXml, string terminyXml, string vystup)
+        public void TestSloucitFacsimileATerminy(Stream facsimileXml, string terminyXml, string vystup)
         {
             XmlDocument facsimile = new XmlDocument();
             XmlDocument terminy = new XmlDocument();
@@ -445,7 +471,7 @@ namespace Daliboris.Slovniky
             //return slozka + cislo;
             return cislo;
         }
-        
+
         /*
         private static Transformator NactiNovaPravidla(string sSoubor)
         {
@@ -457,5 +483,42 @@ namespace Daliboris.Slovniky
             return trs;
         }
         */
+
+        private string GetTempFile(string tempDirectory, string sourceFile, int step)
+        {
+            const string fileNameFormat = "{0}_{1:00}.xmd";
+
+            return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
+        }
+
+        public override void GenerateConversionMetadataFile(
+            ExportBase export,
+            IExportNastaveni settings,
+            string documentType,
+            string finalOutputFileFullPath,
+            string finalOutputFileName,
+            string finalOutputMetadataFileName)
+        {
+            var fiFinalOutputFilename=new FileInfo(finalOutputFileFullPath);
+            var step = 0;
+            var outputFileWithoutExtension = fiFinalOutputFilename.Name.Substring(0, fiFinalOutputFilename.Name.LastIndexOf(".", StringComparison.Ordinal));
+
+            var fileTransformationSource = finalOutputFileFullPath;
+            var parameters = new NameValueCollection();
+
+            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(settings.SouborTransformaci, "jgslov-xmd-step"))
+            {
+                var fileTransformationTarget = GetTempFile(settings.DocasnaSlozka, outputFileWithoutExtension, step++);
+
+                export.ApplyTransformations(fileTransformationSource, fileTransformationTarget, XsltTransformerFactory.GetXsltTransformers(
+                        settings.SouborTransformaci,
+                        transformationFile,
+                        settings.SlozkaXslt, true), settings.DocasnaSlozka, parameters);
+
+                fileTransformationSource = fileTransformationTarget;
+            }
+
+            File.Copy(fileTransformationSource, finalOutputMetadataFileName);
+        }
     }
 }
