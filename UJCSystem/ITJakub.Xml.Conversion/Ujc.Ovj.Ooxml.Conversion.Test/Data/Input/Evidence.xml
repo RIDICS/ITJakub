@@ -83204,4 +83204,82 @@
   <Identifikator>402</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Jan Svoboda</Autor>
+    <Titul>Index Slovníku staročeských osobních jmen Jana Svobody</Titul>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Ulozeni>
+      <Instituce />
+      <Signatura />
+     </Ulozeni>
+     <Datace>
+      <Stoleti>0</Stoleti>
+      <PolovinaStoleti>0</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>0</NePredRokem>
+      <NePoRoce>0</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Jan Svoboda</Autor>
+   <Titul>Index Slovníku staročeských osobních jmen Jana Svobody</Titul>
+   <TypPredlohy>Neznamy</TypPredlohy>
+   <TypPredlohyText>neznámý</TypPredlohyText>
+   <InstituceUlozeni />
+   <Signatura />
+   <EditoriPrepisuText>alenacerna</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>alenacerna</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>IndexSvob.docx</Nazev>
+   <Adresar>D:\Data\Raw_books\Slovniky</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2013-11-01T11:04:19+01:00</Zmeneno>
+   <Velikost>583168</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>94A396807805D61FC7C06D0B8FC5CCA8</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{7A5AB5C5-1481-4AAF-9239-793ABDE1D45B}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>Nezarazeno</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>Slovnik</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni />
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <Identifikator>403</Identifikator>
+  <TypPrepisu>slovník</TypPrepisu>
+ </Prepis>
 </Prepisy>

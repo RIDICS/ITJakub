@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.IO;
+using System.Xml;
 using Daliboris.Pomucky.Xml;
 
 
@@ -15,9 +16,10 @@ namespace Daliboris.Slovniky {
 		}
 
 		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile) {
-			//u IndexSvob není potřeba nic upracovat, protože heslová stať zabírá vždy jeden odstavec
-			return;
-		}
+            File.Copy(inputFile, outputFile);
+
+            //u IndexSvob není potřeba nic upracovat, protože heslová stať zabírá vždy jeden odstavec
+        }
 
 		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile) {
 			int iEntry = 0;
