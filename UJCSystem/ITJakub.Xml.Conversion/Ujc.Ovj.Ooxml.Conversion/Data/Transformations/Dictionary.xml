@@ -76,6 +76,16 @@
   <transformation xml:id="indexsvob-step03" >
     <step file="IndexSvob_OldToTeiP5.xsl" />
   </transformation>
+
+  <transformation xml:id="simekslov-step01" >
+    <step file="SimekSlov_Rename.xsl" />
+  </transformation>
+  <transformation xml:id="simekslov-step02" >
+    <step file="Odstranit_mezery_mezi_elementy.xsl" />
+  </transformation>
+  <transformation xml:id="simekslov-step03" >
+    <step file="SimekSlov_OldToTeiP5.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />

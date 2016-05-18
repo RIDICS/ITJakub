@@ -56,6 +56,10 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <EmbeddedResource Include="Data\Xslt\SimekSlov_OldToTeiP5.xsl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <Content Include="Data\Xslt\SimekSlov_Rename.xslt" />
     <EmbeddedResource Include="Data\Xslt\IndexSvob_Rename.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
