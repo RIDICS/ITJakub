@@ -59,7 +59,7 @@
     <EmbeddedResource Include="Data\Xslt\SimekSlov_OldToTeiP5.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <Content Include="Data\Xslt\SimekSlov_Rename.xslt" />
+    <Content Include="Data\Xslt\SimekSlov_Rename.xsl" />
     <EmbeddedResource Include="Data\Xslt\IndexSvob_Rename.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>

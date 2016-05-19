@@ -219,6 +219,7 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 					break;
 
                 case "gbslov":
+                case "simekslov": //similar as gbslov
 					slovnik = new GbSlov();
 					break;
 

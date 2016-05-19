@@ -14,11 +14,11 @@
     <xsl:strip-space elements="*"/>
     
     <xsl:template match="/">
-    	<TEI n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
+    	<TEI n="{{ED3882E9-80D2-4DE6-BFE9-D2042039A023}}">
             <teiHeader>
-            	<fileDesc n="{{08BE3E56-77D0-46C1-80BB-C1346B757BE5}}">
+            	<fileDesc n="{{ED3882E9-80D2-4DE6-BFE9-D2042039A023}}">
                     <titleStmt>
-                        <title>Elektronický slovník staré češtiny</title>
+                        <title>Slovníček staré češtiny</title>
                     </titleStmt>
                     <publicationStmt>
                         <publisher>Ústav pro jazyk český AV ČR, v. v. i.</publisher>

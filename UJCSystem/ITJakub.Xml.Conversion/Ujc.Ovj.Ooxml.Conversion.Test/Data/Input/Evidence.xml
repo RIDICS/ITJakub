@@ -82506,7 +82506,8 @@
  <Prepis>
   <Hlava>
    <Pamatka>
-    <Titul>a p</Titul>
+    <Autor>František Šimek</Autor>
+    <Titul>Slovníček staré češtiny</Titul>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -82541,7 +82542,8 @@
    <Editori />
   </Hlava>
   <Hlavicka>
-   <Titul>a p</Titul>
+   <Autor>František Šimek</Autor>
+   <Titul>Slovníček staré češtiny</Titul>
    <TypPredlohy>Neznamy</TypPredlohy>
    <TypPredlohyText>neznámý</TypPredlohyText>
    <InstituceUlozeni />
