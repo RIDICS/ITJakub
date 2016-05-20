@@ -248,6 +248,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			        slovnik = null;
 
 			        break;
+                case "slovknm":
+			        slovnik = null;
+
+			        break;
 			}
 
 			return slovnik;

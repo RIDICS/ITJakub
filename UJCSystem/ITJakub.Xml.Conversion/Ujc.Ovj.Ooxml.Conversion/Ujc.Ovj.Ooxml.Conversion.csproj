@@ -56,8 +56,10 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\SlovKNM_Hlavicka.xsl" />
     <Content Include="Data\Xslt\TEI_Seskupit_odstavce_bez_div_2.0_v2.xsl" />
     <Content Include="Data\Xslt\Vokab1550_Fix-footnote.xsl" />
+    <Content Include="Data\Xslt\Vokab1550_Hlavicka.xsl" />
     <Content Include="Data\Xslt\Vokab1550_Prevod-stylu.xsl" />
     <EmbeddedResource Include="Data\Xslt\SimekSlov_OldToTeiP5.xsl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

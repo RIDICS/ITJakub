@@ -212,7 +212,12 @@
     <!-- Opravit ve zdrojových datech - označit jazyk v poznámkách -->
     <xsl:template match="footnote_text/text">
         <!-- <xsl:attribute name="xml:lang"><xsl:text>grc</xsl:text></xsl:attribute>-->
-        <xsl:apply-templates/>
+        <xsl:if test="count(preceding-sibling::text)=0">
+            <xsl:apply-templates/>
+        </xsl:if>
+        <xsl:if test="count(preceding-sibling::text)>0">
+            <xsl:apply-templates mode="text-started"/>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="text()">
@@ -222,6 +227,11 @@
                 <xsl:value-of select="'preserve'"/>
             </xsl:attribute>
         </xsl:if>
+        <xsl:value-of select="$text"/>
+    </xsl:template>
+    
+    <xsl:template match="text()" mode="text-started">
+        <xsl:variable name="text" select="translate(., '&#009;', ' ')"/>
         <xsl:value-of select="$text"/>
     </xsl:template>
     
