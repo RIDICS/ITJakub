@@ -9,18 +9,21 @@
     <xsl:preserve-space elements="text"/>
     <xsl:variable name="vychozi-jazyk" select="'cs'"/>
     
+    <xsl:include href="Kopirovani_prvku.xsl"/>
+    
+    <!--
     <xsl:template match="@*|*|text()">
         <xsl:copy>
             <xsl:apply-templates select="@*|*|text()"/>
         </xsl:copy>
-    </xsl:template>
+    </xsl:template>-->
     
     <xsl:template match="/">
         <xsl:text xml:space="preserve">
-</xsl:text>
+        </xsl:text>
         <xsl:comment> PohlGramSlov_compute_missing_pb-id.xsl </xsl:comment>
         <xsl:text xml:space="preserve">
-</xsl:text>
+        </xsl:text>
         <xsl:apply-templates/>
     </xsl:template>
     

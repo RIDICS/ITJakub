@@ -209,7 +209,7 @@ namespace Ujc.Ovj.Xml.Tei.Splitting
             _outputManager.OutputDirectory = OutputDirectory;
             _outputManager.FileNameFormat = newFileFormat;
 
-            string divId = null;
+            string divId = StartingElement ?? "body"; //set default value because xml:id^="." is invalid
             int paragraphId = 0;
 
             try

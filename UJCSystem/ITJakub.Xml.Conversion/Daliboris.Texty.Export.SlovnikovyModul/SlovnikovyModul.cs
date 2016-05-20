@@ -244,6 +244,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			        slovnik = null;
 
 			        break;
+                case "vokab1550":
+			        slovnik = null;
+
+			        break;
 			}
 
 			return slovnik;

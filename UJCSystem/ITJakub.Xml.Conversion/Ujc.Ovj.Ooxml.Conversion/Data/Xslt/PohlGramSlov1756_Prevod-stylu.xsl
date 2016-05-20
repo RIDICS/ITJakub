@@ -22,21 +22,20 @@
 
 	<xsl:key name="poznamka-pod-carou" match="poznamka_pod_carou" use="@id"/>
 
-<xsl:template match="body">
-	<xsl:apply-templates />
-</xsl:template>
+	<xsl:template match="body">
+		<xsl:apply-templates />
+	</xsl:template>
 
-<xsl:template match="/">
-<xsl:text xml:space="preserve">
-</xsl:text>
+	<xsl:template match="/">
+		<xsl:text xml:space="preserve">
+		</xsl:text>
         <xsl:comment> PohlSlov1756_Prevod-Stylu </xsl:comment>
-<xsl:text xml:space="preserve">
-</xsl:text>
-        	<body>
-            	<xsl:apply-templates/>
-        	</body>
+		<xsl:text xml:space="preserve">
+		</xsl:text>
+        <body>
+            <xsl:apply-templates/>
+        </body>
     </xsl:template>
-
 
     <xsl:template match="Titul/cestina | Nadpis/cestina"> 
     	<choice>

@@ -86,6 +86,19 @@
   <transformation xml:id="simekslov-step03" >
     <step file="SimekSlov_OldToTeiP5.xsl" />
   </transformation>
+
+  <transformation xml:id="vokab1550-step01" >
+    <step file="Vokab1550_Fix-footnote.xsl" />
+    <step file="Vokab1550_Prevod-stylu.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku_cit.xsl" />
+    <step file="Upravit_obsah_prvku_unclear_2.0.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Vokab1550_Hlavicka.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />

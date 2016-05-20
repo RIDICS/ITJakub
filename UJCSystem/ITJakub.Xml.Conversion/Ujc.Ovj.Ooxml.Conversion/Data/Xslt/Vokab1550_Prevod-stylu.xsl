@@ -2,8 +2,9 @@
 <xsl:stylesheet 
     xmlns="http://www.tei-c.org/ns/1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
-	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
-	exclude-result-prefixes="xd" version="1.0">
+	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
+	xmlns:tei="http://www.tei-c.org/ns/1.0"
+	exclude-result-prefixes="xd tei" version="2.0">
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Feb 5, 2013</xd:p>
@@ -16,16 +17,18 @@
     <xsl:strip-space elements="*"/>
 
     <xsl:template match="/">
-<xsl:text xml:space="preserve">
-</xsl:text>
+        <xsl:text xml:space="preserve">
+        </xsl:text>
         <xsl:comment> Vokab1550_Prevod-Stylu </xsl:comment>
-<xsl:text xml:space="preserve">
-</xsl:text>
+        <xsl:text xml:space="preserve">
+        </xsl:text>
         <xsl:element name="body">
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="footnote_text/footnote_reference" />
+    
     <xsl:template match="Titul">
         <xsl:element name="head0">
             <xsl:apply-templates/>
@@ -82,6 +85,9 @@
 
     <xsl:template match="Normalni[latina]">
         <xsl:element name="entryFree">
+            <xsl:attribute name="xml:id">
+                <xsl:value-of select="concat('en', substring(string(1000001 + count(preceding-sibling::Normalni[latina])), 2))"/>
+            </xsl:attribute>
             <xsl:apply-templates/>
         </xsl:element>
     </xsl:template>
@@ -144,6 +150,9 @@
 
     <xsl:template match="latina">
         <xsl:element name="form">
+            <xsl:attribute name="xml:id">
+                <xsl:value-of select="concat('en', substring(string(1000001 + count(parent::*/preceding-sibling::Normalni[latina])), 2), '.hw1')"/>
+            </xsl:attribute>
             <xsl:element name="orth">
                 <xsl:attribute name="xml:lang">
                     <xsl:text>la</xsl:text>
@@ -229,5 +238,4 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
 </xsl:stylesheet>
