@@ -112,6 +112,14 @@
     <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
     <step file="SlovKNM_Hlavicka.xsl" />
   </transformation>
+
+  <transformation xml:id="dodavky-step01">
+    <step file="Dodavky_Rename.xsl" />
+    <step file="Dodavky_Prepare.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Dodavky_Header.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />

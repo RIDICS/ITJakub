@@ -252,6 +252,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			        slovnik = null;
 
 			        break;
+                case "dodavky":
+			        slovnik = null;
+
+			        break;
 			}
 
 			return slovnik;
