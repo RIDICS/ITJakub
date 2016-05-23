@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E64E41B9-D4D5-40E2-B396-496CD7C68AD7}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CustomXmlPartTest.cs" />
+    <Compile Include="KonverzeNastaveni.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Daliboris.OOXML.Word.Transform\Daliboris.OOXML.Word.Transform.csproj">
+      <Project>{b3231e73-5058-4588-b20d-877babd7384e}</Project>
+      <Name>Daliboris.OOXML.Word.Transform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.OOXML.Word\Daliboris.OOXML.Word.csproj">
+      <Project>{96838f37-2e15-4785-b117-0de31494f733}</Project>
+      <Name>Daliboris.OOXML.Word</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.OOXML.Pomucky\Daliboris.OOXML.Pomucky.csproj">
+      <Project>{114B8733-DECF-4402-BA25-E3DBE265E993}</Project>
+      <Name>Daliboris.OOXML.Pomucky</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.csproj">
+      <Project>{3e64d878-8e98-465b-9fa9-a90d1d3b97b1}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj">
+      <Project>{70259678-bea1-44d4-bd7f-85a60d683b8b}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
