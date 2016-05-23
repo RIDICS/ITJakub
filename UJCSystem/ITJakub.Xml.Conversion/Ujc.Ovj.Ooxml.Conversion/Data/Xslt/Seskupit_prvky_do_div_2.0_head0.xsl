@@ -41,10 +41,15 @@
         </xsl:copy>
     </xsl:template>
     
+    <!--
+    <xsl:template match="tei:div[tei:head0]" mode="group">
+        <xsl:apply-templates mode="group" />
+    </xsl:template>-->
+    
     <xsl:template match="tei:head0" mode="group">
         <xsl:element name="div" xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="concat('body.div-', position())"/>
+                <xsl:value-of select="concat('body.div-', count(preceding-sibling::tei:head0)+1)"/>
             </xsl:attribute>
         
             <!--<head><xsl:value-of select="." /></head>-->

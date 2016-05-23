@@ -54,7 +54,7 @@
     <xsl:template match="tei:head1" mode="group">
         <xsl:element name="div" xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="concat(parent::tei:div[1]/@xml:id,'.div-', position())"/>
+                <xsl:value-of select="concat(parent::tei:div[1]/@xml:id,'.div-', count(preceding-sibling::tei:head1)+1)"/>
             </xsl:attribute>
             
             <head><xsl:apply-templates /></head>

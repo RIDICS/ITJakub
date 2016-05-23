@@ -256,6 +256,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 			        slovnik = null;
 
 			        break;
+                case "ryvola1716":
+			        slovnik = null;
+
+			        break;
 			}
 
 			return slovnik;

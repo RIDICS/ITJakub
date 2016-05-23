@@ -24,9 +24,14 @@
         
         <xsl:template match="body" priority="10">
             <xsl:element name="body" namespace="http://www.tei-c.org/ns/1.0">
-                <div xml:id="body.div-1" xmlns="http://www.tei-c.org/ns/1.0">
+                <xsl:if test="not(/body/head0)">
+                  <div xml:id="body.div-1" xmlns="http://www.tei-c.org/ns/1.0">
+                      <xsl:apply-templates />
+                  </div>  
+                </xsl:if>
+                <xsl:if test="/body/head0">
                     <xsl:apply-templates />
-                </div>
+                </xsl:if>
             </xsl:element>
         </xsl:template>
         
