@@ -23,7 +23,7 @@ namespace Daliboris.Slovniky
             UsePersonalizedXmdGenerator = true;
         }
 
-        readonly string m_changeRuleSetFile= "Daliboris.Slovniky.Xmr.JgSlov_pravidla_v4.xmr";
+        protected string m_changeRuleSetFile= "Daliboris.Slovniky.Xmr.JgSlov_pravidla_v4.xmr";
         
         public override void SeskupitHeslaPismene(string inputFile, string outputFile, string filenameWithoutExtension)
         {

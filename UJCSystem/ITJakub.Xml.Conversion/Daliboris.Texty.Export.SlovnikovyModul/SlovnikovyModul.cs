@@ -235,6 +235,10 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                     slovnik = new JgSlov();
                     break;
 
+                case "ddbw":
+                    slovnik = new DDBW();
+                    break;
+
                 case "indexsvob":
                     slovnik = new IndexSvob();
                     break;

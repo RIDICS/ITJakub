@@ -67,6 +67,14 @@
     <step file="JgSlov2Xmd.xsl" />
   </transformation>
 
+  <transformation xml:id="ddbw-step01" >
+    <step file="DDBW_Rename.xsl" />
+  </transformation>
+  
+  <transformation xml:id="ddbw-xmd-step01" >
+    <step file="JgSlov2Xmd.xsl" />
+  </transformation>
+
   <transformation xml:id="indexsvob-step01" >
     <step file="IndexSvob_Rename.xsl" />
   </transformation>

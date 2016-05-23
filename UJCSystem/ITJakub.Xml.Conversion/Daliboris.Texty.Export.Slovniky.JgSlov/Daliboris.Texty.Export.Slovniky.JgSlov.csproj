@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DDBW.cs" />
     <Compile Include="JgSlov.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -129,6 +130,11 @@
   <ItemGroup>
     <EmbeddedResource Include="..\Ujc.Ovj.Ooxml.Conversion\Data\Xslt\TEI_ClassificationDeclarations.xsl">
       <Link>Xls\TEI_ClassificationDeclarations.xsl</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xmr\DDBW.xmr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

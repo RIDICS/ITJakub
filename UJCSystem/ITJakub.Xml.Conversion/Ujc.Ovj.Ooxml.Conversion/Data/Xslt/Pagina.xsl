@@ -3,7 +3,7 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl" 
 	xmlns="http://www.tei-c.org/ns/1.0"
 	exclude-result-prefixes="xd" version="1.0">
-	<xsl:template match="pagina | foliace">
+	<xsl:template match="pagina | foliace | Stranka">
 		<xsl:variable name="number" select="normalize-space(.)"/>
 		<xsl:variable name="column">
 			<xsl:choose>
