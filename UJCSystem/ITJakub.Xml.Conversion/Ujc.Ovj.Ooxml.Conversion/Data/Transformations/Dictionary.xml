@@ -69,6 +69,9 @@
 
   <transformation xml:id="ddbw-step01" >
     <step file="DDBW_Rename.xsl" />
+    <step file="DDBW_AddForm.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
   </transformation>
   
   <transformation xml:id="ddbw-xmd-step01" >

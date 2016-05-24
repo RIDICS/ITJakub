@@ -21,7 +21,9 @@
 	<xsl:variable name="vychozi-jazyk" select="'cs'"/>
 
 	<xsl:template match="body">
-		<xsl:apply-templates />
+		<div xml:id="body.div-1" xmlns="http://www.tei-c.org/ns/1.0">
+			<xsl:apply-templates />
+		</div>
 	</xsl:template>
 
 	<xsl:template match="/">
@@ -49,14 +51,17 @@
 	
 	<xsl:template match="Litera">
 		<xsl:element name="head2">
+			<xsl:if test="node()[self::Nemcina]">
+				<xsl:attribute name="xml:lang">
+					<xsl:text>de-x-translit</xsl:text>
+				</xsl:attribute>
+			</xsl:if>
+			
 			<xsl:apply-templates/>
 		</xsl:element>
 	</xsl:template>
 	
 	<xsl:template match="Litera/Nemcina">
-		<xsl:attribute name="xml:lang">
-			<xsl:text>de-x-translit</xsl:text>
-		</xsl:attribute>
 		<xsl:apply-templates/>
 	</xsl:template>
 	
@@ -65,24 +70,34 @@
 			<xsl:attribute name="xml:id">
 				<xsl:value-of select="concat('en', substring(string(1000001 + count(preceding-sibling::Heslovy_Odstavec)), 2))"/>
 			</xsl:attribute>
-			
-			<xsl:for-each-group select="file" group-starting-with="br">
-				<xsl:value-of select="current-grouping-key()"/>
-				<xsl:text>
-				</xsl:text>
+			<xsl:for-each-group select="node()" group-ending-with="Cislo_Vyznamu">
+				<xsl:if test="position() = 1">
+					<xsl:apply-templates select="current-group()[self::Stranka]"/>
+					
+					<sense>
+						<xsl:apply-templates select="current-group()[not (self::Cislo_Vyznamu)][not (self::Stranka)]" mode="transliteration"/>
+					</sense>
+				</xsl:if>
 			</xsl:for-each-group>
 			
-			<xsl:apply-templates/>
+			<xsl:for-each-group select="node()" group-starting-with="Cislo_Vyznamu">
+				<xsl:if test="position() > 1">
+					<sense>
+						<xsl:apply-templates select="current-group()" mode="transliteration"/>
+					</sense>
+				</xsl:if>
+			</xsl:for-each-group>
 		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Nemcina" mode="transliteration">
+		<reg xml:lang="de-x-translit">
+			<xsl:apply-templates />
+		</reg>
 	</xsl:template>
 	
 	<!--
 	<xsl:template match="Heslovy_Odstavec/Nemcina">
-		<xsl:for-each-group select="node()" group-starting-with="br">
-			<LI>
-				<xsl:apply-templates select="current-group()"/>
-			</LI>
-		</xsl:for-each-group>
 		<sense>
 			<xsl:apply-templates select="following-sibling::Nemcina[1]/preceding-sibling::Cislo_Vyznamu except self::* except preceding-sibling::*" mode="sense_num" />
 			<xsl:element name="form">
@@ -97,10 +112,9 @@
 	</xsl:template>
 	-->
 	
-	<xsl:template match="Cislo_Vyznamu" mode="sense_num">
+	<xsl:template match="Cislo_Vyznamu" mode="transliteration">
 		<num><xsl:apply-templates /></num>
 	</xsl:template>
-	<xsl:template match="Cislo_Vyznamu" mode="transliteration" />
 	<xsl:template match="Kvalifikator" mode="transliteration">
 		<iType>
 			<xsl:apply-templates />

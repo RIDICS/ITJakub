@@ -56,6 +56,8 @@
     <Content Include="Data\AllStylesConvert.2xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\Xslt\DDBW_AddForm.xsl" />
+    <Content Include="Data\Xslt\DDBW_Rename.xsl" />
     <Content Include="Data\Xslt\Dodavky_Header.xsl" />
     <Content Include="Data\Xslt\Dodavky_Prepare.xsl" />
     <Content Include="Data\Xslt\Dodavky_Rename.xsl" />
