@@ -70,6 +70,7 @@
     <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\SourceDocumentTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\TransformationTypeResolver.cs" />
+    <Compile Include="Sessions\ResourceTypeResolvers\ThumbDbTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\UnknownXmlTypeResolver.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />

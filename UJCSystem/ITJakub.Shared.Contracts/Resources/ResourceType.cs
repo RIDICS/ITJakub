@@ -14,5 +14,6 @@
         ExtractableArchive = 9,
         UnknownXmlFile = 10,
         BibliographyDocument = 11,
+        ThumbDbFile = 12,
     }
 }
