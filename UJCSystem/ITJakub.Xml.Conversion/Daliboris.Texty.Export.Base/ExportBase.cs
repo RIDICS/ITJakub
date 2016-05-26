@@ -14,8 +14,11 @@ namespace Daliboris.Texty.Export
     {
         public bool UsePersonalizedXmdGenerator { get; protected set; } = false;
 
-        protected ExportBase()
+        protected IExportNastaveni Nastaveni { get; }
+
+        protected ExportBase(IExportNastaveni nastaveni)
         {
+            Nastaveni = nastaveni;
         }
 
         public virtual void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
@@ -23,43 +26,23 @@ namespace Daliboris.Texty.Export
             Exportuj(prpPrepis, xmlOutputFiles);
         }
 
-        protected ExportBase(IExportNastaveni nastaveni, IList<string> xmlOutputFiles)
-        {
-            Nastaveni = nastaveni;
-            XmlOutputFiles = xmlOutputFiles;
-        }
+        protected abstract void Exportuj(IPrepis prpPrepisy, IList<string> xmlOutputFiles);
 
         private static Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public IExportNastaveni Nastaveni { get; set; }
-
-        public IList<string> XmlOutputFiles;
-
-
-        public void Exportuj(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles)
-        {
-            Nastaveni = emnNastaveni;
-            XmlOutputFiles = xmlOutputFiles;
-
-            Exportuj();
-        }
-
-        public abstract void Exportuj();
-        public abstract void Exportuj(IPrepis prpPrepisy, IList<string> xmlOutputFiles);
-
-        public void Zaloguj(string zprava)
+        protected void Zaloguj(string zprava)
         {
             Zaloguj(zprava, false);
         }
 
-        public void Zaloguj(string format, object arg0, bool chyba)
+        protected void Zaloguj(string format, object arg0, bool chyba)
         {
             object[] args = new object[1];
             args[0] = arg0;
             Zaloguj(format, args, chyba);
         }
 
-        public void Zaloguj(string format, object arg0, object arg1, bool chyba)
+        protected void Zaloguj(string format, object arg0, object arg1, bool chyba)
         {
             object[] args = new object[2];
             args[0] = arg0;
@@ -68,7 +51,7 @@ namespace Daliboris.Texty.Export
 
         }
 
-        public void Zaloguj(string format, object arg0, object arg1, object arg2, bool chyba)
+        protected void Zaloguj(string format, object arg0, object arg1, object arg2, bool chyba)
         {
             object[] args = new object[1];
             args[0] = arg0;
@@ -77,13 +60,13 @@ namespace Daliboris.Texty.Export
             Zaloguj(format, args, chyba);
         }
 
-        public void Zaloguj(string format, object[] args, bool chyba)
+        protected void Zaloguj(string format, object[] args, bool chyba)
         {
             Zaloguj(String.Format(format, args), chyba);
         }
 
 
-        public void Zaloguj(string zprava, bool chyba)
+        protected void Zaloguj(string zprava, bool chyba)
         {
             ConsoleColor backgroundColor = Console.BackgroundColor;
             ConsoleColor foregroundColor = Console.ForegroundColor;
@@ -127,7 +110,7 @@ namespace Daliboris.Texty.Export
             return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
         }
 
-        public void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
+        protected void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
             string tempDirectory, NameValueCollection parameters)
         {
             XsltTransformationProcess process = new XsltTransformationProcess(inputFile, outputFile, transformers,

@@ -11,24 +11,22 @@ namespace Daliboris.Texty.Export
 	public class EdicniModul : ExportBase
 	{
 		const string cstrPriponaXsl = ".xsl";
+        
 
-		public EdicniModul() { }
-
-		public EdicniModul(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles) : base(emnNastaveni, xmlOutputFiles)
+		public EdicniModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
 		{ }
 
 		/*
-			public void UpravBiblickyText(string strNazev, string strVstup)
-			{
+		public void UpravBiblickyText(string strNazev, string strVstup)
+		{
 			 List<string> glsVystupy = new List<string>();
 			 List<string> glsTransformacniSablony = new List<string>();
 			 glsVystupy.Add(strVstup);
 			 glsTransformacniSablony.Add(strVstup);
 			 EdicniModulUpravy.ZpracovatBiblickyText(Nastaveni, strNazev, glsTransformacniSablony, glsVystupy, strVstup);
 
-			}
-	 */
-
+		}
+	 
 		public override void Exportuj()
 		{
 			IPrepis prepis = Nastaveni.Prepis;
@@ -93,8 +91,9 @@ namespace Daliboris.Texty.Export
 
 				//prp.Zpracovani.ZaevidujExport(ZpusobVyuziti.EdicniModul, DateTime.Now);
 		}
+        */
 
-		public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
+		protected override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
 		{
 			ExportujImpl(prpPrepis);
 		}

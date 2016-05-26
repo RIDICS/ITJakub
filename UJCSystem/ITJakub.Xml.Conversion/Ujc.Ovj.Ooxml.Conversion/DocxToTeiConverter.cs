@@ -165,7 +165,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				Directory.CreateDirectory(finalOutputDirectory);
 
             IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, prepis);
-			ExportBase export = GetExportModule(documentType, exportSettings, xmlOutputFiles);
+			ExportBase export = GetExportModule(documentType, exportSettings);
 
 			if (export == null || exportSettings == null)
 			{
@@ -630,17 +630,17 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			return documentType;
 		}
 
-		private ExportBase GetExportModule(string documentType, IExportNastaveni exportSettings, IList<string> xmlOutputFiles)
+		private ExportBase GetExportModule(string documentType, IExportNastaveni exportSettings)
 		{
 			switch (documentType)
 			{
 				case "Edition":
 				case "ProfessionalLiterature":
-					return new EdicniModul(exportSettings, xmlOutputFiles);
+					return new EdicniModul(exportSettings);
 				case "Dictionary":
-					return new SlovnikovyModul(exportSettings, xmlOutputFiles);
+					return new SlovnikovyModul(exportSettings);
                 case "Grammar":
-			        return new ModulMluvnic(exportSettings, xmlOutputFiles);
+			        return new ModulMluvnic(exportSettings);
 			}
 
 			return null;

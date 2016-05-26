@@ -15,16 +15,11 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 {
 	public class SlovnikovyModul : ExportBase
 	{
-		public override void Exportuj()
-		{
-
-		}
-
-		public SlovnikovyModul(IExportNastaveni emnNastaveni, IList<string> xmlOutputFiles) : base(emnNastaveni, xmlOutputFiles)
+		public SlovnikovyModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
 		{
 		}
 
-		public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
+		protected override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
 		{
 			ExportujImpl(prpPrepis, xmlOutputFiles);
 		}
@@ -182,7 +177,7 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 	    }
 
 
-        Slovnik GetDictionaryObject(string dictionaryAcronym)
+        private Slovnik GetDictionaryObject(string dictionaryAcronym)
 		{
 			Slovnik slovnik = null;
 			switch (dictionaryAcronym)
