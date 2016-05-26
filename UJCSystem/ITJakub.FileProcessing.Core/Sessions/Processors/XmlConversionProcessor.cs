@@ -27,7 +27,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var inputFilesResource =resourceSessionDirector.Resources.Where(resource => resource.ResourceType == ResourceType.SourceDocument).OrderBy(r=>r.FileName, StringComparer.CurrentCultureIgnoreCase);
+            var inputFilesResource = resourceSessionDirector.Resources.Where(resource => resource.ResourceType == ResourceType.SourceDocument).OrderBy(r=>r.FileName, StringComparer.CurrentCultureIgnoreCase);
             var inputFileResource = inputFilesResource.First();
 
             string metaDataFileName;
@@ -58,11 +58,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository,
                 m_versionIdGenerator);
-
+            
             var settings = new DocxToTeiConverterSettings
             {
                 Debug = false,
                 InputFilesPath = inputFilesResource.Select(p=>p.FullPath).ToArray(),
+                UploadedFilesPath = resourceSessionDirector.Resources.GroupBy(resource => resource.ResourceType).
+                    ToDictionary(resourceGroup => resourceGroup.Key,
+                        resourceGroup => resourceGroup.Select(resource => resource.FullPath).ToArray()),
                 MetadataFilePath = m_conversionMetadataPath,
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,

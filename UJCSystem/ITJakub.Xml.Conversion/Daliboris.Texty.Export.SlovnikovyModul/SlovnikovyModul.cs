@@ -52,22 +52,6 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
             return fileName.ToLowerInvariant();
         }
 
-	    private Queue<IList<IXsltTransformer>> GetTransformationList(string transformationPrefix)
-	    {
-            var xsltSteps = new Queue<IList<IXsltTransformer>>();
-
-            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(Nastaveni.SouborTransformaci, transformationPrefix))
-            {
-                xsltSteps.Enqueue(
-                    XsltTransformerFactory.GetXsltTransformers(
-                        Nastaveni.SouborTransformaci,
-                        transformationFile,
-                        Nastaveni.SlozkaXslt, true));
-            }
-
-	        return xsltSteps;
-	    }
-
         private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles)
 		{
 		    var fileName = GetSimplifiedFilename(prepis);
@@ -157,13 +141,6 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 					//	ekup.SmazDocasneSoubory();
 				}
 			}
-        }
-
-	    private string GetTempFile(string tempDirectory, string sourceFile, int step)
-	    {
-            const string fileNameFormat = "{0}_{1:00}.xml";
-
-            return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
         }
 
 	    private void CombineInputXml(IList<string> xmlOutputFiles, string inputFilePath, string sourceTag="body")

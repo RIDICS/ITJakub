@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
+using ITJakub.Shared.Contracts.Resources;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
 
 namespace Daliboris.Texty.Export
@@ -26,11 +27,19 @@ namespace Daliboris.Texty.Export
 
         public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
         {
-            ExportujImpl(prpPrepis);
+            throw new NotImplementedException();
         }
 
-        private void ExportujImpl(IPrepis prepis)
+        public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
         {
+            ExportujImpl(prpPrepis, xmlOutputFiles, uploadedFiles);
+        }
+
+        private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
+        {
+
+
+            /*
             IList<IXsltTransformer> body = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, "body", Nastaveni.SlozkaXslt);
             string konecnyVystup = null;
             
@@ -43,7 +52,7 @@ namespace Daliboris.Texty.Export
 
             string headerFile = Path.Combine(Nastaveni.DocasnaSlozka, String.Format("{0}_{1}.xml", souborBezPripony, "header"));
             NameValueCollection parameters = new NameValueCollection();
-            ApplyTransformations(Nastaveni.SouborMetadat, headerFile, body, Nastaveni.DocasnaSlozka, parameters);
+            ApplyTransformations(Nastaveni.SouborMetadat, headerFile, body, Nastaveni.DocasnaSlozka, parameters);*/
         }
 
         #endregion

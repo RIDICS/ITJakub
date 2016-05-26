@@ -61,10 +61,16 @@
     <Content Include="Data\Xslt\Dodavky_Header.xsl" />
     <Content Include="Data\Xslt\Dodavky_Prepare.xsl" />
     <Content Include="Data\Xslt\Dodavky_Rename.xsl" />
+    <Content Include="Data\Xslt\MDM_SloucitHlavickuPlusFacsimile.xsl" />
+    <Content Include="Data\Xslt\MDM_Tei2Bibliography.xsl" />
+    <Content Include="Data\Xslt\MDM_Tei2Editorial-comment.xsl" />
+    <Content Include="Data\Xslt\MDM_Tei2Fixed.xsl" />
+    <Content Include="Data\Xslt\MDM_UpravitPaginaciFacsimle.xsl" />
     <Content Include="Data\Xslt\Ryvola_Header.xsl" />
     <Content Include="Data\Xslt\Ryvola_Rename.xsl" />
     <Content Include="Data\Xslt\SlovKNM_Hlavicka.xsl" />
     <Content Include="Data\Xslt\TEI_Seskupit_odstavce_bez_div_2.0_v2.xsl" />
+    <Content Include="Data\Xslt\UUID.xsl" />
     <Content Include="Data\Xslt\Vokab1550_Fix-footnote.xsl" />
     <Content Include="Data\Xslt\Vokab1550_Hlavicka.xsl" />
     <Content Include="Data\Xslt\Vokab1550_Prevod-stylu.xsl" />
@@ -629,6 +635,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Campari.Software.Reflection\Campari.Software.Reflection.csproj">
       <Project>{8a6d0f17-5c0f-41b0-ab0a-425548bf92f1}</Project>
       <Name>Campari.Software.Reflection</Name>

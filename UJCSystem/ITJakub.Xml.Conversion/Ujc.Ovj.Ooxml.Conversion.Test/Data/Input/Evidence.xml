@@ -83670,4 +83670,33 @@
   <Identifikator>408</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
+
+<Prepis>
+  <Hlava>
+   <Pamatka>
+    <Titul>Alph1718</Titul>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Titul>Alph1718</Titul>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>Alph1718.docx</Nazev>
+   <FormatWordu>Docx</FormatWordu>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{F262076B-8D59-438D-8E57-2B3CBBB56823}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <ZpusobVyuziti>Manuscriptorium StredoceskyKorpus InterniKorpus</ZpusobVyuziti>
+  </Zpracovani>
+  <Identifikator>409</Identifikator>
+  <TypPrepisu>mluvnice</TypPrepisu>
+ </Prepis>
 </Prepisy>

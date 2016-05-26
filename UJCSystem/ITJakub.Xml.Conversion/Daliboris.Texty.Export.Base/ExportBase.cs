@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
+using ITJakub.Shared.Contracts.Resources;
 using NLog;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
 
@@ -14,6 +16,11 @@ namespace Daliboris.Texty.Export
 
         protected ExportBase()
         {
+        }
+
+        public virtual void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
+        {
+            Exportuj(prpPrepis, xmlOutputFiles);
         }
 
         protected ExportBase(IExportNastaveni nastaveni, IList<string> xmlOutputFiles)
@@ -97,6 +104,28 @@ namespace Daliboris.Texty.Export
 
         }
 
+        protected Queue<IList<IXsltTransformer>> GetTransformationList(string transformationPrefix)
+        {
+            var xsltSteps = new Queue<IList<IXsltTransformer>>();
+
+            foreach (var transformationFile in XsltTransformerFactory.GetTransformationFromTransformationsFile(Nastaveni.SouborTransformaci, transformationPrefix))
+            {
+                xsltSteps.Enqueue(
+                    XsltTransformerFactory.GetXsltTransformers(
+                        Nastaveni.SouborTransformaci,
+                        transformationFile,
+                        Nastaveni.SlozkaXslt, true));
+            }
+
+            return xsltSteps;
+        }
+
+        protected string GetTempFile(string tempDirectory, string sourceFile, int step)
+        {
+            const string fileNameFormat = "{0}_{1:00}.xml";
+
+            return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
+        }
 
         public void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
             string tempDirectory, NameValueCollection parameters)

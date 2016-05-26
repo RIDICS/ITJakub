@@ -213,7 +213,7 @@ namespace Test
 			ZkopirovatOriginalniFaksimile();
 		    VlozitFaksimileDoDocx();
 
-            TransformovatDocxNaXml();
+            TransformovatDocxNaXml(); //?
 			TransformovatXmlNaTei();
 
 		    ExtrahovatFaksimileZDocx();

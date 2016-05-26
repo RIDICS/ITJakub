@@ -87,8 +87,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 	            ? Path.Combine(ads.DejSpolecneDocXml, String.Format("{0}_source_{1:00}{2}", fileNameWithoutExtension, filePart, XmlExtension))
 	            : Path.Combine(ads.DejSpolecneDocXml, String.Format("{0}{1}", fileNameWithoutExtension, XmlExtension));
         }
-
-
+        
         public ConversionResult Convert(DocxToTeiConverterSettings settings)
 		{
 		    ConverterSettings = settings;
@@ -176,7 +175,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			try
 			{
-				export.Exportuj(exportSettings.Prepis, xmlOutputFiles);
+				export.Exportuj(exportSettings.Prepis, xmlOutputFiles, ConverterSettings.UploadedFilesPath);
 				_result.IsConverted = true;
 			}
 			catch (Exception exception)
@@ -664,12 +663,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
 					break;
 				case "Dictionary":
-					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads,
-                        prepis);
+					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
+					break;
+                case "Grammar":
+					exportSettings = GetGrammarSettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
 					break;
 			}
 			return exportSettings;
 		}
+
 		private static IExportNastaveni GetEdicniModulNastaveni(DocxToTeiConverterSettings settings,
 			string xsltTransformationFilePath,
 			string xsltTemplatesPath,
@@ -694,6 +696,24 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			AdresarovaStruktura ads, IPrepis prepis)
 		{
 			IExportNastaveni nastaveni = new SlovnikovyModulNastaveni();
+			nastaveni.SouborTransformaci = xsltTransformationFilePath;
+			nastaveni.SlozkaXslt = xsltTemplatesPath;
+			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
+			nastaveni.VystupniSlozka = ads.DejVystup;
+			nastaveni.DocasnaSlozka = ads.DejTemp;
+			nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
+
+			nastaveni.SouborMetadat = settings.MetadataFilePath;
+			return nastaveni;
+		}
+
+        private static IExportNastaveni GetGrammarSettings(DocxToTeiConverterSettings settings,
+			string xsltTransformationFilePath,
+			string xsltTemplatesPath,
+			AdresarovaStruktura ads, IPrepis prepis)
+		{
+			IExportNastaveni nastaveni = new MluvniceModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
 			nastaveni.SlozkaXslt = xsltTemplatesPath;
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;

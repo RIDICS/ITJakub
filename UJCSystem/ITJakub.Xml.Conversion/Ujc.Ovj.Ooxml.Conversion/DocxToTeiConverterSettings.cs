@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace Ujc.Ovj.Ooxml.Conversion
 {
@@ -26,12 +27,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// </summary>
 		public string[] InputFilesPath { get; set; }
 
-		/// <summary>
-		/// List of full paths to input files (DOCX). 
-		/// In the case when one work is divided into multiple files (e.g. dictionaries divided by letter).
-		/// </summary>
-		public List<string> InputFilesPaths { get; set; }
-
+        public Dictionary<ResourceType, string[]> UploadedFilesPath { get; set; }
+        
 		/// <summary>
 		/// Full path to output file (XML).
 		/// </summary>
@@ -74,15 +71,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 	    #endregion
 
-		#region Methods
+        #region Methods
 
-		#endregion
+        #endregion
 
-		#region Helpers
+        #region Helpers
 
-		#endregion
+        #endregion
 
 
 
-	}
+    }
 }
