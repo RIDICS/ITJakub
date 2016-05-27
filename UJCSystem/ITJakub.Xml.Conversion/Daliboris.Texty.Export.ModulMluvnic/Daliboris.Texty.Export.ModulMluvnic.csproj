@@ -30,8 +30,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CodeCarvings.Piczard, Version=1.2.3.0, Culture=neutral, PublicKeyToken=88d00d4422733d60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CodeCarvings.Piczard.1.2.3.3\lib\CodeCarvings.Piczard.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +65,10 @@
       <Project>{96838f37-2e15-4785-b117-0de31494f733}</Project>
       <Name>Daliboris.OOXML.Word</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457fef12-bd22-4498-924f-941b31dccd6b}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
       <Project>{a612c779-be2b-44f2-9c86-bd5324f1f8b6}</Project>
       <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
@@ -84,6 +93,21 @@
       <Project>{70259678-bea1-44d4-bd7f-85a60d683b8b}</Project>
       <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Watermarks\Vodoznak_BLMU.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_KNM.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_MZK.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_NKCR.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_SOUKROME.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_STRAHOV.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_TREBON.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_UJC.png" />
+    <EmbeddedResource Include="Watermarks\Vodoznak_VKOL.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

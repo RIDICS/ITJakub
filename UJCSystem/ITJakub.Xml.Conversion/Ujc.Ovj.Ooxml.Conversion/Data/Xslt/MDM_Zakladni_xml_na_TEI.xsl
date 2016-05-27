@@ -5,6 +5,11 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
     exclude-result-prefixes="xd" 
     version="1.0">
+    
+    <xsl:include href="TEI_Common.xsl"/>
+    
+    <xsl:param name="guid" />
+    
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Jun 11, 2012</xd:p>
@@ -17,11 +22,6 @@
     <xsl:strip-space elements="*"/>
 
     <xsl:template match="body">
-
-        <xsl:variable name="guid">
-            <xsl:value-of select="table[10]/row[1]/cell[1]/Normalni[1]/text/text()"/>
-        </xsl:variable>
-
         <xsl:variable name="zkratka">
             <xsl:value-of select="table[2]/row[4]/cell[2]/Normalni[1]/zkratka_mluvnice/text()"/>
         </xsl:variable>
@@ -146,10 +146,14 @@
                         </msDesc>
                     </sourceDesc>
                 </fileDesc>
+                <xsl:call-template name="InsertEndocingDesc"/>
                 <profileDesc>
                     <langUsage>
                         <xsl:apply-templates select="table[@n='9']"/>
                     </langUsage>
+                    <textClass>
+                        <catRef target="#taxonomy-digitized-grammar #output-digitized-grammar"/>
+                    </textClass>
                 </profileDesc>
             </teiHeader>
             <!--            <text>

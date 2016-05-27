@@ -28,8 +28,7 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 	    {
 	        return GetSimplifiedFilename(prepis.Soubor.NazevBezPripony, false);
 	    }
-
-
+        
         private string GetSimplifiedFilename(string fileName, bool hasExtension = true)
 	    {
             if (hasExtension)
@@ -75,14 +74,11 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 				var step = 0;
 
 			    vystupniSoubor = inputFilePath;
-
-			    NameValueCollection parameters;
-
+                
 			    if (xsltSteps.Count > 0)
 			    {
 			        var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-			        parameters = new NameValueCollection();
-			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
 
                     vystupniSoubor = step00File;
                 }
@@ -106,13 +102,12 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 
                     fileTransformationSource = step04File;
                 }
-
-                parameters = new NameValueCollection();
+                
 				while (xsltSteps.Count > 0)
 				{
                     var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
                         
-                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
+                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
 
                     fileTransformationSource = fileTransformationTarget;
 				}

@@ -110,11 +110,9 @@ namespace Daliboris.Texty.Export
             return Path.Combine(tempDirectory, String.Format(fileNameFormat, sourceFile, step));
         }
 
-        protected void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers,
-            string tempDirectory, NameValueCollection parameters)
+        public void ApplyTransformations(string inputFile, string outputFile, IList<IXsltTransformer> transformers, string tempDirectory, NameValueCollection parameters = null)
         {
-            XsltTransformationProcess process = new XsltTransformationProcess(inputFile, outputFile, transformers,
-                parameters);
+            var process = new XsltTransformationProcess(inputFile, outputFile, transformers, parameters ?? new NameValueCollection());
             process.TempDirectory = tempDirectory;
             process.Transform();
         }

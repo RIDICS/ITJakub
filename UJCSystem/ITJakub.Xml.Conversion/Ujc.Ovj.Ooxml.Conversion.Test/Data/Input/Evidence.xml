@@ -83699,4 +83699,33 @@
   <Identifikator>409</Identifikator>
   <TypPrepisu>mluvnice</TypPrepisu>
  </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Titul>TomsaVerand1805</Titul>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Titul>TomsaVerand1805</Titul>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>TomsaVerand1805.docx</Nazev>
+   <FormatWordu>Docx</FormatWordu>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{E97AAF70-9569-4BC0-997C-5DDB8491B3ED}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <ZpusobVyuziti>Manuscriptorium StredoceskyKorpus InterniKorpus</ZpusobVyuziti>
+  </Zpracovani>
+  <Identifikator>410</Identifikator>
+  <TypPrepisu>mluvnice</TypPrepisu>
+ </Prepis>
+ 
 </Prepisy>

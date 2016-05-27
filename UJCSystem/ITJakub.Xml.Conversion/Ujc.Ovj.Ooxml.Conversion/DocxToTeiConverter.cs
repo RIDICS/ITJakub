@@ -186,23 +186,20 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			if (!settings.Debug)
 			{
-			    foreach (var xmlOutputFile in xmlOutputFiles)
-			    {    
-				if (File.Exists(xmlOutputFile))
-					File.Delete(xmlOutputFile);
+			    foreach (var xmlOutputFile in xmlOutputFiles.Where(File.Exists))
+			    {
+			        File.Delete(xmlOutputFile);
 			    }
 			}
 
-			List<VersionInfoSkeleton> versions = settings.GetVersionList(_documentId);
+			var versions = settings.GetVersionList(_documentId);
 
 			_currentVersionInfoSkeleton = versions.Last();
 
 
 			WriteListChange(finalOutputFileName, versions, _currentVersionInfoSkeleton);
-		    string xmlFinalOutputPath = Path.Combine(settings.OutputDirectoryPath, xmlOutpuFileName);
-
-
-
+		    var xmlFinalOutputPath = Path.Combine(settings.OutputDirectoryPath, xmlOutpuFileName);
+            
             File.Copy(finalOutputFileName, xmlFinalOutputPath, true);
 			_result.MetadataFilePath = settings.OutputMetadataFilePath;
                 //GetConversionMetadataFileFullPath(settings.OutputFilePath);
@@ -228,8 +225,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
                 ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
                 tocResult = tocBuilder.MakeTableOfContent(xmlFinalOutputPath, "body");
 
-                GenerateConversionMetadataFile(splittingResult, tocResult, documentType,
-                    xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+                GenerateConversionMetadataFile(splittingResult, tocResult, documentType, xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
             }
 
             if (!settings.Debug)
@@ -373,22 +369,18 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		{
 			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
 
-			var items = from item in result.Descendants(nsTei + "item").Where(
-			    item =>
+			var items = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null).
+                Select(item => new
 			    {
-			        return item.Element(nsTei + "list") == null;
-			    }
-                )
-									select new
-									{
-										EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
-										DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
-                                        DefaultHwSorting = (from i in item.Parent.Parent.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(),
-										Headword = item.Element(nsTei + "head").Value,
-                                        HeadwordSorting = (from i in item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(), 
-										Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
-										Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
-									};
+			        EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
+			        DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
+			        DefaultHwSorting = item.Parent.Parent.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").Where(i => i.Attribute("type").Value == "sorting").FirstOrDefault(),
+			        Headword = item.Element(nsTei + "head").Value,
+			        HeadwordSorting = item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").Where(i => i.Attribute("type").Value == "sorting").FirstOrDefault(),
+			        Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
+			        Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
+			    });
+
 			foreach (var item in items)
 			{
 				doc.Root.Add(new XElement(nsItj + "headword",

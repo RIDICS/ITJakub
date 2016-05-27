@@ -4,4 +4,15 @@
 	<transformation xml:id="body" >
 		<step file="MDM_Zakladni_xml_na_TEI.xsl" />
 	</transformation>
+  
+  <transformation xml:id="grammar-step01" >
+		<step file="MDM_Zakladni_xml_na_TEI.xsl" />
+	</transformation>
+  
+  <transformation xml:id="grammar-step02" >
+		<step file="MDM_SloucitHlavickuPlusFacsimile.xsl" />
+	</transformation>
+  <transformation xml:id="grammar-step03" >
+		<step file="MDM_UpravitPaginaciFacsimle.xsl" />
+	</transformation>
 </transformations>
