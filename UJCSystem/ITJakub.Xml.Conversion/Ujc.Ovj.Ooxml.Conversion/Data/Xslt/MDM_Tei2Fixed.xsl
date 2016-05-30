@@ -64,9 +64,19 @@
 		<xsl:copy>
 			<xsl:apply-templates select="@*" />
 			<xsl:apply-templates />
-			<revisionDesc>
-				<change n="{$version}" when="{current-dateTime()}" />
-			</revisionDesc>
+			<xsl:if test="not(node()[not(tei:revisionDesc)])">
+				<revisionDesc>
+					<change n="{$version}" when="{current-dateTime()}" />
+				</revisionDesc>
+			</xsl:if>
+		</xsl:copy>
+	</xsl:template>
+	
+	<xsl:template match="tei:teiHeader/tei:revisionDesc">
+		<xsl:copy>
+			<xsl:apply-templates select="@*" />
+			<xsl:apply-templates />
+			<change n="{$version}" when="{current-dateTime()}" />
 		</xsl:copy>
 	</xsl:template>
 	

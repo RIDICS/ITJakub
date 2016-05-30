@@ -8,11 +8,17 @@
   <transformation xml:id="grammar-step01" >
 		<step file="MDM_Zakladni_xml_na_TEI.xsl" />
 	</transformation>
-  
   <transformation xml:id="grammar-step02" >
 		<step file="MDM_SloucitHlavickuPlusFacsimile.xsl" />
 	</transformation>
   <transformation xml:id="grammar-step03" >
 		<step file="MDM_UpravitPaginaciFacsimle.xsl" />
+	</transformation>
+
+  <transformation xml:id="grammar-xmd-step01" >
+		<step file="MDM_Tei2Fixed.xsl" />
+	</transformation>
+  <transformation xml:id="grammar-xmd-step02" >
+		<step file="MDM_Tei2Xmd.xsl" />
 	</transformation>
 </transformations>

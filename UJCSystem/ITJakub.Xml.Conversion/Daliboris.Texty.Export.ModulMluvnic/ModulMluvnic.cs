@@ -27,8 +27,7 @@ namespace Daliboris.Texty.Export
             throw new NotImplementedException();
         }
 
-        public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles,
-            Dictionary<ResourceType, string[]> uploadedFiles)
+        public override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, IReadOnlyDictionary<ResourceType, string[]> uploadedFiles)
         {
             ExportujImpl(prpPrepis, xmlOutputFiles, uploadedFiles);
         }
@@ -39,10 +38,28 @@ namespace Daliboris.Texty.Export
             string finalOutputFileName,
             string finalOutputMetadataFileName)
         {
-            throw new NotImplementedException();
+            var fiFinalOutputFilename = new FileInfo(finalOutputFileFullPath);
+            var outputFileWithoutExtension = fiFinalOutputFilename.Name.Substring(0, fiFinalOutputFilename.Name.LastIndexOf(".", StringComparison.Ordinal)) + "-xmd";
+
+            var xsltSteps = GetTransformationList("grammar-xmd-step");
+            var stepFiles = new string[xsltSteps.Count];
+            for (var i = 0; i < stepFiles.Length; i++)
+            {
+                stepFiles[i] = GetTempFile(Nastaveni.DocasnaSlozka, outputFileWithoutExtension, i);
+            }
+
+            var step = 0;
+            var inputFilePath = finalOutputFileFullPath;
+            while (xsltSteps.Count > 0)
+            {
+                ApplyTransformations(inputFilePath, stepFiles[step], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
+                inputFilePath = stepFiles[step++];
+            }
+
+            File.Copy(inputFilePath, finalOutputMetadataFileName);
         }
 
-        private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
+        private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles, IReadOnlyDictionary<ResourceType, string[]> uploadedFiles)
         {
             var xsltSteps = GetTransformationList("grammar-step");
 
@@ -58,15 +75,15 @@ namespace Daliboris.Texty.Export
                 return xmlFileInfo.Name.Substring(0, xmlFileInfo.Name.Length - xmlFileInfo.Extension.Length) == fileNameFithoutExtension;
             });
 
-            var stepFiles = new string[7];
+            var stepFiles = new string[xsltSteps.Count + 4]; //UpravPerexSouboru, ZkontrolujCislaPagin, OdlisitStejnePojmenovanaPaginy, UpravOdkazyNaPaginy
             for (var i = 0; i < stepFiles.Length; i++)
             {
                 stepFiles[i] = GetTempFile(Nastaveni.DocasnaSlozka, fileNameFithoutExtension, i);
             }
 
-            var parameters = new NameValueCollection { { "guid", prepis.GUID }, { "faksimile", faksimile } };
+            var parameters = new NameValueCollection {{"guid", prepis.GUID}, {"faksimile", faksimile}};
             ApplyTransformations(inputFilePath, stepFiles[0], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
-            
+
             ApplyTransformations(stepFiles[0], stepFiles[1], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
 
             ApplyTransformations(stepFiles[1], stepFiles[2], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);

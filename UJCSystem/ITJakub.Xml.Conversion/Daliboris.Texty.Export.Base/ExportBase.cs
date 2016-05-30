@@ -21,7 +21,7 @@ namespace Daliboris.Texty.Export
             Nastaveni = nastaveni;
         }
 
-        public virtual void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, Dictionary<ResourceType, string[]> uploadedFiles)
+        public virtual void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles, IReadOnlyDictionary<ResourceType, string[]> uploadedFiles)
         {
             Exportuj(prpPrepis, xmlOutputFiles);
         }

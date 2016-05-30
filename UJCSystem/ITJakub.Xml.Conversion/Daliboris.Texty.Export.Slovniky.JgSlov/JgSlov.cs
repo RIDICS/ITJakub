@@ -499,7 +499,7 @@ namespace Daliboris.Slovniky
             string finalOutputFileName,
             string finalOutputMetadataFileName)
         {
-            var fiFinalOutputFilename=new FileInfo(finalOutputFileFullPath);
+            var fiFinalOutputFilename = new FileInfo(finalOutputFileFullPath);
             var step = 0;
             var outputFileWithoutExtension = fiFinalOutputFilename.Name.Substring(0, fiFinalOutputFilename.Name.LastIndexOf(".", StringComparison.Ordinal));
 

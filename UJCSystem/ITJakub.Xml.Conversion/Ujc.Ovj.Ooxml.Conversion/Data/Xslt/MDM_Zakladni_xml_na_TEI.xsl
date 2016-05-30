@@ -6,8 +6,6 @@
     exclude-result-prefixes="xd" 
     version="1.0">
     
-    <xsl:include href="TEI_Common.xsl"/>
-    
     <xsl:param name="guid" />
     
     <xd:doc scope="stylesheet">
@@ -146,14 +144,14 @@
                         </msDesc>
                     </sourceDesc>
                 </fileDesc>
-                <xsl:call-template name="InsertEndocingDesc"/>
+                <!--<xsl:call-template name="InsertEndocingDesc"/>-->
                 <profileDesc>
                     <langUsage>
                         <xsl:apply-templates select="table[@n='9']"/>
                     </langUsage>
-                    <textClass>
+                    <!--<textClass>
                         <catRef target="#taxonomy-digitized-grammar #output-digitized-grammar"/>
-                    </textClass>
+                    </textClass>-->
                 </profileDesc>
             </teiHeader>
             <!--            <text>

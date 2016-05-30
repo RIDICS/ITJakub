@@ -239,6 +239,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					Directory.Delete(settings.TempDirectoryPath, true);
 				}
 			}
+
 			return _result;
 		}
 
