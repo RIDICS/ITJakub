@@ -4,7 +4,7 @@
 	exclude-result-prefixes="xd"
 	version="1.0">
 	<xsl:variable name="lomitko" select="'/'"/>
-	<xsl:template match="foliace">
+	<xsl:template match="foliace | paginace">
 		<xsl:call-template name="zpracujFoliaci">
 			<xsl:with-param name="konciMezerou" select="substring(., string-length(.), 1) = ' '" />
 			<xsl:with-param name="cislo" select="normalize-space(.)" />

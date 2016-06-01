@@ -31,7 +31,7 @@
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
             <xsl:attribute name="xml:id">
-                <xsl:value-of select="concat('pb', @n)"/>
+                <xsl:value-of select="concat('pb-', translate(@n, '’', '-'))"/>
             </xsl:attribute> 
             <xsl:apply-templates select="node()"/>
         </xsl:copy>
