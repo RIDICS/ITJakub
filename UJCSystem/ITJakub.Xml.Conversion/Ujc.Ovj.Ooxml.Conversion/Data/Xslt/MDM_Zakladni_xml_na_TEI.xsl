@@ -525,6 +525,24 @@
                     <xsl:value-of select="$rok"/>
                 </origDate>
             </xsl:when>
+            <!-- Dočasné řešení; týká se BlahGram -->
+            <xsl:when test="$rok = '1571 (opis kolem 1670)'">
+                <origDate notBefore="1571" notAfter="1571">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+          <!-- Dočasné řešení; týká se Prin -->
+            <xsl:when test="$rok = 'b. d. [2. polovina 17. století]'">
+                <origDate notBefore="1650" notAfter="1699">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+          <!-- Dočasné řešení; týká se Prin1783 -->
+            <xsl:when test="$rok = 'b. d. [1783]'">
+                <origDate notBefore="1783" notAfter="1783">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
             <xsl:otherwise>
                 <origDate notBefore="{$rok}" notAfter="{$rok}">
                     <xsl:value-of select="$rok"/>

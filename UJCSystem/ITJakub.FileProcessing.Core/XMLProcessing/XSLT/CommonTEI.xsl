@@ -9,6 +9,10 @@
   exclude-result-prefixes="xd tei nlp exist"
   version="1.0">
 
+  <xsl:template match="tei:author[tei:forename][tei:surname]" priority="5">
+    <xsl:value-of select="concat(tei:forename[not(@type)], ' ', tei:surname[not(@type)])" />
+  </xsl:template>
+  
   <xsl:template match="tei:w" priority="5">
     <xsl:apply-templates />
   </xsl:template>
