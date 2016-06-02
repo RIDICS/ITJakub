@@ -23,7 +23,21 @@
     
     <xsl:template match="body" priority="10">
         <xsl:element name="body" namespace="http://www.tei-c.org/ns/1.0">
-                <xsl:apply-templates />
+            <xsl:apply-templates />
+        </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="pb[@n]" priority="10">
+        <xsl:element name="{local-name()}" namespace="http://www.tei-c.org/ns/1.0">
+            <xsl:copy-of select="@*" />
+            
+            <xsl:if test="number(@n)">
+                <xsl:attribute name="ed">
+                    <xsl:text>print</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            
+            <xsl:apply-templates />
         </xsl:element>
     </xsl:template>
     
