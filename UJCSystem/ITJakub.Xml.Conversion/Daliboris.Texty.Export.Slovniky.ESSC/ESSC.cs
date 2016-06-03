@@ -78,11 +78,13 @@ namespace Daliboris.Slovniky
 										}
 										DPXT.SerializeNode(r, xw);
 										blnJeSenseGrp = blnJeSense = false;
+
 										break;
 									case "entryend":
 										xw.WriteEndElement(); //entry
 										xw.WriteWhitespace("\r\n");
 										blnPrvniEntryhead = true;
+
 										break;
 									case "senseGrp":
 										if (blnJeSense)
@@ -93,11 +95,13 @@ namespace Daliboris.Slovniky
 
 										blnJeSenseGrp = true;
 										blnJeSense = false;
+
 										goto default;
 									case "sense":
 										if (!blnJeSense)
 											xw.WriteStartElement("senses");
 										blnJeSense = true;
+
 										goto default;
 									default:
 										if (blnJeSense && r.Depth == 2 && !(r.Name == "sense"))
