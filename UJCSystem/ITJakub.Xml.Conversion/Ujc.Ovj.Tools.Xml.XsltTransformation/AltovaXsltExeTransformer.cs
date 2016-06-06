@@ -76,12 +76,7 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 
 			foreach (string parameter in parameters)
 			{
-				parametersCmd += String.Format("{0}={1} ", parameter, parameters[parameter]);
-			}
-
-			if (parametersCmd != null)
-			{
-				parametersCmd += "/param ";
+				parametersCmd += String.Format("/param \"{0}='{1}'\" ", parameter, parameters[parameter]);
 			}
 
 			string arguments = string.Format("{0} {1} /in {2} {3} /out {4}", _xsltVersion, _xsltInformation.SourceFile, inputFile, parametersCmd, outputFile);
