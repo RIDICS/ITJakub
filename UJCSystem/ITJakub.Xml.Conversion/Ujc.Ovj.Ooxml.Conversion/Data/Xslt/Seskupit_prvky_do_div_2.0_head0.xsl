@@ -53,7 +53,10 @@
             </xsl:attribute>
         
             <!--<head><xsl:value-of select="." /></head>-->
-            <head><xsl:apply-templates /></head>
+            <xsl:element name="head">
+                <xsl:copy-of select="@*" />
+                <xsl:apply-templates />
+            </xsl:element>
             <xsl:copy-of select="current-group() except ."></xsl:copy-of>
         </xsl:element>
     </xsl:template>

@@ -74,14 +74,19 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 				var step = 0;
 
 			    vystupniSoubor = inputFilePath;
-                
+
+			    var transformationParameter = new NameValueCollection
+			    {
+			        {"guid", prepis.GUID}
+			    };
+
 			    if (xsltSteps.Count > 0)
 			    {
 			        var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
+			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, transformationParameter);
 
-                    vystupniSoubor = step00File;
-                }
+			        vystupniSoubor = step00File;
+			    }
 
 				var slovnik = GetDictionaryObject(fileName);
 				var fileTransformationSource= vystupniSoubor;
@@ -107,7 +112,7 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
 				{
                     var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
                         
-                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
+                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, transformationParameter);
 
                     fileTransformationSource = fileTransformationTarget;
 				}

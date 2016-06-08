@@ -69,12 +69,16 @@
 
   <transformation xml:id="ddbw-step01" >
     <step file="DDBW_Rename.xsl" />
-    <step file="DDBW_AddForm.xsl" />
-    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="DDBW_Compute_entryFreeId.xsl" />
+    <step file="DDBW_Compute_formId.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
     <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="DDBW_Header.xsl" />
   </transformation>
   
   <transformation xml:id="ddbw-xmd-step01" >
+    <step file="CombineHead.xsl" />
     <step file="JgSlov2Xmd.xsl" />
   </transformation>
 

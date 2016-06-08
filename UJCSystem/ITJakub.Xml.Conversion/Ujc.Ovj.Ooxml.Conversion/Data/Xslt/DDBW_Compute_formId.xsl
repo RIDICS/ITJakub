@@ -18,15 +18,27 @@
 	<xsl:preserve-space elements="text"/>
 	<xsl:variable name="vychozi-jazyk" select="'cs'"/>
 
-  
+  <xsl:variable name="entryFreeId" select="0" />
 
 	<xsl:template match="/">
 		<xsl:text xml:space="preserve">
 		</xsl:text>
-    <xsl:comment> DDBW_AddForm </xsl:comment>
+    <xsl:comment> DDBW_Compute_formId </xsl:comment>
 		<xsl:text xml:space="preserve">
 		</xsl:text>
     <xsl:apply-templates/>
+  </xsl:template>
+
+  <xsl:template match="tei:form">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat(ancestor::tei:entryFree[1]/@xml:id, '.hw', substring(string(1000001 + count(preceding-sibling::tei:form)), 2))"/>
+      </xsl:attribute>
+      
+      <xsl:apply-templates />
+    </xsl:copy>
   </xsl:template>
 
   <xsl:template match="*">

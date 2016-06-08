@@ -14,6 +14,9 @@
 			<xd:p>Konverze aktuální verze JgSlov do metadat.</xd:p>
 		</xd:desc>
 	</xd:doc>
+
+  <xsl:param name="accessories" />
+  
 	<xsl:output method="xml" indent="yes" />
 	<xsl:variable name="version" select="tei:TEI/tei:teiHeader/tei:revisionDesc/tei:change[last()]/@n"/>
 	<xsl:template match="/">
@@ -32,6 +35,7 @@
 		<xsl:call-template name="itj-table-of-content" />
 		<xsl:call-template name="itj-headwords-table" />
 		<xsl:call-template name="itj-headwords-list" />
+    <xsl:call-template name="itj-accessories-list" />
 	</xsl:template>
 
 	<xsl:template name="itj-pages">
@@ -41,12 +45,24 @@
 	</xsl:template>
 
 	<xsl:template match="tei:surface" mode="pages">
-		<itj:page n="{@n}" xml:id="t-1.body-1.pb-{@n}-{position()}" facs="{tei:graphic/@url}" >
-<!--			<xsl:attribute name="resource">
+    <xsl:element name="itj:page">
+      <xsl:attribute name="n">
+        <xsl:value-of select="@n"/>
+      </xsl:attribute>
+      <xsl:attribute name="xml:id">
+        <xsl:value-of select="concat('t-1.body-1.pb-', @n, '-', position())"/>
+      </xsl:attribute>
+      <xsl:if test="tei:graphic/@url">
+        <xsl:attribute name="facs">
+          <xsl:value-of select="tei:graphic/@url"/>
+        </xsl:attribute>
+      </xsl:if>
+    </xsl:element>
+    <!--		<itj:page n="{@n}" xml:id="t-1.body-1.pb-{@n}-{position()}" facs="{tei:graphic/@url}" >
+			<xsl:attribute name="resource">
 				<xsl:value-of select=" concat(substring-before(tei:graphic/@url, '.'), '.xml')"/>
 			</xsl:attribute>
--->
-		</itj:page>		
+		</itj:page>		-->
 	</xsl:template>
 
 	<xsl:template name="itj-table-of-content">
@@ -184,5 +200,10 @@
 	<xsl:template name="itj-headwords-list">
 		<itj:headwordsList />
 	</xsl:template>
-	
+
+  <xsl:template name="itj-accessories-list">
+    <itj:accessories>
+      <itj:file type="content" name="{$accessories}" />
+    </itj:accessories>
+  </xsl:template>
 </xsl:stylesheet>

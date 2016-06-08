@@ -21,9 +21,7 @@
 	<xsl:variable name="vychozi-jazyk" select="'cs'"/>
 
 	<xsl:template match="body">
-		<div xml:id="body.div-1" xmlns="http://www.tei-c.org/ns/1.0">
-			<xsl:apply-templates />
-		</div>
+		<xsl:apply-templates />
 	</xsl:template>
 
 	<xsl:template match="/">
@@ -49,8 +47,34 @@
 		</foreign>
 	</xsl:template>
 	
+	<xsl:template match="Titul">
+		<xsl:element name="head0">
+			<xsl:if test="node()[self::Nemcina]">
+				<xsl:attribute name="xml:lang">
+					<xsl:text>de-x-translit</xsl:text>
+				</xsl:attribute>
+			</xsl:if>
+			
+			<xsl:apply-templates />
+			<xsl:if test="following-sibling::*[1]/self::Titul">
+				<lb />
+				<xsl:apply-templates select="following-sibling::Titul[1]" mode="following" />
+			</xsl:if>
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Titul[preceding-sibling::*[1]/self::Titul]" />
+	
+	<xsl:template match="Titul/Nemcina">
+		<xsl:apply-templates/>
+	</xsl:template>
+	
+	<xsl:template match="Titul" mode="following">
+		<xsl:apply-templates />
+	</xsl:template>
+	
 	<xsl:template match="Litera">
-		<xsl:element name="head2">
+		<xsl:element name="head1">
 			<xsl:if test="node()[self::Nemcina]">
 				<xsl:attribute name="xml:lang">
 					<xsl:text>de-x-translit</xsl:text>
@@ -64,12 +88,41 @@
 	<xsl:template match="Litera/Nemcina">
 		<xsl:apply-templates/>
 	</xsl:template>
+  
+  <xsl:template match="Titul/text">
+		<xsl:apply-templates/>
+	</xsl:template>
+  
+  <xsl:template match="Komentar">
+    <note><xsl:apply-templates/></note>
+	</xsl:template>
+
+  <xsl:template match="Sloupec">
+    <xsl:element name="cb">
+      <xsl:attribute name="n">
+        <xsl:value-of select="text()"/>
+      </xsl:attribute>
+    </xsl:element>
+  </xsl:template>
+  
+  <xsl:template match="Zaver">
+    <xsl:element name="p">
+      <xsl:attribute name="rend">
+        <xsl:text>zaver</xsl:text>
+      </xsl:attribute>
+      
+		  <xsl:apply-templates/>
+    </xsl:element>
+	</xsl:template>
+  
+  <xsl:template match="Zaver/Nemcina">
+    <foreign xml:lang="de-x-transcr">
+      <xsl:apply-templates/>
+    </foreign>
+	</xsl:template>
 	
 	<xsl:template match="Heslovy_Odstavec">
 		<xsl:element name="entryFree">
-			<xsl:attribute name="xml:id">
-				<xsl:value-of select="concat('en', substring(string(1000001 + count(preceding-sibling::Heslovy_Odstavec)), 2))"/>
-			</xsl:attribute>
 			<xsl:for-each-group select="node()" group-ending-with="Cislo_Vyznamu">
 				<xsl:if test="position() = 1">
 					<xsl:apply-templates select="current-group()[self::Stranka]"/>
@@ -91,9 +144,11 @@
 	</xsl:template>
 	
 	<xsl:template match="Nemcina" mode="transliteration">
-		<reg xml:lang="de-x-translit">
-			<xsl:apply-templates />
-		</reg>
+		<form>
+			<orth xml:lang="de-x-translit">
+				<xsl:apply-templates />
+			</orth>
+		</form>
 	</xsl:template>
 	
 	<!--
@@ -121,9 +176,33 @@
 		</iType>
 	</xsl:template>
 	<xsl:template match="Cestina" mode="transliteration">
-		<orig xml:lang="cs-x-translit"><xsl:apply-templates /></orig>
+		<cit type="translation" xml:lang="cs-x-translit"><quote><xsl:apply-templates /></quote></cit>
 	</xsl:template>
 	<xsl:template match="Latina" mode="transliteration">
-		<orig xml:lang="lat-x-translit"><xsl:apply-templates /></orig>
+		<cit type="translation" xml:lang="lat-x-translit"><quote><xsl:apply-templates /></quote></cit>
+	</xsl:template>
+	
+	<xsl:template match="Pododstavec">
+		<xsl:element name="entryFree">
+			<xsl:attribute name="type">
+				<xsl:text>subentry</xsl:text>
+			</xsl:attribute>
+			
+			<xsl:apply-templates mode="transliteration" />
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Pododstavec/Sloupec" mode="transliteration">
+		<xsl:element name="cb">
+			<xsl:attribute name="n">
+				<xsl:value-of select="text()"/>
+			</xsl:attribute>
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Pododstavec/Nemcina" mode="transliteration">
+		<form>
+			<orth xml:lang="de-x-translit"><xsl:apply-templates /></orth>
+		</form>
 	</xsl:template>
 </xsl:stylesheet>

@@ -56,7 +56,10 @@
                 <xsl:value-of select="concat(parent::tei:div[1]/@xml:id,'.div-', position())"/>
             </xsl:attribute>
             
-            <head><xsl:apply-templates /></head>
+            <xsl:element name="head">
+                <xsl:copy-of select="@*" />
+                <xsl:apply-templates />
+            </xsl:element>
             <xsl:copy-of select="current-group() except ."></xsl:copy-of>
         </xsl:element>
     </xsl:template>
