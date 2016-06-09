@@ -43,6 +43,7 @@ namespace Daliboris.Texty.Evidence
 		private bool mblnZmenilSe = false;
 
 		public string Nazev { get; set; }
+        public string NazevArchive { get; set; }
 		public string Adresar { get; set; }
 		public string CelaCesta { get { return this.Adresar + "\\" + this.Nazev; } }
 		public FormatSouboru FormatWordu { get; set; }

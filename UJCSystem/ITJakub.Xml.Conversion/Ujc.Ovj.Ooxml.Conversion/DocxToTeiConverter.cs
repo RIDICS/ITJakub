@@ -764,8 +764,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
             }
             
 			var prepisy = Perzistence.NacistZXml(settings.MetadataFilePath);
-			var prepis = prepisy.FirstOrDefault(p => p.Soubor.Nazev == inputFileName) ??
-			             prepisy.FirstOrDefault(p =>p.Soubor.Nazev == searchedFileName);
+		    var prepis = prepisy.FirstOrDefault(p => p.Soubor.Nazev == inputFileName || p.Soubor.NazevArchive == inputFileName) ??
+		                 prepisy.FirstOrDefault(p => p.Soubor.Nazev == searchedFileName || p.Soubor.NazevArchive == searchedFileName);
             
 			return prepis;
 		}
