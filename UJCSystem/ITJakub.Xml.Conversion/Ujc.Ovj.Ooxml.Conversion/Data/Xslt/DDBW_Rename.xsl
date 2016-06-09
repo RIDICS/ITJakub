@@ -176,11 +176,18 @@
 		</iType>
 	</xsl:template>
 	<xsl:template match="Cestina" mode="transliteration">
-		<cit type="translation" xml:lang="cs-x-translit"><quote><xsl:apply-templates /></quote></cit>
+		<cit type="translation" xml:lang="cs"><quote xml:lang="cs">
+      <choice>
+        <reg xml:lang="cs-x-transc" xml:compute-reg="true"><xsl:apply-templates mode="strip-node-with-values" /></reg>
+        <orig xml:lang="cs-x-translit" xml:space="preserve"><xsl:apply-templates /></orig>
+      </choice> 
+    </quote></cit>
 	</xsl:template>
 	<xsl:template match="Latina" mode="transliteration">
 		<cit type="translation" xml:lang="lat-x-translit"><quote><xsl:apply-templates /></quote></cit>
 	</xsl:template>
+
+  <xsl:template match="*" mode="strip-node-with-values" />
 	
 	<xsl:template match="Pododstavec">
 		<xsl:element name="entryFree">
