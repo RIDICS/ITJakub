@@ -128,8 +128,7 @@ namespace ITJakub.ITJakubService.Core
 
             if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
             {
-                var databaseSearchResult =
-                    m_bookVersionRepository.SearchByCriteriaQuery(queryCreator);
+                var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(queryCreator);
 
                 if (databaseSearchResult.Count == 0)
                 {

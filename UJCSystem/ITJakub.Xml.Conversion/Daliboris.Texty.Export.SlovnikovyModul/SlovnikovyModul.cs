@@ -96,14 +96,14 @@ namespace Daliboris.Texty.Export.SlovnikovyModul
                     UsePersonalizedXmdGenerator = slovnik.UsePersonalizedXmdGenerator;
 
                     var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-				    var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-				    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-				    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
-
-				    slovnik.SeskupitHeslaPismene(vystupniSoubor, step01File, souborBezPripony);
-				    slovnik.UpravitHraniceHesloveStati(step01File, step02File, souborBezPripony);
-				    slovnik.KonsolidovatHeslovouStat(step02File, step03File, souborBezPripony);
-				    slovnik.UpravitOdkazy(step03File, step04File, souborBezPripony);
+                    var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    
+                    slovnik.SeskupitHeslaPismene(vystupniSoubor, step01File, souborBezPripony);
+                    slovnik.UpravitHraniceHesloveStati(step01File, step02File, souborBezPripony);
+                    slovnik.KonsolidovatHeslovouStat(step02File, step03File, souborBezPripony);
+                    slovnik.UpravitOdkazy(step03File, step04File, souborBezPripony);
 
                     fileTransformationSource = step04File;
                 }
