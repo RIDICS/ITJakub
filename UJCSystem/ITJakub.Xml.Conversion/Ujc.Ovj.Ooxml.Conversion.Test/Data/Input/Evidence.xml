@@ -90465,4 +90465,294 @@
   <Identifikator>494</Identifikator>
   <TypPrepisu>slovník</TypPrepisu>
  </Prepis>
+  <Prepis>
+    <Hlava>
+      <Pamatka>
+        <Titul>Pobožná píseň k sv. Janu Nepomuckému</Titul>
+        <Zkratka>Pís</Zkratka>
+        <LiterarniDruh>verš</LiterarniDruh>
+        <LiterarniZanr>píseň</LiterarniZanr>
+        <Datace>
+          <Stoleti>0</Stoleti>
+          <PolovinaStoleti>0</PolovinaStoleti>
+          <Desetileti>0</Desetileti>
+          <Rok>0</Rok>
+          <RelativniChronologie>0</RelativniChronologie>
+          <NePredRokem>0</NePredRokem>
+          <NePoRoce>0</NePoRoce>
+        </Datace>
+        <Pramen>
+          <Zkratka>PísNepom1799</Zkratka>
+          <Ulozeni>
+            <Zeme>Česko</Zeme>
+            <Mesto>Praha</Mesto>
+            <Instituce>Etnologický ústav AV ČR</Instituce>
+            <Signatura>XXXVI 91-108 [107]</Signatura>
+            <FoliacePaginace>1–8</FoliacePaginace>
+          </Ulozeni>
+          <Datace>
+            <SlovniPopis>1799</SlovniPopis>
+            <Stoleti>1700</Stoleti>
+            <PolovinaStoleti>2</PolovinaStoleti>
+            <Desetileti>9</Desetileti>
+            <Rok>1799</Rok>
+            <RelativniChronologie>8</RelativniChronologie>
+            <NePredRokem>1799</NePredRokem>
+            <NePoRoce>1799</NePoRoce>
+          </Datace>
+          <Typ>Rukopis</Typ>
+        </Pramen>
+        <Edice>
+          <Editori />
+          <Typ>Edice</Typ>
+        </Edice>
+      </Pamatka>
+      <Predloha typ="Neznamy" />
+      <Editori />
+    </Hlava>
+    <Hlavicka>
+      <Titul>Pobožná píseň k sv. Janu Nepomuckému</Titul>
+      <DataceText>1799</DataceText>
+      <Tiskar>Elsenwangerová, Josefa</Tiskar>
+      <MistoTisku>Praha</MistoTisku>
+      <TypPredlohy>StaryTisk</TypPredlohy>
+      <TypPredlohyText>starý tisk</TypPredlohyText>
+      <ZemeUlozeni>Česko</ZemeUlozeni>
+      <MestoUlozeni>Praha</MestoUlozeni>
+      <InstituceUlozeni>Etnologický ústav AV ČR</InstituceUlozeni>
+      <Signatura>XXXVI 91-108 [107]</Signatura>
+      <FoliacePaginace>1–8</FoliacePaginace>
+      <EditoriPrepisuText>Böhmová, Veronika – Valenta, Petr</EditoriPrepisuText>
+      <EditoriPrepisu>
+        <string>Böhmová, Veronika – Valenta, Petr</string>
+      </EditoriPrepisu>
+    </Hlavicka>
+    <Soubor>
+      <Nazev>PisNepom1799.docx</Nazev>
+      <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+      <FormatWordu>Docx</FormatWordu>
+      <Zmeneno>2016-04-22T11:33:22.4992346+02:00</Zmeneno>
+      <Velikost>57245</Velikost>
+      <CisloRevize>0</CisloRevize>
+      <KontrolniSoucet>5D402DC428A3558B783295208B41FE81</KontrolniSoucet>
+    </Soubor>
+    <Zpracovani>
+      <GUID>{F1ADCB80-F75C-4CA7-A812-603550CD0DD5}</GUID>
+      <FazeZpracovani>Exportovat</FazeZpracovani>
+      <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+      <Neexportovat>false</Neexportovat>
+      <Exporty />
+      <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+      <PrvniExporty />
+      <ObjemDat>0</ObjemDat>
+      <ZkratkaPamatky>Pís</ZkratkaPamatky>
+      <ZkratkaPramene>PísNepom1799</ZkratkaPramene>
+      <LiterarniDruh>verš</LiterarniDruh>
+      <LiterarniZanr>píseň</LiterarniZanr>
+      <VerzeMetadat>2.0</VerzeMetadat>
+      <Transliterovane>false</Transliterovane>
+      <MaEdicniPoznamku>false</MaEdicniPoznamku>
+      <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+      <PocetTokenu>0</PocetTokenu>
+      <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+      <Publikace />
+    </Zpracovani>
+    <ObdobiVzniku>1750–1800</ObdobiVzniku>
+    <Identifikator>495</Identifikator>
+    <VerzeMetadat>2.0</VerzeMetadat>
+    <TypPrepisu>edice</TypPrepisu>
+  </Prepis>
+  <Prepis>
+    <Hlava>
+      <Pamatka>
+        <Titul>Pobožná píseň k svatému Janu Nepomuckému</Titul>
+        <Zkratka>Pís</Zkratka>
+        <LiterarniDruh>verš</LiterarniDruh>
+        <LiterarniZanr>píseň</LiterarniZanr>
+        <Datace>
+          <Stoleti>0</Stoleti>
+          <PolovinaStoleti>0</PolovinaStoleti>
+          <Desetileti>0</Desetileti>
+          <Rok>0</Rok>
+          <RelativniChronologie>0</RelativniChronologie>
+          <NePredRokem>0</NePredRokem>
+          <NePoRoce>0</NePoRoce>
+        </Datace>
+        <Pramen>
+          <Zkratka>PísNepom1789</Zkratka>
+          <Ulozeni>
+            <Zeme>Česko</Zeme>
+            <Mesto>Praha</Mesto>
+            <Instituce>Etnologický ústav AV ČR</Instituce>
+            <Signatura>XXXVI 95-108 [98]</Signatura>
+            <FoliacePaginace>1–7</FoliacePaginace>
+          </Ulozeni>
+          <Datace>
+            <SlovniPopis>1789</SlovniPopis>
+            <Stoleti>1700</Stoleti>
+            <PolovinaStoleti>2</PolovinaStoleti>
+            <Desetileti>8</Desetileti>
+            <Rok>1789</Rok>
+            <RelativniChronologie>8</RelativniChronologie>
+            <NePredRokem>1789</NePredRokem>
+            <NePoRoce>1789</NePoRoce>
+          </Datace>
+          <Typ>Rukopis</Typ>
+        </Pramen>
+        <Edice>
+          <Editori />
+          <Typ>Edice</Typ>
+        </Edice>
+      </Pamatka>
+      <Predloha typ="Neznamy" />
+      <Editori />
+    </Hlava>
+    <Hlavicka>
+      <Titul>Pobožná píseň k svatému Janu Nepomuckému</Titul>
+      <DataceText>1789</DataceText>
+      <Tiskar>Samm, Jan Michal</Tiskar>
+      <MistoTisku>Praha</MistoTisku>
+      <TypPredlohy>StaryTisk</TypPredlohy>
+      <TypPredlohyText>starý tisk</TypPredlohyText>
+      <ZemeUlozeni>Česko</ZemeUlozeni>
+      <MestoUlozeni>Praha</MestoUlozeni>
+      <InstituceUlozeni>Etnologický ústav AV ČR</InstituceUlozeni>
+      <Signatura>XXXVI 95-108 [98]</Signatura>
+      <FoliacePaginace>1–7</FoliacePaginace>
+      <EditoriPrepisuText>Böhmová, Veronika – Valenta, Petr</EditoriPrepisuText>
+      <EditoriPrepisu>
+        <string>Böhmová, Veronika – Valenta, Petr</string>
+      </EditoriPrepisu>
+    </Hlavicka>
+    <Soubor>
+      <Nazev>PisNepom1789.docx</Nazev>
+      <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+      <FormatWordu>Docx</FormatWordu>
+      <Zmeneno>2016-04-22T11:33:22.9445309+02:00</Zmeneno>
+      <Velikost>55938</Velikost>
+      <CisloRevize>0</CisloRevize>
+      <KontrolniSoucet>6414C9FE852992C7C8BB97BD9A7A488C</KontrolniSoucet>
+    </Soubor>
+    <Zpracovani>
+      <GUID>{790CBB9E-31B5-4A7A-AED9-2CA3C3AF45D7}</GUID>
+      <FazeZpracovani>Exportovat</FazeZpracovani>
+      <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+      <Neexportovat>false</Neexportovat>
+      <Exporty />
+      <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+      <PrvniExporty />
+      <ObjemDat>0</ObjemDat>
+      <ZkratkaPamatky>Pís</ZkratkaPamatky>
+      <ZkratkaPramene>PísNepom1789</ZkratkaPramene>
+      <LiterarniDruh>verš</LiterarniDruh>
+      <LiterarniZanr>píseň</LiterarniZanr>
+      <VerzeMetadat>2.0</VerzeMetadat>
+      <Transliterovane>true</Transliterovane>
+      <MaEdicniPoznamku>false</MaEdicniPoznamku>
+      <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+      <PocetTokenu>0</PocetTokenu>
+      <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+      <Publikace />
+    </Zpracovani>
+    <ObdobiVzniku>1750–1800</ObdobiVzniku>
+    <Identifikator>496</Identifikator>
+    <VerzeMetadat>2.0</VerzeMetadat>
+    <TypPrepisu>edice</TypPrepisu>
+  </Prepis>
+  <Prepis>
+    <Hlava>
+      <Pamatka>
+        <Titul>[Veršované Staré letopisy české]</Titul>
+        <Zkratka>Let</Zkratka>
+        <LiterarniDruh>verš</LiterarniDruh>
+        <LiterarniZanr>kronika</LiterarniZanr>
+        <Datace>
+          <Stoleti>0</Stoleti>
+          <PolovinaStoleti>0</PolovinaStoleti>
+          <Desetileti>0</Desetileti>
+          <Rok>0</Rok>
+          <RelativniChronologie>0</RelativniChronologie>
+          <NePredRokem>0</NePredRokem>
+          <NePoRoce>0</NePoRoce>
+        </Datace>
+        <Pramen>
+          <Zkratka>LetVerš</Zkratka>
+          <Ulozeni>
+            <Zeme>Česko</Zeme>
+            <Mesto>Praha</Mesto>
+            <Instituce>Knihovna Národního muzea</Instituce>
+            <Signatura>V E 89</Signatura>
+            <FoliacePaginace>222r–224v</FoliacePaginace>
+          </Ulozeni>
+          <Datace>
+            <SlovniPopis>začátek 16. století</SlovniPopis>
+            <Stoleti>1500</Stoleti>
+            <PolovinaStoleti>0</PolovinaStoleti>
+            <Desetileti>0</Desetileti>
+            <Rok>0</Rok>
+            <Upresneni>začátek</Upresneni>
+            <RelativniChronologie>1</RelativniChronologie>
+            <NePredRokem>1500</NePredRokem>
+            <NePoRoce>1515</NePoRoce>
+          </Datace>
+          <Typ>Rukopis</Typ>
+        </Pramen>
+        <Edice>
+          <Editori />
+          <Typ>Edice</Typ>
+        </Edice>
+      </Pamatka>
+      <Predloha typ="Neznamy" />
+      <Editori />
+    </Hlava>
+    <Hlavicka>
+      <Titul>[Veršované Staré letopisy české]</Titul>
+      <DataceText>začátek 16. století</DataceText>
+      <TypPredlohy>Rukopis</TypPredlohy>
+      <TypPredlohyText>rukopis</TypPredlohyText>
+      <ZemeUlozeni>Česko</ZemeUlozeni>
+      <MestoUlozeni>Praha</MestoUlozeni>
+      <InstituceUlozeni>Knihovna Národního muzea</InstituceUlozeni>
+      <Signatura>V E 89</Signatura>
+      <FoliacePaginace>222r–224v</FoliacePaginace>
+      <EditoriPrepisuText>Černá, Alena M.</EditoriPrepisuText>
+      <EditoriPrepisu>
+        <string>Černá, Alena M.</string>
+      </EditoriPrepisu>
+    </Hlavicka>
+    <Soubor>
+      <Nazev>LetVers.docx</Nazev>
+      <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+      <FormatWordu>Docx</FormatWordu>
+      <Zmeneno>2016-02-18T17:57:47.2281674+01:00</Zmeneno>
+      <Velikost>50283</Velikost>
+      <CisloRevize>0</CisloRevize>
+      <KontrolniSoucet>F570D75E5F93066ED96763D86AE00E86</KontrolniSoucet>
+    </Soubor>
+    <Zpracovani>
+      <GUID>{849309EA-1624-4A58-8E5A-D71D77479AD2}</GUID>
+      <FazeZpracovani>Exportovat</FazeZpracovani>
+      <CasoveZarazeni>DoRoku1500</CasoveZarazeni>
+      <Neexportovat>false</Neexportovat>
+      <Exporty />
+      <ZpusobVyuziti>StaroceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+      <PrvniExporty />
+      <ObjemDat>0</ObjemDat>
+      <ZkratkaPamatky>Let</ZkratkaPamatky>
+      <ZkratkaPramene>LetVerš</ZkratkaPramene>
+      <LiterarniDruh>verš</LiterarniDruh>
+      <LiterarniZanr>kronika</LiterarniZanr>
+      <VerzeMetadat>2.0</VerzeMetadat>
+      <Transliterovane>false</Transliterovane>
+      <MaEdicniPoznamku>false</MaEdicniPoznamku>
+      <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+      <PocetTokenu>0</PocetTokenu>
+      <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+      <Publikace />
+    </Zpracovani>
+    <ObdobiVzniku>1500–1550</ObdobiVzniku>
+    <Identifikator>497</Identifikator>
+    <VerzeMetadat>2.0</VerzeMetadat>
+    <TypPrepisu>edice</TypPrepisu>
+  </Prepis>
 </Prepisy>
