@@ -543,6 +543,12 @@
                     <xsl:value-of select="$rok"/>
                 </origDate>
             </xsl:when>
+          <!-- Dočasné řešení; týká se HusAbecMDM -->
+            <xsl:when test="$rok = '15. století (rukopis z 2. poloviny 15. století)'">
+                <origDate notBefore="1450" notAfter="1499">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
             <xsl:otherwise>
                 <origDate notBefore="{$rok}" notAfter="{$rok}">
                     <xsl:value-of select="$rok"/>
