@@ -12,6 +12,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
 
         private string m_fileName;
         private FileStateType m_state;
+        private string m_errorMessage ="";
         private string m_fullPath;
 
         public FileViewModel(FileModel model)
@@ -37,6 +38,12 @@ namespace ITJakub.BatchImport.Client.ViewModel
             set { m_state = value; RaisePropertyChanged();}
         }
 
+        public string ErrorMessage
+        {
+            get { return m_errorMessage; }
+            set { m_errorMessage = value; RaisePropertyChanged();}
+        }
+
         public string FileName
         {
             get { return m_fileName; }
@@ -50,20 +57,24 @@ namespace ITJakub.BatchImport.Client.ViewModel
         private void SubscribeToEvents()
         {
             m_model.StateChanged += StateChanged;
+            m_model.ErrorMessageChanged += ErrorMessageChanged;
         }
 
         private void UnsubscribeFromEvents()
         {
             m_model.StateChanged -= StateChanged;
+            m_model.ErrorMessageChanged -= ErrorMessageChanged;
         }
-
+        
         private void StateChanged(object sender, FileStateType e)
         {
             State = e;
         }
 
-
-
+        private void ErrorMessageChanged(object sender, string e)
+        {
+            ErrorMessage = e;
+        }
 
         #region IDisposable Implementation
 

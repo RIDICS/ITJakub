@@ -39,7 +39,7 @@ namespace ITJakub.ITJakubService.Core.Resources
             }
             catch (CommunicationException ex)
             {
-                throw new FileProcessingException("Communication with FileProcessing service failed. See inner exception.", ex);
+                throw new FileProcessingException(String.Format("Communication with FileProcessing service failed. See inner exception: {0}", ex.Message), ex);
             }
             catch (ObjectDisposedException ex)
             {

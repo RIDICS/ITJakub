@@ -84,8 +84,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
             else
             {
-                throw new ConversionException(
-                    string.Format("File was not converted sucessfully. See InnerException : '{0}'", conversionResult.Errors.FirstOrDefault()));
+                var exception = conversionResult.Errors.FirstOrDefault();
+                throw new ConversionException(string.Format("File was not converted sucessfully. See InnerException : '{0}'", exception), exception);
             }
             
         }
