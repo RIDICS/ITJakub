@@ -370,17 +370,29 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		{
 			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
 
-			var items = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null).
-                Select(item => new
-			    {
-			        EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
-			        DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
-			        DefaultHwSorting = item.Parent.Parent.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").Where(i => i.Attribute("type").Value == "sorting").FirstOrDefault(),
-			        Headword = item.Element(nsTei + "head").Value,
-			        HeadwordSorting = item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").Where(i => i.Attribute("type").Value == "sorting").FirstOrDefault(),
-			        Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
-			        Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
-			    });
+		    var items2 = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null);
+		    foreach (var item in items2)
+		    {
+		        var xElement = item.Parent;
+		    }
+
+		    var items = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null).
+                Select(item =>
+                {
+                    var corresp = (item.Parent.Parent.Attribute("corresp") ?? item.Attribute("corresp")).Value.Replace("#", "");
+                    var head = item.Parent.Parent.Element(nsTei + "head") ?? item.Element(nsTei + "head");
+
+                    return new
+                    {
+                        EntryId = corresp,
+                        DefaultHw = head.Value,
+                        DefaultHwSorting = head.ElementsAfterSelf(nsTei + "interp").FirstOrDefault(i => i.Attribute("type").Value == "sorting"),
+                        Headword = item.Element(nsTei + "head").Value,
+                        HeadwordSorting = item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").FirstOrDefault(i => i.Attribute("type").Value == "sorting"),
+                        Visibility = item.Parent.Parent.Attribute("type")?.Value,
+                        Type = item.Attribute("type")?.Value
+                    };
+                });
 
 			foreach (var item in items)
 			{
