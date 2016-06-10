@@ -56,9 +56,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 
-            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository,
-                m_versionIdGenerator);
-            
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository, m_versionIdGenerator);
+
             var settings = new DocxToTeiConverterSettings
             {
                 Debug = false,

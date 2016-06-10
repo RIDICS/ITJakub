@@ -12,7 +12,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
 
         private string m_fileName;
         private FileStateType m_state;
-        private string m_errorMessage ="";
+        private string m_errorMessage;
         private string m_fullPath;
 
         public FileViewModel(FileModel model)
@@ -65,7 +65,7 @@ namespace ITJakub.BatchImport.Client.ViewModel
             m_model.StateChanged -= StateChanged;
             m_model.ErrorMessageChanged -= ErrorMessageChanged;
         }
-        
+
         private void StateChanged(object sender, FileStateType e)
         {
             State = e;
