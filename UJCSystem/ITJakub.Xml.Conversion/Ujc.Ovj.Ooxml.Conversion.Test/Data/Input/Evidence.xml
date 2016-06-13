@@ -90871,6 +90871,7 @@
   <ObdobiVzniku>1550–1600</ObdobiVzniku>
   <Identifikator>498</Identifikator>
   <VerzeMetadat>2.0</VerzeMetadat>
+  <TypPrepisu>edice</TypPrepisu>
  </Prepis>
 <Prepis>
   <Hlava>
@@ -90966,6 +90967,7 @@
   </Zpracovani>
   <ObdobiVzniku>1500–1550</ObdobiVzniku>
   <Identifikator>499</Identifikator>
+  <TypPrepisu>edice</TypPrepisu>
  </Prepis>
 <Prepis>
   <Hlava>
@@ -91062,6 +91064,7 @@
   <ObdobiVzniku>1600–1650</ObdobiVzniku>
   <Identifikator>500</Identifikator>
   <VerzeMetadat>2.0</VerzeMetadat>
+  <TypPrepisu>edice</TypPrepisu>
  </Prepis>
 <Prepis>
   <Hlava>
@@ -91160,5 +91163,6 @@
   <ObdobiVzniku>1550–1600</ObdobiVzniku>
   <Identifikator>501</Identifikator>
   <VerzeMetadat>2.0</VerzeMetadat>
+  <TypPrepisu>edice</TypPrepisu>
  </Prepis>
 </Prepisy>
