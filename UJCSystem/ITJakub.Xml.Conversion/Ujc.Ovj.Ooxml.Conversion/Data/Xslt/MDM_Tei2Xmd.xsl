@@ -20,10 +20,12 @@
     </xd:desc>
   </xd:doc>
 
+  <xsl:param name="versionId" />
+
   <xsl:output method="xml" indent="yes" encoding="UTF-8" />
 
   <xsl:template match="/">
-    <itj:document doctype="Grammar" versionId="02cfe5fd-9045-4b7e-a6a8-5255fe2c0f1f" xml:lang="cs" n="{/tei:TEI/tei:teiHeader/tei:fileDesc/@n}"
+    <itj:document doctype="Grammar" versionId="{$versionId}" xml:lang="cs" n="{/tei:TEI/tei:teiHeader/tei:fileDesc/@n}"
 			xmlns="http://www.tei-c.org/ns/1.0"
 			xmlns:itj="http://vokabular.ujc.cas.cz/ns/it-jakub/1.0"
 			xmlns:nlp="http://vokabular.ujc.cas.cz/ns/tei-nlp/1.0"

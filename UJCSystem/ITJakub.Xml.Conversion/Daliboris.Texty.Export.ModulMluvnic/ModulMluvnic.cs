@@ -48,11 +48,18 @@ namespace Daliboris.Texty.Export
                 stepFiles[i] = GetTempFile(Nastaveni.DocasnaSlozka, outputFileWithoutExtension, i);
             }
 
+            var guid = Guid.NewGuid();
+
+            var parameters = new NameValueCollection
+            {
+                {"versionId", guid.ToString("D")}
+            };
+
             var step = 0;
             var inputFilePath = finalOutputFileFullPath;
             while (xsltSteps.Count > 0)
             {
-                ApplyTransformations(inputFilePath, stepFiles[step], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka);
+                ApplyTransformations(inputFilePath, stepFiles[step], xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, parameters);
                 inputFilePath = stepFiles[step++];
             }
 
