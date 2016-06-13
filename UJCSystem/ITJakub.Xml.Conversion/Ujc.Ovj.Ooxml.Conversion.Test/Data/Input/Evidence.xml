@@ -558,7 +558,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
    <PocetTokenu>1034</PocetTokenu>
-   <PocetJedinecnychTokenu>451</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>452</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
   <ObdobiVzniku>1400–1450</ObdobiVzniku>
@@ -674,7 +674,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
    <PocetTokenu>7319</PocetTokenu>
-   <PocetJedinecnychTokenu>1789</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>1790</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
   <ObdobiVzniku>1450–1500</ObdobiVzniku>
@@ -6319,7 +6319,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Interni</Zabezpeceni>
    <PocetTokenu>20996</PocetTokenu>
-   <PocetJedinecnychTokenu>6167</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>6168</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
   <ObdobiVzniku>1450–1500</ObdobiVzniku>
@@ -7307,8 +7307,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>34909</PocetTokenu>
-   <PocetJedinecnychTokenu>6250</PocetJedinecnychTokenu>
+   <PocetTokenu>34905</PocetTokenu>
+   <PocetJedinecnychTokenu>6253</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -7836,9 +7836,9 @@
    <LiterarniZanr>biblický text</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
+   <PocetTokenu>24824</PocetTokenu>
+   <PocetJedinecnychTokenu>4592</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -9582,8 +9582,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele</Zabezpeceni>
-   <PocetTokenu>192547</PocetTokenu>
-   <PocetJedinecnychTokenu>21338</PocetJedinecnychTokenu>
+   <PocetTokenu>192620</PocetTokenu>
+   <PocetJedinecnychTokenu>21294</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -11517,7 +11517,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele</Zabezpeceni>
    <PocetTokenu>37217</PocetTokenu>
-   <PocetJedinecnychTokenu>6928</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>6927</PocetJedinecnychTokenu>
    <GrantovaPodpora>Převod edice do elektronické verze byl podpořen projektem GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -12251,8 +12251,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>true</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Interni</Zabezpeceni>
-   <PocetTokenu>327812</PocetTokenu>
-   <PocetJedinecnychTokenu>30211</PocetJedinecnychTokenu>
+   <PocetTokenu>327811</PocetTokenu>
+   <PocetJedinecnychTokenu>30210</PocetJedinecnychTokenu>
    <Publikace>
     <Vydani>
      <Titul>Bible olomoucká, úryvek o stvoření světa</Titul>
@@ -16819,7 +16819,7 @@
    <LiterarniZanr>cestopis</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
    <PocetTokenu>20332</PocetTokenu>
    <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
@@ -18540,7 +18540,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -19130,7 +19130,7 @@
     <Titul>[Dopisy]</Titul>
     <Zkratka>List</Zkratka>
     <LiterarniDruh>próza</LiterarniDruh>
-    <LiterarniZanr>listina</LiterarniZanr>
+    <LiterarniZanr>list</LiterarniZanr>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -19263,7 +19263,7 @@
    <ZkratkaPamatky>List</ZkratkaPamatky>
    <ZkratkaPramene>ListAnnaZLitoměřic</ZkratkaPramene>
    <LiterarniDruh>próza</LiterarniDruh>
-   <LiterarniZanr>listina</LiterarniZanr>
+   <LiterarniZanr>list</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Hodnotitele Interni</Zabezpeceni>
@@ -19280,10 +19280,10 @@
   <Hlava>
    <Pamatka>
     <Autor>Dorota z Krumlova</Autor>
-    <Titul>[Dopisy]</Titul>
+    <Titul>[Dopisy, Panenský Týnec]</Titul>
     <Zkratka>List</Zkratka>
     <LiterarniDruh>próza</LiterarniDruh>
-    <LiterarniZanr>listina</LiterarniZanr>
+    <LiterarniZanr>list</LiterarniZanr>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -19294,7 +19294,7 @@
      <NePoRoce>0</NePoRoce>
     </Datace>
     <Pramen>
-     <Zkratka>ListDorotaZKrumlova</Zkratka>
+     <Zkratka>ListDorotaZKrumlova1</Zkratka>
      <Ulozeni>
       <Zeme>Česko</Zeme>
       <Mesto>Praha</Mesto>
@@ -19324,7 +19324,7 @@
   </Hlava>
   <Hlavicka>
    <Autor>Dorota z Krumlova</Autor>
-   <Titul>[Dopisy]</Titul>
+   <Titul>[Dopisy, Panenský Týnec]</Titul>
    <DataceText>1550–1553</DataceText>
    <TypPredlohy>Rukopis</TypPredlohy>
    <TypPredlohyText>rukopis</TypPredlohyText>
@@ -19389,9 +19389,9 @@
    </PrvniExporty>
    <ObjemDat>0</ObjemDat>
    <ZkratkaPamatky>List</ZkratkaPamatky>
-   <ZkratkaPramene>ListDorotaZKrumlova</ZkratkaPramene>
+   <ZkratkaPramene>ListDorotaZKrumlova1</ZkratkaPramene>
    <LiterarniDruh>próza</LiterarniDruh>
-   <LiterarniZanr>listina</LiterarniZanr>
+   <LiterarniZanr>list</LiterarniZanr>
    <Transliterovane>true</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
@@ -19410,7 +19410,7 @@
     <Titul>[Dopisy]</Titul>
     <Zkratka>List</Zkratka>
     <LiterarniDruh>próza</LiterarniDruh>
-    <LiterarniZanr>listina</LiterarniZanr>
+    <LiterarniZanr>list</LiterarniZanr>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -19543,7 +19543,7 @@
    <ZkratkaPamatky>List</ZkratkaPamatky>
    <ZkratkaPramene>ListKateřinaZKladna</ZkratkaPramene>
    <LiterarniDruh>próza</LiterarniDruh>
-   <LiterarniZanr>listina</LiterarniZanr>
+   <LiterarniZanr>list</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Hodnotitele Interni</Zabezpeceni>
@@ -19563,7 +19563,7 @@
     <Titul>[Dopisy]</Titul>
     <Zkratka>List</Zkratka>
     <LiterarniDruh>próza</LiterarniDruh>
-    <LiterarniZanr>listina</LiterarniZanr>
+    <LiterarniZanr>list</LiterarniZanr>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -19661,7 +19661,7 @@
    <ZkratkaPamatky>List</ZkratkaPamatky>
    <ZkratkaPramene>ListVoršilaTachovská</ZkratkaPramene>
    <LiterarniDruh>próza</LiterarniDruh>
-   <LiterarniZanr>listina</LiterarniZanr>
+   <LiterarniZanr>list</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
@@ -22816,7 +22816,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -23061,7 +23061,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -23309,7 +23309,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -23706,7 +23706,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -23951,7 +23951,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -24196,7 +24196,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -24441,7 +24441,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -24686,7 +24686,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -24931,7 +24931,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -25176,7 +25176,7 @@
      <Datace>
       <SlovniPopis>60. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>6</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -34704,7 +34704,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
    <PocetTokenu>2998</PocetTokenu>
-   <PocetJedinecnychTokenu>1199</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>1200</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -35441,7 +35441,7 @@
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
    <PocetTokenu>2530</PocetTokenu>
-   <PocetJedinecnychTokenu>913</PocetJedinecnychTokenu>
+   <PocetJedinecnychTokenu>914</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -36786,7 +36786,7 @@
      <KontrolniSoucet>AF0BBC54F06E8BCE10DAED909D7B2D88</KontrolniSoucet>
     </Export>
    </Exporty>
-   <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul</ZpusobVyuziti>
    <PrvniExporty>
     <Export>
      <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
@@ -36800,7 +36800,7 @@
    <LiterarniDruh>próza</LiterarniDruh>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
    <PocetTokenu>0</PocetTokenu>
    <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
@@ -50852,7 +50852,7 @@
     <Titul>[List krále Zikmunda panu Haškovi]</Titul>
     <Zkratka>ListZikm</Zkratka>
     <LiterarniDruh>próza</LiterarniDruh>
-    <LiterarniZanr>listina</LiterarniZanr>
+    <LiterarniZanr>list</LiterarniZanr>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -51222,7 +51222,7 @@
    <ZkratkaPamatky>ListZikm</ZkratkaPamatky>
    <ZkratkaPramene>ListZikm</ZkratkaPramene>
    <LiterarniDruh>próza</LiterarniDruh>
-   <LiterarniZanr>listina</LiterarniZanr>
+   <LiterarniZanr>list</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne</Zabezpeceni>
@@ -52550,7 +52550,7 @@
      <KontrolniSoucet>750AB9690DA931E4858CDD785794F641</KontrolniSoucet>
     </Export>
    </Exporty>
-   <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
+   <ZpusobVyuziti>StaroceskyKorpus EdicniModul</ZpusobVyuziti>
    <PrvniExporty>
     <Export>
      <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
@@ -52565,9 +52565,9 @@
    <LiterarniZanr>slovník</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
+   <PocetTokenu>2531</PocetTokenu>
+   <PocetJedinecnychTokenu>1467</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -53260,8 +53260,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>56469</PocetTokenu>
-   <PocetJedinecnychTokenu>7741</PocetJedinecnychTokenu>
+   <PocetTokenu>56467</PocetTokenu>
+   <PocetJedinecnychTokenu>7742</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -53451,8 +53451,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>32221</PocetTokenu>
-   <PocetJedinecnychTokenu>6862</PocetJedinecnychTokenu>
+   <PocetTokenu>32219</PocetTokenu>
+   <PocetJedinecnychTokenu>6858</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -53586,8 +53586,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>115282</PocetTokenu>
-   <PocetJedinecnychTokenu>14607</PocetJedinecnychTokenu>
+   <PocetTokenu>115281</PocetTokenu>
+   <PocetJedinecnychTokenu>14608</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -54265,6 +54265,7 @@
     <Autor>Dačický z Heslova, Mikuláš</Autor>
     <Titul>Prostopravda</Titul>
     <Zkratka>Dač</Zkratka>
+    <LiterarniDruh>verš</LiterarniDruh>
     <Datace>
      <Stoleti>0</Stoleti>
      <PolovinaStoleti>0</PolovinaStoleti>
@@ -54275,7 +54276,14 @@
      <NePoRoce>0</NePoRoce>
     </Datace>
     <Pramen>
-     <Ulozeni />
+     <Zkratka>DačProstopravda</Zkratka>
+     <Ulozeni>
+      <Zeme>Česko</Zeme>
+      <Mesto>Praha</Mesto>
+      <Instituce>Knihovna Národního muzea</Instituce>
+      <Signatura>III G 28</Signatura>
+      <FoliacePaginace>1r–66r</FoliacePaginace>
+     </Ulozeni>
      <Datace>
       <SlovniPopis>1620</SlovniPopis>
       <Stoleti>1600</Stoleti>
@@ -54300,11 +54308,20 @@
    <Autor>Dačický z Heslova, Mikuláš</Autor>
    <Titul>Prostopravda</Titul>
    <DataceText>1620</DataceText>
-   <TypPredlohy>Edice</TypPredlohy>
-   <TypPredlohyText>edice</TypPredlohyText>
+   <TypPredlohy>Rukopis</TypPredlohy>
+   <TypPredlohyText>rukopis</TypPredlohyText>
+   <ZemeUlozeni>Česko</ZemeUlozeni>
+   <MestoUlozeni>Praha</MestoUlozeni>
+   <InstituceUlozeni>Knihovna Národního muzea</InstituceUlozeni>
+   <Signatura>III G 28</Signatura>
+   <FoliacePaginace>1r–66r</FoliacePaginace>
+   <EditoriPrepisuText>Kuderová, Pavlína</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Kuderová, Pavlína</string>
+   </EditoriPrepisu>
   </Hlavicka>
   <Soubor>
-   <Nazev>Mikulas_Dacicky_z_Heslova_Prostopravda.docx</Nazev>
+   <Nazev>DacProstopravda.docx</Nazev>
    <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
    <FormatWordu>Docx</FormatWordu>
    <Zmeneno>2016-01-31T02:30:01.5906695+01:00</Zmeneno>
@@ -54314,17 +54331,19 @@
   </Soubor>
   <Zpracovani>
    <GUID>{B3406FF0-804E-4613-896E-DC655B15FFCF}</GUID>
-   <FazeZpracovani>Prepsano</FazeZpracovani>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
    <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
    <Neexportovat>false</Neexportovat>
    <Exporty />
-   <ZpusobVyuziti>StredoceskyKorpus InterniKorpus</ZpusobVyuziti>
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
    <PrvniExporty />
    <ObjemDat>0</ObjemDat>
    <ZkratkaPamatky>Dač</ZkratkaPamatky>
+   <ZkratkaPramene>DačProstopravda</ZkratkaPramene>
+   <LiterarniDruh>verš</LiterarniDruh>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni />
+   <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
    <PocetTokenu>12843</PocetTokenu>
    <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
    <Publikace />
@@ -55234,7 +55253,7 @@
      <Datace>
       <SlovniPopis>80. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>8</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -55634,7 +55653,7 @@
      <Datace>
       <SlovniPopis>80. léta 14. století</SlovniPopis>
       <Stoleti>1300</Stoleti>
-      <PolovinaStoleti>1</PolovinaStoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
       <Desetileti>8</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
@@ -55655,12 +55674,12 @@
    <Autor>Jan Milíč z Kroměříže</Autor>
    <Titul>Milíčovský sborník modliteb</Titul>
    <DataceText>80. léta 14. století</DataceText>
-   <TypPredlohy>Neznamy</TypPredlohy>
-   <TypPredlohyText>neznámý</TypPredlohyText>
-   <ZemeUlozeni>Praha</ZemeUlozeni>
+   <TypPredlohy>Neznamy</TypPredlohy><ZemeUlozeni>Praha</ZemeUlozeni>
    <MestoUlozeni>Národní knihovna České republiky</MestoUlozeni>
    <InstituceUlozeni>XVII F 30</InstituceUlozeni>
    <Signatura />
+   <EditoriPrepisuText />
+   <EditoriPrepisu />
   </Hlavicka>
   <Soubor>
    <Nazev>ModlMilNK.docx</Nazev>
@@ -57811,11 +57830,11 @@
       <SlovniPopis>10. léta 15. století</SlovniPopis>
       <Stoleti>1400</Stoleti>
       <PolovinaStoleti>1</PolovinaStoleti>
-      <Desetileti>10</Desetileti>
+      <Desetileti>1</Desetileti>
       <Rok>0</Rok>
       <RelativniChronologie>0</RelativniChronologie>
-      <NePredRokem>1500</NePredRokem>
-      <NePoRoce>1510</NePoRoce>
+      <NePredRokem>1400</NePredRokem>
+      <NePoRoce>1410</NePoRoce>
      </Datace>
      <Typ>Rukopis</Typ>
     </Pramen>
@@ -63565,9 +63584,9 @@
    <LiterarniZanr>právo</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
+   <PocetTokenu>66104</PocetTokenu>
+   <PocetJedinecnychTokenu>7509</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -69606,7 +69625,7 @@
      <KontrolniSoucet>DE60253869663C6753819D866B242143</KontrolniSoucet>
     </Export>
    </Exporty>
-   <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
+   <ZpusobVyuziti>StaroceskyKorpus EdicniModul</ZpusobVyuziti>
    <PrvniExporty>
     <Export>
      <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
@@ -69621,9 +69640,9 @@
    <LiterarniZanr>slovník</LiterarniZanr>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
+   <PocetTokenu>924</PocetTokenu>
+   <PocetJedinecnychTokenu>595</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -70225,8 +70244,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>32474</PocetTokenu>
-   <PocetJedinecnychTokenu>16104</PocetJedinecnychTokenu>
+   <PocetTokenu>32462</PocetTokenu>
+   <PocetJedinecnychTokenu>16107</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace />
   </Zpracovani>
@@ -72231,7 +72250,7 @@
      <KontrolniSoucet>D622C82C86303F62EF401416249B2480</KontrolniSoucet>
     </Export>
    </Exporty>
-   <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
+   <ZpusobVyuziti>StaroceskyKorpus EdicniModul</ZpusobVyuziti>
    <PrvniExporty>
     <Export>
      <ZpusobVyuziti>EdicniModul</ZpusobVyuziti>
@@ -72245,9 +72264,9 @@
    <LiterarniDruh>próza</LiterarniDruh>
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
-   <Zabezpeceni>Hodnotitele Interni</Zabezpeceni>
-   <PocetTokenu>0</PocetTokenu>
-   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Zabezpeceni>Verejne Interni</Zabezpeceni>
+   <PocetTokenu>77880</PocetTokenu>
+   <PocetJedinecnychTokenu>10213</PocetJedinecnychTokenu>
    <GrantovaPodpora>Edice vznikla v rámci řešení projektu GA ČR č. P406/10/1140 Výzkum historické češtiny (na základě nových materiálových bází).</GrantovaPodpora>
    <Publikace>
     <Vydani>
@@ -75587,8 +75606,8 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne Interni</Zabezpeceni>
-   <PocetTokenu>67770</PocetTokenu>
-   <PocetJedinecnychTokenu>9600</PocetJedinecnychTokenu>
+   <PocetTokenu>67769</PocetTokenu>
+   <PocetJedinecnychTokenu>9601</PocetJedinecnychTokenu>
    <Publikace>
     <Vydani>
      <Titul>Tkadleček, úryvek Tkadlečkova proklínání Neštěstí</Titul>
@@ -77076,7 +77095,7 @@
    <Transliterovane>false</Transliterovane>
    <MaEdicniPoznamku>false</MaEdicniPoznamku>
    <Zabezpeceni>Verejne</Zabezpeceni>
-   <PocetTokenu>95350</PocetTokenu>
+   <PocetTokenu>95348</PocetTokenu>
    <PocetJedinecnychTokenu>13924</PocetJedinecnychTokenu>
    <Publikace />
   </Zpracovani>
@@ -90755,4 +90774,391 @@
     <VerzeMetadat>2.0</VerzeMetadat>
     <TypPrepisu>edice</TypPrepisu>
   </Prepis>
+ <Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Albík z Uničova – Zelotýn z Krásné Hory, Václav</Autor>
+    <Titul>Krátký, sprostný a upřímý regiment anebo zpráva v čas rány božské morního nakažení …</Titul>
+    <Zkratka>AlbíkReg</Zkratka>
+    <LiterarniDruh>próza</LiterarniDruh>
+    <LiterarniZanr>lékařství</LiterarniZanr>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Zkratka>AlbíkReg</Zkratka>
+     <Ulozeni>
+      <Zeme>Česko</Zeme>
+      <Mesto>Brno</Mesto>
+      <Instituce>Moravská zemská knihovna</Instituce>
+      <Signatura>R. Z.I.b.2 přív.</Signatura>
+      <FoliacePaginace>E4r–F8v</FoliacePaginace>
+     </Ulozeni>
+     <Datace>
+      <SlovniPopis>1568</SlovniPopis>
+      <Stoleti>1500</Stoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
+      <Desetileti>6</Desetileti>
+      <Rok>1568</Rok>
+      <RelativniChronologie>6</RelativniChronologie>
+      <NePredRokem>1568</NePredRokem>
+      <NePoRoce>1568</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Albík z Uničova – Zelotýn z Krásné Hory, Václav</Autor>
+   <Titul>Krátký, sprostný a upřímý regiment anebo zpráva v čas rány božské morního nakažení …</Titul>
+   <DataceText>1568</DataceText>
+   <Tiskar>Dačický, Jiří Jakubův (?)</Tiskar>
+   <MistoTisku>Praha</MistoTisku>
+   <TypPredlohy>StaryTisk</TypPredlohy>
+   <TypPredlohyText>starý tisk</TypPredlohyText>
+   <ZemeUlozeni>Česko</ZemeUlozeni>
+   <MestoUlozeni>Brno</MestoUlozeni>
+   <InstituceUlozeni>Moravská zemská knihovna</InstituceUlozeni>
+   <Signatura>R. Z.I.b.2 přív.</Signatura>
+   <FoliacePaginace>E4r–F8v</FoliacePaginace>
+   <EditoriPrepisuText>Batka, Ondřej – Böhmová, Veronika – Černá, Alena M. – Pokorná, Gabriela – Špínová, Adéla</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Batka, Ondřej – Böhmová, Veronika – Černá, Alena M. – Pokorná, Gabriela – Špínová, Adéla</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>AlbikReg.docx</Nazev>
+   <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2016-05-20T05:20:55.2531257+02:00</Zmeneno>
+   <Velikost>46356</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>439227E16355B90CF7B2EDEB16C93947</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{0BDB57D1-C8CE-4CB1-91F9-F5AC035B9518}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <ZkratkaPamatky>AlbíkReg</ZkratkaPamatky>
+   <ZkratkaPramene>AlbíkReg</ZkratkaPramene>
+   <LiterarniDruh>próza</LiterarniDruh>
+   <LiterarniZanr>lékařství</LiterarniZanr>
+   <VerzeMetadat>2.0</VerzeMetadat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <ObdobiVzniku>1550–1600</ObdobiVzniku>
+  <Identifikator>498</Identifikator>
+  <VerzeMetadat>2.0</VerzeMetadat>
+ </Prepis>
+<Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Dorota z Krumlova</Autor>
+    <Titul>[Dopisy, Svatý Jiří na Pražském hradě]</Titul>
+    <Zkratka>List</Zkratka>
+    <LiterarniDruh>próza</LiterarniDruh>
+    <LiterarniZanr>list</LiterarniZanr>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Zkratka>ListDorotaZKrumlova2</Zkratka>
+     <Ulozeni>
+      <Zeme>Česko</Zeme>
+      <Mesto>Praha</Mesto>
+      <Instituce>Národní archiv</Instituce>
+      <Signatura>AZK 2570, SM B45/5/3</Signatura>
+      <FoliacePaginace>15 f.</FoliacePaginace>
+     </Ulozeni>
+     <Datace>
+      <SlovniPopis>60.–70. léta 16. století</SlovniPopis>
+      <Stoleti>1500</Stoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
+      <Desetileti>7</Desetileti>
+      <Rok>0</Rok>
+      <RelativniChronologie>0</RelativniChronologie>
+      <NePredRokem>1560</NePredRokem>
+      <NePoRoce>1580</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Dorota z Krumlova</Autor>
+   <Titul>[Dopisy, Svatý Jiří na Pražském hradě]</Titul>
+   <DataceText>60.–70. léta 16. století</DataceText>
+   <MistoTisku>Praha</MistoTisku>
+   <TypPredlohy>Rukopis</TypPredlohy>
+   <TypPredlohyText>rukopis</TypPredlohyText>
+   <ZemeUlozeni>Česko</ZemeUlozeni>
+   <MestoUlozeni>Praha</MestoUlozeni>
+   <InstituceUlozeni>Národní archiv</InstituceUlozeni>
+   <Signatura>AZK 2570, SM B45/5/3</Signatura>
+   <FoliacePaginace>15 f.</FoliacePaginace>
+   <EditoriPrepisuText>Hejdová, Tereza</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Hejdová, Tereza</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>Dopisy_Dorota_z_Krumlova_u_Svateho_Jiri.docx</Nazev>
+   <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2016-06-02T01:00:36.9843426+02:00</Zmeneno>
+   <Velikost>61492</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>0C636BFC3681578102B6252CEE31633F</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{33BA0D8A-EFA1-4BDC-BCAC-AF4A08521B9F}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <ZkratkaPamatky>List</ZkratkaPamatky>
+   <ZkratkaPramene>ListDorotaZKrumlova2</ZkratkaPramene>
+   <LiterarniDruh>próza</LiterarniDruh>
+   <LiterarniZanr>list</LiterarniZanr>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <ObdobiVzniku>1500–1550</ObdobiVzniku>
+  <Identifikator>499</Identifikator>
+ </Prepis>
+<Prepis>
+  <Hlava>
+   <Pamatka>
+    <Titul>Piseň nová žalostivá o smutné svatbě v městě Erffurtu…</Titul>
+    <Zkratka>Pís</Zkratka>
+    <LiterarniDruh>verš</LiterarniDruh>
+    <LiterarniZanr>píseň</LiterarniZanr>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Zkratka>PísŽalost</Zkratka>
+     <Ulozeni>
+      <Zeme>Česko</Zeme>
+      <Mesto>Česká Lípa</Mesto>
+      <Instituce>Vlastivědné muzeum a galerie v České Lípě</Instituce>
+      <Signatura>ST 74, př. č. 70073</Signatura>
+      <FoliacePaginace>1–15</FoliacePaginace>
+     </Ulozeni>
+     <Datace>
+      <SlovniPopis>1609</SlovniPopis>
+      <Stoleti>1600</Stoleti>
+      <PolovinaStoleti>1</PolovinaStoleti>
+      <Desetileti>0</Desetileti>
+      <Rok>1609</Rok>
+      <RelativniChronologie>1</RelativniChronologie>
+      <NePredRokem>1609</NePredRokem>
+      <NePoRoce>1609</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Titul>Piseň nová žalostivá o smutné svatbě v městě Erffurtu…</Titul>
+   <DataceText>1609</DataceText>
+   <Tiskar>Kargesius, Kašpar</Tiskar>
+   <MistoTisku>Praha</MistoTisku>
+   <TypPredlohy>StaryTisk</TypPredlohy>
+   <TypPredlohyText>starý tisk</TypPredlohyText>
+   <ZemeUlozeni>Česko</ZemeUlozeni>
+   <MestoUlozeni>Česká Lípa</MestoUlozeni>
+   <InstituceUlozeni>Vlastivědné muzeum a galerie v České Lípě</InstituceUlozeni>
+   <Signatura>ST 74, př. č. 70073</Signatura>
+   <FoliacePaginace>1–15</FoliacePaginace>
+   <EditoriPrepisuText>Böhmová, Veronika – Valenta, Petr</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Böhmová, Veronika – Valenta, Petr</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>PisZalost.docx</Nazev>
+   <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2016-04-22T11:33:22.9325229+02:00</Zmeneno>
+   <Velikost>49392</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>3914F971DBB76EA0C97F5F7D619ECDA6</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{04C2BB56-D134-4888-91C8-3EBBEDF16183}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <ZkratkaPamatky>Pís</ZkratkaPamatky>
+   <ZkratkaPramene>PísŽalost</ZkratkaPramene>
+   <LiterarniDruh>verš</LiterarniDruh>
+   <LiterarniZanr>píseň</LiterarniZanr>
+   <VerzeMetadat>2.0</VerzeMetadat>
+   <Transliterovane>false</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <ObdobiVzniku>1600–1650</ObdobiVzniku>
+  <Identifikator>500</Identifikator>
+  <VerzeMetadat>2.0</VerzeMetadat>
+ </Prepis>
+<Prepis>
+  <Hlava>
+   <Pamatka>
+    <Autor>Šubar, Valentin</Autor>
+    <Titul>Kázaní o hrozné kométě, kteráž se začala ukazovati ten den po svatém Martině…</Titul>
+    <Zkratka>ŠubarKáz</Zkratka>
+    <LiterarniDruh>próza</LiterarniDruh>
+    <LiterarniZanr>kázání</LiterarniZanr>
+    <Datace>
+     <Stoleti>0</Stoleti>
+     <PolovinaStoleti>0</PolovinaStoleti>
+     <Desetileti>0</Desetileti>
+     <Rok>0</Rok>
+     <RelativniChronologie>0</RelativniChronologie>
+     <NePredRokem>0</NePredRokem>
+     <NePoRoce>0</NePoRoce>
+    </Datace>
+    <Pramen>
+     <Zkratka>ŠubarKáz</Zkratka>
+     <Ulozeni>
+      <Zeme>Česko</Zeme>
+      <Mesto>Praha</Mesto>
+      <Instituce>Národní knihovna České republiky</Instituce>
+      <Signatura>54 B 000132/adl.1</Signatura>
+      <FoliacePaginace>s. A1r–F4r</FoliacePaginace>
+     </Ulozeni>
+     <Datace>
+      <SlovniPopis>1578</SlovniPopis>
+      <Stoleti>1500</Stoleti>
+      <PolovinaStoleti>2</PolovinaStoleti>
+      <Desetileti>7</Desetileti>
+      <Rok>1578</Rok>
+      <RelativniChronologie>7</RelativniChronologie>
+      <NePredRokem>1578</NePredRokem>
+      <NePoRoce>1578</NePoRoce>
+     </Datace>
+     <Typ>Rukopis</Typ>
+    </Pramen>
+    <Edice>
+     <Editori />
+     <Typ>Edice</Typ>
+    </Edice>
+   </Pamatka>
+   <Predloha typ="Neznamy" />
+   <Editori />
+  </Hlava>
+  <Hlavicka>
+   <Autor>Šubar, Valentin</Autor>
+   <Titul>Kázaní o hrozné kométě, kteráž se začala ukazovati ten den po svatém Martině…</Titul>
+   <DataceText>1578</DataceText>
+   <Tiskar>Melantrich z Aventýna, Jiří starší – Adam z Veleslavína, Daniel</Tiskar>
+   <MistoTisku>Praha</MistoTisku>
+   <TypPredlohy>StaryTisk</TypPredlohy>
+   <TypPredlohyText>starý tisk</TypPredlohyText>
+   <ZemeUlozeni>Česko</ZemeUlozeni>
+   <MestoUlozeni>Praha</MestoUlozeni>
+   <InstituceUlozeni>Národní knihovna České republiky</InstituceUlozeni>
+   <Signatura>54 B 000132/adl.1</Signatura>
+   <FoliacePaginace>s. A1r–F4r</FoliacePaginace>
+   <EditoriPrepisuText>Böhmová, Veronika</EditoriPrepisuText>
+   <EditoriPrepisu>
+    <string>Böhmová, Veronika</string>
+   </EditoriPrepisu>
+  </Hlavicka>
+  <Soubor>
+   <Nazev>SubarKaz.docx</Nazev>
+   <Adresar>D:\!UJC\OVJ\Texty\CVS</Adresar>
+   <FormatWordu>Docx</FormatWordu>
+   <Zmeneno>2016-05-20T05:20:55.2251061+02:00</Zmeneno>
+   <Velikost>138642</Velikost>
+   <CisloRevize>0</CisloRevize>
+   <KontrolniSoucet>D29E284DA23FA83149A6120D0732B83A</KontrolniSoucet>
+  </Soubor>
+  <Zpracovani>
+   <GUID>{3FCFF4C5-E4A1-496C-997E-62745B443441}</GUID>
+   <FazeZpracovani>Exportovat</FazeZpracovani>
+   <CasoveZarazeni>DoRoku1800</CasoveZarazeni>
+   <Neexportovat>false</Neexportovat>
+   <Exporty />
+   <ZpusobVyuziti>StredoceskyKorpus EdicniModul InterniKorpus</ZpusobVyuziti>
+   <PrvniExporty />
+   <ObjemDat>0</ObjemDat>
+   <ZkratkaPamatky>ŠubarKáz</ZkratkaPamatky>
+   <ZkratkaPramene>ŠubarKáz</ZkratkaPramene>
+   <LiterarniDruh>próza</LiterarniDruh>
+   <LiterarniZanr>kázání</LiterarniZanr>
+   <VerzeMetadat>2.0</VerzeMetadat>
+   <Transliterovane>true</Transliterovane>
+   <MaEdicniPoznamku>false</MaEdicniPoznamku>
+   <Zabezpeceni>Verejne Spolupracovnici Interni</Zabezpeceni>
+   <PocetTokenu>0</PocetTokenu>
+   <PocetJedinecnychTokenu>0</PocetJedinecnychTokenu>
+   <Publikace />
+  </Zpracovani>
+  <ObdobiVzniku>1550–1600</ObdobiVzniku>
+  <Identifikator>501</Identifikator>
+  <VerzeMetadat>2.0</VerzeMetadat>
+ </Prepis>
 </Prepisy>
