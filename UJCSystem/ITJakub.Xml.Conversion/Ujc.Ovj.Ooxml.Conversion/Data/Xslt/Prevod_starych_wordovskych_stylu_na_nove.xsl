@@ -14,6 +14,12 @@
 	
 
 	<xsl:include href="Kopirovani_prvku.xsl"/>
+	
+	<xsl:template match="Hyperlink">
+		<xsl:element name="hypertextovy_odkaz">
+			<xsl:apply-templates />
+		</xsl:element>
+	</xsl:template>
 
 	<xsl:template match="/">
 		<xsl:comment> Prevod_starych_wordovskych_stylu_na_nove </xsl:comment>

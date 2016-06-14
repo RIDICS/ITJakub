@@ -22,7 +22,7 @@
 	<!-- Dodělat shodu tak, aby se slučovaly všechny podřízené elementy -->
   <!-- Normalni/child::* -->
   <!--<xsl:template match="//*[name() = name(following-sibling::*[1])]">-->
-	<xsl:template match="Normalni/child::* | Nadpis/child::* | Podnadpis/child::*">
+	<xsl:template match="Normalni/child::* | Vers/child::* | Nadpis/child::* | Podnadpis/child::*">
 		<xsl:variable name="name" select="local-name()"/>
 		
 		<!-- Is this the first element in a sequence? -->
@@ -41,7 +41,7 @@
   <!--   //*[name() = name((following-sibling::*)[1])] -->
   <!-- Normalni/child::* -->
   <!--<xsl:template match="//*[name() = name(following-sibling::*[1])]" mode="next">-->
-	<xsl:template match="Normalni/child::* | Nadpis/child::* | Podnadpis/child::*" mode="next">
+	<xsl:template match="Normalni/child::* | Vers/child::* | Nadpis/child::* | Podnadpis/child::*" mode="next">
 		<xsl:variable name="name" select="local-name()"/>
 		<xsl:apply-templates />
 		<xsl:apply-templates select="following-sibling::*[1][local-name()=$name]" mode="next"/>

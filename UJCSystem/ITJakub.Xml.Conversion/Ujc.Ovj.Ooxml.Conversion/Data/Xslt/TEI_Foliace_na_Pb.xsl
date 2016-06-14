@@ -15,6 +15,28 @@
 	<xsl:template name="zpracujFoliaci">
 		<xsl:param name="konciMezerou" />
 		<xsl:param name="cislo" />
+		
+		<xsl:variable name="obsahujeBisEtc">
+			<xsl:choose>
+				<xsl:when test="contains($cislo, ' bis ')
+					or contains($cislo, ' duodecies ')
+					or contains($cislo, ' octies ')
+					or contains($cislo, ' quater ')
+					or contains($cislo, ' quaterdecies ')
+					or contains($cislo, ' quinquies ')
+					or contains($cislo, ' septies ')
+					or contains($cislo, ' sexies ')
+					or contains($cislo, ' ter ')
+					or contains($cislo, ' terdecies ')
+					or contains($cislo, ' undecies ')">
+					<xsl:value-of select="'true'"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="''"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
 		<xsl:choose>
 			<xsl:when test="contains($cislo, $lomitko)">
 				<xsl:call-template name="zpracujFoliaci">
@@ -34,7 +56,7 @@
 				</xsl:call-template>
 			</xsl:when>
 			<!-- DODĚLAT i ostatní případy, kdy může obsahovat 'st.' a 'ed.' -->
-			<xsl:when test="not(contains($cislo, 'ed.')) and (contains($cislo, ' bis ') or contains($cislo, ' ter ')) ">
+			<xsl:when test="not(contains($cislo, 'ed.')) and not(contains($cislo, 'st.')) and boolean($obsahujeBisEtc) ">
 				<xsl:call-template name="vlozCislo">
 					<!-- folio -->
 					<xsl:with-param name="prvek" select="'pb'"/>

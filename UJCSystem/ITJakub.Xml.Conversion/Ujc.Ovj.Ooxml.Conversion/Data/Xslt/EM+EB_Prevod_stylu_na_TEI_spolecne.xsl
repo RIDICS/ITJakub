@@ -3,6 +3,17 @@
 
 	<xsl:key name="poznamka" match="//poznamka_pod_carou" use="@id" />
 
+	<xsl:template match="Predmluva">
+		<xsl:element name="div">
+			<xsl:attribute name="type">
+				<xsl:text>preface</xsl:text>
+			</xsl:attribute>
+			<xsl:element name="p">
+				<xsl:apply-templates />
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+
 	<xsl:template match="Edicni_komentar">
 		<xsl:element name="div">
 			<xsl:attribute name="type">
