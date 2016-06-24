@@ -81,30 +81,40 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			return _documentId;
 		}
 
-		public ConversionResult Convert(DocxToTeiConverterSettings settings)
+	    private string GetDocxToXmlOutput(AdresarovaStruktura ads, string fileNameWithoutExtension, int filePart, bool useMultipleName)
+	    {
+	        return useMultipleName
+	            ? Path.Combine(ads.DejSpolecneDocXml, String.Format("{0}_source_{1:00}{2}", fileNameWithoutExtension, filePart, XmlExtension))
+	            : Path.Combine(ads.DejSpolecneDocXml, String.Format("{0}{1}", fileNameWithoutExtension, XmlExtension));
+        }
+        
+        public ConversionResult Convert(DocxToTeiConverterSettings settings)
 		{
 		    ConverterSettings = settings;
 		    CheckIfDirectoryPathsExists(ConverterSettings);
 			_result = new ConversionResult();
 			string documentType = null;
 
-            FileInfo inputFileInfo = new FileInfo(ConverterSettings.InputFilePath);
+            //get metadata only for first (by alphabet) uploaded file
+            var inputFileName= ConverterSettings.InputFilesPath.Select(filePath => new FileInfo(filePath)).Select(fileInfo => fileInfo.Name).First();
 
-			string inputFileName = inputFileInfo.Name;
+		    ResolveDefaultSettingsValues(ConverterSettings);
 
-            ResolveDefaultSettingsValues(ConverterSettings);
+            var prepis = GetPrepisy(ConverterSettings, inputFileName);
 
-            List<IPrepis> glsPrepisy = GetPrepisy(ConverterSettings, inputFileName);
-
-			if (glsPrepisy == null || glsPrepisy.Count == 0 || glsPrepisy[0] == null)
+			if (prepis == null)
 			{
 				//dokument v evidenci neexistuje, nabídnout zanesení dokumentu do evidence
 				// mělo by stačit přiřazení typu dokumentu
-				_result.Errors.Add(new DocumentNotInEvidenceException("Dokument s uvedeným jménem souboru neexistuje v evidenci."));
+				_result.Errors.Add(new DocumentNotInEvidenceException(String.Format("Dokument s uvedeným jménem souboru '{0}' neexistuje v evidenci.", inputFileName)));
 				return _result;
 			}
-
-			IPrepis prepis = glsPrepisy[0];
+            
+		    if (prepis.FazeZpracovani < FazeZpracovani.Exportovat)
+		    {
+                _result.Errors.Add(new DocumentNotInRequredStateException("Dokument s uvedeným jménem souboru není připraven pro export."));
+                return _result;
+            }
 
 			documentType = GetDocumentType(prepis.TypPrepisu);
 			_documentId = prepis.GUID;
@@ -125,20 +135,25 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			string docxToXmlFilePath = Path.Combine(GetDataDirectoryPath(), "AllStylesConvert.2xml");
 			string xsltTemplatesPath = GetXsltTemplatesPath();
 			string xsltTransformationsPath = GetXsltTransformationsPath();
-
-
-
+            
 			string fileNameWithoutExtension = prepis.Soubor.NazevBezPripony;
 			string xmlOutpuFileName = fileNameWithoutExtension + XmlExtension;
-
-			string docxToXmlOutput = Path.Combine(ads.DejSpolecneDocXml, xmlOutpuFileName);
+            
 			string finalOutputDirectory = ads.DejVystup; // Path.Combine(ads.DejVystup, fileNameWithoutExtension);
 			string finalOutputFileName = Path.Combine(finalOutputDirectory, xmlOutpuFileName);
 
 			//Zatím pouze konverze z DOCX do základního XML
+            IList<string> xmlOutputFiles=new List<string>();
 			try
 			{
-                ConvertDocxToXml(ConverterSettings.InputFilePath, docxToXmlFilePath, docxToXmlOutput);
+			    var filePart = 0;
+			    foreach (var inputFilePath in ConverterSettings.InputFilesPath)
+			    {
+			        xmlOutputFiles.Add(GetDocxToXmlOutput(ads, prepis.Soubor.NazevBezPripony, filePart, ConverterSettings.InputFilesPath.Length > 1));
+
+                    ConvertDocxToXml(inputFilePath, docxToXmlFilePath, xmlOutputFiles.Last());
+			        filePart++;
+			    }
 			}
 			catch (Exception exception)
 			{
@@ -149,7 +164,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			if (!Directory.Exists(finalOutputDirectory))
 				Directory.CreateDirectory(finalOutputDirectory);
 
-            IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, glsPrepisy);
+            IExportNastaveni exportSettings = GetExportSettings(documentType, ConverterSettings, xsltTransformationsPath, xsltTemplatesPath, ads, prepis);
 			ExportBase export = GetExportModule(documentType, exportSettings);
 
 			if (export == null || exportSettings == null)
@@ -160,7 +175,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			try
 			{
-				export.Exportuj(exportSettings.Prepisy);
+				export.Exportuj(exportSettings.Prepis, xmlOutputFiles, ConverterSettings.UploadedFilesPath);
 				_result.IsConverted = true;
 			}
 			catch (Exception exception)
@@ -171,45 +186,49 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 			if (!settings.Debug)
 			{
-				if (File.Exists(docxToXmlOutput))
-					File.Delete(docxToXmlOutput);
+			    foreach (var xmlOutputFile in xmlOutputFiles.Where(File.Exists))
+			    {
+			        File.Delete(xmlOutputFile);
+			    }
 			}
 
-			List<VersionInfoSkeleton> versions = settings.GetVersionList(_documentId);
+			var versions = settings.GetVersionList(_documentId);
 
 			_currentVersionInfoSkeleton = versions.Last();
 
 
 			WriteListChange(finalOutputFileName, versions, _currentVersionInfoSkeleton);
-		    string xmlFinalOutputPath = Path.Combine(settings.OutputDirectoryPath, xmlOutpuFileName);
-
-
-
+		    var xmlFinalOutputPath = Path.Combine(settings.OutputDirectoryPath, xmlOutpuFileName);
+            
             File.Copy(finalOutputFileName, xmlFinalOutputPath, true);
 			_result.MetadataFilePath = settings.OutputMetadataFilePath;
                 //GetConversionMetadataFileFullPath(settings.OutputFilePath);
 
-			SplittingResult splittingResult = null;
-		    if (settings.SplitDocumentByPageBreaks)
-			{
-				splittingResult = SplitDocumentByPageBreaks(xmlFinalOutputPath, fileNameWithoutExtension);
-				if (!splittingResult.IsSplitted)
-				{
-					_result.IsConverted = false;
-					_result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
-				}
-			}
+            if (export.UsePersonalizedXmdGenerator)
+            {
+                export.GenerateConversionMetadataFile(documentType, xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+            }
+            else
+            {
+                SplittingResult splittingResult = null;
+                if (settings.SplitDocumentByPageBreaks)
+                {
+                    splittingResult = SplitDocumentByPageBreaks(xmlFinalOutputPath, fileNameWithoutExtension);
+                    if (!splittingResult.IsSplitted)
+                    {
+                        _result.IsConverted = false;
+                        _result.Errors.Add(new DocumentSplittingException("Vyskytla se chyba při rozdělení souboru podle hranice stran."));
+                    }
+                }
 
-			TableOfContentResult tocResult = null;
-			ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
-			tocBuilder.XmlFile = xmlFinalOutputPath;
-			tocBuilder.StartingElement = "body";
-			tocResult = tocBuilder.MakeTableOfContent();
+                TableOfContentResult tocResult = null;
+                ContentInfoBuilder tocBuilder = new ContentInfoBuilder();
+                tocResult = tocBuilder.MakeTableOfContent(xmlFinalOutputPath, "body");
 
-			GenerateConversionMetadataFile(splittingResult, tocResult, documentType, 
-                xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+                GenerateConversionMetadataFile(splittingResult, tocResult, documentType, xmlFinalOutputPath, xmlOutpuFileName, settings.OutputMetadataFilePath);
+            }
 
-			if (!settings.Debug)
+            if (!settings.Debug)
 			{
 				try
 				{
@@ -220,6 +239,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 					Directory.Delete(settings.TempDirectoryPath, true);
 				}
 			}
+
 			return _result;
 		}
 
@@ -242,20 +262,28 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		/// <param name="settings"></param>
 		private void ResolveDefaultSettingsValues(DocxToTeiConverterSettings settings)
 		{
-			if (settings == null) return;
-			if (settings.InputFilePath == null) return;
-			FileInfo fileInfo = new FileInfo(settings.InputFilePath);
-			DirectoryInfo directoryInfo = new DirectoryInfo(fileInfo.DirectoryName);
-			//if (settings.OutputFilePath == null)
-			//	settings.OutputFilePath = Path.Combine(directoryInfo.FullName, Path.GetFileNameWithoutExtension(fileInfo.FullName) +
-			//		XmlExtension);
-			if (settings.TempDirectoryPath == null)
-			{
-				string tempDirectory = Path.Combine(directoryInfo.FullName, "Temp");
-				if (!Directory.Exists(tempDirectory))
-					Directory.CreateDirectory(tempDirectory);
-				settings.TempDirectoryPath = tempDirectory;
-			}
+	        var inputFilePath = settings?.InputFilesPath.First();
+
+            if (inputFilePath == null) return;
+
+			var fileInfo = new FileInfo(inputFilePath);
+	        if (fileInfo.DirectoryName != null)
+	        {
+	            var directoryInfo = new DirectoryInfo(fileInfo.DirectoryName);
+	            //if (settings.OutputFilePath == null)
+	            //	settings.OutputFilePath = Path.Combine(directoryInfo.FullName, Path.GetFileNameWithoutExtension(fileInfo.FullName) +
+	            //		XmlExtension);
+	            if (settings.TempDirectoryPath != null) return;
+
+	            var tempDirectory = Path.Combine(directoryInfo.FullName, "Temp");
+	            if (!Directory.Exists(tempDirectory))
+	                Directory.CreateDirectory(tempDirectory);
+	            settings.TempDirectoryPath = tempDirectory;
+	        }
+	        else
+	        {
+	            throw new Exception("Not exist filepath");
+	        }
 		}
 
 		//private void GenerateConversionMetadataFile(SplittingResult splittingResult,
@@ -342,17 +370,30 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		{
 			XDocument doc = new XDocument(new XElement(nsItj + "headwordsTable"));
 
-			var items = from item in result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null)
-									select new
-									{
-										EntryId = item.Parent.Parent.Attribute("corresp").Value.Replace("#", ""),
-										DefaultHw = item.Parent.Parent.Element(nsTei + "head").Value,
-                                        DefaultHwSorting = (from i in item.Parent.Parent.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(),
-										Headword = item.Element(nsTei + "head").Value,
-                                        HeadwordSorting = (from i in item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp") where i.Attribute("type").Value == "sorting" select i).FirstOrDefault(), 
-										Visibility = item.Parent.Parent.Attribute("type") != null ? item.Parent.Parent.Attribute("type").Value : null,
-										Type = item.Attribute("type") != null ? item.Attribute("type").Value : null
-									};
+		    var items2 = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null);
+		    foreach (var item in items2)
+		    {
+		        var xElement = item.Parent;
+		    }
+
+		    var items = result.Descendants(nsTei + "item").Where(item => item.Element(nsTei + "list") == null).
+                Select(item =>
+                {
+                    var corresp = (item.Parent.Parent.Attribute("corresp") ?? item.Attribute("corresp")).Value.Replace("#", "");
+                    var head = item.Parent.Parent.Element(nsTei + "head") ?? item.Element(nsTei + "head");
+
+                    return new
+                    {
+                        EntryId = corresp,
+                        DefaultHw = head.Value,
+                        DefaultHwSorting = head.ElementsAfterSelf(nsTei + "interp").FirstOrDefault(i => i.Attribute("type").Value == "sorting"),
+                        Headword = item.Element(nsTei + "head").Value,
+                        HeadwordSorting = item.Element(nsTei + "head").ElementsAfterSelf(nsTei + "interp").FirstOrDefault(i => i.Attribute("type").Value == "sorting"),
+                        Visibility = item.Parent.Parent.Attribute("type")?.Value,
+                        Type = item.Attribute("type")?.Value
+                    };
+                });
+
 			foreach (var item in items)
 			{
 				doc.Root.Add(new XElement(nsItj + "headword",
@@ -616,7 +657,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			string xsltTransformationsDirectoryPath,
 			string xsltTemplatesDirectoryPath,
 			AdresarovaStruktura ads,
-			List<IPrepis> glsPrepisy)
+			IPrepis prepis)
 		{
 			string xsltTransformationFilePath = Path.Combine(xsltTransformationsDirectoryPath, documentType + XmlExtension);
 			IExportNastaveni exportSettings = null;
@@ -624,19 +665,22 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			{
 				case "Edition":
 				case "ProfessionalLiterature":
-					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, glsPrepisy);
+					exportSettings = GetEdicniModulNastaveni(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
 					break;
 				case "Dictionary":
-					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads,
-						glsPrepisy);
+					exportSettings = GetDictionarySettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
+					break;
+                case "Grammar":
+					exportSettings = GetGrammarSettings(settings, xsltTransformationFilePath, xsltTemplatesDirectoryPath, ads, prepis);
 					break;
 			}
 			return exportSettings;
 		}
+
 		private static IExportNastaveni GetEdicniModulNastaveni(DocxToTeiConverterSettings settings,
 			string xsltTransformationFilePath,
 			string xsltTemplatesPath,
-			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+			AdresarovaStruktura ads, IPrepis prepis)
 		{
 			IExportNastaveni nastaveni = new EdicniModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
@@ -644,8 +688,8 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
 			nastaveni.VystupniSlozka = ads.DejVystup;
 			nastaveni.DocasnaSlozka = ads.DejTemp;
-			nastaveni.Prepisy = glsPrepisy;
-			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+            nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
 
 			nastaveni.SouborMetadat = settings.MetadataFilePath;
 			return nastaveni;
@@ -654,7 +698,7 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		private static IExportNastaveni GetDictionarySettings(DocxToTeiConverterSettings settings,
 			string xsltTransformationFilePath,
 			string xsltTemplatesPath,
-			AdresarovaStruktura ads, List<IPrepis> glsPrepisy)
+			AdresarovaStruktura ads, IPrepis prepis)
 		{
 			IExportNastaveni nastaveni = new SlovnikovyModulNastaveni();
 			nastaveni.SouborTransformaci = xsltTransformationFilePath;
@@ -662,8 +706,26 @@ namespace Ujc.Ovj.Ooxml.Conversion
 			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
 			nastaveni.VystupniSlozka = ads.DejVystup;
 			nastaveni.DocasnaSlozka = ads.DejTemp;
-			nastaveni.Prepisy = glsPrepisy;
-			nastaveni.SmazatDocasneSoubory = !settings.Debug;
+			nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
+
+			nastaveni.SouborMetadat = settings.MetadataFilePath;
+			return nastaveni;
+		}
+
+        private static IExportNastaveni GetGrammarSettings(DocxToTeiConverterSettings settings,
+			string xsltTransformationFilePath,
+			string xsltTemplatesPath,
+			AdresarovaStruktura ads, IPrepis prepis)
+		{
+			IExportNastaveni nastaveni = new MluvniceModulNastaveni();
+			nastaveni.SouborTransformaci = xsltTransformationFilePath;
+			nastaveni.SlozkaXslt = xsltTemplatesPath;
+			nastaveni.VstupniSlozka = ads.DejSpolecneDocXml;
+			nastaveni.VystupniSlozka = ads.DejVystup;
+			nastaveni.DocasnaSlozka = ads.DejTemp;
+			nastaveni.Prepis = prepis;
+            nastaveni.SmazatDocasneSoubory = !settings.Debug;
 
 			nastaveni.SouborMetadat = settings.MetadataFilePath;
 			return nastaveni;
@@ -671,13 +733,18 @@ namespace Ujc.Ovj.Ooxml.Conversion
 
 		private void WriteListChange(string docxToXmlOutput, IEnumerable<VersionInfoSkeleton> previousVersions, VersionInfoSkeleton currentVersionInfoSkeleton)
 		{
-			XNamespace tei = "http://www.tei-c.org/ns/1.0";
-			XDocument document = XDocument.Load(docxToXmlOutput);
+		    XNamespace tei = XNamespace.Get("http://www.tei-c.org/ns/1.0");
+            //"http://www.tei-c.org/ns/1.0";
 
-			XElement revisionElement = document.Element(tei + "TEI").Element(tei + "teiHeader").Element(tei + "revisionDesc");
-			if (revisionElement == null)
+            XDocument document = XDocument.Load(docxToXmlOutput);
+
+            //document.Root.Attribute("xmlns:tei")
+
+            XElement teiHeader = document.Element(tei + "TEI").Element(tei + "teiHeader");
+			XElement revisionElement = teiHeader.Element(tei + "revisionDesc");
+
+            if (revisionElement == null)
 			{
-				XElement teiHeader = document.Element(tei + "TEI").Element(tei + "teiHeader");
 				revisionElement = new XElement(tei + "revisionDesc");
 				foreach (VersionInfoSkeleton version in previousVersions)
 				{
@@ -685,36 +752,49 @@ namespace Ujc.Ovj.Ooxml.Conversion
 				}
 				teiHeader.Add(revisionElement);
 			}
-			document.Root.Add(new XAttribute("change", "#" + currentVersionInfoSkeleton.Id));
+		    var teiN = document.Root.Attribute("n");
+
+            if (teiN==null)
+            {
+                var fileDesc = teiHeader.Element(tei+ "fileDesc");
+                document.Root.Add(new XAttribute("n", fileDesc.Attribute("n").Value));
+            }
+
+            document.Root.Add(new XAttribute("change", "#" + currentVersionInfoSkeleton.Id));
 			document.Save(docxToXmlOutput);
 		}
 
-		private static List<IPrepis> GetPrepisy(DocxToTeiConverterSettings settings, string inputFileName)
+		private static IPrepis GetPrepisy(DocxToTeiConverterSettings settings, string inputFileName)
 		{
-			List<IPrepis> glsPrepisy = new List<IPrepis>();
-			Prepisy prepisy = Perzistence.NacistZXml(settings.MetadataFilePath);
-			Prepis prepis = (from p in prepisy where p.Soubor.Nazev == inputFileName select p).FirstOrDefault();
-			glsPrepisy.Add(prepis);
-			return glsPrepisy;
+            var searchedFileName = inputFileName;
+            var extensionDotPosition = inputFileName.LastIndexOf('.');
+            if (extensionDotPosition > 0)
+            {
+                searchedFileName = String.Format("{0}.{1}",
+                    inputFileName.Substring(0, extensionDotPosition).Split('_').First(),
+                    inputFileName.Substring(extensionDotPosition + 1, inputFileName.Length - extensionDotPosition - 1));
+            }
+            
+			var prepisy = Perzistence.NacistZXml(settings.MetadataFilePath);
+		    var prepis = prepisy.FirstOrDefault(p => p.Soubor.Nazev == inputFileName || p.Soubor.NazevArchive == inputFileName) ??
+		                 prepisy.FirstOrDefault(p => p.Soubor.Nazev == searchedFileName || p.Soubor.NazevArchive == searchedFileName);
+            
+			return prepis;
 		}
 
-		private void ConvertDocxToXml(List<IPrepis> prepisy, string outputDirectory, string docxToXmlFilePath)
+		private void ConvertDocxToXml(IPrepis prepis, string outputDirectory, string docxToXmlFilePath)
 		{
-			foreach (Prepis prepis in prepisy)
-			{
-				//FileInfo fi = new FileInfo(Path.Combine(outputDirectory, prepis.Soubor.NazevBezPripony + ".xml"));
-				ConvertDocxToXml(prepis.Soubor.CelaCesta, docxToXmlFilePath, outputDirectory, prepis.Soubor.NazevBezPripony, DateTime.UtcNow);
-			}
+			//FileInfo fi = new FileInfo(Path.Combine(outputDirectory, prepis.Soubor.NazevBezPripony + ".xml"));
+			ConvertDocxToXml(prepis.Soubor.CelaCesta, docxToXmlFilePath, outputDirectory, prepis.Soubor.NazevBezPripony, DateTime.UtcNow);
 		}
 
 		private static void ConvertDocxToXml(string inputDocxFile, string docxToXmlFilePath,
 			string outputDirectory, string fileNameWithoutExtension, DateTime exportTime)
 		{
-			Settings stg = new Settings();
 			string souborXml = Path.Combine(outputDirectory, fileNameWithoutExtension + ".xml");
-			XmlGenerator xg = new XmlGenerator(inputDocxFile, docxToXmlFilePath, souborXml, stg);
-			xg.Read();
 
+		    ConvertDocxToXml(inputDocxFile, docxToXmlFilePath, souborXml);
+            
 			File.SetCreationTime(souborXml, exportTime);
 
 		}

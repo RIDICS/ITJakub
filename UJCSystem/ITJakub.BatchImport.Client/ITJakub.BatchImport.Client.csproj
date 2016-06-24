@@ -129,6 +129,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\Converters\FileStateToIconConverter.cs" />
+    <Compile Include="View\Converters\ErrorMessageToTextBoxVisibilityConverter.cs" />
     <Compile Include="View\Converters\FileStateToProgressbarVisibilityConverter.cs" />
     <Compile Include="View\FileView.xaml.cs">
       <DependentUpon>FileView.xaml</DependentUpon>

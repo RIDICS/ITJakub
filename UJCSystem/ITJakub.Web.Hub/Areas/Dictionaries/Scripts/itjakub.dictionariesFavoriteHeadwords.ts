@@ -6,13 +6,16 @@
     private headwordClickCallback: (bookId: string, entryXmlId: string) => void;
     private headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void;
 
+    private inited = false;
+    private afterInitCallbacks:Array<()=>any>=[];
+
     constructor(mainContainer: string, listContainer: string, expandButton: string) {
         this.expandButton = expandButton;
         this.listContainer = listContainer;
         this.mainContainer = mainContainer;
     }
 
-    public create(headwordClickCallback: (bookId: string, entryXmlId: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
+    create(headwordClickCallback: (bookId: string, entryXmlId: string) => void, headwordListChangedCallback: (newList: Array<IDictionaryFavoriteHeadword>) => void = null) {
         this.headwordClickCallback = headwordClickCallback;
         this.headwordListChangedCallback = headwordListChangedCallback;
         var areaInitHeight = $(".dictionary-header", $(this.mainContainer)).innerHeight();
@@ -46,6 +49,15 @@
         this.getAllHeadwords();
     }
 
+    public callAfterInit(callback:() => any) {
+        if (this.inited) {
+            callback();
+        }
+        else {
+            this.afterInitCallbacks.push(callback);
+        }
+    }
+
     public getAllHeadwords() {
         $(this.listContainer).addClass("loading");
         $.ajax({
@@ -58,6 +70,11 @@
             success: (response) => {
                 $(this.listContainer).removeClass("loading");
                 this.showHeadwordList(response);
+
+                this.inited = true;
+                while (this.afterInitCallbacks.length) {
+                    this.afterInitCallbacks.pop()();
+                }
             }
         });
     }

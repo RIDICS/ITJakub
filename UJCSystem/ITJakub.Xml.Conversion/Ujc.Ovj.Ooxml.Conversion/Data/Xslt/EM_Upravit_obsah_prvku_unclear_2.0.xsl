@@ -12,7 +12,6 @@
 		</xd:desc>
 	</xd:doc>
 
-
 	<xsl:output omit-xml-declaration="no" indent="no" />
 	<xsl:strip-space elements="unclear supplied" />
 

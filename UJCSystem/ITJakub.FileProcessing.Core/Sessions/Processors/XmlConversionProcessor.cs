@@ -27,9 +27,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var inputFileResource =
-                resourceSessionDirector.Resources.First(
-                    resource => resource.ResourceType == ResourceType.SourceDocument);
+            var inputFilesResource = resourceSessionDirector.Resources.Where(resource => resource.ResourceType == ResourceType.SourceDocument).OrderBy(r=>r.FileName, StringComparer.CurrentCultureIgnoreCase);
+            var inputFileResource = inputFilesResource.First();
 
             string metaDataFileName;
             if (resourceSessionDirector.Resources.Any(x => x.ResourceType == ResourceType.UploadedMetadata))
@@ -57,13 +56,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 
-            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository,
-                m_versionIdGenerator);
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository, m_versionIdGenerator);
 
             var settings = new DocxToTeiConverterSettings
             {
                 Debug = false,
-                InputFilePath = inputFileResource.FullPath,
+                InputFilesPath = inputFilesResource.Select(p=>p.FullPath).ToArray(),
+                UploadedFilesPath = resourceSessionDirector.Resources.GroupBy(resource => resource.ResourceType).
+                    ToDictionary(resourceGroup => resourceGroup.Key,
+                        resourceGroup => resourceGroup.Select(resource => resource.FullPath).ToArray()),
                 MetadataFilePath = m_conversionMetadataPath,
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
@@ -82,8 +83,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
             else
             {
-                throw new ConversionException(
-                    string.Format("File was not converted sucessfully. See InnerException : '{0}'", conversionResult.Errors.FirstOrDefault()));
+                var exception = conversionResult.Errors.FirstOrDefault();
+                throw new ConversionException(string.Format("File was not converted sucessfully. See InnerException : '{0}'", exception), exception);
             }
             
         }

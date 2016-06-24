@@ -30,6 +30,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private List<Resource> ExtractFilesFromArchive(Resource extractableArchive, ResourceSessionDirector resourceSessionDirector)
         {
             var result = new List<Resource>();
+
             using (ZipArchive archive = ZipFile.OpenRead(extractableArchive.FullPath))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)

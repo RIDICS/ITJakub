@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{188ED7AC-8EC1-4C32-97E6-270ED0E7F40A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Daliboris.Slovniky</RootNamespace>
+    <AssemblyName>Daliboris.Slovniky.JgSlov</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DDBW.cs" />
+    <Compile Include="JgSlov.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Base\Daliboris.Texty.Export.Base.csproj">
+      <Project>{3179D827-1C9E-4291-8399-9D9A2BAFE374}</Project>
+      <Name>Daliboris.Texty.Export.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Rozhrani\Daliboris.Texty.Export.Rozhrani.csproj">
+      <Project>{585C72E8-10A8-4DFA-8A5C-467C5DD4C98C}</Project>
+      <Name>Daliboris.Texty.Export.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
+      <Project>{56b8bc06-0be8-4045-94df-6844aa49e523}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Transkriptor.Objekty\Daliboris.Transkripce.Objekty.csproj">
+      <Project>{2890bd2d-9511-4503-bb1a-01b7493eade0}</Project>
+      <Name>Daliboris.Transkripce.Objekty</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Transkriptor.Rozhrani\Daliboris.Transkriptor.Rozhrani.csproj">
+      <Project>{d68f920d-02e7-43d4-af48-c2bb70900b11}</Project>
+      <Name>Daliboris.Transkriptor.Rozhrani</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.ChangeEngine.Objects\Ujc.Ovj.ChangeEngine.Objects.csproj">
+      <Project>{516328ef-fa82-42ac-8a97-4a7ca20ffd74}</Project>
+      <Name>Ujc.Ovj.ChangeEngine.Objects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface\Ujc.Ovj.Tools.Xml.XsltTransformation.Interface.csproj">
+      <Project>{3E64D878-8E98-465B-9FA9-A90D1D3B97B1}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj">
+      <Project>{70259678-BEA1-44D4-BD7F-85A60D683B8B}</Project>
+      <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xmr\JgSlov_pravidla_v4.xmr">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xml\JgSlov01.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov02.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov03.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov04.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Xml\JgSlov05.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Ujc.Ovj.Ooxml.Conversion\Data\Xslt\TEI_ClassificationDeclarations.xsl">
+      <Link>Xls\TEI_ClassificationDeclarations.xsl</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Xmr\DDBW.xmr">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

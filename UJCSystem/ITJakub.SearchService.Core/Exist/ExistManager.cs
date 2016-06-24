@@ -144,7 +144,7 @@ namespace ITJakub.SearchService.Core.Exist
             if (filteredCriterias.ResultBooks == null)
                 return null;
 
-            AdjustStartIndexes(filteredCriterias.ResultSpecifications);
+            //AdjustStartIndexes(filteredCriterias.ResultSpecifications);
 
             return SearchResultContractList.FromXml(m_communicationManager.ListSearchEditionsResults(filteredCriterias.ToXml()));
         }

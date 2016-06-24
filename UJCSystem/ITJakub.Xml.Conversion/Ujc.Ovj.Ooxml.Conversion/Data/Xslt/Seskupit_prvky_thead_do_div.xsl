@@ -28,6 +28,7 @@
 	
 	<xsl:template match="body">
 		<xsl:copy>
+			<xsl:copy-of select="@*"/>
 			<xsl:choose>
 				<xsl:when test="count(/body/child::*[(starts-with(name(), 'thead'))]) &gt; 0">
 					<xsl:apply-templates select="/body/*[position() &lt; count(/body/child::*[(starts-with(name(), 'thead'))][1]/preceding-sibling::*)+1]" />
@@ -109,6 +110,13 @@
 	<xsl:template match="@xml:id" priority="3">
 		<xsl:if test="name() = 'xml:id'">
 			<xsl:attribute name="xml:id">
+				<xsl:value-of select="."/>
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="@xml:space" priority="3">
+		<xsl:if test="name() = 'xml:space'">
+			<xsl:attribute name="xml:space">
 				<xsl:value-of select="."/>
 			</xsl:attribute>
 		</xsl:if>

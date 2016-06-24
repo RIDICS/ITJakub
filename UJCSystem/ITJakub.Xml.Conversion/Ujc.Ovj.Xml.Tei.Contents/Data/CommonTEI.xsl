@@ -10,6 +10,8 @@
   version="1.0">
 
 	<xsl:output method="text"/>
+  
+  <!--<xsl:strip-space elements="*" />-->
 	
   <xsl:template match="tei:c[@type='space']" priority="5">
     <xsl:text> </xsl:text>
@@ -19,7 +21,11 @@
 		<xsl:apply-templates />
 	</xsl:template>
 
-	<xsl:template match="tei:choice" />
+	<xsl:template match="tei:choice[tei:sic]" priority="5"/>
+
+  <xsl:template match="tei:choice/tei:orig" />
+  
+  <xsl:template match="tei:cit" />
 
 	<xsl:template match="tei:note" />
 

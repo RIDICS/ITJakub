@@ -40,16 +40,16 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExportBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
       <Project>{a612c779-be2b-44f2-9c86-bd5324f1f8b6}</Project>
       <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
@@ -65,6 +65,14 @@
     <ProjectReference Include="..\Ujc.Ovj.Tools.Xml.XsltTransformation\Ujc.Ovj.Tools.Xml.XsltTransformation.csproj">
       <Project>{70259678-bea1-44d4-bd7f-85a60d683b8b}</Project>
       <Name>Ujc.Ovj.Tools.Xml.XsltTransformation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Xml.Tei.Contents\Ujc.Ovj.Xml.Tei.Contents.csproj">
+      <Project>{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1}</Project>
+      <Name>Ujc.Ovj.Xml.Tei.Contents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ujc.Ovj.Xml.Tei.Splitting\Ujc.Ovj.Xml.Tei.Splitting.csproj">
+      <Project>{E3BEBCD1-4B5E-4D35-981C-256F2A03CC7A}</Project>
+      <Name>Ujc.Ovj.Xml.Tei.Splitting</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

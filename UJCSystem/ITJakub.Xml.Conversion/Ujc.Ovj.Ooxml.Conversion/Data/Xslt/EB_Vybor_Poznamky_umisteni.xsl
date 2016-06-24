@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	xmlns:xml="http://www.w3.org/XML/1998/namespace"
-	xmlns="http://www.tei-c.org/ns/1.0"
 	xmlns:tei="http://www.tei-c.org/ns/1.0"
 	exclude-result-prefixes="xd tei"
 	version="1.0">
@@ -53,5 +52,11 @@
 			</xsl:attribute>
 		</xsl:if>
 	</xsl:template>
-	
+	<xsl:template match="@xml:space" priority="3">
+		<xsl:if test="name() = 'xml:space'">
+			<xsl:attribute name="xml:space">
+				<xsl:value-of select="."/>
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
 </xsl:stylesheet>

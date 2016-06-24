@@ -3,133 +3,254 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using Daliboris.Slovniky;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
 using Ujc.Ovj.Tools.Xml.XsltTransformation;
+using Daliboris.Pomucky.Xml;
+using Daliboris.Slovniky.Svoboda;
 
 namespace Daliboris.Texty.Export.SlovnikovyModul
 {
 	public class SlovnikovyModul : ExportBase
 	{
-		public override void Exportuj()
-		{
-
-		}
-
 		public SlovnikovyModul(IExportNastaveni emnNastaveni) : base(emnNastaveni)
 		{
 		}
 
-		public override void Exportuj(IEnumerable<IPrepis> prpPrepisy)
+		protected override void Exportuj(IPrepis prpPrepis, IList<string> xmlOutputFiles)
 		{
-			ExportujImpl(prpPrepisy);
+			ExportujImpl(prpPrepis, xmlOutputFiles);
 		}
 
-		private void ExportujImpl(IEnumerable<IPrepis> prpPrepisy)
+	    private string GetSimplifiedFilename(IPrepis prepis)
+	    {
+	        return GetSimplifiedFilename(prepis.Soubor.NazevBezPripony, false);
+	    }
+        
+        private string GetSimplifiedFilename(string fileName, bool hasExtension = true)
+	    {
+            if (hasExtension)
+            {
+                var dotPosition = fileName.LastIndexOf(".", StringComparison.Ordinal);
+                fileName = fileName.Substring(0, dotPosition);
+            }
+
+            var underscorePosition = fileName.IndexOf("_", StringComparison.Ordinal);
+            if (underscorePosition > 0)
+            {
+                fileName = fileName.Substring(0, underscorePosition);
+            }
+
+            return fileName.ToLowerInvariant();
+        }
+
+        private void ExportujImpl(IPrepis prepis, IList<string> xmlOutputFiles)
 		{
-			IPrepis first = (from p in prpPrepisy select p).FirstOrDefault();
-			string start = first.Soubor.NazevBezPripony.Substring(0, first.Soubor.NazevBezPripony.IndexOf("_")).ToLowerInvariant();
+		    var fileName = GetSimplifiedFilename(prepis);
 
-			IList<IXsltTransformer> step01 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step01"), Nastaveni.SlozkaXslt);
-			IList<IXsltTransformer> step02 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step02"), Nastaveni.SlozkaXslt);
-			IList<IXsltTransformer> step03 = XsltTransformerFactory.GetXsltTransformers(Nastaveni.SouborTransformaci, (start + "-step03"), Nastaveni.SlozkaXslt);
+            var xsltSteps = GetTransformationList(String.Format("{0}-step", fileName));
+            
+			Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
 
-			foreach (IPrepis prepis in prpPrepisy)
+			string vystupniSoubor = null;
+			
+			var casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
+
+            var souborBezPripony = prepis.Soubor.NazevBezPripony;
+			var fullFileName = souborBezPripony + ".xml";
+
+		    var inputFilePath = Path.Combine(Nastaveni.VstupniSlozka, fullFileName);
+            var konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, fullFileName);
+
+		    if (xmlOutputFiles.Count > 1)
+		    {
+		        CombineInputXml(xmlOutputFiles, inputFilePath);
+		    }
+
+		    try
 			{
-				Zaloguj("Převádím soubor {0}", prepis.Soubor.Nazev, false);
+				var step = 0;
 
-				string vystupniSoubor = null;
-				string konecnyVystup = null;
+			    vystupniSoubor = inputFilePath;
 
-				DateTime casExportu = Nastaveni.CasExportu == DateTime.MinValue ? DateTime.Now : Nastaveni.CasExportu;
-				string souborBezPripony = prepis.Soubor.NazevBezPripony;
-				try
+			    var transformationParameter = new NameValueCollection
+			    {
+			        {"guid", prepis.GUID}
+			    };
+
+			    if (xsltSteps.Count > 0)
+			    {
+			        var step00File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+			        ApplyTransformations(inputFilePath, step00File, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, transformationParameter);
+
+			        vystupniSoubor = step00File;
+			    }
+
+				var slovnik = GetDictionaryObject(fileName);
+				var fileTransformationSource= vystupniSoubor;
+                
+                if (slovnik != null)
+                {
+                    UsePersonalizedXmdGenerator = slovnik.UsePersonalizedXmdGenerator;
+
+                    var step01File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    var step02File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    var step03File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    var step04File = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                    
+                    slovnik.SeskupitHeslaPismene(vystupniSoubor, step01File, souborBezPripony);
+                    slovnik.UpravitHraniceHesloveStati(step01File, step02File, souborBezPripony);
+                    slovnik.KonsolidovatHeslovouStat(step02File, step03File, souborBezPripony);
+                    slovnik.UpravitOdkazy(step03File, step04File, souborBezPripony);
+
+                    fileTransformationSource = step04File;
+                }
+                
+				while (xsltSteps.Count > 0)
 				{
-					int step = 0;
-					const string csPriponaXml = ".xml";
-					konecnyVystup = Path.Combine(Nastaveni.VystupniSlozka, souborBezPripony + csPriponaXml);
+                    var fileTransformationTarget = GetTempFile(Nastaveni.DocasnaSlozka, souborBezPripony, step++);
+                        
+                    ApplyTransformations(fileTransformationSource, fileTransformationTarget, xsltSteps.Dequeue(), Nastaveni.DocasnaSlozka, transformationParameter);
 
-					const string fileNameFormat = "{0}_{1:00}.xml";
-					string step00File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					NameValueCollection parameters = new NameValueCollection();
-					ApplyTransformations(Path.Combine(Nastaveni.VstupniSlozka, souborBezPripony + csPriponaXml),
-						step00File, step01, Nastaveni.DocasnaSlozka, parameters);
-					vystupniSoubor = step00File;
-
-					Slovnik slovnik = GetDictionaryObject(start);
-
-					string step01File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					slovnik.VstupniSoubor = vystupniSoubor;
-					slovnik.VystupniSoubor = step01File;
-
-					slovnik.SeskupitHeslaPismene();
-
-					string step02File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					slovnik.VstupniSoubor = step01File;
-					slovnik.VystupniSoubor = step02File;
-					slovnik.UpravitHraniceHesloveStati();
-
-					string step03File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					slovnik.VstupniSoubor = step02File;
-					slovnik.VystupniSoubor = step03File;
-					slovnik.KonsolidovatHeslovouStat();
-
-					string step04File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					slovnik.VstupniSoubor = step03File;
-					slovnik.VystupniSoubor = step04File;
-					slovnik.UpravitOdkazy();
-
-					string step05File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					slovnik.VstupniSoubor = step04File;
-					slovnik.VystupniSoubor = step05File;
-					//essc.IdentifikovatZkratky(Nastaveni.);
-
-					parameters = new NameValueCollection();
-					ApplyTransformations(step04File, step05File, step02, Nastaveni.DocasnaSlozka, parameters);
-
-
-					string step06File = Path.Combine(Nastaveni.DocasnaSlozka, String.Format(fileNameFormat, souborBezPripony, step++));
-					ApplyTransformations(step05File, step06File, step03, Nastaveni.DocasnaSlozka, parameters);
-
-					vystupniSoubor = step06File;
-
+                    fileTransformationSource = fileTransformationTarget;
 				}
-				catch (Exception e)
-				{
-					Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
 
-				}
-				finally
+				vystupniSoubor = fileTransformationSource;
+			}
+			catch (Exception e)
+			{
+				Zaloguj("Při konverzi souboru {0} nastala chyba: {1}", prepis.Soubor.NazevBezPripony, e.Message, true);
+			}
+			finally
+			{
+				if (vystupniSoubor != null)
 				{
-					if (vystupniSoubor != null)
-					{
-						if (konecnyVystup != null && File.Exists(konecnyVystup))
-							File.Delete(konecnyVystup);
-						File.Copy(vystupniSoubor, konecnyVystup);
-						File.SetCreationTime(konecnyVystup, casExportu);
+					if (File.Exists(konecnyVystup))
+						File.Delete(konecnyVystup);
+					File.Copy(vystupniSoubor, konecnyVystup);
+					File.SetCreationTime(konecnyVystup, casExportu);
 
-						//if (Nastaveni.SmazatDocasneSoubory)
-						//	ekup.SmazDocasneSoubory();
-					}
+					//if (Nastaveni.SmazatDocasneSoubory)
+					//	ekup.SmazDocasneSoubory();
 				}
 			}
-		}
+        }
 
-		Slovnik GetDictionaryObject(string dictionaryAcronym)
+	    private void CombineInputXml(IList<string> xmlOutputFiles, string inputFilePath, string sourceTag="body")
+	    {
+	        var xws = new XmlWriterSettings
+	        {
+	            CloseOutput = true,
+	            Encoding = System.Text.Encoding.UTF8,
+	            Indent = true,
+	            IndentChars = " "
+            };
+
+	        using (var xw = XmlWriter.Create(inputFilePath, xws))
+	        {
+	            xw.WriteStartDocument();
+	            xw.WriteStartElement(sourceTag);
+
+	            foreach (var xmlOutputFile in xmlOutputFiles)
+	            {
+	                using (var xr = XmlReader.Create(xmlOutputFile))
+	                {
+	                    xr.MoveToContent();
+
+	                    while (xr.Read())
+	                    {
+	                        if (xr.NodeType == XmlNodeType.Element && xr.Name != sourceTag)
+	                        {
+	                            xw.WriteNode(xr, false);
+	                        }
+	                    }
+	                }
+	            }
+
+	            xw.WriteEndElement();
+	            xw.WriteEndDocument();
+	            xw.Flush();
+	            xw.Close();
+	        }
+	    }
+
+
+        private Slovnik GetDictionaryObject(string dictionaryAcronym)
 		{
 			Slovnik slovnik = null;
 			switch (dictionaryAcronym)
 			{
 				case "stcs":
 					slovnik = new StcS();
-				break;
+				    break;
+
 				case "essc":
 					slovnik = new ESSC();
 					break;
+
+                case "gbslov":
+                case "simekslov": //similar as gbslov
+					slovnik = new GbSlov();
+					break;
+
+                case "mss":
+                    slovnik = new MSS();
+                    break;
+
+                case "jgslov01":
+                case "jgslov02":
+                case "jgslov03":
+                case "jgslov04":
+                case "jgslov05":
+                    slovnik = new JgSlov();
+                    break;
+
+                case "ddbw":
+                    slovnik = new DDBW();
+                    break;
+
+                case "indexsvob":
+                    slovnik = new IndexSvob();
+                    break;
+
+                case "pohlgramslov1756":
+                case "pohlgramslov1783":
+			        slovnik = null;
+
+			        break;
+                case "vokab1550":
+			        slovnik = null;
+
+			        break;
+                case "slovknm":
+			        slovnik = null;
+
+			        break;
+                case "dodavky":
+			        slovnik = null;
+
+			        break;
+                case "ryvola1716":
+			        slovnik = null;
+
+			        break;
 			}
 
 			return slovnik;
 		}
-	}
+
+        public override void GenerateConversionMetadataFile(
+            string documentType,
+            string finalOutputFileFullPath,
+            string finalOutputFileName,
+            string finalOutputMetadataFileName)
+        {
+            var fileName = GetSimplifiedFilename(finalOutputFileName);
+            var dictionary = GetDictionaryObject(fileName);
+
+            dictionary.GenerateConversionMetadataFile(this, Nastaveni, documentType, finalOutputFileFullPath, finalOutputFileName, finalOutputMetadataFileName);
+        }
+    }
 }

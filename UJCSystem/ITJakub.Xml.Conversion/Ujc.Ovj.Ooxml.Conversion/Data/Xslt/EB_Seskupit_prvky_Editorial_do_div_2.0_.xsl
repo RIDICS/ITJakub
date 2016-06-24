@@ -65,6 +65,9 @@
 	<xsl:template match="div[@type='explicit']">
 			<xsl:copy-of select="." />
 	</xsl:template>
+	<xsl:template match="div[@type='preface']">
+		<xsl:copy-of select="." />
+	</xsl:template>
 
 	<xsl:template match="div[@type = 'incipit']">
 <!--		<div>-->

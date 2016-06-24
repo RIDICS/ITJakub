@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using ITJakub.BatchImport.Client.ViewModel;
@@ -94,7 +95,13 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                     client.ProcessSession(session, DefaultUploadMessage);
                     file.CurrentState = FileStateType.Done;
                 }
-                catch (Exception)
+                catch (FaultException ex)
+                {
+                    file.ErrorMessage = ex.Message;
+                    file.CurrentState = FileStateType.Error;
+                    return;
+                }
+                catch (Exception ex)
                 {
                     file.CurrentState = FileStateType.Error;
                     return;
@@ -114,6 +121,8 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
     {
         private FileStateType m_currentState;
 
+        private string m_currentErrorMessage;
+
         public FileModel(string fullPath, string fileName, FileStateType currentState)
         {
             FullPath = fullPath;
@@ -124,6 +133,16 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         public string FullPath { get; }
 
         public string FileName { get; }
+
+        public string ErrorMessage
+        {
+            get { return m_currentErrorMessage; }
+            set
+            {
+                m_currentErrorMessage = value;
+                OnErrorMessageChanged(m_currentErrorMessage);
+            }
+        }
 
         public FileStateType CurrentState
         {
@@ -140,6 +159,13 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
         protected virtual void OnStateChanged(FileStateType e)
         {
             StateChanged?.Invoke(this, e);
+        }
+
+        public event EventHandler<string> ErrorMessageChanged;
+
+        protected virtual void OnErrorMessageChanged(string e)
+        {
+            ErrorMessageChanged?.Invoke(this, e);
         }
     }
 

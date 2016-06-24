@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+         xmlns="http://vokabular.ujc.cas.cz/schema/changeEngine/v1">
+   <exceptions/>
+   <changes>
+      <change pattern="v"
+              format="string"
+              replace="u"
+              order="1"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ſſ"
+              format="string"
+              replace="š"
+              order="2"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="Sſ"
+              format="string"
+              replace="Š"
+              order="3"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ſ"
+              format="string"
+              replace="s"
+              order="4"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="w"
+              format="string"
+              replace="v"
+              order="5"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ſy"
+              format="string"
+              replace="si"
+              order="6"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="sin"
+              format="string"
+              replace="syn"
+              order="7"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ſý"
+              format="string"
+              replace="sí"
+              order="8"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="šy"
+              format="string"
+              replace="ši"
+              order="9"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="šý"
+              format="string"
+              replace="ší"
+              order="10"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="cy"
+              format="string"
+              replace="ci"
+              order="11"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="cý"
+              format="string"
+              replace="cí"
+              order="12"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="zy"
+              format="string"
+              replace="zi"
+              order="13"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="zý"
+              format="string"
+              replace="zí"
+              order="14"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="sy"
+              format="string"
+              replace="si"
+              order="15"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="j"
+              format="string"
+              replace="í"
+              order="16"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="g"
+              format="string"
+              replace="j"
+              order="17"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="G"
+              format="string"
+              replace="J"
+              order="18"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="jr"
+              format="string"
+              replace="gr"
+              order="19"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="Jr"
+              format="string"
+              replace="Gr"
+              order="20"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="Cž"
+              format="string"
+              replace="Č"
+              order="21"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="au"
+              format="string"
+              replace="ou"
+              order="22"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ġ"
+              format="string"
+              replace="g"
+              order="23"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ay"
+              format="string"
+              replace="aj"
+              order="24"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ey"
+              format="string"
+              replace="ej"
+              order="25"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="adíu"
+              format="string"
+              replace="adju"
+              order="26"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+      <change pattern="ff"
+              format="string"
+              replace="f"
+              order="27"
+              disabled="false"
+              exploitation="0">
+         <options>
+            <replacement-count xsi:nil="true"/>
+            <exceptions/>
+         </options>
+      </change>
+   </changes>
+</ruleset>

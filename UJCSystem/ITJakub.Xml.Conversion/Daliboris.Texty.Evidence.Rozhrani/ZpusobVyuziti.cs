@@ -62,10 +62,16 @@ namespace Daliboris.Texty.Evidence.Rozhrani
 		[EnumDescription("MOL")]
 		OdbornaLiteratura = 256,
 
-		/// <summary>
-		/// Text určený pro interní textovou banku
+        /// <summary>
+		/// Text určený pro modul digitalizovaných mluvnic
 		/// </summary>
-		[EnumDescription("ITB")]
+		[EnumDescription("MDM")]
+        Mluvnice = 512,
+
+        /// <summary>
+        /// Text určený pro interní textovou banku
+        /// </summary>
+        [EnumDescription("ITB")]
 		InterniKorpus = 16384
 	}
 }

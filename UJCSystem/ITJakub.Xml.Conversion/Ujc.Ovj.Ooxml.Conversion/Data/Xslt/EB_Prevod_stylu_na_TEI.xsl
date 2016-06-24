@@ -20,7 +20,7 @@
 	<xsl:strip-space elements="*"/>
 	
   <xsl:template match="/">
-  	<xsl:comment> EB_Prevod_stylu_na_TEI; ; parameters: exportovatTransliteraci = '<xsl:value-of select="$exportovatTransliteraci"/>'  </xsl:comment>
+  	<xsl:comment> EB_Prevod_stylu_na_TEI; parameters: exportovatTransliteraci = '<xsl:value-of select="$exportovatTransliteraci"/>'  </xsl:comment>
     <xsl:apply-templates />
   </xsl:template>
   
@@ -52,6 +52,27 @@
 				</xsl:attribute>
 				<xsl:apply-templates/>
 			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
+	<xsl:template match="Titulek_obrazku">
+		<xsl:variable name="poradi">
+			<xsl:number count="Titulek_obrazku" level="any"/>
+		</xsl:variable>
+		<div type="editorial" subtype="image">
+			<figure type="cover" subtype="A4"><graphic url="Obrazek-{$poradi}_A4.jpg" /></figure>
+			<figure type="cover" subtype="A6"><graphic url="Obrazek-{$poradi}_A6.jpg" /></figure>
+			<p><xsl:apply-templates /></p>
+		</div>
+	</xsl:template>
+	
+	<xsl:template match="Normalni/footnote_reference | Vers//footnote_reference | Titul//footnote_reference | Podnadpis/footnote_reference | Nadpis/footnote_reference">
+		<xsl:element name="note">
+			<xsl:attribute name="type">
+				<xsl:text>footnote</xsl:text>
+			</xsl:attribute>
+			<xsl:apply-templates select="key('poznamka', .)" mode="note" />
+			<!--<xsl:apply-templates select='../../poznamka_pod_carou[@id="{text()}"]' />-->
 		</xsl:element>
 	</xsl:template>
 

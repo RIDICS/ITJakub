@@ -1,0 +1,1030 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ruleset xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://vokabular.ujc.cas.cz/schema/changeEngine/v1">
+    <exceptions>
+   <exception pattern="Weličejší"
+              format="string"
+              replace="Veličejší"
+              order="1"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Weřeji"
+              format="string"
+              replace="Veřeji"
+              order="2"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Weřeje"
+              format="string"
+              replace="Veřeje"
+              order="3"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="*Vice"
+              format="string"
+              replace="*Vice"
+              order="4"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wščewuju"
+              format="string"
+              replace="Vščevuju"
+              order="5"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wykloňuji"
+              format="string"
+              replace="Vykloňuji"
+              order="6"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wylhuji"
+              format="string"
+              replace="Vylhuji"
+              order="7"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wylihuji"
+              format="string"
+              replace="Vylihuji"
+              order="8"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wystřiehají"
+              format="string"
+              replace="Vystřiehají"
+              order="9"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzdojné"
+              format="string"
+              replace="Vzdojné"
+              order="10"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzehraji"
+              format="string"
+              replace="Vzehraji"
+              order="11"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzliji"
+              format="string"
+              replace="Vzliji"
+              order="12"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzpokojiti"
+              format="string"
+              replace="Vzpokojiti"
+              order="13"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zaději"
+              format="string"
+              replace="Zaději"
+              order="14"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zajiti s kým"
+              format="string"
+              replace="Zajiti s kým"
+              order="15"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zajewiti"
+              format="string"
+              replace="Zajeviti"
+              order="16"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zahrucuji"
+              format="string"
+              replace="Zahrucuji"
+              order="17"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zapsuji"
+              format="string"
+              replace="Zapsuji"
+              order="18"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zářijowý"
+              format="string"
+              replace="Zářijový"
+              order="19"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzbiji"
+              format="string"
+              replace="Vzbiji"
+              order="20"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzbrojiti"
+              format="string"
+              replace="Vzbrojiti"
+              order="21"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zceluji"
+              format="string"
+              replace="Zceluji"
+              order="22"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzceluji"
+              format="string"
+              replace="Vzceluji"
+              order="23"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzději"
+              format="string"
+              replace="Vzději"
+              order="24"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zdejší"
+              format="string"
+              replace="Zdejší"
+              order="25"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzduji"
+              format="string"
+              replace="Vzduji"
+              order="26"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zdvíž"
+              format="string"
+              replace="Zdvíž"
+              order="27"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Vzdvíž"
+              format="string"
+              replace="Vzdvíž"
+              order="28"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzejdu"
+              format="string"
+              replace="Vzejdu"
+              order="29"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzejmu"
+              format="string"
+              replace="Vzejmu"
+              order="30"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zjadám"
+              format="string"
+              replace="Zjadám"
+              order="31"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzjasniti"
+              format="string"
+              replace="Vzjasniti"
+              order="32"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zječati"
+              format="string"
+              replace="Zječati"
+              order="33"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzječati"
+              format="string"
+              replace="Vzječati"
+              order="34"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzjitřiti"
+              format="string"
+              replace="Vzjitřiti"
+              order="35"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzhájiti"
+              format="string"
+              replace="Vzhájiti"
+              order="36"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zhynuju"
+              format="string"
+              replace="Zhynuju"
+              order="37"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzchwěji"
+              format="string"
+              replace="Vzchvěji"
+              order="38"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzkazuji"
+              format="string"
+              replace="Vzkazuji"
+              order="39"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzlaji"
+              format="string"
+              replace="Vzlaji"
+              order="40"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zmatuji"
+              format="string"
+              replace="Zmatuji"
+              order="41"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Znenaděje"
+              format="string"
+              replace="Znenaděje"
+              order="42"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Znoj"
+              format="string"
+              replace="Znoj"
+              order="43"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wznojiti"
+              format="string"
+              replace="Wznogiti"
+              order="44"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zobcuji"
+              format="string"
+              replace="Zobcuji"
+              order="45"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzobcuji"
+              format="string"
+              replace="Vzobcuji"
+              order="46"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zobojuji"
+              format="string"
+              replace="Zobojuji"
+              order="47"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzobojuji"
+              format="string"
+              replace="Vzobojuji"
+              order="48"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzochwěji"
+              format="string"
+              replace="Vzochvěji"
+              order="49"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zoroduji"
+              format="string"
+              replace="Zoroduji"
+              order="50"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzpěji"
+              format="string"
+              replace="Vzpěji"
+              order="51"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzpluji"
+              format="string"
+              replace="Vzpluji"
+              order="52"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzpodejmu"
+              format="string"
+              replace="Vzpodejmu"
+              order="53"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzraduji"
+              format="string"
+              replace="Vzraduji"
+              order="54"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzryji"
+              format="string"
+              replace="Vzryji"
+              order="55"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zseji"
+              format="string"
+              replace="Zseji"
+              order="56"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzseji"
+              format="string"
+              replace="Vzseji"
+              order="57"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Zsměji se"
+              format="string"
+              replace="Zsměji se"
+              order="58"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzsměji se"
+              format="string"
+              replace="Vzsměji se"
+              order="59"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wztáji"
+              format="string"
+              replace="Vztáji"
+              order="60"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wzwěji"
+              format="string"
+              replace="Vzvěji"
+              order="61"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Wozwergati"
+              format="string"
+              replace="Vozvergati"
+              order="62"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Izwergati"
+              format="string"
+              replace="Izvergati"
+              order="63"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="Koreyniti"
+              format="string"
+              replace="Korejniti"
+              order="64"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="†Reyt"
+              format="string"
+              replace="†Rejt"
+              order="65"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+   <exception pattern="†Treycil"
+              format="string"
+              replace="†Trejcil"
+              order="66"
+              disabled="false"
+              exploitation="1">
+      <options>
+         <replacement-count xsi:nil="true"/>
+         <exceptions/>
+      </options>
+   </exception>
+        <exception pattern="Gyessnye" format="string" replace="Jěsně" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Iezzen" format="string" replace="Jesen" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Beidj" format="string" replace="Bejdí" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Boj" format="string" replace="Boj" order="1" disabled="false" exploitation="4">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Gijež" format="string" replace="Jijež" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="(H[eu])i" format="regularExpression" replace="$1j" order="1" disabled="false" exploitation="3">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Autajek" format="string" replace="Outajek" order="1" disabled="false" exploitation="1">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Útajek" format="string" replace="Útajek" order="1" disabled="false" exploitation="1">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Flajda" format="string" replace="Flajda" order="1" disabled="false" exploitation="1">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Jc" format="string" replace="Íc" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Jaj" format="string" replace="Jaj" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Iwan" format="string" replace="Ívan" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Yazyel" format="string" replace="Jazel" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Yaz" format="string" replace="Jaz" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+        <exception pattern="Brojiti se" format="string" replace="Brojiti se" order="1" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </exception>
+    </exceptions>
+    <changes>
+        <change pattern="w" format="string" replace="v" order="1" disabled="false" exploitation="10727">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="j" format="string" replace="í" order="2" disabled="false" exploitation="6105">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="ju" format="string" />
+                    <exception pattern="uj" format="string" />
+                    <exception pattern="ja" format="string" />
+                    <exception pattern="Črje" format="string" />
+                    <exception pattern="Drje" format="string" />
+                    <exception pattern="Bej" format="string" />
+                    <exception pattern="[Ee]ja" format="regularExpression" />
+                    <exception pattern="josefo" format="string" />
+                    <exception pattern="Arjonka" format="string" />
+                    <exception pattern="čej[ae]" format="regularExpression" />
+                    <exception pattern="oji" format="regularExpression" />
+                    <exception pattern="major" format="regularExpression" />
+                    <exception pattern="[Hh]rabije" format="regularExpression" />
+                    <exception pattern="Jaj" format="regularExpression" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="Egyp" format="regularExpression" replace="Ejip" order="4" disabled="false" exploitation="2438">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="g" format="string" replace="j" order="4" disabled="false" exploitation="2438">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="\b[Aa]gen[dt]" format="regularExpression" />
+                    <exception pattern="Agio" format="string" />
+                    <exception pattern="Egyp" format="string" />
+                    <exception pattern="[Bb]rg" format="regularExpression" />
+                    <exception pattern="Diogenes" format="string" />
+                    <exception pattern="Drag" format="string" />
+                    <exception pattern="[Ee]legi" format="regularExpression" />
+                    <exception pattern="[Ff]igur" format="regularExpression" />
+                    <exception pattern="[Ff]leg" format="regularExpression" />
+                    <exception pattern="[Gg]erm" format="regularExpression" />
+                    <exception pattern="Ewang" format="string" />
+                    <exception pattern="[Ee]ngl" format="regularExpression" />
+                    <exception pattern="logi" format="string" />
+                    <exception pattern="gene" format="string" />
+                    <exception pattern="Apologj" format="string" />
+                    <exception pattern="jaga" format="string" />
+                    <exception pattern="Regim" format="string" />
+                    <exception pattern="*Gť" format="string" />
+                    <exception pattern="angl" format="string" />
+                    <exception pattern="Halguf" format="string" />
+                    <exception pattern="virig" format="string" />
+                    <exception pattern="Gliwice" format="string" />
+                    <exception pattern="Gněwjn" format="string" />
+                    <exception pattern="Golč" format="string" />
+                    <exception pattern="Gorlický" format="string" />
+                    <exception pattern="Gospod" format="string" />
+                    <exception pattern="Goworiti" format="string" />
+                    <exception pattern="Griebě" format="string" />
+                    <exception pattern="Gniawiti" format="string" />
+                    <exception pattern="Gnjzdno" format="string" />
+                    <exception pattern="Gnězno" format="string" />
+                    <exception pattern="Gnězdo" format="string" />
+                    <exception pattern="[Mm]argk" format="regularExpression" />
+                    <exception pattern="[PpBbSs][eu]rg" format="regularExpression" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="au" format="string" replace="ou" order="5" disabled="false" exploitation="1822">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="Alraun" format="string" />
+                    <exception pattern="Arauz" format="string" />
+                    <exception pattern="nauk" format="string" />
+                    <exception pattern="Emaus" format="string" />
+                    <exception pattern="taur" format="string" />
+                    <exception pattern="arnau" format="string" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="jr" format="string" replace="gr" order="6" disabled="false" exploitation="7">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="Dvojr" format="string" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="Au" format="string" replace="Ou" order="7" disabled="false" exploitation="678">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="[Ff]rauc" format="regularExpression" />
+                    <exception pattern="Aukt" format="string" />
+                    <exception pattern="Aušpice" format="string" />
+                    <exception pattern="Austrye" format="string" />
+                    <exception pattern="Aužjr" format="string" />
+                    <exception pattern="Auĝ" format="regularExpression" />
+                    <exception pattern="Auditor" format="string" />
+                    <exception pattern="Audien" format="string" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="([AaEeUy])y" format="regularExpression" replace="$1j" order="8" disabled="false" exploitation="496">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="([rn])ye" format="regularExpression" replace="$1ie" order="10" disabled="false" exploitation="9">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="V" format="string" replace="U" order="11" disabled="false" exploitation="0">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="W" format="string" replace="V" order="12" disabled="false" exploitation="134">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="G" format="string" replace="J" order="13" disabled="false" exploitation="2238">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="Gene" format="string" />
+                    <exception pattern="Grác" format="string" />
+                    <exception pattern="Genil" format="string" />
+                    <exception pattern="Girafa" format="string" />
+                    <exception pattern="Gliwice" format="string" />
+                    <exception pattern="Gněwjn" format="string" />
+                    <exception pattern="Golč" format="string" />
+                    <exception pattern="Gorzow" format="string" />
+                    <exception pattern="Gorlický" format="string" />
+                    <exception pattern="Gospod" format="string" />
+                    <exception pattern="Goworiti" format="string" />
+                    <exception pattern="Griebě" format="string" />
+                    <exception pattern="Granatice" format="string" />
+                    <exception pattern="Grule" format="string" />
+                    <exception pattern="Gr[úů]n" format="regularExpression" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="ĝ" format="string" replace="g" order="14" disabled="false" exploitation="280">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="Ĝ" format="string" replace="G" order="15" disabled="false" exploitation="320">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="Ia" format="string" replace="Ja" order="15" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="Iu" format="string" replace="Ju" order="15" disabled="false" exploitation="1">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="Iho" format="string" replace="Jho" order="15" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="([Aa])i" format="regularExpression" replace="$1j" order="0" disabled="false" exploitation="8">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions>
+                    <exception pattern="Izaiáš" format="string" />
+                    <exception pattern="Haibi" format="string" />
+                </exceptions>
+            </options>
+        </change>
+        <change pattern="([Cc]h)ych" format="regularExpression" replace="$1ich" order="15" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+        <change pattern="([Ff])yč" format="regularExpression" replace="$1ič" order="15" disabled="false" exploitation="2">
+            <options>
+                <replacement-count xsi:nil="true" />
+                <exceptions />
+            </options>
+        </change>
+    </changes>
+</ruleset>

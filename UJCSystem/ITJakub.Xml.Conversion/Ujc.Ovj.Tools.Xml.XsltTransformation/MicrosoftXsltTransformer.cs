@@ -70,15 +70,14 @@ namespace Ujc.Ovj.Tools.Xml.XsltTransformation
 			XmlWriterSettings xws = new XmlWriterSettings();
 			xws.CloseOutput = true;
 
-
-			const string xmlMethod = "xml";
+            const string xmlMethod = "xml";
 			const string textMethod = "text";
 
 			if (_xsltInformation.Method == xmlMethod || _xsltInformation.Method == null)
 			{
 				using (XmlWriter xw = XmlWriter.Create(outputFile, xws))
 				{
-					xslCompiledTransform.Transform(inputFile, argumentList, xw);
+                    xslCompiledTransform.Transform(inputFile, argumentList, xw);
 				}
 			}
 			if (_xsltInformation.Method == textMethod)

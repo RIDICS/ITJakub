@@ -68,5 +68,12 @@
 			</xsl:attribute>
 		</xsl:if>
 	</xsl:template>
+	<xsl:template match="@xml:space" priority="3">
+		<xsl:if test="name() = 'xml:space'">
+			<xsl:attribute name="xml:space">
+				<xsl:value-of select="."/>
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
 	
 </xsl:stylesheet>

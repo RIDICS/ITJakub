@@ -105,9 +105,7 @@
    </axsl:template>
 		
    <axsl:template match="Delimitator_hesel">
-      <axsl:element name="entryend">
-         <axsl:apply-templates/>
-      </axsl:element>
+      <axsl:element name="entryend" />
    </axsl:template>
 		
 		

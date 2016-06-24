@@ -47,6 +47,10 @@
     <Compile Include="SlovnikovyModulNastaveni.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Daliboris.Pomucky.Xml\Daliboris.Pomucky.Xml.csproj">
+      <Project>{457FEF12-BD22-4498-924F-941B31DCCD6B}</Project>
+      <Name>Daliboris.Pomucky.Xml</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Evidence.Rozhrani\Daliboris.Texty.Evidence.Rozhrani.csproj">
       <Project>{A612C779-BE2B-44F2-9C86-BD5324F1F8B6}</Project>
       <Name>Daliboris.Texty.Evidence.Rozhrani</Name>
@@ -63,6 +67,18 @@
       <Project>{2FCB6B55-EE90-4664-BF98-2249B9BC94D3}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.ESSC</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.GbSlov\Daliboris.Texty.Export.Slovniky.GbSlov.csproj">
+      <Project>{52d3d792-3904-4b0c-8bf7-c278c763a801}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.GbSlov</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.JgSlov\Daliboris.Texty.Export.Slovniky.JgSlov.csproj">
+      <Project>{188ed7ac-8ec1-4c32-97e6-270ed0e7f40a}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.JgSlov</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.MSS\Daliboris.Texty.Export.Slovniky.MSS.csproj">
+      <Project>{cd83ea74-89f9-4573-ba08-7e958a240b5e}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.MSS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Slovnik\Daliboris.Texty.Export.Slovniky.Slovnik.csproj">
       <Project>{56B8BC06-0BE8-4045-94DF-6844AA49E523}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.Slovnik</Name>
@@ -70,6 +86,10 @@
     <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.StcS\Daliboris.Texty.Export.Slovniky.StcS.csproj">
       <Project>{132f9406-f111-478f-9325-d312c401ebbb}</Project>
       <Name>Daliboris.Texty.Export.Slovniky.StcS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Daliboris.Texty.Export.Slovniky.Svoboda\Daliboris.Texty.Export.Slovniky.Svoboda.csproj">
+      <Project>{0adaee4e-3099-4037-b245-836851b8c096}</Project>
+      <Name>Daliboris.Texty.Export.Slovniky.Svoboda</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.Texty.Export.Transformace\Daliboris.Texty.Export.Transformace.csproj">
       <Project>{9339ED5B-312F-4AAF-9DF6-31B6C3169C48}</Project>

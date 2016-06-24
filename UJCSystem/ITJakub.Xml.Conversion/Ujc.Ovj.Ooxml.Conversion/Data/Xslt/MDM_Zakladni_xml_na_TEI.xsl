@@ -5,6 +5,9 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace" 
     exclude-result-prefixes="xd" 
     version="1.0">
+    
+    <xsl:param name="guid" />
+    
     <xd:doc scope="stylesheet">
         <xd:desc>
             <xd:p><xd:b>Created on:</xd:b> Jun 11, 2012</xd:p>
@@ -17,11 +20,6 @@
     <xsl:strip-space elements="*"/>
 
     <xsl:template match="body">
-
-        <xsl:variable name="guid">
-            <xsl:value-of select="table[10]/row[1]/cell[1]/Normalni[1]/text/text()"/>
-        </xsl:variable>
-
         <xsl:variable name="zkratka">
             <xsl:value-of select="table[2]/row[4]/cell[2]/Normalni[1]/zkratka_mluvnice/text()"/>
         </xsl:variable>
@@ -146,10 +144,14 @@
                         </msDesc>
                     </sourceDesc>
                 </fileDesc>
+                <!--<xsl:call-template name="InsertEndocingDesc"/>-->
                 <profileDesc>
                     <langUsage>
                         <xsl:apply-templates select="table[@n='9']"/>
                     </langUsage>
+                    <!--<textClass>
+                        <catRef target="#taxonomy-digitized-grammar #output-digitized-grammar"/>
+                    </textClass>-->
                 </profileDesc>
             </teiHeader>
             <!--            <text>
@@ -520,6 +522,30 @@
             <!-- Dočasné řešení; týká se HusAbec -->
             <xsl:when test="$rok = '15. století'">
                 <origDate notBefore="1400" notAfter="1499">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+            <!-- Dočasné řešení; týká se BlahGram -->
+            <xsl:when test="$rok = '1571 (opis kolem 1670)'">
+                <origDate notBefore="1571" notAfter="1571">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+          <!-- Dočasné řešení; týká se Prin -->
+            <xsl:when test="$rok = 'b. d. [2. polovina 17. století]'">
+                <origDate notBefore="1650" notAfter="1699">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+          <!-- Dočasné řešení; týká se Prin1783 -->
+            <xsl:when test="$rok = 'b. d. [1783]'">
+                <origDate notBefore="1783" notAfter="1783">
+                    <xsl:value-of select="$rok"/>
+                </origDate>
+            </xsl:when>
+          <!-- Dočasné řešení; týká se HusAbecMDM -->
+            <xsl:when test="$rok = '15. století (rukopis z 2. poloviny 15. století)'">
+                <origDate notBefore="1450" notAfter="1499">
                     <xsl:value-of select="$rok"/>
                 </origDate>
             </xsl:when>

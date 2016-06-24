@@ -19,7 +19,7 @@
 	</xd:doc>
 	
 	
-	<xsl:template match="body/*/*[following-sibling::*[1]/self::rekonstrukce][not(self::doplneny_text)]">
+	<xsl:template match="body/*/*[following-sibling::*[1]/self::rekonstrukce][not(self::doplneny_text)][not(self::foliace)][not(self::cislo_verse)]">
 		<!--<xsl:template match="body/*/popisek_k_obrazku[following-sibling::*[1]/self::rekonstrukce]">-->
 		<xsl:copy><xsl:copy-of select="@*"/><xsl:apply-templates />
 			<xsl:choose>
@@ -38,7 +38,7 @@
 	
 	
 <!--	<xsl:template match="body/*/rekonstrukce[preceding-sibling::*[1]/self::popisek_k_obrazku]" priority="10" />-->
-	<xsl:template match="body/*/rekonstrukce[not(following-sibling::*[1]/self::rekonstrukce)][not(preceding-sibling::*[1]/self::doplneny_text)][not(preceding-sibling::*[1]/self::poznamka)]" priority="10" >
+	<xsl:template match="body/*/rekonstrukce[not(following-sibling::*[1]/self::rekonstrukce)][not(preceding-sibling::*[1]/self::doplneny_text)][not(preceding-sibling::*[1]/self::poznamka)][not(preceding-sibling::*[1]/self::foliace)][not(preceding-sibling::*[1]/self::cislo_verse)]" priority="10" >
 <!--		<xsl:message> vynechaný text: <xsl:value-of select="."/> </xsl:message>-->
 	</xsl:template>
 </xsl:stylesheet>

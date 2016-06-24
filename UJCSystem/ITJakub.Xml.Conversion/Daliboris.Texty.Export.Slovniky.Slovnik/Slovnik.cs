@@ -6,6 +6,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using Daliboris.Pomucky.Xml;
+using Daliboris.Texty.Export;
+using Daliboris.Texty.Export.Rozhrani;
 using DPXT = Daliboris.Pomucky.Xml.Transformace;
 //using Daliboris.Texty.Export.Rozhrani;
 //using System.Web;
@@ -17,8 +19,9 @@ namespace Daliboris.Slovniky
 {
 	public abstract class Slovnik : IUpravy
 	{
+        public bool UsePersonalizedXmdGenerator { get; protected set; } = false;
 
-		private string mstrChyby;
+        private string mstrChyby;
 		private string mstrVstupniSoubor;
 		private string mstrVystupniSoubor;
 
@@ -87,19 +90,24 @@ namespace Daliboris.Slovniky
 			return sVychozi;
 		}
 
-		#region Základní funkce pro úpravu exportovaného textu slovníku z Wordu
-		
-		/// <summary>
-		/// Ohraničí heslové stati náležející k jednomu písmenu značkou &lt;div1&gt;.
-		/// Původní element <remarks>milestone</remarks> přemění na element <remarks>div1</remarks>.
-		/// </summary>
-		public virtual void SeskupitHeslaPismene()
+        #region Základní funkce pro úpravu exportovaného textu slovníku z Wordu
+        
+	    public virtual void SeskupitHeslaPismene(string inputFile, string outputFile, string filenameWithoutExtension)
+	    {
+	        SeskupitHeslaPismene(inputFile, outputFile);
+	    }
+
+        /// <summary>
+        /// Ohraničí heslové stati náležející k jednomu písmenu značkou &lt;div1&gt;.
+        /// Původní element <remarks>milestone</remarks> přemění na element <remarks>div1</remarks>.
+        /// </summary>
+        public virtual void SeskupitHeslaPismene(string inputFile, string outputFile)
 		{
 			Dictionary<string, string> gdcPismena = Heslar.IDPismenAbecedy();
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					bool bJinaNezPrvni = false;
@@ -130,7 +138,7 @@ namespace Daliboris.Slovniky
 										//chyba
 										sText = "XX";
 									else
-										sID = sText.Replace(".", "").Replace(",", "").ToUpper();
+										sID = sText.Replace(".", "").Replace(",", "").ToUpper().Trim();
 									if (gdcPismena.ContainsKey(sID))
 										xw.WriteAttributeString("id", gdcPismena[sID]);
 									else
@@ -176,22 +184,36 @@ namespace Daliboris.Slovniky
 
 		}
 
-		public abstract void UpravitHraniceHesloveStati();
+        public virtual void UpravitHraniceHesloveStati(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            UpravitHraniceHesloveStati(inputFile, outputFile);
+        }
 
+        public abstract void UpravitHraniceHesloveStati(string inputFile, string outputFile);
 
-		//jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
-		public abstract void KonsolidovatHeslovouStat();
-		#endregion
+        public virtual void KonsolidovatHeslovouStat(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            KonsolidovatHeslovouStat(inputFile, outputFile);
+        }
 
-		/// <summary>
-		/// Zpracuje odkazy &lt;xref&gt;, aby byly co nejjednoznačněji určitelné.
-		/// <remarks>Pokud odkaz ve značce &lt;xref&gt; neobsahuje jednoznačnou identifikaci odkazu pomocí source a target,
-		/// extrahuje informace o heslovém slově (oddělí čísla homonym, morfologii, hvězdičku na začátku ap.)
-		/// a vytvoří odkaz na samotné heslové slovo.
-		/// Na základě předcházející informace o zdroji se pokus odkázat na heslo v konkrétním zdroji.
-		/// </remarks>
-		/// </summary>
-		public virtual void UpravitOdkazy()
+        //jak zajistit, aby dědící třídy tuto metodu přepsaly, i když není abstraktní?
+        public abstract void KonsolidovatHeslovouStat(string inputFile, string outputFile);
+        #endregion
+
+        public virtual void UpravitOdkazy(string inputFile, string outputFile, string filenameWithoutExtension)
+        {
+            UpravitOdkazy(inputFile, outputFile);
+        }
+
+        /// <summary>
+        /// Zpracuje odkazy &lt;xref&gt;, aby byly co nejjednoznačněji určitelné.
+        /// <remarks>Pokud odkaz ve značce &lt;xref&gt; neobsahuje jednoznačnou identifikaci odkazu pomocí source a target,
+        /// extrahuje informace o heslovém slově (oddělí čísla homonym, morfologii, hvězdičku na začátku ap.)
+        /// a vytvoří odkaz na samotné heslové slovo.
+        /// Na základě předcházející informace o zdroji se pokus odkázat na heslo v konkrétním zdroji.
+        /// </remarks>
+        /// </summary>
+        public virtual void UpravitOdkazy(string inputFile, string outputFile)
 		{
 			string strPredchoziZdroj = null;
 
@@ -204,9 +226,9 @@ namespace Daliboris.Slovniky
 			gdcSlovniky.Add("SSL", "SSL"); //slovník středověké latiny - tyto odkazy by se neměly kontrolovat; nebo jo?
 
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					while (r.Read())
@@ -365,16 +387,16 @@ namespace Daliboris.Slovniky
 
 		#region Identifikace zkratek
 
-		public virtual void IdentifikovatZkratky(string strAdresarZkratek)
+		public virtual void IdentifikovatZkratky(string inputFile, string outputFile, string strAdresarZkratek)
 		{
 			string strDictionary = null;
 			string strPredchoziKapitalky = null;
 			string strPredchoziZkratka = null;
 
 
-			using (XmlReader r = Objekty.VytvorXmlReader(mstrVstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(mstrVystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 					Zkratky zkrZkratky = new Zkratky();
@@ -629,6 +651,7 @@ namespace Daliboris.Slovniky
 		#region Rozdělení slovníků do souborů
 		public virtual void RozdelitEntryDoSouboru(string[] strTagy,
 			string strAtributID,
+            string inputFile,
 			string sVystupniAdresar,
 			string sVystupniSoubor,
 			String strXPathPopis)
@@ -658,7 +681,7 @@ namespace Daliboris.Slovniky
 
 				xObsah.WriteStartDocument();
 				xObsah.WriteStartElement("obsah");
-				xObsah.WriteAttributeString("soubor", mstrVstupniSoubor);
+				xObsah.WriteAttributeString("soubor", inputFile);
 				xObsah.WriteAttributeString("zpracovano", DateTime.Now.ToString());
 			}
 
@@ -668,7 +691,7 @@ namespace Daliboris.Slovniky
 			string strID = "";
 			try
 			{
-				reader = new XmlTextReader(mstrVstupniSoubor);
+				reader = new XmlTextReader(inputFile);
 				//string strHesla = null;
 
 				while (reader.Read())
@@ -1210,5 +1233,16 @@ namespace Daliboris.Slovniky
 
 			return new string(a);
 		}
-	}
+
+        public virtual void GenerateConversionMetadataFile(
+            ExportBase export,
+            IExportNastaveni settings,
+            string documentType,
+            string finalOutputFileFullPath,
+            string finalOutputFileName,
+            string finalOutputMetadataFileName)
+        {
+
+        }
+    }
 }

@@ -6,11 +6,11 @@ namespace Daliboris.Texty.Export.Rozhrani
 {
 	public interface IExportNastaveni : ITransformaceNastaveni
 	{
-
-	 /// <summary>
-	 /// Seznam přepisů, které se budou exportovat
-	 /// </summary>
-		IList<IPrepis> Prepisy { get; set; }
+        
+        /// <summary>
+        /// Přepis, který se bude exportovat
+        /// </summary>
+        IPrepis Prepis { get; set; }
 
 	 /// <summary>
 	 /// Soubor s metadaty o přepisech

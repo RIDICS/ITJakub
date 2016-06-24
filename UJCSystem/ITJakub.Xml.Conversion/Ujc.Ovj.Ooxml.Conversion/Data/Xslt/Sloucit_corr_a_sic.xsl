@@ -3,6 +3,7 @@
 	xmlns:xd="http://www.oxygenxml.com/ns/doc/xsl"
 	exclude-result-prefixes="xd"
 	version="1.0">
+	<xsl:import href="COMMON_Substring-after-last.xsl"/>
 	<xd:doc scope="stylesheet">
 		<xd:desc>
 			<xd:p><xd:b>Created on:</xd:b> Dec 3, 2010</xd:p>
@@ -36,6 +37,34 @@
 		</xsl:element>
 	</xsl:template>
 	
-	<xsl:template match="sic" />
+	<xsl:template match="sic">
+		<xsl:choose>
+			<xsl:when test="name(preceding-sibling::*[1]) != 'corr'">
+				<xsl:variable name="text">
+					<xsl:value-of select="normalize-space(preceding::text()[1])"/>
+				</xsl:variable>
+				
+				
+					<xsl:element name="note">
+					<xsl:element name="choice">
+						<xsl:element name="corr">
+							<xsl:choose>
+								<xsl:when test="contains($text, ' ')">
+									<xsl:call-template name="substring-after-last">
+										<xsl:with-param name="string" select="$text" />
+										<xsl:with-param name="delimiter" select="' '" />
+									</xsl:call-template>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="$text"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:element>
+						<xsl:copy-of select="." />
+					</xsl:element>
+					</xsl:element>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
 	
 </xsl:stylesheet>

@@ -41,8 +41,8 @@ namespace Daliboris.Texty.Evidence
             // Use the Deserialize method to restore the object's state.
             Prepisy prps = (Prepisy)xs.Deserialize(reader);
             fs.Close();
-            return prps;
 
+            return prps;
         }
 
         public static void UlozitDoStreamu(Stream stmProud, Prepis prpPrepis)

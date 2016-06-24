@@ -27,15 +27,15 @@ namespace Daliboris.Slovniky
 		/// <summary>
 		/// Upraví hranice heslové stati. Ohraničí jednotlivé části značkou &lt;entry&gt; a v rámci heslové stati seskupí významy podřazené značce &lt;senseGrp&gt;.
 		/// </summary>
-		public override void UpravitHraniceHesloveStati()
+		public override void UpravitHraniceHesloveStati(string inputFile, string outputFile)
 		{
-			if (base.VstupniSoubor == null || base.VystupniSoubor == null)
+			if (inputFile == null || outputFile == null)
 			{
 				throw new ArgumentNullException("Nebyly zadány vhodné názvy vstupního nebo výstupního souboru.");
 			}
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 
 
@@ -229,67 +229,76 @@ namespace Daliboris.Slovniky
 		}
 
 
-		public override void KonsolidovatHeslovouStat()
+		public override void KonsolidovatHeslovouStat(string inputFile, string outputFile)
 		{
-			KonsolidovatHeslovouStat(1);
+			KonsolidovatHeslovouStat(inputFile, outputFile, 1);
 		}
-		public void KonsolidovatHeslovouStat(int iVychoziID)
+		public void KonsolidovatHeslovouStat(string inputFile, string outputFile, int iVychoziID)
 		{
 
 			int iEntry = iVychoziID - 1;
 			string sSource = null;
-			using (XmlReader r = Objekty.VytvorXmlReader(base.VstupniSoubor))
+			using (XmlReader r = Objekty.VytvorXmlReader(inputFile))
 			{
-				using (XmlWriter xw = Objekty.VytvorXmlWriter(base.VystupniSoubor))
+				using (XmlWriter xw = Objekty.VytvorXmlWriter(outputFile))
 				{
 					xw.WriteStartDocument(true);
 
+				    bool skipReading = false;
 
-					while (r.Read())
+					while (skipReading || r.Read())
 					{
-						if (r.NodeType == XmlNodeType.Element)
-						{
-							switch (r.Name)
-							{
-								case "entry":
-									XmlDocument xd = new XmlDocument();
-									XmlNode xn = xd.ReadNode(r);
-									if (xn != null)
-										xd.AppendChild(xn);
-									if (xd.DocumentElement != null)
-										if (!xd.DocumentElement.IsEmpty)
-										{
-											ZkonsolidujEntry(ref xd, sSource, ++iEntry);
-											xd.WriteContentTo(xw);
-										}
+					    skipReading = false;
 
-									break;
-								case "dictionary":
-									sSource = r.GetAttribute("name");
-									goto default;
-								default:
-									Transformace.SerializeNode(r, xw);
-									break;
+					    switch (r.NodeType)
+					    {
+					        case XmlNodeType.Element:
+					            switch (r.Name)
+					            {
+					                case "entry":
+					                    XmlDocument xd = new XmlDocument();
+					                    XmlNode xn = xd.ReadNode(r);
+					                    if (xn != null)
+					                        xd.AppendChild(xn);
+					                    if (xd.DocumentElement != null)
+					                        if (!xd.DocumentElement.IsEmpty)
+					                        {
+					                            ZkonsolidujEntry(ref xd, sSource, ++iEntry);
+					                            xd.WriteContentTo(xw);
+					                        }
 
-							}
-						}
-						else if (r.NodeType == XmlNodeType.EndElement)
-						{
-							switch (r.Name)
-							{
-								case "entry":
-									break;
-								default:
-									Transformace.SerializeNode(r, xw);
-									break;
-							}
-						}
+					                    if (r.NodeType == XmlNodeType.Element || r.NodeType == XmlNodeType.EndElement)
+					                        skipReading = true;
 
+					                    break;
+					                case "dictionary":
+					                    sSource = r.GetAttribute("name");
+					                    goto default;
+					                default:
+					                    Transformace.SerializeNode(r, xw);
+					                    break;
 
-						else { Transformace.SerializeNode(r, xw); }
+					            }
 
+					            break;
+
+					        case XmlNodeType.EndElement:
+					            switch (r.Name)
+					            {
+					                case "entry":
+					                    break;
+					                default:
+					                    Transformace.SerializeNode(r, xw);
+					                    break;
+					            }
+
+					            break;
+
+					        default:
+					            Transformace.SerializeNode(r, xw);
+					            break;
+					    }
 					}
-
 				}
 			}
 

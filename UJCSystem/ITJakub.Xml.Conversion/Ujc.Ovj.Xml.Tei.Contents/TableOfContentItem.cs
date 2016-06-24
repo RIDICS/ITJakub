@@ -15,8 +15,8 @@ namespace Ujc.Ovj.Xml.Tei.Contents
 		{
 			Sections = new List<TableOfContentItem>();
 		}
-
-		public List<TableOfContentItem> Sections { get; set; }
+        
+		public new List<TableOfContentItem> Sections { get; set; }
 
 	}
 }

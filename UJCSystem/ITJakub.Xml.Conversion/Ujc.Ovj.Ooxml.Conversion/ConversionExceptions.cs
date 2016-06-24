@@ -34,4 +34,15 @@ namespace Ujc.Ovj.Ooxml.Conversion
 		{
 		}
 	}
+
+    public class DocumentNotInRequredStateException : Exception
+	{
+		public DocumentNotInRequredStateException(string message) : base(message)
+		{
+		}
+
+		public DocumentNotInRequredStateException(string message, Exception innerException) : base(message, innerException)
+		{
+		}
+	}
 }

@@ -45,6 +45,7 @@
 					<xsl:apply-templates select="*[position() &lt; $uroven]"/>
 					
 					<xsl:apply-templates select="head | head1" mode="walker"/>
+					<xsl:apply-templates select="div[@type='editorial'][@subtype='image']" mode="walker"/>
 					<!--<xsl:apply-templates select="*[position() &gt; count(child::*[(starts-with(name(), 'head'))][1]/following-sibling::*)+2]" />-->
 				</xsl:when>
 				<xsl:otherwise>
@@ -66,6 +67,12 @@
 		</xsl:template>-->
 
 
+	<xsl:template match="div[@type='editorial'][@subtype='image']" priority="10">
+		<xsl:copy-of select="."/>
+	</xsl:template>
+	<xsl:template match="div [@type='editorial'][@subtype='image']" priority="10" mode="walker">
+		<xsl:copy-of select="."/>
+	</xsl:template>
 
 	<xsl:template match="head | head1" mode="walker">
 		<xsl:element name="div">
@@ -122,6 +129,13 @@
 	<xsl:template match="@xml:id" priority="3">
 		<xsl:if test="name() = 'xml:id'">
 			<xsl:attribute name="xml:id">
+				<xsl:value-of select="."/>
+			</xsl:attribute>
+		</xsl:if>
+	</xsl:template>
+	<xsl:template match="@xml:space" priority="3">
+		<xsl:if test="name() = 'xml:space'">
+			<xsl:attribute name="xml:space">
 				<xsl:value-of select="."/>
 			</xsl:attribute>
 		</xsl:if>

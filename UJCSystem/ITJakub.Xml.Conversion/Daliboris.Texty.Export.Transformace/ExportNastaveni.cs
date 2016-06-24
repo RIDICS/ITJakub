@@ -11,7 +11,7 @@ namespace Daliboris.Texty.Export
 		public string MaskaSoubru { get; set; }
 		public string VystupniSlozka { get; set; }
 		public string DocasnaSlozka { get; set; }
-		public IList<IPrepis> Prepisy { get; set; }
+		public IPrepis Prepis { get; set; }
 		public string SouborMetadat { get; set; }
 		public string ValidacniXsd { get; set; }
 		public string SlozkaXslt { get; set; }

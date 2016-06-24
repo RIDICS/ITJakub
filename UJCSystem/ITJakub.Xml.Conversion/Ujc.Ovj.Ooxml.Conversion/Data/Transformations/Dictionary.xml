@@ -20,6 +20,140 @@
 	<transformation xml:id="stcs-step03" >
 		<step file="StcS_OldToTeiP5.xsl" />
 	</transformation>
+  
+  <transformation xml:id="gbslov-step01" >
+		<step file="GbSlov_Rename.xsl" />
+	</transformation>
+	<transformation xml:id="gbslov-step02" >
+		<step file="Odstranit_mezery_mezi_elementy.xsl" />
+	</transformation>
+	<transformation xml:id="gbslov-step03" >
+		<step file="GbSlov_OldToTeiP5.xsl" />
+	</transformation>
+
+  <transformation xml:id="mss-step01" >
+    <step file="MSS_Rename.xsl" />
+  </transformation>
+  <transformation xml:id="mss-step02" >
+    <step file="Odstranit_mezery_mezi_elementy.xsl" />
+  </transformation>
+  <transformation xml:id="mss-step03" >
+    <step file="MSS_OldToTeiP5.xsl" />
+  </transformation>
+
+  <transformation xml:id="pohlgramslov1756-step01" >
+    <step file="PohlGramSlov1756_Prevod-stylu.xsl" />
+    <step file="PohlGramSlov1756_Notes.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="PohlGramSlov1756_Hlavicka.xsl" />
+  </transformation>
+
+  <transformation xml:id="pohlgramslov1783-step01" >
+    <step file="PohlGramSlov1783_Prevod-stylu.xsl" />
+    <step file="PohlGramSlov1756_Notes.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku_cit.xsl" />
+    <step file="Upravit_obsah_prvku_unclear_2.0.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="PohlGramSlov1783_Hlavicka.xsl" />
+  </transformation>
+  
+  <transformation xml:id="jgslov-xmd-step01" >
+    <step file="JgSlov2Xmd.xsl" />
+  </transformation>
+
+  <transformation xml:id="ddbw-step01" >
+    <step file="DDBW_Rename.xsl" />
+    <step file="DDBW_Compute_entryFreeId.xsl" />
+    <step file="DDBW_Compute_formId.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="DDBW_Header.xsl" />
+  </transformation>
+  
+  <transformation xml:id="ddbw-xmd-step01" >
+    <step file="CombineHead.xsl" />
+    <step file="JgSlov2Xmd.xsl" />
+  </transformation>
+
+  <transformation xml:id="indexsvob-step01" >
+    <step file="IndexSvob_Rename.xsl" />
+  </transformation>
+  <transformation xml:id="indexsvob-step02" >
+    <step file="Odstranit_mezery_mezi_elementy.xsl" />
+  </transformation>
+  <transformation xml:id="indexsvob-step03" >
+    <step file="IndexSvob_OldToTeiP5.xsl" />
+  </transformation>
+
+  <transformation xml:id="simekslov-step01" >
+    <step file="SimekSlov_Rename.xsl" />
+  </transformation>
+  <transformation xml:id="simekslov-step02" >
+    <step file="Odstranit_mezery_mezi_elementy.xsl" />
+  </transformation>
+  <transformation xml:id="simekslov-step03" >
+    <step file="SimekSlov_OldToTeiP5.xsl" />
+  </transformation>
+
+  <transformation xml:id="vokab1550-step01" >
+    <step file="Vokab1550_Fix-footnote.xsl" />
+    <step file="Vokab1550_Prevod-stylu.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku_cit.xsl" />
+    <step file="Upravit_obsah_prvku_unclear_2.0.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Vokab1550_Hlavicka.xsl" />
+  </transformation>
+  
+  <transformation xml:id="slovknm-step01" >
+    <step file="Vokab1550_Fix-footnote.xsl" />
+    <step file="Vokab1550_Prevod-stylu.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head2.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku.xsl" />
+    <step file="Seskupit_obsah_shodnych_prvku_cit.xsl" />
+    <step file="Upravit_obsah_prvku_unclear_2.0.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="SlovKNM_Hlavicka.xsl" />
+  </transformation>
+
+  <transformation xml:id="dodavky-step01">
+    <step file="Dodavky_Rename.xsl" />
+    <step file="Dodavky_Prepare.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Dodavky_Header.xsl" />
+  </transformation>
+
+  <transformation xml:id="ryvola1716-step01">
+    <step file="Ryvola_Rename.xsl" />
+    <step file="Dodavky_Prepare.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Ryvola_Header.xsl" />
+  </transformation>
+
+  <transformation xml:id="vokab1704-step01">
+    <step file="Vokab1704_Rename.xsl" />
+    <step file="EM_Seskupit_polozky_rejstriku.xsl" />
+    <step file="Vokab1704_Prepare.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head0.xsl" />
+    <step file="Seskupit_prvky_do_div_2.0_head1.xsl" />
+    <step file="PohlGramSlov_compute_missing_pb-id.xsl" />
+    <step file="Vokab1704_Header.xsl" />
+  </transformation>
 	
 	<transformation xml:id="body" >
 		<step file="Prevod_starych_wordovskych_stylu_na_nove.xsl" />
