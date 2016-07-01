@@ -417,6 +417,8 @@
     <Content Include="Content\Permission\itjakub.permission.min.css">
       <DependentUpon>itjakub.permission.css</DependentUpon>
     </Content>
+    <Content Include=".bowerrc" />
+    <Content Include="bower.json" />
     <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
     <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">

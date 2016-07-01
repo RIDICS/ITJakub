@@ -80,3 +80,6 @@ packages/
 #Store publish
 [Aa]ppPackages/
 *.csdat
+
+#Bower libraries
+*/*/wwwroot/lib/
