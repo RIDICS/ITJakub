@@ -13,6 +13,6 @@
 /// <reference path="modernizr-2.6.2.js" />
 /// <reference path="npm.js" />
 /// <reference path="plugins/wheelzoom/wheelzoom.js" />
-/// <reference path="plugins/zoommaster/jquery.zoom.js" />
+/// <reference path="plugins/zoommaster/jquery.zoom.min.js" />
 /// <reference path="respond.js" />
 /// <reference path="typeahead.bundle.js" />
