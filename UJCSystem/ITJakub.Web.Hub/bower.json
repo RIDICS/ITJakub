@@ -12,6 +12,7 @@
     "dropzone": "3.12.0",
     "jquery-appear": "0.2.6",
     "jquery-eu-cookie-law-popup": "1.0.1",
+    "jquery-zoom": "1.7.15",
     "simplemde": "1.11.2"
   }
 }

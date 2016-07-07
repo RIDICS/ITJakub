@@ -604,14 +604,11 @@
     </None>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
-    <Content Include="Scripts\Plugins\Zoommaster\daisy.jpg" />
-    <Content Include="Scripts\Plugins\Zoommaster\demo.html" />
-    <Content Include="Scripts\Plugins\Zoommaster\grab.cur" />
-    <Content Include="Scripts\Plugins\Zoommaster\grabbed.cur" />
-    <Content Include="Scripts\Plugins\Zoommaster\icon.png" />
+    <Content Include="Scripts\Wheelzoom\wheelzoom.js" />
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery.zoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
@@ -620,14 +617,9 @@
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.cookiestorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.istorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
-    <TypeScriptCompile Include="Scripts\Plugins\Wheelzoom\wheelzoom_.d.ts" />
-    <TypeScriptCompile Include="Scripts\Plugins\Zoommaster\jquery.zoom_.d.ts" />
-    <Content Include="Scripts\Plugins\Zoommaster\jquery.zoom.js" />
-    <Content Include="Scripts\Plugins\Zoommaster\jquery.zoom.min.js" />
-    <Content Include="Scripts\Plugins\Zoommaster\roxy.jpg" />
-    <Content Include="Scripts\Plugins\Wheelzoom\daisy.jpg" />
-    <Content Include="Scripts\Plugins\Wheelzoom\demo.html" />
-    <Content Include="Scripts\Plugins\Wheelzoom\wheelzoom.js" />
+    <TypeScriptCompile Include="Scripts\typings\wheelzoom_.d.ts" />
+    <Content Include="Scripts\Wheelzoom\daisy.jpg" />
+    <Content Include="Scripts\Wheelzoom\demo.html" />
     <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -657,12 +649,8 @@
     <Content Include="Views\News\AddNews.cshtml" />
     <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
     <Content Include="Views\EditionNote\EditionNote.cshtml" />
-    <Content Include="Scripts\Plugins\Wheelzoom\LICENSE.md" />
-    <Content Include="Scripts\Plugins\Wheelzoom\readme.md" />
-    <Content Include="Scripts\Plugins\Zoommaster\bower.json" />
-    <Content Include="Scripts\Plugins\Zoommaster\LICENSE.md" />
-    <Content Include="Scripts\Plugins\Zoommaster\package.json" />
-    <Content Include="Scripts\Plugins\Zoommaster\readme.md" />
+    <Content Include="Scripts\Wheelzoom\LICENSE.md" />
+    <Content Include="Scripts\Wheelzoom\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -49,8 +49,8 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/imagezoom").Include(
-                "~/Scripts/Plugins/Wheelzoom/wheelzoom.js",
-                "~/Scripts/Plugins/Zoommaster/jquery.zoom.min.js"));
+                "~/Scripts/Wheelzoom/wheelzoom.js",
+                "~/wwwroot/lib/jquery-zoom/jquery.zoom.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
