@@ -18,21 +18,22 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryappear").Include(
-                "~/Scripts/jquery.appear.js"));
+                "~/wwwroot/lib/jquery-appear/src/jquery.appear.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                "~/Scripts/modernizr-*"));
+                "~/wwwroot/lib/modernizr/modernizr.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cookies").Include("~/Scripts/cookies/jquery-eu-cookie-law-popup.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cookies").Include(
+                "~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
-                "~/Scripts/respond.js"));
+                "~/wwwroot/lib/respond/dest/respond.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
-                     "~/Scripts/dropzone/dropzone.js"));
+                     "~/wwwroot/lib/dropzone/downloads/dropzone.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                 "~/Scripts/typeahead.bundle.js"));
@@ -92,13 +93,16 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
                 "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/cookiescss").Include("~/Scripts/cookies/css/jquery-eu-cookie-law-popup.css"));
+            bundles.Add(new StyleBundle("~/Content/cookiescss").Include(
+                "~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css",
+                "~/Content/ITJakub.EuCookiePopup.css"));
 
-            bundles.Add(new StyleBundle("~/Content/itjakub").Include("~/Content/ITJakub.css"));
+            bundles.Add(new StyleBundle("~/Content/itjakub").Include(
+                "~/Content/ITJakub.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
-                     "~/Scripts/dropzone/css/basic.css",
-                     "~/Scripts/dropzone/css/dropzone.css"));
+                     "~/wwwroot/lib/dropzone/downloads/css/basic.css",
+                     "~/wwwroot/lib/dropzone/downloads/css/dropzone.css"));
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
                 "~/wwwroot/lib/jquery-ui/themes/base/*.css"));

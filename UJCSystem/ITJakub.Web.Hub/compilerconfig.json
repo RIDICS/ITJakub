@@ -120,6 +120,11 @@
     "sourceMap": false
   },
   {
+    "outputFile": "Content/ITJakub.EuCookiePopup.css",
+    "inputFile": "Content/ITJakub.EuCookiePopup.less",
+    "sourceMap": false
+  },
+  {
     "outputFile": "Content/Permission/itjakub.permission.css",
     "inputFile": "Content/Permission/itjakub.permission.less",
     "sourceMap": false

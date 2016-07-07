@@ -403,8 +403,8 @@
     </Content>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
+    <None Include="Content\ITJakub.EuCookiePopup.less" />
     <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
-    <Content Include="Scripts\cookies\css\jquery-eu-cookie-law-popup.css" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
     </Content>
@@ -505,10 +505,6 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
     <Content Include="Content\ITJakub.PluginMenu.less" />
     <Content Include="Scripts\itjakub.upload.js" />
-    <Content Include="Scripts\dropzone\css\basic.css" />
-    <Content Include="Scripts\dropzone\css\dropzone.css" />
-    <Content Include="Scripts\dropzone\css\stylus\dropzone.styl" />
-    <Content Include="Scripts\dropzone\css\stylus\basic.styl" />
     <Content Include="Content\dropzones.less" />
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
@@ -554,7 +550,6 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
-    <Content Include="Content\bootstrap\carousel.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.content.less" />
     <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
@@ -594,9 +589,6 @@
     </None>
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
-    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js.map">
-      <DependentUpon>dropzone-amd-module.min.js</DependentUpon>
-    </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
     <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.less" />
     <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.less" />
@@ -612,15 +604,6 @@
     </None>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
-    <Content Include="Scripts\dropzone\dropzone-amd-module.js" />
-    <Content Include="Scripts\dropzone\dropzone-amd-module.min.js" />
-    <Content Include="Scripts\dropzone\dropzone.js" />
-    <Content Include="Scripts\dropzone\dropzone.min.js" />
-    <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
-    <Content Include="Scripts\dropzone\images\spritemap.png" />
-    <Content Include="Scripts\cookies\jquery-eu-cookie-law-popup.js" />
-    <Content Include="Scripts\jquery.appear.js" />
-    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Plugins\Zoommaster\daisy.jpg" />
     <Content Include="Scripts\Plugins\Zoommaster\demo.html" />
     <Content Include="Scripts\Plugins\Zoommaster\grab.cur" />
@@ -645,8 +628,6 @@
     <Content Include="Scripts\Plugins\Wheelzoom\daisy.jpg" />
     <Content Include="Scripts\Plugins\Wheelzoom\demo.html" />
     <Content Include="Scripts\Plugins\Wheelzoom\wheelzoom.js" />
-    <Content Include="Scripts\respond.js" />
-    <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
