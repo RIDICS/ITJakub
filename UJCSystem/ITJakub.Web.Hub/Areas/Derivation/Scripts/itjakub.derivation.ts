@@ -188,8 +188,8 @@ class DerivationSearchBox {
     private suggestionTemplate: (item: any) => string;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset;
-    private bloodhound: Bloodhound<string>;
+    private dataset: Twitter.Typeahead.Dataset<IDTypeaheadItem>;
+    private bloodhound: Bloodhound<IDTypeaheadItem>;
     private currentItem: IDTypeaheadItem;
 
     constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
@@ -280,33 +280,37 @@ class DerivationSearchBox {
             remoteUrl += "&" + parameterUrlString;
         }
 
-        var remoteOptions: Bloodhound.RemoteOptions<string> = {
+        var remoteOptions: Bloodhound.RemoteOptions<IDTypeaheadItem> = {
             url: remoteUrl,
             wildcard: "%QUERY"
         };
 
-        var bloodhound: Bloodhound<string> = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
+        var bloodhound: Bloodhound<IDTypeaheadItem> = new Bloodhound({
+            datumTokenizer: this.datumTokenizer,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 10,
             remote: remoteOptions
         });
 
         var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
-        var dataset: Twitter.Typeahead.Dataset = {
+        var dataset: Twitter.Typeahead.Dataset<IDTypeaheadItem> = {
             name: name,
             source: bloodhound,
             display: "Text",
             templates: {
                 suggestion: suggestionTemplate
-            }
+            },
+            limit: 10
         };
 
         this.bloodhound = bloodhound;
         this.dataset = dataset;
     }
 
-    private getDefaultSuggestionTemplate(item: IDToken): string {
+    private datumTokenizer(datum: IDTypeaheadItem): string[] {
+        return Bloodhound.tokenizers.whitespace(datum.Text);
+    }
+
+    private getDefaultSuggestionTemplate(item: IDTypeaheadItem): string {
         return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
     }
 }

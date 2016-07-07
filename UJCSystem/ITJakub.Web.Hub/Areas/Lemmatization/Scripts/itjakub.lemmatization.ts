@@ -1136,8 +1136,8 @@ class LemmatizationSearchBox {
     private suggestionTemplate: (item: any) => string;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset;
-    private bloodhound: Bloodhound<string>;
+    private dataset: Twitter.Typeahead.Dataset<ITypeaheadItem>;
+    private bloodhound: Bloodhound<ITypeaheadItem>;
     private currentItem: ITypeaheadItem;
 
     constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
@@ -1228,33 +1228,37 @@ class LemmatizationSearchBox {
             remoteUrl += "&" + parameterUrlString;
         }
 
-        var remoteOptions: Bloodhound.RemoteOptions<string> = {
+        var remoteOptions: Bloodhound.RemoteOptions<ITypeaheadItem> = {
             url: remoteUrl,
             wildcard: "%QUERY"
         };
 
-        var bloodhound: Bloodhound<string> = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
+        var bloodhound: Bloodhound<ITypeaheadItem> = new Bloodhound({
+            datumTokenizer: this.datumTokenizer,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 10,
             remote: remoteOptions
         });
 
         var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
-        var dataset: Twitter.Typeahead.Dataset = {
+        var dataset: Twitter.Typeahead.Dataset<ITypeaheadItem> = {
             name: name,
             source: bloodhound,
             display: "Text",
             templates: {
                 suggestion: suggestionTemplate
-            }
+            },
+            limit: 10
         };
 
         this.bloodhound = bloodhound;
         this.dataset = dataset;
     }
 
-    private getDefaultSuggestionTemplate(item: IToken): string {
+    private datumTokenizer(datum: ITypeaheadItem): string[] {
+        return Bloodhound.tokenizers.whitespace(datum.Text);
+    }
+
+    private getDefaultSuggestionTemplate(item: ITypeaheadItem): string {
         return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
     }
 }

@@ -4,7 +4,7 @@ class ConcreteInstanceSearchBox {
     private itemToPrintableConverter: (item: any) => IPrintableItem;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset;
+    private dataset: Twitter.Typeahead.Dataset<any>;
     private bloodhound: Bloodhound<string>;
     private currentItem: any;
 
@@ -101,22 +101,22 @@ class ConcreteInstanceSearchBox {
             wildcard: "%QUERY"
         };
 
-        var bloodhound: Bloodhound<string> = new Bloodhound({
+        var bloodhound: Bloodhound<any> = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.whitespace,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: remoteOptions,
-            limit:10,
+            remote: remoteOptions
         });
 
         var suggestionTemplate = (item) => { return this.getDefaultSuggestionTemplate(item) };
 
-        var dataset: Twitter.Typeahead.Dataset = {
+        var dataset: Twitter.Typeahead.Dataset<any> = {
             name: name,            
             source: bloodhound,
             display: "Text",
             templates: {
                 suggestion: suggestionTemplate
-            }
+            },
+            limit: 10
         };
 
         this.bloodhound = bloodhound;
