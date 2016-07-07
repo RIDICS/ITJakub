@@ -26,14 +26,15 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/modernizr/modernizr.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/cookies").Include(
-                "~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"));
+                "~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js",
+                "~/Scripts/Plugins/itjakub.eucookiepopup.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
                 "~/wwwroot/lib/respond/dest/respond.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
-                     "~/wwwroot/lib/dropzone/downloads/dropzone.js"));
+                "~/wwwroot/lib/dropzone/downloads/dropzone.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                 "~/Scripts/typeahead.bundle.js"));
@@ -101,8 +102,8 @@ namespace ITJakub.Web.Hub
                 "~/Content/ITJakub.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
-                     "~/wwwroot/lib/dropzone/downloads/css/basic.css",
-                     "~/wwwroot/lib/dropzone/downloads/css/dropzone.css"));
+                "~/wwwroot/lib/dropzone/downloads/css/basic.css",
+                "~/wwwroot/lib/dropzone/downloads/css/dropzone.css"));
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
                 "~/wwwroot/lib/jquery-ui/themes/base/*.css"));

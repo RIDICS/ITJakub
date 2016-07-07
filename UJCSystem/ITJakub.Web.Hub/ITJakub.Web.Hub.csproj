@@ -608,6 +608,8 @@
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery.eu.cookie.law.popup_.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery.zoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
