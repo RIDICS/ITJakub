@@ -8,13 +8,14 @@ namespace ITJakub.Web.Hub
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-{version}.js"));
+                "~/wwwroot/lib/jquery/dist/jquery.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-            "~/Scripts/jquery-ui-{version}.js"));
+                "~/wwwroot/lib/jquery-ui/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                "~/Scripts/jquery.validate*"));
+                "~/wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+                "~/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryappear").Include(
                 "~/Scripts/jquery.appear.js"));
@@ -27,7 +28,7 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/cookies").Include("~/Scripts/cookies/jquery-eu-cookie-law-popup.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js",
+                "~/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
                 "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
@@ -88,7 +89,7 @@ namespace ITJakub.Web.Hub
                 "~/Content/Permission/itjakub.permission.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.css",
+                "~/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
                 "~/Content/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/cookiescss").Include("~/Scripts/cookies/css/jquery-eu-cookie-law-popup.css"));
@@ -100,7 +101,7 @@ namespace ITJakub.Web.Hub
                      "~/Scripts/dropzone/css/dropzone.css"));
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
-              "~/Content/themes/base/*.css"));
+                "~/wwwroot/lib/jquery-ui/themes/base/*.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

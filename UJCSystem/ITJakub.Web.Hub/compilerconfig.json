@@ -120,16 +120,6 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Content/bootstrap/bootstrap.css",
-    "inputFile": "Content/bootstrap/bootstrap.less",
-    "sourceMap": false
-  },
-  {
-    "outputFile": "Content/bootstrap/print.css",
-    "inputFile": "Content/bootstrap/print.less",
-    "sourceMap": false
-  },
-  {
     "outputFile": "Content/Permission/itjakub.permission.css",
     "inputFile": "Content/Permission/itjakub.permission.less",
     "sourceMap": false

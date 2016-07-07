@@ -2,6 +2,11 @@
 	"name": "ASP.NET",
 	"private": true,
   "dependencies": {
+    "jquery": "2.2.4",
+    "jquery-ui": "1.11.4",
+    "jquery-validation": "1.15.0",
+    "jquery-validation-unobtrusive": "3.2.6",
+    "bootstrap": "3.3.6",
     "simplemde": "1.11.2"
   }
 }
