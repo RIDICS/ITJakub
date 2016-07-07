@@ -110,6 +110,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
 	ProjectSection(SolutionItems) = preProject
 		Deploy_readme.txt = Deploy_readme.txt
+		Readme.txt = Readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.Crosswords", "ITJakub.MobileApps.Client.Crosswords\ITJakub.MobileApps.Client.Crosswords.csproj", "{9754F9BD-7148-4600-8A98-C39B4073FE4D}"
