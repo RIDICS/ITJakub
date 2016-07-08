@@ -107,6 +107,10 @@ class Lemmatization {
 
     private loadToken(tokenItem: IToken) {
         this.currentTokenItem = tokenItem;
+        if (tokenItem == null) {
+            return;
+        }
+
         $(".content").removeClass("hidden");
         $("#specificToken").text(tokenItem.Text);
         $("#specificTokenDescription").text(tokenItem.Description);
@@ -165,6 +169,10 @@ class Lemmatization {
     private saveNewToken() {
         var token = $("#new-token").val();
         var description = $("#new-token-description").val();
+
+        if (!token) {
+            return;
+        }
 
         $.ajax({
             type: "POST",
@@ -1167,23 +1175,18 @@ class LemmatizationSearchBox {
     create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
         var self = this;
         $(this.inputField).typeahead(this.options, this.dataset);
-        $(this.inputField).bind("typeahead:render", <any>function(e, ...datums) {
-            var isEmpty = $(".tt-menu", e.target.parentNode).hasClass("tt-empty");
-            if (isEmpty) {
-                self.currentItem = null;
-                selectionChangedCallback(false, false);
-                return;
-            }
-
-            var currentText = self.getInputValue();
-            var suggestionElements = $(".suggestion", e.target.parentNode);
-            for (var i = 0; i < suggestionElements.length; i++) {
-                if ($(suggestionElements[i]).text() === currentText) {
-                    self.currentItem = datums[i];
-                    selectionChangedCallback(true, false);
-                    return;
+        $(this.inputField).bind("typeahead:render", <any>function (e, ...datums: ITypeaheadItem[]) {
+            if (datums.length > 0) {
+                var currentText = self.getInputValue();
+                for (var i = 0; i < datums.length; i++) {
+                    if (datums[i].Text === currentText) {
+                        self.currentItem = datums[i];
+                        selectionChangedCallback(true, false);
+                        return;
+                    }
                 }
             }
+
             self.currentItem = null;
             selectionChangedCallback(false, false);
         });
@@ -1195,6 +1198,12 @@ class LemmatizationSearchBox {
             self.currentItem = datum;
             selectionChangedCallback(true, false);
         });
+        //$(this.inputField).change(function () {
+        //    if (!$(this).val()) {
+        //        self.currentItem = null;
+        //        selectionChangedCallback(false, false);
+        //    }
+        //});
     }
 
     destroy(): void {

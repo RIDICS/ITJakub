@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Core", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.DataEntities", "ITJakub.MobileApps.DataEntities\ITJakub.MobileApps.DataEntities.csproj", "{8E467186-0805-4652-9319-98F6619492F8}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "ITJakub.MobileApps.Azure", "ITJakub.MobileApps.Azure\ITJakub.MobileApps.Azure.ccproj", "{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}"
+Project("{BB40F520-413E-3EBA-ABD4-2177801094F0}") = "ITJakub.MobileApps.Azure", "ITJakub.MobileApps.Azure\ITJakub.MobileApps.Azure.ccproj", "{685C5EE7-71D4-4D5C-A5FF-0E6A0003780B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.DataContracts", "ITJakub.MobileApps.Client.DataContracts\ITJakub.MobileApps.Client.DataContracts.csproj", "{A6F66019-70E7-4177-9389-554D1E73C437}"
 EndProject
@@ -109,8 +109,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
 	ProjectSection(SolutionItems) = preProject
+		Dependencies_Readme.txt = Dependencies_Readme.txt
 		Deploy_readme.txt = Deploy_readme.txt
-		Readme.txt = Readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.Client.Crosswords", "ITJakub.MobileApps.Client.Crosswords\ITJakub.MobileApps.Client.Crosswords.csproj", "{9754F9BD-7148-4600-8A98-C39B4073FE4D}"
