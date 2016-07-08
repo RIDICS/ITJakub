@@ -611,9 +611,10 @@
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\wheelzoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery.eu.cookie.law.popup_.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\jquery.zoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
@@ -624,7 +625,6 @@
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <TypeScriptCompile Include="Scripts\typings\wheelzoom_.d.ts" />
     <Content Include="Scripts\Wheelzoom\daisy.jpg" />
     <Content Include="Scripts\Wheelzoom\demo.html" />
     <Content Include="Scripts\typeahead.bundle.js" />
