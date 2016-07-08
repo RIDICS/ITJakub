@@ -9,31 +9,23 @@
 
 class UserPermissionEditor {
     private mainContainer: string;
-    private searchBox: ConcreteInstanceSearchBox;
-    private groupSearchBox: ConcreteInstanceSearchBox;
+    private searchBox: SingleSetTypeaheadSearchBox<IUser>;
+    private groupSearchBox: SingleSetTypeaheadSearchBox<IGroup>;
     private currentUserSelectedItem: IUser;
     private groupSearchCurrentSelectedItem: IGroup;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-        this.searchBox = new ConcreteInstanceSearchBox("#mainSearchInput", "Permission", this.getPrintableItem );
-        this.groupSearchBox = new ConcreteInstanceSearchBox("#groupSearchInput", "Permission", this.getGroupPrintableItem );
+        this.searchBox = new SingleSetTypeaheadSearchBox<IUser>("#mainSearchInput", "Permission",
+            this.getFullNameString,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item), item.Email));
+        this.groupSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput", "Permission",
+            (item) => item.Name,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Name, item.Description));
     }
 
-    public getPrintableItem(item: IUser): IPrintableItem {
-        var printableUser: IPrintableItem = {
-            Name: item.UserName+" - "+item.FirstName+" "+item.LastName,
-            Description: item.Email
-        };
-        return printableUser;
-    }
-
-    public getGroupPrintableItem(item: IGroup): IPrintableItem {
-        var printableGroup: IPrintableItem = {
-            Name: item.Name,
-            Description: item.Description
-        };
-        return printableGroup;
+    private getFullNameString(user: IUser): string {
+        return user.UserName + " - " + user.FirstName + " " + user.LastName;
     }
 
     public make() {

@@ -80,11 +80,11 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
                 "~/Scripts/Permission/itjakub.permission.user.js",
-                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/group/javascript").Include(
                 "~/Scripts/Permission/itjakub.permission.group.js",
-                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
 
             bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(

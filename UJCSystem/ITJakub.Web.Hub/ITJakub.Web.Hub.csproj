@@ -609,6 +609,8 @@
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery.eu.cookie.law.popup_.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery.zoom_.d.ts" />
@@ -708,7 +710,6 @@
     <TypeScriptCompile Include="Areas\Lemmatization\Scripts\itjakub.lemmatization.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.feedbacks.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.interfaces.ts" />
-    <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.typeahead.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.group.ts" />
     <TypeScriptCompile Include="Scripts\Permission\itjakub.permission.user.ts" />
     <TypeScriptCompile Include="Scripts\News\itjakub.news.ts" />

@@ -10,14 +10,17 @@
 class Lemmatization {
     private canEdit: boolean;
     private mainContainer: string;
-    private searchBox: LemmatizationSearchBox;
+    private searchBox: SingleSetTypeaheadSearchBox<IToken>;
     private lemmatizationCharacteristic: LemmatizationCharacteristicEditor;
     private currentTokenItem: IToken;
 
     constructor(mainContainer: string, canEdit: boolean) {
         this.canEdit = canEdit;
         this.mainContainer = mainContainer;
-        this.searchBox = new LemmatizationSearchBox("#mainSearchInput");
+        this.searchBox = new SingleSetTypeaheadSearchBox<IToken>("#mainSearchInput",
+            "Lemmatization/Lemmatization",
+            (item) => item.Text,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
         this.lemmatizationCharacteristic = new LemmatizationCharacteristicEditor();
     }
     
@@ -34,14 +37,14 @@ class Lemmatization {
             }
 
             if (selectionConfirmed) {
-                this.loadToken(<IToken>this.searchBox.getValue());
+                this.loadToken(this.searchBox.getValue());
             }
         });
         this.lemmatizationCharacteristic.init();
         LemmatizationCanonicalForm.init();
 
         $("#loadButton").click(() => {
-            var tokenItem = <IToken>this.searchBox.getValue();
+            var tokenItem = this.searchBox.getValue();
             this.loadToken(tokenItem);
         });
 
@@ -524,8 +527,8 @@ class LemmatizationCharacteristicTable {
 }
 
 class LemmatizationCanonicalForm {
-    private static searchBox: LemmatizationSearchBox;
-    private static hyperSearchBox: LemmatizationSearchBox;
+    private static searchBox: SingleSetTypeaheadSearchBox<ICanonicalForm>;
+    private static hyperSearchBox: SingleSetTypeaheadSearchBox<IHyperCanonicalForm>;
     private newCanonicalFormCreatedCallback: (form: ICanonicalForm) => void;
     private reloadCallback: () => void;
     private canEdit: boolean;
@@ -828,7 +831,7 @@ class LemmatizationCanonicalForm {
             });
         } else {
             var searchBox = LemmatizationCanonicalForm.searchBox;
-            var currentItem: ICanonicalForm = <ICanonicalForm>(searchBox.getValue());
+            var currentItem: ICanonicalForm = (searchBox.getValue());
 
             if (!currentItem)
                 return; //TODO show error
@@ -874,7 +877,7 @@ class LemmatizationCanonicalForm {
             });
         } else {
             var searchBox = LemmatizationCanonicalForm.hyperSearchBox;
-            var currentItem: IHyperCanonicalForm = <IHyperCanonicalForm>(searchBox.getValue());
+            var currentItem: IHyperCanonicalForm = (searchBox.getValue());
 
             if (!currentItem)
                 return; //TODO show error
@@ -1068,8 +1071,14 @@ class LemmatizationCanonicalForm {
             .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperLemma))
             .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
 
-        var searchBox = new LemmatizationSearchBox("#new-form-existing-input");
-        var hyperSearchBox = new LemmatizationSearchBox("#new-hyper-existing-input");
+        var searchBox = new SingleSetTypeaheadSearchBox<ICanonicalForm>("#new-form-existing-input",
+            "Lemmatization/Lemmatization",
+            (item) => item.Text,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
+        var hyperSearchBox = new SingleSetTypeaheadSearchBox<IHyperCanonicalForm>("#new-hyper-existing-input",
+            "Lemmatization/Lemmatization",
+            (item) => item.Text,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
 
         var selectedChangedCallback = (selectedExist, selectionConfirmed) => {
             var currentItem = searchBox.getValue();
@@ -1137,182 +1146,4 @@ class LemmatizationHyperCanonicalForm {
     public containerName: HTMLDivElement;
     public containerType: HTMLDivElement;
     public containerDescription: HTMLDivElement;
-}
-
-class LemmatizationSearchBox {
-    private inputField: string;
-    private suggestionTemplate: (item: any) => string;
-    private urlWithController: string;
-    private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset<ITypeaheadItem>;
-    private bloodhound: Bloodhound<ITypeaheadItem>;
-    private currentItem: ITypeaheadItem;
-
-    constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
-        this.inputField = inputFieldElement;
-        this.suggestionTemplate = suggestionTemplate;
-        this.urlWithController = getBaseUrl() + "Lemmatization/Lemmatization";
-
-        this.options = {
-            hint: true,
-            highlight: false,
-            minLength: 1
-        };
-    }
-    
-    setValue(value: any): void {
-        $(this.inputField).typeahead('val', value);
-    }
-
-    getValue(): ITypeaheadItem {
-        return this.currentItem;
-    }
-
-    getInputValue(): string {
-        return <any>($(this.inputField).typeahead("val"));
-    }
-
-    create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
-        var self = this;
-        $(this.inputField).typeahead(this.options, this.dataset);
-        $(this.inputField).bind("typeahead:render", <any>function (e, ...datums: ITypeaheadItem[]) {
-            if (datums.length > 0) {
-                var currentText = self.getInputValue();
-                for (var i = 0; i < datums.length; i++) {
-                    if (datums[i].Text === currentText) {
-                        self.currentItem = datums[i];
-                        selectionChangedCallback(true, false);
-                        return;
-                    }
-                }
-            }
-
-            self.currentItem = null;
-            selectionChangedCallback(false, false);
-        });
-        $(this.inputField).bind("typeahead:select", <any>function (e, datum) {
-            self.currentItem = datum;
-            selectionChangedCallback(true, true);
-        });
-        $(this.inputField).bind("typeahead:autocomplete", <any>function (e, datum) {
-            self.currentItem = datum;
-            selectionChangedCallback(true, false);
-        });
-        //$(this.inputField).change(function () {
-        //    if (!$(this).val()) {
-        //        self.currentItem = null;
-        //        selectionChangedCallback(false, false);
-        //    }
-        //});
-    }
-
-    destroy(): void {
-        $(this.inputField).typeahead("destroy");
-        $(this.inputField).unbind("typeahead:render");
-        $(this.inputField).unbind("typeahead:select");
-        $(this.inputField).unbind("typeahead:autocomplete");
-    }
-
-    reload() {
-        this.clearCache();
-        var value = this.getInputValue();
-        this.setValue("");
-        this.setValue(value);
-    }
-
-    clearCache(): void {
-        if (this.bloodhound) {
-            this.bloodhound.clear();
-            this.bloodhound.clearPrefetchCache();
-            this.bloodhound.clearRemoteCache();
-        }
-    }
-
-    setDataSet(name: string, parameterUrlString: string = null): void {
-        this.clearCache();
-        this.destroy();
-        var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
-
-        if (parameterUrlString != null) {
-            remoteUrl += "&" + parameterUrlString;
-        }
-
-        var remoteOptions: Bloodhound.RemoteOptions<ITypeaheadItem> = {
-            url: remoteUrl,
-            wildcard: "%QUERY"
-        };
-
-        var bloodhound: Bloodhound<ITypeaheadItem> = new Bloodhound({
-            datumTokenizer: this.datumTokenizer,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            remote: remoteOptions
-        });
-
-        var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
-        var dataset: Twitter.Typeahead.Dataset<ITypeaheadItem> = {
-            name: name,
-            source: bloodhound,
-            display: "Text",
-            templates: {
-                suggestion: suggestionTemplate
-            },
-            limit: 10
-        };
-
-        this.bloodhound = bloodhound;
-        this.dataset = dataset;
-    }
-
-    private datumTokenizer(datum: ITypeaheadItem): string[] {
-        return Bloodhound.tokenizers.whitespace(datum.Text);
-    }
-
-    private getDefaultSuggestionTemplate(item: ITypeaheadItem): string {
-        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
-    }
-}
-
-interface ITypeaheadItem {
-    Text: string;
-    Description: string;
-}
-
-interface IToken {
-    Id: number;
-    Text: string;
-    Description: string;
-}
-
-interface ITokenCharacteristic {
-    Id: number;
-    MorphologicalCharacteristic: string;
-    Description: string;
-    CanonicalFormList: Array<ICanonicalForm>;
-}
-
-interface ICanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: CanonicalFormTypeEnum;
-    HyperCanonicalForm: IHyperCanonicalForm;
-}
-
-interface IHyperCanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: HyperCanonicalFormTypeEnum;
-}
-
-enum CanonicalFormTypeEnum {
-    Lemma = 0,
-    Stemma = 1,
-    LemmaOld = 2,
-    StemmaOld = 3,
-}
-
-enum HyperCanonicalFormTypeEnum {
-    HyperLemma = 0,
-    HyperStemma = 1,
 }

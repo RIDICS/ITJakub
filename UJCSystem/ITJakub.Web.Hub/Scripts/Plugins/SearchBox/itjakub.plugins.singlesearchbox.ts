@@ -1,16 +1,17 @@
-﻿
-class ConcreteInstanceSearchBox {
+﻿class SingleSetTypeaheadSearchBox<T> {
+    private displayPath: (item: T) => string;
+    private suggestionTemplate: (item: T) => string;
     private inputField: string;
-    private itemToPrintableConverter: (item: any) => IPrintableItem;
     private urlWithController: string;
     private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset<any>;
-    private bloodhound: Bloodhound<string>;
-    private currentItem: any;
+    private dataset: Twitter.Typeahead.Dataset<T>;
+    private bloodhound: Bloodhound<T>;
+    private currentItem: T;
 
-    constructor(inputFieldElement: string, controllerName: string, itemToPrintableConverter: (item: any) => IPrintableItem) {
+    constructor(inputFieldElement: string, controllerName: string, displayPath: (item: T) => string, suggestionTemplate: (item: T) => string = null) {
         this.inputField = inputFieldElement;
-        this.itemToPrintableConverter = itemToPrintableConverter;
+        this.suggestionTemplate = suggestionTemplate;
+        this.displayPath = displayPath;
         this.urlWithController = getBaseUrl() + controllerName;
 
         this.options = {
@@ -24,34 +25,30 @@ class ConcreteInstanceSearchBox {
         $(this.inputField).typeahead('val', value);
     }
 
-    getValue(): any {
+    getValue(): T {
         return this.currentItem;
     }
 
     getInputValue(): string {
-        return <any>($(this.inputField).typeahead("val"));
+        return $(this.inputField).typeahead("val");
     }
 
     create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
         var self = this;
         $(this.inputField).typeahead(this.options, this.dataset);
-        $(this.inputField).bind("typeahead:render", <any>function (e, ...datums) {
-            var isEmpty = $(".tt-menu", e.target.parentNode).hasClass("tt-empty");
-            if (isEmpty) {
-                self.currentItem = null;
-                selectionChangedCallback(false, false);
-                return;
-            }
-
-            var currentText = self.getInputValue();
-            var suggestionElements = $(".suggestion", e.target.parentNode);
-            for (var i = 0; i < suggestionElements.length; i++) {
-                if ($(suggestionElements[i]).text() === currentText) {
-                    self.currentItem = datums[i];
-                    selectionChangedCallback(true, false);
-                    return;
+        $(this.inputField).bind("typeahead:render", <any>function (e, ...datums: T[]) {
+            if (datums.length > 0) {
+                var currentText = self.getInputValue();
+                for (var i = 0; i < datums.length; i++) {
+                    var text = self.displayPath(datums[i]);
+                    if (text === currentText) {
+                        self.currentItem = datums[i];
+                        selectionChangedCallback(true, false);
+                        return;
+                    }
                 }
             }
+
             self.currentItem = null;
             selectionChangedCallback(false, false);
         });
@@ -63,6 +60,12 @@ class ConcreteInstanceSearchBox {
             self.currentItem = datum;
             selectionChangedCallback(true, false);
         });
+        //$(this.inputField).change(function () {
+        //    if (!$(this).val()) {
+        //        self.currentItem = null;
+        //        selectionChangedCallback(false, false);
+        //    }
+        //});
     }
 
     destroy(): void {
@@ -96,36 +99,39 @@ class ConcreteInstanceSearchBox {
             remoteUrl += "&" + parameterUrlString;
         }
 
-        var remoteOptions: Bloodhound.RemoteOptions<string> = {
+        var remoteOptions: Bloodhound.RemoteOptions<T> = {
             url: remoteUrl,
             wildcard: "%QUERY"
         };
 
-        var bloodhound: Bloodhound<any> = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
+        var bloodhound: Bloodhound<T> = new Bloodhound({
+            datumTokenizer: this.datumTokenizer,
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: remoteOptions
         });
 
-        var suggestionTemplate = (item) => { return this.getDefaultSuggestionTemplate(item) };
-
-        var dataset: Twitter.Typeahead.Dataset<any> = {
-            name: name,            
+        var dataset: Twitter.Typeahead.Dataset<T> = {
+            name: name,
             source: bloodhound,
-            display: "Text",
-            templates: {
-                suggestion: suggestionTemplate
-            },
+            display: this.displayPath,
             limit: 10
         };
+        if (this.suggestionTemplate) {
+            dataset.templates = {
+                suggestion: this.suggestionTemplate
+            }
+        }
 
         this.bloodhound = bloodhound;
         this.dataset = dataset;
     }
 
-    private getDefaultSuggestionTemplate(item: any): string {
-        var printableItem = this.itemToPrintableConverter(item);
-        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + printableItem.Name + "</div><div class=\"description\">" + printableItem.Description + "</div></div>";
+    private datumTokenizer(datum: T): string[] {
+        var text = this.displayPath(datum);
+        return Bloodhound.tokenizers.whitespace(text);
+    }
+
+    public static getDefaultSuggestionTemplate(name: string, description: string) {
+        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + name + "</div><div class=\"description\">" + description + "</div></div>";
     }
 }
-
