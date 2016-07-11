@@ -126,4 +126,6 @@ declare class SimpleMDE {
     static togglePreview: (editor: any) => void;
     static toggleSideBySide: (editor: any) => void;
     static toggleFullScreen: (editor: any) => void;
+    static undo: (editor: any) => void;
+    static redo: (editor: any) => void;
 }

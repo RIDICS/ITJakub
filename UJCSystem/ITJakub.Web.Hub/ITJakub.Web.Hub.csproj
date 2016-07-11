@@ -244,6 +244,7 @@
     <Compile Include="Controllers\PermissionController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\Plugins\Keyboard\KeyboardController.cs" />
+    <Compile Include="Controllers\TextController.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
@@ -605,12 +606,14 @@
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\Wheelzoom\wheelzoom.js" />
+    <Content Include="Views\Text\TextEditor.cshtml" />
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
+    <TypeScriptCompile Include="Scripts\Text\itjakub.text.editor.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde-tests_.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />

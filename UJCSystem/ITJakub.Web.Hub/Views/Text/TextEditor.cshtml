@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Administrace - Upravit statický text";
+}
+
+@section styles{
+    @Styles.Render("~/Content/simplemdecss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/simplemde")
+    @Scripts.Render("~/itjakub/text/javascript")
+}
+
+<div class="content-container">
+    <h2>Textový editor</h2>
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="name" class="col-md-2 control-label">Název stránky</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="name" disabled="disabled">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="text" class="col-md-2 control-label">Text stránky</label>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12">
+                <textarea id="text"></textarea>
+            </div>
+        </div>
+
+    </form>
+</div>

@@ -30,7 +30,7 @@
     }
 
     getInputValue(): string {
-        return $(this.inputField).typeahead("val");
+        return <any>$(this.inputField).typeahead("val");
     }
 
     create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {

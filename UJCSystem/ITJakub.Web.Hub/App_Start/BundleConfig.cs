@@ -7,6 +7,8 @@ namespace ITJakub.Web.Hub
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // ----- Scripts -----
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                 "~/wwwroot/lib/jquery/dist/jquery.js"));
 
@@ -53,6 +55,9 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Wheelzoom/wheelzoom.js",
                 "~/wwwroot/lib/jquery-zoom/jquery.zoom.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/simplemde").Include(
+                "~/wwwroot/lib/simplemde/dist/simplemde.min.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
@@ -86,6 +91,11 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Permission/itjakub.permission.group.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
+                "~/Scripts/Text/itjakub.text.editor.js"));
+
+
+            // ----- Styles ------
 
             bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
                 "~/Content/Permission/itjakub.permission.css"));
@@ -107,6 +117,9 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
                 "~/wwwroot/lib/jquery-ui/themes/base/*.css"));
+
+            bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
+                "~/wwwroot/lib/simplemde/dist/simplemde.min.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
