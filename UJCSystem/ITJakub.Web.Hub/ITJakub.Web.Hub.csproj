@@ -611,8 +611,10 @@
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde-tests_.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde_.d.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\wheelzoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
