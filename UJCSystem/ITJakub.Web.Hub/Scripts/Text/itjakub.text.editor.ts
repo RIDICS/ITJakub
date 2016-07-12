@@ -41,6 +41,7 @@ class TextEditorWrapper {
                 TextEditorWrapper.toolSeparator,
                 TextEditorWrapper.toolPreview,
                 TextEditorWrapper.toolSideBySide,
+                TextEditorWrapper.toolFullScreen,
                 TextEditorWrapper.toolSeparator,
                 TextEditorWrapper.toolGuide
             ]
@@ -50,6 +51,7 @@ class TextEditorWrapper {
     public create(initValue?: string) {
         this.setCustomImageTool();
         this.setCustomLinkTool();
+        
         this.options.initialValue = initValue;
         this.simplemde = new SimpleMDE(this.options);
     }
@@ -246,6 +248,13 @@ class TextEditorWrapper {
         action: SimpleMDE.toggleSideBySide,
         className: "fa fa-columns no-disable no-mobile",
         title: "Přepnout na zobrazení textu a náhledu vedle sebe"
+    }
+
+    static toolFullScreen: SimpleMDE.ToolbarIcon = {
+        name: "fullscreen",
+        action: SimpleMDE.toggleFullScreen,
+        className: "fa fa-arrows-alt no-disable no-mobile",
+        title: "Toggle Fullscreen"
     }
 
     static toolGuide: SimpleMDE.ToolbarIcon = {

@@ -138,5 +138,10 @@
     "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
     "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less",
     "sourceMap": false
+  },
+  {
+    "outputFile": "Content/ITJakub.TextEditor.css",
+    "inputFile": "Content/ITJakub.TextEditor.less",
+    "sourceMap": false
   }
 ]

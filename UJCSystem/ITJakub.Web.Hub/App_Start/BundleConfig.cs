@@ -119,7 +119,8 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/jquery-ui/themes/base/*.css"));
 
             bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
-                "~/wwwroot/lib/simplemde/dist/simplemde.min.css"));
+                "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
+                "~/Content/ITJakub.TextEditor.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

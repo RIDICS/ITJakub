@@ -405,6 +405,7 @@
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <None Include="Content\ITJakub.EuCookiePopup.less" />
+    <None Include="Content\ITJakub.TextEditor.less" />
     <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
