@@ -11,7 +11,7 @@
     @Scripts.Render("~/itjakub/text/javascript")
 }
 
-<div class="content-container">
+<div class="content-container top-offset-without-submenu">
     <h2>Textový editor</h2>
 
     <form class="form-horizontal">
@@ -23,7 +23,10 @@
         </div>
 
         <div class="form-group">
-            <label for="text" class="col-md-2 control-label">Text stránky</label>
+            <label for="text" class="col-md-2 control-label">Text stránky:</label>
+            <div class="col-md-3">
+                <div class="alert alert-info inline-alert">Editor používá syntaxi Markdown</div>
+            </div>
         </div>
 
         <div class="form-group">
@@ -32,5 +35,10 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <div class="col-md-offset-10 col-md-2">
+                <input type="submit" class="form-control" name="save-text" value="Uložit" />
+            </div>
+        </div>
     </form>
 </div>

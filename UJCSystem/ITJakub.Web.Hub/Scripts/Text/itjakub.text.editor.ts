@@ -67,139 +67,139 @@ class TextEditorWrapper {
         name: "italic",
         action: SimpleMDE.toggleItalic,
         className: "fa fa-italic",
-        title: "Italic"
+        title: "Kurzíva"
     }
 
     static toolStrikethrough: SimpleMDE.ToolbarIcon = {
         name: "strikethrough",
         action: SimpleMDE.toggleStrikethrough,
         className: "fa fa-strikethrough",
-        title: "Strikethrough"
+        title: "Přeškrtnuté"
     }
 
     static toolHeadingSmaller: SimpleMDE.ToolbarIcon = {
         name: "heading-smaller",
         action: SimpleMDE.toggleHeadingSmaller,
         className: "fa fa-header fa-header-x fa-header-smaller",
-        title: "Smaller Heading"
+        title: "Zmenšit nadpis"
     }
 
     static toolHeadingBigger: SimpleMDE.ToolbarIcon = {
         name: "heading-bigger",
         action: SimpleMDE.toggleHeadingBigger,
         className: "fa fa-header fa-header-x fa-header-bigger",
-        title: "Bigger Heading"
+        title: "Zvětšit nadpis"
     }
 
     static toolHeading1: SimpleMDE.ToolbarIcon = {
         name: "heading-1",
         action: SimpleMDE.toggleHeading1,
         className: "fa fa-header fa-header-x fa-header-1",
-        title: "Big Heading"
+        title: "Velký nadpis"
     }
 
     static toolHeading2: SimpleMDE.ToolbarIcon = {
         name: "heading-2",
         action: SimpleMDE.toggleHeading2,
         className: "fa fa-header fa-header-x fa-header-2",
-        title: "Medium Heading"
+        title: "Střední nadpis"
     }
 
     static toolHeading3: SimpleMDE.ToolbarIcon = {
         name: "heading-3",
         action: SimpleMDE.toggleHeading3,
         className: "fa fa-header fa-header-x fa-header-3",
-        title: "Small Heading"
+        title: "Malý nadpis"
     }
 
     static toolCodeBlock: SimpleMDE.ToolbarIcon = {
         name: "code",
         action: SimpleMDE.toggleCodeBlock,
         className: "fa fa-code",
-        title: "Code"
+        title: "Kód"
     }
 
     static toolQuote: SimpleMDE.ToolbarIcon = {
         name: "quote",
         action: SimpleMDE.toggleBlockquote,
         className: "fa fa-quote-left",
-        title: "Quote"
+        title: "Citát"
     }
 
     static toolUnorderedList: SimpleMDE.ToolbarIcon = {
         name: "unordered-list",
         action: SimpleMDE.toggleUnorderedList,
         className: "fa fa-list-ul",
-        title: "Generic List"
+        title: "Seznam s odrážkami"
     }
 
     static toolOrderedList: SimpleMDE.ToolbarIcon = {
         name: "ordered-list",
         action: SimpleMDE.toggleOrderedList,
         className: "fa fa-list-ol",
-        title: "Numbered List"
+        title: "Číslovaný seznam"
     }
 
     static toolLink: SimpleMDE.ToolbarIcon = {
         name: "link",
         action: SimpleMDE.drawLink,
         className: "fa fa-link",
-        title: "Create Link"
+        title: "Vytvořit odkaz"
     }
 
     static toolImage: SimpleMDE.ToolbarIcon = {
         name: "image",
         action: SimpleMDE.drawImage,
         className: "fa fa-picture-o",
-        title: "Insert Image"
+        title: "Vložit obrázek"
     }
 
     static toolTable: SimpleMDE.ToolbarIcon = {
         name: "table",
         action: SimpleMDE.drawTable,
         className: "fa fa-table",
-        title: "Insert Table"
+        title: "Vložit tabulku"
     }
 
     static toolHorizontalRule: SimpleMDE.ToolbarIcon = {
         name: "horizontal-rule",
         action: SimpleMDE.drawHorizontalRule,
         className: "fa fa-minus",
-        title: "Insert Horizontal Line"
+        title: "Vložit horizontální čáru"
     }
 
     static toolPreview: SimpleMDE.ToolbarIcon = {
         name: "preview",
         action: SimpleMDE.togglePreview,
         className: "fa fa-eye no-disable",
-        title: "Toggle Preview"
+        title: "Přepnout na náhled"
     }
 
     static toolSideBySide: SimpleMDE.ToolbarIcon = {
         name: "side-by-side",
         action: SimpleMDE.toggleSideBySide,
         className: "fa fa-columns no-disable no-mobile",
-        title: "Toggle Side by Side"
+        title: "Přepnout na zobrazení textu a náhledu vedle sebe"
     }
 
     static toolGuide: SimpleMDE.ToolbarIcon = {
         name: "guide",
         action: "https://simplemde.com/markdown-guide",
         className: "fa fa-question-circle",
-        title: "Markdown Guide"
+        title: "Nápověda k formátu Markdown"
     }
 
     static toolUndo: SimpleMDE.ToolbarIcon = {
         name: "undo",
         action: SimpleMDE.undo,
         className: "fa fa-undo no-disable",
-        title: "Undo"
+        title: "Zpět"
     }
 
     static toolRedo: SimpleMDE.ToolbarIcon = {
         name: "redo",
         action: SimpleMDE.redo,
         className: "fa fa-repeat no-disable",
-        title: "Redo"
+        title: "Znovu"
     }
 }

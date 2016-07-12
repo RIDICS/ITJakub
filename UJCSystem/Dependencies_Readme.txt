@@ -8,3 +8,5 @@ NuGet packages are restored during build or in NuGet manager.
 
 Bower packages are restered automatically when Visual Studio opening project/solution.
 Another option is run command "bower install" in command line.
+
+Bower requires installed Git.

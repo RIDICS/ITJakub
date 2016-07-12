@@ -39,14 +39,14 @@
                 <div class="form-group">
                     @Html.LabelFor(model => model.ItemType, htmlAttributes: new { @class = "control-label col-md-1" })
                     <div class="col-md-10 selectContainer">
-                        @Html.EnumDropDownListFor(model => model.ItemType, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EnumDropDownListFor(model => model.ItemType, htmlAttributes: new { @class = "form-control" })
                     </div>
                 </div>
 
                 <div class="form-group">
                     @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-1" })
                     <div class="col-md-10">
-                        @Html.TextAreaFor(m => m.Content, new { @class = "form-control news-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..." })
+                        @Html.TextAreaFor(m => m.Content, new { @class = "form-control news-text-area", @style = "min-height: 100px", @placeholder = "Zde napište text novinky..." })
                     </div>
                 </div>
 
