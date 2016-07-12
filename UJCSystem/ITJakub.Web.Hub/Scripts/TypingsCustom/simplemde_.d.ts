@@ -60,7 +60,7 @@ declare namespace SimpleMDE {
 
     interface ToolbarIcon {
         name: string;
-        action: string|((editor: any) => void); // TODO specific type
+        action: string|((editor: SimpleMDE) => void);
         className: string;
         title: string;
     }
@@ -105,27 +105,26 @@ declare class SimpleMDE {
     isFullscreenActive(): boolean;
     clearAutosavedValue(): void;
 
-    // todo add editor spicific type
-    static toggleBold: (editor: any) => void;
-    static toggleItalic: (editor: any) => void;
-    static toggleStrikethrough: (editor: any) => void;
-    static toggleHeadingSmaller: (editor: any) => void;
-    static toggleHeadingBigger: (editor: any) => void;
-    static toggleHeading1: (editor: any) => void;
-    static toggleHeading2: (editor: any) => void;
-    static toggleHeading3: (editor: any) => void;
-    static toggleCodeBlock: (editor: any) => void;
-    static toggleBlockquote: (editor: any) => void;
-    static toggleUnorderedList: (editor: any) => void;
-    static toggleOrderedList: (editor: any) => void;
-    static cleanBlock: (editor: any) => void;
-    static drawLink: (editor: any) => void;
-    static drawImage: (editor: any) => void;
-    static drawTable: (editor: any) => void;
-    static drawHorizontalRule: (editor: any) => void;
-    static togglePreview: (editor: any) => void;
-    static toggleSideBySide: (editor: any) => void;
-    static toggleFullScreen: (editor: any) => void;
-    static undo: (editor: any) => void;
-    static redo: (editor: any) => void;
+    static toggleBold: (editor: SimpleMDE) => void;
+    static toggleItalic: (editor: SimpleMDE) => void;
+    static toggleStrikethrough: (editor: SimpleMDE) => void;
+    static toggleHeadingSmaller: (editor: SimpleMDE) => void;
+    static toggleHeadingBigger: (editor: SimpleMDE) => void;
+    static toggleHeading1: (editor: SimpleMDE) => void;
+    static toggleHeading2: (editor: SimpleMDE) => void;
+    static toggleHeading3: (editor: SimpleMDE) => void;
+    static toggleCodeBlock: (editor: SimpleMDE) => void;
+    static toggleBlockquote: (editor: SimpleMDE) => void;
+    static toggleUnorderedList: (editor: SimpleMDE) => void;
+    static toggleOrderedList: (editor: SimpleMDE) => void;
+    static cleanBlock: (editor: SimpleMDE) => void;
+    static drawLink: (editor: SimpleMDE) => void;
+    static drawImage: (editor: SimpleMDE) => void;
+    static drawTable: (editor: SimpleMDE) => void;
+    static drawHorizontalRule: (editor: SimpleMDE) => void;
+    static togglePreview: (editor: SimpleMDE) => void;
+    static toggleSideBySide: (editor: SimpleMDE) => void;
+    static toggleFullScreen: (editor: SimpleMDE) => void;
+    static undo: (editor: SimpleMDE) => void;
+    static redo: (editor: SimpleMDE) => void;
 }

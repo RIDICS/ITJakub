@@ -7,11 +7,13 @@
 class TextEditorWrapper {
     private simplemde: SimpleMDE;
     private options: SimpleMDE.Options;
+    private dialogInsertImage: BootstrapDialogWrapper;
+    private dialogInsertLink: BootstrapDialogWrapper;
 
     constructor(textArea: HTMLElement) {
         this.options = {
             element: textArea,
-            promptURLs: true,
+            promptURLs: false,
             spellChecker: false,
             toolbar: [
                 TextEditorWrapper.toolUndo,
@@ -46,12 +48,76 @@ class TextEditorWrapper {
     }
 
     public create(initValue?: string) {
+        this.setCustomImageTool();
+        this.setCustomLinkTool();
         this.options.initialValue = initValue;
         this.simplemde = new SimpleMDE(this.options);
     }
 
     public getValue(): string {
         return this.simplemde.value();
+    }
+
+    private setCustomImageTool() {
+        this.dialogInsertImage = new BootstrapDialogWrapper($("#editor-insert-image-dialog"), true);
+
+        TextEditorWrapper.toolImage.action = (editor: SimpleMDE) => {
+            var selectedText = editor.codemirror.getSelection();
+            $("#editor-insert-image-alt").val(selectedText);
+            this.dialogInsertImage.show();
+        };
+
+        $("#editor-insert-image-button").click(() => {
+            this.customImageAction();
+            this.dialogInsertImage.hide();
+        });
+    }
+
+    private setCustomLinkTool() {
+        this.dialogInsertLink = new BootstrapDialogWrapper($("#editor-insert-link-dialog"), true);
+
+        TextEditorWrapper.toolLink.action = (editor: SimpleMDE) => {
+            var selectedText = editor.codemirror.getSelection();
+            $("#editor-insert-link-label").val(selectedText);
+            this.dialogInsertLink.show();
+        };
+
+        $("#editor-insert-link-button").click(() => {
+            this.customLinkAction();
+            this.dialogInsertLink.hide();
+        });
+    }
+
+    private customImageAction() {
+        var url = $("#editor-insert-image-url").val();
+        var alt = $("#editor-insert-image-alt").val();
+        var imageText = "![" + alt + "](" + url+ ")";
+
+        var cm = this.simplemde.codemirror;
+        this.replaceSelection(cm, imageText);
+    }
+
+    private customLinkAction() {
+        var url = $("#editor-insert-link-url").val();
+        var label = $("#editor-insert-link-label").val();
+        var linkText = "[" + label + "](" + url + ")";
+
+        var cm = this.simplemde.codemirror;
+        this.replaceSelection(cm, linkText);
+    }
+
+    private replaceSelection(codeMirror: any, newText: string) {
+        var startPoint = codeMirror.getCursor("start");
+        var endPoint = codeMirror.getCursor("end");
+
+        codeMirror.replaceSelection(newText);
+
+        if (startPoint !== endPoint) {
+            endPoint.ch = startPoint.ch + newText.length;
+        }
+
+        codeMirror.setSelection(startPoint, endPoint);
+        codeMirror.focus();
     }
 
     static toolSeparator = "|";
@@ -201,5 +267,32 @@ class TextEditorWrapper {
         action: SimpleMDE.redo,
         className: "fa fa-repeat no-disable",
         title: "Znovu"
+    }
+    
+}
+
+class BootstrapDialogWrapper {
+    private clearInputElements: boolean;
+    private element: JQuery;
+
+    constructor(dialogElement: JQuery, clearInputElements: boolean) {
+        this.clearInputElements = clearInputElements;
+        this.element = dialogElement;
+    }
+
+    public show() {
+        this.element.modal({
+            show: true,
+            backdrop: "static"
+        });
+    }
+
+    public hide() {
+        this.element.modal("hide");
+        if (this.clearInputElements) {
+            $("input", this.element).val("");
+            $("textarea", this.element).val("");
+            $("select", this.element).val("");
+        }
     }
 }

@@ -607,6 +607,8 @@
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Scripts\Wheelzoom\wheelzoom.js" />
     <Content Include="Views\Text\TextEditor.cshtml" />
+    <Content Include="Views\Text\_TextEditorInsertImage.cshtml" />
+    <Content Include="Views\Text\_TextEditorInsertLink.cshtml" />
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
