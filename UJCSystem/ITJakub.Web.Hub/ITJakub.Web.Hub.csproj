@@ -283,6 +283,7 @@
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Managers\StaticTextManager.cs" />
+    <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
@@ -326,6 +327,7 @@
     <Compile Include="Models\Plugins\RegExSearch\TokenDistanceListCriteriaDescription.cs" />
     <Compile Include="Models\Plugins\RegExSearch\WordCriteriaDescription.cs" />
     <Compile Include="Models\Plugins\RegExSearch\WordListCriteriaDescription.cs" />
+    <Compile Include="Models\StaticTextViewModel.cs" />
     <Compile Include="Models\Type\StaticTextFormatType.cs" />
     <Compile Include="Models\UploadViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -646,6 +648,7 @@
     <Content Include="Views\Text\TextEditor.cshtml" />
     <Content Include="Views\Text\_TextEditorInsertImage.cshtml" />
     <Content Include="Views\Text\_TextEditorInsertLink.cshtml" />
+    <Content Include="Views\Shared\_StaticText.cshtml" />
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />

@@ -1,0 +1,15 @@
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+<div class="static-text-container">
+    <div>
+        @if (Model.IsRecordExists)
+        {
+            <a href="#" class="btn btn-default">Edit</a>
+        }
+        else
+        {
+            <a href="#" class="btn btn-default">Create</a>
+        }
+    </div>
+    @Model.Text
+</div>

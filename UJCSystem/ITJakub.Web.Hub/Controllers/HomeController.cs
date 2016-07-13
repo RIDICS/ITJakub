@@ -1,15 +1,22 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public class HomeController : BaseController
-    {        
+    {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public HomeController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         private ApplicationUserManager UserManager
         {
             get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
@@ -90,7 +97,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Support()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeSupport);
+            return View(staticTextViewModel);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
+﻿using Castle.Facilities.NHibernateIntegration;
 using Castle.Services.Transaction;
 using ITJakub.Web.DataEntities.Database.Daos;
 using ITJakub.Web.DataEntities.Database.Entities;
-using NHibernate;
 
 namespace ITJakub.Web.DataEntities.Database.Repositories
 {
@@ -14,13 +12,15 @@ namespace ITJakub.Web.DataEntities.Database.Repositories
             : base(sessManager)
         {
         }
-
+        
         [Transaction(TransactionMode.Requires)]
-        public virtual IList<StaticText> GetAllTexts()
+        public virtual StaticText GetStaticText(string name)
         {
-            using (ISession session = GetSession())
+            using (var session = GetSession())
             {
-                return session.QueryOver<StaticText>().List();
+                return session.QueryOver<StaticText>()
+                    .Where(x => x.Name == name)
+                    .SingleOrDefault();
             }
         }
     }
