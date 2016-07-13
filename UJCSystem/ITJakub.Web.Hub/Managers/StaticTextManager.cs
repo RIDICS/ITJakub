@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ITJakub.Web.DataEntities.Database.Entities;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.DataEntities.Database.Repositories;
 using ITJakub.Web.Hub.Models;
@@ -25,6 +26,15 @@ namespace ITJakub.Web.Hub.Managers
         public StaticTextViewModel GetText(string name)
         {
             var staticText = m_staticTextRepository.GetStaticText(name);
+            if (staticText == null)
+            {
+                return new StaticTextViewModel
+                {
+                    Name = name,
+                    IsRecordExists = false
+                };
+            }
+
             var viewModel = Mapper.Map<StaticTextViewModel>(staticText);
             return viewModel;
         }
@@ -55,6 +65,23 @@ namespace ITJakub.Web.Hub.Managers
             }
 
             return viewModel;
+        }
+
+        public void SaveText(string name, string text, StaticTextFormatType format)
+        {
+            var staticTextEntity = m_staticTextRepository.GetStaticText(name);
+            if (staticTextEntity == null)
+            {
+                staticTextEntity = new StaticText
+                {
+                    Name = name
+                };
+            }
+
+            staticTextEntity.Text = text;
+            staticTextEntity.Format = Mapper.Map<StaticTextFormat>(format);
+
+            m_staticTextRepository.Save(staticTextEntity);
         }
     }
 }
