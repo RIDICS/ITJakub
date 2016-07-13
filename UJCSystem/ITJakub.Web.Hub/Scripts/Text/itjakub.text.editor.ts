@@ -9,19 +9,24 @@ class TextEditorWrapper {
     private options: SimpleMDE.Options;
     private dialogInsertImage: BootstrapDialogWrapper;
     private dialogInsertLink: BootstrapDialogWrapper;
+    private isPreviewRendering = false;
 
     constructor(textArea: HTMLElement) {
         this.options = {
             element: textArea,
             promptURLs: false,
             spellChecker: false,
+            previewRender: (plainText, preview) => {
+                this.previewRemoteRender(plainText, preview);
+                return "<div class=\"loading\"></div>";
+            },
             toolbar: [
                 TextEditorWrapper.toolUndo,
                 TextEditorWrapper.toolRedo,
                 TextEditorWrapper.toolSeparator,
                 TextEditorWrapper.toolBold,
                 TextEditorWrapper.toolItalic,
-                TextEditorWrapper.toolStrikethrough,
+                //TextEditorWrapper.toolStrikethrough, // not supported by the most markdown parsers
                 TextEditorWrapper.toolSeparator,
                 TextEditorWrapper.toolHeading1,
                 TextEditorWrapper.toolHeading2,
@@ -29,10 +34,10 @@ class TextEditorWrapper {
                 TextEditorWrapper.toolHeadingSmaller,
                 TextEditorWrapper.toolHeadingBigger,
                 TextEditorWrapper.toolSeparator,
-                TextEditorWrapper.toolCodeBlock,
-                TextEditorWrapper.toolQuote,
                 TextEditorWrapper.toolUnorderedList,
                 TextEditorWrapper.toolOrderedList,
+                TextEditorWrapper.toolCodeBlock,
+                TextEditorWrapper.toolQuote,
                 TextEditorWrapper.toolSeparator,
                 TextEditorWrapper.toolLink,
                 TextEditorWrapper.toolImage,
@@ -58,6 +63,33 @@ class TextEditorWrapper {
 
     public getValue(): string {
         return this.simplemde.value();
+    }
+
+    private previewRemoteRender(text: string, previewElement: HTMLElement) {
+        if (this.isPreviewRendering) {
+            // todo save to memory for rerendering
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Text/RenderPreview",
+            data: JSON.stringify({
+                text: text,
+                inputTextFormat: "markdown"
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (generatedHtml) => {
+                previewElement.innerHTML = generatedHtml;
+                this.isPreviewRendering = false;
+            },
+            error: () => {
+                previewElement.innerHTML = "<div>Chyba při vykreslování</div>";
+                this.isPreviewRendering = false;
+            }
+        });
     }
 
     private setCustomImageTool() {
