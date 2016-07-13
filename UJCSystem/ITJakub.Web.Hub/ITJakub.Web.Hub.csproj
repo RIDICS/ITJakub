@@ -225,6 +225,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WindsorControllerFactory.cs" />
     <Compile Include="Areas\AudioBooks\AudioBooksAreaRegistration.cs" />
     <Compile Include="Areas\AudioBooks\BundleConfig.cs" />
     <Compile Include="Areas\AudioBooks\Controllers\AudioBooksController.cs" />

@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Web.Mvc;
 using AutoMapper;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
-using log4net.Config;
+using ITJakub.Web.Hub.App_Start;
 
 namespace ITJakub.Web.Hub
 {
@@ -37,9 +39,10 @@ namespace ITJakub.Web.Hub
             //XmlConfigurator.Configure(new FileInfo("log4net.config"));
             //XmlConfigurator.Configure();
             //configure AutoMapper
+            ConfigureControllerFactory();
             ConfigureAutoMapper();
         }
-
+        
         private void ConfigureAutoMapper()
         {
             foreach (var profile in ResolveAll<Profile>()) Mapper.AddProfile(profile);
@@ -63,5 +66,14 @@ namespace ITJakub.Web.Hub
             return string.Format(@"{0}\{1}", directory, prefix);
         }
 
+        private void ConfigureControllerFactory()
+        {
+            Register(Classes.FromThisAssembly()
+                .BasedOn<IController>()
+                .LifestyleTransient());
+
+            var controllerFactory = new WindsorControllerFactory(Kernel);
+            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+        }
     }
 }
