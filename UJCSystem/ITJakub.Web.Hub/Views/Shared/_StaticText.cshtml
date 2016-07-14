@@ -1,15 +1,22 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
 
 <div class="static-text-container">
-    <div>
+    <div class="static-text-panel">
         @if (Model.IsRecordExists)
         {
-            <a href="#" class="btn btn-default">Edit</a>
+            <a href="@Url.Action("Editor", "Text", new {textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span>
+                Upravit text
+            </a>
         }
         else
         {
-            <a href="#" class="btn btn-default">Create</a>
+            <a href="@Url.Action("Editor", "Text", new {textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+                <span class="glyphicon glyphicon-pencil"></span>
+                Vytvořit text
+            </a>
         }
     </div>
-    @Model.Text
+
+    @Html.Raw(Model.Text)
 </div>

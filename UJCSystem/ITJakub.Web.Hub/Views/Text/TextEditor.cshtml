@@ -48,10 +48,15 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button type="button" class="form-control" id="save-button">
+                    <button type="button" class="form-control btn btn-default" id="save-button">
                         <span id="save-progress" class="loading-small-inline hidden"></span>
                         Uložit
                     </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-10 col-md-2">
+                    <a href="@Request.Params["pageUrl"]" class="form-control btn btn-default">Zavřít editor</a>
                 </div>
             </div>
         </form>
