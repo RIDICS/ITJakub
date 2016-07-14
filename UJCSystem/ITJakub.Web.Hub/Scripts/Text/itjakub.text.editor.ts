@@ -1,8 +1,62 @@
 ﻿$(document).ready(() => {
-    var textArea = document.getElementById("text");
-    var textEditor = new TextEditorWrapper(textArea);
-    textEditor.create();
+    var staticTextEditor = new StaticTextEditor();
+    staticTextEditor.init();
 });
+
+class StaticTextEditor {
+    private textEditor: TextEditorWrapper;
+
+    public init() {
+        var textArea = document.getElementById("text");
+        this.textEditor = new TextEditorWrapper(textArea);
+        this.textEditor.create();
+
+        $("#save-button").click(() => {
+            this.saveText();
+        });
+    }
+
+    private saveText() {
+        var textName = $("#name").val();
+        var markdownText = this.textEditor.getValue();
+
+        var data: IStaticTextViewModel = {
+            Name: textName,
+            Text: markdownText,
+            Format: "markdown"
+        };
+
+        $("#save-error").addClass("hidden");
+        $("#save-success").addClass("hidden");
+        $("#save-progress").removeClass("hidden");
+        $("#save-button").prop("disabled", true);
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Text/SaveText",
+            data: JSON.stringify(data),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                $("#save-success").removeClass("hidden");
+                $("#save-progress").addClass("hidden");
+                $("#save-button").prop("disabled", false);
+            },
+            error: () => {
+                $("#save-error").removeClass("hidden");
+                $("#save-progress").addClass("hidden");
+                $("#save-button").prop("disabled", false);
+            }
+        });
+    }
+}
+
+interface IStaticTextViewModel {
+    Name?: string;
+    Text?: string;
+    Format?: string|number;
+}
 
 class TextEditorWrapper {
     private simplemde: SimpleMDE;
@@ -286,7 +340,7 @@ class TextEditorWrapper {
         name: "fullscreen",
         action: SimpleMDE.toggleFullScreen,
         className: "fa fa-arrows-alt no-disable no-mobile",
-        title: "Toggle Fullscreen"
+        title: "Přepnout na režim celé obrazovky"
     }
 
     static toolGuide: SimpleMDE.ToolbarIcon = {

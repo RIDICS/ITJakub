@@ -39,8 +39,19 @@
             </div>
 
             <div class="form-group">
-                <div class="col-md-offset-10 col-md-2">
-                    <input type="submit" class="form-control" name="save-text" value="Uložit"/>
+                <div class="col-md-offset-7 col-md-3">
+                    <div id="save-error" class="alert alert-danger inline-alert hidden">
+                        Chyba při ukládání textu
+                    </div>
+                    <div id="save-success" class="alert alert-success inline-alert hidden">
+                        Text uložen
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="form-control" id="save-button">
+                        <span id="save-progress" class="loading-small-inline hidden"></span>
+                        Uložit
+                    </button>
                 </div>
             </div>
         </form>

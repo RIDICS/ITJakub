@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using ITJakub.Web.DataEntities.Database.Entities;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.DataEntities.Database.Repositories;
@@ -69,6 +70,7 @@ namespace ITJakub.Web.Hub.Managers
 
         public void SaveText(string name, string text, StaticTextFormatType format)
         {
+            var now = DateTime.UtcNow;
             var staticTextEntity = m_staticTextRepository.GetStaticText(name);
             if (staticTextEntity == null)
             {
@@ -80,6 +82,7 @@ namespace ITJakub.Web.Hub.Managers
 
             staticTextEntity.Text = text;
             staticTextEntity.Format = Mapper.Map<StaticTextFormat>(format);
+            staticTextEntity.ModificationTime = now;
 
             m_staticTextRepository.Save(staticTextEntity);
         }
