@@ -39,9 +39,12 @@ class StaticTextEditor {
             dataType: "json",
             contentType: "application/json",
             success: () => {
-                $("#save-success").removeClass("hidden");
+                $("#save-success")
+                    .removeClass("hidden")
+                    .show();
                 $("#save-progress").addClass("hidden");
                 $("#save-button").prop("disabled", false);
+                $("#save-success").delay(3000).fadeOut(2000);
             },
             error: () => {
                 $("#save-error").removeClass("hidden");
@@ -64,16 +67,13 @@ class TextEditorWrapper {
     private dialogInsertImage: BootstrapDialogWrapper;
     private dialogInsertLink: BootstrapDialogWrapper;
     private isPreviewRendering = false;
+    private originalPreviewRender: (plaintext: string, preview?: HTMLElement) => string;
 
     constructor(textArea: HTMLElement) {
         this.options = {
             element: textArea,
             promptURLs: false,
             spellChecker: false,
-            previewRender: (plainText, preview) => {
-                this.previewRemoteRender(plainText, preview);
-                return "<div class=\"loading\"></div>";
-            },
             toolbar: [
                 TextEditorWrapper.toolUndo,
                 TextEditorWrapper.toolRedo,
@@ -110,9 +110,12 @@ class TextEditorWrapper {
     public create(initValue?: string) {
         this.setCustomImageTool();
         this.setCustomLinkTool();
+        this.setCustomPreviewRender();
         
         this.options.initialValue = initValue;
         this.simplemde = new SimpleMDE(this.options);
+
+        this.originalPreviewRender = this.options.previewRender;
     }
 
     public getValue(): string {
@@ -121,7 +124,6 @@ class TextEditorWrapper {
 
     private previewRemoteRender(text: string, previewElement: HTMLElement) {
         if (this.isPreviewRendering) {
-            // todo save to memory for rerendering
             return;
         }
 
@@ -144,6 +146,23 @@ class TextEditorWrapper {
                 this.isPreviewRendering = false;
             }
         });
+    }
+
+    private setCustomPreviewRender() {
+        // for SideBySide mode use faster inner markdown parser
+        TextEditorWrapper.toolSideBySide.action = (editor: SimpleMDE) => {
+            this.options.previewRender = this.originalPreviewRender;
+            SimpleMDE.toggleSideBySide(editor);
+        };
+
+        // for Preview mode use server-side markdown parser
+        TextEditorWrapper.toolPreview.action = (editor: SimpleMDE) => {
+            this.options.previewRender = (plainText: string, preview: HTMLElement) => {
+                this.previewRemoteRender(plainText, preview);
+                return "<div class=\"loading\"></div>";
+            };
+            SimpleMDE.togglePreview(editor);
+        };
     }
 
     private setCustomImageTool() {
