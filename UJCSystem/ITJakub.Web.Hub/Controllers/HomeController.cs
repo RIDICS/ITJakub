@@ -48,10 +48,17 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                var viewModel = new FeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                };
+
+                return View(viewModel);
             }
 
             using (var client = GetEncryptedClient())
@@ -60,7 +67,8 @@ namespace ITJakub.Web.Hub.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);

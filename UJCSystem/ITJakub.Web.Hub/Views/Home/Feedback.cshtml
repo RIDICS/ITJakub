@@ -8,6 +8,9 @@
 }
 
 <div class="content-container top-offset-without-submenu">
+    @Html.Partial("_StaticText", Model.PageStaticText)
+
+    @*Original text:
     <h1>Připomínky</h1>
 
     <p>
@@ -18,7 +21,7 @@
     </p>
     <p>
         <a href="http://www.ujc.cas.cz/zakladni-informace/oddeleni/oddeleni-vyvoje-jazyka/">Provozovatel</a> stránek si vyhrazuje právo nereagovat na připomínky, které jsou pro provoz <i>Vokabuláře webového</i> zcela nepřínosné či které jsou v rozporu s dobrými mravy.
-    </p>
+    </p>*@
 
     <p>
         @using (Html.BeginForm("Feedback", "Home", new {}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
@@ -28,28 +31,30 @@
                 @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
             </div>
 
-            <div class="text-area-info" style="float: right;margin-right:140px;">
+            <div class="text-area-info" style="float: right; margin-right: 140px;">
                 Max. <span class="text-area-max-chars"></span> znaků <br/>
                 Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br/>
                 Můžete používat diakritiku
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
+                @Html.LabelFor(m => m.Name, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @readonly = "readonly" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @readonly = "readonly"}) : Html.TextBoxFor(m => m.Name, new {@class = "form-control", @placeholder = "Zde zadejte Vaše jméno..."}))
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
+                @Html.LabelFor(m => m.Email, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @readonly = "readonly" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
+                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @readonly = "readonly"}) : Html.TextBoxFor(m => m.Email, new {@class = "form-control", @placeholder = "Zde zadejte Váš e-mail..."}))
                 </div>
             </div>
 
             <div class="form-group">
-                <input type="submit" value="Odeslat" class="btn btn-default" style="margin-left: 900px;">
+                <div class="col-md-offset-9 col-md-2">
+                    <input type="submit" value="Odeslat" class="btn btn-default">
+                </div>
             </div>
         }
     </p>
