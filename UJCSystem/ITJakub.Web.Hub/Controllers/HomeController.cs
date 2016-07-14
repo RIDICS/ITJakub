@@ -30,17 +30,20 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult About()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeAbout);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Contacts()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeContacts);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Copyright()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeCopyright);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Feedback()
@@ -87,12 +90,14 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult HowToCite()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeHowToCite);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Links()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeLinks);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Support()
