@@ -97,7 +97,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
@@ -147,12 +148,14 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult EditionPrinciples()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionPrinciples);
+            return View(pageStaticText);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

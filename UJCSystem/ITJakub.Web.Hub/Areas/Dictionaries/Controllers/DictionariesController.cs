@@ -62,7 +62,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult GetDictionariesWithCategories()
@@ -78,7 +79,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()

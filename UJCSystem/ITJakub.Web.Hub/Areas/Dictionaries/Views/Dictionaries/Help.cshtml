@@ -1,9 +1,8 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@{
     ViewBag.Title = "Slovníky - Nápověda";
 }
 
 <div class="content-container">
-    <h1>Nápověda</h1>
-
-    
+    @Html.Partial("_StaticText", Model)
 </div>
