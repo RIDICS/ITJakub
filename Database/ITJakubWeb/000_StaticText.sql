@@ -26,7 +26,7 @@ BEGIN TRAN
 	(
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_StaticText(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar(255) CONSTRAINT [UQ_StaticText(Name)] NOT NULL UNIQUE,
-	   [Text] varchar(max) NOT NULL,
+	   [Text] nvarchar(max) NOT NULL,
 	   [Format] smallint NOT NULL,
 	   [ModificationTime] datetime NULL,
 	   [ModificationUser] varchar(255) NULL

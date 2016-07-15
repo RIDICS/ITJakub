@@ -8,7 +8,7 @@
 
     <property name="Name" />
     
-    <property name="Text" />
+    <property name="Text" type="StringClob" />
     
     <property name="Format" />
     
