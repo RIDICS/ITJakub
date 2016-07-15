@@ -4,14 +4,14 @@
     <div class="static-text-panel">
         @if (Model.IsRecordExists)
         {
-            <a href="@Url.Action("Editor", "Text", new {textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+            <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
                 Upravit text
             </a>
         }
         else
         {
-            <a href="@Url.Action("Editor", "Text", new {textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+            <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
                 <span class="glyphicon glyphicon-pencil"></span>
                 Vytvořit text
             </a>
