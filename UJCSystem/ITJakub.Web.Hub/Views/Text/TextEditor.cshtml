@@ -39,24 +39,52 @@
             </div>
 
             <div class="form-group">
-                <div class="col-md-offset-7 col-md-3">
-                    <div id="save-error" class="alert alert-danger inline-alert hidden">
-                        Chyba při ukládání textu
-                    </div>
-                    <div id="save-success" class="alert alert-success inline-alert hidden">
-                        Text uložen
+                <div class="col-md-4" style="margin-top: -20px;">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            Autor poslední modifikace:
+                            <span id="modification-author">
+                                @if (string.IsNullOrEmpty(Model.LastModificationAuthor))
+                                {
+                                    @Html.Raw("(anonym)")
+                                }
+                                else
+                                {
+                                    @Model.LastModificationAuthor
+                                }
+                            </span><br/>
+
+                            Čas poslední modifikace:
+                            <span id="modification-time">
+                                @Model.LastModificationTime.ToLocalTime()
+                            </span>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" class="form-control btn btn-default" id="save-button">
-                        <span id="save-progress" class="loading-small-inline hidden"></span>
-                        Uložit
-                    </button>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-md-offset-10 col-md-2">
-                    <a href="@Request.Params["pageUrl"]" class="form-control btn btn-default">Zavřít editor</a>
+                
+                <div class="col-md-offset-2 col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-6">
+                            <div id="save-error" class="alert alert-danger inline-alert hidden">
+                                Chyba při ukládání textu
+                            </div>
+                            <div id="save-success" class="alert alert-success inline-alert hidden">
+                                Text uložen
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="form-control btn btn-default" id="save-button">
+                                <span id="save-progress" class="loading-small-inline hidden"></span>
+                                Uložit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-8 col-md-4">
+                            <a href="@Request.Params["pageUrl"]" class="form-control btn btn-default">Zavřít editor</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </form>

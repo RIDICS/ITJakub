@@ -38,13 +38,16 @@ class StaticTextEditor {
             data: JSON.stringify(data),
             dataType: "json",
             contentType: "application/json",
-            success: () => {
+            success: (modificationUpdate: IModificationUpdateViewModel) => {
                 $("#save-success")
                     .removeClass("hidden")
                     .show();
                 $("#save-progress").addClass("hidden");
                 $("#save-button").prop("disabled", false);
                 $("#save-success").delay(3000).fadeOut(2000);
+
+                $("#modification-author").text(modificationUpdate.User ? modificationUpdate.User : "(anonym)");
+                $("#modification-time").text(modificationUpdate.ModificationTime);
             },
             error: () => {
                 $("#save-error").removeClass("hidden");
@@ -59,6 +62,11 @@ interface IStaticTextViewModel {
     Name?: string;
     Text?: string;
     Format?: string|number;
+}
+
+interface IModificationUpdateViewModel {
+    User: string;
+    ModificationTime: string;
 }
 
 class TextEditorWrapper {

@@ -29,8 +29,9 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult SaveText(StaticTextViewModel viewModel)
         {
-            m_staticTextManager.SaveText(viewModel.Name, viewModel.Text, viewModel.Format);
-            return Json(new {});
+            var username = User.Identity.Name;
+            var modificationUpdate = m_staticTextManager.SaveText(viewModel.Name, viewModel.Text, viewModel.Format, username);
+            return Json(modificationUpdate);
         }
 
         public ActionResult RenderPreview(string text, StaticTextFormatType inputTextFormat)

@@ -286,6 +286,7 @@
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
+    <Compile Include="Models\ModificationUpdateViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
     <Compile Include="Models\Plugins\Keyboard\LayoutListItem.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />

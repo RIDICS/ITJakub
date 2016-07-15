@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using AutoMapper;
 using ITJakub.Web.DataEntities.Database.Entities;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
@@ -68,7 +69,7 @@ namespace ITJakub.Web.Hub.Managers
             return viewModel;
         }
 
-        public void SaveText(string name, string text, StaticTextFormatType format)
+        public ModificationUpdateViewModel SaveText(string name, string text, StaticTextFormatType format, string username)
         {
             var now = DateTime.UtcNow;
             var staticTextEntity = m_staticTextRepository.GetStaticText(name);
@@ -82,9 +83,12 @@ namespace ITJakub.Web.Hub.Managers
 
             staticTextEntity.Text = text;
             staticTextEntity.Format = Mapper.Map<StaticTextFormat>(format);
+            staticTextEntity.ModificationUser = username;
             staticTextEntity.ModificationTime = now;
 
             m_staticTextRepository.Save(staticTextEntity);
+
+            return Mapper.Map<ModificationUpdateViewModel>(staticTextEntity);
         }
     }
 }
