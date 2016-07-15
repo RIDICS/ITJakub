@@ -31,11 +31,7 @@
                 @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
             </div>
 
-            <div class="text-area-info" style="float: right; margin-right: 140px;">
-                Max. <span class="text-area-max-chars"></span> znaků <br/>
-                Zbývá: <span class="text-area-remaining-chars" style="color: lightseagreen"></span> znaků <br/>
-                Můžete používat diakritiku
-            </div>
+            @Html.Partial("Plugins/_CharRemaining")
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new {@class = "col-md-1 control-label"})
@@ -59,22 +55,3 @@
         }
     </p>
 </div>
-
-<script>
-    $(document).ready(function () {
-        var maxChars = $(".feedback-text-area").attr("data-val-maxlength-max");
-        $(".text-area-max-chars").html(maxChars);
-        $(".text-area-remaining-chars").html(maxChars);
-
-        $(".feedback-text-area").keyup(function () {
-            var text = $(this).val();
-            var actualCharsRemaining = maxChars - text.length;
-            if (actualCharsRemaining < 0) {
-                actualCharsRemaining = 0;
-                $(this).val(text.substring(0,maxChars));
-            }
-            $(".text-area-remaining-chars").html(actualCharsRemaining);
-        });
-
-    });
-</script>

@@ -650,6 +650,7 @@
     <Content Include="Views\Text\_TextEditorInsertImage.cshtml" />
     <Content Include="Views\Text\_TextEditorInsertLink.cshtml" />
     <Content Include="Views\Shared\_StaticText.cshtml" />
+    <Content Include="Views\Shared\Plugins\_CharRemaining.cshtml" />
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />

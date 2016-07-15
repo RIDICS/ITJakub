@@ -8,6 +8,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.Ajax.Utilities;
 
@@ -16,6 +17,13 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
     [RouteArea("CardFiles")]
     public class CardFilesController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public CardFilesController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.CardFile; }
@@ -73,6 +81,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -84,7 +94,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);

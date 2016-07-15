@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Web.Mvc;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
@@ -18,6 +18,13 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
     [RouteArea("AudioBooks")]
     public class AudioBooksController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public AudioBooksController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.AudioBook; }
@@ -35,6 +42,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -46,7 +55,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);

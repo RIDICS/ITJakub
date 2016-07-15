@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Mime;
 using System.Web.Mvc;
@@ -12,6 +11,7 @@ using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
 
@@ -20,6 +20,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     [RouteArea("Dictionaries")]
     public class DictionariesController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public DictionariesController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
 
         public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Dictionary; } }
 
@@ -77,6 +83,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -89,7 +97,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 var viewModel = new HeadwordFeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
 
