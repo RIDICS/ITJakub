@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/bohemiantextbank/css")
 }
 @section scripts{
@@ -10,5 +12,5 @@
 }
 
 <div class="content-container">
-    <h1>Nápověda</h1>
+    @Html.Partial("_StaticText", Model)
 </div>

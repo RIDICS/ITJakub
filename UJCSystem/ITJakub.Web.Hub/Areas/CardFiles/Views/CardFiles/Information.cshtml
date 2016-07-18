@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/cardfiles/css")
 }
 @section scripts{
@@ -11,6 +13,9 @@
 
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
 
     <p>
@@ -38,6 +43,6 @@
         Za vytvoření anotovacího a vyhledávacího programu <i>Bára</i>, pomocí něhož jsou lístky zveřejněny, děkujeme Mgr. Miroslavu Spoustovi.
     </p>
     <p>
-        Pro obecné připomínky ke zveřejnění Gebauerovy excerpce je možné využít nabídku <a href='@Url.Action("Feedback", "CardFiles", new { Area = "CardFiles"})'>Připomínky</a>. Připomínky k jednotlivým lístkům lze zaslat po kliknutí na odkaz <i>Připomínka</i> ve spodní části jednotlivých záznamů. <span style="color: red">– poslední větu aktualizovat dle budoucího stavu</span>
-    </p>
+        Pro obecné připomínky ke zveřejnění Gebauerovy excerpce je možné využít nabídku <a href='@Url.Action("Feedback", "CardFiles", new {Area = "CardFiles"})'>Připomínky</a>. Připomínky k jednotlivým lístkům lze zaslat po kliknutí na odkaz <i>Připomínka</i> ve spodní části jednotlivých záznamů. <span style="color: red">– poslední větu aktualizovat dle budoucího stavu</span>
+    </p>*@
 </div>

@@ -37,7 +37,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextAudioBooksInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()

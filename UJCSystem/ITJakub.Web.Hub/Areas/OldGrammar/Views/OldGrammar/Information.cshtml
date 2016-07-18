@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/oldgrammar/css")
 }
 @section scripts{
@@ -10,6 +12,9 @@
 }
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
 
     <p>V oddílu Mluvnic <i>Vokabuláře webového</i> (dříve též <i>modul digitalizovaných mluvnic, MDM</i>) poskytujeme zájemcům digitalizované verze historických mluvnic a podobných jazykových příruček z období 16. až 19. století. Tuto část <i>Vokabuláře webového</i> jsme uvedli v užívání mj. na počest stého výročí založení <i>Kanceláře Slovníku jazyka českého</i>, která dala základy dnešnímu <i>Ústavu pro jazyk český</i>. V roce 2011 byl <i>MDM</i> spuštěn v testovacím provozu s několika mluvnicemi na ukázku, v roce 2012 jsme zahájili plný provoz. Zvýšil se nejen počet prezentovaných mluvnic, ale podstatně jsme též upravili a rozšířili informace o těchto významných památkách české jazykovědy.</p>
@@ -25,6 +30,6 @@
         </ul>	
     <p>Vzácněji užité typy (textura, grotesk) jsou přepisovány jedním z konvenčních přepisů a komentovány v poznámce. K písmům více v příslušných heslech Petr VOIT. <i>Encyklopedie knihy: starší knihtisk a příbuzné obory mezi polovinou 15. a počátkem 19. století I–II</i>. 2. vyd. Praha: Libri, 2008.</p>
     <p>Digitalizované mluvnice, které zpřístupňujeme veřejnosti, pocházejí především z fondu knihovny ÚJČ. Některé knihy nemá naše knihovna k dispozici, a proto byly naskenovány z exemplářů jiných knihoven, jako <i>Knihovny Národního muzea</i> v Praze, <i>Moravské zemské knihovny</i> v Brně, <i>Národní knihovny České republiky</i> v Praze, <i>Strahovské knihovny</i> v Praze, <i>Vědecké knihovny v Olomouci</i>. <i>Státnímu oblastnímu archivu v Třeboni</i> jsme zavázáni za poskytnutí digitálních kopií a souhlasu se zveřejněním v případě tzv. Husovy <i>Abecedy</i> a traktátu <i>Orthographia Bohemica</i>. Některé knihy pocházejí ze soukromých sbírek. Děkujeme těmto institucím za laskavý souhlas se zveřejněním digitalizovaných kopií v rámci <i>Vokabuláře webového</i>. O nositeli reprodukčních práv k daným snímkům je možné se dočíst v detailním popisu příslušné knihy a také prostřednictvím vodoznaku, kterým jsou digitalizované obrazy opatřeny, např. ÚJČ = kniha pochází z fondu knihovny <i>Ústavu pro jazyk český AV ČR, v. v. i.</i>; KNM = kniha pochází z fondu <i>Knihovny Národního muzea</i> v Praze; MZK = kniha pochází z fondu <i>Moravské zemské knihovny</i> v Brně; NK ČR = kniha pochází z fondu <i>Národní knihovny ČR</i> v Praze; VKOL = kniha pochází z fondu <i>Vědecké knihovny v Olomouci</i>; Strahov = kniha pochází z fondu <i>Strahovské knihovny</i> v Praze; TŘEBOŇ = rukopis pochází z fondu <i>Státního oblastního archivu v Třeboni</i>; SOUKROMÉ = kniha pochází ze sbírky soukromé osoby.</p>
-    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze je bez souhlasu oddělení vývoje jazyka publikovat v žádných dalších textech. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46 Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>
+    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze je bez souhlasu oddělení vývoje jazyka publikovat v žádných dalších textech. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46 Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>*@
 
 </div>

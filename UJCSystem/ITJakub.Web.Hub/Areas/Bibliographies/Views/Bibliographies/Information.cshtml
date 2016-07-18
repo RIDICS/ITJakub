@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/bibliographies/css")
 }
 @section scripts{
@@ -10,7 +12,6 @@
 }
 
 <div class="content-container">
-    <h1>Informace</h1>
-
-    Zde budou informace k Bibliografickemu modulu
+    @Html.Partial("_StaticText", Model)
+    
 </div>

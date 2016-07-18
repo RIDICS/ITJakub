@@ -24,5 +24,6 @@
         public const string TextCardFilesInfo = "cardfiles-info";
         public const string TextAudioBooksInfo = "audio-info";
         public const string TextToolsInfo = "tools-info";
+        public const string TextToolsList = "tools-list";
     }
 }

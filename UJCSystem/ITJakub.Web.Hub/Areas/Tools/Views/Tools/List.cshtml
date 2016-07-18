@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/tools/css")
 }
 @section scripts{
@@ -10,6 +12,6 @@
 }
 
 <div class="content-container">
-    <h1>Seznam</h1>
+    @Html.Partial("_StaticText", Model)
 
 </div>

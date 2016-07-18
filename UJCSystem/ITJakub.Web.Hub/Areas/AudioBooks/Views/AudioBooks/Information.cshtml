@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/audiobooks/css")
 }
 @section scripts{
@@ -10,6 +12,9 @@
 }
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
 
     <p>
@@ -23,5 +28,5 @@
     </p>
     <p>
         Nahrávky jsou vystaveny pouze pro nekomerční využití, pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.
-    </p>
+    </p>*@
 </div>

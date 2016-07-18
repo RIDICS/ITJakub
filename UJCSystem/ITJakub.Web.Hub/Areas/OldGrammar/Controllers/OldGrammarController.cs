@@ -58,7 +58,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextGrammarInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
@@ -107,7 +108,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextGrammarHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult Listing(string bookId, string searchText, string page)

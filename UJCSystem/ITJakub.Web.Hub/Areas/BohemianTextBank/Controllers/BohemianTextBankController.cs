@@ -45,7 +45,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextTextBankInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
@@ -95,7 +96,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextTextBankHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult GetCorpusWithCategories()

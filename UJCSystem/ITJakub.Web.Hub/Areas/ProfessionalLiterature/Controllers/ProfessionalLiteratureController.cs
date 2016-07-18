@@ -85,7 +85,8 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
@@ -135,7 +136,8 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

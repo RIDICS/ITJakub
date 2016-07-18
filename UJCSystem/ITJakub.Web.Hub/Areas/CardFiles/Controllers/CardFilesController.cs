@@ -76,7 +76,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextCardFilesInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()

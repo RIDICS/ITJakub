@@ -23,7 +23,8 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsInfo);
+            return View(pageStaticText);
         }
         public ActionResult Feedback()
         {
@@ -71,7 +72,8 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 
         public ActionResult List()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsList);
+            return View(pageStaticText);
         }
 
     }

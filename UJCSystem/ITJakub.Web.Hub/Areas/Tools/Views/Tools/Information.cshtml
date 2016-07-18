@@ -1,4 +1,6 @@
-﻿@section styles{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@section styles{
     @Styles.Render("~/itjakub/tools/css")
 }
 @section scripts{
@@ -10,6 +12,9 @@
 }
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
 
     <p>
@@ -20,5 +25,5 @@
     </p>
     <p>
         V případě jakýchkoli dotazů můžete využít kontaktní formulář <a href='@Url.Action("Feedback", "Tools", new { Area = "Tools"})'>Připomínek</a> nebo se obrátit na správce stránky prostřednictvím e-mailové adresy <a href="mailto:vokabular@ujc.cas.cz">vokabular@ujc.cas.cz</a>.
-    </p>
+    </p>*@
 </div>
