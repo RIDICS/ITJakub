@@ -645,7 +645,6 @@
     </None>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
-    <Content Include="Scripts\Wheelzoom\wheelzoom.js" />
     <Content Include="Views\Text\TextEditor.cshtml" />
     <Content Include="Views\Text\_TextEditorInsertImage.cshtml" />
     <Content Include="Views\Text\_TextEditorInsertLink.cshtml" />
@@ -674,8 +673,6 @@
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
     <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
-    <Content Include="Scripts\Wheelzoom\daisy.jpg" />
-    <Content Include="Scripts\Wheelzoom\demo.html" />
     <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -705,8 +702,6 @@
     <Content Include="Views\News\AddNews.cshtml" />
     <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
     <Content Include="Views\EditionNote\EditionNote.cshtml" />
-    <Content Include="Scripts\Wheelzoom\LICENSE.md" />
-    <Content Include="Scripts\Wheelzoom\readme.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

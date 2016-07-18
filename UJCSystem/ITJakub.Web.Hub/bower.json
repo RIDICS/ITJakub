@@ -13,6 +13,7 @@
     "jquery-appear": "0.2.6",
     "jquery-eu-cookie-law-popup": "1.1.0",
     "jquery-zoom": "1.7.15",
+    "wheelzoom": "3.0.4",
     "simplemde": "1.11.2"
   }
 }

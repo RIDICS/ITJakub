@@ -52,7 +52,7 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/imagezoom").Include(
-                "~/Scripts/Wheelzoom/wheelzoom.js",
+                "~/wwwroot/lib/Wheelzoom/wheelzoom.js",
                 "~/wwwroot/lib/jquery-zoom/jquery.zoom.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/simplemde").Include(
