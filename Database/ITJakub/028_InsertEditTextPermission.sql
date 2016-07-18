@@ -2,10 +2,11 @@
 USE ITJakubDB;
 
 BEGIN TRAN;
+
 	INSERT INTO [dbo].[SpecialPermission]
-		 ( PermissionType, PermissionCategorization, CanEditionPrintText )
+		 ( PermissionType, PermissionCategorization, CanEditStaticText )
 	VALUES
-		 ( 'EditionPrintText', 0, 1 );
+		 ( 'EditStaticText', 0, 1 );
 
 
 
@@ -18,14 +19,14 @@ BEGIN TRAN;
 	    SpecialPermission,
 	    [Group]
 	)
-	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp WHERE sp.PermissionType = 'EditionPrintText'
+	SELECT sp.Id, @AdminGroupId FROM dbo.SpecialPermission sp WHERE sp.PermissionType = 'EditStaticText'
 
 
 
-	INSERT INTO [dbo].[DatabaseVersion]
+    INSERT INTO [dbo].[DatabaseVersion]
 		 ( DatabaseVersion )
-	VALUES
-		 ( '025' );
+    VALUES
+		 ( '028' );
 	-- DatabaseVersion - varchar
 --ROLLBACK
 COMMIT;

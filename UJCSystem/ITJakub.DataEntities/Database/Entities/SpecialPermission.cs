@@ -140,4 +140,14 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual bool CanEditionPrintText { get; set; }
     }
+
+    public class EditStaticTextPermission : SpecialPermission
+    {
+        public EditStaticTextPermission()
+        {
+            PermissionCategorization = SpecialPermissionCategorization.Action;
+        }
+
+        public virtual bool CanEditStaticText { get; set; }
+    }
 }

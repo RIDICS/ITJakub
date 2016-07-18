@@ -563,6 +563,7 @@ class SpecialPermissionTextResolver {
     private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
     private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
     private static editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
+    private static editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -587,6 +588,8 @@ class SpecialPermissionTextResolver {
                 return "Derivace hláskových podob";
             case this.editionPrintPermission:
                 return "Tisk edic";
+            case this.editStaticTextPermission:
+                return "Úprava statických textů";
             default:
                 return "Neznámé právo";
         }
@@ -616,6 +619,8 @@ class SpecialPermissionTextResolver {
                 return "Derivace hláskových podob";
             case this.editionPrintPermission:
                 return "Tisk edic";
+            case this.editStaticTextPermission:
+                return "Úprava statických textů";
             default:
                 return "Neznámé právo";
         }

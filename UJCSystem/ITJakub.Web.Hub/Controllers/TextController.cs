@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
@@ -21,12 +22,14 @@ namespace ITJakub.Web.Hub.Controllers
             };
         }
 
+        [Authorize(Roles = CustomRole.CanEditStaticText)]
         public ActionResult Editor(string textName)
         {
             var viewModel = m_staticTextManager.GetText(textName);
             return View("TextEditor", viewModel);
         }
 
+        [Authorize(Roles = CustomRole.CanEditStaticText)]
         public ActionResult SaveText(StaticTextViewModel viewModel)
         {
             var username = User.Identity.Name;
@@ -34,6 +37,7 @@ namespace ITJakub.Web.Hub.Controllers
             return Json(modificationUpdate);
         }
 
+        [Authorize(Roles = CustomRole.CanEditStaticText)]
         public ActionResult RenderPreview(string text, StaticTextFormatType inputTextFormat)
         {
             string result;
