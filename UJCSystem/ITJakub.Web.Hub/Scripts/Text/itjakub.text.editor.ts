@@ -194,6 +194,14 @@ class TextEditorWrapper {
         TextEditorWrapper.toolLink.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
             $("#editor-insert-link-label").val(selectedText);
+
+            if (selectedText.startsWith("http")) {
+                $("#editor-insert-link-url").val(selectedText);
+            }
+            else if (/^.+@.+\..+/.test(selectedText)) { // test if string is e-mail
+                $("#editor-insert-link-url").val("mailto:" + selectedText);
+            }
+
             this.dialogInsertLink.show();
         };
 
@@ -215,6 +223,14 @@ class TextEditorWrapper {
     private customLinkAction() {
         var url = $("#editor-insert-link-url").val();
         var label = $("#editor-insert-link-label").val();
+
+        if (!url) {
+            url = "#";
+        }
+        if (!label) {
+            label = url;
+        }
+
         var linkText = "[" + label + "](" + url + ")";
 
         var cm = this.simplemde.codemirror;
@@ -400,6 +416,10 @@ class BootstrapDialogWrapper {
     constructor(dialogElement: JQuery, clearInputElements: boolean) {
         this.clearInputElements = clearInputElements;
         this.element = dialogElement;
+
+        this.element.on("hidden.bs.modal", () => {
+            this.clear();
+        });
     }
 
     public show() {
@@ -411,6 +431,9 @@ class BootstrapDialogWrapper {
 
     public hide() {
         this.element.modal("hide");
+    }
+
+    private clear() {
         if (this.clearInputElements) {
             $("input", this.element).val("");
             $("textarea", this.element).val("");
