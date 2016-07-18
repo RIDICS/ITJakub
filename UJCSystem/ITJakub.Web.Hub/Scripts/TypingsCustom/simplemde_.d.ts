@@ -1,7 +1,7 @@
 ﻿// Type definitions for SimpleMDE v1.11.2
 // Project: https://github.com/NextStepWebs/simplemde-markdown-editor
-// Definitions by: Vladimír Pokorný <https://github.com/vladapokorny>
-// Definitions: TODO
+// Definitions by: Scalesoft <https://github.com/Scalesoft>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 
 declare namespace SimpleMDE {
     interface AutoSaveOptions {
@@ -98,7 +98,7 @@ declare class SimpleMDE {
     constructor(options: SimpleMDE.Options);
     value(): string;
     value(val: string): void;
-    codemirror: any; // TODO specific type
+    codemirror: any;
     toTextArea(): void;
     isPreviewActive(): boolean;
     isSideBySideActive(): boolean;
