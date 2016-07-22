@@ -6,5 +6,12 @@
         {
             var container = Container.Current;
         }
+
+        public static void CleanUpContainers()
+        {
+            var container = Container.Current;
+            Container.Current = null;
+            container.Dispose();
+        }
     }
 }

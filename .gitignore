@@ -73,6 +73,10 @@ packages/
 *js.[Mm]ap
 *.js
 
+#TypeScript type definitions are part of the project - must be commited
+#*.d.ts
+#!*_.d.ts
+
 #Less
 *.css
 *css.[Mm]ap
@@ -80,3 +84,6 @@ packages/
 #Store publish
 [Aa]ppPackages/
 *.csdat
+
+#Bower libraries
+*/*/wwwroot/lib/

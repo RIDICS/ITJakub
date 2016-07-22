@@ -7,6 +7,7 @@ using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
@@ -16,6 +17,13 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
     [RouteArea("Bibliographies")]
     public class BibliographiesController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public BibliographiesController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.BibliographicalItem; }
@@ -33,11 +41,14 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextBibliographiesInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -49,7 +60,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);

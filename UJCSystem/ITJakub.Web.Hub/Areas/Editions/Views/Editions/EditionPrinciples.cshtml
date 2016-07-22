@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@{
     ViewBag.Title = "Edice - Ediční zásady";
 }
 
@@ -10,6 +11,9 @@
 }
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Obecné ediční zásady</h1>
 
     <p>Při vytváření elektronických edic je uplatňován kritický přístup k vydávanému textu. Texty jsou transkribovány, tj. převedeny do novočeského pravopisného systému, s tím, že jsou respektovány specifické rysy soudobého jazyka. Elektronické edice vznikají na akademickém pracovišti zabývajícím se lingvistickým výzkumem, proto je kladen mimořádný důraz na interpretaci a spolehlivý záznam jazyka pramenného textu.</p>
@@ -64,7 +68,7 @@
                 </ul>
             </li>
         </ul>
-</p>
+    </p>*@
 
 
 </div>

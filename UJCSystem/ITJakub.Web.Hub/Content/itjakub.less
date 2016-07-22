@@ -266,6 +266,11 @@ ul.navbar-right.navbar-login {
     color: @item-background-color;
 }
 
+.inline-alert {
+    margin-bottom: 0;
+    padding: 6px 12px;
+}
+
 
 // styles for feedback area
 
@@ -345,3 +350,32 @@ ul.navbar-right.navbar-login {
 }
 
 // end of styles for feedback area
+
+.static-text-container ul {
+    display: block;
+    list-style: disc;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right:0; 
+}
+
+.static-text-panel {
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 6px;
+}
+
+a.btn.btn-default:hover {
+    color: #333;
+}
+
+.loading-small-inline {
+    background: url(Images/small_trans_loading.gif) no-repeat center;
+    width: 20px;
+    display: inline-block;
+}
+
+.loading-small-inline::before {
+    content: "";
+    display: inline-block;
+}

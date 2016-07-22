@@ -16,5 +16,7 @@ namespace ITJakub.Web.Hub.Models
         [MaxLength(2000)]
         [Display(Name = "Text")]
         public string Text { get; set; }
+
+        public StaticTextViewModel PageStaticText { get; set; }
     }
 }

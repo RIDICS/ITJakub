@@ -1,4 +1,6 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@{
     ViewBag.Title = "Podpora";
 }
 
@@ -7,6 +9,9 @@
 }
 
 <div class="content-container top-offset-without-submenu">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Podpora</h1>
 
     <br/>
@@ -19,5 +24,5 @@
         2010–2014 projekt GA ČR č. P406/10/1140 <i>Výzkum historické češtiny (na základě nových materiálových bází)</i><br>
         2010–2014 projekt GA ČR č. P406/10/1153 <i>Slovní zásoba staré češtiny a její lexikografické zpracování</i><br>
         2005–2011 projekt MŠMT ČR LC 546 <i>Výzkumné centrum vývoje staré a střední češtiny (od praslovanských kořenů po současný stav)</i>
-    </p>
+    </p>*@
 </div>

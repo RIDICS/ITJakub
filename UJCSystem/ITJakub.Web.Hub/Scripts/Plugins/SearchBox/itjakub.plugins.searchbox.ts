@@ -2,7 +2,7 @@
      private inputField: string;
      private urlWithController: string;
      private options: Twitter.Typeahead.Options;
-     private datasets: Array<Twitter.Typeahead.Dataset>;
+     private datasets: Array<Twitter.Typeahead.Dataset<string>>;
      private bloodhounds: Array<Bloodhound<string>>;
 
      constructor(inputFieldElement: string, controllerPath: string) {
@@ -60,17 +60,17 @@
              datumTokenizer: Bloodhound.tokenizers.whitespace,
              queryTokenizer: Bloodhound.tokenizers.whitespace,
              prefetch: prefetchUrl,
-             remote: remoteOptions,
-             limit: 5
+             remote: remoteOptions
          });
 
 
-         var dataset: Twitter.Typeahead.Dataset = {
+         var dataset: Twitter.Typeahead.Dataset<string> = {
              name: name,             
              source: bloodhound,
              templates: {
                  header: "<div class=\"tt-suggestions-header\">" + groupHeader + "</div>"
-             }
+             },
+             limit: 5
          };
 
          this.bloodhounds.push(bloodhound);

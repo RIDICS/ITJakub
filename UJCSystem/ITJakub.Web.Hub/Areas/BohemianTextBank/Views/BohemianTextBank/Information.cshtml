@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
 @section styles{
     @Styles.Render("~/itjakub/bohemiantextbank/css")
 }
@@ -12,11 +13,14 @@
 
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
     <p><i>Staročeský a středněčeský korpus</i> (dříve staročeská a středněčeská textová banka) vznikají v rámci textologické a ediční činnosti oddělení vývoje jazyka. Jsou budovány od roku 2006, odkdy jsou texty psané historickou češtinou, jejichž transkribované edice v oddělení vznikají, formálně upravovány rovněž s ohledem na korpusové zpřístupnění prostřednictvím <i>Vokabuláře webového</i>. Zprvu se hlavní důraz kladl na staročeské období – <i>staročeský korpus</i> je k dipozici veřejnosti již od r. 2008; od roku 2015 zpřístupňujeme též <i>středněčeský korpus</i>.</p>
     <p><i>Staročeský korpus</i> zahrnuje texty z období od nejstarších počátků historické češtiny přibližně do konce 15. století, <i>středněčeský korpus</i> zpřístupňuje texty z doby od 16. století do konce 18. století. Zařazené texty zřídka mírně přesahují stanovený horní limit – a to v případech, kdy lze předpokládat, že text vznikl ve starším období. Texty jsou do korpusu zařazovány výhradně v transkripci do novočeského pravopisu. Výchozím textem (pramenem) je rukopis, prvotisk či starý tisk. Jen výjimečně používáme jako pramen novodobou edici, a to tehdy, je-li originální pramen nedostupný či obtížně dostupný nebo je-li novodobá edice jen těžko překonatelná (mj. vzhledem k jejímu rozsahu, jako je tomu např. u edice V. Kyase a kol., <i>Staročeská Bible drážďanská a olomoucká</i>).</p>
     <p>Zařazené texty prošly při transkripci podrobnou lingvistickou analýzou, proto je lze prezentovat s doprovodnými informacemi, a to alespoň v té míře, jakou webová prezentace dovolí. Tyto informace se týkají pramenného textu jako artefaktu a charakteristiky jazyka, jímž je pramen zaznamenán. Pro zveřejnění těchto informací bylo třeba vytvořit speciální korpusový manažer, jehož autorem je PhDr. Pavel Květoň, Ph.D. Přehledný návod k užívání manažeru je obsažen v aplikaci pod záložkou <a href='@Url.Action("Help", "BohemianTextBank", new { Area = "BohemianTextBank"})'>Nápověda</a>. Protože jsou korpusy postupně doplňovány, upravovány a opravovány, je při citaci korpusových dat nezbytné uvádět verzi korpusu, tj. datum, které je uvedeno v nabídkovém menu korpusového manažeru.</p>
     <p>Korpusy nejsou anotované; až na výjimky neobsahují lemmatizaci ani morfologické charakteristiky.</p>
-    <p>Pro připomínky ke korpusům lze užít nabídku <a href='@Url.Action("Feedback", "BohemianTextBank", new { Area = "BohemianTextBank"})'>Připomínky</a>.</p>
+    <p>Pro připomínky ke korpusům lze užít nabídku <a href='@Url.Action("Feedback", "BohemianTextBank", new { Area = "BohemianTextBank"})'>Připomínky</a>.</p>*@
 
 </div>

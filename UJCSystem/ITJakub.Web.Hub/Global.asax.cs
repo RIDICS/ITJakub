@@ -18,5 +18,10 @@ namespace ITJakub.Web.Hub
             ContainerConfig.InitializeContainers();
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
+
+        protected void Application_End()
+        {
+            ContainerConfig.CleanUpContainers();
+        }
     }
 }

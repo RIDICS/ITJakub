@@ -1,8 +1,12 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+@{
     ViewBag.Title = "Slovníky - Informace";
 }
 
 <div class="content-container">
+    @Html.Partial("_StaticText", Model)
+
+    @*Original text:
     <h1>Informace</h1>
 
     <p>V oddílu <i>Slovníky</i> Vokabuláře webového poskytujeme zájemcům o historickou češtinu informace o její slovní zásobě. Tvoří jej různorodé lexikální zdroje, které umožňují jednotné <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>vyhledávání</a> a <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>listování</a>, tj. procházení slovníkovými zdroji „po listech“. Poučení o způsobech, jakými lze dotaz formulovat, najde uživatel v <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>Nápovědě</a>.</p>
@@ -11,6 +15,6 @@
     <p>Formou digitalizovaných obrazů doplněných o metainformace (soupis hesel a podheslí) zveřejňujeme <a href="@Url.Action("Listing", "Dictionaries", new {xmlId = "{7AC74E21-53E9-4E4D-A7CC-CA739A962E58}"})">Slovník česko-německý</a> Josefa Jungmanna. Jedná se o fotokopie archivního exempláře, v němž sám autor označoval opravy a doplňky textu pro zamýšlené druhé vydání slovníku. Digitální kopii lze prohlížet dvěma způsoby: pomocí listování a vyhledávání v heslových slovech a podheslích, a to podle transliterované i transkribované podoby.</p>
     <p>Informace získané vyhledáváním či listováním se liší v závislosti na zdroji, z něhož jsou čerpány – slovníky poskytnou heslovou stať, heslář ke kartotéce Staročeského slovníku pochopitelně pouze samotný výraz bez dalšího lexikografického zpracování apod. Získané údaje lze archivovat v tiskové verzi.</p>
     <p>Elektronický slovník staré češtiny, Staročeský slovník i heslář ke kartotéce Staročeského slovníku jsou díla vzniklá (či vznikající) na půdě oddělení vývoje jazyka ÚJČ; na vzniku Indexu staročeských osobních jmen Jana Svobody se podíleli pracovníci ÚJČ PhDr. Libuše Olivová-Nezbedová, CSc., a doc. PhDr. & RNDr. Karel Oliva, Dr. Za možnost zapojit do <i>Vokabuláře webového</i> elektronickou verzi Malého staročeského slovníku děkujeme autorům či nositelům autorských práv k tomuto dílu, jmenovitě prof. PhDr. Karlu Kučerovi, CSc., doc. PhDr. Heleně Běličové, DrSc., a prof. PhDr. Karlu Kamišovi, CSc., kteří našemu záměru laskavě vyšli vstříc. Za souhlas s uveřejněním <a href='#'>dodatku k Malému staročeskému slovníku</a>, tj. stati Václava Křístka o staročeských pravopisných systémech, děkujeme nositelce autorských práv k uvedené práci PhDr. Marii Bělíkové. Stejně tak patří naše poděkování Středisku <a href='#'>Teiresiás</a>, zastoupenému PhDr. Petrem Peňázem, které nám poskytlo Malý staročeský slovník v elektronické formě.</p>
-    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>
+    <p>Obrazové i textové materiály jsou vystaveny pouze pro studijní a badatelské účely a nelze rozšiřovat jakoukoliv jejich část, ať již samostatně, či v rámci jiného projektu. V případě zájmu nás kontaktujte elektronicky na adrese <a href="mailto:vokabular@ujc.cas.cz?subject=zajem">vokabular@ujc.cas.cz</a> nebo písemně: oddělení vývoje jazyka, Ústav pro jazyk český AV ČR, v. v. i., Valentinská 1, 116 46, Praha 1. Veškeré přejímané informace podléhají citačnímu úzu vědecké literatury.</p>*@
 
 </div>

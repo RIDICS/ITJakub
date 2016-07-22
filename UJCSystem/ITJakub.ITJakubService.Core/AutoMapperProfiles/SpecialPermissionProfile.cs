@@ -49,6 +49,9 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<EditionPrintTextPermission, EditionPrintPermissionContract>()
                 .ForMember(dest => dest.CanEditionPrintText, opts => opts.MapFrom(src => src.CanEditionPrintText));
+
+            CreateMap<EditStaticTextPermission, EditStaticTextPermissionContract>()
+                .ForMember(dest => dest.CanEditStaticText, opts => opts.MapFrom(src => src.CanEditStaticText));
         }
     }
 }

@@ -177,17 +177,16 @@
         this.books[currentLeafItem].checkboxes.push(checkbox);
 
         var info = this.createCallbackInfo(String(this.books[currentLeafItem].id), this.books[currentLeafItem].name, itemDiv);
-        var self = this;
-        $(checkbox).change(function (event: Event, propagate: boolean) {
-            if (this.checked) {
-                self.addToSelectedItems(info);
+        $(checkbox).change((event: Event, propagate: boolean) => {
+            if (checkbox.checked) {
+                this.addToSelectedItems(info);
             } else {
-                self.removeFromSelectedItems(info);
+                this.removeFromSelectedItems(info);
             }
 
             if (typeof propagate === "undefined" || propagate === null || propagate) { //Deafault behaviour is to propagate change
-                self.propagateSelectChange(<HTMLDivElement>$(this).parent(".concrete-item")[0]);
-                self.propagateLeafSelectChange(this, info);
+                this.propagateSelectChange(<HTMLDivElement>$(checkbox).parent(".concrete-item")[0]);
+                this.propagateLeafSelectChange(checkbox, info);
             }
         });
 
@@ -198,12 +197,12 @@
             var saveStarSpan = document.createElement("span");
             $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
 
-            $(saveStarSpan).click(function () {
-                $(this).siblings(".delete-item").show();
-                $(this).hide();
+            $(saveStarSpan).click(() => {
+                $(saveStarSpan).siblings(".delete-item").show();
+                $(saveStarSpan).hide();
                 //TODO populate request on save to favorites
-                if (self.callbackDelegate.starSaveItemCallback) {
-                    self.callbackDelegate.starSaveItemCallback(info);
+                if (this.callbackDelegate.starSaveItemCallback) {
+                    this.callbackDelegate.starSaveItemCallback(info);
                 }
             });
 
@@ -212,12 +211,12 @@
             var deleteStarSpan = document.createElement("span");
             $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
 
-            $(deleteStarSpan).click(function () {
-                $(this).siblings(".save-item").show();
-                $(this).hide();
+            $(deleteStarSpan).click(() => {
+                $(deleteStarSpan).siblings(".save-item").show();
+                $(deleteStarSpan).hide();
                 //TODO populate request on delete from favorites
-                if (self.callbackDelegate.starDeleteItemCallback) {
-                    self.callbackDelegate.starDeleteItemCallback(info);
+                if (this.callbackDelegate.starDeleteItemCallback) {
+                    this.callbackDelegate.starDeleteItemCallback(info);
                 }
             });
 

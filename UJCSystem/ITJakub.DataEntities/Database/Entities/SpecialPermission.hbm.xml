@@ -117,6 +117,14 @@
       </property>
       
     </subclass>
+
+    <subclass name="EditStaticTextPermission" discriminator-value="EditStaticText">
+
+      <property name="CanEditStaticText">
+        <column name="CanEditStaticText" sql-type="bit" not-null="true" />
+      </property>
+
+    </subclass>
     
   </class>
 </hibernate-mapping>

@@ -10,6 +10,7 @@ using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
@@ -19,6 +20,13 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
     [RouteArea("OldGrammar")]
     public class OldGrammarController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public OldGrammarController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Grammar; } }
 
         public ActionResult Index()
@@ -50,11 +58,14 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextGrammarInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -66,7 +77,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);
@@ -96,7 +108,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextGrammarHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult Listing(string bookId, string searchText, string page)

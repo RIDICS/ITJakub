@@ -1,0 +1,100 @@
+﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+
+@{
+    ViewBag.Title = "Administrace - Upravit statický text";
+}
+
+@section styles{
+    @Styles.Render("~/Content/simplemdecss")
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/simplemde")
+    @Scripts.Render("~/itjakub/text/javascript")
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h2>Textový editor</h2>
+
+    @if (Request.Params["textName"] != null)
+    {
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="name" class="col-md-2 control-label">Název stránky</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="name" disabled="disabled" value="@Model.Name">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="text" class="col-md-2 control-label">Text stránky:</label>
+                <div class="col-md-3">
+                    <div class="alert alert-info inline-alert">Editor používá syntaxi Markdown</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <textarea id="text">@Model.Text</textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-4" style="margin-top: -20px;">
+                    <div class="panel panel-default">
+
+                        <div class="panel-body">
+                            Autor poslední modifikace:
+                            <span id="modification-author">
+                                @if (string.IsNullOrEmpty(Model.LastModificationAuthor))
+                                {
+                                    @Html.Raw("(anonym)")
+                                }
+                                else
+                                {
+                                    @Model.LastModificationAuthor
+                                }
+                            </span><br/>
+
+                            Čas poslední modifikace:
+                            <span id="modification-time">
+                                @Model.LastModificationTime.ToLocalTime()
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-offset-2 col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-6">
+                            <div id="save-error" class="alert alert-danger inline-alert hidden">
+                                Chyba při ukládání textu
+                            </div>
+                            <div id="save-success" class="alert alert-success inline-alert hidden">
+                                Text uložen
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="form-control btn btn-default" id="save-button">
+                                <span id="save-progress" class="loading-small-inline hidden"></span>
+                                Uložit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-8 col-md-4">
+                            <a href="@Request.Params["pageUrl"]" class="form-control btn btn-default">Zavřít editor</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        @Html.Partial("_TextEditorInsertImage")
+        @Html.Partial("_TextEditorInsertLink")
+    }
+    else
+    {
+        <div class="alert alert-danger">Nebyl zvolen žádný text pro editaci.</div>
+    }
+
+</div>

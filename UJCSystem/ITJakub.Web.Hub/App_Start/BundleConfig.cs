@@ -7,31 +7,36 @@ namespace ITJakub.Web.Hub
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+            // ----- Scripts -----
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                "~/Scripts/jquery-{version}.js"));
+                "~/wwwroot/lib/jquery/dist/jquery.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-            "~/Scripts/jquery-ui-{version}.js"));
+                "~/wwwroot/lib/jquery-ui/jquery-ui.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                "~/Scripts/jquery.validate*"));
+                "~/wwwroot/lib/jquery-validation/dist/jquery.validate.js",
+                "~/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryappear").Include(
-                "~/Scripts/jquery.appear.js"));
+                "~/wwwroot/lib/jquery-appear/src/jquery.appear.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                "~/Scripts/modernizr-*"));
+                "~/wwwroot/lib/modernizr/modernizr.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/cookies").Include("~/Scripts/cookies/jquery-eu-cookie-law-popup.js"));
+            bundles.Add(new ScriptBundle("~/bundles/cookies").Include(
+                "~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js",
+                "~/Scripts/Plugins/itjakub.eucookiepopup.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js",
-                "~/Scripts/respond.js"));
+                "~/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+                "~/wwwroot/lib/respond/dest/respond.src.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
-                     "~/Scripts/dropzone/dropzone.js"));
+                "~/wwwroot/lib/dropzone/downloads/dropzone.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
                 "~/Scripts/typeahead.bundle.js"));
@@ -47,8 +52,11 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/imagezoom").Include(
-                "~/Scripts/Plugins/Wheelzoom/wheelzoom.js",
-                "~/Scripts/Plugins/Zoommaster/jquery.zoom.min.js"));
+                "~/wwwroot/lib/Wheelzoom/wheelzoom.js",
+                "~/wwwroot/lib/jquery-zoom/jquery.zoom.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/simplemde").Include(
+                "~/wwwroot/lib/simplemde/dist/simplemde.min.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
@@ -77,30 +85,42 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
                 "~/Scripts/Permission/itjakub.permission.user.js",
-                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/group/javascript").Include(
                 "~/Scripts/Permission/itjakub.permission.group.js",
-                "~/Scripts/Permission/itjakub.permission.typeahead.js"));
+                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
+                "~/Scripts/Text/itjakub.text.editor.js"));
+
+
+            // ----- Styles ------
 
             bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
                 "~/Content/Permission/itjakub.permission.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.css",
+                "~/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
                 "~/Content/site.css"));
 
-            bundles.Add(new StyleBundle("~/Content/cookiescss").Include("~/Scripts/cookies/css/jquery-eu-cookie-law-popup.css"));
+            bundles.Add(new StyleBundle("~/Content/cookiescss").Include(
+                "~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css",
+                "~/Content/ITJakub.EuCookiePopup.css"));
 
-            bundles.Add(new StyleBundle("~/Content/itjakub").Include("~/Content/ITJakub.css"));
+            bundles.Add(new StyleBundle("~/Content/itjakub").Include(
+                "~/Content/ITJakub.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
-                     "~/Scripts/dropzone/css/basic.css",
-                     "~/Scripts/dropzone/css/dropzone.css"));
+                "~/wwwroot/lib/dropzone/downloads/css/basic.css",
+                "~/wwwroot/lib/dropzone/downloads/css/dropzone.css"));
 
             bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
-              "~/Content/themes/base/*.css"));
+                "~/wwwroot/lib/jquery-ui/themes/base/*.css"));
+
+            bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
+                "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
+                "~/Content/ITJakub.TextEditor.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

@@ -1,15 +1,22 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNet.Identity.Owin;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public class HomeController : BaseController
-    {        
+    {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public HomeController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         private ApplicationUserManager UserManager
         {
             get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
@@ -23,25 +30,35 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult About()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeAbout);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Contacts()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeContacts);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Copyright()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeCopyright);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                var viewModel = new FeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                };
+
+                return View(viewModel);
             }
 
             using (var client = GetEncryptedClient())
@@ -50,7 +67,8 @@ namespace ITJakub.Web.Hub.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);
@@ -80,17 +98,20 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult HowToCite()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeHowToCite);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Links()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeLinks);
+            return View(staticTextViewModel);
         }
 
         public ActionResult Support()
         {
-            return View();
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeSupport);
+            return View(staticTextViewModel);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

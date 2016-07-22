@@ -160,6 +160,11 @@ namespace ITJakub.Web.Hub.Identity
                 claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditionPrint));
             }
 
+            if (specialPermissions.OfType<EditStaticTextPermissionContract>().Count() != 0)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditStaticText));
+            }
+
             return claims;
         }
     }

@@ -9,22 +9,13 @@
 
 class GroupPermissionEditor {
     private mainContainer: string;
-    private searchBox: ConcreteInstanceSearchBox;
-    private groupSearchBox: ConcreteInstanceSearchBox;
+    private searchBox: SingleSetTypeaheadSearchBox<IGroup>;
     private currentGroupSelectedItem: IGroup;
     private bookSelector: BooksSelector;
     private specialPermissionSelector: SpecialPermissionsSelector;
 
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
-    }
-
-    public getPrintableItem(item: IGroup): IPrintableItem {
-        var printableGroup: IPrintableItem = {
-            Name: item.Name,
-            Description: item.Description
-        };
-        return printableGroup;
     }
 
     private searchboxStateChangedCallback(selectedExists: boolean, selectionConfirmed: boolean) {
@@ -40,7 +31,7 @@ class GroupPermissionEditor {
         }
 
         if (selectionConfirmed) {
-            var selectedItem = <IGroup>this.searchBox.getValue();
+            var selectedItem = this.searchBox.getValue();
             this.loadGroup(selectedItem);
         }
     }
@@ -50,7 +41,10 @@ class GroupPermissionEditor {
             this.searchBox.clearCache();
             this.searchBox.destroy();
         }
-        this.searchBox = new ConcreteInstanceSearchBox("#mainSearchInput", "Permission", this.getPrintableItem);
+        this.searchBox = new SingleSetTypeaheadSearchBox<IGroup>("#mainSearchInput",
+            "Permission",
+            (item) => item.Name,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Name, item.Description));
         this.searchBox.setDataSet("Group");
 
         this.searchBox.create((selectedExist, selectionConfirmed) => {
@@ -569,6 +563,7 @@ class SpecialPermissionTextResolver {
     private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
     private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
     private static editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
+    private static editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
     
     static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
@@ -593,6 +588,8 @@ class SpecialPermissionTextResolver {
                 return "Derivace hláskových podob";
             case this.editionPrintPermission:
                 return "Tisk edic";
+            case this.editStaticTextPermission:
+                return "Úprava statických textů";
             default:
                 return "Neznámé právo";
         }
@@ -622,6 +619,8 @@ class SpecialPermissionTextResolver {
                 return "Derivace hláskových podob";
             case this.editionPrintPermission:
                 return "Tisk edic";
+            case this.editStaticTextPermission:
+                return "Úprava statických textů";
             default:
                 return "Neznámé právo";
         }

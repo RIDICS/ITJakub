@@ -1,11 +1,5 @@
 ﻿
 
-interface IPrintableItem {
-    Name: string;
-    Description: string;
-}
-
-
 interface IUser {
     Id: number;
     UserName: string;

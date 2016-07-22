@@ -11,5 +11,6 @@ namespace ITJakub.Web.Hub.Identity
         public const string CanEditLemmatization = "CanEditLemmatization";
         public const string CanDerivateLemmatization = "CanDerivateLemmatization";
         public const string CanEditionPrint = "CanEditionPrint";
+        public const string CanEditStaticText = "CanEditStaticText";
     }
 }

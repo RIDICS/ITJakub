@@ -9,6 +9,7 @@ using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Newtonsoft.Json;
@@ -18,6 +19,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
     [RouteArea("Editions")]
     public class EditionsController : AreaController
     {
+        private readonly StaticTextManager m_staticTextManager;
+
+        public EditionsController(StaticTextManager staticTextManager)
+        {
+            m_staticTextManager = staticTextManager;
+        }
+
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.Edition; }
@@ -89,11 +97,14 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Information()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionInfo);
+            return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -106,7 +117,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 var viewModel = new FeedbackViewModel
                 {
                     Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
                 };
 
                 return View(viewModel);
@@ -136,12 +148,14 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Help()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionHelp);
+            return View(pageStaticText);
         }
 
         public ActionResult EditionPrinciples()
         {
-            return View();
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextEditionPrinciples);
+            return View(pageStaticText);
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

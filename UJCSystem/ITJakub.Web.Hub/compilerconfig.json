@@ -120,13 +120,8 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Content/bootstrap/bootstrap.css",
-    "inputFile": "Content/bootstrap/bootstrap.less",
-    "sourceMap": false
-  },
-  {
-    "outputFile": "Content/bootstrap/print.css",
-    "inputFile": "Content/bootstrap/print.less",
+    "outputFile": "Content/ITJakub.EuCookiePopup.css",
+    "inputFile": "Content/ITJakub.EuCookiePopup.less",
     "sourceMap": false
   },
   {
@@ -142,6 +137,11 @@
   {
     "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
     "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less",
+    "sourceMap": false
+  },
+  {
+    "outputFile": "Content/ITJakub.TextEditor.css",
+    "inputFile": "Content/ITJakub.TextEditor.less",
     "sourceMap": false
   }
 ]

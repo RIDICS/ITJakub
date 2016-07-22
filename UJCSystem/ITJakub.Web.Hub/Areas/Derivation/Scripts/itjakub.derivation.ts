@@ -1,16 +1,19 @@
 ﻿class Derivation {
     private container: string;
-    private searchBox: DerivationSearchBox;
+    private searchBox: SingleSetTypeaheadSearchBox<IHyperCanonicalForm>;
     private idList: Array<number>;
     private tbody: HTMLTableSectionElement;
 
     constructor(container: string) {
         this.container = container;
-        this.searchBox = new DerivationSearchBox("#mainSearchInput");
+        this.searchBox = new SingleSetTypeaheadSearchBox<IHyperCanonicalForm>("#mainSearchInput",
+            "Derivation/Derivation",
+            (item) => item.Text,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
     }
 
     public make() {
-        var createHyperOption = (value: DHyperCanonicalFormTypeEnum): HTMLOptionElement => {
+        var createHyperOption = (value: HyperCanonicalFormTypeEnum): HTMLOptionElement => {
             var label = this.hyperTypeToString(value);
             var element = document.createElement("option");
             $(element).attr("value", value);
@@ -26,13 +29,13 @@
             }
 
             if (selectionConfirmed) {
-                this.loadData(<IDHyperCanonicalForm>this.searchBox.getValue());
+                this.loadData(this.searchBox.getValue());
             }
         };
         
         $("#type-select")
-            .append(createHyperOption(DHyperCanonicalFormTypeEnum.HyperLemma))
-            .append(createHyperOption(DHyperCanonicalFormTypeEnum.HyperStemma));
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperLemma))
+            .append(createHyperOption(HyperCanonicalFormTypeEnum.HyperStemma));
 
         this.searchBox.setDataSet("HyperCanonicalForm", "type=0");
         this.searchBox.create(selectedChangedCallback);
@@ -45,12 +48,12 @@
         });
 
         $("#loadButton").click(() => {
-            var item = <IDHyperCanonicalForm>this.searchBox.getValue();
+            var item = this.searchBox.getValue();
             this.loadData(item);
         });
     }
 
-    private loadData(value: IDHyperCanonicalForm) {
+    private loadData(value: IHyperCanonicalForm) {
         $("#descriptionContainer").text(value.Description);
 
         $.ajax({
@@ -171,187 +174,14 @@
         $(td1).attr("rowspan", rows);
     }
 
-    private hyperTypeToString(hyperCanonicalForm: DHyperCanonicalFormTypeEnum): string {
+    private hyperTypeToString(hyperCanonicalForm: HyperCanonicalFormTypeEnum): string {
         switch (hyperCanonicalForm) {
-            case DHyperCanonicalFormTypeEnum.HyperLemma:
+            case HyperCanonicalFormTypeEnum.HyperLemma:
                 return "Hyperlemma";
-            case DHyperCanonicalFormTypeEnum.HyperStemma:
+            case HyperCanonicalFormTypeEnum.HyperStemma:
                 return "Hyperstemma";
             default:
                 return "";
         }
     }
-}
-
-class DerivationSearchBox {
-    private inputField: string;
-    private suggestionTemplate: (item: any) => string;
-    private urlWithController: string;
-    private options: Twitter.Typeahead.Options;
-    private dataset: Twitter.Typeahead.Dataset;
-    private bloodhound: Bloodhound<string>;
-    private currentItem: IDTypeaheadItem;
-
-    constructor(inputFieldElement: string, suggestionTemplate: (item: any) => string = null) {
-        this.inputField = inputFieldElement;
-        this.suggestionTemplate = suggestionTemplate;
-        this.urlWithController = getBaseUrl() + "Derivation/Derivation";
-
-        this.options = {
-            hint: true,
-            highlight: false,
-            minLength: 1
-        };
-    }
-
-    setValue(value: any): void {
-        $(this.inputField).typeahead('val', value);
-    }
-
-    getValue(): IDTypeaheadItem {
-        return this.currentItem;
-    }
-
-    getInputValue(): string {
-        return <any>($(this.inputField).typeahead("val"));
-    }
-
-    create(selectionChangedCallback: (selectedExists: boolean, selectConfirmed: boolean) => void): void {
-        var self = this;
-        $(this.inputField).typeahead(this.options, this.dataset);
-        $(this.inputField).bind("typeahead:render", <any>function (e, ...datums) {
-            var isEmpty = $(".tt-menu", e.target.parentNode).hasClass("tt-empty");
-            if (isEmpty) {
-                self.currentItem = null;
-                selectionChangedCallback(false, false);
-                return;
-            }
-
-            var currentText = self.getInputValue();
-            var suggestionElements = $(".suggestion", e.target.parentNode);
-            for (var i = 0; i < suggestionElements.length; i++) {
-                if ($(suggestionElements[i]).text() === currentText) {
-                    self.currentItem = datums[i];
-                    selectionChangedCallback(true, false);
-                    return;
-                }
-            }
-            self.currentItem = null;
-            selectionChangedCallback(false, false);
-        });
-        $(this.inputField).bind("typeahead:select", <any>function (e, datum) {
-            self.currentItem = datum;
-            selectionChangedCallback(true, true);
-        });
-        $(this.inputField).bind("typeahead:autocomplete", <any>function (e, datum) {
-            self.currentItem = datum;
-            selectionChangedCallback(true, false);
-        });
-    }
-
-    destroy(): void {
-        $(this.inputField).typeahead("destroy");
-        $(this.inputField).unbind("typeahead:render");
-        $(this.inputField).unbind("typeahead:select");
-        $(this.inputField).unbind("typeahead:autocomplete");
-    }
-
-    reload() {
-        this.clearCache();
-        var value = this.getInputValue();
-        this.setValue("");
-        this.setValue(value);
-    }
-
-    clearCache(): void {
-        if (this.bloodhound) {
-            this.bloodhound.clear();
-            this.bloodhound.clearPrefetchCache();
-            this.bloodhound.clearRemoteCache();
-        }
-    }
-
-    setDataSet(name: string, parameterUrlString: string = null): void {
-        this.clearCache();
-        this.destroy();
-        var remoteUrl: string = this.urlWithController + "/GetTypeahead" + name + "?query=%QUERY";
-
-        if (parameterUrlString != null) {
-            remoteUrl += "&" + parameterUrlString;
-        }
-
-        var remoteOptions: Bloodhound.RemoteOptions<string> = {
-            url: remoteUrl,
-            wildcard: "%QUERY"
-        };
-
-        var bloodhound: Bloodhound<string> = new Bloodhound({
-            datumTokenizer: Bloodhound.tokenizers.whitespace,
-            queryTokenizer: Bloodhound.tokenizers.whitespace,
-            limit: 10,
-            remote: remoteOptions
-        });
-
-        var suggestionTemplate = this.suggestionTemplate ? this.suggestionTemplate : this.getDefaultSuggestionTemplate;
-        var dataset: Twitter.Typeahead.Dataset = {
-            name: name,
-            source: bloodhound,
-            display: "Text",
-            templates: {
-                suggestion: suggestionTemplate
-            }
-        };
-
-        this.bloodhound = bloodhound;
-        this.dataset = dataset;
-    }
-
-    private getDefaultSuggestionTemplate(item: IDToken): string {
-        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + item.Text + "</div><div class=\"description\">" + item.Description + "</div></div>";
-    }
-}
-
-interface IDTypeaheadItem {
-    Text: string;
-    Description: string;
-}
-
-interface IDToken {
-    Id: number;
-    Text: string;
-    Description: string;
-}
-
-interface IDHyperCanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: DHyperCanonicalFormTypeEnum;
-}
-
-interface IInverseTokenCharacteristic {
-    Id: number;
-    MorphologicalCharacteristic: string;
-    Description: string;
-    Token: IDToken;
-}
-
-interface IInverseCanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: DCanonicalFormTypeEnum;
-    CanonicalFormFor: Array<IInverseTokenCharacteristic>;
-}
-
-enum DCanonicalFormTypeEnum {
-    Lemma = 0,
-    Stemma = 1,
-    LemmaOld = 2,
-    StemmaOld = 3,
-}
-
-enum DHyperCanonicalFormTypeEnum {
-    HyperLemma = 0,
-    HyperStemma = 1,
 }
