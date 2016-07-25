@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Castle.Windsor;
-using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,24 +13,31 @@ namespace ITJakub.ITJakubService.Core.Test
         private readonly WindsorContainer m_container = Container.Current;
         private readonly PermissionManager m_permissionManager;
         private readonly UserManager m_userManager;
-        private readonly string testUserUsername = "testUser";
+        private readonly MockPermissionRepository m_mockRepository;
 
         public PermissionManagerTest()
         {
             m_permissionManager = m_container.Resolve<PermissionManager>();
             m_userManager = m_container.Resolve<UserManager>();
+            m_mockRepository = m_container.Resolve<PermissionRepository>() as MockPermissionRepository;
+        }
+
+        [TestInitialize]
+        public void Init()
+        {
+            m_mockRepository.IsAdmin = true;
         }
 
         [TestMethod]
         public void CreateUserTest()
         {
-            //var username = Guid.NewGuid().ToString();
+            var guid = Guid.NewGuid();
             var newUserContract = new UserContract
             {
                 FirstName = "Test",
                 LastName = "User",
-                Email = string.Format("test@{0}.test", Guid.NewGuid()),
-                UserName = testUserUsername
+                Email = string.Format("test@{0}.test", guid),
+                UserName = string.Format("user{0}", guid)
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
@@ -49,7 +56,8 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing creating group");
+            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            var group = m_permissionManager.CreateGroup(groupName, "Just testing creating group");
             Assert.IsNotNull(group);
         }
 
@@ -65,7 +73,8 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
+            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -110,7 +119,8 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
+            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -158,7 +168,8 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
+            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -202,8 +213,10 @@ namespace ITJakub.ITJakubService.Core.Test
             };
 
             var user = m_userManager.CreateLocalUser(newUserContract);
-            var group = m_permissionManager.CreateGroup("TestGroup", "Just testing group with member");
-            var group2 = m_permissionManager.CreateGroup("TestGroup2", "Just testing group with member");
+            var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
+            var groupName2 = string.Format("TestGroup{0}", Guid.NewGuid());
+            var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
+            var group2 = m_permissionManager.CreateGroup(groupName2, "Just testing group with member");
 
             var firstMemberContract = new UserContract
             {
@@ -231,15 +244,17 @@ namespace ITJakub.ITJakubService.Core.Test
 
             m_permissionManager.AddUserToGroup(secondMember.Id, group.Id);
 
-            var groupsForFirstMember = m_permissionManager.GetGroupsByUser(firstMember.Id);
+            var groupsForFirstMember = m_permissionManager.GetGroupsByUser(firstMember.Id)
+                .Where(x => x.Description != "Default user group");
 
-            var groupsForSecondMember = m_permissionManager.GetGroupsByUser(secondMember.Id);
+            var groupsForSecondMember = m_permissionManager.GetGroupsByUser(secondMember.Id)
+                .Where(x => x.Description != "Default user group");
 
             Assert.IsNotNull(groupsForFirstMember);
-            Assert.AreEqual(2, groupsForFirstMember.Count);
+            Assert.AreEqual(2, groupsForFirstMember.Count());
 
             Assert.IsNotNull(groupsForSecondMember);
-            Assert.AreEqual(1, groupsForSecondMember.Count);
+            Assert.AreEqual(1, groupsForSecondMember.Count());
         }
        
     }

@@ -86,6 +86,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Container.cs" />
+    <Compile Include="MockPermissionRepository.cs" />
     <Compile Include="PermissionManagerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

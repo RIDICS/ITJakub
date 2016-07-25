@@ -1,8 +1,10 @@
 ﻿using System.IO;
 using System.Reflection;
 using AutoMapper;
+using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using Castle.Windsor.Configuration.Interpreters;
+using ITJakub.DataEntities.Database.Repositories;
 using log4net.Config;
 
 namespace ITJakub.ITJakubService.Core.Test
@@ -33,6 +35,8 @@ namespace ITJakub.ITJakubService.Core.Test
         public Container(string configFile)
             : base(new XmlInterpreter(configFile))
         {
+            Register(Component.For<PermissionRepository>().ImplementedBy<MockPermissionRepository>().IsDefault());
+
             //configure log4net
             //XmlConfigurator.Configure(new FileInfo("log4net.config"));
             XmlConfigurator.Configure();
