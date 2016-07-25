@@ -1,6 +1,4 @@
 
-USE ITJakubDB
-
 BEGIN TRAN
 
     CREATE TABLE [dbo].[BookContentItem] 

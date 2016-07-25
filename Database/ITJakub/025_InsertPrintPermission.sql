@@ -1,5 +1,4 @@
 ﻿SET XACT_ABORT ON;
-USE ITJakubDB;
 
 BEGIN TRAN;
 	INSERT INTO [dbo].[SpecialPermission]

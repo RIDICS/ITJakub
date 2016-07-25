@@ -1,6 +1,4 @@
 
-USE ITJakubDB
-
 BEGIN TRAN
 
 	ALTER TABLE [dbo].[User] ADD [UserName] varchar(50) NOT NULL UNIQUE
