@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Castle.Windsor;
+using Castle.Facilities.AutoTx;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,23 +8,26 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ITJakub.ITJakubService.Core.Test
 {
     [TestClass]
+    [DeploymentItem("ITJakub.ITJakubService.Core.Test.Container.Config")]
+    [DeploymentItem("log4net.config")]
     public class PermissionManagerTest
     {
-        private readonly WindsorContainer m_container = Container.Current;
-        private readonly PermissionManager m_permissionManager;
-        private readonly UserManager m_userManager;
-        private readonly MockPermissionRepository m_mockRepository;
+        private PermissionManager m_permissionManager;
+        private UserManager m_userManager;
+        private MockPermissionRepository m_mockRepository;
 
         public PermissionManagerTest()
         {
-            m_permissionManager = m_container.Resolve<PermissionManager>();
-            m_userManager = m_container.Resolve<UserManager>();
-            m_mockRepository = m_container.Resolve<PermissionRepository>() as MockPermissionRepository;
+            new AutoTxFacility(); // todo hack for deploying Unit test (copy dll to output directory)
         }
 
         [TestInitialize]
         public void Init()
         {
+            var container = Container.Current;
+            m_permissionManager = container.Resolve<PermissionManager>();
+            m_userManager = container.Resolve<UserManager>();
+            m_mockRepository = (MockPermissionRepository)container.Resolve<PermissionRepository>();
             m_mockRepository.IsAdmin = true;
         }
 
