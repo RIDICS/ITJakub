@@ -9,8 +9,8 @@ namespace ITJakub.Web.Hub.Areas.Tools
             bundles.Add(new ScriptBundle("~/itjakub/tools/javascript").Include(
             "~/Areas/Tools/Scripts/itjakub.tools.js"));
 
-            bundles.Add(new StyleBundle("~/itjakub/tools/css").Include(
-                "~/Areas/Tools/Content/itjakub.tools.css"));
+            //bundles.Add(new StyleBundle("~/itjakub/tools/css").Include(
+            //    "~/Areas/Tools/Content/itjakub.tools.css"));
         }
     }
 }

@@ -130,11 +130,6 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/Tools/Content/itjakub.tools.css",
-    "inputFile": "Areas/Tools/Content/itjakub.tools.less",
-    "sourceMap": false
-  },
-  {
     "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
     "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less",
     "sourceMap": false
