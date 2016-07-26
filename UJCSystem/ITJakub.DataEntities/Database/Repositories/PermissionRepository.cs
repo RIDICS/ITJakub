@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+﻿using System.Collections.Generic;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -9,7 +9,6 @@ using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class PermissionRepository : NHibernateTransactionalDao
     {
         public PermissionRepository(ISessionManager sessManager)
@@ -17,7 +16,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Group FindGroupById(int groupId)
         {
             using (var session = GetSession())
@@ -32,7 +31,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Group FindGroupWithSpecialPermissionsById(int groupId)
         {
             using (var session = GetSession())
@@ -47,7 +46,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Group> GetLastGroups(int recordCount)
         {
             using (var session = GetSession())
@@ -59,7 +58,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Group> GetTypeaheadGroups(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -71,7 +70,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Book> GetAllowedBooksByGroup(int groupId)
         {
 
@@ -91,7 +90,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<User> GetUsersByGroup(int groupId)
         {
             using (var session = GetSession())
@@ -108,7 +107,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Group> GetGroupsByUser(int userId)
         {
             using (var session = GetSession())
@@ -125,7 +124,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual int CreateGroup(Group group)
         {
             using (var session = GetSession())
@@ -134,7 +133,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetFilteredBookXmlIdListByUserPermissions(int userId, IEnumerable<string> bookXmlIds)
         {
             using (var session = GetSession())
@@ -157,7 +156,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetFilteredBookIdListByUserPermissions(int userId, IEnumerable<long> bookIds)
         {
             using (var session = GetSession())
@@ -180,7 +179,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetFilteredBookIdListByGroupPermissions(int groupId, IEnumerable<long> bookIds)
         {
             using (var session = GetSession())
@@ -201,7 +200,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void CreatePermission(Permission permission)
         {
             using (var session = GetSession())
@@ -210,7 +209,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void CreateSpecialPermission(SpecialPermission permission)
         {
             using (var session = GetSession())
@@ -219,7 +218,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Permission> FindPermissionsByGroupAndBooks(int groupId, IList<long> bookIds)
         {
             using (var session = GetSession())
@@ -239,7 +238,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void DeletePermissions(IList<Permission> permissionsList)
         {
             using (var session = GetSession())
@@ -251,7 +250,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<SpecialPermission> GetSpecialPermissionsByUser(int userId)
         {
             using (var session = GetSession())
@@ -270,7 +269,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
         
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<SpecialPermission> GetSpecialPermissionsByUserAndType(int userId, SpecialPermissionCategorization type)
         {
             using (var session = GetSession())
@@ -290,7 +289,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<SpecialPermission> GetSpecialPermissions()
         {
             using (var session = GetSession())
@@ -304,7 +303,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<SpecialPermission> GetSpecialPermissionsByGroup(int groupId)
         {
             using (var session = GetSession())
@@ -321,7 +320,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<SpecialPermission> GetSpecialPermissionsByIds(IEnumerable<int> specialPermissionIds)
         {
             using (var session = GetSession())
@@ -336,7 +335,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<AutoImportCategoryPermission> GetAutoimportPermissionsByCategoryIdList(IEnumerable<int> categoryIds)
         {
             using (var session = GetSession())
@@ -353,7 +352,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Group> GetGroupsBySpecialPermissionIds(IEnumerable<int> specialPermissionIds)
         {
             using (var session = GetSession())
@@ -370,7 +369,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void CreatePermissionIfNotExist(Permission permission)
         {
             using (var session = GetSession())
@@ -383,7 +382,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Permission FindPermissionByBookAndGroup(long bookId, int groupId)
         {
             using (var session = GetSession())

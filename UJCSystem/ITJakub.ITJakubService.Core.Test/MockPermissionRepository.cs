@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
+using Castle.Facilities.NHibernate;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;

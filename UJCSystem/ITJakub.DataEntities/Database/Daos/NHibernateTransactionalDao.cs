@@ -2,24 +2,19 @@
 using System.Collections;
 using System.Data;
 using System.Reflection;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Facilities.NHibernateIntegration.Util;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using log4net;
 using NHibernate;
-using NHibernate.Collection;
-using NHibernate.Proxy;
 
 namespace ITJakub.DataEntities.Database.Daos
 {
-
-
     public class NHibernateDao
     {
         protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly ISessionManager m_sessionManager;
-        private string m_sessionFactoryAlias;
 
         public NHibernateDao(ISessionManager sessionManager)
         {
@@ -31,26 +26,14 @@ namespace ITJakub.DataEntities.Database.Daos
             get { return m_sessionManager; }
         }
 
-        private string SessionFactoryAlias
-        {
-            get { return m_sessionFactoryAlias; }
-            set { m_sessionFactoryAlias = value; }
-        }
-
         protected ISession GetSession()
         {
 
-            var flushMode = m_sessionManager.DefaultFlushMode;
-            if (string.IsNullOrEmpty(m_sessionFactoryAlias))
-            {
-                //if(m_log.IsDebugEnabled)
-                //    m_log.DebugFormat("Getting session with flushMode: {0}", flushMode);
-
-                return m_sessionManager.OpenSession();
-            }
+            var session = m_sessionManager.OpenSession();
             //if (m_log.IsDebugEnabled)
-            //    m_log.DebugFormat("Getting session with alias: {0} and with flush mode: {1}", SessionFactoryAlias, m_sessionManager.DefaultFlushMode);
-            return m_sessionManager.OpenSession(SessionFactoryAlias);
+            //    m_log.DebugFormat("Getting session with flush mode: {0}", session.FlushMode);
+
+            return session;
         }
 
         public virtual object FindById(Type type, object id)
@@ -66,15 +49,15 @@ namespace ITJakub.DataEntities.Database.Daos
                     throw new DataException(string.Format("Get by id operation failed for type:{0}", type.Name), ex);
                 }
             }
-        }  
-        
+        }
+
         public virtual T FindById<T>(object id)
         {
             using (ISession session = GetSession())
             {
                 try
                 {
-                    return (T) session.Get(typeof(T), id);
+                    return (T)session.Get(typeof(T), id);
                 }
                 catch (Exception ex)
                 {
@@ -100,7 +83,7 @@ namespace ITJakub.DataEntities.Database.Daos
                     throw new DataException(string.Format("Load by id operation failed for type:{0}", type.Name), ex);
                 }
             }
-        }   
+        }
         public virtual T Load<T>(object id)
         {
             using (ISession session = GetSession())
@@ -184,34 +167,19 @@ namespace ITJakub.DataEntities.Database.Daos
         {
             using (ISession session = GetSession())
             {
-                try
-                {
-                    session.SaveOrUpdate(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(string.Format("Save or Update operation failed for type:{0} ", instance.GetType().Name), ex);
-                }
+                Save(instance, session);
             }
         }
 
-        public void InitializeLazyProperties(object instance)
+        protected virtual void Save(object instance, ISession session)
         {
-            if (instance == null) throw new ArgumentNullException("instance");
-
-            using (ISession session = GetSession())
+            try
             {
-                foreach (object val in ReflectionUtility.GetPropertiesDictionary(instance).Values)
-                {
-                    if (val is INHibernateProxy || val is IPersistentCollection)
-                    {
-                        if (!NHibernateUtil.IsInitialized(val))
-                        {
-                            session.Lock(instance, LockMode.None);//lock session for this
-                            NHibernateUtil.Initialize(val);
-                        }
-                    }
-                }
+                session.SaveOrUpdate(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(string.Format("Save or Update operation failed for type:{0} ", instance.GetType().Name), ex);
             }
         }
 
@@ -221,13 +189,12 @@ namespace ITJakub.DataEntities.Database.Daos
             {
                 foreach (var o in data)
                 {
-                    Save(o);
+                    Save(o, session);
                 }
             }
         }
     }
 
-    [Transactional]
     public class NHibernateTransactionalDao : NHibernateDao
     {
         public NHibernateTransactionalDao(ISessionManager sessManager)
@@ -235,43 +202,40 @@ namespace ITJakub.DataEntities.Database.Daos
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override object Create(object instance)
         {
             return base.Create(instance);
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override void Update(object instance)
         {
             base.Update(instance);
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override void Delete(object instance)
         {
             base.Delete(instance);
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override void Save(object instance)
         {
             base.Save(instance);
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override void DeleteAll(Type instanceType)
         {
             base.DeleteAll(instanceType);
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public override void SaveAll(IEnumerable data)
         {
             base.SaveAll(data);
         }
     }
-
-
-
 }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -8,13 +9,12 @@ using NHibernate.Transform;
 
 namespace ITJakub.Lemmatization.DataEntities.Repositories
 {
-    [Transactional]
     public class LemmatizationRepository : NHibernateTransactionalDao {
         public LemmatizationRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Token> GetTypeaheadToken(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -28,7 +28,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<CanonicalForm> GetTypeaheadCannonicalForm(CanonicalFormType type, string query, int recordCount)
         {
             using (var session = GetSession())
@@ -44,7 +44,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<HyperCanonicalForm> GetTypeaheadHyperCannonicalForm(HyperCanonicalFormType type, string query, int recordCount)
         {
             using (var session = GetSession())
@@ -59,7 +59,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<TokenCharacteristic> GetTokenCharacteristicDetail(long tokenId)
         {
             using (var session = GetSession())
@@ -80,7 +80,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual TokenCharacteristic GetTokenCharacteristicWithCanonicalForms(long tokenCharacteristicId)
         {
             using (var session = GetSession())
@@ -94,7 +94,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual int GetTokenCount()
         {
             using (var session = GetSession())
@@ -106,7 +106,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Token> GetTokenList(int start, int count)
         {
             using (var session = GetSession())
@@ -121,7 +121,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetCanonicalFormIdList(long hyperCanonicalFormId)
         {
             using (var session = GetSession())
@@ -136,7 +136,7 @@ namespace ITJakub.Lemmatization.DataEntities.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual CanonicalForm GetCanonicalFormDetail(long canonicalFormId)
         {
             using (var session = GetSession())

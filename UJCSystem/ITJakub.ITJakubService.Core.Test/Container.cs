@@ -18,7 +18,6 @@ namespace ITJakub.ITJakubService.Core.Test
     ///</summary>
     public class Container : WindsorContainer
     {
-
         private static readonly Lazy<WindsorContainer> m_current = new Lazy<WindsorContainer>(() => new Container());
 
         private const string ConfigSuffix = ".Container.config";
@@ -33,13 +32,10 @@ namespace ITJakub.ITJakubService.Core.Test
 
 
         private Container()
-            : base()
         {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-            if (m_log.IsDebugEnabled)
-                m_log.Debug("Starting Windsor Castle configuration.");
 
             //Add subresolvers
             AddSubresolvers();
@@ -52,7 +48,7 @@ namespace ITJakub.ITJakubService.Core.Test
             //configure AutoMapper
             ConfigureAutoMapper();
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Configuration castle is completed.");
+                m_log.DebugFormat("Configuration castle is completed");
         }
 
         private void InstallComponents()
@@ -73,17 +69,13 @@ namespace ITJakub.ITJakubService.Core.Test
             }
         }
 
-
         private void AddSubresolvers()
         {
             Kernel.Resolver.AddSubResolver(new CollectionResolver(Kernel, true));
         }
 
-
-
         private static IResource GetConfigResource()
         {
-
             var assembly = GetAssembly();
 
             string fileConfigPath = GetFileConfigPath(assembly);
@@ -99,8 +91,6 @@ namespace ITJakub.ITJakubService.Core.Test
                 if (m_log.IsDebugEnabled)
                     m_log.DebugFormat("Using assembly location config failed. Search location was: {0}", fileConfigPath);
             }
-
-
 
 
             fileConfigPath = GetCodebasePath(assembly);
@@ -141,8 +131,6 @@ namespace ITJakub.ITJakubService.Core.Test
             return string.Format(@"{0}\{1}", directory, configName);
         }
 
-
-
         private static string GetEmbeddedConfigPath(Assembly assembly)
         {
             string configName = string.Format(@"assembly://{0}/{1}", assembly.GetName().Name, GetConfigName(assembly));
@@ -154,12 +142,10 @@ namespace ITJakub.ITJakubService.Core.Test
             return string.Format(@"{0}{1}", assembly.GetName().Name, ConfigSuffix);
         }
 
-
         private static Assembly GetAssembly()
         {
             //return System.Reflection.Assembly.GetExecutingAssembly();
             return typeof(Container).Assembly;
         }
-
     }
 }

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using NHibernate;
 using NHibernate.Criterion;
-using ITransaction = NHibernate.ITransaction;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class UserRepository : NHibernateTransactionalDao
     {
         public UserRepository(ISessionManager sessManager)
@@ -19,7 +17,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User FindByUserName(string userName)
         {
             using (var session = GetSession())
@@ -30,7 +28,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User FindById(int userId)
         {
             using (var session = GetSession())
@@ -41,7 +39,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User FindByIdWithDetails(int userId)
         {
             using (var session = GetSession())
@@ -53,7 +51,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual int Create(User user)
         {
             using (var session = GetSession())
@@ -62,7 +60,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<User> GetLastUsers(int recordCount)
         {
             using (var session = GetSession())
@@ -74,7 +72,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<User> GetTypeaheadUsers(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -91,7 +89,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User GetByLogin(string username)
         {
             using (var session = GetSession())
@@ -100,7 +98,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User GetByLoginAndCommToken(string userName, string commToken)
         {
             using (var session = GetSession())
@@ -109,7 +107,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual User GetVirtualUserForUnregisteredUsersOrCreate(string unregisteredUserName, Group unregisteredUserGroupName)
         {
             using (var session = GetSession())
@@ -140,7 +138,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }        
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Group GetDefaultGroupOrCreate(string defaultRegisteredGroupName)
         {
             using (var session = GetSession())

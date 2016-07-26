@@ -1,19 +1,19 @@
 using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class NewsRepository : NHibernateTransactionalDao<NewsSyndicationItem>
     {
         public NewsRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<NewsSyndicationItem> GetWebNews(int start, int count)
         {
             using (var session = GetSession())
@@ -27,7 +27,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<NewsSyndicationItem> GetMobileAppsNews(int start, int count)
         {
             using (var session = GetSession())
@@ -41,7 +41,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual int GetWebNewsSyndicationItemCount()
         {
             using (var session = GetSession())

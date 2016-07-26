@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using NHibernate;
-using Remotion.Linq.Utilities;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class AuthorRepository : NHibernateTransactionalDao
     {
         public AuthorRepository(ISessionManager sessManager)
@@ -16,7 +15,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Author> GetAllAuthors()
         {
             using (ISession session = GetSession())
@@ -25,7 +24,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Author FindByName(string name)
         {
             using (ISession session = GetSession())

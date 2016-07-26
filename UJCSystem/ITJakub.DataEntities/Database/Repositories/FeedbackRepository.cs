@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -9,7 +10,6 @@ using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class FeedbackRepository : NHibernateTransactionalDao<Feedback>
     {
         public FeedbackRepository(ISessionManager sessManager) : base(sessManager)
@@ -17,7 +17,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Feedback> GetFeedbacks(List<FeedbackCategoryEnum> categories, FeedbackSortEnum sortCriteria, bool sortAsc, int? start, int? count)
         {
             using (var session = GetSession())
@@ -48,7 +48,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual int GetFeedbacksCount(List<FeedbackCategoryEnum> categories)
         {
             using (var session = GetSession())
@@ -64,7 +64,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void DeleteFeedback(long feedbackId)
         {
             using (var session = GetSession())

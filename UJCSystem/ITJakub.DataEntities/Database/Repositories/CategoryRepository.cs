@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Exceptions;
 using NHibernate.Criterion;
-using NHibernate.Mapping;
 using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class CategoryRepository : NHibernateTransactionalDao
     {
         public CategoryRepository(ISessionManager sessManager)
@@ -20,7 +19,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void SaveOrUpdate(Category category)
         {
             using (var session = GetSession())
@@ -38,7 +37,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Category FindByXmlId(string xmlId)
         {
             using (var session = GetSession())
@@ -49,7 +48,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void SetBookTypeToRootCategoryIfNotKnown(BookType bookType, Category rootCategory)
         {
             using (var session = GetSession())
@@ -71,7 +70,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Category> FindCategoriesByBookTypeii(BookTypeEnum type)
         {
             using (var session = GetSession())
@@ -130,7 +129,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookType FindBookTypeByCategory(Category category)
         {
             using (var session = GetSession())
@@ -140,7 +139,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookType FindBookTypeByType(BookTypeEnum bookTypeEnum)
         {
             using (var session = GetSession())
@@ -151,7 +150,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<int> GetAllSubcategoryIds(IList<int> categoryIds)
         {
             using (var session = GetSession())
@@ -165,7 +164,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetBookIdsFromCategory(IList<int> categoryIds)
         {
             using (var session = GetSession())
@@ -176,7 +175,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Category> GetRootCategories()
         {
             using (var session = GetSession())
@@ -188,7 +187,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Category> FindChildCategoriesInCategory(int categoryId)
         {
             using (var session = GetSession())
@@ -200,7 +199,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> FindChildBookVersionsInCategory(int categoryId)
         {
             Book bookAlias = null;
@@ -224,7 +223,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Category> GetAllCategories()
         {
             using (var session = GetSession())
@@ -235,7 +234,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Category> GetDirectCategoriesByBookVersionId(long bookVersionId)
         {
             BookVersion bookVersionAlias = null;
@@ -252,7 +251,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetAllBookIdsByBookType(BookTypeEnum currentBookType)
         {
             using (var session = GetSession())
@@ -270,7 +269,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<long> GetAllBookIds()
         {
             using (var session = GetSession())

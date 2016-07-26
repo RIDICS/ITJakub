@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -14,14 +13,13 @@ using ResponsibleType = ITJakub.DataEntities.Database.Entities.ResponsibleType;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class BookRepository : NHibernateTransactionalDao
     {
         public BookRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Book> GetAllBooks()
         {
             using (var session = GetSession())
@@ -30,7 +28,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Book FindBookById(long bookId)
         {
             using (var session = GetSession())
@@ -43,7 +41,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookVersion GetLastVersionForBook(string bookGuid)
         {
             using (var session = GetSession())
@@ -61,7 +59,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookVersion GetLastVersionForBookByBookId(long bookId)
         {
             using (var session = GetSession())
@@ -79,7 +77,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookVersion GetLastVersionForBookWithType(string bookGuid)
         {
             using (var session = GetSession())
@@ -98,7 +96,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookVersion GetLastVersionForBookWithPages(string bookGuid)
         {
             using (var session = GetSession())
@@ -117,7 +115,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Book FindBookByGuid(string bookGuid)
         {
             using (var session = GetSession())
@@ -129,7 +127,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookVersion FindBookVersionByGuid(string bookGuid, string bookVersionGuid)
         {
             using (var session = GetSession())
@@ -143,7 +141,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Transformation FindTransformation(BookVersion bookVersion, OutputFormat outputFormat, BookTypeEnum requestedBookType)
         {
 
@@ -170,7 +168,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Transformation FindDefaultTransformation(BookVersion bookVersion, OutputFormat outputFormat)
         {
             BookVersion bookVersionAlias = null;
@@ -197,7 +195,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual BookType FindBookType(BookTypeEnum bookTypeEnum)
         {
             using (var session = GetSession())
@@ -209,7 +207,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IEnumerable<BookVersion> GetAllVersionsByBookXmlId(string bookXmlId)
         {
             using (var session = GetSession())
@@ -220,7 +218,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> SearchByTitle(string text)
         {
             using (var session = GetSession())
@@ -267,7 +265,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> SearchByTitleAndBookType(string text, BookTypeEnum bookType)
         {
             Book bookAlias = null;
@@ -291,7 +289,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> SearchByAuthorAndBookType(string query, BookTypeEnum bookType)
         {
             Book bookAlias = null;
@@ -324,7 +322,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> FindBookVersionsByTypeWithCategories(BookTypeEnum bookType)
         {
             Book bookAlias = null;
@@ -354,7 +352,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<BookVersion> FindBookVersionsByTypeWithAuthors(BookTypeEnum bookType)
         {
             Book bookAlias = null;
@@ -378,7 +376,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetLastAuthors(int recordCount)
         {
             using (var session = GetSession())
@@ -390,7 +388,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetLastAuthorsByBookType(int recordCount, BookTypeEnum bookType)
         {
             using (var session = GetSession())
@@ -412,7 +410,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTypeaheadAuthors(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -430,7 +428,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTypeaheadAuthorsByBookType(string query, BookTypeEnum bookType, int recordCount)
         {
             using (var session = GetSession())
@@ -453,7 +451,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetLastTitles(int recordCount)
         {
             using (var session = GetSession())
@@ -469,7 +467,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetLastTitlesByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
         {
             using (var session = GetSession())
@@ -495,7 +493,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTermsByBookType(int recordCount, BookTypeEnum bookType, IList<long> bookIdList)
         {
             using (var session = GetSession())
@@ -525,7 +523,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTypeaheadTitles(string query, int recordCount)
         {
             using (var session = GetSession())
@@ -541,7 +539,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
         
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTypeaheadTitlesByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
         {
             using (var session = GetSession())
@@ -568,7 +566,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
                
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTermsByBookType(string query, BookTypeEnum bookType, IList<long> bookIdList, int recordCount)
         {
             using (var session = GetSession())
@@ -599,7 +597,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetLastTypeaheadHeadwords(int recordCount, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
@@ -623,7 +621,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<string> GetTypeaheadHeadwords(string query, int recordCount, IList<long> selectedBookIds = null)
         {
             using (var session = GetSession())
@@ -648,7 +646,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Book> GetBooksById(IList<long> bookIds)
         {
             using (var session = GetSession())
@@ -663,7 +661,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<TermCategory> GetTermCategoriesWithTerms()
         {
             using (var session = GetSession())

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
@@ -10,14 +11,13 @@ using NHibernate.Transform;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class FavoritesRepository:NHibernateTransactionalDao
     {
         public FavoritesRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void DeletePageBookmarkByPageXmlId(string bookId, string pageXmlId, string userName)
         {
             using (var session = GetSession())
@@ -48,7 +48,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<PageBookmark> GetAllPageBookmarksByBookId(string bookId, string userName)
         {
             using (var session = GetSession())
@@ -66,7 +66,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<PageBookmark> GetPageBookmarkByPageXmlId(string bookId, string pageXmlId, string userName)
         {
             using (var session = GetSession())
@@ -88,7 +88,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void DeleteHeadwordBookmark(string bookId, string entryXmlId, string userName)
         {
             using (var session = GetSession())
@@ -119,7 +119,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<HeadwordBookmarkResult> GetAllHeadwordBookmarks(string userName)
         {
             using (var session = GetSession())

@@ -1,11 +1,11 @@
-﻿using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+﻿using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 
 namespace ITJakub.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class TermRepository : NHibernateTransactionalDao
     {
         public TermRepository(ISessionManager sessManager)
@@ -13,7 +13,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         {
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual void SaveOrUpdate(Term term)
         {
             using (var session = GetSession())
@@ -32,7 +32,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual Term FindByXmlId(string xmlId)
         {
             using (var session = GetSession())
@@ -43,7 +43,7 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual TermCategory GetTermCategoryByName(string termCategory)
         {
             using (var session = GetSession())
