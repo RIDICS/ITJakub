@@ -137,9 +137,6 @@
     <Content Include="log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ITJakub.FileProcessing.Service.Container.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />

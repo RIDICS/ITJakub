@@ -52,7 +52,8 @@ namespace ITJakub.ITJakubService
         private void InstallComponents()
         {
             Install(FromAssembly.InThisApplication());
-            Install(Configuration.FromXml(GetConfigResource()));
+            Install(Configuration.FromAppConfig());
+            //Install(Configuration.FromXml(GetConfigResource()));
         }
 
         private void ConfigureAutoMapper()

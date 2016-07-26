@@ -92,9 +92,7 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ITJakub.SearchService.Container.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="ITJakub.SearchService.Container.Config" />
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />

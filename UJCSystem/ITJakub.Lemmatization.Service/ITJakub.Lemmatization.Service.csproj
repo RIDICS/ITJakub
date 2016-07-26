@@ -124,9 +124,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ITJakub.Lemmatization.Service.Container.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
