@@ -1,11 +1,11 @@
-﻿using Castle.Facilities.NHibernateIntegration;
-using Castle.Services.Transaction;
+﻿using System.Transactions;
+using Castle.Facilities.NHibernate;
+using Castle.Transactions;
 using ITJakub.Web.DataEntities.Database.Daos;
 using ITJakub.Web.DataEntities.Database.Entities;
 
 namespace ITJakub.Web.DataEntities.Database.Repositories
 {
-    [Transactional]
     public class StaticTextRepository : NHibernateTransactionalDao
     {
         public StaticTextRepository(ISessionManager sessManager)
@@ -13,7 +13,7 @@ namespace ITJakub.Web.DataEntities.Database.Repositories
         {
         }
         
-        [Transaction(TransactionMode.Requires)]
+        [Transaction(TransactionScopeOption.Required)]
         public virtual StaticText GetStaticText(string name)
         {
             using (var session = GetSession())

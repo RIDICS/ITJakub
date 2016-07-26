@@ -31,20 +31,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Facilities.NHibernateIntegration">
-      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Facilities.NHibernateIntegration.dll</HintPath>
+    <Reference Include="Castle.Facilities.NHibernate">
+      <HintPath>..\packages\Castle.Facilities.NHibernate.1.1.0\lib\net40\Castle.Facilities.NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="Castle.Services.Transaction">
-      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\Castle.Services.Transaction.dll</HintPath>
+    <Reference Include="Castle.Transactions">
+      <HintPath>..\packages\Castle.Transactions.3.3.0.08214\lib\net40\Castle.Transactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Iesi.Collections.4.0.0.4000\lib\net40\Iesi.Collections.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Libs\log4net1.2.12\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\Libs\Castle_Nhibernate(Custom Build)\NET45\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <HintPath>..\packages\NHibernate.4.0.4.4000\lib\net40\NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\StaticText.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
