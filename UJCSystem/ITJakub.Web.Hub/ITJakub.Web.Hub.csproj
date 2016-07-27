@@ -655,6 +655,7 @@
     <Content Include="Views\Text\_TextEditorInsertLink.cshtml" />
     <Content Include="Views\Shared\_StaticText.cshtml" />
     <Content Include="Views\Shared\Plugins\_CharRemaining.cshtml" />
+    <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

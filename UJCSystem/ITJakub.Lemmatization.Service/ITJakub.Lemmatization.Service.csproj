@@ -126,6 +126,7 @@
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
+    <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
