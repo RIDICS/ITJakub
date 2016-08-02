@@ -95,6 +95,11 @@
     "sourceMap": false
   },
   {
+    "outputFile": "Content/Plugins/Keyboard/ITJakub.Keyboard.css",
+    "inputFile": "Content/Plugins/Keyboard/ITJakub.Keyboard.less",
+    "sourceMap": false
+  },
+  {
     "outputFile": "Content/Plugins/Reader/ITJakub.Reader.css",
     "inputFile": "Content/Plugins/Reader/ITJakub.Reader.less",
     "sourceMap": false
@@ -107,6 +112,11 @@
   {
     "outputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.css",
     "inputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.less",
+    "sourceMap": false
+  },
+  {
+    "outputFile": "Content/Plugins/ITJakub.Pagination.css",
+    "inputFile": "Content/Plugins/ITJakub.Pagination.less",
     "sourceMap": false
   },
   {

@@ -1366,9 +1366,9 @@
     <Content Include="wwwroot\lib\wheelzoom\daisy.jpg" />
     <Content Include="wwwroot\lib\wheelzoom\demo.html" />
     <Content Include="wwwroot\lib\wheelzoom\wheelzoom.js" />
-    <None Include="Content\ITJakub.EuCookiePopup.less" />
-    <None Include="Content\ITJakub.TextEditor.less" />
-    <None Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
+    <Content Include="Content\ITJakub.EuCookiePopup.less" />
+    <Content Include="Content\ITJakub.TextEditor.less" />
+    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
     <Content Include="Content\dropzones.css">
       <DependentUpon>dropzones.less</DependentUpon>
     </Content>
@@ -1418,6 +1418,18 @@
     <Content Include="Content\ITJakub.min.css">
       <DependentUpon>ITJakub.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.EuCookiePopup.css">
+      <DependentUpon>ITJakub.EuCookiePopup.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.EuCookiePopup.min.css">
+      <DependentUpon>ITJakub.EuCookiePopup.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.TextEditor.css">
+      <DependentUpon>ITJakub.TextEditor.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.TextEditor.min.css">
+      <DependentUpon>ITJakub.TextEditor.css</DependentUpon>
+    </Content>
     <Content Include="Content\ITJakub.PluginMenu.css">
       <DependentUpon>ITJakub.PluginMenu.less</DependentUpon>
     </Content>
@@ -1436,6 +1448,12 @@
     <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.min.css">
       <DependentUpon>ITJakub.DropdownSelect.css</DependentUpon>
     </Content>
+    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.css">
+      <DependentUpon>ITJakub.Keyboard.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.min.css">
+      <DependentUpon>ITJakub.Keyboard.css</DependentUpon>
+    </Content>
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.css">
       <DependentUpon>ITJakub.Reader.less</DependentUpon>
     </Content>
@@ -1453,6 +1471,12 @@
     </Content>
     <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.min.css">
       <DependentUpon>ITJakub.SearchBox.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\ITJakub.Pagination.css">
+      <DependentUpon>ITJakub.Pagination.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Plugins\ITJakub.Pagination.min.css">
+      <DependentUpon>ITJakub.Pagination.css</DependentUpon>
     </Content>
     <Content Include="Content\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
