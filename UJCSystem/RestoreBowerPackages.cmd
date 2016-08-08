@@ -1,7 +1,8 @@
 @echo off
 
 set CI=true
-pushd %CD%
+set SOLUTION_PATH=%~dp0
+pushd %SOLUTION_PATH%
 
 echo Restoring Bower packages
 
