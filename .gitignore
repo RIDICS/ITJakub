@@ -30,6 +30,7 @@ ipch/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
+[Aa]rtifacts/
 Ankh.NoLoad
 
 #MonoDevelop
