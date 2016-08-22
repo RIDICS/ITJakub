@@ -17,18 +17,33 @@ echo Updating eXist-db for collection %COLLECTION_NAME% on %EXIST_URL%
 echo --------------------
 
 rem upload new data
-java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH%
+java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH% || goto error
 echo --------------------
 
 rem upload configuration data
-java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/system/config/db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH%\config
+java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/system/config/db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH%\config || goto error
 echo --------------------
 
 rem upload files for jacob-develop collection
-if "%COLLECTION_NAME%" == "jacob-develop" java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH%ForDevelopment
+if "%COLLECTION_NAME%" == "jacob-develop" (
+  java -Dexist.home=%EXIST_HOME% -jar %EXIST_HOME%\start.jar client -ouri=%EXIST_URL% -u %USERNAME% -P %PASSWORD% -d -m /db/apps/%COLLECTION_NAME% -p %SCRIPT_PATH%ForDevelopment || goto error
+)
 
 echo --------------------
 echo Collection %COLLECTION_NAME% on %EXIST_URL% updated
 
 set USERNAME=
 set PASSWORD=
+
+goto end
+
+
+:error
+set USERNAME=
+set PASSWORD=
+
+echo Failed with error code %errorlevel%
+exit /b %errorlevel%
+
+
+:end
