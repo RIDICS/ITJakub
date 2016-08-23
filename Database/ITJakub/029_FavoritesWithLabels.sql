@@ -27,7 +27,7 @@ BEGIN TRAN
 		Color,
 		[User]
 	)
-	SELECT 'Výchozí', '#FAEBCC', u.Id FROM [dbo].[User] u
+	SELECT 'Výchozí', '#EEB711', u.Id FROM [dbo].[User] u
 	
 
     INSERT INTO [dbo].[DatabaseVersion]

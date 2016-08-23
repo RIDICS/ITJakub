@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "TestForDevelop";
+}
+
+<div class="content-container top-offset-without-submenu">
+    <h2>TestForDevelop</h2>
+
+    <button type="button" id="test-button">Test</button>
+</div>
+
+<script src="../../Scripts/Favorite/itjakub.newFavoriteDialog.js"></script>
+
+<script>
+    $(document).ready(() => {
+
+        var dialog = new NewFavoriteDialog("test1");
+        dialog.make();
+
+        $("#test-button").click(() => {
+            dialog.show("Nějaká položka");
+        });
+    });
+</script>
