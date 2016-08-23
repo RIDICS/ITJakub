@@ -12,7 +12,9 @@
                    not-null="true"
                    type="System.String" />
 
-
+    <property name="Title" />
+    
+    
     <many-to-one name="User"
                  column="[User]"
                  class="User"
@@ -26,8 +28,6 @@
 
       <property name="PagePosition" />
       
-      <property name="Title" />
-
       <many-to-one name="Book"
                    column="BookmarkBook"
                    class="Book"
@@ -38,7 +38,7 @@
 
     <subclass
       name="FavoriteCategory"
-      discriminator-value="FavoriteCategory">
+      discriminator-value="Category">
 
       <many-to-one name="Category"
                    column="FavoriteCategory"
@@ -49,11 +49,22 @@
 
     <subclass
       name="FavoriteBook"
-      discriminator-value="FavoriteBook">
+      discriminator-value="Book">
 
       <many-to-one name="Book"
                    column="BookmarkBook"
                    class="Book"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteBookVersion"
+      discriminator-value="BookVersion">
+
+      <many-to-one name="BookVersion"
+                   column="BookVersion"
+                   class="BookVersion"
                    lazy="proxy" />
 
     </subclass>
@@ -68,6 +79,21 @@
                    column="BookmarkBook"
                    class="Book"
                    lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteQuery"
+      discriminator-value="Query">
+
+      <many-to-one name="BookType"
+                   column="BookType"
+                   class="BookType"
+                   lazy="proxy" />
+      
+      <property name="QueryType" />
+      
+      <property name="Query" />
 
     </subclass>
   </class>

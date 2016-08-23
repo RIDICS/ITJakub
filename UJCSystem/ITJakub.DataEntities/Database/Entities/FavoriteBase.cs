@@ -1,4 +1,5 @@
 using System;
+using ITJakub.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.DataEntities.Database.Entities
 {
@@ -7,6 +8,8 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual int Id { get; set; }
 
         public virtual User User { get; set; }
+
+        public virtual string Title { get; set; }
 
         public virtual bool Equals(FavoriteBase other)
         {
@@ -34,9 +37,7 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual string PageXmlId { get; set; }
 
         public virtual int PagePosition { get; set; }
-
-        public virtual string Title { get; set; }
-
+        
         public virtual Book Book { get; set; }
     }
 
@@ -50,10 +51,24 @@ namespace ITJakub.DataEntities.Database.Entities
         public virtual Book Book { get; set; }
     }
 
+    public class FavoriteBookVersion : FavoriteBase
+    {
+        public virtual BookVersion BookVersion { get; set; }
+    }
+
     public class HeadwordBookmark : FavoriteBase
     {
         public virtual Book Book { get; set; }
 
         public virtual string XmlEntryId { get; set; }
+    }
+
+    public class FavoriteQuery : FavoriteBase
+    {
+        public virtual BookType BookType { get; set; }
+
+        public virtual QueryType QueryType { get; set; }
+
+        public virtual string Query { get; set; }
     }
 }

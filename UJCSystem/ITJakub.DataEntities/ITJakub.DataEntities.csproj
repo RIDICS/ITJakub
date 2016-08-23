@@ -90,6 +90,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
+    <Compile Include="Database\Entities\Enums\QueryType.cs" />
+    <Compile Include="Database\Entities\FavoriteLabel.cs" />
     <Compile Include="Database\Entities\LiteraryOriginal.cs" />
     <Compile Include="Database\Entities\LiteraryGenre.cs" />
     <Compile Include="Database\Entities\BookAccessory.cs" />
@@ -258,6 +260,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\FavoriteLabel.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
