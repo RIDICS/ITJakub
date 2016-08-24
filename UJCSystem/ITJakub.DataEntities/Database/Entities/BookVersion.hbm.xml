@@ -141,5 +141,10 @@
       <key column="BookVersion" />
       <many-to-many class="LiteraryGenre" column="LiteraryGenre" />
     </bag>
+
+    <bag name="FavoriteItems" cascade="all-delete-orphan" lazy="true">
+      <key column="BookVersion"/>
+      <one-to-many class="FavoriteBookVersion"/>
+    </bag>
   </class>
 </hibernate-mapping>

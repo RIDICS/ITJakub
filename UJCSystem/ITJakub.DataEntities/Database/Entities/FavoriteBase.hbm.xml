@@ -20,6 +20,11 @@
                  class="User"
                  lazy="proxy" />
 
+    <many-to-one name="FavoriteLabel"
+                 column="[FavoriteLabel]"
+                 class="FavoriteLabel"
+                 lazy="proxy" />
+
     <subclass
       name="PageBookmark"
       discriminator-value="PageBookmark">

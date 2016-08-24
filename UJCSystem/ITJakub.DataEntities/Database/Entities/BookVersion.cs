@@ -71,6 +71,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
 
+        public virtual IList<FavoriteBookVersion> FavoriteItems { get; set; }
+
 
         public virtual bool Equals(BookVersion other)
         {

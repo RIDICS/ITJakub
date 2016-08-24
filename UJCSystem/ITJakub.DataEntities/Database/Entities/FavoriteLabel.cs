@@ -17,6 +17,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<FavoriteLabel> SubLabels { get; set; }
 
+        public virtual IList<FavoriteBase> FavoriteItems { get; set; }
+
 
         public virtual bool Equals(FavoriteLabel other)
         {

@@ -124,6 +124,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return session.QueryOver<Category>()
                     .WhereRestrictionOn(x => x.Path)
                     .IsLike(rootCategory.Path, MatchMode.Start)
+                    .OrderBy(x => x.Description).Asc
                     .List<Category>();
             }
         }

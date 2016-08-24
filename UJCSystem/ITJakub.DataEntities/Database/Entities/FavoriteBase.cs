@@ -11,6 +11,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual string Title { get; set; }
 
+        public virtual FavoriteLabel FavoriteLabel { get; set; }
+
         public virtual bool Equals(FavoriteBase other)
         {
             if (ReferenceEquals(null, other)) return false;

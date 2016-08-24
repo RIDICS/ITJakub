@@ -23,6 +23,11 @@
       <key column="ParentLabel" />
       <one-to-many class="FavoriteLabel" />
     </bag>
+
+    <bag name="FavoriteItems" cascade="all-delete-orphan">
+      <key column="FavoriteLabel" />
+      <one-to-many class="FavoriteBase" />
+    </bag>
     
   </class>
 </hibernate-mapping>
