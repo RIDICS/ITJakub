@@ -109,7 +109,8 @@ namespace ITJakub.Web.Hub
                 "~/Content/ITJakub.EuCookiePopup.css"));
 
             bundles.Add(new StyleBundle("~/Content/itjakub").Include(
-                "~/Content/ITJakub.css"));
+                "~/Content/ITJakub.css",
+                "~/Content/ITJakub.Favorites.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
                 "~/wwwroot/lib/dropzone/downloads/css/basic.css",
@@ -121,7 +122,7 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
                 "~/Content/ITJakub.TextEditor.css"));
-
+            
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             //BundleTable.EnableOptimizations = true;

@@ -50,7 +50,7 @@
     private finishInnerInitialization() {
         $(".modal-body", this.container).removeClass("loading");
 
-        $(".favorite-labels", this.container).change(event => {
+        $("[name=favorite-label]", this.container).change(event => {
             var checkbox = <HTMLInputElement>event.target;
             if (!checkbox.checked)
                 return;
@@ -58,7 +58,7 @@
             var labelName = $(checkbox).data("name");
             var labelColor = $(checkbox).data("color");
 
-            $(".selected-label-info", this.container)
+            $(".favorite-selected-label-info", this.container)
                 .text(labelName)
                 .css("background-color", labelColor);
         });
@@ -78,18 +78,18 @@
     }
 
     private getData(): INewFavoriteItemData {
-        var itemName = $("#favorite-name").val();
-        var labelId = $("#favorite-labels").val();
+        var itemName: string = $("#favorite-name").val();
+        var labelId: string = $("#favorite-labels").val();
 
         var resultData: INewFavoriteItemData = {
             itemName: itemName,
-            labelId: labelId
+            labelId: Number(labelId)
         };
         return resultData;
     }
 }
 
 interface INewFavoriteItemData {
-    labelId: number,
-    itemName: string,
+    labelId: number;
+    itemName: string;
 }

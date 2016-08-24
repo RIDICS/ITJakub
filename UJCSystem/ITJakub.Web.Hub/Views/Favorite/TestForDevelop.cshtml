@@ -6,9 +6,16 @@
     <h2>TestForDevelop</h2>
 
     <button type="button" id="test-button">Test</button>
+
+
+    <div>
+        Nějaká položka
+        <div id="fav"></div>
+    </div>
 </div>
 
 <script src="../../Scripts/Favorite/itjakub.newFavoriteDialog.js"></script>
+<script src="../../Scripts/Favorite/itjakub.favoriteStar.js"></script>
 
 <script>
     $(document).ready(() => {
@@ -19,5 +26,39 @@
         $("#test-button").click(() => {
             dialog.show("Nějaká položka");
         });
+
+
+        var favStar = new FavoriteStar($("#fav"));
+        favStar.addFavoriteItems([{
+            Id: 5,
+            Title: "První item",
+            FavoriteLabel: {
+                Id: 9,
+                Name: "Tag1",
+                Color: "#FF1010"
+            }
+        },
+        {
+            Id: 5,
+            Title: "První item",
+            FavoriteLabel: {
+                Id: 91,
+                Name: "Tag2",
+                Color: "#10FF10"
+            }
+        }]);
+
+        favStar.addFavoriteLabels([{
+            Id: 91,
+            Name: "Tag2",
+            Color: "#10FF10"
+        },
+        {
+            Id: 9,
+            Name: "Tag1",
+            Color: "#FF1010"
+        }]);
+
+        favStar.make();
     });
 </script>
