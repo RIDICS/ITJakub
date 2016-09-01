@@ -64,6 +64,10 @@
     <Compile Include="Contracts\AudioBooks\FileDataContract.cs" />
     <Compile Include="Clients\ItJakubServiceClient.cs" />
     <Compile Include="Clients\ItJakubServiceEncryptedClient.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteBaseInfoContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteBookInfoContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteCategoryContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteLabelContract.cs" />
     <Compile Include="Contracts\HeadwordBookmarkContract.cs" />
     <Compile Include="Contracts\ImageSizeEnumContract.cs" />
     <Compile Include="Contracts\ImageContract.cs" />
@@ -95,6 +99,7 @@
       <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

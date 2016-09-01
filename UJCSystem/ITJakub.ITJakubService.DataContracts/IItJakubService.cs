@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
@@ -276,6 +277,18 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        [OperationContract]
+        IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName);
+
+        [OperationContract]
+        IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName);
+
+        [OperationContract]
+        void CreateFavoriteBook(long bookId, string title, long? labelId, string userName);
+
+        [OperationContract]
+        void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName);
 
         #endregion
 

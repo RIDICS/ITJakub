@@ -12,11 +12,18 @@
     
     <property name="Color" />
     
+    <property name="IsDefault" />
+    
     <property name="LastUseTime" />
     
     <many-to-one name="ParentLabel"
                  column="ParentLabel"
                  class="FavoriteLabel"
+                 lazy="proxy" />
+
+    <many-to-one name="User"
+                 column="[User]"
+                 class="User"
                  lazy="proxy" />
 
     <bag name="SubLabels" cascade="all-delete-orphan">

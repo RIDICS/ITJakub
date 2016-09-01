@@ -53,6 +53,42 @@ namespace ITJakub.Web.Hub.Controllers
             return View("TestForDevelop");
         }
 
+        public ActionResult GetFavoriteLabeledBooks(IList<long> bookIds)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteLabeledBooks(bookIds, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetFavoriteLabeledCategories(IList<int> categoryIds)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteLabeledCategories(categoryIds, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult CreateFavoriteBook(long bookId, string title, long? labelId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                client.CreateFavoriteBook(bookId, title, labelId, CurrentUserName);
+                return Json(new {});
+            }
+        }
+
+        public ActionResult CreateFavoriteCategory(int categoryId, string title, long? labelId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                client.CreateFavoriteCategory(categoryId, title, labelId, CurrentUserName);
+                return Json(new {});
+            }
+        }
+
         public ActionResult GetLabelList()
         {
             var result = new List<object>();

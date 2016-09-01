@@ -147,5 +147,56 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<HeadwordBookmarkResult>();
             }
         }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<Book> GetFavoriteLabeledBooks(IList<long> bookIds, int userId)
+        {
+            Book bookAlias = null;
+            FavoriteBase favoriteItemAlias = null;
+            FavoriteLabel favoriteLabelAlias = null;
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver(() => bookAlias)
+                    .JoinAlias(() => bookAlias.FavoriteItems, () => favoriteItemAlias)
+                    .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
+                    .WhereRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
+                    .And(() => favoriteLabelAlias.User.Id == userId)
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<Category> GetFavoriteLabeledCategories(IList<int> categoryIds, int userId)
+        {
+            Category categoryAlias = null;
+            FavoriteBase favoriteItemAlias = null;
+            FavoriteLabel favoriteLabelAlias = null;
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver(() => categoryAlias)
+                    .JoinAlias(() => categoryAlias.FavoriteItems, () => favoriteItemAlias)
+                    .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
+                    .WhereRestrictionOn(() => categoryAlias.Id).IsInG(categoryIds)
+                    .And(() => favoriteLabelAlias.User.Id == userId)
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual FavoriteLabel GetDefaultFavoriteLabel(int userId)
+        {
+            FavoriteLabel favoriteLabelAlias = null;
+            User userAlias = null;
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver(() => favoriteLabelAlias)
+                    .JoinAlias(() => favoriteLabelAlias.User, () => userAlias)
+                    .Where(() => favoriteLabelAlias.IsDefault && userAlias.Id == userId)
+                    .SingleOrDefault();
+            }
+        }
     }
 }

@@ -11,9 +11,13 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual string Color { get; set; }
 
+        public virtual bool IsDefault { get; set; }
+
         public virtual DateTime? LastUseTime { get; set; }
 
         public virtual FavoriteLabel ParentLabel { get; set; }
+
+        public virtual User User { get; set; }
 
         public virtual IList<FavoriteLabel> SubLabels { get; set; }
 

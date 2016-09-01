@@ -337,7 +337,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
                         .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
                         .JoinAlias(() => bookVersionAlias.Book, () => bookAlias)
-                        .Fetch(x => x.FavoriteItems).Eager
                         .Where(() => bookTypeAlias.Type == bookType && bookVersionAlias.Id == bookAlias.LastVersion.Id)
                         .OrderBy(() => bookVersionAlias.Title).Asc
                         .TransformUsing(Transformers.DistinctRootEntity)

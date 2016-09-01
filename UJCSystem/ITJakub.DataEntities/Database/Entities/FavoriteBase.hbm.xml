@@ -46,7 +46,7 @@
       discriminator-value="Category">
 
       <many-to-one name="Category"
-                   column="FavoriteCategory"
+                   column="Category"
                    class="Category"
                    lazy="proxy" />
 

@@ -4,8 +4,8 @@ using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using log4net;
 
 namespace ITJakub.ITJakubService.Core
@@ -18,6 +18,7 @@ namespace ITJakub.ITJakubService.Core
         private readonly BookRepository m_bookRepository;
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
         public FavoriteManager(FavoritesRepository favoritesRepository, UserRepository userRepository, BookRepository bookRepository, BookVersionRepository bookVersionRepository)
         {
             m_favoritesRepository = favoritesRepository;
@@ -35,11 +36,11 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
         }
 
-        public void AddPageBookmark(string bookXmlId, string pageXmlId, string userName)
+        private User TryGetUser(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
             {
-                string message = "Username is empty, cannot add bookmark";
+                string message = "Username is empty, cannot execute specified action.";
 
                 if (m_log.IsWarnEnabled)
                     m_log.Warn(message);
@@ -55,6 +56,12 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
+            return user;
+        }
+
+        public void AddPageBookmark(string bookXmlId, string pageXmlId, string userName)
+        {
+            var user = TryGetUser(userName);
             var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
 
             if (bookPage == null)
@@ -78,24 +85,7 @@ namespace ITJakub.ITJakubService.Core
 
         public bool SetPageBookmarkTitle(string bookXmlId, string pageXmlId, string title, string userName)
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                string message = "Username is empty, cannot update bookmark";
-
-                if (m_log.IsWarnEnabled)
-                    m_log.Warn(message);
-                throw new ArgumentException(message);
-            }
-            User user = m_userRepository.FindByUserName(userName);
-
-            if (user == null)
-            {
-                string message = string.Format("Cannot locate user by username: '{0}'", userName);
-                if (m_log.IsErrorEnabled)
-                    m_log.Error(message);
-                throw new ArgumentException(message);
-            }
-
+            var user = TryGetUser(userName);
             var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
 
             if (bookPage == null)
@@ -136,24 +126,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                string message = "Username is empty, cannot add bookmark";
-
-                if (m_log.IsWarnEnabled)
-                    m_log.Warn(message);
-                throw new ArgumentException(message);
-            }
-
-            User user = m_userRepository.FindByUserName(userName);
-
-            if (user == null)
-            {
-                string message = string.Format("Cannot locate user by username: '{0}'", userName);
-                if (m_log.IsErrorEnabled)
-                    m_log.Error(message);
-                throw new ArgumentException(message);
-            }
+            var user = TryGetUser(userName);
 
             var bookmark = new HeadwordBookmark
             {
@@ -168,6 +141,72 @@ namespace ITJakub.ITJakubService.Core
         public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
+        }
+
+        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
+        {
+            var user = TryGetUser(userName);
+            
+            var result = m_favoritesRepository.GetFavoriteLabeledBooks(bookIds, user.Id);
+            return Mapper.Map<IList<FavoriteBookInfoContract>>(result);
+        }
+
+        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
+        {
+            var user = TryGetUser(userName);
+
+            var result = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
+            return Mapper.Map<IList<FavoriteCategoryContract>>(result);
+        }
+
+        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        {
+            var user = TryGetUser(userName);
+            var book = m_favoritesRepository.Load<Book>(bookId);
+
+            var label = labelId == null
+                ? m_favoritesRepository.GetDefaultFavoriteLabel(user.Id)
+                : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
+            
+            if (label.User.Id != label.Id)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var favoriteItem = new FavoriteBook
+            {
+                Book = book,
+                User = user,
+                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                Title = title
+            };
+
+            m_favoritesRepository.Create(favoriteItem);
+        }
+
+        public void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        {
+            var user = TryGetUser(userName);
+            var category = m_favoritesRepository.Load<Category>(categoryId);
+
+            var label = labelId == null
+                ? m_favoritesRepository.GetDefaultFavoriteLabel(user.Id)
+                : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
+
+            if (label.User.Id != label.Id)
+            {
+                throw new UnauthorizedAccessException();
+            }
+
+            var favoriteItem = new FavoriteCategory
+            {
+                Category = category,
+                User = user,
+                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                Title = title
+            };
+
+            m_favoritesRepository.Create(favoriteItem);
         }
     }
 }

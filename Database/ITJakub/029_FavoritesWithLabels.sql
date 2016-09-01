@@ -9,6 +9,7 @@ BEGIN TRAN
 		[Color] char(7) NOT NULL,
 		[User] int NOT NULL CONSTRAINT [FK_FavoriteLabel(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[ParentLabel] bigint NULL CONSTRAINT [FK_FavoriteLabel(ParentLabel)_FavoriteLabel(Id)] FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
+		[IsDefault] bit NOT NULL,
 		[LastUseTime] datetime NULL
 	)
 

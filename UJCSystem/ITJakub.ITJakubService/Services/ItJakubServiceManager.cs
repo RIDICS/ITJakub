@@ -5,7 +5,7 @@ using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.Core.Resources;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.MobileApps.MobileContracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
@@ -465,6 +465,26 @@ namespace ITJakub.ITJakubService.Services
         public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
+        }
+
+        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
+        {
+            return m_favoriteManager.GetFavoriteLabeledBooks(bookIds, userName);
+        }
+
+        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
+        {
+            return m_favoriteManager.GetFavoriteLabeledCategories(categoryIds, userName);
+        }
+
+        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        {
+            m_favoriteManager.CreateFavoriteBook(bookId, title, labelId, userName);
+        }
+
+        public void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        {
+            m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelId, userName);
         }
 
         #endregion
