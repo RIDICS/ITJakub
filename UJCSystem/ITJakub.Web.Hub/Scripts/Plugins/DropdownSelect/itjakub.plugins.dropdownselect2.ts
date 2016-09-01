@@ -193,34 +193,13 @@
         itemDiv.appendChild(checkbox);
 
         if (this.showStar) {
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
 
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
+            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
+            favoriteStar.make(true);
 
-            $(saveStarSpan).click(() => {
-                $(saveStarSpan).siblings(".delete-item").show();
-                $(saveStarSpan).hide();
-                //TODO populate request on save to favorites
-                if (this.callbackDelegate.starSaveItemCallback) {
-                    this.callbackDelegate.starSaveItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(saveStarSpan);
-
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            $(deleteStarSpan).click(() => {
-                $(deleteStarSpan).siblings(".save-item").show();
-                $(deleteStarSpan).hide();
-                //TODO populate request on delete from favorites
-                if (this.callbackDelegate.starDeleteItemCallback) {
-                    this.callbackDelegate.starDeleteItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(deleteStarSpan);
+            itemDiv.appendChild(favoriteStarContainer);
         }
 
         var nameSpan = document.createElement("span");

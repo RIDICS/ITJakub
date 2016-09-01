@@ -92,6 +92,7 @@ class DropDownSelect {
     protected callbackDelegate: DropDownSelectCallbackDelegate;
     private moreSpan: HTMLSpanElement;
     private dropDownBodyDiv: HTMLDivElement;
+    protected favoriteDialog: NewFavoriteDialog;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -100,6 +101,7 @@ class DropDownSelect {
         this.callbackDelegate = callbackDelegate;
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
+        this.favoriteDialog = new NewFavoriteDialog();
     }
 
     private getType(response): string {
@@ -143,6 +145,8 @@ class DropDownSelect {
     }
 
     makeDropdown() {
+        this.favoriteDialog.make();
+
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
 
@@ -504,33 +508,41 @@ class DropDownSelect {
 
         if (this.showStar) {
 
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
 
-            $(saveStarSpan).click(function() {
-                $(this).siblings(".delete-item").show();
-                $(this).hide();
-                //TODO populate request on save to favorites
-                if (self.callbackDelegate.starSaveCategoryCallback) {
-                    self.callbackDelegate.starSaveCategoryCallback(info);
-                }
-            });
+            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
+            favoriteStar.make(true);
 
-            itemDiv.appendChild(saveStarSpan);
+            itemDiv.appendChild(favoriteStarContainer);
 
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
+            //var saveStarSpan = document.createElement("span");
+            //$(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
 
-            $(deleteStarSpan).click(function() {
-                $(this).siblings(".save-item").show();
-                $(this).hide();
-                //TODO populate request on delete from favorites
-                if (self.callbackDelegate.starDeleteCategoryCallback) {
-                    self.callbackDelegate.starDeleteCategoryCallback(info);
-                }
-            });
+            //$(saveStarSpan).click(function() {
+            //    $(this).siblings(".delete-item").show();
+            //    $(this).hide();
+            //    //TODO populate request on save to favorites
+            //    if (self.callbackDelegate.starSaveCategoryCallback) {
+            //        self.callbackDelegate.starSaveCategoryCallback(info);
+            //    }
+            //});
 
-            itemDiv.appendChild(deleteStarSpan);
+            //itemDiv.appendChild(saveStarSpan);
+
+            //var deleteStarSpan = document.createElement("span");
+            //$(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
+
+            //$(deleteStarSpan).click(function() {
+            //    $(this).siblings(".save-item").show();
+            //    $(this).hide();
+            //    //TODO populate request on delete from favorites
+            //    if (self.callbackDelegate.starDeleteCategoryCallback) {
+            //        self.callbackDelegate.starDeleteCategoryCallback(info);
+            //    }
+            //});
+
+            //itemDiv.appendChild(deleteStarSpan);
         }
 
         var nameSpan = document.createElement("span");
@@ -595,33 +607,41 @@ class DropDownSelect {
 
         if (this.showStar) {
 
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
 
-            $(saveStarSpan).click(function() {
-                $(this).siblings(".delete-item").show();
-                $(this).hide();
-                //TODO populate request on save to favorites
-                if (self.callbackDelegate.starSaveItemCallback) {
-                    self.callbackDelegate.starSaveItemCallback(info);
-                }
-            });
+            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
+            favoriteStar.make(true);
 
-            itemDiv.appendChild(saveStarSpan);
+            itemDiv.appendChild(favoriteStarContainer);
 
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
+            //var saveStarSpan = document.createElement("span");
+            //$(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
 
-            $(deleteStarSpan).click(function() {
-                $(this).siblings(".save-item").show();
-                $(this).hide();
-                //TODO populate request on delete from favorites
-                if (self.callbackDelegate.starDeleteItemCallback) {
-                    self.callbackDelegate.starDeleteItemCallback(info);
-                }
-            });
+            //$(saveStarSpan).click(function() {
+            //    $(this).siblings(".delete-item").show();
+            //    $(this).hide();
+            //    //TODO populate request on save to favorites
+            //    if (self.callbackDelegate.starSaveItemCallback) {
+            //        self.callbackDelegate.starSaveItemCallback(info);
+            //    }
+            //});
 
-            itemDiv.appendChild(deleteStarSpan);
+            //itemDiv.appendChild(saveStarSpan);
+
+            //var deleteStarSpan = document.createElement("span");
+            //$(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
+
+            //$(deleteStarSpan).click(function() {
+            //    $(this).siblings(".save-item").show();
+            //    $(this).hide();
+            //    //TODO populate request on delete from favorites
+            //    if (self.callbackDelegate.starDeleteItemCallback) {
+            //        self.callbackDelegate.starDeleteItemCallback(info);
+            //    }
+            //});
+
+            //itemDiv.appendChild(deleteStarSpan);
         }
 
         var nameSpan = document.createElement("span");

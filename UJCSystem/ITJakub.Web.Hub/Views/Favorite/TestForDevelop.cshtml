@@ -14,8 +14,6 @@
     </div>
 </div>
 
-<script src="../../Scripts/Favorite/itjakub.newFavoriteDialog.js"></script>
-<script src="../../Scripts/Favorite/itjakub.favoriteStar.js"></script>
 
 <script>
     $(document).ready(() => {
@@ -28,7 +26,7 @@
         });
 
 
-        var favStar = new FavoriteStar($("#fav"));
+        var favStar = new FavoriteStar($("#fav"), 555, dialog);
         favStar.addFavoriteItems([{
             Id: 5,
             Title: "První item",

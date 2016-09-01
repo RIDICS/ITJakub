@@ -1,11 +1,6 @@
 ﻿class NewFavoriteDialog {
-    private identificator: string;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
-
-    constructor(identificator: string) {
-        this.identificator = identificator;
-    }
 
     public make() {
         this.container = document.createElement("div");
@@ -20,7 +15,6 @@
     }
 
     private finishInitialization() {
-        $(".modal", this.container).attr("id", this.identificator);
         $(".modal-title", this.container).text("Přidat novou oblíbenou položku");
         $(".save-button").click(this.onSaveButtonClick.bind(this));
     }

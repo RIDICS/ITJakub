@@ -94,6 +94,11 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
                 "~/Scripts/Text/itjakub.text.editor.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/favorite/javascript").Include(
+                "~/Scripts/Favorite/itjakub.favorites.js",
+                "~/Scripts/Favorite/itjakub.favoriteStar.js",
+                "~/Scripts/Favorite/itjakub.newFavoriteDialog.js"));
+
 
             // ----- Styles ------
 
