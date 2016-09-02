@@ -1,6 +1,6 @@
 ﻿function createSearch() {
     var callbackDelegate = createDelegate();
-    var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", true, callbackDelegate);
+    var cardfileSelector = new DropDownSelect("div.cardfile-selects", getBaseUrl() +"CardFiles/CardFiles/CardFiles", false, callbackDelegate);
     var cardFileManager = new CardFileManager("div.cardfile-result-area");
     cardfileSelector.makeDropdown();
 

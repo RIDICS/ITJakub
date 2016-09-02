@@ -149,36 +149,34 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<Book> GetFavoriteLabeledBooks(IList<long> bookIds, int userId)
+        public virtual IList<FavoriteBook> GetFavoriteLabeledBooks(IList<long> bookIds, int userId)
         {
-            Book bookAlias = null;
-            FavoriteBase favoriteItemAlias = null;
+            FavoriteBook favoriteItemAlias = null;
             FavoriteLabel favoriteLabelAlias = null;
 
             using (var session = GetSession())
             {
-                return session.QueryOver(() => bookAlias)
-                    .JoinAlias(() => bookAlias.FavoriteItems, () => favoriteItemAlias)
+                return session.QueryOver(() => favoriteItemAlias)
                     .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
-                    .WhereRestrictionOn(() => bookAlias.Id).IsInG(bookIds)
+                    .Fetch(x => x.FavoriteLabel).Eager
+                    .WhereRestrictionOn(() => favoriteItemAlias.Book.Id).IsInG(bookIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
                     .List();
             }
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<Category> GetFavoriteLabeledCategories(IList<int> categoryIds, int userId)
+        public virtual IList<FavoriteCategory> GetFavoriteLabeledCategories(IList<int> categoryIds, int userId)
         {
-            Category categoryAlias = null;
-            FavoriteBase favoriteItemAlias = null;
+            FavoriteCategory favoriteItemAlias = null;
             FavoriteLabel favoriteLabelAlias = null;
 
             using (var session = GetSession())
             {
-                return session.QueryOver(() => categoryAlias)
-                    .JoinAlias(() => categoryAlias.FavoriteItems, () => favoriteItemAlias)
+                return session.QueryOver(() => favoriteItemAlias)
                     .JoinAlias(() => favoriteItemAlias.FavoriteLabel, () => favoriteLabelAlias)
-                    .WhereRestrictionOn(() => categoryAlias.Id).IsInG(categoryIds)
+                    .Fetch(x => x.FavoriteLabel).Eager
+                    .WhereRestrictionOn(() => favoriteItemAlias.Category.Id).IsInG(categoryIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
                     .List();
             }

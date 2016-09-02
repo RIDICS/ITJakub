@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
@@ -146,17 +147,37 @@ namespace ITJakub.ITJakubService.Core
         public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
         {
             var user = TryGetUser(userName);
-            
-            var result = m_favoritesRepository.GetFavoriteLabeledBooks(bookIds, user.Id);
-            return Mapper.Map<IList<FavoriteBookInfoContract>>(result);
+            var dbResult = m_favoritesRepository.GetFavoriteLabeledBooks(bookIds, user.Id);
+
+            var resultList = new List<FavoriteBookInfoContract>();
+            foreach (var favoriteBookGroup in dbResult.GroupBy(x => x.Book.Id))
+            {
+                var favoriteItems = new FavoriteBookInfoContract
+                {
+                    Id = favoriteBookGroup.Key,
+                    FavoriteInfo = favoriteBookGroup.Select(Mapper.Map<FavoriteBaseInfoContract>).ToList()
+                };
+                resultList.Add(favoriteItems);
+            }
+            return resultList;
         }
 
         public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
         {
             var user = TryGetUser(userName);
+            var dbResult = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
 
-            var result = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
-            return Mapper.Map<IList<FavoriteCategoryContract>>(result);
+            var resultList = new List<FavoriteCategoryContract>();
+            foreach (var favoriteCategoryGroup in dbResult.GroupBy(x => x.Category.Id))
+            {
+                var favoriteItems = new FavoriteCategoryContract
+                {
+                    Id = favoriteCategoryGroup.Key,
+                    FavoriteInfo = favoriteCategoryGroup.Select(Mapper.Map<FavoriteBaseInfoContract>).ToList()
+                };
+                resultList.Add(favoriteItems);
+            }
+            return resultList;
         }
 
         public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)

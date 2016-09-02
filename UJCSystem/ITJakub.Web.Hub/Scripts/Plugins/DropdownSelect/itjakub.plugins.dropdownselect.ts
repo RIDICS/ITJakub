@@ -86,6 +86,8 @@ class DropDownSelect {
     protected dropDownSelectContainer: string;
     protected dataUrl: string;
     protected showStar: boolean;
+    protected favoriteCategoryUrl: string;
+    protected favoriteLeafUrl: string;
     private type: string;
     private selectedItems: Array<Item>;
     private selectedCategories: Array<Category>;
@@ -142,6 +144,11 @@ class DropDownSelect {
 
     private getChildLeafItems(leafItems, currentCategory): Array<any> {
         return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
+    }
+
+    public setFavoritesFetchUrl(categoryUrl: string, leafUrl: string) {
+        this.favoriteCategoryUrl = categoryUrl;
+        this.favoriteLeafUrl = leafUrl;
     }
 
     makeDropdown() {
@@ -294,10 +301,50 @@ class DropDownSelect {
                 var rootCategory = this.getRootCategory(categories);
                 var rootCategoryId = this.getCategoryId(rootCategory);
                 this.dataLoaded(rootCategoryId);
+
+                this.downloadFavoriteData(dropDownItemsDiv);
             }
         });
     }
 
+    protected downloadFavoriteData(dropDownItemsDiv: HTMLDivElement) {
+        throw new Error("Not implemented");
+    }
+
+    protected updateFavoriteIcons(categoryItems: Array<IDropdownFavoriteItem>, leafItems: Array<IDropdownFavoriteItem>, dropdownItemsDiv: HTMLDivElement) {
+        var categoriesDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
+        var leafsDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
+        
+        for (var i = 0; i < categoryItems.length; i++) {
+            categoriesDictionary.add(categoryItems[i].Id, categoryItems[i]);
+        }
+        for (var j = 0; j < leafItems.length; j++) {
+            leafsDictionary.add(leafItems[j].Id, leafItems[j]);
+        }
+
+        $(".concrete-item", dropdownItemsDiv).each((index, element) => {
+            var id = $(element).data("id");
+            var type = $(element).data("type");
+
+            var favoriteItem: IDropdownFavoriteItem = null;
+
+            if (type === "category") {
+                favoriteItem = categoriesDictionary.get(id);
+            } else if (type === "item") {
+                favoriteItem = leafsDictionary.get(id);
+            }
+            
+            var favoriteStarContainer = $(element).children(".save-item");
+            var favoriteStar = new FavoriteStar(favoriteStarContainer, id, this.favoriteDialog);
+
+            if (favoriteItem != null) {
+                favoriteStar.addFavoriteItems(favoriteItem.FavoriteInfo);
+            }
+
+            favoriteStar.make(true);
+        });
+    }
+    
     protected makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
         var rootCategory = this.getRootCategory(categories);
 
@@ -510,39 +557,8 @@ class DropDownSelect {
 
             var favoriteStarContainer = document.createElement("span");
             $(favoriteStarContainer).addClass("save-item");
-
-            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
-            favoriteStar.make(true);
-
+            
             itemDiv.appendChild(favoriteStarContainer);
-
-            //var saveStarSpan = document.createElement("span");
-            //$(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
-
-            //$(saveStarSpan).click(function() {
-            //    $(this).siblings(".delete-item").show();
-            //    $(this).hide();
-            //    //TODO populate request on save to favorites
-            //    if (self.callbackDelegate.starSaveCategoryCallback) {
-            //        self.callbackDelegate.starSaveCategoryCallback(info);
-            //    }
-            //});
-
-            //itemDiv.appendChild(saveStarSpan);
-
-            //var deleteStarSpan = document.createElement("span");
-            //$(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            //$(deleteStarSpan).click(function() {
-            //    $(this).siblings(".save-item").show();
-            //    $(this).hide();
-            //    //TODO populate request on delete from favorites
-            //    if (self.callbackDelegate.starDeleteCategoryCallback) {
-            //        self.callbackDelegate.starDeleteCategoryCallback(info);
-            //    }
-            //});
-
-            //itemDiv.appendChild(deleteStarSpan);
         }
 
         var nameSpan = document.createElement("span");
@@ -609,39 +625,8 @@ class DropDownSelect {
 
             var favoriteStarContainer = document.createElement("span");
             $(favoriteStarContainer).addClass("save-item");
-
-            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
-            favoriteStar.make(true);
-
+            
             itemDiv.appendChild(favoriteStarContainer);
-
-            //var saveStarSpan = document.createElement("span");
-            //$(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
-
-            //$(saveStarSpan).click(function() {
-            //    $(this).siblings(".delete-item").show();
-            //    $(this).hide();
-            //    //TODO populate request on save to favorites
-            //    if (self.callbackDelegate.starSaveItemCallback) {
-            //        self.callbackDelegate.starSaveItemCallback(info);
-            //    }
-            //});
-
-            //itemDiv.appendChild(saveStarSpan);
-
-            //var deleteStarSpan = document.createElement("span");
-            //$(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            //$(deleteStarSpan).click(function() {
-            //    $(this).siblings(".save-item").show();
-            //    $(this).hide();
-            //    //TODO populate request on delete from favorites
-            //    if (self.callbackDelegate.starDeleteItemCallback) {
-            //        self.callbackDelegate.starDeleteItemCallback(info);
-            //    }
-            //});
-
-            //itemDiv.appendChild(deleteStarSpan);
         }
 
         var nameSpan = document.createElement("span");
@@ -750,4 +735,9 @@ class Category {
         this.Id = id;
         this.Name = name;
     }
+}
+
+interface IDropdownFavoriteItem {
+    Id: number;
+    FavoriteInfo: Array<IFavoriteBaseInfo>;
 }

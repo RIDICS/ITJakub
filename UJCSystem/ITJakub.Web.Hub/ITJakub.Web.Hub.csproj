@@ -1689,6 +1689,7 @@
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteDialog.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.dataContracts.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
     <TypeScriptCompile Include="Scripts\Text\itjakub.text.editor.ts" />

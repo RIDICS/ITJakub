@@ -1,5 +1,6 @@
 ﻿class DropDownSelect2 extends DropDownSelect {
     private bookIdList: Array<number>;
+    private categoryIdList: Array<number>;
     private books: IDropDownBookDictionary;
     private categories: IDropDownCategoryDictionary;
     private rootCategory: DropDownCategory;
@@ -58,7 +59,14 @@
         $(this.dropDownSelectContainer).append(this.descriptionDiv);
     }
 
-    private restore() {
+    restore(categoryIds: Array<number>, bookIds: Array<number>) {
+        this.restoreCategoryIds = categoryIds;
+        this.restoreBookIds = bookIds;
+
+        this.doRestore();
+    }
+
+    private doRestore() {
         var categoriesCount = 0;
         var booksCount = 0;
 
@@ -109,20 +117,68 @@
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
-                this.restore();
+                this.doRestore();
                 this.isLoaded = true;
                 this.dataLoaded(this.rootCategory.id);
+
+                this.downloadFavoriteData(dropDownItemsDiv);
             }
         });
     }
-    
+
+    public downloadFavoriteData(dropDownItemsDiv: HTMLDivElement): void {
+        if (!this.showStar) {
+            return;
+        }
+
+        var loadedFavoriteCategories: Array<IDropdownFavoriteItem> = null;
+        var loadedFavoriteBooks: Array<IDropdownFavoriteItem> = null;
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: {
+                categoryIds: this.categoryIdList
+            },
+            url: getBaseUrl() + "Favorite/GetFavoriteLabeledCategories",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                loadedFavoriteCategories = response;
+
+                if (loadedFavoriteBooks != null) {
+                    this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+                }
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            data: {
+                bookIds: this.bookIdList
+            },
+            url: getBaseUrl() + "Favorite/GetFavoriteLabeledBooks",
+            dataType: "json",
+            contentType: "application/json",
+            success: (response) => {
+                loadedFavoriteBooks = response;
+
+                if (loadedFavoriteCategories != null) {
+                    this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+                }
+            }
+        });
+    }
+
     private processDownloadedData(result: IDropDownRequestResult) {
         this.books = {};
         this.categories = {};
         this.bookIdList = [];
+        this.categoryIdList = [];
 
-        for (var i = 0; i < result.Categories.length; i++) {
-            var resultCategory = result.Categories[i];
+        for (let i = 0; i < result.Categories.length; i++) {
+            let resultCategory = result.Categories[i];
             var category = new DropDownCategory();
             category.id = resultCategory.Id;
             category.name = resultCategory.Description;
@@ -130,13 +186,14 @@
             category.bookIds = [];
             category.subcategoryIds = [];
             this.categories[category.id] = category;
+            this.categoryIdList.push(category.id);
 
             if (!category.parentCategoryId)
                 this.rootCategory = category;
         }
 
-        for (var i = 0; i < result.Categories.length; i++) {
-            var resultCategory = result.Categories[i];
+        for (let i = 0; i < result.Categories.length; i++) {
+            let resultCategory = result.Categories[i];
             if (!resultCategory.ParentCategoryId)
                 continue;
 
@@ -195,10 +252,7 @@
         if (this.showStar) {
             var favoriteStarContainer = document.createElement("span");
             $(favoriteStarContainer).addClass("save-item");
-
-            var favoriteStar = new FavoriteStar($(favoriteStarContainer), info.ItemId, this.favoriteDialog);
-            favoriteStar.make(true);
-
+            
             itemDiv.appendChild(favoriteStarContainer);
         }
 
@@ -335,12 +389,12 @@
         state.SelectedItems = [];
         state.IsOnlyRootSelected = selectedIds.isOnlyRootSelected;
 
-        for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
-            var id = selectedIds.selectedCategoryIds[i];
+        for (let i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
+            let id = selectedIds.selectedCategoryIds[i];
             state.SelectedCategories.push(new Category(String(id), this.categories[id].name));
         }
-        for (var i = 0; i < selectedIds.selectedBookIds.length; i++) {
-            var id = selectedIds.selectedBookIds[i];
+        for (let i = 0; i < selectedIds.selectedBookIds.length; i++) {
+            let id = selectedIds.selectedBookIds[i];
             state.SelectedItems.push(new Item(String(id), this.books[id].name));
         }
 
@@ -377,13 +431,13 @@
         var selectedCategories = state.SelectedCategories;
         var resultString = "";
 
-        for (var i = 0; i < selectedBooks.length; i++) {
+        for (let i = 0; i < selectedBooks.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
             resultString += DropDownSelect2.selectedBookUrlKey + "=" + selectedBooks[i].Id;
         }
 
-        for (var i = 0; i < selectedCategories.length; i++) {
+        for (let i = 0; i < selectedCategories.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
             resultString += DropDownSelect2.selectedCategoryUrlKey + "=" + selectedCategories[i].Id;
@@ -410,7 +464,7 @@
             }
         }
 
-        this.makeAndRestore(categoryIds, bookIds);
+        this.restore(categoryIds, bookIds);
     }
 }
 
