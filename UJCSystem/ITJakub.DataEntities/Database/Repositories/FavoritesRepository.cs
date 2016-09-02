@@ -196,5 +196,30 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .SingleOrDefault();
             }
         }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteLabel> GetLatestFavoriteLabels(int latestLabelCount, int userId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FavoriteLabel>()
+                    .Where(x => x.User.Id == userId)
+                    .OrderBy(x => x.LastUseTime).Desc
+                    .Take(latestLabelCount)
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteLabel> GetAllFavoriteLabels(int userId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FavoriteLabel>()
+                    .Where(x => x.User.Id == userId)
+                    .OrderBy(x => x.Name).Asc
+                    .List();
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
+    private favoriteManager: FavoriteManager;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
@@ -41,6 +42,7 @@
             return this.books[item].name;
         };
         this.isLoaded = false;
+        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
     }
 
     makeAndRestore(categoryIds: Array<number>, bookIds: Array<number>) {
@@ -133,40 +135,33 @@
 
         var loadedFavoriteCategories: Array<IDropdownFavoriteItem> = null;
         var loadedFavoriteBooks: Array<IDropdownFavoriteItem> = null;
+        var loadedFavoriteLabels: Array<IFavoriteLabel> = null;
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: {
-                categoryIds: this.categoryIdList
-            },
-            url: getBaseUrl() + "Favorite/GetFavoriteLabeledCategories",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                loadedFavoriteCategories = response;
+        var isAllLoaded = () => (loadedFavoriteCategories != null &&
+            loadedFavoriteBooks != null &&
+            loadedFavoriteLabels != null);
 
-                if (loadedFavoriteBooks != null) {
-                    this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
-                }
+        this.favoriteManager.getFavoritesForCategories(this.categoryIdList, (favoriteCategories) => {
+            loadedFavoriteCategories = favoriteCategories;
+
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
             }
         });
 
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            data: {
-                bookIds: this.bookIdList
-            },
-            url: getBaseUrl() + "Favorite/GetFavoriteLabeledBooks",
-            dataType: "json",
-            contentType: "application/json",
-            success: (response) => {
-                loadedFavoriteBooks = response;
+        this.favoriteManager.getFavoritesForBooks(this.bookIdList, (favoriteBooks) => {
+            loadedFavoriteBooks = favoriteBooks;
 
-                if (loadedFavoriteCategories != null) {
-                    this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
-                }
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+            }
+        });
+
+        this.favoriteManager.getLatestFavoriteLabels(favoriteLabels => {
+            loadedFavoriteLabels = favoriteLabels;
+
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
             }
         });
     }

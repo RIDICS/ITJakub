@@ -2,12 +2,14 @@
     private favoriteDialog: NewFavoriteDialog;
     private itemId: string;
     private container: JQuery;
+    private isItemLabeled: boolean;
     private popoverBuilder: FavoritePopoverBuilder;
 
     constructor(container: JQuery, itemId: string, favoriteDialog: NewFavoriteDialog) {
         this.favoriteDialog = favoriteDialog;
         this.itemId = itemId;
         this.container = container;
+        this.isItemLabeled = false;
         this.popoverBuilder = new FavoritePopoverBuilder();
     }
 
@@ -23,6 +25,7 @@
         for (var i = 0; i < items.length; i++) {
             this.popoverBuilder.addFavoriteItem(items[i]);
         }
+        this.isItemLabeled = items.length > 0;
     }
 
     public addFavoriteLabels(labels: Array<IFavoriteLabel>) {
@@ -32,8 +35,10 @@
     }
     
     public make(fixPosition = false) {
-        var innerContainer = document.createElement("div");
-        $(innerContainer).addClass("favorite-star");
+        var innerContainer = document.createElement("a");
+        $(innerContainer)
+            .addClass("favorite-star")
+            .attr("href", "#");
 
         var popoverOptions: PopoverOptions = {
             html: true,
@@ -43,7 +48,8 @@
             popoverOptions.container = "body";
         }
 
-        var glyphIcon = this.createGlyphIcon("glyphicon-star-empty");
+        var glyphIconType = this.isItemLabeled ? "glyphicon-star" : "glyphicon-star-empty";
+        var glyphIcon = this.createGlyphIcon(glyphIconType);
         $(glyphIcon)
             .attr("data-content", this.popoverBuilder.getHtmlString())
             .attr("data-title", "Oblíbené položky")

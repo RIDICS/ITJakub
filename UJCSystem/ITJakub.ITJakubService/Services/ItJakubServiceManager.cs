@@ -367,7 +367,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_newsManager.GetWebNewsSyndicationItemCount();
         }
-
+        
         #region news
 
         public void CreateNewsSyndicationItem(string title, string content, string url, NewsTypeContract itemType, string username)
@@ -431,6 +431,11 @@ namespace ITJakub.ITJakubService.Services
         #endregion
 
         #region Favorite Items
+
+        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)
+        {
+            return m_favoriteManager.GetFavoriteLabels(latestLabelCount, userName);
+        }
 
         public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
         {

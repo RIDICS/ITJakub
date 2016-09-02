@@ -229,5 +229,16 @@ namespace ITJakub.ITJakubService.Core
 
             m_favoritesRepository.Create(favoriteItem);
         }
+
+        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)
+        {
+            var user = TryGetUser(userName);
+
+            var dbResult = latestLabelCount == 0
+                ? m_favoritesRepository.GetAllFavoriteLabels(user.Id)
+                : m_favoritesRepository.GetLatestFavoriteLabels(latestLabelCount, user.Id);
+
+            return Mapper.Map<IList<FavoriteLabelContract>>(dbResult);
+        }
     }
 }

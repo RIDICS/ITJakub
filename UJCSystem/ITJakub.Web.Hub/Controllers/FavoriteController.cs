@@ -6,6 +6,8 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class FavoriteController : BaseController
     {
+        private const int LatestFavoriteCount = 5;
+
         private string CurrentUserName
         {
             get { return HttpContext.User.Identity.Name; }
@@ -91,8 +93,20 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetLabelList()
         {
-            var result = new List<object>();
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteLabels(0, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetLatestLabelList()
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteLabels(LatestFavoriteCount, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult GetFavoriteList(long? labelId)

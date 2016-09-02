@@ -258,6 +258,9 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Favorite Items
 
         [OperationContract]
+        IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName);
+
+        [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
 
         [OperationContract]
