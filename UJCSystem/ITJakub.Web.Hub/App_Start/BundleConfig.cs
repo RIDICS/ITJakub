@@ -58,6 +58,10 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/simplemde").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/colorpicker").Include(
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js",
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
                 "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
@@ -96,9 +100,12 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Text/itjakub.text.editor.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/favorite/javascript").Include(
-                "~/Scripts/Favorite/itjakub.favorites.js",
+                "~/Scripts/Favorite/itjakub.favoriteManager.js",
                 "~/Scripts/Favorite/itjakub.favoriteStar.js",
                 "~/Scripts/Favorite/itjakub.newFavoriteDialog.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/favorite/management/javascript").Include(
+                "~/Scripts/Favorite/itjakub.favoriteManagement.js"));
 
 
             // ----- Styles ------
@@ -128,7 +135,11 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
                 "~/Content/ITJakub.TextEditor.css"));
-            
+
+            bundles.Add(new StyleBundle("~/Content/colorpicker").Include(
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css",
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css"));
+
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             //BundleTable.EnableOptimizations = true;

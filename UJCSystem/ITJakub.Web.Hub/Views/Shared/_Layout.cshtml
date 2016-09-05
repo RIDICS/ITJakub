@@ -320,7 +320,7 @@
         }
         else
         {
-            <a href='#'>
+            <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
                 <span>Administrace</span>
             </a>
         }
@@ -379,6 +379,12 @@
                     </a>
                 </li>
             }
+            
+            <li>
+                <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
+                    <span>Správa oblíbených položek</span>
+                </a>
+            </li>
 
             @if (User.IsInRole(CustomRole.CanAddNews))
             {

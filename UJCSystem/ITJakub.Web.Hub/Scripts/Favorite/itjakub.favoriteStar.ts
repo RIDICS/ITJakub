@@ -101,12 +101,12 @@ class FavoritePopoverBuilder {
     }
 
     public addFavoriteItem(item: IFavoriteBaseInfo) {
-        var itemHtml = '<div><span class="badge" style="background-color: ' + item.FavoriteLabel.Color + '">' + item.FavoriteLabel.Name + '</span><span> ' + item.Title + '</span></div>';
+        var itemHtml = '<div><span class="label label-favorite" style="background-color: ' + item.FavoriteLabel.Color + '">' + item.FavoriteLabel.Name + '</span><span> ' + item.Title + '</span></div>';
         this.favoriteItems.push(itemHtml);
     }
 
     public addFavoritLabel(label: IFavoriteLabel) {
-        var labelHtml = '<div><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="badge" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></div>';
+        var labelHtml = '<div><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></div>';
         this.favoriteLabels.push(labelHtml);
     }
 

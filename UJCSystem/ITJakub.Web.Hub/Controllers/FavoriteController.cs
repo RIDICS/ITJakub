@@ -13,6 +13,11 @@ namespace ITJakub.Web.Hub.Controllers
             get { return HttpContext.User.Identity.Name; }
         }
 
+        public ActionResult Management()
+        {
+            return View("FavoriteManagement");
+        }
+
         public ActionResult NewFavorite(string itemName)
         {
             var viewModel = new NewFavoriteViewModel
