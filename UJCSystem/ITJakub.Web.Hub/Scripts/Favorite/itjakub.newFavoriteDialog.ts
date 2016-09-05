@@ -1,6 +1,15 @@
 ﻿class NewFavoriteDialog {
+    private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
+
+    constructor(favoriteManager: FavoriteManager) {
+        this.favoriteManager = favoriteManager;
+    }
+
+    public setSaveCallback(value: (data: INewFavoriteItemData) => void) {
+        this.onSaveCallback = value;
+    }
 
     public make() {
         this.container = document.createElement("div");

@@ -9,7 +9,6 @@
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
-    private favoriteManager: FavoriteManager;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
@@ -42,7 +41,6 @@
             return this.books[item].name;
         };
         this.isLoaded = false;
-        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
     }
 
     makeAndRestore(categoryIds: Array<number>, bookIds: Array<number>) {
@@ -145,7 +143,7 @@
             loadedFavoriteCategories = favoriteCategories;
 
             if (isAllLoaded()) {
-                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
             }
         });
 
@@ -153,7 +151,7 @@
             loadedFavoriteBooks = favoriteBooks;
 
             if (isAllLoaded()) {
-                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
             }
         });
 
@@ -161,7 +159,7 @@
             loadedFavoriteLabels = favoriteLabels;
 
             if (isAllLoaded()) {
-                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, dropDownItemsDiv);
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
             }
         });
     }

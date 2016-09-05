@@ -1,12 +1,18 @@
 ﻿class FavoriteStar {
+    private favoriteManager: FavoriteManager;
     private favoriteDialog: NewFavoriteDialog;
+    private favoriteDefaultTitle: string;
+    private favoriteItemType: FavoriteType;
     private itemId: string;
     private container: JQuery;
     private isItemLabeled: boolean;
     private popoverBuilder: FavoritePopoverBuilder;
 
-    constructor(container: JQuery, itemId: string, favoriteDialog: NewFavoriteDialog) {
+    constructor(container: JQuery, type: FavoriteType, itemId: string, favoriteDefaultTitle: string, favoriteDialog: NewFavoriteDialog, favoriteManager: FavoriteManager) {
+        this.favoriteManager = favoriteManager;
         this.favoriteDialog = favoriteDialog;
+        this.favoriteDefaultTitle = favoriteDefaultTitle;
+        this.favoriteItemType = type;
         this.itemId = itemId;
         this.container = container;
         this.isItemLabeled = false;
@@ -56,6 +62,7 @@
             .attr("data-toggle", "popover")
             .popover(popoverOptions);
         $(glyphIcon).on("shown.bs.popover", () => {
+            // todo only one popover can be opened at once
             this.initPopoverEvents($(glyphIcon));
         });
 
@@ -67,7 +74,15 @@
         $(".show-all-favorite-button").click(() => {
             icon.popover("hide");
 
-            this.favoriteDialog.show("TODO item name");
+            this.favoriteDialog.show(this.favoriteDefaultTitle);
+        });
+
+        $(".fast-add-favorite-label").click((event) => {
+            var labelId = $(event.target).data("id");
+
+            this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, this.favoriteDefaultTitle, labelId, () => {
+                icon.popover("hide");
+            });
         });
     }
 }
@@ -91,7 +106,7 @@ class FavoritePopoverBuilder {
     }
 
     public addFavoritLabel(label: IFavoriteLabel) {
-        var labelHtml = '<div><a href="#" data-id="' + label.Id + '"><span class="badge" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></div>';
+        var labelHtml = '<div><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="badge" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></div>';
         this.favoriteLabels.push(labelHtml);
     }
 

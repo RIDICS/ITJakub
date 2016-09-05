@@ -94,6 +94,7 @@ class DropDownSelect {
     protected callbackDelegate: DropDownSelectCallbackDelegate;
     private moreSpan: HTMLSpanElement;
     private dropDownBodyDiv: HTMLDivElement;
+    protected favoriteManager: FavoriteManager;
     protected favoriteDialog: NewFavoriteDialog;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
@@ -103,7 +104,8 @@ class DropDownSelect {
         this.callbackDelegate = callbackDelegate;
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
-        this.favoriteDialog = new NewFavoriteDialog();
+        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager);
     }
 
     private getType(response): string {
@@ -311,7 +313,7 @@ class DropDownSelect {
         throw new Error("Not implemented");
     }
 
-    protected updateFavoriteIcons(categoryItems: Array<IDropdownFavoriteItem>, leafItems: Array<IDropdownFavoriteItem>, dropdownItemsDiv: HTMLDivElement) {
+    protected updateFavoriteIcons(categoryItems: Array<IDropdownFavoriteItem>, leafItems: Array<IDropdownFavoriteItem>, favoriteLabels: Array<IFavoriteLabel>, dropdownItemsDiv: HTMLDivElement) {
         var categoriesDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
         var leafsDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
         
@@ -325,22 +327,27 @@ class DropDownSelect {
         $(".concrete-item", dropdownItemsDiv).each((index, element) => {
             var id = $(element).data("id");
             var type = $(element).data("type");
+            var itemName = $(element).data("name");
 
             var favoriteItem: IDropdownFavoriteItem = null;
+            var favoriteType: FavoriteType = FavoriteType.Unknown;
 
             if (type === "category") {
                 favoriteItem = categoriesDictionary.get(id);
+                favoriteType = FavoriteType.Category;
             } else if (type === "item") {
                 favoriteItem = leafsDictionary.get(id);
+                favoriteType = FavoriteType.Book;
             }
-            
+
             var favoriteStarContainer = $(element).children(".save-item");
-            var favoriteStar = new FavoriteStar(favoriteStarContainer, id, this.favoriteDialog);
+            var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager);
 
             if (favoriteItem != null) {
                 favoriteStar.addFavoriteItems(favoriteItem.FavoriteInfo);
             }
 
+            favoriteStar.addFavoriteLabels(favoriteLabels);
             favoriteStar.make(true);
         });
     }
