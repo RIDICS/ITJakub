@@ -1,8 +1,10 @@
-﻿<div class="favorite-label-management" style="background-color: #EEB711;">
+﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteLabelViewModel
+
+<div class="favorite-label-management" style="background-color: @Model.Color;" data-id="@Model.Id" data-name="@Model.Name" data-color="@Model.Color">
     <div class="row">
         <div class="col-xs-9">
             <a href="#">
-                <div>Název štítku</div>
+                <div>@Model.Name</div>
             </a>
         </div>
         <div class="col-xs-3">

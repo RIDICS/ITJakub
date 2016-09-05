@@ -35,6 +35,24 @@
         });
     }
 
+    public getFavorites(callback: (favorites: IFavoriteBaseInfo[]) => void) {
+        if (!this.isUserLoggedIn) {
+            throw new Error("Not implemented"); // TODO
+        }
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetFavoriteList",
+            data: {},
+            dataType: "json",
+            contentType: "application/json",
+            success: (favorites: Array<IFavoriteBaseInfo>) => {
+                callback(favorites);
+            }
+        });
+    }
+
     public getFavoritesForBooks(bookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteBook>) => void): void {
         if (!this.isUserLoggedIn) {
             this.getFavoritesForBooksLocal(bookIds, callback);
@@ -136,10 +154,10 @@
 }
 
 enum FavoriteType {
-    Unknown,
-    Book,
-    Category,
-    PageBookmark,
-    Query,
-    BookVersion,
+    Unknown = 0,
+    Book = 1,
+    Category = 2,
+    PageBookmark = 3,
+    Query = 4,
+    BookVersion = 5,
 }

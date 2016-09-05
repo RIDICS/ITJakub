@@ -262,6 +262,7 @@
     <Compile Include="Areas\Lemmatization\LemmatizationAreaRegistration.cs" />
     <Compile Include="Areas\Lemmatization\RouteConfig.cs" />
     <Compile Include="Areas\OldGrammar\Models\TermCategoriesWithTermsModel.cs" />
+    <Compile Include="AutoMapperProfiles\FavoriteProfile.cs" />
     <Compile Include="AutoMapperProfiles\StaticTextProfile.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
@@ -294,6 +295,7 @@
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />
     <Compile Include="Models\Favorite\FavoriteLabelViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteManagementViewModel.cs" />
     <Compile Include="Models\Favorite\NewFavoriteViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />

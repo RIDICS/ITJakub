@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteManagementViewModel
+@{
     ViewBag.Title = "Administrace - Správa oblíbených položek";
 }
 @section scripts{
@@ -14,13 +15,14 @@
     
     <div class="row">
         <div class="col-md-3">
-            <span style="font-weight: bold">Štítky</span>
+            <span class="favorite-management-heading">Štítky</span>
             <hr/>
             <div>
                 
-                @Html.Partial("_FavoriteLabelManagement")
-                @Html.Partial("_FavoriteLabelManagement")
-                @Html.Partial("_FavoriteLabelManagement")
+                @foreach (var favoriteLabel in Model.FavoriteLabels)
+                {
+                    @Html.Partial("_FavoriteLabelManagement", favoriteLabel)
+                }
 
             </div>
 
@@ -28,7 +30,7 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-6">
                     <button type="button" class="btn btn-default btn-block" id="add-new-label" data-toggle="modal" data-target="#new-favorite-label-dialog">
-                        Přidat
+                        Vytvořit nový
                     </button>
                 </div>
             </div>
@@ -37,10 +39,15 @@
 
         <div class="col-md-9">
             <div class="row">
-                <div class="col-md-6">
-                    <span style="font-weight: bold">Oblíbené položky</span>
+                <div class="col-md-5">
+                    <span class="favorite-management-heading">Oblíbené položky</span>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select class="form-control input-sm">
+                        <option selected="selected">Seřadit podle názvu</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <select class="form-control input-sm">
                         <option selected="selected">Filtr podle typu</option>
                     </select>
@@ -51,6 +58,8 @@
             </div>
             <hr/>
             
+            <div id="favorite-item-container"></div>
+
             @Html.Partial("_FavoriteItemManagement")
             @Html.Partial("_FavoriteItemManagement")
             @Html.Partial("_FavoriteItemManagement")

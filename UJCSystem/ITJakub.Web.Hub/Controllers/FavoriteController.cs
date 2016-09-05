@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using AutoMapper;
 using ITJakub.Web.Hub.Models.Favorite;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -15,7 +16,15 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Management()
         {
-            return View("FavoriteManagement");
+            using (var client = GetMainServiceClient())
+            {
+                var favoriteLabels = client.GetFavoriteLabels(0, CurrentUserName);
+                var viewModel = new FavoriteManagementViewModel
+                {
+                    FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels)
+                };
+                return View("FavoriteManagement", viewModel);
+            }
         }
 
         public ActionResult NewFavorite(string itemName)

@@ -2,7 +2,8 @@
     Id: number;
     Title: string;
     FavoriteLabel: IFavoriteLabel;
-    LastUseTime: string;
+    CreateTime: string;
+    FavoriteType: FavoriteType;
 }
 
 interface IFavoriteLabel {

@@ -1,3 +1,5 @@
+using System;
+
 namespace ITJakub.Web.Hub.Models.Favorite
 {
     public class FavoriteLabelViewModel
@@ -7,5 +9,7 @@ namespace ITJakub.Web.Hub.Models.Favorite
         public string Name { get; set; }
 
         public string Color { get; set; }
+
+        public DateTime? LastUseTime { get; set; }
     }
 }
