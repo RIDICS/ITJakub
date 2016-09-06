@@ -278,6 +278,9 @@ namespace ITJakub.ITJakubService.Core
             if (user.Id != favoriteLabel.User.Id)
                 throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
 
+            if (favoriteLabel.IsDefault)
+                throw new ArgumentException("User can't modify default favorite label");
+
             favoriteLabel.Name = name;
             favoriteLabel.Color = color;
 
@@ -291,6 +294,9 @@ namespace ITJakub.ITJakubService.Core
 
             if (user.Id != favoriteLabel.User.Id)
                 throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
+
+            if (favoriteLabel.IsDefault)
+                throw new ArgumentException("Can't remove default favorite label");
 
             m_favoritesRepository.Delete(favoriteLabel);
         }
