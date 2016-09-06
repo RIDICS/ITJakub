@@ -17,5 +17,8 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
 
         [DataMember]
         public DateTime? LastUseTime { get; set; }
+
+        [DataMember]
+        public bool IsDefault { get; set; }
     }
 }

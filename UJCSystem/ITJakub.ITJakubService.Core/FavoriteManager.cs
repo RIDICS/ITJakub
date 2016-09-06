@@ -252,5 +252,47 @@ namespace ITJakub.ITJakubService.Core
 
             return Mapper.Map<IList<FavoriteBaseInfoContract>>(dbResult);
         }
+
+        public long CreateFavoriteLabel(string name, string color, string userName, bool isDefault)
+        {
+            var now = DateTime.UtcNow;
+            var user = TryGetUser(userName);
+            var favoriteLabel = new FavoriteLabel
+            {
+                Name = name,
+                Color = color,
+                IsDefault = isDefault,
+                LastUseTime = now,
+                User = m_favoritesRepository.Load<User>(user.Id)
+            };
+
+            var id = m_favoritesRepository.Create(favoriteLabel);
+            return (long) id;
+        }
+
+        public void UpdateFavoriteLabel(long labelId, string name, string color, string userName)
+        {
+            var user = TryGetUser(userName);
+            var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
+
+            if (user.Id != favoriteLabel.User.Id)
+                throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
+
+            favoriteLabel.Name = name;
+            favoriteLabel.Color = color;
+
+            m_favoritesRepository.Update(favoriteLabel);
+        }
+
+        public void DeleteFavoriteLabel(long labelId, string userName)
+        {
+            var user = TryGetUser(userName);
+            var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
+
+            if (user.Id != favoriteLabel.User.Id)
+                throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
+
+            m_favoritesRepository.Delete(favoriteLabel);
+        }
     }
 }

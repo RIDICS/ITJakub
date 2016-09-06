@@ -10,6 +10,8 @@ interface IFavoriteLabel {
     Id: number;
     Name: string;
     Color: string;
+    IsDefault: boolean;
+    LastUseTime: string;
 }
 
 interface IFavoriteBook {

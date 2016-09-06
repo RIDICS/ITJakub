@@ -438,6 +438,21 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetFavoriteLabels(latestLabelCount, userName);
         }
 
+        public long CreateFavoriteLabel(string name, string color, string userName)
+        {
+            return m_favoriteManager.CreateFavoriteLabel(name, color, userName, false);
+        }
+
+        public void UpdateFavoriteLabel(long labelId, string name, string color, string userName)
+        {
+            m_favoriteManager.UpdateFavoriteLabel(labelId, name, color, userName);
+        }
+
+        public void DeleteFavoriteLabel(long labelId, string userName)
+        {
+            m_favoriteManager.DeleteFavoriteLabel(labelId, userName);
+        }
+
         public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName)
         {
             return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, userName);

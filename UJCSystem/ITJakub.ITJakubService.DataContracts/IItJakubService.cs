@@ -262,6 +262,15 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName);
 
         [OperationContract]
+        long CreateFavoriteLabel(string name, string color, string userName);
+
+        [OperationContract]
+        void UpdateFavoriteLabel(long labelId, string name, string color, string userName);
+
+        [OperationContract]
+        void DeleteFavoriteLabel(long labelId, string userName);
+
+        [OperationContract]
         IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName);
 
         [OperationContract]

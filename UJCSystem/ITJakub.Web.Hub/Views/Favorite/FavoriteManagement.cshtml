@@ -17,7 +17,7 @@
         <div class="col-md-3">
             <span class="favorite-management-heading">Štítky</span>
             <hr/>
-            <div>
+            <div id="favorite-labels">
                 
                 @foreach (var favoriteLabel in Model.FavoriteLabels)
                 {
@@ -59,10 +59,6 @@
             <hr/>
             
             <div id="favorite-item-container"></div>
-
-            @Html.Partial("_FavoriteItemManagement")
-            @Html.Partial("_FavoriteItemManagement")
-            @Html.Partial("_FavoriteItemManagement")
         </div>
     </div>
 </div>

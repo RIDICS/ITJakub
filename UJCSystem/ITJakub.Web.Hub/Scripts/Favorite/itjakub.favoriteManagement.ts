@@ -6,6 +6,7 @@
 
 class FavoriteManagement {
     private favoriteManager: FavoriteManager;
+    private activeLabelId: number;
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -25,6 +26,15 @@ class FavoriteManagement {
             }
         });
 
+        $("#new-favorite-label-dialog .save-button").click(this.saveNewFavoriteLabel.bind(this));
+
+        $(".favorite-label-management a").click((event) => {
+            $(".favorite-label-management").removeClass("active");
+            var activeElement = $(event.target).closest(".favorite-label-management");
+            activeElement.addClass("active");
+            this.activeLabelId = activeElement.data("id");
+        });
+
         this.loadFavoriteItems();
     }
 
@@ -40,6 +50,28 @@ class FavoriteManagement {
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime);
                 item.make();
             }
+        });
+    }
+
+    private saveNewFavoriteLabel() {
+        var name = $("#favorite-label-name").val();
+        var color = $("#favorite-label-color").val();
+
+        this.favoriteManager.createFavoriteLabel(name, color, (id) => {
+            $("#new-favorite-label-dialog").modal("hide");
+
+            var labelDiv = document.createElement("div");
+            $("#favorite-labels").append(labelDiv);
+
+            var url = getBaseUrl() + "Favorite/GetFavoriteLabelManagementPartial?";
+            var urlParams = {
+                id: id,
+                name: name,
+                color: color
+            }
+            url = url + $.param(urlParams);
+            
+            $(labelDiv).load(url);
         });
     }
 }
@@ -65,9 +97,13 @@ class FavoriteManagementItem {
 
         var iconColumn = document.createElement("div");
         var iconContainer = document.createElement("div");
+        var icon = this.createIconElement();
         $(iconContainer)
-            .attr("style", "width: 24px; height: 24px; background-color: black; margin-left: auto; margin-right: auto");
-        $(iconColumn).append(iconContainer);
+            .attr("style", "text-align: center; font-size: 120%;")
+            .append(icon);
+        $(iconColumn)
+            .addClass("col-md-1 col-xs-2")
+            .append(iconContainer);
 
         var nameColumn = document.createElement("div");
         var nameLink = document.createElement("a");
@@ -75,7 +111,9 @@ class FavoriteManagementItem {
         $(nameDiv).text(this.name);
         $(nameLink).attr("href", "#")
             .append(nameDiv);
-        $(nameColumn).append(nameLink);
+        $(nameColumn)
+            .addClass("col-md-10 col-xs-8")
+            .append(nameLink);
 
         var removeColumn = document.createElement("div");
         var removeLink = document.createElement("a");
@@ -83,11 +121,16 @@ class FavoriteManagementItem {
         $(removeIcon)
             .addClass("glyphicon")
             .addClass("glyphicon-remove");
-        $(removeLink).attr("href", "#")
+        $(removeLink)
+            .attr("href", "#")
+            .attr("title", "Smazat oblíbenou položku")
             .append(removeIcon);
-        removeColumn.appendChild(removeLink);
+        $(removeColumn)
+            .addClass("col-md-1 col-xs-2")
+            .append(removeLink);
 
         $(innerContainerDiv)
+            .addClass("row")
             .append(iconColumn)
             .append(nameColumn)
             .append(removeColumn);
@@ -97,28 +140,34 @@ class FavoriteManagementItem {
             .append(separatorHr);
     }
 
-    private getIconElement(): HTMLSpanElement {
+    private createIconElement(): HTMLSpanElement {
         var icon = document.createElement("span");
         $(icon).addClass("glyphicon");
 
         switch (this.type) {
             case FavoriteType.Book:
-                $(icon).addClass("glyphicon-book");
+                $(icon).addClass("glyphicon-book")
+                    .attr("title", "Kniha");
                 break;
             case FavoriteType.PageBookmark:
-                $(icon).addClass("glyphicon-bookmark");
+                $(icon).addClass("glyphicon-bookmark")
+                    .attr("title", "Záložka na stránku v knize");
                 break;
             case FavoriteType.Category:
-                $(icon).addClass("glyphicon-list");
+                $(icon).addClass("glyphicon-list")
+                    .attr("title", "Kategorie");
                 break;
             case FavoriteType.Query:
-                $(icon).addClass("glyphicon-console");
+                $(icon).addClass("glyphicon-console")
+                    .attr("title", "Vyhledávací dotaz");
                 break;
             case FavoriteType.BookVersion:
-                $(icon).addClass("glyphicon-tags");
+                $(icon).addClass("glyphicon-tags")
+                    .attr("title", "Verze knihy");
                 break;
             default:
-                $(icon).addClass("glyphicon-question-sign");
+                $(icon).addClass("glyphicon-question-sign")
+                    .attr("title", "Neznámý typ oblíbené položky");
                 break;
         }
         return icon;

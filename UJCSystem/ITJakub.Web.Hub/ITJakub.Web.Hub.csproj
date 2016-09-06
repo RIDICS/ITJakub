@@ -1631,7 +1631,6 @@
     <Content Include="Views\Favorite\TestForDevelop.cshtml" />
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
-    <Content Include="Views\Favorite\_FavoriteItemManagement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

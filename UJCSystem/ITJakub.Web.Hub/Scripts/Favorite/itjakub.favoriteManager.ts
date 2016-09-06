@@ -11,7 +11,9 @@
         return {
             Id: 0,
             Name: "Anonymní",
-            Color: "#CC9900"
+            Color: "#CC9900",
+            IsDefault: true,
+            LastUseTime: null
         };
     }
 
@@ -101,6 +103,57 @@
 
     private getFavoritesForCategoriesLocal(categoryIds: number[], callback: (favoriteBooks: IFavoriteBook[]) => void) {
         throw new Error("Not implemented"); // TODO
+    }
+
+    public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/CreateLabel",
+            data: JSON.stringify({
+                name: labelName,
+                color: colorHex
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (id) => {
+                callback(id);
+            }
+        });
+    }
+
+    public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/UpdateLabel",
+            data: JSON.stringify({
+                labelId: labelId,
+                name: labelName,
+                color: colorHex
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
+    }
+
+    public deleteFavoriteLabel(labelId: number, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/DeleteLabel",
+            data: JSON.stringify({
+                labelId: labelId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
     }
 
     public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {

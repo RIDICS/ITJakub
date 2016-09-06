@@ -8,11 +8,14 @@
             </a>
         </div>
         <div class="col-xs-3">
-            <a href="#">
-                <div class="text-center">
-                    <span class="glyphicon glyphicon-remove"></span>
-                </div>
-            </a>
+            @if (!Model.IsDefault)
+            {
+                <a href="#" title="Smazat štítek">
+                    <div class="text-center">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </div>
+                </a>
+            }
         </div>
     </div>
 </div>

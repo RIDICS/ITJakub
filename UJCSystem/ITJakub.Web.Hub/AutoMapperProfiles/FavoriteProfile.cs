@@ -12,6 +12,7 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Color, opt => opt.MapFrom(src => src.Color))
+                .ForMember(dest => dest.IsDefault, opt => opt.MapFrom(src => src.IsDefault))
                 .ForMember(dest => dest.LastUseTime, opt => opt.MapFrom(src => src.LastUseTime));
         }
     }

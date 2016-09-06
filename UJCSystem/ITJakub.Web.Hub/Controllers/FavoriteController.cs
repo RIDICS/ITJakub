@@ -137,19 +137,44 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult GetFavoriteLabelManagementPartial(long id, string name, string color)
+        {
+            var viewModel = new FavoriteLabelViewModel
+            {
+                Id = id,
+                Name = name,
+                Color = color,
+                IsDefault = false
+            };
+
+            return PartialView("_FavoriteLabelManagement", viewModel);
+        }
+
         public ActionResult CreateLabel(string name, string color)
         {
-            return Json(new {});
+            using (var client = GetMainServiceClient())
+            {
+                var resultId = client.CreateFavoriteLabel(name, color, CurrentUserName);
+                return Json(resultId);
+            }
         }
 
         public ActionResult UpdateLabel(long labelId, string name, string color)
         {
-            return Json(new {});
+            using (var client = GetMainServiceClient())
+            {
+                client.UpdateFavoriteLabel(labelId, name, color, CurrentUserName);
+                return Json(new { });
+            }
         }
 
         public ActionResult DeleteLabel(long labelId)
         {
-            return Json(new {});
+            using (var client = GetMainServiceClient())
+            {
+                client.DeleteFavoriteLabel(labelId, CurrentUserName);
+                return Json(new {});
+            }
         }
     }
 }

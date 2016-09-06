@@ -11,5 +11,7 @@ namespace ITJakub.Web.Hub.Models.Favorite
         public string Color { get; set; }
 
         public DateTime? LastUseTime { get; set; }
+
+        public bool IsDefault { get; set; }
     }
 }
