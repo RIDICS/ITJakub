@@ -5,7 +5,9 @@ using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
+using ITJakub.Shared.Contracts.Favorites;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -219,6 +221,46 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Where(x => x.User.Id == userId)
                     .OrderBy(x => x.Name).Asc
                     .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteBase> GetFavoriteItems(long? labelId, FavoriteTypeEnum? filterByType, string filterByTitle, FavoriteSortContract sort, int userId)
+        {
+            using (var session = GetSession())
+            {
+                var query = session.QueryOver<FavoriteBase>()
+                    .Where(x => x.User.Id == userId);
+
+                if (labelId != null)
+                    query.And(x => x.FavoriteLabel.Id == labelId.Value);
+
+                if (filterByType != null)
+                    query.And(x => x.FavoriteType == filterByType.Value);
+
+                if (!string.IsNullOrWhiteSpace(filterByTitle))
+                    query.AndRestrictionOn(x => x.Title).IsLike(filterByTitle, MatchMode.Anywhere);
+
+                switch (sort)
+                {
+                    case FavoriteSortContract.TitleAsc:
+                        query = query.OrderBy(x => x.Title).Asc;
+                        break;
+                    case FavoriteSortContract.TitleDesc:
+                        query = query.OrderBy(x => x.Title).Desc;
+                        break;
+                    case FavoriteSortContract.CreateTimeAsc:
+                        query = query.OrderBy(x => x.CreateTime).Asc;
+                        break;
+                    case FavoriteSortContract.CreateTimeDesc:
+                        query = query.OrderBy(x => x.CreateTime).Desc;
+                        break;
+                    default:
+                        query = query.OrderBy(x => x.Title).Asc;
+                        break;
+                }
+
+                return query.List();
             }
         }
     }

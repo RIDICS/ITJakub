@@ -10,6 +10,6 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
         public long Id { get; set; }
 
         [DataMember]
-        public IList<FavoriteBaseInfoContract> FavoriteInfo { get; set; }
+        public IList<FavoriteBaseDetailContract> FavoriteInfo { get; set; }
     }
 }

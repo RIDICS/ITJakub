@@ -22,5 +22,8 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
 
         [EnumMember]
         BookVersion = 5,
+
+        [EnumMember]
+        HeadwordBookmark = 6,
     }
 }

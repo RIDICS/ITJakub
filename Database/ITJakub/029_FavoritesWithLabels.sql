@@ -14,6 +14,7 @@ BEGIN TRAN
 	)
 
 	ALTER TABLE [dbo].[Favorites] ADD
+	   [CreateTime] datetime NULL,
 	   [FavoriteLabel] bigint NULL FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
 	   [BookVersion] bigint NULL FOREIGN KEY REFERENCES [dbo].[BookVersion](Id),
 	   [BookType] int NULL FOREIGN KEY REFERENCES [dbo].[BookType](Id),

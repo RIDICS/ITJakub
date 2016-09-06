@@ -5,6 +5,7 @@ using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -259,6 +260,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName);
+
+        [OperationContract]
+        IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName);
 
         [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);

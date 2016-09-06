@@ -160,4 +160,5 @@ enum FavoriteType {
     PageBookmark = 3,
     Query = 4,
     BookVersion = 5,
+    HeadwordBookmark = 6,
 }

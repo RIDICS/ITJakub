@@ -82,6 +82,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -90,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
+    <Compile Include="Database\Entities\Enums\FavoriteTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\QueryType.cs" />
     <Compile Include="Database\Entities\FavoriteLabel.cs" />
     <Compile Include="Database\Entities\LiteraryOriginal.cs" />

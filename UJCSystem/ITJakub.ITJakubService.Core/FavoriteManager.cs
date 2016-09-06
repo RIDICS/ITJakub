@@ -4,9 +4,11 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
+using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using ITJakub.Shared.Contracts.Favorites;
 using log4net;
 
 namespace ITJakub.ITJakubService.Core
@@ -155,7 +157,7 @@ namespace ITJakub.ITJakubService.Core
                 var favoriteItems = new FavoriteBookInfoContract
                 {
                     Id = favoriteBookGroup.Key,
-                    FavoriteInfo = favoriteBookGroup.Select(Mapper.Map<FavoriteBaseInfoContract>).ToList()
+                    FavoriteInfo = favoriteBookGroup.Select(Mapper.Map<FavoriteBaseDetailContract>).ToList()
                 };
                 resultList.Add(favoriteItems);
             }
@@ -173,7 +175,7 @@ namespace ITJakub.ITJakubService.Core
                 var favoriteItems = new FavoriteCategoryContract
                 {
                     Id = favoriteCategoryGroup.Key,
-                    FavoriteInfo = favoriteCategoryGroup.Select(Mapper.Map<FavoriteBaseInfoContract>).ToList()
+                    FavoriteInfo = favoriteCategoryGroup.Select(Mapper.Map<FavoriteBaseDetailContract>).ToList()
                 };
                 resultList.Add(favoriteItems);
             }
@@ -239,6 +241,16 @@ namespace ITJakub.ITJakubService.Core
                 : m_favoritesRepository.GetLatestFavoriteLabels(latestLabelCount, user.Id);
 
             return Mapper.Map<IList<FavoriteLabelContract>>(dbResult);
+        }
+
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName)
+        {
+            var user = TryGetUser(userName);
+            var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
+
+            var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, user.Id);
+
+            return Mapper.Map<IList<FavoriteBaseInfoContract>>(dbResult);
         }
     }
 }

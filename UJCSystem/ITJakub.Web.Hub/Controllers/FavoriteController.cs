@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
+using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Web.Hub.Models.Favorite;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -123,10 +125,16 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetFavoriteList(long? labelId)
+        public ActionResult GetFavoriteList(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract? sort)
         {
-            var result = new List<object>();
-            return Json(result, JsonRequestBehavior.AllowGet);
+            if (sort == null)
+                sort = FavoriteSortContract.TitleAsc;
+            
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult CreateLabel(string name, string color)
