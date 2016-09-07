@@ -88,9 +88,9 @@
 }
 
 class FavoritePopoverBuilder {
-    private templateStart = '<div class="row"><div class="col-md-6"><h6>Existující</h6>';
-    private templateMiddle = '</div><div class="col-md-6"><h6>Rychlé přidání</h6>';
-    private templateEnd = '</div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block show-all-favorite-button">Zobrazit všechny štítky</button></div></div>';
+    private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků</h6><div class="favorite-label-popover-container">';
+    private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
+    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Zobrazit všechny štítky</button></div></div>';
 
     private favoriteItems: Array<string>;
     private favoriteLabels: Array<string>;
@@ -106,18 +106,18 @@ class FavoritePopoverBuilder {
     }
 
     public addFavoritLabel(label: IFavoriteLabel) {
-        var labelHtml = '<div><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></div>';
+        var labelHtml = '<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></span>';
         this.favoriteLabels.push(labelHtml);
     }
 
     public getHtmlString(): string {
         if (this.favoriteItems.length === 0) {
-            var emptyInfoHtml = '<div>Žádná položka</div>';
+            let emptyInfoHtml = '<div>Žádná položka</div>';
             this.favoriteItems.push(emptyInfoHtml);
         }
 
         if (this.favoriteLabels.length === 0) {
-            var emptyInfoHtml = '<div>Žádná položka</div>';
+            let emptyInfoHtml = '<div>Žádná položka</div>';
             this.favoriteLabels.push(emptyInfoHtml);
         }
 

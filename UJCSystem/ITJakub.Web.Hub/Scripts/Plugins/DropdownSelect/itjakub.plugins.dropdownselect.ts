@@ -164,7 +164,8 @@ class DropDownSelect {
 
         $(document).unbind("click.dropdown");
         $(document).bind("click.dropdown", (event) => {
-            if (!$(event.target).parents().is(dropDownDiv)) {
+            var parents = $(event.target).parents();
+            if (!parents.is(dropDownDiv) && !parents.is(".popover")) {
                 this.hideBody();
             }
         });
