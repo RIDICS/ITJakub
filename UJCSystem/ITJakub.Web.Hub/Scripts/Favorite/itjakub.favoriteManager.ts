@@ -156,6 +156,39 @@
         });
     }
 
+    public updateFavoriteItem(favoriteId: number, title: string, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/UpdateFavoriteItem",
+            data: JSON.stringify({
+                id: favoriteId,
+                title: title
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
+    }
+
+    public deleteFavoriteItem(favoriteId: number, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/DeleteFavoriteItem",
+            data: JSON.stringify({
+                id: favoriteId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
+    }
+
     public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
         switch (itemType) {
             case FavoriteType.Book:

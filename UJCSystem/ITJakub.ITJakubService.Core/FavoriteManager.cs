@@ -62,6 +62,12 @@ namespace ITJakub.ITJakubService.Core
             return user;
         }
 
+        private void CheckItemOwnership(long itemOwnerUserId, User user)
+        {
+            if (user.Id != itemOwnerUserId)
+                throw new ArgumentException(string.Format("Current user ({0}) doesn't have permission manipulate with specified item owned by user with ID={1}", user.UserName, itemOwnerUserId));
+        }
+
         public void AddPageBookmark(string bookXmlId, string pageXmlId, string userName)
         {
             var user = TryGetUser(userName);
@@ -275,9 +281,8 @@ namespace ITJakub.ITJakubService.Core
             var user = TryGetUser(userName);
             var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
 
-            if (user.Id != favoriteLabel.User.Id)
-                throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
-
+            CheckItemOwnership(favoriteLabel.User.Id, user);
+            
             if (favoriteLabel.IsDefault)
                 throw new ArgumentException("User can't modify default favorite label");
 
@@ -292,13 +297,34 @@ namespace ITJakub.ITJakubService.Core
             var user = TryGetUser(userName);
             var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
 
-            if (user.Id != favoriteLabel.User.Id)
-                throw new ArgumentException(string.Format("Invalid label (ID={0}) for user {1}", user.Id, userName));
+            CheckItemOwnership(favoriteLabel.User.Id, user);
 
             if (favoriteLabel.IsDefault)
                 throw new ArgumentException("Can't remove default favorite label");
 
             m_favoritesRepository.Delete(favoriteLabel);
+        }
+
+        public void UpdateFavoriteItem(long id, string title, string userName)
+        {
+            var user = TryGetUser(userName);
+            var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
+
+            CheckItemOwnership(favoriteItem.User.Id, user);
+
+            favoriteItem.Title = title;
+            
+            m_favoritesRepository.Update(favoriteItem);
+        }
+
+        public void DeleteFavoriteItem(long id, string userName)
+        {
+            var user = TryGetUser(userName);
+            var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
+
+            CheckItemOwnership(favoriteItem.User.Id, user);
+
+            m_favoritesRepository.Delete(favoriteItem);
         }
     }
 }

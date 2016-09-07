@@ -8,6 +8,7 @@ class FavoriteManagement {
     private favoriteManager: FavoriteManager;
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;
+    private labelColorInput: ColorInput;
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -15,18 +16,8 @@ class FavoriteManagement {
     }
 
     public init() {
-        $("#favorite-label-color").colorpickerplus();
-        $("#favorite-label-color").on("changeColor", (event, color) => {
-            if (color == null) {
-                $(event.target)
-                    .val("#FFFFFF")
-                    .css("background-color", "#FFFFFF");
-            } else {
-                $(event.target)
-                    .val(color)
-                    .css("background-color", color);
-            }
-        });
+        this.labelColorInput = new ColorInput($("#favorite-label-color"));
+        this.labelColorInput.make();
 
         $("#add-new-label").click(() => {
             this.showAddLabelDialog();
@@ -67,7 +58,7 @@ class FavoriteManagement {
         this.favoriteManager.getFavorites((favorites) => {
             for (let i = 0; i < favorites.length; i++) {
                 var favoriteItem = favorites[i];
-                var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime);
+                var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
                 item.make();
             }
         });
@@ -94,17 +85,17 @@ class FavoriteManagement {
 
     private showEditLabelDialog(name: string, color: string, item: JQuery) {
         this.activeLabelForEditing = item;
+        this.labelColorInput.setValue(color);
         $("#favorite-label-name").val(name);
-        $("#favorite-label-color").val(color);
         $("#new-favorite-label-dialog").modal("show");
     }
 
     private removeLabel(item: JQuery) {
-        //todo request to server
-
-        // todo after save remove from UI:
-        item.remove();
-        $("#remove-dialog").modal("hide");
+        var labelId = item.data("id");
+        this.favoriteManager.deleteFavoriteLabel(labelId, () => {
+            item.remove();
+            $("#remove-dialog").modal("hide");
+        });
     }
 
     private saveNewFavoriteLabel(name: string, color: string) {
@@ -127,20 +118,20 @@ class FavoriteManagement {
     }
 
     private saveEditedFavoriteLabel(labelItem: JQuery, name: string, color: string) {
-        // todo send to server
+        var labelId = labelItem.data("id");
+        this.favoriteManager.updateFavoriteLabel(labelId, name, color, () => {
+            $("#new-favorite-label-dialog").modal("hide");
 
-        // todo update correctly UI:
-        $("#new-favorite-label-dialog").modal("hide");
-
-        $(".favorite-label-name", labelItem).text(name);
-        labelItem.css("background-color", color);
-        labelItem.data("name", name);
-        labelItem.data("color", color);
+            $(".favorite-label-name", labelItem).text(name);
+            labelItem.css("background-color", color);
+            labelItem.data("name", name);
+            labelItem.data("color", color);
+        });
     }
 
     private saveFavoriteLabel() {
         var name = $("#favorite-label-name").val();
-        var color = $("#favorite-label-color").val();
+        var color = this.labelColorInput.getValue();
         
         if (this.activeLabelForEditing == null) {
             this.saveNewFavoriteLabel(name, color);
@@ -151,6 +142,7 @@ class FavoriteManagement {
 }
 
 class FavoriteManagementItem {
+    private favoriteManager: FavoriteManager;
     private createTime: string;
     private name: string;
     private id: number;
@@ -159,7 +151,8 @@ class FavoriteManagementItem {
     private innerContainerDiv: HTMLDivElement;
     private separatorHr: HTMLHRElement;
 
-    constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string) {
+    constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
+        this.favoriteManager = favoriteManager;
         this.createTime = createTime;
         this.name = name;
         this.id = id;
@@ -203,7 +196,7 @@ class FavoriteManagementItem {
         var editIcon = document.createElement("span");
         $(removeIcon)
             .addClass("glyphicon")
-            .addClass("glyphicon-remove");
+            .addClass("glyphicon-trash");
         $(editIcon)
             .addClass("glyphicon")
             .addClass("glyphicon-pencil");
@@ -262,24 +255,23 @@ class FavoriteManagementItem {
     }
 
     private remove() {
-        // TODO send request to server
-        $("#remove-dialog").modal("hide");
+        this.favoriteManager.deleteFavoriteItem(this.id, () => {
+            $("#remove-dialog").modal("hide");
 
-        // todo after success remove from UI:
-        $(this.innerContainerDiv).remove();
-        $(this.separatorHr).remove();
+            $(this.innerContainerDiv).remove();
+            $(this.separatorHr).remove();
+        });
     }
 
     private edit() {
         var newName = $("#favorite-item-name").val();
 
-        //todo send request to server
-        $("#edit-favorite-dialog").modal("hide");
+        this.favoriteManager.updateFavoriteItem(this.id, newName, () => {
+            $("#edit-favorite-dialog").modal("hide");
 
-        // todo after success update UI:
-        this.name = newName;
-        $(".favorite-item-name", this.innerContainerDiv).text(newName);
-
+            this.name = newName;
+            $(".favorite-item-name", this.innerContainerDiv).text(newName);
+        });
     }
 
     private createIconElement(): HTMLSpanElement {
@@ -313,5 +305,44 @@ class FavoriteManagementItem {
                 break;
         }
         return icon;
+    }
+}
+
+class ColorInput {
+    private inputElement: JQuery;
+
+    constructor(inputElement: JQuery) {
+        this.inputElement = inputElement;
+    }
+
+    public make() {
+        this.inputElement.colorpickerplus();
+        this.inputElement.on("changeColor", (event, color) => {
+            if (color == null) {
+                color = "#FFFFFF";
+            }
+
+            this.setValue(color);
+        });
+
+        this.inputElement.change(() => this.updateBackground());
+    }
+
+    public setValue(value: string) {
+        this.inputElement.val(value);
+        this.updateBackground();
+    }
+
+    public getValue(): string {
+        return this.inputElement.val();
+    }
+
+    private updateBackground() {
+        var value = this.inputElement.val();
+        if (value.length !== 7) {
+            this.inputElement.css("background-color", "#FFFFFF");
+        } else {
+            this.inputElement.css("background-color", value);
+        }
     }
 }

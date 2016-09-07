@@ -8,7 +8,7 @@ namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
     public class FavoriteBaseInfoContract
     {
         [DataMember]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [DataMember]
         public string Title { get; set; }

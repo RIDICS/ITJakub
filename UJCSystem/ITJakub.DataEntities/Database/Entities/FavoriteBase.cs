@@ -7,7 +7,7 @@ namespace ITJakub.DataEntities.Database.Entities
     {
         public abstract FavoriteTypeEnum FavoriteType { get; }
 
-        public virtual int Id { get; set; }
+        public virtual long Id { get; set; }
 
         public virtual User User { get; set; }
 
@@ -34,7 +34,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public override int GetHashCode()
         {
-            return Id;
+            return Id.GetHashCode();
         }
     }
 

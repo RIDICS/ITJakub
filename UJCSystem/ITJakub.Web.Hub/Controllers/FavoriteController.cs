@@ -13,7 +13,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         private string CurrentUserName
         {
-            get { return HttpContext.User.Identity.Name; }
+            get { return GetUserName(); }
         }
 
         public ActionResult Management()
@@ -173,6 +173,24 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 client.DeleteFavoriteLabel(labelId, CurrentUserName);
+                return Json(new {});
+            }
+        }
+
+        public ActionResult UpdateFavoriteItem(long id, string title)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                client.UpdateFavoriteItem(id, title, CurrentUserName);
+                return Json(new {});
+            }
+        }
+
+        public ActionResult DeleteFavoriteItem(long id)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                client.DeleteFavoriteItem(id, CurrentUserName);
                 return Json(new {});
             }
         }

@@ -2222,6 +2222,58 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public void UpdateFavoriteItem(long id, string title, string userName)
+        {
+            try
+            {
+                Channel.UpdateFavoriteItem(id, title, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public void DeleteFavoriteItem(long id, string userName)
+        {
+            try
+            {
+                Channel.DeleteFavoriteItem(id, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
         {
             try
