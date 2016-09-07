@@ -3,7 +3,7 @@
 namespace ITJakub.ITJakubService.DataContracts.Contracts.Favorite
 {
     [DataContract]
-    public enum FavoriteTypeContract
+    public enum FavoriteTypeContract : short
     {
         [EnumMember]
         Unknown = 0,

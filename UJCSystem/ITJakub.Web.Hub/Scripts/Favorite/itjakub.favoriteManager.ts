@@ -37,16 +37,21 @@
         });
     }
 
-    public getFavorites(callback: (favorites: IFavoriteBaseInfo[]) => void) {
+    public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
         if (!this.isUserLoggedIn) {
             throw new Error("Not implemented"); // TODO
         }
-
+        
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteList",
-            data: {},
+            data: {
+                labelId: labelId,
+                filterByType: filterByType,
+                filterByTitle: filterByTitle,
+                sort: sort
+            },
             dataType: "json",
             contentType: "application/json",
             success: (favorites: Array<IFavoriteBaseInfo>) => {

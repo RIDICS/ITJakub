@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.DataEntities.Database.Entities.Enums
 {
-    public enum FavoriteTypeEnum
+    public enum FavoriteTypeEnum : short
     {
         Book = 1,
         Category = 2,

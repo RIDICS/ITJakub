@@ -5,7 +5,9 @@ namespace ITJakub.DataEntities.Database.Entities
 {
     public abstract class FavoriteBase : IEquatable<FavoriteBase>
     {
-        public abstract FavoriteTypeEnum FavoriteType { get; }
+        public abstract FavoriteTypeEnum FavoriteTypeEnum { get; }
+
+        public virtual string FavoriteType { get; protected set; }
 
         public virtual long Id { get; set; }
 
@@ -40,7 +42,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class PageBookmark : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.PageBookmark; }
         }
@@ -54,7 +56,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class FavoriteCategory : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.Category; }
         }
@@ -64,7 +66,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class FavoriteBook : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.Book; }
         }
@@ -74,7 +76,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class FavoriteBookVersion : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.BookVersion; }
         }
@@ -84,7 +86,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class HeadwordBookmark : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.HeadwordBookmark; }
         }
@@ -96,7 +98,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
     public class FavoriteQuery : FavoriteBase
     {
-        public override FavoriteTypeEnum FavoriteType
+        public override FavoriteTypeEnum FavoriteTypeEnum
         {
             get { return FavoriteTypeEnum.Query; }
         }

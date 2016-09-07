@@ -3,7 +3,7 @@
 namespace ITJakub.Shared.Contracts.Favorites
 {
     [DataContract]
-    public enum FavoriteSortContract
+    public enum FavoriteSortContract : short
     {
         [EnumMember]
         TitleAsc = 0,

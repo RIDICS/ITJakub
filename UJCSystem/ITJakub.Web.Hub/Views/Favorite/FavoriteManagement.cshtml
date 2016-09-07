@@ -15,7 +15,8 @@
     
     <div class="row">
         <div class="col-md-3">
-            <span class="favorite-management-heading">Štítky</span>
+            <span class="favorite-management-heading" style="margin-right: 10px;">Štítky</span>
+            (<a href="#" id="show-all-link">Zobrazit všechny</a>)
             <hr/>
             <div id="favorite-labels">
                 
@@ -43,17 +44,28 @@
                     <span class="favorite-management-heading">Oblíbené položky</span>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm">
-                        <option selected="selected">Seřadit podle názvu</option>
+                    <select class="form-control input-sm" id="sort-select" title="Seřadit oblíbené položky">
+                        @foreach (var sort in Model.SortList)
+                        {
+                            <option value="@((short)sort.SortType)">@sort.Name</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control input-sm">
-                        <option selected="selected">Filtr podle typu</option>
+                    <select class="form-control input-sm" id="type-filter-select" title="Filtrovat oblíbené položky podle typu">
+                        @foreach (var filter in Model.FilterList)
+                        {
+                            <option value="@((short)filter.FavoriteType)">@filter.Name</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <input type="text" class="form-control input-sm" placeholder="Filtr podle názvu" />
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="name-filter" placeholder="Filtr podle názvu" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
                 </div>
             </div>
             <hr/>

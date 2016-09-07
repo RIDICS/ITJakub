@@ -13,6 +13,7 @@ class FavoriteManagement {
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
         this.activeLabelForEditing = null;
+        this.activeLabelId = null;
     }
 
     public init() {
@@ -28,10 +29,8 @@ class FavoriteManagement {
         });
 
         $(".favorite-label-management .favorite-label-link").click((event) => {
-            $(".favorite-label-management").removeClass("active");
             var activeElement = $(event.target).closest(".favorite-label-management");
-            activeElement.addClass("active");
-            this.activeLabelId = activeElement.data("id");
+            this.setActiveLabel(activeElement);
         });
 
         $(".favorite-label-management .favorite-label-remove-link").click((event) => {
@@ -46,22 +45,62 @@ class FavoriteManagement {
             this.showEditLabelDialog(name, color, item);
         });
 
+        $("#sort-select").change(this.loadFavoriteItems.bind(this));
+        $("#type-filter-select").change(this.loadFavoriteItems.bind(this));
+        $("#name-filter").change(this.loadFavoriteItems.bind(this));
+        //$("#name-filter-button").click(this.loadFavoriteItems.bind(this));
+
+        $("#show-all-link").click(() => {
+            this.setActiveLabel(null);
+        });
+
         this.loadFavoriteItems();
     }
 
-    private loadFavoriteItems() {
-        // todo get all sort and filter parameters
+    private initFavoriteLabel(item: JQuery) {
+        $(".favorite-label-link", item).click(() => {
+            this.setActiveLabel(item);
+        });
 
+        $(".favorite-label-management .favorite-label-remove-link").click(() => {
+            this.showRemoveDialog(item);
+        });
+
+        $(".favorite-label-management .favorite-label-edit-link").click(() => {
+            var name = item.data("name");
+            var color = item.data("color");
+            this.showEditLabelDialog(name, color, item);
+        });
+    }
+
+    private loadFavoriteItems() {
+        var sortOrder = $("#sort-select").val();
+        var typeFilter = $("#type-filter-select").val();
+        var nameFilter = $("#name-filter").val();
+        
         var container = $("#favorite-item-container");
         container.empty();
 
-        this.favoriteManager.getFavorites((favorites) => {
+        this.favoriteManager.getFavorites(this.activeLabelId, typeFilter, nameFilter, sortOrder, (favorites) => {
             for (let i = 0; i < favorites.length; i++) {
                 var favoriteItem = favorites[i];
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
                 item.make();
             }
         });
+    }
+
+    private setActiveLabel(item: JQuery) {
+        $(".favorite-label-management").removeClass("active");
+
+        if (item != null) {
+            item.addClass("active");
+            this.activeLabelId = item.data("id");
+        } else {
+            this.activeLabelId = null;
+        }
+        
+        this.loadFavoriteItems();
     }
 
     private showRemoveDialog(item: JQuery) {
@@ -113,7 +152,9 @@ class FavoriteManagement {
             }
             url = url + $.param(urlParams);
 
-            $(labelDiv).load(url);
+            $(labelDiv).load(url, null, () => {
+                this.initFavoriteLabel($(labelDiv).children());
+            });
         });
     }
 

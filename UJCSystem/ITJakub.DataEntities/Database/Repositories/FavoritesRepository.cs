@@ -219,8 +219,30 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 return session.QueryOver<FavoriteLabel>()
                     .Where(x => x.User.Id == userId)
+                    .OrderBy(x => x.IsDefault).Desc
                     .OrderBy(x => x.Name).Asc
                     .List();
+            }
+        }
+
+        private string GetFavoriteTypeDiscriminatorValue(FavoriteTypeEnum favoriteType)
+        {
+            switch (favoriteType)
+            {
+                case FavoriteTypeEnum.Book:
+                    return "Book";
+                case FavoriteTypeEnum.BookVersion:
+                    return "BookVersion";
+                case FavoriteTypeEnum.Category:
+                    return "Category";
+                case FavoriteTypeEnum.HeadwordBookmark:
+                    return "HeadwordBookmark";
+                case FavoriteTypeEnum.PageBookmark:
+                    return "PageBookmark";
+                case FavoriteTypeEnum.Query:
+                    return "Query";
+                default:
+                    return null;
             }
         }
 
@@ -236,7 +258,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     query.And(x => x.FavoriteLabel.Id == labelId.Value);
 
                 if (filterByType != null)
-                    query.And(x => x.FavoriteType == filterByType.Value);
+                    query.And(x => x.FavoriteType == GetFavoriteTypeDiscriminatorValue(filterByType.Value));
 
                 if (!string.IsNullOrWhiteSpace(filterByTitle))
                     query.AndRestrictionOn(x => x.Title).IsLike(filterByTitle, MatchMode.Anywhere);

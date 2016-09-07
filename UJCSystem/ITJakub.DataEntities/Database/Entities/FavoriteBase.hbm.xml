@@ -12,6 +12,11 @@
                    not-null="true"
                    type="System.String" />
 
+    <property name="FavoriteType"
+              column="FavoriteType"
+              update="false"
+              insert="false" />
+    
     <property name="Title" />
     
     <property name="CreateTime" />

@@ -23,7 +23,22 @@ namespace ITJakub.Web.Hub.Controllers
                 var favoriteLabels = client.GetFavoriteLabels(0, CurrentUserName);
                 var viewModel = new FavoriteManagementViewModel
                 {
-                    FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels)
+                    FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
+                    SortList = new List<FavoriteSortViewModel>
+                    {
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleAsc, "Seřadit podle názvu vzestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleDesc, "Seřadit podle názvu sestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeAsc, "Seřadit podle času vytvoření vzestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeDesc, "Seřadit podle času vytvoření sestupně")
+                    },
+                    FilterList = new List<FavoriteFilterViewModel>
+                    {
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Unknown, "Vše"),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Book, "Knihy"),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Category, "Kategorie"),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.PageBookmark, "Záložky na stránky"),
+                        new FavoriteFilterViewModel(FavoriteTypeContract.Query, "Vyhledávací dotazy")
+                    }
                 };
                 return View("FavoriteManagement", viewModel);
             }
@@ -129,7 +144,10 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (sort == null)
                 sort = FavoriteSortContract.TitleAsc;
-            
+
+            if (filterByType != null && filterByType.Value == FavoriteTypeContract.Unknown)
+                filterByType = null;
+
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, CurrentUserName);
