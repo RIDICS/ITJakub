@@ -41,6 +41,7 @@
     "Newtonsoft.Json": "9.0.1",
     "NHibernate": "4.0.4.4000",
     "Owin": "1.0",
+    "simplemde.TypeScript.DefinitelyTyped": "0.0.1",
     "typeahead.TypeScript.DefinitelyTyped": "0.3.5",
     "WebGrease": "1.5.2"
   },

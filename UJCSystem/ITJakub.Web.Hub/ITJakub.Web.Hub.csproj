@@ -1525,11 +1525,9 @@
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
     <TypeScriptCompile Include="Scripts\Text\itjakub.text.editor.ts" />
-    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde-tests_.ts" />
-    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
-    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />
-    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde_.d.ts" />
-    <TypeScriptCompile Include="Scripts\TypingsCustom\wheelzoom_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery.eu.cookie.law.popup_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\jquery.zoom_.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings-custom\wheelzoom_.d.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
@@ -1538,7 +1536,7 @@
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.cookiestorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.istorage.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
-    <Content Include="Scripts\typeahead.bundle.js" />
+    <Content Include="wwwroot\lib-custom\typeahead.bundle.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1570,6 +1568,7 @@
     <TypeScriptCompile Include="wwwroot\js\typings\bootstrap\bootstrap.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\jquery\jquery.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings\simplemde\simplemde.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\typeahead\typeahead.d.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -1598,7 +1597,6 @@
     <Folder Include="Content\Images\Plugins\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />
-    <Folder Include="wwwroot\lib-custom\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />

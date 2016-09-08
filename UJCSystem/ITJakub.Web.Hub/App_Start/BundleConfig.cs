@@ -39,7 +39,7 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/dropzone/downloads/dropzone.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/typeahead").Include(
-                "~/Scripts/typeahead.bundle.js"));
+                "~/wwwroot/lib-custom/typeahead.bundle.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/keyboardLayout").Include(
                 "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboard.js",
