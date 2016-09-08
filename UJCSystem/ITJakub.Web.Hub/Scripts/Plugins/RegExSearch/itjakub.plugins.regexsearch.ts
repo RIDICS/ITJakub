@@ -29,11 +29,13 @@
 class Search {
     private speedAnimation: number = 200; //200=fast, 600=slow
     private advancedRegexEditor: RegExAdvancedSearchEditor;
+    private favoriteQueryComponent: FavoriteQuery;
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
     private searchInputTextbox: HTMLInputElement;
     private searchbarAdvancedEditorContainer: HTMLDivElement;
+    private favoritesContainer: HTMLDivElement;
 
     private container: HTMLDivElement;
 
@@ -112,7 +114,12 @@ class Search {
                     $(this.searchbarAdvancedEditorContainer).slideDown(this.speedAnimation);
                     $searchInputTextbox.prop("disabled", true);
                     $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").addClass("disabled");
+                    $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", true);
                     $(this.searchButton).prop("disabled", true);
+
+                    if (!this.favoriteQueryComponent.isHidden()) {
+                        this.favoriteQueryComponent.hide();
+                    }
                 }
             });
 
@@ -132,6 +139,16 @@ class Search {
         searchbarInputClassList.add("searchbar-input");
         searchbarInputClassList.add("keyboard-input");
         searchbarInputDiv.appendChild(searchbarInput);
+
+        var favoriteButton = document.createElement("button");
+        favoriteButton.type = "button";
+        favoriteButton.classList.add("btn", "regexsearch-input-button");
+        var favoriteIcon = document.createElement("span");
+        favoriteIcon.classList.add("glyphicon", "glyphicon-star");
+        favoriteIcon.style.fontSize = "110%";
+        favoriteIcon.style.marginTop = "3px";
+        favoriteButton.appendChild(favoriteIcon);
+        searchbarInputDiv.appendChild(favoriteButton);
         
         this.searchInputTextbox = searchbarInput;
 
@@ -145,11 +162,26 @@ class Search {
             }
         });
 
+        $(favoriteButton).click(() => {
+            if (this.favoriteQueryComponent.isHidden()) {
+                if (!$(this.searchbarAdvancedEditorContainer).is(":hidden")) {
+                    this.closeAdvancedSearchEditor();
+                }
+                this.favoriteQueryComponent.show();
+            } else {
+                this.favoriteQueryComponent.hide();
+            }
+        });
+
         var searchbarAdvancedEditor = document.createElement("div");
         searchbarInputDiv.classList.add("regex-searchbar-advanced-editor");
         searchAreaDiv.appendChild(searchbarAdvancedEditor);
 
+        var favoritesContainer = document.createElement("div");
+        searchAreaDiv.appendChild(favoritesContainer);
+
         this.searchbarAdvancedEditorContainer = searchbarAdvancedEditor;
+        this.favoritesContainer = favoritesContainer;
 
         if (typeof this.processSearchJsonCallback !== "undefined" && this.processSearchJsonCallback != null) {
 
@@ -161,6 +193,8 @@ class Search {
             searchbarInputDiv.classList.add("no-advanced");
         }
 
+        this.favoriteQueryComponent = new FavoriteQuery($(this.favoritesContainer), $(this.searchInputTextbox));
+        
         $(this.container).append(searchAreaDiv);
 
         $(this.searchButton).click((event: Event) => {
@@ -181,6 +215,7 @@ class Search {
         var $searchInputTextbox=$(this.searchInputTextbox);
         $searchInputTextbox.prop("disabled", false);
         $searchInputTextbox.closest(".input_container").find(".keyboard-icon-img").removeClass("disabled");
+        $searchInputTextbox.closest(".input_container").find(".regexsearch-input-button").prop("disabled", false);
         $(this.searchButton).prop("disabled", false);
         $(this.advancedButton).css("visibility", "visible");
         $searchInputTextbox.focus();

@@ -1630,9 +1630,9 @@
     </None>
     <Content Include="Views\Favorite\_NewFavorite.cshtml" />
     <Content Include="Views\Shared\Plugins\_Dialog.cshtml" />
-    <Content Include="Views\Favorite\TestForDevelop.cshtml" />
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
+    <Content Include="Views\Favorite\_FavoriteQuery.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1705,6 +1705,7 @@
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManagement.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManager.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteQuery.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteStar.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteDialog.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.dataContracts.ts" />

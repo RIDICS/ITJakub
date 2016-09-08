@@ -102,6 +102,7 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/favorite/javascript").Include(
                 "~/Scripts/Favorite/itjakub.favoriteManager.js",
                 "~/Scripts/Favorite/itjakub.favoriteStar.js",
+                "~/Scripts/Favorite/itjakub.favoriteQuery.js",
                 "~/Scripts/Favorite/itjakub.newFavoriteDialog.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/favorite/management/javascript").Include(

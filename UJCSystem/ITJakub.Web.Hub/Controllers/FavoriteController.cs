@@ -75,15 +75,14 @@ namespace ITJakub.Web.Hub.Controllers
             return PartialView("_NewFavorite", viewModel);
         }
 
+        public ActionResult GetFavoriteQueryPartial()
+        {
+            return PartialView("_FavoriteQuery");
+        }
+
         public ActionResult Dialog()
         {
             return PartialView("Plugins/_Dialog");
-        }
-
-        // TODO only for testing during development:
-        public ActionResult TestForDevelop()
-        {
-            return View("TestForDevelop");
         }
 
         public ActionResult GetFavoriteLabeledBooks(IList<long> bookIds)
