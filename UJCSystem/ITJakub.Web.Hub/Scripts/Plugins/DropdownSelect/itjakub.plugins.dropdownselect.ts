@@ -1,8 +1,5 @@
-﻿ 
-/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
-
-class DropDownSelectCallbackDelegate {
-    //callbacks needs to be implemented
+﻿class DropDownSelectCallbackDelegate {
+    // callbacks needs to be implemented
 
     starSaveItemCallback: (info: CallbackInfo) => void;
     starSaveCategoryCallback: (info: CallbackInfo) => void;

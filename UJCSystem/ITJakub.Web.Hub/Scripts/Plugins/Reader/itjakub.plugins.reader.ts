@@ -1,6 +1,4 @@
-﻿/// <reference path="../../typings/jqueryui/jqueryui.d.ts" />
-
-class ReaderModule {
+﻿class ReaderModule {
 
     readerContainer: HTMLDivElement;
     sliderOnPage: number;

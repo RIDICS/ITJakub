@@ -88,3 +88,5 @@ packages/
 
 #Bower libraries
 */*/wwwroot/lib/
+
+project.lock.json
