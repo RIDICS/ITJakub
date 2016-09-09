@@ -7,7 +7,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
         // GET: Bibliography
         public ActionResult GetConfiguration()
         {
-            string fullPath = Server.MapPath("~/Content/Plugins/Bibliography/configuration.json");
+            string fullPath = Server.MapPath("~/Content/BibliographyConfiguration/configuration.json");
             return File(fullPath, "application/json", fullPath);
         }
     }

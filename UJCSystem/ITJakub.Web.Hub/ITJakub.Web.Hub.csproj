@@ -1252,7 +1252,7 @@
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Search.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
-    <Content Include="Content\Plugins\Bibliography\configuration.json" />
+    <Content Include="Content\BibliographyConfiguration\configuration.json" />
     <Content Include="Content\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
     </Content>
