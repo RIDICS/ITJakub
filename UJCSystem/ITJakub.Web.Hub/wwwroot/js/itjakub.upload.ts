@@ -2,11 +2,11 @@
 
     Dropzone.autoDiscover = false; // otherwise will be initialized twice
     function disableUploadButton() {
-        $("#ProcessUploadedButton").attr("disabled", true);
+        $("#ProcessUploadedButton").prop("disabled", true);
     }
 
     function enableUploadButton() {
-        $("#ProcessUploadedButton").removeAttr("disabled");
+        $("#ProcessUploadedButton").prop("disabled", false);
 
     }
 
@@ -25,7 +25,7 @@
         uploadMultiple: true,
         clickable: "#dropzoneFileFormPreview",
         autoProcessQueue: true,
-        paralelUploads: 5,
+        parallelUploads: 5,
         previewsContainer: "#dropzoneFileFormPreview",
         acceptedFiles: ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
         dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
@@ -126,6 +126,8 @@ var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+declare var YT; // type definition for YouTube player class
 
 var player;
 var readyplayer;

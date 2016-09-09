@@ -1339,7 +1339,7 @@
     <Content Include="Content\ITJakub.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
     <Content Include="Content\ITJakub.PluginMenu.less" />
-    <Content Include="wwwroot\js\itjakub.upload.js" />
+    <TypeScriptCompile Include="wwwroot\js\itjakub.upload.ts" />
     <Content Include="Content\dropzones.less" />
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
@@ -1566,6 +1566,7 @@
     <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
     <Content Include="Views\EditionNote\EditionNote.cshtml" />
     <TypeScriptCompile Include="wwwroot\js\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="wwwroot\js\typings\dropzone\dropzone.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\jqueryui\jqueryui.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\simplemde\simplemde.d.ts" />
