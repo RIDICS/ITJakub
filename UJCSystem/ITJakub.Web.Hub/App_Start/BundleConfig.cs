@@ -29,7 +29,7 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/bundles/cookies").Include(
                 "~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js",
-                "~/Scripts/Plugins/itjakub.eucookiepopup.js"));
+                "~/wwwroot/js/Plugins/itjakub.eucookiepopup.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/wwwroot/lib/bootstrap/dist/js/bootstrap.js",
@@ -42,14 +42,14 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib-custom/typeahead.bundle.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/keyboardLayout").Include(
-                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboard.js",
-                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
-                "~/Scripts/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"));
+                "~/wwwroot/js/Plugins/Keyboard/itjakub.plugins.keyboard.js",
+                "~/wwwroot/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
+                "~/wwwroot/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/storage").Include(
-                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.manager.js",
-                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
-                "~/Scripts/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
+                "~/wwwroot/js/Plugins/Storage/itjakub.plugins.storage.manager.js",
+                "~/wwwroot/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
+                "~/wwwroot/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/imagezoom").Include(
                 "~/wwwroot/lib/Wheelzoom/wheelzoom.js",
@@ -60,12 +60,11 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/wwwroot/js/itjakub.js",
-                "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
-                "~/Scripts/Plugins/itjakub.modul.inicializator.js",
-                "~/Scripts/Plugins/itjakub.list.modul.inicializator.js",
-                "~/Scripts/Plugins/itjakub.search.modul.inicializator.js",
-                "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
-                "~/Scripts/Plugins/Reader/itjakub.plugins.reader.js",
+                "~/wwwroot/js/Plugins/Progress/itjakub.plugins.progress.js",
+                "~/wwwroot/js/Plugins/itjakub.modul.inicializator.js",
+                "~/wwwroot/js/Plugins/itjakub.list.modul.inicializator.js",
+                "~/wwwroot/js/Plugins/itjakub.search.modul.inicializator.js",
+                "~/wwwroot/js/Plugins/Reader/itjakub.plugins.reader.js",
                 "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
                 "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
                 "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js",
@@ -73,9 +72,10 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/js/Plugins/Sort/itjakub.plugins.sort.js",
                 "~/wwwroot/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
                 "~/wwwroot/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
-                "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
+                "~/wwwroot/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
                 "~/wwwroot/js/Plugins/itjakub.plugins.pagination.js",
-                "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
+                "~/wwwroot/js/Plugins/SearchBox/itjakub.plugins.searchbox.js",
+                "~/wwwroot/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
                 "~/wwwroot/js/itjakub.home.js"));
@@ -88,15 +88,12 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/upload/javascript").Include(
                 "~/wwwroot/js/itjakub.upload.js"));
-            //todo Feedback and Upload requires verification (was mapped directly!)
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
-                "~/wwwroot/js/Permission/itjakub.permission.user.js",
-                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
+                "~/wwwroot/js/Permission/itjakub.permission.user.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/group/javascript").Include(
-                "~/wwwroot/js/Permission/itjakub.permission.group.js",
-                "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
+                "~/wwwroot/js/Permission/itjakub.permission.group.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
                 "~/wwwroot/js/itjakub.text.editor.js"));
