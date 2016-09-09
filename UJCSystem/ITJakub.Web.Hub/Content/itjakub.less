@@ -12,6 +12,14 @@
 @import "Plugins/SearchBox/ITJakub.SearchBox.less";
 @import "Plugins/ITJakub.Pagination.less";
 
+@image-news-background: url('../wwwroot/images/news_background.png');
+@image-feeds04: url('../wwwroot/images/Feeds/04.png');
+@image-feeds07: url('../wwwroot/images/Feeds/07.png');
+@image-feeds25: url('../wwwroot/images/Feeds/25.png');
+@image-feeds26: url('../wwwroot/images/Feeds/26.png');
+@image-feeds49: url('../wwwroot/images/Feeds/49.png');
+@image-feeds50: url('../wwwroot/images/Feeds/50.png');
+
 .main_logo {
     margin: 10px;
     margin-left: 0;
@@ -147,7 +155,7 @@ ul.navbar-right.navbar-login {
 }
 
 .news {
-    background-image: url('Images/news_background.png');
+    background-image: @image-news-background;
     background-size: 86px 50px;
     background-position: left top;
     background-repeat: no-repeat;
@@ -202,11 +210,11 @@ ul.navbar-right.navbar-login {
     width: 16px;
     height: 16px;
     display: inline-block;
-    background:transparent url('Images/Feeds/25.png') center top no-repeat;
+    background:transparent @image-feeds25 center top no-repeat;
 }
 
 .news-feed-atom:hover{
-    background:transparent url('Images/Feeds/50.png') center top no-repeat;
+    background:transparent @image-feeds50 center top no-repeat;
 }
 
 .news-feed-rss{
@@ -214,11 +222,11 @@ ul.navbar-right.navbar-login {
     width: 16px;
     height: 16px;
     display: inline-block;
-    background:transparent url('Images/Feeds/04.png') center top no-repeat;
+    background:transparent @image-feeds04 center top no-repeat;
 }
 
 .news-feed-rss:hover{
-    background:transparent url('Images/Feeds/49.png') center top no-repeat;
+    background:transparent @image-feeds49 center top no-repeat;
 }
 
 
@@ -370,7 +378,7 @@ a.btn.btn-default:hover {
 }
 
 .loading-small-inline {
-    background: url(Images/small_trans_loading.gif) no-repeat center;
+    background: @image-small-loading no-repeat center;
     width: 20px;
     display: inline-block;
 }

@@ -80,3 +80,7 @@ function onClickHref(event:JQueryEventObject, targetUrl) {
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);
+
+function getImageResourcePath(): string {
+    return getBaseUrl() + "wwwroot/images/";
+}

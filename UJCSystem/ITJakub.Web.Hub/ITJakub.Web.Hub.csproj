@@ -270,16 +270,16 @@
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
-    <Content Include="Content\Images\Feeds\04.png" />
-    <Content Include="Content\Images\Feeds\07.png" />
-    <Content Include="Content\Images\Feeds\25.png" />
-    <Content Include="Content\Images\Feeds\26.png" />
-    <Content Include="Content\Images\Feeds\49.png" />
-    <Content Include="Content\Images\Feeds\50.png" />
-    <Content Include="Content\Images\klavesnice.gif" />
-    <Content Include="Content\Images\mlceni_blue.jpg" />
-    <Content Include="Content\Images\mlceni_hangman.jpg" />
-    <Content Include="Content\Images\Mlceni_pink.jpg" />
+    <Content Include="wwwroot\images\Feeds\04.png" />
+    <Content Include="wwwroot\images\Feeds\07.png" />
+    <Content Include="wwwroot\images\Feeds\25.png" />
+    <Content Include="wwwroot\images\Feeds\26.png" />
+    <Content Include="wwwroot\images\Feeds\49.png" />
+    <Content Include="wwwroot\images\Feeds\50.png" />
+    <Content Include="wwwroot\images\keyboard.gif" />
+    <Content Include="wwwroot\images\mlceni_blue.jpg" />
+    <Content Include="wwwroot\images\mlceni_hangman.jpg" />
+    <Content Include="wwwroot\images\Mlceni_pink.jpg" />
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.css">
       <DependentUpon>itjakub.lemmatization.less</DependentUpon>
     </Content>
@@ -1222,12 +1222,12 @@
     <Content Include="Content\dropzones.min.css">
       <DependentUpon>dropzones.css</DependentUpon>
     </Content>
-    <Content Include="Content\Images\glyphicons_chevron.png" />
-    <Content Include="Content\Images\glyphicons_chevron_green.png" />
-    <Content Include="Content\Images\loading.gif" />
-    <Content Include="Content\Images\logo.png" />
-    <Content Include="Content\Images\news_background.png" />
-    <Content Include="Content\Images\small_trans_loading.gif" />
+    <Content Include="wwwroot\images\glyphicons_chevron.png" />
+    <Content Include="wwwroot\images\glyphicons_chevron_green.png" />
+    <Content Include="wwwroot\images\loading.gif" />
+    <Content Include="wwwroot\images\logo.png" />
+    <Content Include="wwwroot\images\news_background.png" />
+    <Content Include="wwwroot\images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.Footer.css">
       <DependentUpon>ITJakub.Footer.less</DependentUpon>
     </Content>
@@ -1595,9 +1595,7 @@
     <Folder Include="Areas\Tools\Content\" />
     <Folder Include="Areas\Tools\Models\" />
     <Folder Include="Areas\Tools\Views\Shared\" />
-    <Folder Include="Content\Images\Plugins\" />
     <Folder Include="wwwroot\css\" />
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />

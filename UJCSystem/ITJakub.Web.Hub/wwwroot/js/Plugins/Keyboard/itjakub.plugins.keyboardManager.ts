@@ -8,7 +8,7 @@
     
     export function getKeyboard(keyboard: string, lazy: boolean=true): KeyboardComponent {
         if (typeof keyboardMap[keyboard] == "undefined") {
-            keyboardMap[keyboard] = new KeyboardComponent(findContainer(keyboard), loadedKeyboards, "keyboard-", "/");
+            keyboardMap[keyboard] = new KeyboardComponent(findContainer(keyboard), loadedKeyboards, "keyboard-", getImageResourcePath());
             keyboardMap[keyboard].getComponent().append(keyboardMap[keyboard].createKeyboardHtml(true));
 
             if (!lazy) {
