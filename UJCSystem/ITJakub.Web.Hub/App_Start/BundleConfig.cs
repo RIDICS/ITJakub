@@ -59,40 +59,47 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
-                "~/Scripts/itjakub.js",
+                "~/wwwroot/js/itjakub.js",
                 "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
                 "~/Scripts/Plugins/itjakub.modul.inicializator.js",
                 "~/Scripts/Plugins/itjakub.list.modul.inicializator.js",
                 "~/Scripts/Plugins/itjakub.search.modul.inicializator.js",
                 "~/Scripts/Plugins/Search/itjakub.plugins.search.js",
                 "~/Scripts/Plugins/Reader/itjakub.plugins.reader.js",
-                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
-                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
-                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js",
-                "~/Scripts/Plugins/Bibliography/itjakub.plugins.bibliography.js",
-                "~/Scripts/Plugins/Sort/itjakub.plugins.sort.js",
-                "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
-                "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
+                "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js",
+                "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js",
+                "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js",
+                "~/wwwroot/js/Plugins/Bibliography/itjakub.plugins.bibliography.js",
+                "~/wwwroot/js/Plugins/Sort/itjakub.plugins.sort.js",
+                "~/wwwroot/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
+                "~/wwwroot/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
                 "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
-                "~/Scripts/Plugins/itjakub.plugins.pagination.js",
+                "~/wwwroot/js/Plugins/itjakub.plugins.pagination.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
-                "~/Scripts/Home/itjakub.home.js"));
+                "~/wwwroot/js/itjakub.home.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/news/javascript").Include(
-                "~/Scripts/News/itjakub.news.js"));
+                "~/wwwroot/js/itjakub.news.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/feedback/javascript").Include(
+                "~/wwwroot/js/itjakub.feedbacks.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/upload/javascript").Include(
+                "~/wwwroot/js/itjakub.upload.js"));
+            //todo Feedback and Upload requires verification (was mapped directly!)
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/user/javascript").Include(
-                "~/Scripts/Permission/itjakub.permission.user.js",
+                "~/wwwroot/js/Permission/itjakub.permission.user.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/permission/group/javascript").Include(
-                "~/Scripts/Permission/itjakub.permission.group.js",
+                "~/wwwroot/js/Permission/itjakub.permission.group.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
-                "~/Scripts/Text/itjakub.text.editor.js"));
+                "~/wwwroot/js/itjakub.text.editor.js"));
 
 
             // ----- Styles ------

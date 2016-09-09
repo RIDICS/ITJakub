@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../Scripts/Plugins/itjakub.plugins.pagination.ts" />
+﻿/// <reference path="../../../wwwroot/js/Plugins/itjakub.plugins.pagination.ts" />
 class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
