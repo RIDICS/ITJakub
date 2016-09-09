@@ -55,68 +55,68 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.DefaultTheme.css",
-    "inputFile": "Content/ITJakub.DefaultTheme.less",
+    "outputFile": "wwwroot/css/ITJakub.DefaultTheme.css",
+    "inputFile": "wwwroot/css/ITJakub.DefaultTheme.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.Footer.css",
-    "inputFile": "Content/ITJakub.Footer.less",
+    "outputFile": "wwwroot/css/ITJakub.Footer.css",
+    "inputFile": "wwwroot/css/ITJakub.Footer.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.HorizontalLoader.css",
-    "inputFile": "Content/ITJakub.HorizontalLoader.less",
+    "outputFile": "wwwroot/css/ITJakub.HorizontalLoader.css",
+    "inputFile": "wwwroot/css/ITJakub.HorizontalLoader.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/itjakub.css",
-    "inputFile": "Content/ITJakub.less",
+    "outputFile": "wwwroot/css/itjakub.css",
+    "inputFile": "wwwroot/css/ITJakub.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.NumberedOrderedList.css",
-    "inputFile": "Content/ITJakub.NumberedOrderedList.less",
+    "outputFile": "wwwroot/css/ITJakub.NumberedOrderedList.css",
+    "inputFile": "wwwroot/css/ITJakub.NumberedOrderedList.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.PluginMenu.css",
-    "inputFile": "Content/ITJakub.PluginMenu.less",
+    "outputFile": "wwwroot/css/ITJakub.PluginMenu.css",
+    "inputFile": "wwwroot/css/ITJakub.PluginMenu.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/Bibliography/ITJakub.Bibliography.css",
-    "inputFile": "Content/Plugins/Bibliography/ITJakub.Bibliography.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.Bibliography.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.Bibliography.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/DropdownSelect/ITJakub.DropdownSelect.css",
-    "inputFile": "Content/Plugins/DropdownSelect/ITJakub.DropdownSelect.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.DropdownSelect.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.DropdownSelect.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/Keyboard/ITJakub.Keyboard.css",
-    "inputFile": "Content/Plugins/Keyboard/ITJakub.Keyboard.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.Keyboard.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.Keyboard.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/Reader/ITJakub.Reader.css",
-    "inputFile": "Content/Plugins/Reader/ITJakub.Reader.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.Reader.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.Reader.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/RegExSearch/ITJakub.RegExSearch.css",
-    "inputFile": "Content/Plugins/RegExSearch/ITJakub.RegExSearch.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.RegExSearch.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.RegExSearch.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.css",
-    "inputFile": "Content/Plugins/SearchBox/ITJakub.SearchBox.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.SearchBox.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.SearchBox.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Plugins/ITJakub.Pagination.css",
-    "inputFile": "Content/Plugins/ITJakub.Pagination.less",
+    "outputFile": "wwwroot/css/Plugins/ITJakub.Pagination.css",
+    "inputFile": "wwwroot/css/Plugins/ITJakub.Pagination.less",
     "sourceMap": false
   },
   {
@@ -125,18 +125,18 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Content/dropzones.css",
-    "inputFile": "Content/dropzones.less",
+    "outputFile": "wwwroot/css/ITJakub.Dropzone.css",
+    "inputFile": "wwwroot/css/ITJakub.Dropzone.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.EuCookiePopup.css",
-    "inputFile": "Content/ITJakub.EuCookiePopup.less",
+    "outputFile": "wwwroot/css/ITJakub.EuCookiePopup.css",
+    "inputFile": "wwwroot/css/ITJakub.EuCookiePopup.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Content/Permission/itjakub.permission.css",
-    "inputFile": "Content/Permission/itjakub.permission.less",
+    "outputFile": "wwwroot/css/ITJakub.Permission.css",
+    "inputFile": "wwwroot/css/ITJakub.Permission.less",
     "sourceMap": false
   },
   {
@@ -145,8 +145,8 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Content/ITJakub.TextEditor.css",
-    "inputFile": "Content/ITJakub.TextEditor.less",
+    "outputFile": "wwwroot/css/ITJakub.TextEditor.css",
+    "inputFile": "wwwroot/css/ITJakub.TextEditor.less",
     "sourceMap": false
   }
 ]

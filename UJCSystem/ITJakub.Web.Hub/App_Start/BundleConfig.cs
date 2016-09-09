@@ -102,18 +102,18 @@ namespace ITJakub.Web.Hub
             // ----- Styles ------
 
             bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
-                "~/Content/Permission/itjakub.permission.css"));
+                "~/wwwroot/css/ITJakub.Permission.css"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
-                "~/Content/site.css"));
+                "~/wwwroot/css/site.css"));
 
             bundles.Add(new StyleBundle("~/Content/eucookiescss").Include(
                 "~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css",
-                "~/Content/ITJakub.EuCookiePopup.css"));
+                "~/wwwroot/css/ITJakub.EuCookiePopup.css"));
 
             bundles.Add(new StyleBundle("~/Content/itjakub").Include(
-                "~/Content/ITJakub.css"));
+                "~/wwwroot/css/ITJakub.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
                 "~/wwwroot/lib/dropzone/downloads/css/basic.css",
@@ -124,7 +124,7 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
-                "~/Content/ITJakub.TextEditor.css"));
+                "~/wwwroot/css/ITJakub.TextEditor.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862

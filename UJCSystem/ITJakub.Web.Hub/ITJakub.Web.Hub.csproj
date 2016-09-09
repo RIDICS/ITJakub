@@ -270,6 +270,18 @@
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\css\ITJakub.Dropzone.css">
+      <DependentUpon>ITJakub.Dropzone.less</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\css\ITJakub.Dropzone.min.css">
+      <DependentUpon>ITJakub.Dropzone.css</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\css\ITJakub.Permission.css">
+      <DependentUpon>ITJakub.Permission.less</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\css\ITJakub.Permission.min.css">
+      <DependentUpon>ITJakub.Permission.css</DependentUpon>
+    </Content>
     <Content Include="wwwroot\images\Feeds\04.png" />
     <Content Include="wwwroot\images\Feeds\07.png" />
     <Content Include="wwwroot\images\Feeds\25.png" />
@@ -290,12 +302,6 @@
     <Content Include="Content\KeyboardLayouts\cyrilic.xml" />
     <Content Include="Content\KeyboardLayouts\greek_qwerty.xml" />
     <Content Include="Content\KeyboardLayouts\Vokabular_def.xml" />
-    <Content Include="Content\Permission\itjakub.permission.css">
-      <DependentUpon>itjakub.permission.less</DependentUpon>
-    </Content>
-    <Content Include="Content\Permission\itjakub.permission.min.css">
-      <DependentUpon>itjakub.permission.css</DependentUpon>
-    </Content>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.css" />
@@ -1213,37 +1219,31 @@
     <Content Include="wwwroot\lib\wheelzoom\daisy.jpg" />
     <Content Include="wwwroot\lib\wheelzoom\demo.html" />
     <Content Include="wwwroot\lib\wheelzoom\wheelzoom.js" />
-    <Content Include="Content\ITJakub.EuCookiePopup.less" />
-    <Content Include="Content\ITJakub.TextEditor.less" />
-    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
-    <Content Include="Content\dropzones.css">
-      <DependentUpon>dropzones.less</DependentUpon>
-    </Content>
-    <Content Include="Content\dropzones.min.css">
-      <DependentUpon>dropzones.css</DependentUpon>
-    </Content>
+    <Content Include="wwwroot\css\ITJakub.EuCookiePopup.less" />
+    <Content Include="wwwroot\css\ITJakub.TextEditor.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.Keyboard.less" />
     <Content Include="wwwroot\images\glyphicons_chevron.png" />
     <Content Include="wwwroot\images\glyphicons_chevron_green.png" />
     <Content Include="wwwroot\images\loading.gif" />
     <Content Include="wwwroot\images\logo.png" />
     <Content Include="wwwroot\images\news_background.png" />
     <Content Include="wwwroot\images\small_trans_loading.gif" />
-    <Content Include="Content\ITJakub.Footer.css">
+    <Content Include="wwwroot\css\ITJakub.Footer.css">
       <DependentUpon>ITJakub.Footer.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.Footer.min.css">
+    <Content Include="wwwroot\css\ITJakub.Footer.min.css">
       <DependentUpon>ITJakub.Footer.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.HorizontalLoader.css">
+    <Content Include="wwwroot\css\ITJakub.HorizontalLoader.css">
       <DependentUpon>ITJakub.HorizontalLoader.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.HorizontalLoader.min.css">
+    <Content Include="wwwroot\css\ITJakub.HorizontalLoader.min.css">
       <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.NumberedOrderedList.css">
+    <Content Include="wwwroot\css\ITJakub.NumberedOrderedList.css">
       <DependentUpon>ITJakub.NumberedOrderedList.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.NumberedOrderedList.min.css">
+    <Content Include="wwwroot\css\ITJakub.NumberedOrderedList.min.css">
       <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
@@ -1253,102 +1253,102 @@
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
     <Content Include="Content\BibliographyConfiguration\configuration.json" />
-    <Content Include="Content\ITJakub.css">
+    <Content Include="wwwroot\css\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.DefaultTheme.css">
+    <Content Include="wwwroot\css\ITJakub.DefaultTheme.css">
       <DependentUpon>ITJakub.DefaultTheme.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.DefaultTheme.min.css">
+    <Content Include="wwwroot\css\ITJakub.DefaultTheme.min.css">
       <DependentUpon>ITJakub.DefaultTheme.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.min.css">
+    <Content Include="wwwroot\css\ITJakub.min.css">
       <DependentUpon>ITJakub.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.EuCookiePopup.css">
+    <Content Include="wwwroot\css\ITJakub.EuCookiePopup.css">
       <DependentUpon>ITJakub.EuCookiePopup.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.EuCookiePopup.min.css">
+    <Content Include="wwwroot\css\ITJakub.EuCookiePopup.min.css">
       <DependentUpon>ITJakub.EuCookiePopup.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.TextEditor.css">
+    <Content Include="wwwroot\css\ITJakub.TextEditor.css">
       <DependentUpon>ITJakub.TextEditor.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.TextEditor.min.css">
+    <Content Include="wwwroot\css\ITJakub.TextEditor.min.css">
       <DependentUpon>ITJakub.TextEditor.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.PluginMenu.css">
+    <Content Include="wwwroot\css\ITJakub.PluginMenu.css">
       <DependentUpon>ITJakub.PluginMenu.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.PluginMenu.min.css">
+    <Content Include="wwwroot\css\ITJakub.PluginMenu.min.css">
       <DependentUpon>ITJakub.PluginMenu.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.css">
       <DependentUpon>ITJakub.Bibliography.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.min.css">
       <DependentUpon>ITJakub.Bibliography.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.DropdownSelect.css">
       <DependentUpon>ITJakub.DropdownSelect.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.DropdownSelect.min.css">
       <DependentUpon>ITJakub.DropdownSelect.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Keyboard.css">
       <DependentUpon>ITJakub.Keyboard.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Keyboard.min.css">
       <DependentUpon>ITJakub.Keyboard.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Reader\ITJakub.Reader.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Reader.css">
       <DependentUpon>ITJakub.Reader.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\Reader\ITJakub.Reader.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Reader.min.css">
       <DependentUpon>ITJakub.Reader.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.RegExSearch.css">
       <DependentUpon>ITJakub.RegExSearch.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.RegExSearch.min.css">
       <DependentUpon>ITJakub.RegExSearch.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.SearchBox.css">
       <DependentUpon>ITJakub.SearchBox.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.SearchBox.min.css">
       <DependentUpon>ITJakub.SearchBox.css</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\ITJakub.Pagination.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Pagination.css">
       <DependentUpon>ITJakub.Pagination.less</DependentUpon>
     </Content>
-    <Content Include="Content\Plugins\ITJakub.Pagination.min.css">
+    <Content Include="wwwroot\css\Plugins\ITJakub.Pagination.min.css">
       <DependentUpon>ITJakub.Pagination.css</DependentUpon>
     </Content>
-    <Content Include="Content\Site.min.css">
+    <Content Include="wwwroot\css\Site.min.css">
       <DependentUpon>Site.css</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="wwwroot\css\Site.css" />
     <Content Include="Areas\Editions\Views\web.config" />
     <Content Include="Areas\Dictionaries\Views\web.config" />
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
-    <Content Include="Content\ITJakub.less" />
+    <Content Include="wwwroot\css\ITJakub.less" />
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
-    <Content Include="Content\ITJakub.PluginMenu.less" />
+    <Content Include="wwwroot\css\ITJakub.PluginMenu.less" />
     <TypeScriptCompile Include="wwwroot\js\itjakub.upload.ts" />
-    <Content Include="Content\dropzones.less" />
-    <Content Include="Content\ITJakub.DefaultTheme.less" />
+    <Content Include="wwwroot\css\ITJakub.Dropzone.less" />
+    <Content Include="wwwroot\css\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Listing.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
-    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
     <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
@@ -1380,7 +1380,7 @@
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
-    <Content Include="Content\ITJakub.Footer.less" />
+    <Content Include="wwwroot\css\ITJakub.Footer.less" />
     <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
@@ -1421,18 +1421,18 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <None Include="Content\ITJakub.HorizontalLoader.less" />
-    <None Include="Content\ITJakub.NumberedOrderedList.less" />
-    <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
-    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.less" />
-    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.less" />
+    <None Include="wwwroot\css\ITJakub.HorizontalLoader.less" />
+    <None Include="wwwroot\css\ITJakub.NumberedOrderedList.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.Reader.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.DropdownSelect.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.RegExSearch.less" />
     <Content Include="ITJakub.Web.Hub.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Plugins\SearchBox\ITJakub.SearchBox.less" />
-    <Content Include="Content\Plugins\ITJakub.Pagination.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.SearchBox.less" />
+    <Content Include="wwwroot\css\Plugins\ITJakub.Pagination.less" />
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.less" />
-    <Content Include="Content\Permission\itjakub.permission.less" />
+    <Content Include="wwwroot\css\ITJakub.Permission.less" />
     <None Include="Content\KeyboardLayouts\layoutdefinition.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -1595,7 +1595,6 @@
     <Folder Include="Areas\Tools\Content\" />
     <Folder Include="Areas\Tools\Models\" />
     <Folder Include="Areas\Tools\Views\Shared\" />
-    <Folder Include="wwwroot\css\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />
