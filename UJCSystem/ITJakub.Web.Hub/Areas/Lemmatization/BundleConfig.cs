@@ -12,7 +12,7 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization
                 "~/wwwroot/js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/lemmatization/css")
-                .Include("~/Areas/Lemmatization/Content/itjakub.lemmatization.css"));
+                .Include("~/wwwroot/Areas/Lemmatization/css/itjakub.lemmatization.css"));
         }
     }
 }

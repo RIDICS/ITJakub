@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks
                 "~/Areas/AudioBooks/Scripts/itjakub.audiobooks.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/audiobooks/css").Include(
-                "~/Areas/AudioBooks/Content/itjakub.audiobooks.css"));
+                "~/wwwroot/Areas/AudioBooks/css/itjakub.audiobooks.css"));
         }
     }
 }

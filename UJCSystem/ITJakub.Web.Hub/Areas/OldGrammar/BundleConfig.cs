@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar
                 "~/Areas/OldGrammar/Scripts/itjakub.oldgrammar.search.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/oldgrammar/css").Include(
-                "~/Areas/OldGrammar/Content/itjakub.oldgrammar.css"));
+                "~/wwwroot/Areas/OldGrammar/css/itjakub.oldgrammar.css"));
         }
     }
 }

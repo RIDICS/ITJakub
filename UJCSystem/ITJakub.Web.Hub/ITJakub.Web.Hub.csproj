@@ -198,76 +198,76 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.css">
+    <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.css">
       <DependentUpon>itjakub.audiobooks.less</DependentUpon>
     </Content>
-    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.min.css">
+    <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.min.css">
       <DependentUpon>itjakub.audiobooks.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.css">
+    <Content Include="wwwroot\Areas\Bibliographies\css\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.min.css">
+    <Content Include="wwwroot\Areas\Bibliographies\css\itjakub.bibliographies.min.css">
       <DependentUpon>itjakub.bibliographies.css</DependentUpon>
     </Content>
-    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.css">
+    <Content Include="wwwroot\Areas\BohemianTextBank\css\itjakub.bohemiantextbank.css">
       <DependentUpon>itjakub.bohemiantextbank.less</DependentUpon>
     </Content>
-    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.min.css">
+    <Content Include="wwwroot\Areas\BohemianTextBank\css\itjakub.bohemiantextbank.min.css">
       <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
     </Content>
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.css">
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.css">
       <DependentUpon>itjakub.cardfile.less</DependentUpon>
     </Content>
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.min.css">
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.min.css">
       <DependentUpon>itjakub.cardfile.css</DependentUpon>
     </Content>
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.css">
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.css">
       <DependentUpon>itjakub.cardfiles.less</DependentUpon>
     </Content>
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.min.css">
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.min.css">
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Derivation\Content\itjakub.derivation.css">
+    <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.css">
       <DependentUpon>itjakub.derivation.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Derivation\Content\itjakub.derivation.min.css">
+    <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.min.css">
       <DependentUpon>itjakub.derivation.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.css">
+    <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.min.css">
+    <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Editions\Content\itjakub.editions.content.css">
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.css">
       <DependentUpon>itjakub.editions.content.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Editions\Content\itjakub.editions.content.min.css">
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.min.css">
       <DependentUpon>itjakub.editions.content.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Editions\Content\itjakub.editions.css">
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.css">
       <DependentUpon>itjakub.editions.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Editions\Content\itjakub.editions.min.css">
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.min.css">
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
-    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.css">
+    <Content Include="wwwroot\Areas\OldGrammar\css\itjakub.oldgrammar.css">
       <DependentUpon>itjakub.oldgrammar.less</DependentUpon>
     </Content>
-    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.min.css">
+    <Content Include="wwwroot\Areas\OldGrammar\css\itjakub.oldgrammar.min.css">
       <DependentUpon>itjakub.oldgrammar.css</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.min.css">
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.content.min.css">
       <DependentUpon>itjakub.professionalliterature.content.css</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.css">
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.css">
       <DependentUpon>itjakub.professionalliterature.less</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.css">
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.content.css">
       <DependentUpon>itjakub.professionalliterature.content.less</DependentUpon>
     </Content>
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
     <Content Include="wwwroot\css\ITJakub.Dropzone.css">
@@ -292,10 +292,10 @@
     <Content Include="wwwroot\images\mlceni_blue.jpg" />
     <Content Include="wwwroot\images\mlceni_hangman.jpg" />
     <Content Include="wwwroot\images\Mlceni_pink.jpg" />
-    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.css">
+    <Content Include="wwwroot\Areas\Lemmatization\css\itjakub.lemmatization.css">
       <DependentUpon>itjakub.lemmatization.less</DependentUpon>
     </Content>
-    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
+    <Content Include="wwwroot\Areas\Lemmatization\css\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
     <Content Include="Content\KeyboardLayouts\cs_quertz.xml" />
@@ -1247,7 +1247,7 @@
       <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
-    <Content Include="Areas\Bibliographies\Content\itjakub.bibliographies.less" />
+    <Content Include="wwwroot\Areas\Bibliographies\css\itjakub.bibliographies.less" />
     <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Search.cshtml" />
     <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
@@ -1335,9 +1335,9 @@
     <Content Include="Areas\Dictionaries\Views\web.config" />
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
+    <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.less" />
     <Content Include="wwwroot\css\ITJakub.less" />
-    <Content Include="Areas\Editions\Content\itjakub.editions.less" />
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.less" />
     <Content Include="wwwroot\css\ITJakub.PluginMenu.less" />
     <TypeScriptCompile Include="wwwroot\js\itjakub.upload.ts" />
     <Content Include="wwwroot\css\ITJakub.Dropzone.less" />
@@ -1350,31 +1350,31 @@
     <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.less" />
     <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
     <Content Include="Areas\CardFiles\Views\CardFiles\Listing.cshtml" />
     <Content Include="Areas\CardFiles\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.less" />
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\web.config" />
     <Content Include="Areas\OldGrammar\Views\web.config" />
     <Content Include="Areas\BohemianTextBank\Views\web.config" />
-    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.less" />
+    <Content Include="wwwroot\Areas\BohemianTextBank\css\itjakub.bohemiantextbank.less" />
     <Content Include="Areas\BohemianTextBank\Views\_ViewStart.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Search.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\List.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Information.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Feedback.cshtml" />
-    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.less" />
+    <Content Include="wwwroot\Areas\OldGrammar\css\itjakub.oldgrammar.less" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
     <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
-    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.less" />
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
@@ -1385,7 +1385,7 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
-    <Content Include="Areas\Editions\Content\itjakub.editions.content.less" />
+    <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.less" />
     <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
@@ -1396,7 +1396,7 @@
     <Content Include="Areas\AudioBooks\Views\_ViewStart.cshtml" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\Feedback.cshtml" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\Information.cshtml" />
-    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.less" />
+    <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.less" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\List.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\Feedback.cshtml" />
     <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
@@ -1416,7 +1416,7 @@
     <Content Include="Areas\Derivation\Views\web.config" />
     <Content Include="Areas\Lemmatization\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Derivation\Content\itjakub.derivation.less" />
+    <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
@@ -1431,7 +1431,7 @@
     </Content>
     <Content Include="wwwroot\css\Plugins\ITJakub.SearchBox.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Pagination.less" />
-    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.less" />
+    <Content Include="wwwroot\Areas\Lemmatization\css\itjakub.lemmatization.less" />
     <Content Include="wwwroot\css\ITJakub.Permission.less" />
     <None Include="Content\KeyboardLayouts\layoutdefinition.xsd">
       <SubType>Designer</SubType>
@@ -1574,19 +1574,26 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\AudioBooks\Content\" />
     <Folder Include="Areas\AudioBooks\Models\" />
     <Folder Include="Areas\AudioBooks\Views\Shared\" />
+    <Folder Include="Areas\Bibliographies\Content\" />
     <Folder Include="Areas\Bibliographies\Models\" />
     <Folder Include="Areas\Bibliographies\Views\Shared\" />
+    <Folder Include="Areas\BohemianTextBank\Content\" />
     <Folder Include="Areas\BohemianTextBank\Models\" />
     <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
+    <Folder Include="Areas\CardFiles\Content\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
+    <Folder Include="Areas\Derivation\Content\" />
     <Folder Include="Areas\Derivation\Models\" />
     <Folder Include="Areas\Derivation\Views\Shared\" />
+    <Folder Include="Areas\Dictionaries\Content\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\Editions\Models\" />
     <Folder Include="Areas\Editions\Views\Shared\" />
+    <Folder Include="Areas\Lemmatization\Content\" />
     <Folder Include="Areas\Lemmatization\Models\" />
     <Folder Include="Areas\Lemmatization\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
@@ -1595,6 +1602,18 @@
     <Folder Include="Areas\Tools\Content\" />
     <Folder Include="Areas\Tools\Models\" />
     <Folder Include="Areas\Tools\Views\Shared\" />
+    <Folder Include="wwwroot\Areas\AudioBooks\js\" />
+    <Folder Include="wwwroot\Areas\Bibliographies\js\" />
+    <Folder Include="wwwroot\Areas\BohemianTextBank\js\" />
+    <Folder Include="wwwroot\Areas\CardFiles\js\" />
+    <Folder Include="wwwroot\Areas\Derivation\js\" />
+    <Folder Include="wwwroot\Areas\Dictionaries\js\" />
+    <Folder Include="wwwroot\Areas\Editions\js\" />
+    <Folder Include="wwwroot\Areas\Lemmatization\js\" />
+    <Folder Include="wwwroot\Areas\OldGrammar\js\" />
+    <Folder Include="wwwroot\Areas\ProfessionalLiterature\js\" />
+    <Folder Include="wwwroot\Areas\Tools\css\" />
+    <Folder Include="wwwroot\Areas\Tools\js\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Project_Readme.html" />

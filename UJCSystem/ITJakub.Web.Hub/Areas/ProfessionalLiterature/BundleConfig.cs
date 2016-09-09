@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature
                 "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.search.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/professionalliterature/css").Include(
-                "~/Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.css"));
+                "~/wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css"));
         }
     }
 }

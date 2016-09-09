@@ -1,57 +1,67 @@
 [
   {
-    "outputFile": "Areas/Bibliographies/Content/itjakub.bibliographies.css",
-    "inputFile": "Areas/Bibliographies/Content/itjakub.bibliographies.less",
+    "outputFile": "wwwroot/Areas/Bibliographies/css/itjakub.bibliographies.css",
+    "inputFile": "wwwroot/Areas/Bibliographies/css/itjakub.bibliographies.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/BohemianTextBank/Content/itjakub.bohemiantextbank.css",
-    "inputFile": "Areas/BohemianTextBank/Content/itjakub.bohemiantextbank.less",
+    "outputFile": "wwwroot/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css",
+    "inputFile": "wwwroot/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/CardFiles/Content/itjakub.cardfile.css",
-    "inputFile": "Areas/CardFiles/Content/itjakub.cardfile.less",
+    "outputFile": "wwwroot/Areas/CardFiles/css/itjakub.cardfile.css",
+    "inputFile": "wwwroot/Areas/CardFiles/css/itjakub.cardfile.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/CardFiles/Content/itjakub.cardfiles.css",
-    "inputFile": "Areas/CardFiles/Content/itjakub.cardfiles.less",
+    "outputFile": "wwwroot/Areas/CardFiles/css/itjakub.cardfiles.css",
+    "inputFile": "wwwroot/Areas/CardFiles/css/itjakub.cardfiles.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/Dictionaries/Content/itjakub.dictionaries.css",
-    "inputFile": "Areas/Dictionaries/Content/itjakub.dictionaries.less",
+    "outputFile": "wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css",
+    "inputFile": "wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/Editions/Content/itjakub.editions.content.css",
-    "inputFile": "Areas/Editions/Content/itjakub.editions.content.less",
+    "outputFile": "wwwroot/Areas/Editions/css/itjakub.editions.content.css",
+    "inputFile": "wwwroot/Areas/Editions/css/itjakub.editions.content.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/Editions/Content/itjakub.editions.css",
-    "inputFile": "Areas/Editions/Content/itjakub.editions.less",
+    "outputFile": "wwwroot/Areas/Editions/css/itjakub.editions.css",
+    "inputFile": "wwwroot/Areas/Editions/css/itjakub.editions.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/OldGrammar/Content/itjakub.oldgrammar.css",
-    "inputFile": "Areas/OldGrammar/Content/itjakub.oldgrammar.less",
+    "outputFile": "wwwroot/Areas/OldGrammar/css/itjakub.oldgrammar.css",
+    "inputFile": "wwwroot/Areas/OldGrammar/css/itjakub.oldgrammar.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.css",
-    "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.less",
+    "outputFile": "wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css",
+    "inputFile": "wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.content.css",
-    "inputFile": "Areas/ProfessionalLiterature/Content/itjakub.professionalliterature.content.less",
+    "outputFile": "wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.content.css",
+    "inputFile": "wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.content.less",
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/Derivation/Content/itjakub.derivation.css",
-    "inputFile": "Areas/Derivation/Content/itjakub.derivation.less",
+    "outputFile": "wwwroot/Areas/AudioBooks/css/itjakub.audiobooks.css",
+    "inputFile": "wwwroot/Areas/AudioBooks/css/itjakub.audiobooks.less",
+    "sourceMap": false
+  },
+  {
+    "outputFile": "wwwroot/Areas/Derivation/css/itjakub.derivation.css",
+    "inputFile": "wwwroot/Areas/Derivation/css/itjakub.derivation.less",
+    "sourceMap": false
+  },
+  {
+    "outputFile": "wwwroot/Areas/Lemmatization/css/itjakub.lemmatization.css",
+    "inputFile": "wwwroot/Areas/Lemmatization/css/itjakub.lemmatization.less",
     "sourceMap": false
   },
   {
@@ -120,11 +130,6 @@
     "sourceMap": false
   },
   {
-    "outputFile": "Areas/AudioBooks/Content/itjakub.audiobooks.css",
-    "inputFile": "Areas/AudioBooks/Content/itjakub.audiobooks.less",
-    "sourceMap": false
-  },
-  {
     "outputFile": "wwwroot/css/ITJakub.Dropzone.css",
     "inputFile": "wwwroot/css/ITJakub.Dropzone.less",
     "sourceMap": false
@@ -137,11 +142,6 @@
   {
     "outputFile": "wwwroot/css/ITJakub.Permission.css",
     "inputFile": "wwwroot/css/ITJakub.Permission.less",
-    "sourceMap": false
-  },
-  {
-    "outputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.css",
-    "inputFile": "Areas/Lemmatization/Content/itjakub.lemmatization.less",
     "sourceMap": false
   },
   {

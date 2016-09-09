@@ -12,7 +12,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank
                 "~/Areas/BohemianTextBank/Scripts/itjakub.bohemiantextbank.list.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/bohemiantextbank/css").Include(
-                "~/Areas/BohemianTextBank/Content/itjakub.bohemiantextbank.css"));
+                "~/wwwroot/Areas/BohemianTextBank/css/itjakub.bohemiantextbank.css"));
         }
     }
 }

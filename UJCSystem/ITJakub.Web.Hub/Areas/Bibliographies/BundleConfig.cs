@@ -10,7 +10,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies
             "~/Areas/Bibliographies/Scripts/itjakub.bibliographies.search.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/bibliographies/css").Include(
-                "~/Areas/Bibliographies/Content/itjakub.bibliographies.css"));
+                "~/wwwroot/Areas/Bibliographies/css/itjakub.bibliographies.css"));
         }
     }
 }

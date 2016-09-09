@@ -22,7 +22,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
                "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.list.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(
-                "~/Areas/Dictionaries/Content/itjakub.dictionaries.css"));
+                "~/wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css"));
         }
     }
 }

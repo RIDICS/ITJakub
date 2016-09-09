@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation
                 "~/wwwroot/js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/derivation/css")
-                .Include("~/Areas/Derivation/Content/itjakub.derivation.css"));
+                .Include("~/wwwroot/Areas/Derivation/css/itjakub.derivation.css"));
         }
     }
 }
