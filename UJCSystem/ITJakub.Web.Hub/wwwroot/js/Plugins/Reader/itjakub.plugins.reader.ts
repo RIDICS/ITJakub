@@ -182,9 +182,9 @@
     hasBookImage(bookId: string, bookVersionId: string, onTrue: () => any = null, onFalse: () => any = null) {
         if (this.hasBookImageCache[bookId] === undefined || this.hasBookImageCache[bookId][bookVersionId] === undefined) {
             $.ajax({
-                type: "POST",
+                type: "GET",
                 traditional: true,
-                data: JSON.stringify({ bookId: bookId, versionId: bookVersionId }),
+                data: { bookId: bookId, versionId: bookVersionId },
                 url: this.readerContainer.getAttribute("data-has-image-url"),
                 dataType: "json",
                 contentType: "application/json",
