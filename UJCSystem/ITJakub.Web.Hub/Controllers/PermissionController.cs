@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Models.Requests.Permission;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -56,42 +56,42 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUserToGroup(int userId, int groupId)
+        public ActionResult AddUserToGroup(AddUserToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.AddUserToGroup(userId, groupId);
+                client.AddUserToGroup(request.UserId, request.GroupId);
                 return Json(new {});
             }
         }
 
         [HttpPost]
-        public ActionResult CreateGroup(string groupName, string groupDescription)
+        public ActionResult CreateGroup(CreateGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                var group = client.CreateGroup(groupName, groupDescription);
+                var group = client.CreateGroup(request.GroupName, request.GroupDescription);
                 return Json(group);
             }
         }
 
         [HttpPost]
-        public ActionResult CreateGroupWithUser(int userId, string groupName, string groupDescription)
+        public ActionResult CreateGroupWithUser(CreateGroupWithUserRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                var group = client.CreateGroup(groupName, groupDescription);
-                client.AddUserToGroup(userId, group.Id);
+                var group = client.CreateGroup(request.GroupName, request.GroupDescription);
+                client.AddUserToGroup(request.UserId, group.Id);
                 return Json(group);
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveUserFromGroup(int userId, int groupId)
+        public ActionResult RemoveUserFromGroup(RemoveUserFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.RemoveUserFromGroup(userId, groupId);
+                client.RemoveUserFromGroup(request.UserId, request.GroupId);
                 return Json(new {});
             }
         }
@@ -143,21 +143,21 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddBooksAndCategoriesToGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        public ActionResult AddBooksAndCategoriesToGroup(AddBooksAndCategoriesToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.AddBooksAndCategoriesToGroup(groupId, bookIds, categoryIds);
+                client.AddBooksAndCategoriesToGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveBooksAndCategoriesFromGroup(int groupId, IList<long> bookIds, IList<int> categoryIds)
+        public ActionResult RemoveBooksAndCategoriesFromGroup(RemoveBooksAndCategoriesFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.RemoveBooksAndCategoriesFromGroup(groupId, bookIds, categoryIds);
+                client.RemoveBooksAndCategoriesFromGroup(request.GroupId, request.BookIds, request.CategoryIds);
                 return Json(new {});
             }
         }
@@ -184,21 +184,21 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSpecialPermissionsToGroup(int groupId, IList<int> specialPermissionIds)
+        public ActionResult AddSpecialPermissionsToGroup(AddSpecialPermissionsToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.AddSpecialPermissionsToGroup(groupId, specialPermissionIds);
+                client.AddSpecialPermissionsToGroup(request.GroupId, request.SpecialPermissionIds);
                 return Json(new {});
             }
         }
 
         [HttpPost]
-        public ActionResult RemoveSpecialPermissionsFromGroup(int groupId, IList<int> specialPermissionIds)
+        public ActionResult RemoveSpecialPermissionsFromGroup(RemoveSpecialPermissionsFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.RemoveSpecialPermissionsFromGroup(groupId, specialPermissionIds);
+                client.RemoveSpecialPermissionsFromGroup(request.GroupId, request.SpecialPermissionIds);
                 return Json(new {});
             }
         }

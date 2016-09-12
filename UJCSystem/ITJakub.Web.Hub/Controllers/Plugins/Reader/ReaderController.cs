@@ -6,6 +6,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using ITJakub.Web.Hub.Models.Requests.Reader;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
@@ -94,18 +95,20 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             }
         }
 
-        public ActionResult AddBookmark(string bookId, string pageXmlId)
-        {
-            using (var client = GetMainServiceClient())
-                client.AddPageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
-            return Json(new {});
-        }
-
-        public ActionResult SetBookmakTitle(string bookId, string pageXmlId, string title)
+        public ActionResult AddBookmark(AddBookmarkRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                var successSave=client.SetPageBookmarkTitle(bookId, pageXmlId, title, HttpContext.User.Identity.Name);
+                client.AddPageBookmark(request.BookId, request.PageXmlId, HttpContext.User.Identity.Name);
+            }
+            return Json(new {});
+        }
+
+        public ActionResult SetBookmakTitle(SetBookmakTitleRequest request)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var successSave=client.SetPageBookmarkTitle(request.BookId, request.PageXmlId, request.Title, HttpContext.User.Identity.Name);
 
                 if (!successSave)
                 {
@@ -117,10 +120,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         }
 
 
-        public ActionResult RemoveBookmark(string bookId, string pageXmlId)
+        public ActionResult RemoveBookmark(RemoveBookmarkRequest request)
         {
             using (var client = GetMainServiceClient())
-                client.RemovePageBookmark(bookId, pageXmlId, HttpContext.User.Identity.Name);
+            {
+                client.RemovePageBookmark(request.BookId, request.PageXmlId, HttpContext.User.Identity.Name);
+            }
             return Json(new {});
         }
 

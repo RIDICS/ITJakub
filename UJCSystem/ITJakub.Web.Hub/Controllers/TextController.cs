@@ -2,6 +2,7 @@
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
+using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
 using MarkdownDeep;
 
@@ -38,16 +39,16 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
-        public ActionResult RenderPreview(string text, StaticTextFormatType inputTextFormat)
+        public ActionResult RenderPreview(RenderTextPreviewRequest request)
         {
             string result;
-            switch (inputTextFormat)
+            switch (request.InputTextFormat)
             {
                 case StaticTextFormatType.Markdown:
-                    result = m_markdownDeep.Transform(text);
+                    result = m_markdownDeep.Transform(request.Text);
                     break;
                 default:
-                    result = text;
+                    result = request.Text;
                     break;
             }
 

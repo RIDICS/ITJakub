@@ -20,7 +20,7 @@
 
  
     $("#dropzoneFileForm").dropzone({
-    	url: "../Upload/UploadFile",
+    	url: getBaseUrl() + "Upload/UploadFile",
         maxFilesize: 10000, // MB
         uploadMultiple: true,
         clickable: "#dropzoneFileFormPreview",
@@ -79,7 +79,7 @@
 
         $.ajax({
             type: "POST",
-            url: "../Upload/ProcessUploadedFiles",
+            url: getBaseUrl() + "Upload/ProcessUploadedFiles",
             data: JSON.stringify({ 'sessionId': getSessionIdFromPage(), 'uploadMessage': getUploadMessage() }),
             dataType: "json",
             contentType: "application/json",

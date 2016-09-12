@@ -143,9 +143,9 @@
             }
 
             $.ajax({
-                type: "POST",
+                type: "GET",
                 traditional: true,
-                data: JSON.stringify({ bookId: bookId, versionId: bookVersionId }),
+                data: { bookId: bookId, versionId: bookVersionId },
                 url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
                 dataType: "json",
                 contentType: "application/json",
