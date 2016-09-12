@@ -8,14 +8,14 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature
         {
 
             bundles.Add(new ScriptBundle("~/itjakub/professionalliterature/javascript").Include(
-                "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.js"));
+                "~/wwwroot/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/professionalliterature/listjs").Include(
-                "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.modul.inicializator.js",
-                "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.list.js"));
+                "~/wwwroot/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
+                "~/wwwroot/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/professionalliterature/searchjs").Include(
-                "~/Areas/ProfessionalLiterature/Scripts/itjakub.professionalliterature.search.js"));
+                "~/wwwroot/Areas/ProfessionalLiterature/js/itjakub.professionalliterature.search.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/professionalliterature/css").Include(
                 "~/wwwroot/Areas/ProfessionalLiterature/css/itjakub.professionalliterature.css"));

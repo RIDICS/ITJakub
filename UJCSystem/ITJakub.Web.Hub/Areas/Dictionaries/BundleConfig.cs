@@ -7,19 +7,19 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
         internal static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/searchjs").Include(
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.search.js",
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionariesViewer.js"));
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.search.js",
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionariesViewer.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/headwordsjs").Include(
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.headwords.js",
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionariesFavoriteHeadwords.js",
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionariesViewer.js"));
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.headwords.js",
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionariesViewer.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/feedbackjs").Include(
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.feedback.js"));
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.feedback.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/listjs").Include(
-               "~/Areas/Dictionaries/Scripts/itjakub.dictionaries.list.js"));
+               "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.list.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(
                 "~/wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css"));

@@ -7,13 +7,13 @@ namespace ITJakub.Web.Hub.Areas.Editions
         internal static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/itjakub/editions/javascript").Include(
-            "~/Areas/Editions/Scripts/itjakub.editions.js"));
+                "~/wwwroot/Areas/Editions/js/itjakub.editions.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/editions/listjs").Include(
-                "~/Areas/Editions/Scripts/itjakub.editions.list.js"));
+                "~/wwwroot/Areas/Editions/js/itjakub.editions.list.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/editions/searchjs").Include(
-                "~/Areas/Editions/Scripts/itjakub.editions.search.js"));
+                "~/wwwroot/Areas/Editions/js/itjakub.editions.search.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/editions/css").Include(
                 "~/wwwroot/Areas/Editions/css/itjakub.editions.css"));

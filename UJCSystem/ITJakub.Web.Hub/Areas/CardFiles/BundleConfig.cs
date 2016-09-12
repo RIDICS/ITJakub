@@ -7,8 +7,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles
         internal static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/itjakub/cardfiles/javascript").Include(
-            "~/Areas/CardFiles/Scripts/itjakub.cardfiles.js",
-            "~/Areas/CardFiles/Scripts/itjakub.cardfileManager.js"));
+                "~/wwwroot/Areas/CardFiles/js/itjakub.cardfiles.js",
+                "~/wwwroot/Areas/CardFiles/js/itjakub.cardfileManager.js"));
 
             bundles.Add(new StyleBundle("~/itjakub/cardfiles/css").Include(
                 "~/wwwroot/Areas/CardFiles/css/itjakub.cardfiles.css",
