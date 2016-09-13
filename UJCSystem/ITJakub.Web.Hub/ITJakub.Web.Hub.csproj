@@ -345,6 +345,10 @@
     <Content Include="Content\KeyboardLayouts\Vokabular_def.xml" />
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
+    <Content Include="wwwroot\js\bundles\itjakub.bundle.js" />
+    <Content Include="wwwroot\js\bundles\itjakub.keyboard.bundle.js" />
+    <Content Include="wwwroot\js\bundles\itjakub.plugins.bundle.js" />
+    <Content Include="wwwroot\js\bundles\itjakub.storage.bundle.js" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.css" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.min.css" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css" />

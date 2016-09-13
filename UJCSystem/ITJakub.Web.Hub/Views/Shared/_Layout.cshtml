@@ -11,8 +11,8 @@
     <link href="~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
     <link href="~/wwwroot/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
     <link href="~/wwwroot/css/ITJakub.css" rel="stylesheet" />
+    <script src="~/wwwroot/lib/modernizr/modernizr.js"></script>
     
-    @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", false)
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookPageByXmlId", "Reader",  new {area = ""})">
@@ -399,18 +399,24 @@
 </div>
 <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
 
-@Scripts.Render("~/bundles/jquery")
-@Scripts.Render("~/bundles/jqueryui")
-@Scripts.Render("~/bundles/bootstrap")
-@Scripts.Render("~/bundles/keyboardLayout")
-@Scripts.Render("~/bundles/storage")
-@Scripts.Render("~/itjakub/javascript")
-@Scripts.Render("~/bundles/dropzonescripts")
-@Scripts.Render("~/bundles/typeahead")
-@Scripts.Render("~/bundles/jqueryappear")
-@Scripts.Render("~/bundles/imagezoom")
-@Scripts.Render("~/bundles/eucookies")
+<script src="~/wwwroot/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/wwwroot/lib/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/wwwroot/lib/respond/dest/respond.min.js"></script>
+<script src="~/wwwroot/lib-custom/typeahead.bundle.js"></script>
+<script src="~/wwwroot/lib/dropzone/downloads/dropzone.js"></script>
+<script src="~/wwwroot/lib/jquery-appear/src/jquery.appear.js"></script>
+<script src="~/wwwroot/lib/jquery-zoom/jquery.zoom.js"></script>
+<script src="~/wwwroot/lib/wheelzoom/wheelzoom.js"></script>
+<script src="~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
+
+<script src="~/wwwroot/js/bundles/itjakub.keyboard.bundle.js"></script>
+<script src="~/wwwroot/js/bundles/itjakub.storage.bundle.js"></script>
+<script src="~/wwwroot/js/bundles/itjakub.bundle.js"></script>
+<script src="~/wwwroot/js/bundles/itjakub.plugins.bundle.js"></script>
+
 @RenderSection("scripts", false)
+
 @*main page content*@
 <div class="container module-content">
 
