@@ -89,4 +89,9 @@ packages/
 #Bower libraries
 */*/wwwroot/lib/
 
+#NPM modules
+node_modules/
+
 project.lock.json
+!gulpfile.js
+!Gruntfile.js

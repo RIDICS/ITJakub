@@ -226,6 +226,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="gulpfile.js" />
     <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.css">
       <DependentUpon>itjakub.audiobooks.less</DependentUpon>
     </Content>
@@ -309,6 +310,12 @@
     </Content>
     <Content Include="wwwroot\css\ITJakub.Permission.min.css">
       <DependentUpon>ITJakub.Permission.css</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\css\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\css\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
     </Content>
     <Content Include="wwwroot\images\Feeds\04.png" />
     <Content Include="wwwroot\images\Feeds\07.png" />
@@ -1353,12 +1360,8 @@
     <Content Include="wwwroot\css\Plugins\ITJakub.Pagination.min.css">
       <DependentUpon>ITJakub.Pagination.css</DependentUpon>
     </Content>
-    <Content Include="wwwroot\css\Site.min.css">
-      <DependentUpon>Site.css</DependentUpon>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="wwwroot\css\Site.css" />
     <Content Include="Areas\Editions\Views\web.config" />
     <Content Include="Areas\Dictionaries\Views\web.config" />
     <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
@@ -1367,6 +1370,7 @@
     <Content Include="wwwroot\css\ITJakub.less" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.less" />
     <Content Include="wwwroot\css\ITJakub.PluginMenu.less" />
+    <Content Include="wwwroot\css\Site.less" />
     <TypeScriptCompile Include="wwwroot\js\itjakub.upload.ts" />
     <Content Include="wwwroot\css\ITJakub.Dropzone.less" />
     <Content Include="wwwroot\css\ITJakub.DefaultTheme.less" />
@@ -1445,10 +1449,7 @@
     <Content Include="Areas\Lemmatization\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
-    <None Include="compilerconfig.json" />
-    <None Include="compilerconfig.json.defaults">
-      <DependentUpon>compilerconfig.json</DependentUpon>
-    </None>
+    <Content Include="package.json" />
     <None Include="wwwroot\css\ITJakub.HorizontalLoader.less" />
     <None Include="wwwroot\css\ITJakub.NumberedOrderedList.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Reader.less" />
