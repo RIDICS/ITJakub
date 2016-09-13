@@ -20,9 +20,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries
 
             bundles.Add(new ScriptBundle("~/itjakub/dictionaries/listjs").Include(
                "~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.list.js"));
-
-            bundles.Add(new StyleBundle("~/itjakub/dictionaries/css").Include(
-                "~/wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css"));
         }
     }
 }

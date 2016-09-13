@@ -5,11 +5,13 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UJC - @ViewBag.Title</title>
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/dropzonescss")
-    @Styles.Render("~/Content/jqueryuicss")
-    @Styles.Render("~/Content/eucookiescss")
-    @Styles.Render("~/Content/itjakub")
+    <link href="~/wwwroot/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
+    <link href="~/wwwroot/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
+    <link href="~/wwwroot/css/ITJakub.css" rel="stylesheet" />
+    
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("styles", false)
 </head>

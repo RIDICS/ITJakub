@@ -9,9 +9,6 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks
             bundles.Add(new ScriptBundle("~/itjakub/audiobooks/javascript").Include(
                 "~/wwwroot/Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
                 "~/wwwroot/Areas/AudioBooks/js/itjakub.audiobooks.js"));
-
-            bundles.Add(new StyleBundle("~/itjakub/audiobooks/css").Include(
-                "~/wwwroot/Areas/AudioBooks/css/itjakub.audiobooks.css"));
         }
     }
 }

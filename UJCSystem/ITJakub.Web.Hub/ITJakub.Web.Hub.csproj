@@ -251,6 +251,12 @@
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.min.css">
       <DependentUpon>itjakub.cardfile.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.bundle.css">
+      <DependentUpon>itjakub.cardfiles.bundle.less</DependentUpon>
+    </Content>
+    <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.bundle.min.css">
+      <DependentUpon>itjakub.cardfiles.bundle.css</DependentUpon>
+    </Content>
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.css">
       <DependentUpon>itjakub.cardfiles.less</DependentUpon>
     </Content>
@@ -1450,6 +1456,7 @@
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
     <Content Include="package.json" />
+    <None Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.bundle.less" />
     <None Include="wwwroot\css\ITJakub.HorizontalLoader.less" />
     <None Include="wwwroot\css\ITJakub.NumberedOrderedList.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Reader.less" />

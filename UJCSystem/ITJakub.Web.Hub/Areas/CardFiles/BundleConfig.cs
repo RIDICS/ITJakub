@@ -9,10 +9,6 @@ namespace ITJakub.Web.Hub.Areas.CardFiles
             bundles.Add(new ScriptBundle("~/itjakub/cardfiles/javascript").Include(
                 "~/wwwroot/Areas/CardFiles/js/itjakub.cardfiles.js",
                 "~/wwwroot/Areas/CardFiles/js/itjakub.cardfileManager.js"));
-
-            bundles.Add(new StyleBundle("~/itjakub/cardfiles/css").Include(
-                "~/wwwroot/Areas/CardFiles/css/itjakub.cardfiles.css",
-                "~/wwwroot/Areas/CardFiles/css/itjakub.cardfile.css"));
         }
     }
 }

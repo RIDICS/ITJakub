@@ -14,9 +14,6 @@ namespace ITJakub.Web.Hub.Areas.Editions
 
             bundles.Add(new ScriptBundle("~/itjakub/editions/searchjs").Include(
                 "~/wwwroot/Areas/Editions/js/itjakub.editions.search.js"));
-
-            bundles.Add(new StyleBundle("~/itjakub/editions/css").Include(
-                "~/wwwroot/Areas/Editions/css/itjakub.editions.css"));
         }
     }
 }

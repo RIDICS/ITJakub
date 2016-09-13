@@ -99,33 +99,6 @@ namespace ITJakub.Web.Hub
                 "~/wwwroot/js/itjakub.text.editor.js"));
 
 
-            // ----- Styles ------
-
-            bundles.Add(new StyleBundle("~/itjakub/permission/css").Include(
-                "~/wwwroot/css/ITJakub.Permission.css"));
-
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/wwwroot/lib/bootstrap/dist/css/bootstrap.css",
-                "~/wwwroot/css/site.css"));
-
-            bundles.Add(new StyleBundle("~/Content/eucookiescss").Include(
-                "~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css",
-                "~/wwwroot/css/ITJakub.EuCookiePopup.css"));
-
-            bundles.Add(new StyleBundle("~/Content/itjakub").Include(
-                "~/wwwroot/css/ITJakub.css"));
-
-            bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
-                "~/wwwroot/lib/dropzone/downloads/css/basic.css",
-                "~/wwwroot/lib/dropzone/downloads/css/dropzone.css"));
-
-            bundles.Add(new StyleBundle("~/Content/jqueryuicss").Include(
-                "~/wwwroot/lib/jquery-ui/themes/base/*.css"));
-
-            bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
-                "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
-                "~/wwwroot/css/ITJakub.TextEditor.css"));
-
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
             //BundleTable.EnableOptimizations = true;

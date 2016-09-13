@@ -10,9 +10,6 @@ namespace ITJakub.Web.Hub.Areas.Lemmatization
                 "~/wwwroot/Areas/Lemmatization/js/itjakub.lemmatization.js",
                 "~/wwwroot/Areas/Lemmatization/js/itjakub.lemmatization.list.js",
                 "~/wwwroot/js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"));
-
-            bundles.Add(new StyleBundle("~/itjakub/lemmatization/css").Include(
-                "~/wwwroot/Areas/Lemmatization/css/itjakub.lemmatization.css"));
         }
     }
 }
