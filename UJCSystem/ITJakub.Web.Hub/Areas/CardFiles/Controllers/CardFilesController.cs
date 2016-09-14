@@ -10,7 +10,6 @@ using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
-using Microsoft.Ajax.Utilities;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
@@ -59,7 +58,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                 var result = new List<SearchResultContract>();
                 foreach (var cardFile in cardFiles)
                 {
-                    if (cardFile.Name.ToLower().Contains(term) || cardFile.Description.ToLower().Contains(term) || term.IsNullOrWhiteSpace())
+                    if (cardFile.Name.ToLower().Contains(term) || cardFile.Description.ToLower().Contains(term) || string.IsNullOrWhiteSpace(term))
                     {
                         result.Add(new SearchResultContract
                         {
