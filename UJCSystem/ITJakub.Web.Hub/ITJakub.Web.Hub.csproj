@@ -233,6 +233,7 @@
     <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.min.css">
       <DependentUpon>itjakub.audiobooks.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\AudioBooks\js\itjakub.audiobooks.bundle.js" />
     <Content Include="wwwroot\Areas\Bibliographies\css\itjakub.bibliographies.css">
       <DependentUpon>itjakub.bibliographies.less</DependentUpon>
     </Content>
@@ -245,6 +246,7 @@
     <Content Include="wwwroot\Areas\BohemianTextBank\css\itjakub.bohemiantextbank.min.css">
       <DependentUpon>itjakub.bohemiantextbank.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\BohemianTextBank\js\itjakub.bohemiantextbank.bundle.js" />
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.css">
       <DependentUpon>itjakub.cardfile.less</DependentUpon>
     </Content>
@@ -263,18 +265,22 @@
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.min.css">
       <DependentUpon>itjakub.cardfiles.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\CardFiles\js\itjakub.cardfiles.bundle.js" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.css">
       <DependentUpon>itjakub.derivation.less</DependentUpon>
     </Content>
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.min.css">
       <DependentUpon>itjakub.derivation.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\Derivation\js\itjakub.derivation.bundle.js" />
     <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.css">
       <DependentUpon>itjakub.dictionaries.less</DependentUpon>
     </Content>
     <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.min.css">
       <DependentUpon>itjakub.dictionaries.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\Dictionaries\js\itjakub.dictionaries.headwords.bundle.js" />
+    <Content Include="wwwroot\Areas\Dictionaries\js\itjakub.dictionaries.search.bundle.js" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.css">
       <DependentUpon>itjakub.editions.content.less</DependentUpon>
     </Content>
@@ -287,6 +293,7 @@
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.min.css">
       <DependentUpon>itjakub.editions.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\Lemmatization\js\itjakub.lemmatization.bundle.js" />
     <Content Include="wwwroot\Areas\OldGrammar\css\itjakub.oldgrammar.css">
       <DependentUpon>itjakub.oldgrammar.less</DependentUpon>
     </Content>
@@ -305,6 +312,7 @@
     <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
+    <Content Include="wwwroot\Areas\ProfessionalLiterature\js\itjakub.professionalliterature.list.bundle.js" />
     <Content Include="wwwroot\css\ITJakub.Dropzone.css">
       <DependentUpon>ITJakub.Dropzone.less</DependentUpon>
     </Content>

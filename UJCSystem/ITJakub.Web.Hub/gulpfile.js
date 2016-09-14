@@ -137,6 +137,104 @@ gulp.task("bundle:itjakub_storage", function () {
 gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage"]);
 
 
+// Bundle JavaScript in Areas
+
+gulp.task("bundle:itjakub_audiobooks", function () {
+    return gulp.src([
+            paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
+            paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.js"
+        ])
+        .pipe(concat("itjakub.audiobooks.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/AudioBooks/js"));
+});
+
+gulp.task("bundle:itjakub_bohemiantextbank", function () {
+    return gulp.src([
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiatextbank.modul.inicializator.js",
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js"
+        ])
+        .pipe(concat("itjakub.bohemiantextbank.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/BohemianTextBank/js"));
+});
+
+gulp.task("bundle:itjakub_cardfiles", function () {
+    return gulp.src([
+            paths.webroot + "Areas/CardFiles/js/itjakub.cardfiles.js",
+            paths.webroot + "Areas/CardFiles/js/itjakub.cardfileManager.js"
+        ])
+        .pipe(concat("itjakub.cardfiles.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/CardFiles/js"));
+});
+
+gulp.task("bundle:itjakub_derivation", function () {
+    return gulp.src([
+            paths.webroot + "Areas/Derivation/js/itjakub.derivation.js",
+            paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
+        ])
+        .pipe(concat("itjakub.derivation.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Derivation/js"));
+});
+
+gulp.task("bundle:itjakub_dictionary_search", function () {
+    return gulp.src([
+            paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.search.js",
+            paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
+        ])
+        .pipe(concat("itjakub.dictionaries.search.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
+});
+
+gulp.task("bundle:itjakub_dictionary_headwords", function () {
+    return gulp.src([
+            paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.headwords.js",
+            paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
+            paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
+        ])
+        .pipe(concat("itjakub.dictionaries.headwords.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
+});
+
+gulp.task("bundle:itjakub_lemmatization", function () {
+    return gulp.src([
+            paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.js",
+            paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.list.js",
+            paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
+        ])
+        .pipe(concat("itjakub.lemmatization.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Lemmatization/js"));
+});
+
+gulp.task("bundle:itjakub_professionalliterature_list", function () {
+    return gulp.src([
+            paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
+            paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"
+        ])
+        .pipe(concat("itjakub.professionalliterature.list.bundle.js"))
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
+});
+
+gulp.task("bundlejs_areas",
+[
+    "bundle:itjakub_audiobooks",
+    "bundle:itjakub_bohemiantextbank",
+    "bundle:itjakub_cardfiles",
+    "bundle:itjakub_derivation",
+    "bundle:itjakub_dictionary_search",
+    "bundle:itjakub_dictionary_headwords",
+    "bundle:itjakub_lemmatization",
+    "bundle:itjakub_professionalliterature_list"
+]);
+
+
 // Main build
 
-gulp.task("build", ["build:less", "bundlejs"]);
+gulp.task("build", ["build:less", "bundlejs", "bundlejs_areas"]);
