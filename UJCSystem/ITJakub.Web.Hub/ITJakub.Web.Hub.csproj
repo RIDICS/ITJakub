@@ -1460,6 +1460,7 @@
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
     <Content Include="package.json" />
+    <Content Include="tsconfig.json" />
     <None Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.bundle.less" />
     <None Include="wwwroot\css\ITJakub.HorizontalLoader.less" />
     <None Include="wwwroot\css\ITJakub.NumberedOrderedList.less" />

@@ -18,9 +18,11 @@ var paths = {
 paths.less = paths.webroot + "css/**/*.less";
 paths.css = paths.webroot + "css/**/*.css";
 paths.js = paths.webroot + "js/**/*.js";
+paths.jsMap = paths.webroot + "js/**/*.js.map";
 paths.areaLess = paths.webroot + "Areas/*/css/**/*.less";
 paths.areaCss = paths.webroot + "Areas/*/css/**/*.css";
 paths.areaJs = paths.webroot + "Areas/*/js/**/*.js";
+paths.areaJsMap = paths.webroot + "Areas/*/js/**/*.js.map";
 
 
 // Clean-up
@@ -41,7 +43,15 @@ gulp.task("clean:js_areas", function (cb) {
     rimraf(paths.areaJs, cb);
 });
 
-gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas"]);
+gulp.task("clean:jsmap", function (cb) {
+    rimraf(paths.jsMap, cb);
+});
+
+gulp.task("clean:jsmap_areas", function (cb) {
+    rimraf(paths.areaJsMap, cb);
+});
+
+gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"]);
 
 
 // Less build

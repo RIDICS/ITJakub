@@ -3,8 +3,9 @@
     ViewBag.Title = "Úvodní stránka";
 }
 @section scripts{
-    @Scripts.Render("~/itjakub/home/javascript")'
-    @Scripts.Render("~/itjakub/news/javascript")
+    <script src="~/wwwroot/js/itjakub.home.js"></script>
+    <script src="~/wwwroot/js/itjakub.news.js"></script>
+    ' @*This apostrophe moves page content down to correct position*@
 }
 
 <script type="text/javascript">
