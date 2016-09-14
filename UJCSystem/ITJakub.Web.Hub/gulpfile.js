@@ -1,4 +1,4 @@
-﻿/// <binding BeforeBuild='build' Clean='clean' />
+﻿/// <binding AfterBuild='build' Clean='clean' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -9,6 +9,7 @@ var gulp = require("gulp"),
   concat = require("gulp-concat"),
   cssmin = require("gulp-cssmin"),
   less = require("gulp-less"),
+  sourcemaps = require('gulp-sourcemaps'),
   uglify = require("gulp-uglify");
 
 var paths = {
@@ -82,7 +83,9 @@ gulp.task("bundle:itjakub", function () {
             paths.webroot + "js/itjakub.js",
             paths.webroot + "js/Plugins/itjakub.eucookiepopup.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
@@ -107,7 +110,9 @@ gulp.task("bundle:itjakub_plugins", function () {
             paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.searchbox.js",
             paths.webroot + "js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.plugins.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
@@ -118,7 +123,9 @@ gulp.task("bundle:itjakub_keyboard", function () {
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js",
             paths.webroot + "js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.keyboard.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
@@ -129,7 +136,9 @@ gulp.task("bundle:itjakub_storage", function () {
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js",
             paths.webroot + "js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.storage.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
@@ -144,7 +153,9 @@ gulp.task("bundle:itjakub_audiobooks", function () {
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.modul.inicializator.js",
             paths.webroot + "Areas/AudioBooks/js/itjakub.audiobooks.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.audiobooks.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/AudioBooks/js"));
 });
@@ -155,7 +166,9 @@ gulp.task("bundle:itjakub_bohemiantextbank", function () {
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.bohemiantextbank.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/BohemianTextBank/js"));
 });
@@ -165,7 +178,9 @@ gulp.task("bundle:itjakub_cardfiles", function () {
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfiles.js",
             paths.webroot + "Areas/CardFiles/js/itjakub.cardfileManager.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.cardfiles.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/CardFiles/js"));
 });
@@ -175,7 +190,9 @@ gulp.task("bundle:itjakub_derivation", function () {
             paths.webroot + "Areas/Derivation/js/itjakub.derivation.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.derivation.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/Derivation/js"));
 });
@@ -185,7 +202,9 @@ gulp.task("bundle:itjakub_dictionary_search", function () {
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionaries.search.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.dictionaries.search.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
@@ -196,7 +215,9 @@ gulp.task("bundle:itjakub_dictionary_headwords", function () {
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesFavoriteHeadwords.js",
             paths.webroot + "Areas/Dictionaries/js/itjakub.dictionariesViewer.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.dictionaries.headwords.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/Dictionaries/js"));
 });
@@ -207,7 +228,9 @@ gulp.task("bundle:itjakub_lemmatization", function () {
             paths.webroot + "Areas/Lemmatization/js/itjakub.lemmatization.list.js",
             paths.webroot + "js/Plugins/Lemmatization/itjakub.lemmatization.shared.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.lemmatization.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/Lemmatization/js"));
 });
@@ -217,7 +240,9 @@ gulp.task("bundle:itjakub_professionalliterature_list", function () {
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.modul.inicializator.js",
             paths.webroot + "Areas/ProfessionalLiterature/js/itjakub.professionalliterature.list.js"
         ])
+        .pipe(sourcemaps.init())
         .pipe(concat("itjakub.professionalliterature.list.bundle.js"))
+        .pipe(sourcemaps.write())
         //.pipe(uglify())
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
