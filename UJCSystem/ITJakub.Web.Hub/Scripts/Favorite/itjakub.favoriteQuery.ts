@@ -16,8 +16,16 @@
         }
 
         var url = getBaseUrl() + "Favorite/GetFavoriteQueryPartial";
-        this.renderContainer.text("Načítání");
+        this.renderLoading();
         this.renderContainer.load(url);
+    }
+
+    private renderLoading() {
+        var loadingDiv = document.createElement("div");
+        $(loadingDiv).addClass("loading");
+        $(loadingDiv).css("min-height", "100px"); // TODO use css styles
+
+        this.renderContainer.append(loadingDiv);
     }
 
     public isHidden(): boolean {

@@ -1,3 +1,44 @@
-﻿<div>
-    Favorite query view
+﻿<div style="width: 76%; background-color: white;">
+    @*TODO style similar to typeahead without shadows*@ 
+    <div class="row">
+        <div class="col-md-3">
+            <span>Filtrovat podle štítků</span>
+            <hr/>
+            <div class="favorite-query-container">
+                <div>
+                    <a href="">
+                        <span class="label label-info">Tag</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <span>Dotazy</span>
+            <hr/>
+            <div class="favorite-query-container">
+                <div>
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <hr/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3 col-md-offset-9">
+            <button class="btn btn-default">Vytvořit nový</button>
+        </div>
+    </div>
 </div>
