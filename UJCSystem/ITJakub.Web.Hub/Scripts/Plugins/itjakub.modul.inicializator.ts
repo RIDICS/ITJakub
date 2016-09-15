@@ -153,7 +153,8 @@
         const search = new Search(
             this.configuration.search.container,
             this.configuration.search.processSearchJsonCallback,
-            this.configuration.search.processSearchTextCallback
+            this.configuration.search.processSearchTextCallback,
+            this.configuration.search.favoriteQueries
         );
         search.makeSearch(this.configuration.search.enabledOptions);
 
@@ -407,10 +408,16 @@ interface IModulInicializatorConfigurationSearch {
     enabledOptions: Array<SearchTypeEnum>;
 
     url: IModulInicializatorConfigurationSearchUrl;
+    favoriteQueries: IModulInicializatorConfigurationSearchFavorites;
 }
 
 interface IModulInicializatorConfigurationSearchUrl {
     advanced: string;
     text: string;
     textCount: string;
+}
+
+interface IModulInicializatorConfigurationSearchFavorites {
+    bookType: BookTypeEnum;
+    queryType: QueryTypeEnum;
 }

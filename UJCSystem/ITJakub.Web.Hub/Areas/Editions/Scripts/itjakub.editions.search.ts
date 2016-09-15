@@ -21,6 +21,10 @@
                     text: getBaseUrl() + "Editions/Editions/TextSearchFulltextPaged",
                     textCount: getBaseUrl() + "Editions/Editions/TextSearchFulltextCount",
                     advancedCount: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount"
+                },
+                favoriteQueries: {
+                    bookType: BookTypeEnum.Edition,
+                    queryType: QueryTypeEnum.Search
                 }
             },
             dropDownSelect: {

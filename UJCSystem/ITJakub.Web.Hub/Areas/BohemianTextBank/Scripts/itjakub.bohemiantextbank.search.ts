@@ -455,7 +455,11 @@ function initSearch() {
     enabledOptions.push(SearchTypeEnum.Term);
     enabledOptions.push(SearchTypeEnum.TokenDistance);
 
-    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
+    var favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+        bookType: BookTypeEnum.TextBank,
+        queryType: QueryTypeEnum.Search
+    }
+    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
     search.makeSearch(enabledOptions);
     
     const callbackDelegate = new DropDownSelectCallbackDelegate();

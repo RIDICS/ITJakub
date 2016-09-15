@@ -229,7 +229,7 @@
         $.ajax({
             type: "POST",
             traditional: true,
-            url: getBaseUrl() + "Favorite/CreateFavoriteBook",
+            url: getBaseUrl() + "Favorite/CreateFavoriteCategory",
             data: JSON.stringify({
                 categoryId: categoryId,
                 title: favoriteTitle,
@@ -242,14 +242,9 @@
             }
         });
     }
-}
 
-enum FavoriteType {
-    Unknown = 0,
-    Book = 1,
-    Category = 2,
-    PageBookmark = 3,
-    Query = 4,
-    BookVersion = 5,
-    HeadwordBookmark = 6,
+    public createFavoriteQuery(query: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+        // todo add parameters: booktype, queryType
+        throw Error("Not implemented");
+    }
 }

@@ -31,7 +31,11 @@ class BibliographiesSearch {
         enabledOptions.push(SearchTypeEnum.Editor);
         enabledOptions.push(SearchTypeEnum.Dating);
 
-        this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) });
+        var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.BibliographicalItem,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) }, favoriteQueriesConfig);
         this.search.makeSearch(enabledOptions);
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");

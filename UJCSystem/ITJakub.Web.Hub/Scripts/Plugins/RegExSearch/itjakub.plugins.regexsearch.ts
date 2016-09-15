@@ -47,7 +47,10 @@ class Search {
 
     private enabledOptions: Array<SearchTypeEnum>;
 
-    constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void) {
+    private favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites;
+
+    constructor(container: HTMLDivElement, processSearchJsonCallback: (jsonData: string) => void, processSearchTextCallback: (text: string) => void, favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites) {
+        this.favoriteQueriesConfig = favoriteQueriesConfig;
         this.container = container;
         this.processSearchJsonCallback = processSearchJsonCallback;
         this.processSearchTextCallback = processSearchTextCallback;
@@ -193,7 +196,7 @@ class Search {
             searchbarInputDiv.classList.add("no-advanced");
         }
 
-        this.favoriteQueryComponent = new FavoriteQuery($(this.favoritesContainer), $(this.searchInputTextbox));
+        this.favoriteQueryComponent = new FavoriteQuery($(this.favoritesContainer), $(this.searchInputTextbox), this.favoriteQueriesConfig.bookType, this.favoriteQueriesConfig.queryType);
         
         $(this.container).append(searchAreaDiv);
 

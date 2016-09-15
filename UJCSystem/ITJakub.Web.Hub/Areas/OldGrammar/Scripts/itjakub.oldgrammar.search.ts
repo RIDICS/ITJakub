@@ -18,6 +18,10 @@
                     text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchFulltextPaged",
                     textCount: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchFulltextCount",
                     advancedCount: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchResultsCount"
+                },
+                favoriteQueries: {
+                    bookType: BookTypeEnum.Grammar,
+                    queryType: QueryTypeEnum.Search
                 }
             },
             dropDownSelect: {

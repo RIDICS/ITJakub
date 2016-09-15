@@ -1,9 +1,17 @@
 ﻿class FavoriteQuery {
+    private queryType: QueryTypeEnum;
+    private bookType: BookTypeEnum;
     private inputTextbox: JQuery;
     private renderContainer: JQuery;
+    private favoriteManager: FavoriteManager;
+    private favoriteDialog: NewFavoriteDialog;
     private isCreated: boolean;
 
-    constructor(renderContainer: JQuery, inputTextbox: JQuery) {
+    constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
+        this.queryType = queryType;
+        this.bookType = bookType;
+        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager);
         this.inputTextbox = inputTextbox;
         this.renderContainer = renderContainer;
         this.isCreated = false;
@@ -17,12 +25,14 @@
 
         var url = getBaseUrl() + "Favorite/GetFavoriteQueryPartial";
         this.renderLoading();
-        this.renderContainer.load(url, null, (responseTxt, statusTxt, xhr) => {
+        this.renderContainer.load(url, null, (responseTxt, statusTxt) => {
             if (statusTxt === "success") {
                 this.bindEvents();
                 this.isCreated = true;
             }
         });
+
+        this.favoriteDialog.make();
     }
 
     private renderLoading() {
@@ -67,8 +77,26 @@
 
             this.filterQueryList(labelId);
         });
-    }
 
+        $(".favorite-query-item", this.renderContainer).click((event) => {
+            var elementJquery = $(event.currentTarget);
+            var query = elementJquery.data("query");
+            this.inputTextbox.val(query);
+        });
+
+        $(".favorite-query-save-button", this.renderContainer).click(() => {
+            this.favoriteDialog.show("Nový oblíbený dotaz");
+        });
+
+        this.favoriteDialog.setSaveCallback(data => {
+            // todo save favorite query
+            // this.favoriteManager.createFavoriteItem();
+
+            console.log("Saving favorite query: BT:" + this.bookType + " QT:" + this.queryType);
+            throw Error("Not implemented");
+        });
+    }
+    
     private filterQueryList(labelId?: number) {
         if (!labelId) {
             $(".favorite-query-item").removeClass("hidden");

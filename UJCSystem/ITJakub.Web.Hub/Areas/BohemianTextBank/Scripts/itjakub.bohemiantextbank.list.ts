@@ -20,6 +20,10 @@
                 text: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchPaged",
                 textCount: getBaseUrl() + "BohemianTextBank/BohemianTextBank/TextSearchCount",
                 advancedCount: getBaseUrl() + "BohemianTextBank/BohemianTextBank/AdvancedSearchResultsCount"
+            },
+            favoriteQueries: {
+                bookType: BookTypeEnum.TextBank,
+                queryType: QueryTypeEnum.List
             }
         },
         searchBox: {

@@ -35,7 +35,12 @@ class DictionarySearch {
 
         this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
         this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
-        this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
+
+        var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.Dictionary,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this), favoriteQueriesConfig);
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         
         this.disabledShowOptions = [

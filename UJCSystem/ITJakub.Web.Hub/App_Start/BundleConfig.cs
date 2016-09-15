@@ -64,6 +64,7 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
+                "~/Scripts/itjakub.datacontracts.js",
                 "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
                 "~/Scripts/Plugins/itjakub.modul.inicializator.js",
                 "~/Scripts/Plugins/itjakub.list.modul.inicializator.js",
