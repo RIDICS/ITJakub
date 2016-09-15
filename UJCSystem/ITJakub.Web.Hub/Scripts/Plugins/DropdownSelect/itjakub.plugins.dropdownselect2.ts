@@ -9,6 +9,7 @@
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
+    private favoriteBook: FavoriteBook;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
@@ -57,6 +58,14 @@
         this.descriptionDiv = document.createElement("div");
         $(this.descriptionDiv).addClass("dropdown-description");
         $(this.dropDownSelectContainer).append(this.descriptionDiv);
+
+        if (this.showStar) {
+            var favoriteDropdownDiv = document.createElement("div");
+            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv));
+            this.favoriteBook.make();
+
+            $(this.dropDownSelectContainer).append(favoriteDropdownDiv);
+        }
     }
 
     restore(categoryIds: Array<number>, bookIds: Array<number>) {

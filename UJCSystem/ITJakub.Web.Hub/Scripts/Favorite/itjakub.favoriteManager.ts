@@ -110,6 +110,11 @@
         throw new Error("Not implemented"); // TODO
     }
 
+    public getFavoriteLabelsForBooksAndCategories(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
+        throw new Error("Not implemented"); // TODO ajax call
+        // todo also return IDs of books and categories in callback
+    }
+
     public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {
         $.ajax({
             type: "POST",

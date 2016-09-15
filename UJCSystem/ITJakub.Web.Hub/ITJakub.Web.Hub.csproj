@@ -1705,6 +1705,7 @@
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteBook.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManagement.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManager.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteQuery.ts" />
