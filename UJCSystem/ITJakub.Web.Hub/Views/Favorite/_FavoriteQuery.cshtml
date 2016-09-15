@@ -1,173 +1,40 @@
-﻿<div class="favorite-query">
+﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteQueriesViewModel
+
+<div class="favorite-query">
     <div class="row">
         <div class="col-md-3">
             <span>Filtrovat:</span>
             <hr/>
             <div class="favorite-query-list">
-                <a href="#" class="favorite-query-label" data-id="0" data-name="Vše" data-color="#0000DD">
-                    <div>
-                        <span class="label label-info">Vše</span>
-                    </div>
+                <a href="#" class="favorite-query-label" data-id="0" data-name="Zobrazeno vše" data-color="#0000DD">
+                    <span>Zobrazit vše</span>
                 </a>
                 
-                <a href="#" class="favorite-query-label" data-id="1" data-name="Tag" data-color="#DDDD00">
-                    <div>
-                        <span class="label label-warning">Tag</span>
-                    </div>
-                </a>
-                <a href="#" class="favorite-query-label" data-id="2" data-name="Tag2" data-color="#00DD00">
-                    <div>
-                        <span class="label label-success">Tag2</span>
-                    </div>
-                </a>
+                @foreach (var favoriteLabel in Model.FavoriteLabelList)
+                {
+                    <a href="#" class="favorite-query-label" data-id="@favoriteLabel.Id" data-name="@favoriteLabel.Name" data-color="@favoriteLabel.Color">
+                        <span class="label" style="background-color: @favoriteLabel.Color">@favoriteLabel.Name</span>
+                    </a>
+                }
             </div>
         </div>
 
         <div class="col-md-9">
-            <span>Vložit dotaz z oblíbených <span class="label label-danger favorite-query-label-selected">Vybraný dotaz</span>:</span>
+            <span>Vložit dotaz z oblíbených: <span class="label favorite-query-label-selected" style="background-color: #0000DD">Zobrazeno vše</span></span>
             <hr/>
             <div class="favorite-query-list">
-                <a href="#" class="favorite-query-item" data-id="0" data-query="{query}" data-label-id="0">
-                    <div>
+                @foreach (var favoriteQuery in Model.QueryList)
+                {
+                    <a href="#" class="favorite-query-item" data-id="@favoriteQuery.Id" data-query="@favoriteQuery.Query" data-label-id="@favoriteQuery.FavoriteLabel.Id">
                         <div>
-                            <span class="label label-info">Tag</span>
-                            <span>Název oblíbené položky</span>
+                            <span class="label" style="background-color: @favoriteQuery.FavoriteLabel.Color">@favoriteQuery.FavoriteLabel.Name</span>
+                            <span>@favoriteQuery.Title</span>
                         </div>
-                        <div>
-                            {query}
+                        <div class="favorite-query-raw">
+                            @favoriteQuery.Query
                         </div>
-                    </div>
-                </a>
-
-                <div data-label-id="0" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-
-                @*mock for test:*@
-                <div data-label-id="1" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="1" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div data-label-id="2" class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-                <div class="favorite-query-item" >
-                    <div>
-                        <span class="label label-info">Tag</span>
-                        <span>Název oblíbené položky</span>
-                    </div>
-                    <div>
-                        {query}
-                    </div>
-                </div>
-
+                    </a>
+                }
             </div>
         </div>
     </div>

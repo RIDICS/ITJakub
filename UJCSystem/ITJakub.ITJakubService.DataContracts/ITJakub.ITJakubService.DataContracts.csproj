@@ -76,6 +76,7 @@
     <Compile Include="Contracts\BucketShortContract.cs" />
     <Compile Include="Contracts\CardFileContract.cs" />
     <Compile Include="Contracts\SelectedCategoriesContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteQueryContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="Contracts\CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />

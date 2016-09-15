@@ -297,6 +297,8 @@
     <Compile Include="Models\Favorite\FavoriteFilterViewModel.cs" />
     <Compile Include="Models\Favorite\FavoriteLabelViewModel.cs" />
     <Compile Include="Models\Favorite\FavoriteManagementViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteQueriesViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteQueryViewModel.cs" />
     <Compile Include="Models\Favorite\FavoriteSortViewModel.cs" />
     <Compile Include="Models\Favorite\NewFavoriteViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />

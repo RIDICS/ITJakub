@@ -274,6 +274,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName);
 
         [OperationContract]
+        IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName);
+
+        [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
 
         [OperationContract]

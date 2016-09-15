@@ -18,6 +18,15 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<FavoriteBase, FavoriteBaseDetailContract>()
                 .ForMember(dest => dest.FavoriteLabel, opts => opts.MapFrom(src => src.FavoriteLabel));
 
+            CreateMap<FavoriteQuery, FavoriteQueryContract>()
+                .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
+                .ForMember(dest => dest.CreateTime, opts => opts.MapFrom(src => src.CreateTime))
+                .ForMember(dest => dest.Query, opts => opts.MapFrom(src => src.Query))
+                .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.BookType.Type))
+                .ForMember(dest => dest.QueryType, opts => opts.MapFrom(src => src.QueryType))
+                .ForMember(dest => dest.FavoriteLabel, opts => opts.MapFrom(src => src.FavoriteLabel));
+
 
             CreateMap<FavoriteTypeEnum, FavoriteTypeContract>()
                 .ReverseMap();

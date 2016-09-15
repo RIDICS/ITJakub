@@ -28,7 +28,12 @@
     }
 
     private forceRerender() {
-        var url = getBaseUrl() + "Favorite/GetFavoriteQueryPartial";
+        var urlParams = {
+            bookType: this.bookType,
+            queryType: this.queryType
+        }
+        var url = getBaseUrl() + "Favorite/GetFavoriteQueryPartial?" + $.param(urlParams);
+
         this.renderLoading();
         this.renderContainer.load(url, null, (responseTxt, statusTxt) => {
             if (statusTxt === "success") {

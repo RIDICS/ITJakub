@@ -458,6 +458,11 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, userName);
         }
 
+        public IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName)
+        {
+            return m_favoriteManager.GetFavoriteQueries(bookType, queryType, userName);
+        }
+
         public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
         {
             return m_favoriteManager.GetPageBookmarks(bookId, userName);

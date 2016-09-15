@@ -289,6 +289,17 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteBaseInfoContract>>(dbResult);
         }
 
+        public IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName)
+        {
+            var user = TryGetUser(userName);
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
+
+            var dbResult = m_favoritesRepository.GetFavoriteQueries(bookTypeEnum, queryTypeEnum, user.Id);
+
+            return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
+        }
+
         public long CreateFavoriteLabel(string name, string color, string userName, bool isDefault)
         {
             var now = DateTime.UtcNow;

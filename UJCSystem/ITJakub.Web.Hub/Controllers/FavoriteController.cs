@@ -10,6 +10,7 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class FavoriteController : BaseController
     {
+        private const int AllFavoriteCount = 0;
         private const int LatestFavoriteCount = 5;
 
         private string CurrentUserName
@@ -21,7 +22,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var favoriteLabels = client.GetFavoriteLabels(0, CurrentUserName);
+                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
                 var viewModel = new FavoriteManagementViewModel
                 {
                     FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
@@ -47,38 +48,38 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult NewFavorite(string itemName)
         {
-            var viewModel = new NewFavoriteViewModel
+            using (var client = GetMainServiceClient())
             {
-                ItemName = itemName,
-                Labels = new List<FavoriteLabelViewModel>
-                {
-                    new FavoriteLabelViewModel
-                    {
-                        Color = "#EEB711",
-                        Id = 1,
-                        Name = "Výchozí - mock"
-                    },
-                    new FavoriteLabelViewModel
-                    {
-                        Color = "#10B711",
-                        Id = 2,
-                        Name = "Druhý - mock"
-                    },
-                    new FavoriteLabelViewModel
-                    {
-                        Color = "#EE1211",
-                        Id = 3,
-                        Name = "Třetí - mock"
-                    },
-                }
-            };
+                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
 
-            return PartialView("_NewFavorite", viewModel);
+                var favoriteLabelViewModels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels);
+                var viewModel = new NewFavoriteViewModel
+                {
+                    ItemName = itemName,
+                    Labels = favoriteLabelViewModels
+                };
+
+                return PartialView("_NewFavorite", viewModel);
+            }
         }
 
-        public ActionResult GetFavoriteQueryPartial()
+        public ActionResult GetFavoriteQueryPartial(BookTypeEnumContract bookType, QueryTypeEnumContract queryType)
         {
-            return PartialView("_FavoriteQuery");
+            using (var client = GetMainServiceClient())
+            {
+                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
+                var favoriteQueries = client.GetFavoriteQueries(bookType, queryType, CurrentUserName);
+
+                var favoriteLabelViewModels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels);
+                var favoriteQueryViewModels = Mapper.Map<IList<FavoriteQueryViewModel>>(favoriteQueries);
+                var viewModel = new FavoriteQueriesViewModel
+                {
+                    FavoriteLabelList = favoriteLabelViewModels,
+                    QueryList = favoriteQueryViewModels
+                };
+
+                return PartialView("_FavoriteQuery", viewModel);
+            }
         }
 
         public ActionResult Dialog()
@@ -135,7 +136,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabels(0, CurrentUserName);
+                var result = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

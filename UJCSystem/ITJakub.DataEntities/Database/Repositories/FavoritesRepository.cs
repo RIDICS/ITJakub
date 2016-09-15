@@ -285,5 +285,23 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return query.List();
             }
         }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteQuery> GetFavoriteQueries(BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, int userId)
+        {
+            FavoriteQuery favoriteQueryAlias = null;
+            BookType bookTypeAlias = null;
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver(() => favoriteQueryAlias)
+                    .JoinAlias(() => favoriteQueryAlias.BookType, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteQueryAlias.User.Id == userId)
+                    .Fetch(x => x.FavoriteLabel).Eager
+                    .Fetch(x => x.BookType).Eager
+                    .OrderBy(x => x.Title).Asc
+                    .List();
+            }
+        }
     }
 }
