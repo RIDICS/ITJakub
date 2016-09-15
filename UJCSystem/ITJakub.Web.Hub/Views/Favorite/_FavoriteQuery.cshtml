@@ -1,23 +1,45 @@
-﻿<div style="width: 76%; background-color: white;">
-    @*TODO style similar to typeahead without shadows*@ 
+﻿<div class="favorite-query">
     <div class="row">
         <div class="col-md-3">
-            <span>Filtrovat podle štítků</span>
+            <span>Filtrovat:</span>
             <hr/>
-            <div class="favorite-query-container">
-                <div>
-                    <a href="">
-                        <span class="label label-info">Tag</span>
-                    </a>
-                </div>
+            <div class="favorite-query-list">
+                <a href="#" class="favorite-query-label" data-id="0" data-name="Vše" data-color="#0000DD">
+                    <div>
+                        <span class="label label-info">Vše</span>
+                    </div>
+                </a>
+                
+                <a href="#" class="favorite-query-label" data-id="1" data-name="Tag" data-color="#DDDD00">
+                    <div>
+                        <span class="label label-warning">Tag</span>
+                    </div>
+                </a>
+                <a href="#" class="favorite-query-label" data-id="2" data-name="Tag2" data-color="#00DD00">
+                    <div>
+                        <span class="label label-success">Tag2</span>
+                    </div>
+                </a>
             </div>
         </div>
 
         <div class="col-md-9">
-            <span>Dotazy</span>
+            <span>Vložit dotaz z oblíbených <span class="label label-danger favorite-query-label-selected">Vybraný dotaz</span>:</span>
             <hr/>
-            <div class="favorite-query-container">
-                <div>
+            <div class="favorite-query-list">
+                <a href="#" class="favorite-query-item" data-id="0" data-query="{query}" data-label-id="0">
+                    <div>
+                        <div>
+                            <span class="label label-info">Tag</span>
+                            <span>Název oblíbené položky</span>
+                        </div>
+                        <div>
+                            {query}
+                        </div>
+                    </div>
+                </a>
+
+                <div data-label-id="0" class="favorite-query-item" >
                     <div>
                         <span class="label label-info">Tag</span>
                         <span>Název oblíbené položky</span>
@@ -26,6 +48,126 @@
                         {query}
                     </div>
                 </div>
+
+                @*mock for test:*@
+                <div data-label-id="1" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="1" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div data-label-id="2" class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+                <div class="favorite-query-item" >
+                    <div>
+                        <span class="label label-info">Tag</span>
+                        <span>Název oblíbené položky</span>
+                    </div>
+                    <div>
+                        {query}
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -37,8 +179,10 @@
     </div>
 
     <div class="row">
-        <div class="col-md-3 col-md-offset-9">
-            <button class="btn btn-default">Vytvořit nový</button>
+        <div class="col-md-5 col-md-offset-7">
+            <button class="btn btn-default btn-block">
+                <span class="glyphicon glyphicon-star-empty"></span> Uložit dotaz jako oblíbený
+            </button>
         </div>
     </div>
 </div>

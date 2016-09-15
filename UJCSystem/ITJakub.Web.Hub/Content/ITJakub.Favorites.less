@@ -1,4 +1,6 @@
-﻿.label-favorite {
+﻿@import "ITJakub.DefaultTheme.less";
+
+.label-favorite {
     font-size: 84%;
     display: inline-block;
 }
@@ -87,4 +89,31 @@ div.favorite-label-management a:hover {
 .favorite-management-heading {
     font-weight: bold;
     line-height: 30px;
+}
+
+.favorite-query {
+    min-height: 70px;
+    background-color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    margin-right: 182px;
+}
+
+.favorite-query hr {
+    margin-top: 7px;
+    margin-bottom: 7px;
+}
+
+.favorite-query-list {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.favorite-query-list a:hover, .favorite-query-list a:focus {
+    text-decoration: none;
+}
+
+.favorite-query-list a:hover > div {
+    background-color: #F0F0F0;
+    color: black;
 }
