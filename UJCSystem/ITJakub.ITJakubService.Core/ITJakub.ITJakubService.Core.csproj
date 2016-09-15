@@ -90,6 +90,7 @@
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\EditorProfile.cs" />
     <Compile Include="AutoMapperProfiles\CardFileContractProfile.cs" />
+    <Compile Include="AutoMapperProfiles\QueryTypeEnumProfile.cs" />
     <Compile Include="AutoMapperProfiles\SearchResultContractProfile.cs" />
     <Compile Include="AutoMapperProfiles\SpecialPermissionProfile.cs" />
     <Compile Include="AutoMapperProfiles\TermCategoryProfile.cs" />

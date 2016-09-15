@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Web.Hub.Models.Favorite;
 
@@ -117,6 +118,15 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 client.CreateFavoriteCategory(categoryId, title, labelId, CurrentUserName);
+                return Json(new {});
+            }
+        }
+
+        public ActionResult CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                client.CreateFavoriteQuery(bookType, queryType, query, title, labelId, CurrentUserName);
                 return Json(new {});
             }
         }

@@ -23,6 +23,11 @@
             return;
         }
 
+        this.forceRerender();
+        this.favoriteDialog.make();
+    }
+
+    private forceRerender() {
         var url = getBaseUrl() + "Favorite/GetFavoriteQueryPartial";
         this.renderLoading();
         this.renderContainer.load(url, null, (responseTxt, statusTxt) => {
@@ -31,8 +36,6 @@
                 this.isCreated = true;
             }
         });
-
-        this.favoriteDialog.make();
     }
 
     private renderLoading() {
@@ -89,11 +92,7 @@
         });
 
         this.favoriteDialog.setSaveCallback(data => {
-            // todo save favorite query
-            // this.favoriteManager.createFavoriteItem();
-
-            console.log("Saving favorite query: BT:" + this.bookType + " QT:" + this.queryType);
-            throw Error("Not implemented");
+            this.saveFavoriteQuery(data.itemName, data.labelId);
         });
     }
     
@@ -110,5 +109,12 @@
                     }
                 });
         }
+    }
+
+    private saveFavoriteQuery(itemName: string, labelId: number) {
+        var query = this.inputTextbox.val();
+        this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelId, () => {
+            this.forceRerender();
+        });
     }
 }

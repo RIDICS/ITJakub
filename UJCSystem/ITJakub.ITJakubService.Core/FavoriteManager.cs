@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
 using log4net;
 
@@ -188,23 +189,32 @@ namespace ITJakub.ITJakubService.Core
             return resultList;
         }
 
-        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        private FavoriteLabel GetFavoriteLabelAndCheckAuthorization(long? labelId, int userId)
         {
-            var user = TryGetUser(userName);
-            var book = m_favoritesRepository.Load<Book>(bookId);
-
             var label = labelId == null
-                ? m_favoritesRepository.GetDefaultFavoriteLabel(user.Id)
+                ? m_favoritesRepository.GetDefaultFavoriteLabel(userId)
                 : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
-            
+
             if (label.User.Id != label.Id)
             {
                 throw new UnauthorizedAccessException();
             }
 
+            return label;
+        }
+
+        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        {
+            var now = DateTime.UtcNow;
+            var user = TryGetUser(userName);
+            var book = m_favoritesRepository.Load<Book>(bookId);
+
+            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            
             var favoriteItem = new FavoriteBook
             {
                 Book = book,
+                CreateTime = now,
                 User = user,
                 FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
                 Title = title
@@ -215,24 +225,44 @@ namespace ITJakub.ITJakubService.Core
 
         public void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
         {
+            var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var category = m_favoritesRepository.Load<Category>(categoryId);
 
-            var label = labelId == null
-                ? m_favoritesRepository.GetDefaultFavoriteLabel(user.Id)
-                : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
-
-            if (label.User.Id != label.Id)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
+            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            
             var favoriteItem = new FavoriteCategory
             {
                 Category = category,
+                CreateTime = now,
                 User = user,
                 FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
                 Title = title
+            };
+
+            m_favoritesRepository.Create(favoriteItem);
+        }
+
+        public void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        {
+            var now = DateTime.UtcNow;
+            var user = TryGetUser(userName);
+            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
+
+            var bookTypeEntity = m_bookVersionRepository.GetBookType(bookTypeEnum);
+            
+            var favoriteItem = new FavoriteQuery
+            {
+                BookType = bookTypeEntity,
+                Query = query,
+                QueryType = queryTypeEnum,
+                CreateTime = now,
+                User = user,
+                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                Title = title,
             };
 
             m_favoritesRepository.Create(favoriteItem);

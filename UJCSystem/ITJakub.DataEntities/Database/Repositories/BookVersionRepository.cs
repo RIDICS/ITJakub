@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Transactions;
@@ -8,6 +9,7 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using NHibernate;
@@ -886,6 +888,19 @@ namespace ITJakub.DataEntities.Database.Repositories
                 var result = session.QueryOver<BookType>()
                     .JoinAlias(x => x.BookVersions, () => bookVersionAlias)
                     .Where(x => bookVersionAlias.Id == bookVersionId)
+                    .SingleOrDefault();
+
+                return result;
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual BookType GetBookType(BookTypeEnum bookType)
+        {
+            using (var session = GetSession())
+            {
+                var result = session.QueryOver<BookType>()
+                    .Where(x => x.Type == bookType)
                     .SingleOrDefault();
 
                 return result;

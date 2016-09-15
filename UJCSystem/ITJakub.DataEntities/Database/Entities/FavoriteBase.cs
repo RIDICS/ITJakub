@@ -105,7 +105,7 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual BookType BookType { get; set; }
 
-        public virtual QueryType QueryType { get; set; }
+        public virtual QueryTypeEnum QueryType { get; set; }
 
         public virtual string Query { get; set; }
     }

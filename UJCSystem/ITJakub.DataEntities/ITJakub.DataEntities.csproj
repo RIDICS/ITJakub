@@ -92,7 +92,7 @@
   <ItemGroup>
     <Compile Include="Database\CriteriaConditionBuilder.cs" />
     <Compile Include="Database\Entities\Enums\FavoriteTypeEnum.cs" />
-    <Compile Include="Database\Entities\Enums\QueryType.cs" />
+    <Compile Include="Database\Entities\Enums\QueryTypeEnum.cs" />
     <Compile Include="Database\Entities\FavoriteLabel.cs" />
     <Compile Include="Database\Entities\LiteraryOriginal.cs" />
     <Compile Include="Database\Entities\LiteraryGenre.cs" />

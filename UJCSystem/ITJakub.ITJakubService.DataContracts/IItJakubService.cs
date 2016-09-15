@@ -312,6 +312,9 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName);
 
+        [OperationContract]
+        void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName);
+
         #endregion
 
         #region Feedback

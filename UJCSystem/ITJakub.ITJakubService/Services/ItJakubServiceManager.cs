@@ -523,6 +523,11 @@ namespace ITJakub.ITJakubService.Services
             m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelId, userName);
         }
 
+        public void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        {
+            m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
+        }
+
         #endregion
 
         #region Feedback

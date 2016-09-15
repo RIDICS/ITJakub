@@ -243,8 +243,23 @@
         });
     }
 
-    public createFavoriteQuery(query: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
-        // todo add parameters: booktype, queryType
-        throw Error("Not implemented");
+    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/CreateFavoriteQuery",
+            data: JSON.stringify({
+                bookType: bookType,
+                queryType: queryType,
+                query: query,
+                title: favoriteTitle,
+                labelId: favoriteLabelId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: () => {
+                callback();
+            }
+        });
     }
 }
