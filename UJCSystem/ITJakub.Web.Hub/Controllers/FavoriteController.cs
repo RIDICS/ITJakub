@@ -118,8 +118,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.CreateFavoriteBook(bookId, title, labelId, CurrentUserName);
-                return Json(new {});
+                var resultId = client.CreateFavoriteBook(bookId, title, labelId, CurrentUserName);
+                return Json(resultId);
             }
         }
 
@@ -127,8 +127,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.CreateFavoriteCategory(categoryId, title, labelId, CurrentUserName);
-                return Json(new {});
+                var resultId = client.CreateFavoriteCategory(categoryId, title, labelId, CurrentUserName);
+                return Json(resultId);
             }
         }
 
@@ -136,8 +136,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.CreateFavoriteQuery(bookType, queryType, query, title, labelId, CurrentUserName);
-                return Json(new {});
+                var resultId = client.CreateFavoriteQuery(bookType, queryType, query, title, labelId, CurrentUserName);
+                return Json(resultId);
             }
         }
 

@@ -195,7 +195,7 @@ namespace ITJakub.ITJakubService.Core
                 ? m_favoritesRepository.GetDefaultFavoriteLabel(userId)
                 : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
 
-            if (label.User.Id != label.Id)
+            if (label.User.Id != userId)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -203,7 +203,7 @@ namespace ITJakub.ITJakubService.Core
             return label;
         }
 
-        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        public long CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
@@ -223,7 +223,7 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Create(favoriteItem);
         }
 
-        public void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        public long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
@@ -243,7 +243,7 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Create(favoriteItem);
         }
 
-        public void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);

@@ -48,7 +48,8 @@
 
         var popoverOptions: PopoverOptions = {
             html: true,
-            placement: "right"
+            placement: "right",
+            content: () => this.render()
         };
         if (fixPosition) {
             popoverOptions.container = "body";
@@ -57,12 +58,10 @@
         var glyphIconType = this.isItemLabeled ? "glyphicon-star" : "glyphicon-star-empty";
         var glyphIcon = this.createGlyphIcon(glyphIconType);
         $(glyphIcon)
-            .attr("data-content", this.popoverBuilder.getHtmlString())
             .attr("data-title", "Oblíbené položky")
             .attr("data-toggle", "popover")
             .popover(popoverOptions);
         $(glyphIcon).on("shown.bs.popover", () => {
-            // todo only one popover can be opened at once
             this.initPopoverEvents($(glyphIcon));
         });
 
@@ -78,12 +77,32 @@
         });
 
         $(".fast-add-favorite-label").click((event) => {
-            var labelId = $(event.target).data("id");
+            var labelId = $(event.currentTarget).data("id");
+            var labelName = $(event.currentTarget).data("name");
+            var labelColor = $(event.currentTarget).data("color");
+            var favoriteLabel: IFavoriteLabel = {
+                Id: labelId,
+                Name: labelName,
+                Color: labelColor,
+                IsDefault: null,
+                LastUseTime: null
+            };
 
-            this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, this.favoriteDefaultTitle, labelId, () => {
+            this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, this.favoriteDefaultTitle, labelId, (id) => {
                 icon.popover("hide");
+                this.popoverBuilder.addFavoriteItem({
+                    Id: id,
+                    FavoriteType: this.favoriteItemType,
+                    Title: this.favoriteDefaultTitle,
+                    CreateTime: null,
+                    FavoriteLabel: favoriteLabel
+                });
             });
         });
+    }
+
+    private render() {
+        return this.popoverBuilder.getHtmlString();
     }
 }
 
@@ -106,7 +125,8 @@ class FavoritePopoverBuilder {
     }
 
     public addFavoritLabel(label: IFavoriteLabel) {
-        var labelHtml = '<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></span>';
+        var labelHtml = '<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '" data-color="' + label.Color + '" + data-name="' + label.Name
+            + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></span>';
         this.favoriteLabels.push(labelHtml);
     }
 

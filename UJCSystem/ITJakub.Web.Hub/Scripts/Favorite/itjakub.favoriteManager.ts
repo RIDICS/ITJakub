@@ -208,7 +208,7 @@
         });
     }
 
-    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         switch (itemType) {
             case FavoriteType.Book:
                 this.createFavoriteBook(Number(itemId), favoriteTitle, favoriteLabelId, callback);
@@ -221,7 +221,7 @@
         }
     }
 
-    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         $.ajax({
             type: "POST",
             traditional: true,
@@ -233,13 +233,13 @@
             }),
             dataType: "json",
             contentType: "application/json",
-            success: () => {
-                callback();
+            success: (resultId) => {
+                callback(resultId);
             }
         });
     }
 
-    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         $.ajax({
             type: "POST",
             traditional: true,
@@ -251,13 +251,13 @@
             }),
             dataType: "json",
             contentType: "application/json",
-            success: () => {
-                callback();
+            success: (resultId) => {
+                callback(resultId);
             }
         });
     }
 
-    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: () => void) {
+    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         $.ajax({
             type: "POST",
             traditional: true,
@@ -271,8 +271,8 @@
             }),
             dataType: "json",
             contentType: "application/json",
-            success: () => {
-                callback();
+            success: (resultId) => {
+                callback(resultId);
             }
         });
     }
