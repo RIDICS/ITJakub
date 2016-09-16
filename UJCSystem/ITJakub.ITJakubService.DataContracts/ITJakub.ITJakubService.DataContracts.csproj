@@ -68,6 +68,7 @@
     <Compile Include="Contracts\Favorite\FavoriteBookInfoContract.cs" />
     <Compile Include="Contracts\Favorite\FavoriteCategoryContract.cs" />
     <Compile Include="Contracts\Favorite\FavoriteLabelContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteLabelWithBooksAndCategories.cs" />
     <Compile Include="Contracts\Favorite\FavoriteTypeContract.cs" />
     <Compile Include="Contracts\HeadwordBookmarkContract.cs" />
     <Compile Include="Contracts\ImageSizeEnumContract.cs" />

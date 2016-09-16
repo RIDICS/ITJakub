@@ -27,9 +27,10 @@ BEGIN TRAN
 	(
 		Name,
 		Color,
+		IsDefault,
 		[User]
 	)
-	SELECT 'Výchozí', '#EEB711', u.Id FROM [dbo].[User] u
+	SELECT 'Výchozí', '#EEB711', 1, u.Id FROM [dbo].[User] u
 	
 
     INSERT INTO [dbo].[DatabaseVersion]

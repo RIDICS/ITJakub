@@ -300,6 +300,48 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
         }
 
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(string userName)
+        {
+            var user = TryGetUser(userName);
+
+            var dbResult = m_favoritesRepository.GetFavoriteBooksAndCategoriesWithLabel(user.Id);
+            var favoriteLabels = new Dictionary<long, FavoriteLabelWithBooksAndCategories>();
+
+            foreach (var favoriteItem in dbResult)
+            {
+                FavoriteLabel favoriteLabelEntity = favoriteItem.FavoriteLabel;
+                FavoriteLabelWithBooksAndCategories favoriteLabel;
+
+                if (!favoriteLabels.TryGetValue(favoriteItem.FavoriteLabel.Id, out favoriteLabel))
+                {
+                    favoriteLabel = new FavoriteLabelWithBooksAndCategories
+                    {
+                        BookIdList = new List<long>(),
+                        CategoryIdList = new List<int>(),
+                        Id = favoriteLabelEntity.Id,
+                        Name = favoriteLabelEntity.Name,
+                        Color = favoriteLabelEntity.Color
+                    };
+                    favoriteLabels.Add(favoriteLabel.Id, favoriteLabel);
+                }
+
+                if (favoriteItem.FavoriteTypeEnum == FavoriteTypeEnum.Book)
+                {
+                    var favoriteBook = (FavoriteBook) favoriteItem;
+                    favoriteLabel.BookIdList.Add(favoriteBook.Book.Id);
+                }
+                else if (favoriteItem.FavoriteTypeEnum == FavoriteTypeEnum.Category)
+                {
+                    var favoriteCategory = (FavoriteCategory) favoriteItem;
+                    favoriteLabel.CategoryIdList.Add(favoriteCategory.Category.Id);
+                }
+            }
+
+            return favoriteLabels.Select(x => x.Value)
+                .OrderBy(x => x.Name)
+                .ToList();
+        }
+
         public long CreateFavoriteLabel(string name, string color, string userName, bool isDefault)
         {
             var now = DateTime.UtcNow;

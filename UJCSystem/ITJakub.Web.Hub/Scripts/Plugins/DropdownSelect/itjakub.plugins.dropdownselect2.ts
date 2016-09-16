@@ -61,11 +61,16 @@
 
         if (this.showStar) {
             var favoriteDropdownDiv = document.createElement("div");
-            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv));
+            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv), this);
             this.favoriteBook.make();
 
             $(this.dropDownSelectContainer).append(favoriteDropdownDiv);
         }
+    }
+
+    setSelected(categoryIds: Array<number>, bookIds: Array<number>) {
+        $("input[type=checkbox]", this.dropDownBodyDiv).prop("checked", false);
+        this.restore(categoryIds, bookIds);
     }
 
     restore(categoryIds: Array<number>, bookIds: Array<number>) {

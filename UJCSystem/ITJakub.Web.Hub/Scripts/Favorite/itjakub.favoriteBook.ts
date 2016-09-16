@@ -1,9 +1,11 @@
 ﻿class FavoriteBook {
+    private dropdownSelect: DropDownSelect2;
     private container: JQuery;
     private bodyDiv: HTMLDivElement;
     private favoriteManager: FavoriteManager;
 
-    constructor(container: JQuery) {
+    constructor(container: JQuery, dropdownSelect: DropDownSelect2) {
+        this.dropdownSelect = dropdownSelect;
         this.container = container;
         this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
     }
@@ -18,10 +20,10 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonContentSpan)
-            .text("Vybrat oblíbené / DropdownSelect");
+            .text(" Vybrat oblíbené knihy a kategorie");
         $(headerButton)
-            .attr("style", "width: 100%; height: 100%;")
             .attr("type", "button")
+            .addClass("favorite-book-select-button")
             .append(favoriteIcon)
             .append(buttonContentSpan)
             .click(this.toggleBodyVisibility.bind(this));
@@ -31,52 +33,99 @@
             .append(headerButton);
 
         this.bodyDiv = document.createElement("div");
+        var loadingDiv = document.createElement("div");
+
+        $(loadingDiv)
+            .addClass("loading");
         $(this.bodyDiv)
             .addClass("dropdown-select-body")
-            .text("TODO tag selection");
+            .append(loadingDiv);
 
         $(innerContainer)
             .addClass("dropdown-select")
+            .addClass("favorite-book-select")
             .append(headerDiv)
             .append(this.bodyDiv);
 
         this.container.append(innerContainer);
         this.loadData();
+
+        $(document).unbind("click.favoriteBooks");
+        $(document).bind("click.favoriteBooks", (event) => {
+            var parents = $(event.target).parents();
+            if (!parents.is(this.container)) {
+                this.hide();
+            }
+        });
     }
 
     private toggleBodyVisibility() {
         var bodyJQuery = $(this.bodyDiv);
-
         if (bodyJQuery.is(":hidden")) {
-            bodyJQuery.show();
+            this.show();
         } else {
-            bodyJQuery.hide();
+            this.hide();
         }
     }
 
-    private loadData() {
-        //this.favoriteManager.getFavoriteLabelsForBooksAndCategories((favoriteLabels) => {
-            
-        //});
+    public show() {
+        $(this.bodyDiv).slideDown("fast");
     }
 
-    private createFavoriteLabel(favoriteLabel: IFavoriteLabel): HTMLDivElement {
+    public hide() {
+        $(this.bodyDiv).slideUp("fast");
+    }
+
+    private loadData() {
+        $(this.bodyDiv).empty();
+        this.favoriteManager.getFavoriteLabelsForBooksAndCategories((favoriteLabels) => {
+            for (var i = 0; i < favoriteLabels.length; i++) {
+                var favoriteLabel = favoriteLabels[i];
+                var itemDiv = this.createFavoriteLabel(favoriteLabel);
+                this.bodyDiv.appendChild(itemDiv);
+            }
+
+            if (favoriteLabels.length === 0) {
+                var emptyDiv = document.createElement("div");
+                $(emptyDiv)
+                    .addClass("text-center")
+                    .text("Žádný štítek neobsahuje oblíbenou knihu nebo kategorii");
+                this.bodyDiv.appendChild(emptyDiv);
+            }
+        });
+    }
+
+    private createFavoriteLabel(favoriteLabel: IFavoriteLabelsWithBooksAndCategories): HTMLDivElement {
         var mainDiv = document.createElement("div");
         var link = document.createElement("a");
         var labelSpan = document.createElement("span");
 
         $(labelSpan)
             .addClass("label")
+            .addClass("favorite-dropdown-item-label")
             .text(favoriteLabel.Name)
             .css("background-color", favoriteLabel.Color);
 
         $(link)
             .attr("href", "#")
+            .data("id", favoriteLabel.Id)
+            .data("bookIdList", favoriteLabel.BookIdList)
+            .data("categoryIdList", favoriteLabel.CategoryIdList)
+            .click(this.onLabelClick.bind(this))
             .append(labelSpan);
 
         $(mainDiv)
             .append(link);
 
         return mainDiv;
+    }
+
+    private onLabelClick(event: JQueryEventObject) {
+        var linkJquery = $(event.currentTarget);
+        var bookIdList = <number[]>linkJquery.data("bookIdList");
+        var categoryIdList = <number[]>linkJquery.data("categoryIdList");
+
+        this.dropdownSelect.setSelected(categoryIdList, bookIdList);
+        setTimeout(() => this.dropdownSelect.showBody(), 0);
     }
 }

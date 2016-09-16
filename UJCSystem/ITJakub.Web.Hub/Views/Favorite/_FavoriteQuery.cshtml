@@ -35,6 +35,10 @@
                         </div>
                     </a>
                 }
+                @if (Model.QueryList.Count == 0)
+                {
+                    <div style="margin-left: 15px;">Žádný oblíbený dotaz</div>
+                }
             </div>
         </div>
     </div>

@@ -508,6 +508,11 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetFavoriteLabeledCategories(categoryIds, userName);
         }
 
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(string userName)
+        {
+            return m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(userName);
+        }
+
         public void UpdateFavoriteItem(long id, string title, string userName)
         {
             m_favoriteManager.UpdateFavoriteItem(id, title, userName);

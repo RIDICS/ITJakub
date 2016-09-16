@@ -14,6 +14,14 @@ interface IFavoriteLabel {
     LastUseTime: string;
 }
 
+interface IFavoriteLabelsWithBooksAndCategories {
+    Id: number;
+    Name: string;
+    Color: string;
+    BookIdList: number[];
+    CategoryIdList: number[];
+}
+
 interface IFavoriteBook {
     Id: number;
     FavoriteInfo: Array<IFavoriteBaseInfo>;

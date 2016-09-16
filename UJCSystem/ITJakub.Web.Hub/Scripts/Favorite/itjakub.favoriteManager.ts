@@ -110,9 +110,18 @@
         throw new Error("Not implemented"); // TODO
     }
 
-    public getFavoriteLabelsForBooksAndCategories(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
-        throw new Error("Not implemented"); // TODO ajax call
-        // todo also return IDs of books and categories in callback
+    public getFavoriteLabelsForBooksAndCategories(callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
+            data: JSON.stringify({}),
+            dataType: "json",
+            contentType: "application/json",
+            success: (favoriteLabels) => {
+                callback(favoriteLabels);
+            }
+        });
     }
 
     public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {

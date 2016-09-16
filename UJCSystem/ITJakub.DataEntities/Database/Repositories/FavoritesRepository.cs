@@ -303,5 +303,22 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List();
             }
         }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteBase> GetFavoriteBooksAndCategoriesWithLabel(int userId)
+        {
+            var favoriteBook = GetFavoriteTypeDiscriminatorValue(FavoriteTypeEnum.Book);
+            var favoriteCategory = GetFavoriteTypeDiscriminatorValue(FavoriteTypeEnum.Category);
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FavoriteBase>()
+                    .Where(x => x.User.Id == userId)
+                    .And(x => x.FavoriteType == favoriteBook || x.FavoriteType == favoriteCategory)
+                    .Fetch(x => x.FavoriteLabel).Eager
+                    .OrderBy(x => x.Title).Asc
+                    .List();
+            }
+        }
     }
 }

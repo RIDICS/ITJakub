@@ -93,7 +93,7 @@ class DropDownSelect {
     private selectedCategories: Array<Category>;
     protected callbackDelegate: DropDownSelectCallbackDelegate;
     private moreSpan: HTMLSpanElement;
-    private dropDownBodyDiv: HTMLDivElement;
+    protected dropDownBodyDiv: HTMLDivElement;
     protected favoriteManager: FavoriteManager;
     protected favoriteDialog: NewFavoriteDialog;
 
@@ -223,7 +223,7 @@ class DropDownSelect {
         dropDownDiv.appendChild(dropDownHeadDiv);
     }
 
-    private showBody() {
+    showBody() {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
         $(this.moreSpan).children().addClass("glyphicon-chevron-up");
         $(this.dropDownBodyDiv).slideDown("fast");

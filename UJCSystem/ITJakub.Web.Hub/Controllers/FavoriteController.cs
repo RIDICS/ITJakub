@@ -105,6 +105,15 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        public ActionResult GetFavoriteLabelsWithBooksAndCategories()
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteLabelsWithBooksAndCategories(CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         public ActionResult CreateFavoriteBook(long bookId, string title, long? labelId)
         {
             using (var client = GetMainServiceClient())
