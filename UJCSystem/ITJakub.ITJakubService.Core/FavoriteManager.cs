@@ -220,7 +220,7 @@ namespace ITJakub.ITJakubService.Core
                 Title = title
             };
 
-            m_favoritesRepository.Create(favoriteItem);
+            return (long) m_favoritesRepository.Create(favoriteItem);
         }
 
         public long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
@@ -240,7 +240,7 @@ namespace ITJakub.ITJakubService.Core
                 Title = title
             };
 
-            m_favoritesRepository.Create(favoriteItem);
+            return (long) m_favoritesRepository.Create(favoriteItem);
         }
 
         public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
@@ -265,7 +265,7 @@ namespace ITJakub.ITJakubService.Core
                 Title = title,
             };
 
-            m_favoritesRepository.Create(favoriteItem);
+            return (long) m_favoritesRepository.Create(favoriteItem);
         }
 
         public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)

@@ -313,13 +313,13 @@ namespace ITJakub.ITJakubService.DataContracts
         void DeleteFavoriteItem(long id, string userName);
 
         [OperationContract]
-        void CreateFavoriteBook(long bookId, string title, long? labelId, string userName);
+        long CreateFavoriteBook(long bookId, string title, long? labelId, string userName);
 
         [OperationContract]
-        void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName);
+        long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName);
 
         [OperationContract]
-        void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName);
+        long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName);
 
         #endregion
 

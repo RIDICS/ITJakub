@@ -523,19 +523,19 @@ namespace ITJakub.ITJakubService.Services
             m_favoriteManager.DeleteFavoriteItem(id, userName);
         }
 
-        public void CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        public long CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
         {
-            m_favoriteManager.CreateFavoriteBook(bookId, title, labelId, userName);
+            return m_favoriteManager.CreateFavoriteBook(bookId, title, labelId, userName);
         }
 
-        public void CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        public long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
         {
-            m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelId, userName);
+            return m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelId, userName);
         }
 
-        public void CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
         {
-            m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
+            return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
         }
 
         #endregion

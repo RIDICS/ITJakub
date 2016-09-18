@@ -99,6 +99,13 @@
                 });
             });
         });
+
+        $(".favorite-book-remove").click((event) => {
+            var elementJQuery = $(event.currentTarget);
+            var id = <number>elementJQuery.data("id");
+
+            // TODO remove item
+        });
     }
 
     private render() {
@@ -120,7 +127,8 @@ class FavoritePopoverBuilder {
     }
 
     public addFavoriteItem(item: IFavoriteBaseInfo) {
-        var itemHtml = '<div><span class="label label-favorite" style="background-color: ' + item.FavoriteLabel.Color + '">' + item.FavoriteLabel.Name + '</span><span> ' + item.Title + '</span></div>';
+        var itemHtml = '<div><span class="label label-favorite" style="background-color: ' + item.FavoriteLabel.Color + '">' + item.FavoriteLabel.Name + '</span><span> '
+            + item.Title + '</span><a href="#" class="favorite-book-remove" data-id="' + item.Id+ '"><span class="glyphicon glyphicon-trash"></span></a></div>';
         this.favoriteItems.push(itemHtml);
     }
 
@@ -131,20 +139,17 @@ class FavoritePopoverBuilder {
     }
 
     public getHtmlString(): string {
-        if (this.favoriteItems.length === 0) {
-            let emptyInfoHtml = '<div>Žádná položka</div>';
-            this.favoriteItems.push(emptyInfoHtml);
-        }
-
-        if (this.favoriteLabels.length === 0) {
-            let emptyInfoHtml = '<div>Žádná položka</div>';
-            this.favoriteLabels.push(emptyInfoHtml);
-        }
+        var favoriteItemsString = this.favoriteItems.length === 0
+            ? "<div>Žádná položka</div>"
+            : this.favoriteItems.join("");
+        var favoriteLabelsString = this.favoriteLabels.length === 0
+            ? "<div>Žádná položka</div>"
+            : this.favoriteLabels.join("");
 
         return this.templateStart +
-            this.favoriteItems.join("") +
+            favoriteItemsString +
             this.templateMiddle +
-            this.favoriteLabels.join("") +
+            favoriteLabelsString +
             this.templateEnd;
     }
 }
