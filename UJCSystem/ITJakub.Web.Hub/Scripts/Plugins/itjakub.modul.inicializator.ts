@@ -308,6 +308,7 @@
         const dropDownSelect = new DropDownSelect2(
             this.configuration.dropDownSelect.dropDownSelectContainer,
             this.configuration.dropDownSelect.dataUrl,
+            this.configuration.search.favoriteQueries.bookType,
             this.configuration.dropDownSelect.showStar,
             callbackDelegate
         );

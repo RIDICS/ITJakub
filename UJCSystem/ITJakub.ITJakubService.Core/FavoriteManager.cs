@@ -300,41 +300,48 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
         }
 
-        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(string userName)
+        private FavoriteLabelWithBooksAndCategories CreateFavoriteLabelWithBooksAndCategories(FavoriteLabel favoriteLabelEntity)
+        {
+            return new FavoriteLabelWithBooksAndCategories
+            {
+                BookIdList = new List<long>(),
+                CategoryIdList = new List<int>(),
+                Id = favoriteLabelEntity.Id,
+                Name = favoriteLabelEntity.Name,
+                Color = favoriteLabelEntity.Color
+            };
+        }
+
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName)
         {
             var user = TryGetUser(userName);
 
-            var dbResult = m_favoritesRepository.GetFavoriteBooksAndCategoriesWithLabel(user.Id);
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var booksDbResult = m_favoritesRepository.GetFavoriteBooksWithLabel(bookTypeEnum, user.Id);
+            var categoriesDbResult = m_favoritesRepository.GetFavoriteCategoriesWithLabel(bookTypeEnum, user.Id);
             var favoriteLabels = new Dictionary<long, FavoriteLabelWithBooksAndCategories>();
 
-            foreach (var favoriteItem in dbResult)
+            foreach (var favoriteBook in booksDbResult)
             {
-                FavoriteLabel favoriteLabelEntity = favoriteItem.FavoriteLabel;
                 FavoriteLabelWithBooksAndCategories favoriteLabel;
-
-                if (!favoriteLabels.TryGetValue(favoriteItem.FavoriteLabel.Id, out favoriteLabel))
+                if (!favoriteLabels.TryGetValue(favoriteBook.FavoriteLabel.Id, out favoriteLabel))
                 {
-                    favoriteLabel = new FavoriteLabelWithBooksAndCategories
-                    {
-                        BookIdList = new List<long>(),
-                        CategoryIdList = new List<int>(),
-                        Id = favoriteLabelEntity.Id,
-                        Name = favoriteLabelEntity.Name,
-                        Color = favoriteLabelEntity.Color
-                    };
+                    favoriteLabel = CreateFavoriteLabelWithBooksAndCategories(favoriteBook.FavoriteLabel);
                     favoriteLabels.Add(favoriteLabel.Id, favoriteLabel);
                 }
 
-                if (favoriteItem.FavoriteTypeEnum == FavoriteTypeEnum.Book)
+                favoriteLabel.BookIdList.Add(favoriteBook.Book.Id);
+            }
+            foreach (var favoriteCategory in categoriesDbResult)
+            {
+                FavoriteLabelWithBooksAndCategories favoriteLabel;
+                if (!favoriteLabels.TryGetValue(favoriteCategory.FavoriteLabel.Id, out favoriteLabel))
                 {
-                    var favoriteBook = (FavoriteBook) favoriteItem;
-                    favoriteLabel.BookIdList.Add(favoriteBook.Book.Id);
+                    favoriteLabel = CreateFavoriteLabelWithBooksAndCategories(favoriteCategory.FavoriteLabel);
+                    favoriteLabels.Add(favoriteLabel.Id, favoriteLabel);
                 }
-                else if (favoriteItem.FavoriteTypeEnum == FavoriteTypeEnum.Category)
-                {
-                    var favoriteCategory = (FavoriteCategory) favoriteItem;
-                    favoriteLabel.CategoryIdList.Add(favoriteCategory.Category.Id);
-                }
+
+                favoriteLabel.CategoryIdList.Add(favoriteCategory.Category.Id);
             }
 
             return favoriteLabels.Select(x => x.Value)

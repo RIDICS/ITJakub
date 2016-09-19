@@ -342,7 +342,7 @@ class DropDownSelect {
             }
 
             var favoriteStarContainer = $(element).children(".save-item");
-            var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager);
+            var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager, () => this.onFavoritesChanged(favoriteType, id));
 
             if (favoriteItem != null) {
                 favoriteStar.addFavoriteItems(favoriteItem.FavoriteInfo);
@@ -351,6 +351,10 @@ class DropDownSelect {
             favoriteStar.addFavoriteLabels(favoriteLabels);
             favoriteStar.make(true);
         });
+    }
+
+    protected onFavoritesChanged(favoriteType: FavoriteType, id: number) {
+        
     }
     
     protected makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {

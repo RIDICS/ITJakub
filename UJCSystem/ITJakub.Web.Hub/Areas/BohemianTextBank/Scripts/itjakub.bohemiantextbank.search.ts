@@ -485,7 +485,7 @@ function initSearch() {
         initializeFromUrlParams();
     };
 
-    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
+    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", BookTypeEnum.TextBank, true, callbackDelegate);
     booksSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {

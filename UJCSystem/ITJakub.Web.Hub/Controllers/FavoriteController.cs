@@ -105,11 +105,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetFavoriteLabelsWithBooksAndCategories()
+        public ActionResult GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabelsWithBooksAndCategories(CurrentUserName);
+                var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType, CurrentUserName);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

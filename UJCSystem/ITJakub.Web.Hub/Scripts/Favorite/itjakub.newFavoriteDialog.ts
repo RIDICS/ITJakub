@@ -2,7 +2,10 @@
     private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
-
+    private selectedLabelId: number;
+    private selectedLabelName: string;
+    private selectedLabelColor: string;
+    
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
     }
@@ -58,13 +61,16 @@
             if (!checkbox.checked)
                 return;
 
-            var labelName = $(checkbox).data("name");
-            var labelColor = $(checkbox).data("color");
+            this.selectedLabelId = $(checkbox).val();
+            this.selectedLabelName = $(checkbox).data("name");
+            this.selectedLabelColor = $(checkbox).data("color");
 
             $(".favorite-selected-label-info", this.container)
-                .text(labelName)
-                .css("background-color", labelColor);
+                .text(this.selectedLabelName)
+                .css("background-color", this.selectedLabelColor);
         });
+
+        $("[name=favorite-label]:checked", this.container).trigger("change");
     }
 
     public hide() {
@@ -82,11 +88,12 @@
 
     private getData(): INewFavoriteItemData {
         var itemName: string = $("#favorite-name").val();
-        var labelId: string = $("#favorite-labels").val();
-
+        
         var resultData: INewFavoriteItemData = {
             itemName: itemName,
-            labelId: Number(labelId)
+            labelId: this.selectedLabelId,
+            labelName: this.selectedLabelName,
+            labelColor: this.selectedLabelColor
         };
         return resultData;
     }
@@ -95,4 +102,6 @@
 interface INewFavoriteItemData {
     labelId: number;
     itemName: string;
+    labelName: string;
+    labelColor: string;
 }

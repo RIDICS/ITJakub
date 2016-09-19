@@ -10,13 +10,15 @@
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
     private favoriteBook: FavoriteBook;
+    private bookType: BookTypeEnum;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
+    constructor(dropDownSelectContainer: string, dataUrl: string, bookType:BookTypeEnum, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
+        this.bookType = bookType;
         this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
         callbackDelegate.selectedChangedCallback = null;
 
@@ -61,7 +63,7 @@
 
         if (this.showStar) {
             var favoriteDropdownDiv = document.createElement("div");
-            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv), this);
+            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv), this.bookType, this);
             this.favoriteBook.make();
 
             $(this.dropDownSelectContainer).append(favoriteDropdownDiv);
@@ -80,6 +82,10 @@
         this.doRestore();
     }
 
+    protected onFavoritesChanged(favoriteType: FavoriteType, id: number): void {
+        this.favoriteBook.loadData();
+    }
+
     private doRestore() {
         var categoriesCount = 0;
         var booksCount = 0;
@@ -87,15 +93,21 @@
         if (this.restoreCategoryIds) {
             for (var i = 0; i < this.restoreCategoryIds.length; i++) {
                 var category = this.categories[this.restoreCategoryIds[i]];
+                if (!category) {
+                    continue;
+                }
                 category.checkBox.checked = true;
                 this.propagateSelectChange(<HTMLDivElement>$(category.checkBox).parent(".concrete-item")[0]);
+                categoriesCount++;
             }
-            categoriesCount = this.restoreCategoryIds.length;
         }
 
         if (this.restoreBookIds) {
             for (var j = 0; j < this.restoreBookIds.length; j++) {
                 var book = this.books[this.restoreBookIds[j]];
+                if (!book) {
+                    continue;
+                }
 
                 for (var k = 0; k < book.checkboxes.length; k++) {
                     var checkbox = book.checkboxes[k];

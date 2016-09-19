@@ -163,6 +163,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.FavoriteLabel).Eager
                     .WhereRestrictionOn(() => favoriteItemAlias.Book.Id).IsInG(bookIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
+                    .OrderBy(() => favoriteItemAlias.Title).Asc
                     .List();
             }
         }
@@ -180,6 +181,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.FavoriteLabel).Eager
                     .WhereRestrictionOn(() => favoriteItemAlias.Category.Id).IsInG(categoryIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
+                    .OrderBy(() => favoriteItemAlias.Title).Asc
                     .List();
             }
         }
@@ -305,16 +307,39 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<FavoriteBase> GetFavoriteBooksAndCategoriesWithLabel(int userId)
+        public virtual IList<FavoriteBook> GetFavoriteBooksWithLabel(BookTypeEnum bookType, int userId)
         {
-            var favoriteBook = GetFavoriteTypeDiscriminatorValue(FavoriteTypeEnum.Book);
-            var favoriteCategory = GetFavoriteTypeDiscriminatorValue(FavoriteTypeEnum.Category);
+            Book bookAlias = null;
+            BookVersion bookVersionAlias = null;
+            Category categoryAlias = null;
+            BookType bookTypeAlias = null;
 
             using (var session = GetSession())
             {
-                return session.QueryOver<FavoriteBase>()
-                    .Where(x => x.User.Id == userId)
-                    .And(x => x.FavoriteType == favoriteBook || x.FavoriteType == favoriteCategory)
+                return session.QueryOver<FavoriteBook>()
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .JoinAlias(() => bookAlias.LastVersion, () => bookVersionAlias)
+                    .JoinAlias(() => bookVersionAlias.Categories, () => categoryAlias)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                    .Where(x => x.User.Id == userId && bookTypeAlias.Type == bookType)
+                    .Fetch(x => x.FavoriteLabel).Eager
+                    .OrderBy(x => x.Title).Asc
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteCategory> GetFavoriteCategoriesWithLabel(BookTypeEnum bookType, int userId)
+        {
+            Category categoryAlias = null;
+            BookType bookTypeAlias = null;
+
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FavoriteCategory>()
+                    .JoinAlias(x => x.Category, () => categoryAlias)
+                    .JoinAlias(() => categoryAlias.BookType, () => bookTypeAlias)
+                    .Where(x => x.User.Id == userId && bookTypeAlias.Type == bookType)
                     .Fetch(x => x.FavoriteLabel).Eager
                     .OrderBy(x => x.Title).Asc
                     .List();

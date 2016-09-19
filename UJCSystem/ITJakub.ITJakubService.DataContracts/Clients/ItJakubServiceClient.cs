@@ -2248,11 +2248,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(string userName)
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName)
         {
             try
             {
-                return Channel.GetFavoriteLabelsWithBooksAndCategories(userName);
+                return Channel.GetFavoriteLabelsWithBooksAndCategories(bookType, userName);
             }
             catch (CommunicationException ex)
             {

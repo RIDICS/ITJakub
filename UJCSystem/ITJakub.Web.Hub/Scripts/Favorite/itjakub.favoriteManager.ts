@@ -110,12 +110,14 @@
         throw new Error("Not implemented"); // TODO
     }
 
-    public getFavoriteLabelsForBooksAndCategories(callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
+    public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
         $.ajax({
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
-            data: JSON.stringify({}),
+            data: JSON.stringify({
+                bookType: bookType
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (favoriteLabels) => {

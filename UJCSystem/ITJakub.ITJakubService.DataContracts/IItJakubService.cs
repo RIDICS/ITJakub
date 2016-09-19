@@ -304,7 +304,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName);
 
         [OperationContract]
-        IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(string userName);
+        IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName);
 
         [OperationContract]
         void UpdateFavoriteItem(long id, string title, string userName);

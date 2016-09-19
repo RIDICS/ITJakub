@@ -1,13 +1,17 @@
 ﻿class FavoriteBook {
     private dropdownSelect: DropDownSelect2;
+    private bookType: BookTypeEnum;
     private container: JQuery;
     private bodyDiv: HTMLDivElement;
     private favoriteManager: FavoriteManager;
+    private loading: boolean;
 
-    constructor(container: JQuery, dropdownSelect: DropDownSelect2) {
+    constructor(container: JQuery, bookType: BookTypeEnum, dropdownSelect: DropDownSelect2) {
         this.dropdownSelect = dropdownSelect;
+        this.bookType = bookType;
         this.container = container;
         this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.loading = false;
     }
 
     public make() {
@@ -39,6 +43,7 @@
             .addClass("loading");
         $(this.bodyDiv)
             .addClass("dropdown-select-body")
+            .addClass("favorite-book-select-body")
             .append(loadingDiv);
 
         $(innerContainer)
@@ -76,9 +81,14 @@
         $(this.bodyDiv).slideUp("fast");
     }
 
-    private loadData() {
+    public loadData() {
+        if (this.loading) {
+            return;
+        }
+
+        this.loading = true;
         $(this.bodyDiv).empty();
-        this.favoriteManager.getFavoriteLabelsForBooksAndCategories((favoriteLabels) => {
+        this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
             for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];
                 var itemDiv = this.createFavoriteLabel(favoriteLabel);
@@ -92,6 +102,8 @@
                     .text("Žádný štítek neobsahuje oblíbenou knihu nebo kategorii");
                 this.bodyDiv.appendChild(emptyDiv);
             }
+
+            this.loading = false;
         });
     }
 
