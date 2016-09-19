@@ -465,25 +465,14 @@
         return resultString;
     }
 
-    setStateFromUrlString(urlString: string) {
-        var selectedBooksAndCategories: string[] = urlString.split("&");
-        var bookIds = new Array<number>();
-        var categoryIds = new Array<number>();
+    getSerializedState(): string {
+        var state = this.getSelectedIds();
+        return JSON.stringify(state);
+    }
 
-        for (var i = 0; i < selectedBooksAndCategories.length; i++) {
-            var item = selectedBooksAndCategories[i];
-            var indexOfEqualSign = item.indexOf("=");
-            var name = item.slice(0, indexOfEqualSign);
-            var value = parseInt(item.slice(indexOfEqualSign + 1, item.length));
-
-            if (name === DropDownSelect2.selectedBookUrlKey) {
-                bookIds.push(value);
-            } else if (name === DropDownSelect2.selectedCategoryUrlKey) {
-                categoryIds.push(value);
-            }
-        }
-
-        this.restore(categoryIds, bookIds);
+    restoreFromSerializedState(serializedState: string) {
+        var state: DropDownSelected = JSON.parse(serializedState);
+        this.restore(state.selectedCategoryIds, state.selectedBookIds);
     }
 }
 

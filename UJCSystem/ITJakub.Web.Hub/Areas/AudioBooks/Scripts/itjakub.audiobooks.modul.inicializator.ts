@@ -32,7 +32,7 @@
             success: response => {
                 this.createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(this.configuration.base.url.searchKey, json);
-                updateQueryStringParameter(this.configuration.base.url.selectionKey, DropDownSelect2.getUrlStringFromState(this.getDropDownSelect().getState()));
+                updateQueryStringParameter(this.configuration.base.url.selectionKey, this.dropDownSelect.getSerializedState());
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, this.bibliographyModule.getSortCriteria());
             }

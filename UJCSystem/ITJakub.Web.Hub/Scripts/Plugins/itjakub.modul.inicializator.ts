@@ -6,10 +6,7 @@
 
     protected bookIdsInQuery = new Array();
     protected categoryIdsInQuery = new Array();
-
-    protected selectedBookIds = new Array();
-    protected selectedCategoryIds = new Array();
-
+    
     protected initPage: number = null;
     protected booksCountOnPage = 5;
 
@@ -226,8 +223,9 @@
     }
 
     protected actualizeSelectedBooksAndCategoriesInQuery() {
-        this.bookIdsInQuery = this.selectedBookIds;
-        this.categoryIdsInQuery = this.selectedCategoryIds;
+        var selectedIds = this.dropDownSelect.getSelectedIds();
+        this.bookIdsInQuery = selectedIds.selectedBookIds;
+        this.categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
     protected createPagination(booksCount: number) {
@@ -271,7 +269,6 @@
             success: response => {
                 this.createPagination(response["count"]); //enable pagination
                 updateQueryStringParameter(this.configuration.base.url.searchKey, text);
-                updateQueryStringParameter(this.configuration.base.url.selectionKey, DropDownSelect2.getUrlStringFromState(this.getDropDownSelect().getState()));
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
             }
@@ -292,17 +289,8 @@
         const callbackDelegate = new DropDownSelectCallbackDelegate();
 
         callbackDelegate.selectedChangedCallback = (state: State) => {
-            this.selectedBookIds = new Array();
-
-            for (let i = 0; i < state.SelectedItems.length; i++) {
-                this.selectedBookIds.push(state.SelectedItems[i].Id);
-            }
-
-            this.selectedCategoryIds = new Array();
-
-            for (let i = 0; i < state.SelectedCategories.length; i++) {
-                this.selectedCategoryIds.push(state.SelectedCategories[i].Id);
-            }
+            var serializedState = this.dropDownSelect.getSerializedState();
+            updateQueryStringParameter(this.configuration.base.url.selectionKey, serializedState);
         };
 
         const dropDownSelect = new DropDownSelect2(
@@ -314,10 +302,6 @@
         );
 
         callbackDelegate.dataLoadedCallback = () => {
-            var selectedIds = dropDownSelect.getSelectedIds();
-
-            this.selectedBookIds = selectedIds.selectedBookIds;
-            this.selectedCategoryIds = selectedIds.selectedCategoryIds;
             $("#listResults").removeClass("loader");
             this.initializeFromUrlParams();
         };
@@ -358,8 +342,9 @@
                 search.writeTextToTextField(searched);
 
                 if (selected) {
-                    dropDownSelect.setStateFromUrlString(selected);
-                } else if (this.configuration.base.autosearch || (
+                    dropDownSelect.restoreFromSerializedState(selected);
+                }
+                if (this.configuration.base.autosearch || (
                     this.configuration.base.searchOnFill
                     && search.getTextFromTextField().length > 0
                 )) {
