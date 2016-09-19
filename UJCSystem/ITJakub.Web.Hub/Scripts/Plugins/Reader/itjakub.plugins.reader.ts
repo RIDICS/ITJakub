@@ -2,6 +2,8 @@
 
 class ReaderModule {
 
+    private favoriteManager: FavoriteManager;
+    private newFavoriteDialog: NewFavoriteDialog;
     readerContainer: HTMLDivElement;
     sliderOnPage: number;
     actualPageIndex: number;
@@ -48,6 +50,8 @@ class ReaderModule {
         this.showPanelList = showPanelList;
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
+        this.favoriteManager = new FavoriteManager(storage);
+        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager);
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -122,6 +126,8 @@ class ReaderModule {
         $(this.readerContainer).append(readerDiv);
 
         this.loadBookmarks();
+        this.newFavoriteDialog.make();
+        this.newFavoriteDialog.setSaveCallback(this.createBookmark.bind(this));
 
         this.moveToPageNumber(0, false); //load first page
     }
@@ -488,7 +494,7 @@ class ReaderModule {
 
         $(bookmarkButton).click((event: Event) => {
             if (!this.removeBookmark()) {
-                this.addBookmark();
+                this.newFavoriteDialog.show("");
             }
         });
 
@@ -927,7 +933,7 @@ class ReaderModule {
         return $(outputBooks);
     }
 
-    addBookmark() {
+    createBookmark(data: INewFavoriteItemData) {
         var pageIndex: number = this.actualPageIndex;
         var page: BookPage = this.pages[pageIndex];
 
@@ -947,28 +953,12 @@ class ReaderModule {
             }
         };
 
-        if (useOnline) {
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                data: JSON.stringify({ bookId: this.bookId, pageXmlId: page.xmlId }),
-                url: getBaseUrl() + "Reader/AddBookmark",
-                dataType: "json",
-                contentType: "application/json",
-                success: (response) => {
-                    this.showBookmark(bookmarkSpan);
-                    postShowAction();
-                },
-                error: (response) => {
-                }
-            });
-        } else {
-            this.storage.update(`reader-bookmarks-${this.bookId}`, page.xmlId, { BookId: this.bookId, PageXmlId: page.xmlId });
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, () => {
             this.showBookmark(bookmarkSpan);
             postShowAction();
-        }
+        });
     }
-
+    
     setBookmarkTitle(targetBookmark: HTMLSpanElement, title: string) {
         var useOnlineUpdate: boolean = targetBookmark.title != title;
         targetBookmark.title = title;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
@@ -138,6 +139,14 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var resultId = client.CreateFavoriteQuery(bookType, queryType, query, title, labelId, CurrentUserName);
                 return Json(resultId);
+            }
+        }
+
+        public ActionResult CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                throw new NotImplementedException();
             }
         }
 

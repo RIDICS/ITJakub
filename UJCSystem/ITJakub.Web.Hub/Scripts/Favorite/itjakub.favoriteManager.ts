@@ -278,4 +278,30 @@
             }
         });
     }
+
+    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+        if (!this.isUserLoggedIn) {
+            // TODO save to local storage:
+            // this.storage.update(`reader-bookmarks-${this.bookId}`, page.xmlId, { BookId: this.bookId, PageXmlId: page.xmlId });
+            // callback();
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/CreatePageBookmark",
+            data: JSON.stringify({
+                bookXmlId: bookXmlId,
+                pageXmlId: pageXmlId,
+                title: favoriteTitle,
+                labelId: favoriteLabelId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (resultId) => {
+                callback(resultId);
+            }
+        });
+    }
 }
