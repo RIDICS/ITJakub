@@ -280,12 +280,6 @@ namespace ITJakub.ITJakubService.DataContracts
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
         
         [OperationContract]
-        bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName);
-
-        [OperationContract]
-        void RemovePageBookmark(string bookId, string pageName, string userName);
-
-        [OperationContract]
         IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
 
         [OperationContract]

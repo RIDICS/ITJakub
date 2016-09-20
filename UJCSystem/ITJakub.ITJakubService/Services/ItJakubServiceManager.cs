@@ -468,16 +468,6 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetPageBookmarks(bookId, userName);
         }
         
-        public bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName)
-        {
-            return m_favoriteManager.SetPageBookmarkTitle(bookId, pageName, title, userName);
-        }
-
-        public void RemovePageBookmark(string bookId, string pageName, string userName)
-        {
-            m_favoriteManager.RemovePageBookmark(bookId, pageName, userName);
-        }
-
         public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
         {
             return m_favoriteManager.GetHeadwordBookmarks(userName);

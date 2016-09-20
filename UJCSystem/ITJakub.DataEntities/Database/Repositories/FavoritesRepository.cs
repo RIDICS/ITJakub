@@ -18,38 +18,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         public FavoritesRepository(ISessionManager sessManager) : base(sessManager)
         {
         }
-
-        [Transaction(TransactionScopeOption.Required)]
-        public virtual void DeletePageBookmarkByPageXmlId(string bookId, string pageXmlId, string userName)
-        {
-            using (var session = GetSession())
-            {
-                PageBookmark pageBookmarkAlias = null;
-                User userAlias = null;
-                Book bookAlias = null;
-
-
-                var bookmarks = session.QueryOver(()=>pageBookmarkAlias)
-                    .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)     
-                    .JoinQueryOver(()=>pageBookmarkAlias.User, ()=>userAlias)
-                    .Where(() => pageBookmarkAlias.PageXmlId == pageXmlId && bookAlias.Guid == bookId && userAlias.UserName == userName)
-                    .List<PageBookmark>();
-
-                if (bookmarks == null)
-                {
-                    string message = string.Format("bookmark not found for bookId: '{0}' and page xmlId: '{1}' for user: '{2}'", bookId, pageXmlId, userName);
-                    if (m_log.IsErrorEnabled)
-                        m_log.Error(message);
-                    throw new ArgumentException(message);
-                }
-
-                foreach (var bookmark in bookmarks)
-                {
-                    Delete(bookmark);
-                }                
-            }
-        }
-
+        
         [Transaction(TransactionScopeOption.Required)]
         public virtual IList<PageBookmark> GetAllPageBookmarksByBookId(string bookXmlId, long userId)
         {
@@ -65,29 +34,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .List<PageBookmark>();
             }
         }
-
-        [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<PageBookmark> GetPageBookmarkByPageXmlId(string bookId, string pageXmlId, string userName)
-        {
-            using (var session = GetSession())
-            {
-                
-                PageBookmark pageBookmarkAlias = null;
-                User userAlias = null;
-                Book bookAlias = null;
-
-                return session.QueryOver(() => pageBookmarkAlias)
-                    .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)
-                    .JoinQueryOver(() => pageBookmarkAlias.User, () => userAlias)
-                    .Where(
-                        () =>
-                            userAlias.UserName == userName
-                            && bookAlias.Guid == bookId
-                            && pageBookmarkAlias.PageXmlId == pageXmlId)
-                    .List<PageBookmark>();
-            }
-        }
-
+        
         [Transaction(TransactionScopeOption.Required)]
         public virtual void DeleteHeadwordBookmark(string bookId, string entryXmlId, string userName)
         {

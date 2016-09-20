@@ -89,39 +89,7 @@ namespace ITJakub.ITJakubService.Core
 
             return (long) m_favoritesRepository.Create(bookmark);
         }
-
-        public bool SetPageBookmarkTitle(string bookXmlId, string pageXmlId, string title, string userName)
-        {
-            var user = TryGetUser(userName);
-            var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
-
-            if (bookPage == null)
-            {
-                string message = string.Format("Page not found for bookXmlId: '{0}' and page xmlId: '{1}'", bookXmlId, pageXmlId);
-                if (m_log.IsErrorEnabled)
-                    m_log.Error(message);
-                throw new ArgumentException(message);
-            }
-
-            var done = false;
-
-            foreach (var pageBookmark in m_favoritesRepository.GetPageBookmarkByPageXmlId(bookXmlId, pageXmlId, userName))
-            {
-                pageBookmark.Title = title;
-
-                m_favoritesRepository.Save(pageBookmark);
-
-                done = true;
-            }
-
-            return done;
-        }
-
-        public void RemovePageBookmark(string bookXmlId, string pageXmlId, string userName)
-        {
-            m_favoritesRepository.DeletePageBookmarkByPageXmlId(bookXmlId, pageXmlId, userName);
-        }
-
+        
         public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
