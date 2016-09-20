@@ -155,7 +155,16 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetPageBookmarks(bookXmlId, CurrentUserName);
-                return Json(result);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteQueries(bookType, queryType, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 

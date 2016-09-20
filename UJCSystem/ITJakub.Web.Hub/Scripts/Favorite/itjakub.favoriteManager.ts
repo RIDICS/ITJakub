@@ -37,6 +37,26 @@
         });
     }
 
+    public getFavoriteLabels(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
+        if (!this.isUserLoggedIn) {
+            var list = [this.getDefaultFavoriteLabel()];
+            callback(list);
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetLabelList",
+            data: {},
+            dataType: "json",
+            contentType: "application/json",
+            success: (favoriteLabels: Array<IFavoriteLabel>) => {
+                callback(favoriteLabels);
+            }
+        });
+    }
+
     public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
         if (!this.isUserLoggedIn) {
             throw new Error("Not implemented"); // TODO
@@ -112,12 +132,12 @@
 
     public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
         $.ajax({
-            type: "POST",
+            type: "GET",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteLabelsWithBooksAndCategories",
-            data: JSON.stringify({
+            data: {
                 bookType: bookType
-            }),
+            },
             dataType: "json",
             contentType: "application/json",
             success: (favoriteLabels) => {
@@ -126,9 +146,26 @@
         });
     }
 
+    public getFavoriteQueries(bookType: BookTypeEnum, queryType: QueryTypeEnum, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetFavoriteQueries",
+            data: {
+                bookType: bookType,
+                queryType: queryType
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (queries) => {
+                callback(queries);
+            }
+        });
+    }
+
     public getPageBookmarks(bookXmlId: string, callback: (bookmarks: IBookPageBookmark[]) => void) {
         $.ajax({
-            type: "POST",
+            type: "GET",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetPageBookmarks",
             data: JSON.stringify({

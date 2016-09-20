@@ -32,6 +32,14 @@ interface IFavoriteCategory {
     FavoriteInfo: Array<IFavoriteBaseInfo>;
 }
 
+interface IFavoriteQuery {
+    Id: number;
+    Title: string;
+    CreateTime: string;
+    Query: string;
+    FavoriteLabel: IFavoriteLabel;
+}
+
 interface IBookPageBookmark {
     Id: number;
     PageXmlId: string;
