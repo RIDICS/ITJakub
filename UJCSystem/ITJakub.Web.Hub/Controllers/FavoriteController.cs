@@ -146,7 +146,17 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                throw new NotImplementedException();
+                var resultId = client.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId, CurrentUserName);
+                return Json(resultId);
+            }
+        }
+
+        public ActionResult GetPageBookmarks(string bookXmlId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetPageBookmarks(bookXmlId, CurrentUserName);
+                return Json(result);
             }
         }
 

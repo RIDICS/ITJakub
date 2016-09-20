@@ -30,16 +30,7 @@ namespace ITJakub.ITJakubService.Core
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
         }
-
-        public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId, string userName)
-        {
-            if (string.IsNullOrWhiteSpace(userName))
-                return new List<PageBookmarkContract>();
-
-            var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookXmlId, userName);
-            return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
-        }
-
+        
         private User TryGetUser(string userName)
         {
             if (string.IsNullOrWhiteSpace(userName))
@@ -69,8 +60,9 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Current user ({0}) doesn't have permission manipulate with specified item owned by user with ID={1}", user.UserName, itemOwnerUserId));
         }
 
-        public void AddPageBookmark(string bookXmlId, string pageXmlId, string userName)
+        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName)
         {
+            var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
 
@@ -82,15 +74,20 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
+            Book book = m_bookVersionRepository.Load<Book>(bookPage.BookVersion.Book.Id);
+            FavoriteLabel favoriteLabel = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
             PageBookmark bookmark = new PageBookmark
             {
                 PageXmlId = pageXmlId,
                 User = user,
                 PagePosition = bookPage.Position,
-                Book = m_bookRepository.FindBookByGuid(bookXmlId),
+                Book = book,
+                Title = title,
+                FavoriteLabel = favoriteLabel,
+                CreateTime = now,
             };
 
-            m_favoritesRepository.Save(bookmark);
+            return (long) m_favoritesRepository.Create(bookmark);
         }
 
         public bool SetPageBookmarkTitle(string bookXmlId, string pageXmlId, string title, string userName)
@@ -298,6 +295,15 @@ namespace ITJakub.ITJakubService.Core
             var dbResult = m_favoritesRepository.GetFavoriteQueries(bookTypeEnum, queryTypeEnum, user.Id);
 
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
+        }
+
+        public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId, string userName)
+        {
+            var user = TryGetUser(userName);
+            
+            var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookXmlId, user.Id);
+
+            return Mapper.Map<List<PageBookmarkContract>>(allBookmarks);
         }
 
         private FavoriteLabelWithBooksAndCategories CreateFavoriteLabelWithBooksAndCategories(FavoriteLabel favoriteLabelEntity)

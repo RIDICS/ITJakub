@@ -32,6 +32,14 @@ interface IFavoriteCategory {
     FavoriteInfo: Array<IFavoriteBaseInfo>;
 }
 
+interface IBookPageBookmark {
+    Id: number;
+    PageXmlId: string;
+    PagePosition: number;
+    Title: string;
+    FavoriteLabel: IFavoriteLabel;
+}
+
 enum FavoriteType {
     Unknown = 0,
     Book = 1,

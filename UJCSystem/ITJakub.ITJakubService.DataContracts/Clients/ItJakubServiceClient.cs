@@ -2039,32 +2039,6 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public void AddPageBookmark(string bookId, string pageName, string userName)
-        {
-            try
-            {
-                Channel.AddPageBookmark(bookId, pageName, userName);
-            }
-            catch (CommunicationException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (ObjectDisposedException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-            catch (TimeoutException ex)
-            {
-                if (m_log.IsErrorEnabled)
-                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
-                throw;
-            }
-        }
-
         public bool SetPageBookmarkTitle(string bookId, string pageName,string title, string userName)
         {
             try
@@ -2383,6 +2357,32 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             try
             {
                 return Channel.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName)
+        {
+            try
+            {
+                return Channel.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId, userName);
             }
             catch (CommunicationException ex)
             {

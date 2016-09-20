@@ -126,6 +126,22 @@
         });
     }
 
+    public getPageBookmarks(bookXmlId: string, callback: (bookmarks: IBookPageBookmark[]) => void) {
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetPageBookmarks",
+            data: JSON.stringify({
+                bookXmlId: bookXmlId
+            }),
+            dataType: "json",
+            contentType: "application/json",
+            success: (bookmarks) => {
+                callback(bookmarks);
+            }
+        });
+    }
+
     public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {
         $.ajax({
             type: "POST",

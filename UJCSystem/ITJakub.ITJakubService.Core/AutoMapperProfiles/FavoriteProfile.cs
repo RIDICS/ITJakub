@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.DataEntities.Database.Entities.SelectResults;
+using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
@@ -30,6 +32,30 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 
             CreateMap<FavoriteTypeEnum, FavoriteTypeContract>()
                 .ReverseMap();
+        }
+    }
+
+    public class PageBookmarkProfile : Profile
+    {
+        protected override void Configure()
+        {
+            CreateMap<PageBookmark, PageBookmarkContract>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.PagePosition, opt => opt.MapFrom(src => src.PagePosition))
+                .ForMember(dest => dest.PageXmlId, opt => opt.MapFrom(src => src.PageXmlId))
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.FavoriteLabel, opt => opt.MapFrom(src => src.FavoriteLabel));
+        }
+    }
+
+    public class HeadwordBookmarkProfile : Profile
+    {
+        protected override void Configure()
+        {
+            CreateMap<HeadwordBookmarkResult, HeadwordBookmarkContract>()
+                .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.BookGuid))
+                .ForMember(dest => dest.EntryXmlId, opt => opt.MapFrom(src => src.XmlEntryId))
+                .ForMember(dest => dest.Headword, opt => opt.MapFrom(src => src.Headword));
         }
     }
 }

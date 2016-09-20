@@ -467,12 +467,7 @@ namespace ITJakub.ITJakubService.Services
         {
             return m_favoriteManager.GetPageBookmarks(bookId, userName);
         }
-
-        public void AddPageBookmark(string bookId, string pageName, string userName)
-        {
-            m_favoriteManager.AddPageBookmark(bookId, pageName, userName);
-        }
-
+        
         public bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName)
         {
             return m_favoriteManager.SetPageBookmarkTitle(bookId, pageName, title, userName);
@@ -536,6 +531,11 @@ namespace ITJakub.ITJakubService.Services
         public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
         {
             return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
+        }
+
+        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName)
+        {
+            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId, userName);
         }
 
         #endregion

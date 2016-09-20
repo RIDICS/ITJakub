@@ -278,10 +278,7 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
-
-        [OperationContract]
-        void AddPageBookmark(string bookId, string pageName, string userName);
-
+        
         [OperationContract]
         bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName);
 
@@ -320,6 +317,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName);
+
+        [OperationContract]
+        long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName);
 
         #endregion
 

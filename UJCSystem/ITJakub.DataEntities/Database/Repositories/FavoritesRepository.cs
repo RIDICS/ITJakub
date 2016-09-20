@@ -51,19 +51,17 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<PageBookmark> GetAllPageBookmarksByBookId(string bookId, string userName)
+        public virtual IList<PageBookmark> GetAllPageBookmarksByBookId(string bookXmlId, long userId)
         {
             using (var session = GetSession())
             {
-                
                 PageBookmark pageBookmarkAlias = null;
-                User userAlias = null;
                 Book bookAlias = null;
 
                 return session.QueryOver(() => pageBookmarkAlias)
-                    .JoinQueryOver(() => pageBookmarkAlias.Book, () => bookAlias)
-                    .JoinQueryOver(() => pageBookmarkAlias.User, () => userAlias)
-                    .Where(() => userAlias.UserName == userName && bookAlias.Guid == bookId)
+                    .JoinAlias(() => pageBookmarkAlias.Book, () => bookAlias)
+                    .Where(() => bookAlias.Guid == bookXmlId && pageBookmarkAlias.User.Id == userId)
+                    .Fetch(x => x.FavoriteLabel).Eager
                     .List<PageBookmark>();
             }
         }

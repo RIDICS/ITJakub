@@ -81,7 +81,7 @@
     <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="Contracts\CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
-    <Compile Include="Contracts\PageBookmarkContract.cs" />
+    <Compile Include="Contracts\Favorite\PageBookmarkContract.cs" />
     <Compile Include="Contracts\ProcessedFileInfoContract.cs" />
     <Compile Include="IITJakubServiceStreamed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

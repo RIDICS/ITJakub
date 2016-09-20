@@ -639,43 +639,46 @@ class ReaderModule {
     }
 
     private loadBookmarks() {
-        const bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
-        for (var xmlId in bookmarks) {
-            if (bookmarks.hasOwnProperty(xmlId)) {
-                this.loadBookmark(bookmarks[xmlId], true);
+        this.favoriteManager.getPageBookmarks(this.bookId, (bookmarks) => {
+            for (var i = 0; i < bookmarks.length; i++) {
+                var bookmark = bookmarks[i];
+                this.loadBookmark(bookmark);
             }
-        }
+        });
+        //const bookmarks = this.storage.get(`reader-bookmarks-${this.bookId}`);
+        //for (var xmlId in bookmarks) {
+        //    if (bookmarks.hasOwnProperty(xmlId)) {
+        //        this.loadBookmark(bookmarks[xmlId], true);
+        //    }
+        //}
 
-        if (isUserLoggedIn()) {
-            $.ajax({
-                type: "GET",
-                traditional: true,
-                data: { bookId: this.bookId },
-                url: getBaseUrl() + "Reader/GetAllBookmarks",
-                dataType: "json",
-                contentType: "application/json",
-                success: (response) => {
-                    const bookmarks = response["bookmarks"];
-                    for (var i = 0; i < bookmarks.length; i++) {
-                        this.loadBookmark(bookmarks[i]);
-                    }
-                },
-                error: (response) => {
-                }
-            });
-        } 
+        //if (isUserLoggedIn()) {
+        //    $.ajax({
+        //        type: "GET",
+        //        traditional: true,
+        //        data: { bookId: this.bookId },
+        //        url: getBaseUrl() + "Reader/GetAllBookmarks",
+        //        dataType: "json",
+        //        contentType: "application/json",
+        //        success: (response) => {
+        //            const bookmarks = response["bookmarks"];
+        //            for (var i = 0; i < bookmarks.length; i++) {
+        //                this.loadBookmark(bookmarks[i]);
+        //            }
+        //        },
+        //        error: (response) => {
+        //        }
+        //    });
+        //} 
     }
 
-    private loadBookmark(actualBookmark: { PageXmlId: string, Title?:string }, local: boolean=false) {
+    private loadBookmark(actualBookmark: IBookPageBookmark) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
-            if (actualBookmark["PageXmlId"] === actualPage.xmlId) {
-                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, local);
-
-                if (actualBookmark.Title !== undefined && actualBookmark.Title !== null && actualBookmark.Title.length > 0) {
-                    bookmarkSpan.title = actualBookmark.Title;
-                }
-
+            if (actualBookmark.PageXmlId === actualPage.xmlId) {
+                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.Title, actualBookmark.FavoriteLabel);
+                $(bookmarkSpan).data("favorite-id", actualBookmark.Id);
+                
                 this.showBookmark(bookmarkSpan);
                 break;
             }
@@ -879,7 +882,7 @@ class ReaderModule {
 
     }
 
-    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, local: boolean=false): HTMLSpanElement {
+    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         var $bookmarkSpan = $(bookmarkSpan);
@@ -888,14 +891,26 @@ class ReaderModule {
         $bookmarkSpan.data("page-index", pageIndex);
         $bookmarkSpan.data("page-name", pageName);
         $bookmarkSpan.data("page-xmlId", pageXmlId);
-
+        $bookmarkSpan.data("title", title);
+        
         $bookmarkSpan.click(() => {
             this.moveToPage(pageXmlId, true);
         });
 
-        if (local) {
-            $bookmarkSpan.addClass("bookmark-local");
+        var tooltipText = title;
+        if (favoriteLabel) {
+            tooltipText = title + " (Štítek: " + favoriteLabel.Name + ")";
+            $bookmarkSpan.css("color", favoriteLabel.Color);
+            $bookmarkSpan.data("label-id", favoriteLabel.Id);
+            $bookmarkSpan.data("label-name", favoriteLabel.Name);
+            $bookmarkSpan.data("label-color", favoriteLabel.Color);
         }
+
+        var tooltipOptions: TooltipOptions = {
+            placement: "bottom",
+            title: tooltipText
+        };
+        $bookmarkSpan.tooltip(tooltipOptions);
 
         var computedPosition = (positionStep * pageIndex);
         $bookmarkSpan.css("left", computedPosition + "%");
@@ -939,7 +954,14 @@ class ReaderModule {
 
         var useOnline: boolean = isUserLoggedIn();
 
-        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, !useOnline);
+        var favoriteLabel: IFavoriteLabel = {
+            Id: data.labelId,
+            Name: data.labelName,
+            Color: data.labelColor,
+            IsDefault: false,
+            LastUseTime: null
+        }
+        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, favoriteLabel);
 
         const postShowAction = () => {
             const $bookmarksContainer = $(".reader-bookmarks-container");
@@ -953,54 +975,57 @@ class ReaderModule {
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, () => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, (id) => {
+            $(bookmarkSpan).data("favorite-id", id);
             this.showBookmark(bookmarkSpan);
             postShowAction();
         });
     }
     
     setBookmarkTitle(targetBookmark: HTMLSpanElement, title: string) {
-        var useOnlineUpdate: boolean = targetBookmark.title != title;
-        targetBookmark.title = title;
-        const $targetBookmark=$(targetBookmark);
+        //this.favoriteManager.updateFavoriteItem();
 
-        var useOnline: boolean = isUserLoggedIn();
+        //var useOnlineUpdate: boolean = targetBookmark.title != title;
+        //targetBookmark.title = title;
+        //const $targetBookmark=$(targetBookmark);
 
-        useOnline = useOnline && !$targetBookmark.hasClass("bookmark-local");
+        //var useOnline: boolean = isUserLoggedIn();
 
-        if (useOnline) {
-            if (useOnlineUpdate) {
-                $.ajax({
-                    type: "POST",
-                    traditional: true,
-                    data: JSON.stringify({
-                        bookId: this.bookId,
-                        pageXmlId: $targetBookmark.data("pageXmlId"),
-                        title: title
-                    }),
-                    url: getBaseUrl() + "Reader/SetBookmakTitle",
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: (response) => {
-                    },
-                    error: (response) => {
-                        if (response.status == 400) {
-                            alert("Nebylo možné upravit titulek záložky, záložka byla odstraněna.");
-                        }
-                    }
-                });
-            }
-        } else {
-            this.storage.update(
-                `reader-bookmarks-${this.bookId}`,
-                $targetBookmark.data("pageXmlId"),
-                {
-                    BookId: this.bookId,
-                    PageXmlId: $targetBookmark.data("pageXmlId"),
-                    Title: title
-                }
-            );
-        }
+        //useOnline = useOnline && !$targetBookmark.hasClass("bookmark-local");
+
+        //if (useOnline) {
+        //    if (useOnlineUpdate) {
+        //        $.ajax({
+        //            type: "POST",
+        //            traditional: true,
+        //            data: JSON.stringify({
+        //                bookId: this.bookId,
+        //                pageXmlId: $targetBookmark.data("pageXmlId"),
+        //                title: title
+        //            }),
+        //            url: getBaseUrl() + "Reader/SetBookmakTitle",
+        //            dataType: "json",
+        //            contentType: "application/json",
+        //            success: (response) => {
+        //            },
+        //            error: (response) => {
+        //                if (response.status == 400) {
+        //                    alert("Nebylo možné upravit titulek záložky, záložka byla odstraněna.");
+        //                }
+        //            }
+        //        });
+        //    }
+        //} else {
+        //    this.storage.update(
+        //        `reader-bookmarks-${this.bookId}`,
+        //        $targetBookmark.data("pageXmlId"),
+        //        {
+        //            BookId: this.bookId,
+        //            PageXmlId: $targetBookmark.data("pageXmlId"),
+        //            Title: title
+        //        }
+        //    );
+        //}
     }
 
     removeBookmark(): boolean {
@@ -1747,6 +1772,8 @@ class SettingsPanel extends LeftSidePanel {
 
         const bookmarkIco = document.createElement("span");
         bookmarkIco.classList.add("glyphicon", "glyphicon-bookmark", "bookmark-ico");
+        $(bookmarkIco).css("color", $bookmark.data("label-color"));
+        $(bookmarkIco).attr("title", $bookmark.data("label-name"));
         bookmarkItem.appendChild(bookmarkIco);
 
         const page = document.createElement("a");
@@ -1769,11 +1796,11 @@ class SettingsPanel extends LeftSidePanel {
 
         const titleInput = document.createElement("input");
         titleInput.classList.add("reader-bookmarks-content-item-title-input", "hide");
-        titleInput.value = bookmark.title;
+        titleInput.value = $bookmark.data("title");
         bookmarkItem.appendChild(titleInput);
 
         const title = document.createElement("span");
-        this.setBookmarkTitle(title, bookmark, rootReference, bookmark.title);
+        this.setBookmarkTitle(title, bookmark, rootReference, $bookmark.data("title"));
         title.classList.add("reader-bookmarks-content-item-title");
         
         titleContainer.addEventListener("click", () => {
@@ -1808,7 +1835,7 @@ class SettingsPanel extends LeftSidePanel {
     protected setBookmarkTitle(titleItem: HTMLElement, bookmark: HTMLElement, rootReference: SidePanel, title: string) {
         rootReference.parentReader.setBookmarkTitle(bookmark, title);
 
-        if (title.length == 0) {
+        if (!title) {
             title = "&lt;bez názvu&gt;";
         }
 
