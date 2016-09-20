@@ -367,6 +367,12 @@ class ColorInput {
         });
 
         this.inputElement.change(() => this.updateBackground());
+
+        // disable saving custom colors:
+        $(".colorpickerplus-container button").remove();
+        if (window.localStorage) {
+            window.localStorage.removeItem("colorpickerplus_custom_colors");
+        }
     }
 
     public setValue(value: string) {
@@ -381,9 +387,10 @@ class ColorInput {
     private updateBackground() {
         var value = this.inputElement.val();
         if (value.length !== 7) {
-            this.inputElement.css("background-color", "#FFFFFF");
-        } else {
-            this.inputElement.css("background-color", value);
+            value = "#FFFFFF";
         }
+
+        this.inputElement.css("background-color", value);
+        this.inputElement.css("color", FavoriteHelper.getFontColor(value));
     }
 }

@@ -321,3 +321,22 @@
         });
     }
 }
+
+class FavoriteHelper {
+    static getColorBrightness(red: number, green: number, blue: number): number {
+        return ((red * 299) + (green * 587) + (blue * 114)) / 1000;
+    }
+
+    static getFontColor(hexBackgroundColor: string): string {
+        if (hexBackgroundColor.length !== 7 && hexBackgroundColor.charAt(0) !== "#") {
+            throw Error("Invalid color format");
+        }
+
+        var red = parseInt(hexBackgroundColor.substr(1, 2), 16);
+        var green = parseInt(hexBackgroundColor.substr(3, 2), 16);
+        var blue = parseInt(hexBackgroundColor.substr(5, 2), 16);
+        var brightness = FavoriteHelper.getColorBrightness(red, green, blue);
+
+        return brightness > 128 ? "#000000" : "#FFFFFF";
+    }
+}
