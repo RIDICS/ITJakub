@@ -38,6 +38,8 @@ interface IFavoriteQuery {
     CreateTime: string;
     Query: string;
     FavoriteLabel: IFavoriteLabel;
+    BookType?: BookTypeEnum;
+    QueryType?: QueryTypeEnum;
 }
 
 interface IBookPageBookmark {

@@ -1634,7 +1634,6 @@
     <Content Include="Views\Shared\Plugins\_Dialog.cshtml" />
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
-    <Content Include="Views\Favorite\_FavoriteQuery.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

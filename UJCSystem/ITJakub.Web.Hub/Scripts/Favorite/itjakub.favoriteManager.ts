@@ -17,6 +17,18 @@
         };
     }
 
+    private getFromStorage(key: string): any {
+        var items = this.storage.get(key);
+        if (!items) {
+            items = [];
+        }
+        return items;
+    }
+
+    private generateLocalId(): number {
+        return new Date().getTime();
+    }
+
     public getLatestFavoriteLabels(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
         if (!this.isUserLoggedIn) {
             var list = [this.getDefaultFavoriteLabel()];
@@ -147,6 +159,12 @@
     }
 
     public getFavoriteQueries(bookType: BookTypeEnum, queryType: QueryTypeEnum, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
+        if (!this.isUserLoggedIn) {
+            var favoriteQueries = this.getFromStorage("favoriteQueries");
+            callback(favoriteQueries);
+            return;
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -313,6 +331,23 @@
     }
 
     public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+        if (!this.isUserLoggedIn) {
+            var favoriteQueries = <IFavoriteQuery[]>this.getFromStorage("favoriteQueries");
+            var favoriteQuery: IFavoriteQuery = {
+                Id: this.generateLocalId(),
+                CreateTime: new Date().getTime().toString(),
+                Title: favoriteTitle,
+                Query: query,
+                FavoriteLabel: this.getDefaultFavoriteLabel()
+            }
+
+            favoriteQueries.push(favoriteQuery);
+            this.storage.save("favoriteQueries", favoriteQueries);
+
+            callback(favoriteQuery.Id);
+            return;
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,

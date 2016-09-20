@@ -48,6 +48,26 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult NewFavorite(string itemName)
         {
+            if (string.IsNullOrWhiteSpace(CurrentUserName))
+            {
+                var viewModel = new NewFavoriteViewModel
+                {
+                    ItemName = itemName,
+                    Labels = new List<FavoriteLabelViewModel>
+                    {
+                        new FavoriteLabelViewModel
+                        {
+                            Id = 0,
+                            Name = "Anonymní",
+                            Color = "#CC9900",
+                            IsDefault = true,
+                            LastUseTime = null
+                        }
+                    }
+                };
+                return PartialView("_NewFavorite", viewModel);
+            }
+
             using (var client = GetMainServiceClient())
             {
                 var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
@@ -62,26 +82,7 @@ namespace ITJakub.Web.Hub.Controllers
                 return PartialView("_NewFavorite", viewModel);
             }
         }
-
-        public ActionResult GetFavoriteQueryPartial(BookTypeEnumContract bookType, QueryTypeEnumContract queryType)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
-                var favoriteQueries = client.GetFavoriteQueries(bookType, queryType, CurrentUserName);
-
-                var favoriteLabelViewModels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels);
-                var favoriteQueryViewModels = Mapper.Map<IList<FavoriteQueryViewModel>>(favoriteQueries);
-                var viewModel = new FavoriteQueriesViewModel
-                {
-                    FavoriteLabelList = favoriteLabelViewModels,
-                    QueryList = favoriteQueryViewModels
-                };
-
-                return PartialView("_FavoriteQuery", viewModel);
-            }
-        }
-
+        
         public ActionResult Dialog()
         {
             return PartialView("Plugins/_Dialog");
