@@ -51,6 +51,11 @@
       <one-to-many class="FavoriteBase" />
     </bag>
 
+    <bag name="FavoriteLabels" inverse="true" cascade="save-update">
+      <key column="[User]" />
+      <one-to-many class="FavoriteLabel" />
+    </bag>
+
     <bag name="Groups" table="User_Group" cascade="all">
       <key column="[User]" />
       <many-to-many class="Group" column="[Group]" />
