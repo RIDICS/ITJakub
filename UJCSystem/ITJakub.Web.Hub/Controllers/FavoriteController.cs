@@ -58,7 +58,7 @@ namespace ITJakub.Web.Hub.Controllers
                         new FavoriteLabelViewModel
                         {
                             Id = 0,
-                            Name = "Anonymní",
+                            Name = "Všechny položky",
                             Color = "#CC9900",
                             IsDefault = true,
                             LastUseTime = null

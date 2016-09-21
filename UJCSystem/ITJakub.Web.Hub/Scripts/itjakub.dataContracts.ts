@@ -22,12 +22,12 @@ interface IFavoriteLabelsWithBooksAndCategories {
     CategoryIdList: number[];
 }
 
-interface IFavoriteBook {
+interface IFavoriteLabeledBook {
     Id: number;
     FavoriteInfo: Array<IFavoriteBaseInfo>;
 }
 
-interface IFavoriteCategory {
+interface IFavoriteLabeledCategory {
     Id: number;
     FavoriteInfo: Array<IFavoriteBaseInfo>;
 }

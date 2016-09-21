@@ -10,7 +10,7 @@
     private getDefaultFavoriteLabel(): IFavoriteLabel {
         return {
             Id: 0,
-            Name: "Anonymní",
+            Name: "Všechny položky",
             Color: "#CC9900",
             IsDefault: true,
             LastUseTime: null
@@ -27,6 +27,10 @@
 
     private generateLocalId(): number {
         return new Date().getTime();
+    }
+
+    private getCurrentTime(): string {
+        return new Date().getTime().toString();
     }
 
     public getLatestFavoriteLabels(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
@@ -71,9 +75,9 @@
 
     public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
         if (!this.isUserLoggedIn) {
-            throw new Error("Not implemented"); // TODO
+            throw new Error("Not supported for anonymous users");
         }
-        
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -92,9 +96,21 @@
         });
     }
 
-    public getFavoritesForBooks(bookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteBook>) => void): void {
+    public getFavoritesForBooks(bookIds: Array<number>, callback: (favoriteBooks: Array<IFavoriteLabeledBook>) => void): void {
         if (!this.isUserLoggedIn) {
-            this.getFavoritesForBooksLocal(bookIds, callback);
+            var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
+            var bookIdSet = new Set();
+            var resultArray = new Array<IFavoriteLabeledBook>();
+
+            bookIdSet.addAll(bookIds);
+            for (var i = 0; i < favoriteLabeledBooks.length; i++) {
+                var favoriteLabeledBook = favoriteLabeledBooks[i];
+                if (bookIdSet.contains(favoriteLabeledBook.Id)) {
+                    resultArray.push(favoriteLabeledBook);
+                }
+            }
+
+            callback(resultArray);
             return;
         }
 
@@ -107,15 +123,27 @@
             },
             dataType: "json",
             contentType: "application/json",
-            success: (bookList: Array<IFavoriteBook>) => {
+            success: (bookList: Array<IFavoriteLabeledBook>) => {
                 callback(bookList);
             }
         });
     }
 
-    public getFavoritesForCategories(categoryIds: Array<number>, callback: (favoriteCategories: Array<IFavoriteCategory>) => void) {
+    public getFavoritesForCategories(categoryIds: Array<number>, callback: (favoriteCategories: Array<IFavoriteLabeledCategory>) => void) {
         if (!this.isUserLoggedIn) {
-            this.getFavoritesForCategoriesLocal(categoryIds, callback);
+            var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
+            var categoryIdSet = new Set();
+            var resultArray = new Array<IFavoriteLabeledCategory>();
+
+            categoryIdSet.addAll(categoryIds);
+            for (var i = 0; i < favoriteLabeledCategories.length; i++) {
+                var favoriteLabeledCategory = favoriteLabeledCategories[i];
+                if (categoryIdSet.contains(favoriteLabeledCategory.Id)) {
+                    resultArray.push(favoriteLabeledCategory);
+                }
+            }
+
+            callback(resultArray);
             return;
         }
 
@@ -128,21 +156,42 @@
             },
             dataType: "json",
             contentType: "application/json",
-            success: (bookList: Array<IFavoriteCategory>) => {
+            success: (bookList: Array<IFavoriteLabeledCategory>) => {
                 callback(bookList);
             }
         });
     }
-
-    private getFavoritesForBooksLocal(bookIds: number[], callback: (favoriteBooks: IFavoriteBook[]) => void) {
-        throw new Error("Not implemented"); // TODO
-    }
-
-    private getFavoritesForCategoriesLocal(categoryIds: number[], callback: (favoriteBooks: IFavoriteBook[]) => void) {
-        throw new Error("Not implemented"); // TODO
-    }
-
+    
     public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
+        if (!this.isUserLoggedIn) {
+            
+            var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
+            var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
+            var resultList = new Array<IFavoriteLabelsWithBooksAndCategories>();
+            var defaultLabel = this.getDefaultFavoriteLabel();
+
+            var resultLabel: IFavoriteLabelsWithBooksAndCategories = {
+                Id: defaultLabel.Id,
+                Name: defaultLabel.Name,
+                Color: defaultLabel.Color,
+                BookIdList: [],
+                CategoryIdList: []
+            }
+
+            for (let i = 0; i < favoriteLabeledBooks.length; i++) {
+                var favoriteLabeledBook = favoriteLabeledBooks[i];
+                resultLabel.BookIdList.push(favoriteLabeledBook.Id);
+            }
+            for (let i = 0; i < favoriteLabeledCategories.length; i++) {
+                var favoriteLabeledCategory = favoriteLabeledCategories[i];
+                resultLabel.CategoryIdList.push(favoriteLabeledCategory.Id);
+            }
+
+            resultList.push(resultLabel);
+            callback(resultList);
+            return;
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -182,6 +231,24 @@
     }
 
     public getPageBookmarks(bookXmlId: string, callback: (bookmarks: IBookPageBookmark[]) => void) {
+        if (!this.isUserLoggedIn) {
+            var favoritePageBookmarks: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
+            var resultList = new Array<IBookPageBookmark>();
+
+            for (var i = 0; i < favoritePageBookmarks.length; i++) {
+                var item = favoritePageBookmarks[i];
+                if (item.bookXmlId === bookXmlId) {
+                    for (var j = 0; j < item.bookmarks.length; j++) {
+                        var bookmark = item.bookmarks[j];
+                        resultList.push(bookmark);
+                    }
+                }
+            }
+
+            callback(resultList);
+            return;
+        }
+
         $.ajax({
             type: "GET",
             traditional: true,
@@ -198,6 +265,10 @@
     }
 
     public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {
+        if (!this.isUserLoggedIn) {
+            throw Error("Not supported for anonymous user");
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -215,6 +286,10 @@
     }
 
     public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: () => void) {
+        if (!this.isUserLoggedIn) {
+            throw Error("Not implemented yet"); //TODO!
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -233,6 +308,10 @@
     }
 
     public deleteFavoriteLabel(labelId: number, callback: () => void) {
+        if (!this.isUserLoggedIn) {
+            throw Error("Not supported for anonymous user");
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -249,6 +328,10 @@
     }
 
     public updateFavoriteItem(favoriteId: number, title: string, callback: () => void) {
+        if (!this.isUserLoggedIn) {
+            throw Error("Not implemented yet"); //TODO!
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -266,6 +349,10 @@
     }
 
     public deleteFavoriteItem(favoriteId: number, callback: () => void) {
+        if (!this.isUserLoggedIn) {
+            throw Error("Not implemented yet"); //TODO!
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -295,6 +382,27 @@
     }
 
     private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+        if (!this.isUserLoggedIn) {
+            var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
+            var newItem: IFavoriteLabeledBook = {
+                Id: bookId,
+                FavoriteInfo: []
+            };
+            newItem.FavoriteInfo.push({
+                Id: this.generateLocalId(),
+                CreateTime: this.getCurrentTime(),
+                FavoriteLabel: this.getDefaultFavoriteLabel(),
+                FavoriteType: FavoriteType.Book,
+                Title: favoriteTitle
+            });
+
+            favoriteLabeledBooks.push(newItem);
+            this.storage.save("favoriteLabeledBooks", favoriteLabeledBooks);
+
+            callback(newItem.Id);
+            return;
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -313,6 +421,27 @@
     }
 
     private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+        if (!this.isUserLoggedIn) {
+            var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
+            var newItem: IFavoriteLabeledCategory = {
+                Id: categoryId,
+                FavoriteInfo: []
+            };
+            newItem.FavoriteInfo.push({
+                Id: this.generateLocalId(),
+                CreateTime: this.getCurrentTime(),
+                FavoriteLabel: this.getDefaultFavoriteLabel(),
+                FavoriteType: FavoriteType.Category,
+                Title: favoriteTitle
+            });
+
+            favoriteLabeledCategories.push(newItem);
+            this.storage.save("favoriteLabeledCategories", favoriteLabeledCategories);
+
+            callback(newItem.Id);
+            return;
+        }
+
         $.ajax({
             type: "POST",
             traditional: true,
@@ -335,7 +464,7 @@
             var favoriteQueries = <IFavoriteQuery[]>this.getFromStorage("favoriteQueries");
             var favoriteQuery: IFavoriteQuery = {
                 Id: this.generateLocalId(),
-                CreateTime: new Date().getTime().toString(),
+                CreateTime: this.getCurrentTime(),
                 Title: favoriteTitle,
                 Query: query,
                 FavoriteLabel: this.getDefaultFavoriteLabel()
@@ -369,9 +498,34 @@
 
     public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         if (!this.isUserLoggedIn) {
-            // TODO save to local storage:
-            // this.storage.update(`reader-bookmarks-${this.bookId}`, page.xmlId, { BookId: this.bookId, PageXmlId: page.xmlId });
-            // callback();
+            var favoritePageBookmarkItems: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
+            var item: IPageBookmarkStorageItem = null;
+            for (var i = 0; i < favoritePageBookmarkItems.length; i++) {
+                var storageItem = favoritePageBookmarkItems[i];
+                if (storageItem.bookXmlId === bookXmlId) {
+                    item = storageItem;
+                    break;
+                }
+            }
+            if (item == null) {
+                item = {
+                    bookXmlId: bookXmlId,
+                    bookmarks: []
+                };
+                favoritePageBookmarkItems.push(item);
+            }
+
+            var bookmark: IBookPageBookmark = {
+                Id: this.generateLocalId(),
+                Title: favoriteTitle,
+                PageXmlId: pageXmlId,
+                PagePosition: null,
+                FavoriteLabel: this.getDefaultFavoriteLabel()
+            };
+            item.bookmarks.push(bookmark);
+
+            this.storage.save("favoritePageBookmarkItems", favoritePageBookmarkItems);
+            callback(bookmark.Id);
             return;
         }
 
@@ -411,4 +565,9 @@ class FavoriteHelper {
 
         return brightness > 128 ? "#000000" : "#FFFFFF";
     }
+}
+
+interface IPageBookmarkStorageItem {
+    bookXmlId: string;
+    bookmarks: IBookPageBookmark[];
 }
