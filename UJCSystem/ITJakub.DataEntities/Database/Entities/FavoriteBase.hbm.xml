@@ -30,7 +30,8 @@
     <many-to-one name="FavoriteLabel"
                  column="[FavoriteLabel]"
                  class="FavoriteLabel"
-                 lazy="proxy" />
+                 lazy="proxy"
+                 cascade="save-update" />
 
     <subclass
       name="PageBookmark"

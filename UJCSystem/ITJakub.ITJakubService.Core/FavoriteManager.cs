@@ -76,6 +76,8 @@ namespace ITJakub.ITJakubService.Core
 
             Book book = m_bookVersionRepository.Load<Book>(bookPage.BookVersion.Book.Id);
             FavoriteLabel favoriteLabel = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            favoriteLabel.LastUseTime = now;
+
             PageBookmark bookmark = new PageBookmark
             {
                 PageXmlId = pageXmlId,
@@ -101,13 +103,17 @@ namespace ITJakub.ITJakubService.Core
 
         public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
+            var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
+            var defaultFavoriteLabel = m_favoritesRepository.GetDefaultFavoriteLabel(user.Id);
 
             var bookmark = new HeadwordBookmark
             {
                 Book = m_bookRepository.FindBookByGuid(bookXmlId),
                 User = user,
-                XmlEntryId = entryXmlId
+                XmlEntryId = entryXmlId,
+                CreateTime = now,
+                FavoriteLabel = defaultFavoriteLabel
             };
             
             m_favoritesRepository.Save(bookmark);
@@ -175,13 +181,14 @@ namespace ITJakub.ITJakubService.Core
             var book = m_favoritesRepository.Load<Book>(bookId);
 
             var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            label.LastUseTime = now;
             
             var favoriteItem = new FavoriteBook
             {
                 Book = book,
                 CreateTime = now,
                 User = user,
-                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                FavoriteLabel = label,
                 Title = title
             };
 
@@ -195,13 +202,14 @@ namespace ITJakub.ITJakubService.Core
             var category = m_favoritesRepository.Load<Category>(categoryId);
 
             var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            label.LastUseTime = now;
             
             var favoriteItem = new FavoriteCategory
             {
                 Category = category,
                 CreateTime = now,
                 User = user,
-                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                FavoriteLabel = label,
                 Title = title
             };
 
@@ -213,6 +221,7 @@ namespace ITJakub.ITJakubService.Core
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            label.LastUseTime = now;
 
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
@@ -226,7 +235,7 @@ namespace ITJakub.ITJakubService.Core
                 QueryType = queryTypeEnum,
                 CreateTime = now,
                 User = user,
-                FavoriteLabel = m_favoritesRepository.Load<FavoriteLabel>(label.Id),
+                FavoriteLabel = label,
                 Title = title,
             };
 
@@ -342,6 +351,7 @@ namespace ITJakub.ITJakubService.Core
 
         public void UpdateFavoriteLabel(long labelId, string name, string color, string userName)
         {
+            var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
 
@@ -352,6 +362,7 @@ namespace ITJakub.ITJakubService.Core
 
             favoriteLabel.Name = name;
             favoriteLabel.Color = color;
+            favoriteLabel.LastUseTime = now;
 
             m_favoritesRepository.Update(favoriteLabel);
         }

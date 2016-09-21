@@ -163,7 +163,7 @@
 class FavoritePopoverBuilder {
     private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků</h6><div class="favorite-label-popover-container">';
     private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
-    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Zobrazit všechny štítky</button></div></div>';
+    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Přiřadit nový štítek</button></div></div>';
 
     private favoriteItems: Array<IFavoriteBaseInfo>;
     private favoriteLabels: Array<IFavoriteLabel>;
@@ -199,6 +199,10 @@ class FavoritePopoverBuilder {
             var labelHtml = this.getFavoriteLabelHtml(this.favoriteLabels[i]);
             resultStrings.push(labelHtml);
         }
+
+        var nextButtonString = '<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="Přidat ze seznamu všech štítků"><span class="label label-favorite" style="background-color: #606060">...</span></a></span>';
+        resultStrings.push(nextButtonString);
+
         return resultStrings.join("");
     }
 

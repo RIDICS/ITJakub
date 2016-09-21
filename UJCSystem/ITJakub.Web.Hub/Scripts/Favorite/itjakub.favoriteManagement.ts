@@ -132,6 +132,10 @@ class FavoriteManagement {
     private removeLabel(item: JQuery) {
         var labelId = item.data("id");
         this.favoriteManager.deleteFavoriteLabel(labelId, () => {
+            if (item.hasClass("active")) {
+                this.setActiveLabel(null);
+            }
+
             item.remove();
             $("#remove-dialog").modal("hide");
         });
