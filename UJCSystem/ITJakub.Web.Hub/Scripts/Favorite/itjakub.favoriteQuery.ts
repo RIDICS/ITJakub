@@ -151,6 +151,18 @@
             var queryRow2 = document.createElement("div");
             var queryLabel = document.createElement("span");
             var queryTitle = document.createElement("span");
+            var queryRemoveLink = document.createElement("a");
+            var queryRemoveIcon = document.createElement("span");
+
+            $(queryRemoveIcon)
+                .addClass("glyphicon")
+                .addClass("glyphicon-trash");
+
+            $(queryRemoveLink)
+                .attr("href", "#")
+                .addClass("favorite-query-remove")
+                .data("id", favoriteQuery.Id)
+                .append(queryRemoveIcon);
 
             $(queryLabel)
                 .addClass("label")
@@ -174,6 +186,7 @@
                 .data("id", favoriteQuery.Id)
                 .data("query", favoriteQuery.Query)
                 .data("label-id", favoriteQuery.FavoriteLabel.Id)
+                .append(queryRemoveLink)
                 .append(queryRow1)
                 .append(queryRow2);
 
@@ -282,6 +295,16 @@
 
         $(".favorite-query-save-button", this.renderContainer).click(() => {
             this.favoriteDialog.show("Nový oblíbený dotaz");
+        });
+
+        $(".favorite-query-remove", this.renderContainer).click((event) => {
+            event.stopPropagation();
+
+            var elementJQuery = $(event.currentTarget);
+            var favoriteId = elementJQuery.data("id");
+            this.favoriteManager.deleteFavoriteItem(favoriteId, () => {
+                elementJQuery.closest(".favorite-query-item").remove();
+            });
         });
 
         this.favoriteDialog.setSaveCallback(data => {

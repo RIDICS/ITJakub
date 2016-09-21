@@ -33,6 +33,78 @@
         return new Date().getTime().toString();
     }
 
+    private findLocalItemById(id: number): IFavoriteStorageItem {
+        var favoritePageBookmarkItems: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
+        for (let i = 0; i < favoritePageBookmarkItems.length; i++) {
+            var item = favoritePageBookmarkItems[i];
+
+            for (let j = 0; j < item.bookmarks.length; j++) {
+                var bookmark = item.bookmarks[j];
+                if (bookmark.Id === id) {
+                    return {
+                        favoriteType: FavoriteType.PageBookmark,
+                        storageItemIndex: j,
+                        storageIndex: i,
+                        storageItem: item,
+                        storage: favoritePageBookmarkItems
+                    };
+                }
+            }
+        }
+
+        var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
+        for (let i = 0; i < favoriteLabeledBooks.length; i++) {
+            var favoriteLabeledBook = favoriteLabeledBooks[i];
+
+            for (let j = 0; j < favoriteLabeledBook.FavoriteInfo.length; j++) {
+                var favoriteBook = favoriteLabeledBook.FavoriteInfo[j];
+                if (favoriteBook.Id === id) {
+                    return {
+                        favoriteType: FavoriteType.Book,
+                        storageItemIndex: j,
+                        storageIndex: i,
+                        storageItem: favoriteLabeledBook,
+                        storage: favoriteLabeledBooks
+                    };
+                }
+            }
+        }
+
+        var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
+        for (let i = 0; i < favoriteLabeledCategories.length; i++) {
+            var favoriteLabeledCategory = favoriteLabeledCategories[i];
+
+            for (let j = 0; j < favoriteLabeledCategory.FavoriteInfo.length; j++) {
+                var favoriteCategory = favoriteLabeledCategory.FavoriteInfo[j];
+                if (favoriteCategory.Id === id) {
+                    return {
+                        favoriteType: FavoriteType.Category,
+                        storageItemIndex: j,
+                        storageIndex: i,
+                        storageItem: favoriteLabeledCategory,
+                        storage: favoriteLabeledCategories
+                    };
+                }
+            }
+        }
+
+        var favoriteQueries: IFavoriteQuery[] = this.getFromStorage("favoriteQueries");
+        for (let i = 0; i < favoriteQueries.length; i++) {
+            var favoriteQuery = favoriteQueries[i];
+            if (favoriteQuery.Id === id) {
+                return {
+                    favoriteType: FavoriteType.Query,
+                    storageItemIndex: null,
+                    storageIndex: i,
+                    storageItem: favoriteQuery,
+                    storage: favoriteQueries
+                };
+            }
+        }
+
+        return null;
+    }
+
     public getLatestFavoriteLabels(callback: (favoriteLabels: IFavoriteLabel[]) => void) {
         if (!this.isUserLoggedIn) {
             var list = [this.getDefaultFavoriteLabel()];
@@ -287,7 +359,7 @@
 
     public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: () => void) {
         if (!this.isUserLoggedIn) {
-            throw Error("Not implemented yet"); //TODO!
+            throw Error("Not supported for anonymous user");
         }
 
         $.ajax({
@@ -329,7 +401,47 @@
 
     public updateFavoriteItem(favoriteId: number, title: string, callback: () => void) {
         if (!this.isUserLoggedIn) {
-            throw Error("Not implemented yet"); //TODO!
+            var storageItemInfo = this.findLocalItemById(favoriteId);
+            if (storageItemInfo) {
+                switch (storageItemInfo.favoriteType) {
+                    case FavoriteType.Book:
+                        var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
+                        var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
+                        var favoriteBook = favoriteLabeledBook.FavoriteInfo[storageItemInfo.storageItemIndex];
+
+                        favoriteBook.Title = title;
+                        this.storage.save("favoriteLabeledBooks", bookStorage);
+                        break;
+                    case FavoriteType.Category:
+                        var categoryStorage = <IFavoriteLabeledCategory[]>storageItemInfo.storage;
+                        var favoriteLabeledCategory = <IFavoriteLabeledCategory>storageItemInfo.storageItem;
+                        var favoriteCategory = favoriteLabeledCategory.FavoriteInfo[storageItemInfo.storageItemIndex];
+
+                        favoriteCategory.Title = title;
+                        this.storage.save("favoriteLabeledCategories", categoryStorage);
+                        break;
+                    case FavoriteType.Query:
+                        var queryStorage = <IFavoriteQuery[]>storageItemInfo.storage;
+                        var favoriteQuery = <IFavoriteQuery>storageItemInfo.storageItem;
+
+                        favoriteQuery.Title = title;
+                        this.storage.save("favoriteQueries", queryStorage);
+                        break;
+                    case FavoriteType.PageBookmark:
+                        var bookmarkStorage = <IPageBookmarkStorageItem[]>storageItemInfo.storage;
+                        var bookmarkStorageItem = <IPageBookmarkStorageItem>storageItemInfo.storageItem;
+                        var bookmark = bookmarkStorageItem.bookmarks[storageItemInfo.storageItemIndex];
+
+                        bookmark.Title = title;
+                        this.storage.save("favoritePageBookmarkItems", bookmarkStorage);
+                        break;
+                    default:
+                        throw Error("Not supported FavoriteType");
+                }
+            }
+
+            callback();
+            return;
         }
 
         $.ajax({
@@ -350,7 +462,55 @@
 
     public deleteFavoriteItem(favoriteId: number, callback: () => void) {
         if (!this.isUserLoggedIn) {
-            throw Error("Not implemented yet"); //TODO!
+            var storageItemInfo = this.findLocalItemById(favoriteId);
+            if (storageItemInfo) {
+                switch (storageItemInfo.favoriteType) {
+                    case FavoriteType.Book:
+                        var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
+                        var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
+
+                        favoriteLabeledBook.FavoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
+                        if (favoriteLabeledBook.FavoriteInfo.length === 0) {
+                            bookStorage.splice(storageItemInfo.storageIndex, 1);
+                        }
+
+                        this.storage.save("favoriteLabeledBooks", bookStorage);
+                        break;
+                    case FavoriteType.Category:
+                        var categoryStorage = <IFavoriteLabeledCategory[]>storageItemInfo.storage;
+                        var favoriteLabeledCategory = <IFavoriteLabeledCategory>storageItemInfo.storageItem;
+
+                        favoriteLabeledCategory.FavoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
+                        if (favoriteLabeledCategory.FavoriteInfo.length === 0) {
+                            categoryStorage.splice(storageItemInfo.storageIndex, 1);
+                        }
+
+                        this.storage.save("favoriteLabeledCategories", categoryStorage);
+                        break;
+                    case FavoriteType.Query:
+                        var queryStorage = <IFavoriteQuery[]>storageItemInfo.storage;
+
+                        queryStorage.splice(storageItemInfo.storageIndex, 1);
+                        this.storage.save("favoriteQueries", queryStorage);
+                        break;
+                    case FavoriteType.PageBookmark:
+                        var bookmarkStorage = <IPageBookmarkStorageItem[]>storageItemInfo.storage;
+                        var bookmarkStorageItem = <IPageBookmarkStorageItem>storageItemInfo.storageItem;
+                        
+                        bookmarkStorageItem.bookmarks.splice(storageItemInfo.storageItemIndex, 1);
+                        if (bookmarkStorageItem.bookmarks.length === 0) {
+                            bookmarkStorage.splice(storageItemInfo.storageIndex, 1);
+                        }
+
+                        this.storage.save("favoritePageBookmarkItems", bookmarkStorage);
+                        break;
+                    default:
+                        throw Error("Not supported FavoriteType");
+                }
+            }
+
+            callback();
+            return;
         }
 
         $.ajax({
@@ -384,22 +544,34 @@
     private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
-            var newItem: IFavoriteLabeledBook = {
-                Id: bookId,
-                FavoriteInfo: []
-            };
-            newItem.FavoriteInfo.push({
+            var favoriteLabeledBook: IFavoriteLabeledBook = null;
+            
+            for (let i = 0; i < favoriteLabeledBooks.length; i++) {
+                var item = favoriteLabeledBooks[i];
+                if (item.Id === bookId) {
+                    favoriteLabeledBook = item;
+                    break;
+                }
+            }
+            if (favoriteLabeledBook == null) {
+                favoriteLabeledBook = {
+                    Id: bookId,
+                    FavoriteInfo: []
+                };
+                favoriteLabeledBooks.push(favoriteLabeledBook);
+            }
+
+            var newFavoriteBook: IFavoriteBaseInfo = {
                 Id: this.generateLocalId(),
                 CreateTime: this.getCurrentTime(),
                 FavoriteLabel: this.getDefaultFavoriteLabel(),
                 FavoriteType: FavoriteType.Book,
                 Title: favoriteTitle
-            });
-
-            favoriteLabeledBooks.push(newItem);
+            };
+            favoriteLabeledBook.FavoriteInfo.push(newFavoriteBook);
+            
             this.storage.save("favoriteLabeledBooks", favoriteLabeledBooks);
-
-            callback(newItem.Id);
+            callback(newFavoriteBook.Id);
             return;
         }
 
@@ -423,22 +595,34 @@
     private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
-            var newItem: IFavoriteLabeledCategory = {
-                Id: categoryId,
-                FavoriteInfo: []
-            };
-            newItem.FavoriteInfo.push({
+            var favoriteLabeledCategory: IFavoriteLabeledCategory = null;
+
+            for (let i = 0; i < favoriteLabeledCategories.length; i++) {
+                var item = favoriteLabeledCategories[i];
+                if (item.Id === categoryId) {
+                    favoriteLabeledCategory = item;
+                    break;
+                }
+            }
+            if (favoriteLabeledCategory == null) {
+                favoriteLabeledCategory = {
+                    Id: categoryId,
+                    FavoriteInfo: []
+                };
+                favoriteLabeledCategories.push(favoriteLabeledCategory);
+            }
+
+            var newFavoriteCategory: IFavoriteBaseInfo = {
                 Id: this.generateLocalId(),
                 CreateTime: this.getCurrentTime(),
                 FavoriteLabel: this.getDefaultFavoriteLabel(),
                 FavoriteType: FavoriteType.Category,
                 Title: favoriteTitle
-            });
+            };
+            favoriteLabeledCategory.FavoriteInfo.push(newFavoriteCategory);
 
-            favoriteLabeledCategories.push(newItem);
             this.storage.save("favoriteLabeledCategories", favoriteLabeledCategories);
-
-            callback(newItem.Id);
+            callback(newFavoriteCategory.Id);
             return;
         }
 
@@ -570,4 +754,12 @@ class FavoriteHelper {
 interface IPageBookmarkStorageItem {
     bookXmlId: string;
     bookmarks: IBookPageBookmark[];
+}
+
+interface IFavoriteStorageItem {
+    favoriteType: FavoriteType;
+    storageItemIndex: number;
+    storageIndex: number;
+    storageItem: any;
+    storage: any;
 }
