@@ -20,6 +20,12 @@ class FavoriteManagement {
         this.labelColorInput = new ColorInput($("#favorite-label-color"));
         this.labelColorInput.make();
 
+        $(".favorite-label-management").each((index, element) => {
+            var backgroundColor = $(element).data("color");
+            var fontColor = FavoriteHelper.getFontColor(backgroundColor);
+            $("a", element).css("color", fontColor);
+        });
+        
         $("#add-new-label").click(() => {
             this.showAddLabelDialog();
         });
@@ -58,6 +64,10 @@ class FavoriteManagement {
     }
 
     private initFavoriteLabel(item: JQuery) {
+        var backgroundColor = item.data("color");
+        var fontColor = FavoriteHelper.getFontColor(backgroundColor);
+        $("a", item).css("color", fontColor);
+
         $(".favorite-label-link", item).click(() => {
             this.setActiveLabel(item);
         });
@@ -337,7 +347,7 @@ class FavoriteManagementItem {
                     .attr("title", "Kategorie");
                 break;
             case FavoriteType.Query:
-                $(icon).addClass("glyphicon-console")
+                $(icon).addClass("glyphicon-search")
                     .attr("title", "Vyhledávací dotaz");
                 break;
             case FavoriteType.BookVersion:

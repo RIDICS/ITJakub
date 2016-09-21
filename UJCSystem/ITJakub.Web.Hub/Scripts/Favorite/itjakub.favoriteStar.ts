@@ -174,14 +174,16 @@ class FavoritePopoverBuilder {
     }
 
     private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
+        var fontColor = FavoriteHelper.getFontColor(item.FavoriteLabel.Color);
         return '<div class="favorite-item"><a href="#" class="favorite-book-remove" data-id="' + item.Id
-            + '"><span class="glyphicon glyphicon-trash"></span></a><span class="label label-favorite" style="background-color: ' + item.FavoriteLabel.Color + '">'
+            + '"><span class="glyphicon glyphicon-trash"></span></a><span class="label label-favorite" style="background-color: ' + item.FavoriteLabel.Color + '; color: ' + fontColor + ';">'
             + item.FavoriteLabel.Name + '</span><span> ' + item.Title + '</span></div>';
     }
 
     private getFavoriteLabelHtml(label: IFavoriteLabel): string {
+        var fontColor = FavoriteHelper.getFontColor(label.Color);
         return '<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="' + label.Id + '" data-color="' + label.Color + '" + data-name="' + label.Name
-            + '"><span class="label label-favorite" style="background-color: ' + label.Color + '">' + label.Name + '</span></a></span>';
+            + '"><span class="label label-favorite" style="background-color: ' + label.Color + '; color: ' + fontColor + ';">' + label.Name + '</span></a></span>';
     }
 
     private getFavoriteItemsHtml(): string {

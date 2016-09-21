@@ -64,13 +64,23 @@
             this.selectedLabelId = $(checkbox).val();
             this.selectedLabelName = $(checkbox).data("name");
             this.selectedLabelColor = $(checkbox).data("color");
+            var fontColor = FavoriteHelper.getFontColor(this.selectedLabelColor);
 
             $(".favorite-selected-label-info", this.container)
                 .text(this.selectedLabelName)
-                .css("background-color", this.selectedLabelColor);
+                .css("background-color", this.selectedLabelColor)
+                .css("color", fontColor);
         });
 
         $("[name=favorite-label]:checked", this.container).trigger("change");
+
+        $(".favorite-select-label-item", this.container).each((index, element) => {
+            var backgroundColor = $("input", element).data("color");
+            var fontColor = FavoriteHelper.getFontColor(backgroundColor);
+            $(element).css("color", fontColor);
+        });
+
+        //$(".favorite-selected-label-info", this.container)
     }
 
     public hide() {

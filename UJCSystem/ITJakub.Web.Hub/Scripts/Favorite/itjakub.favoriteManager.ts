@@ -747,7 +747,7 @@ class FavoriteHelper {
         var blue = parseInt(hexBackgroundColor.substr(5, 2), 16);
         var brightness = FavoriteHelper.getColorBrightness(red, green, blue);
 
-        return brightness > 128 ? "#000000" : "#FFFFFF";
+        return brightness > 192 ? "#000000" : "#FFFFFF";
     }
 }
 

@@ -112,11 +112,14 @@
         var link = document.createElement("a");
         var labelSpan = document.createElement("span");
 
+        var fontColor = FavoriteHelper.getFontColor(favoriteLabel.Color);
+
         $(labelSpan)
             .addClass("label")
             .addClass("favorite-dropdown-item-label")
             .text(favoriteLabel.Name)
-            .css("background-color", favoriteLabel.Color);
+            .css("background-color", favoriteLabel.Color)
+            .css("color", fontColor);
 
         $(link)
             .attr("href", "#")

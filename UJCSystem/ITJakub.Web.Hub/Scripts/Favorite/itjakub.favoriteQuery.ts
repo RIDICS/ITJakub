@@ -110,9 +110,12 @@
             var labelLink = document.createElement("a");
             var label = document.createElement("span");
 
+            let fontColor = FavoriteHelper.getFontColor(favoriteLabel.Color);
+
             $(label)
                 .addClass("label")
                 .css("background-color", favoriteLabel.Color)
+                .css("color", fontColor)
                 .text(favoriteLabel.Name);
 
             $(labelLink)
@@ -164,9 +167,12 @@
                 .data("id", favoriteQuery.Id)
                 .append(queryRemoveIcon);
 
+            let fontColor = FavoriteHelper.getFontColor(favoriteQuery.FavoriteLabel.Color);
+            
             $(queryLabel)
                 .addClass("label")
                 .css("background-color", favoriteQuery.FavoriteLabel.Color)
+                .css("color", fontColor)
                 .text(favoriteQuery.FavoriteLabel.Name);
 
             $(queryTitle)
