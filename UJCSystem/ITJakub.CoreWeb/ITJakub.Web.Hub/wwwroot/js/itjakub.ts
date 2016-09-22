@@ -82,5 +82,5 @@ jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);
 
 function getImageResourcePath(): string {
-    return getBaseUrl() + "wwwroot/images/";
+    return getBaseUrl() + "images/";
 }

@@ -87,11 +87,12 @@ packages/
 *.csdat
 
 #Bower libraries
-*/*/wwwroot/lib/
+**/wwwroot/lib/
 
 #NPM modules
 node_modules/
 
 project.lock.json
+project.fragment.lock.json
 !gulpfile.js
 !Gruntfile.js
