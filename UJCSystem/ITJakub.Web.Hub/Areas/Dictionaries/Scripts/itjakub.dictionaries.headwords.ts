@@ -92,7 +92,7 @@ class DictionaryViewerListWrapper {
     constructor(dictionaryViewer: DictionaryViewer, pageSize: number) {
         this.pageSize = pageSize;
         this.dictionaryViewer = dictionaryViewer;
-        this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
+        //this.dictionaryViewer.setFavoriteCallback(this.addNewFavoriteHeadword.bind(this), this.removeFavoriteHeadword.bind(this));
 
         window.matchMedia("print").addListener(mql => {
             if (mql.matches) {
@@ -100,12 +100,19 @@ class DictionaryViewerListWrapper {
             }
         });
 
-        this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
-        this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
+        //this.favoriteHeadwords = new DictionaryFavoriteHeadwords("#saved-word-area", "#saved-word-area .saved-words-body", "#saved-word-area .saved-word-area-more");
+        //this.favoriteHeadwords.create(this.goToPageWithHeadword.bind(this), this.favoriteHeadwordsChanged.bind(this));
+
+        //disabled favorites:
+        $("#saved-word-area").addClass("hidden");
     }
 
     callAfterFavouriteHeadwordsInit(callback: () => any) {
-        this.favoriteHeadwords.callAfterInit(callback);
+        //this.favoriteHeadwords.callAfterInit(callback);
+
+        //disabled favorites:
+        this.favoriteHeadwordsChanged([]);
+        callback();
     }
 
     private goToPageWithHeadword(bookId: string, entryXmlId: string) {

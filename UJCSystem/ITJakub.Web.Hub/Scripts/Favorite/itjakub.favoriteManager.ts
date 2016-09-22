@@ -738,8 +738,9 @@ class FavoriteHelper {
     }
 
     static getFontColor(hexBackgroundColor: string): string {
-        if (hexBackgroundColor.length !== 7 && hexBackgroundColor.charAt(0) !== "#") {
-            throw Error("Invalid color format");
+        if (hexBackgroundColor.length !== 7 || hexBackgroundColor.charAt(0) !== "#") {
+            console.log("Invalid color format: " + hexBackgroundColor);
+            return "#000000";
         }
 
         var red = parseInt(hexBackgroundColor.substr(1, 2), 16);

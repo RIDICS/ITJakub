@@ -28,7 +28,18 @@ function replaceSpecialChars(text : string): string {
     decoded = decoded.replace(/&quot;/g, '"');
     decoded = decoded.replace(/&#39;/g, "'");
     return decoded;
-} 
+}
+
+function escapeHtmlChars(text: string): string {
+    var map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    };
+    return text.replace(/[&<>"']/g, char => map[char]);
+}
 
 function updateQueryStringParameter(key, value) {
     var uri = window.location.href;
