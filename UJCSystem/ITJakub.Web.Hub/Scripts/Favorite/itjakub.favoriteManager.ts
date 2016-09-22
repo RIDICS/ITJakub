@@ -234,7 +234,7 @@
         });
     }
     
-    public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[]) => void) {
+    public getFavoriteLabelsForBooksAndCategories(bookType: BookTypeEnum, callback: (favoriteLabels: IFavoriteLabelsWithBooksAndCategories[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             
             var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
@@ -260,7 +260,7 @@
             }
 
             resultList.push(resultLabel);
-            callback(resultList);
+            callback(resultList, null);
             return;
         }
 
@@ -274,7 +274,10 @@
             dataType: "json",
             contentType: "application/json",
             success: (favoriteLabels) => {
-                callback(favoriteLabels);
+                callback(favoriteLabels, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
@@ -336,7 +339,7 @@
         });
     }
 
-    public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number) => void) {
+    public createFavoriteLabel(labelName: string, colorHex: string, callback: (id: number, error: string) => void) {
         if (!this.isUserLoggedIn) {
             throw Error("Not supported for anonymous user");
         }
@@ -352,12 +355,15 @@
             dataType: "json",
             contentType: "application/json",
             success: (id) => {
-                callback(id);
+                callback(id, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
 
-    public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: () => void) {
+    public updateFavoriteLabel(labelId: number, labelName: string, colorHex: string, callback: (error: string) => void) {
         if (!this.isUserLoggedIn) {
             throw Error("Not supported for anonymous user");
         }
@@ -374,12 +380,15 @@
             dataType: "json",
             contentType: "application/json",
             success: () => {
-                callback();
+                callback(null);
+            },
+            error: (request, status) => {
+                callback(status);
             }
         });
     }
 
-    public deleteFavoriteLabel(labelId: number, callback: () => void) {
+    public deleteFavoriteLabel(labelId: number, callback: (error: string) => void) {
         if (!this.isUserLoggedIn) {
             throw Error("Not supported for anonymous user");
         }
@@ -394,12 +403,15 @@
             dataType: "json",
             contentType: "application/json",
             success: () => {
-                callback();
+                callback(null);
+            },
+            error: (request, status) => {
+                callback(status);
             }
         });
     }
 
-    public updateFavoriteItem(favoriteId: number, title: string, callback: () => void) {
+    public updateFavoriteItem(favoriteId: number, title: string, callback: (error: string) => void) {
         if (!this.isUserLoggedIn) {
             var storageItemInfo = this.findLocalItemById(favoriteId);
             if (storageItemInfo) {
@@ -440,7 +452,7 @@
                 }
             }
 
-            callback();
+            callback(null);
             return;
         }
 
@@ -455,12 +467,15 @@
             dataType: "json",
             contentType: "application/json",
             success: () => {
-                callback();
+                callback(null);
+            },
+            error: (request, status) => {
+                callback(status);
             }
         });
     }
 
-    public deleteFavoriteItem(favoriteId: number, callback: () => void) {
+    public deleteFavoriteItem(favoriteId: number, callback: (error: string) => void) {
         if (!this.isUserLoggedIn) {
             var storageItemInfo = this.findLocalItemById(favoriteId);
             if (storageItemInfo) {
@@ -509,7 +524,7 @@
                 }
             }
 
-            callback();
+            callback(null);
             return;
         }
 
@@ -523,12 +538,15 @@
             dataType: "json",
             contentType: "application/json",
             success: () => {
-                callback();
+                callback(null);
+            },
+            error: (request, status) => {
+                callback(status);
             }
         });
     }
 
-    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
         switch (itemType) {
             case FavoriteType.Book:
                 this.createFavoriteBook(Number(itemId), favoriteTitle, favoriteLabelId, callback);
@@ -541,7 +559,7 @@
         }
     }
 
-    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
             var favoriteLabeledBook: IFavoriteLabeledBook = null;
@@ -571,7 +589,7 @@
             favoriteLabeledBook.FavoriteInfo.push(newFavoriteBook);
             
             this.storage.save("favoriteLabeledBooks", favoriteLabeledBooks);
-            callback(newFavoriteBook.Id);
+            callback(newFavoriteBook.Id, null);
             return;
         }
 
@@ -587,12 +605,15 @@
             dataType: "json",
             contentType: "application/json",
             success: (resultId) => {
-                callback(resultId);
+                callback(resultId, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
 
-    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
             var favoriteLabeledCategory: IFavoriteLabeledCategory = null;
@@ -622,7 +643,7 @@
             favoriteLabeledCategory.FavoriteInfo.push(newFavoriteCategory);
 
             this.storage.save("favoriteLabeledCategories", favoriteLabeledCategories);
-            callback(newFavoriteCategory.Id);
+            callback(newFavoriteCategory.Id, null);
             return;
         }
 
@@ -638,12 +659,15 @@
             dataType: "json",
             contentType: "application/json",
             success: (resultId) => {
-                callback(resultId);
+                callback(resultId, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
 
-    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteQueries = <IFavoriteQuery[]>this.getFromStorage("favoriteQueries");
             var favoriteQuery: IFavoriteQuery = {
@@ -657,7 +681,7 @@
             favoriteQueries.push(favoriteQuery);
             this.storage.save("favoriteQueries", favoriteQueries);
 
-            callback(favoriteQuery.Id);
+            callback(favoriteQuery.Id, null);
             return;
         }
 
@@ -675,12 +699,15 @@
             dataType: "json",
             contentType: "application/json",
             success: (resultId) => {
-                callback(resultId);
+                callback(resultId, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
 
-    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number) => void) {
+    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoritePageBookmarkItems: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
             var item: IPageBookmarkStorageItem = null;
@@ -709,7 +736,7 @@
             item.bookmarks.push(bookmark);
 
             this.storage.save("favoritePageBookmarkItems", favoritePageBookmarkItems);
-            callback(bookmark.Id);
+            callback(bookmark.Id, null);
             return;
         }
 
@@ -726,7 +753,10 @@
             dataType: "json",
             contentType: "application/json",
             success: (resultId) => {
-                callback(resultId);
+                callback(resultId, null);
+            },
+            error: (request, status) => {
+                callback(null, status);
             }
         });
     }
@@ -737,9 +767,13 @@ class FavoriteHelper {
         return ((red * 299) + (green * 587) + (blue * 114)) / 1000;
     }
 
+    static isValidHexColor(color: string): boolean {
+        return color.length === 7 && color.charAt(0) === "#";
+    }
+
     static getFontColor(hexBackgroundColor: string): string {
-        if (hexBackgroundColor.length !== 7 || hexBackgroundColor.charAt(0) !== "#") {
-            console.log("Invalid color format: " + hexBackgroundColor);
+        if (!FavoriteHelper.isValidHexColor(hexBackgroundColor)) {
+            console.warn("Invalid color format: " + hexBackgroundColor);
             return "#000000";
         }
 

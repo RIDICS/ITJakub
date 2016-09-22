@@ -9,11 +9,16 @@ class FavoriteManagement {
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;
     private labelColorInput: ColorInput;
+    private newFavoriteLabelDialog: FavoriteManagementDialog;
+    private removeDialog: FavoriteManagementDialog;
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
         this.activeLabelForEditing = null;
         this.activeLabelId = null;
+
+        this.newFavoriteLabelDialog = new FavoriteManagementDialog($("#new-favorite-label-dialog"));
+        this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
     }
 
     public init() {
@@ -90,8 +95,10 @@ class FavoriteManagement {
         
         var container = $("#favorite-item-container");
         container.empty();
+        container.addClass("loader");
 
         this.favoriteManager.getFavorites(this.activeLabelId, typeFilter, nameFilter, sortOrder, (favorites) => {
+            container.removeClass("loader");
             for (let i = 0; i < favorites.length; i++) {
                 var favoriteItem = favorites[i];
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
@@ -125,7 +132,7 @@ class FavoriteManagement {
                 this.removeLabel(item);
             });
 
-        $("#remove-dialog").modal("show");
+        this.removeDialog.show();
     }
 
     private showAddLabelDialog() {
@@ -136,24 +143,36 @@ class FavoriteManagement {
         this.activeLabelForEditing = item;
         this.labelColorInput.setValue(color);
         $("#favorite-label-name").val(name);
-        $("#new-favorite-label-dialog").modal("show");
+        this.newFavoriteLabelDialog.show();
     }
 
     private removeLabel(item: JQuery) {
         var labelId = item.data("id");
-        this.favoriteManager.deleteFavoriteLabel(labelId, () => {
+        this.removeDialog.showSaving();
+        this.favoriteManager.deleteFavoriteLabel(labelId, (error) => {
+            if (error) {
+                this.removeDialog.showError("Chyba při odstraňování štítku");
+                return;
+            }
+
             if (item.hasClass("active")) {
                 this.setActiveLabel(null);
             }
 
             item.remove();
-            $("#remove-dialog").modal("hide");
+            this.removeDialog.hide();
         });
     }
 
     private saveNewFavoriteLabel(name: string, color: string) {
-        this.favoriteManager.createFavoriteLabel(name, color, (id) => {
-            $("#new-favorite-label-dialog").modal("hide");
+        this.newFavoriteLabelDialog.showSaving();
+        this.favoriteManager.createFavoriteLabel(name, color, (id, error) => {
+            if (error) {
+                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                return;
+            }
+
+            this.newFavoriteLabelDialog.hide();
 
             var labelDiv = document.createElement("div");
             $("#favorite-labels").append(labelDiv);
@@ -174,11 +193,18 @@ class FavoriteManagement {
 
     private saveEditedFavoriteLabel(labelItem: JQuery, name: string, color: string) {
         var labelId = labelItem.data("id");
-        this.favoriteManager.updateFavoriteLabel(labelId, name, color, () => {
-            $("#new-favorite-label-dialog").modal("hide");
+        this.newFavoriteLabelDialog.showSaving();
+        this.favoriteManager.updateFavoriteLabel(labelId, name, color, (error) => {
+            if (error) {
+                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                return;
+            }
+
+            this.newFavoriteLabelDialog.hide();
 
             $(".favorite-label-name", labelItem).text(name);
             labelItem.css("background-color", color);
+            labelItem.css("color", FavoriteHelper.getFontColor(color));
             labelItem.data("name", name);
             labelItem.data("color", color);
         });
@@ -187,12 +213,56 @@ class FavoriteManagement {
     private saveFavoriteLabel() {
         var name = $("#favorite-label-name").val();
         var color = this.labelColorInput.getValue();
-        
+
+        var error = "";
+        if (!name) {
+            error = "Nebylo zadáno jméno.";
+        }
+        if (!FavoriteHelper.isValidHexColor(color)) {
+            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+        }
+        if (error.length > 0) {
+            this.newFavoriteLabelDialog.showError(error);
+            return;
+        }
+
         if (this.activeLabelForEditing == null) {
             this.saveNewFavoriteLabel(name, color);
         } else {
             this.saveEditedFavoriteLabel(this.activeLabelForEditing, name, color);
         }
+    }
+}
+
+class FavoriteManagementDialog {
+    private dialogJQuery: JQuery;
+
+    constructor(dialogJQuery: JQuery) {
+        this.dialogJQuery = dialogJQuery;
+    }
+
+    public show() {
+        $(".error, .saving-icon").addClass("hidden");
+        this.dialogJQuery.modal("show");
+    }
+
+    public showSaving() {
+        $(".saving-icon", this.dialogJQuery)
+            .removeClass("hidden");
+        $(".error", this.dialogJQuery)
+            .addClass("hidden");
+    }
+
+    public showError(text: string) {
+        $(".saving-icon", this.dialogJQuery)
+            .addClass("hidden");
+        $(".error", this.dialogJQuery)
+            .text(text)
+            .removeClass("hidden");
+    }
+
+    public hide() {
+        this.dialogJQuery.modal("hide");
     }
 }
 
@@ -205,6 +275,8 @@ class FavoriteManagementItem {
     private container: JQuery;
     private innerContainerDiv: HTMLDivElement;
     private separatorHr: HTMLHRElement;
+    private editFavoriteDialog: FavoriteManagementDialog;
+    private removeDialog: FavoriteManagementDialog;
 
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -213,6 +285,9 @@ class FavoriteManagementItem {
         this.id = id;
         this.type = type;
         this.container = container;
+
+        this.editFavoriteDialog = new FavoriteManagementDialog($("#edit-favorite-dialog"));
+        this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
     }
 
     public make() {
@@ -274,7 +349,8 @@ class FavoriteManagementItem {
                     .off("click")
                     .click(this.remove.bind(this));
 
-                $("#remove-dialog").modal("show");
+                this.removeDialog.show();
+                
             });
         $(editLink)
             .attr("href", "#")
@@ -287,7 +363,7 @@ class FavoriteManagementItem {
                     .off("click")
                     .click(this.edit.bind(this));
 
-                $("#edit-favorite-dialog").modal("show");
+                this.editFavoriteDialog.show();
             });
 
         $(removeColumn)
@@ -310,8 +386,14 @@ class FavoriteManagementItem {
     }
 
     private remove() {
-        this.favoriteManager.deleteFavoriteItem(this.id, () => {
-            $("#remove-dialog").modal("hide");
+        this.removeDialog.showSaving();
+        this.favoriteManager.deleteFavoriteItem(this.id, (error) => {
+            if (error) {
+                this.removeDialog.showError("Chyba při odstraňování položky");
+                return;
+            }
+
+            this.removeDialog.hide();
 
             $(this.innerContainerDiv).remove();
             $(this.separatorHr).remove();
@@ -321,8 +403,14 @@ class FavoriteManagementItem {
     private edit() {
         var newName = $("#favorite-item-name").val();
 
-        this.favoriteManager.updateFavoriteItem(this.id, newName, () => {
-            $("#edit-favorite-dialog").modal("hide");
+        this.editFavoriteDialog.showSaving();
+        this.favoriteManager.updateFavoriteItem(this.id, newName, (error) => {
+            if (error) {
+                this.editFavoriteDialog.showError("Chyba při ukládání položky");
+                return;
+            }
+
+            this.editFavoriteDialog.hide();
 
             this.name = newName;
             $(".favorite-item-name", this.innerContainerDiv).text(newName);

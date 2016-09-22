@@ -335,8 +335,14 @@
 
     private saveFavoriteQuery(itemName: string, labelId: number) {
         var query = this.inputTextbox.val();
-        this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelId, () => {
+        this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelId, (id, error) => {
+            if (error) {
+                this.favoriteDialog.showError("Chyba při vytváření oblíbeného dotazu");
+                return;
+            }
+
             this.forceRerender();
+            this.favoriteDialog.hide();
         });
     }
 }

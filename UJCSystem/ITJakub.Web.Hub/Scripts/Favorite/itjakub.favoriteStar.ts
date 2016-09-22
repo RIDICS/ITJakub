@@ -77,7 +77,7 @@
         $(".show-all-favorite-button").click(() => {
             $(this.starGlyphIcon).popover("hide");
 
-            this.favoriteDialog.setSaveCallback(data => this.createFavoriteItem(data.labelId, data.itemName, data.labelName, data.labelColor));
+            this.favoriteDialog.setSaveCallback(this.createFavoriteItem.bind(this));
             this.favoriteDialog.show(this.favoriteDefaultTitle);
         });
 
@@ -86,7 +86,7 @@
             var labelName = $(event.currentTarget).data("name");
             var labelColor = $(event.currentTarget).data("color");
             
-            this.createFavoriteItem(labelId, this.favoriteDefaultTitle, labelName, labelColor);
+            this.createFavoriteItemFast(labelId, this.favoriteDefaultTitle, labelName, labelColor);
         });
 
         $(".favorite-book-remove").click((event) => {
@@ -97,26 +97,49 @@
         });
     }
 
-    private createFavoriteItem(labelId: number, favoriteTitle: string, labelName: string, labelColor: string) {
-        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, favoriteTitle, labelId, (id) => {
+    private createFavoriteItemObject(id: number, favoriteTitle: string, labelId: number, labelName: string, labelColor: string): IFavoriteBaseInfo {
+        var favoriteLabel: IFavoriteLabel = {
+            Id: labelId,
+            Name: labelName,
+            Color: labelColor,
+            IsDefault: null,
+            LastUseTime: null
+        };
+        var favoriteItem: IFavoriteBaseInfo = {
+            Id: id,
+            FavoriteType: this.favoriteItemType,
+            Title: favoriteTitle,
+            CreateTime: null,
+            FavoriteLabel: favoriteLabel
+        };
+        return favoriteItem;
+    }
+
+    private createFavoriteItem(data: INewFavoriteItemData) {
+        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, data.itemName, data.labelId, (id, error) => {
+            if (error) {
+                this.favoriteDialog.showError("Chyba při vytváření oblíbené položky");
+                return;
+            }
+
+            this.favoriteDialog.hide();
+
+            var itemData = this.createFavoriteItemObject(id, data.itemName, data.labelId, data.labelName, data.labelColor);
+            this.popoverBuilder.addFavoriteItem(itemData);
+            this.notifyFavoritesChanged();
+        });
+    }
+
+    private createFavoriteItemFast(labelId: number, favoriteTitle: string, labelName: string, labelColor: string) {
+        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, favoriteTitle, labelId, (id, error) => {
+            if (error) {
+                return;
+            }
+
             $(this.starGlyphIcon).popover("hide");
 
-            var favoriteLabel: IFavoriteLabel = {
-                Id: labelId,
-                Name: labelName,
-                Color: labelColor,
-                IsDefault: null,
-                LastUseTime: null
-            };
-            var favoriteItem: IFavoriteBaseInfo = {
-                Id: id,
-                FavoriteType: this.favoriteItemType,
-                Title: favoriteTitle,
-                CreateTime: null,
-                FavoriteLabel: favoriteLabel
-            };
-
-            this.popoverBuilder.addFavoriteItem(favoriteItem);
+            var itemData = this.createFavoriteItemObject(id, favoriteTitle, labelId, labelName, labelColor);
+            this.popoverBuilder.addFavoriteItem(itemData);
             this.notifyFavoritesChanged();
         });
     }

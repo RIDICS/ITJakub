@@ -37,14 +37,10 @@
             .append(headerButton);
 
         this.bodyDiv = document.createElement("div");
-        var loadingDiv = document.createElement("div");
-
-        $(loadingDiv)
-            .addClass("loading");
+        
         $(this.bodyDiv)
             .addClass("dropdown-select-body")
-            .addClass("favorite-book-select-body")
-            .append(loadingDiv);
+            .addClass("favorite-book-select-body");
 
         $(innerContainer)
             .addClass("dropdown-select")
@@ -87,8 +83,13 @@
         }
 
         this.loading = true;
-        $(this.bodyDiv).empty();
+        $(this.bodyDiv)
+            .addClass("loading")
+            .empty();
+
         this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
+            $(this.bodyDiv).removeClass("loading");
+
             for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];
                 var itemDiv = this.createFavoriteLabel(favoriteLabel);

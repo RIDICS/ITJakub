@@ -949,8 +949,14 @@ class ReaderModule {
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, (id) => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, (id, error) => {
+            if (error) {
+                this.newFavoriteDialog.showError("Chyba při vytváření záložky");
+                return;
+            }
+
             $(bookmarkSpan).data("favorite-id", id);
+            this.newFavoriteDialog.hide();
             this.showBookmark(bookmarkSpan);
             postShowAction();
         });

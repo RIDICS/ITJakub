@@ -47,6 +47,12 @@
             }
         });
 
+        $(".error", this.container)
+            .addClass("hidden")
+            .text("");
+        $(".saving-icon", this.container)
+            .addClass("hidden");
+
         $(".modal", this.container).modal({
             show: true,
             backdrop: "static"
@@ -87,13 +93,21 @@
         $(".modal", this.container).modal("hide");
     }
 
+    public showError(text: string) {
+        $(".saving-icon", this.container).addClass("hidden");
+        $(".error", this.container)
+            .removeClass("hidden")
+            .text(text);
+    }
+
     private onSaveButtonClick() {
+        $(".saving-icon", this.container).removeClass("hidden");
+        $(".error", this.container).addClass("hidden");
+        
         if (this.onSaveCallback) {
             var resultData = this.getData();
             this.onSaveCallback(resultData);
         }
-
-        this.hide();
     }
 
     private getData(): INewFavoriteItemData {
