@@ -1,32 +1,22 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Owin.Security;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize]
     public class AccountController : BaseController
     {
+        private readonly ApplicationUserManager m_userManager;
+        private readonly ApplicationSignInManager m_signInManager;
 
-        private ApplicationSignInManager SignInManager
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
-            get { return HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-        }
-
-        private ApplicationUserManager UserManager
-        {
-            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-        }
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get { return HttpContext.GetOwinContext().Authentication; }
+            m_userManager = userManager;
+            m_signInManager = signInManager;
         }
 
         //
@@ -52,15 +42,16 @@ namespace ITJakub.Web.Hub.Controllers
             }
 
             var result =
-                await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+                await m_signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
 
-            switch (result)
+            if (result.Succeeded)
             {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                default:
-                    ModelState.AddModelError("", "Přihlášení se nezdařilo.");
-                    return View(model);
+                return RedirectToLocal(returnUrl);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Přihlášení se nezdařilo.");
+                return View(model);
             }
         }
 
@@ -90,10 +81,10 @@ namespace ITJakub.Web.Hub.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName
                 };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var result = await m_userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, false, false);
+                    await m_signInManager.SignInAsync(user, false);
                     return RedirectToLocal("");
                 }
                 AddErrors(result);
@@ -107,7 +98,7 @@ namespace ITJakub.Web.Hub.Controllers
         // POST: /Account/LogOut
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult LogOut()
+        public async Task<ActionResult> LogOut()
         {
 
             using (var client = GetEncryptedClient())
@@ -115,7 +106,7 @@ namespace ITJakub.Web.Hub.Controllers
                 client.RenewCommToken(User.Identity.Name);
             }
 
-            AuthenticationManager.SignOut();
+            await m_signInManager.SignOutAsync();
             return RedirectToLocal("");
         }
 
@@ -123,7 +114,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError("", error);
+                ModelState.AddModelError("", string.Format("{0}: {1}", error.Code, error.Description));
             }
         }
 

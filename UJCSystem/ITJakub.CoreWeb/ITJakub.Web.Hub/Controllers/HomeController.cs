@@ -1,9 +1,6 @@
-﻿using System.Web;
-using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Web.Hub.Identity;
+﻿using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,13 +14,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             m_staticTextManager = staticTextManager;
         }
-
-        private ApplicationUserManager UserManager
-        {
-            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-        }
-
-
+        
         public ActionResult Index()
         {
             return View();
@@ -84,7 +75,7 @@ namespace ITJakub.Web.Hub.Controllers
            
             using (var client = GetMainServiceClient())
             {
-                if (Request.IsAuthenticated)
+                if (User.Identity.IsAuthenticated)
                 {
                     client.CreateFeedback(model.Text, GetUserName(), FeedbackCategoryEnumContract.None);
                 }

@@ -11,12 +11,27 @@ namespace ITJakub.Web.Hub.Managers
 {
     public class StaticTextManager
     {
-        private readonly StaticTextRepository m_staticTextRepository;
+        class MockStaticTextRepository
+        {
+            public StaticText GetStaticText(string name)
+            {
+                return new StaticText
+                {
+                    Text = "# Nadpis\nText",
+                    Format = StaticTextFormat.Markdown
+                };
+            }
+
+            public void Save(object o) { }
+        }
+
+        private readonly MockStaticTextRepository m_staticTextRepository = new MockStaticTextRepository();
+        //private readonly StaticTextRepository m_staticTextRepository;
         private readonly Markdown m_markdownDeep;
 
-        public StaticTextManager(StaticTextRepository staticTextRepository)
+        public StaticTextManager(/*StaticTextRepository staticTextRepository*/)
         {
-            m_staticTextRepository = staticTextRepository;
+            //m_staticTextRepository = staticTextRepository;
             m_markdownDeep = new Markdown
             {
                 ExtraMode = true,

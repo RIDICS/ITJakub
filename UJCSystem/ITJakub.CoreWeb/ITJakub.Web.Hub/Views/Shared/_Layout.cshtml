@@ -45,7 +45,7 @@
         </div>
     </div>
 </div>
-<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
+<div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
                                                                                                       {@Html.Raw("EditLemmatization")
                                                                                                       } "></div>
 
@@ -275,7 +275,7 @@
         </li>
     </ul>
 </li>
-@if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
+@if (User.Identity.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
 {
     <li id="admin-menu" class="has-sub last">
         @if (User.IsInRole(CustomRole.CanUploadBooks))

@@ -1,17 +1,15 @@
-using System;
-using System.Security.Cryptography;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    public class CustomPasswordHasher: IPasswordHasher
-    {        
-        public string HashPassword(string password)
+    public class CustomPasswordHasher: IPasswordHasher<ApplicationUser>
+    {
+        public string HashPassword(ApplicationUser user, string password)
         {
             return Jewelery.CustomPasswordHasher.CreateHash(password);
         }
 
-        public PasswordVerificationResult VerifyHashedPassword(string hashedPassword, string providedPassword)
+        public PasswordVerificationResult VerifyHashedPassword(ApplicationUser user, string hashedPassword, string providedPassword)
         {
            var result =  Jewelery.CustomPasswordHasher.ValidatePassword(providedPassword, hashedPassword);
             if(result)

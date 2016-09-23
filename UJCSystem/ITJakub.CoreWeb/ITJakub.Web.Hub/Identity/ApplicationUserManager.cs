@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.ServiceModel.Security.Tokens;
 using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace ITJakub.Web.Hub.Identity
 {
@@ -15,57 +15,59 @@ namespace ITJakub.Web.Hub.Identity
     {
         private readonly CommunicationProvider m_communication = new CommunicationProvider();
 
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
-            : base(store)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<ApplicationUser> passwordHasher, IEnumerable<IUserValidator<ApplicationUser>> userValidators, IEnumerable<IPasswordValidator<ApplicationUser>> passwordValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<ApplicationUser>> logger) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
+
         }
 
-        public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
-        {
-            var manager = new ApplicationUserManager(new ApplicationUserStore());
-            manager.PasswordHasher = new CustomPasswordHasher();
-            // Configure validation logic for usernames
-            manager.UserValidator = new UserValidator<ApplicationUser>(manager)
-            {
-                AllowOnlyAlphanumericUserNames = false,
-                RequireUniqueEmail = false
-            };
+        // Before ASP.NET Core:
 
-            // Configure validation logic for passwords
-            manager.PasswordValidator = new PasswordValidator
-            {
-                RequiredLength = 1,
-                RequireNonLetterOrDigit = false,
-                RequireDigit = false,
-                RequireLowercase = false,
-                RequireUppercase = false,
-            };
+        //public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
+        //{
+        //    var manager = new ApplicationUserManager(new ApplicationUserStore());
+        //    manager.PasswordHasher = new CustomPasswordHasher();
+        //    // Configure validation logic for usernames
+        //    manager.UserValidator = new UserValidator<ApplicationUser>(manager)
+        //    {
+        //        AllowOnlyAlphanumericUserNames = false,
+        //        RequireUniqueEmail = false
+        //    };
 
-            // Configure user lockout defaults
-            manager.UserLockoutEnabledByDefault = false;
-            manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            manager.MaxFailedAccessAttemptsBeforeLockout = 5;
-            // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
-            // You can write your own provider and plug it in here.
-            //manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
-            //{
-            //    MessageFormat = "Your security code is {0}"
-            //});
-            //manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
-            //{
-            //    Subject = "Security Code",
-            //    BodyFormat = "Your security code is {0}"
-            //});
-            //manager.EmailService = new EmailService();            
+        //    // Configure validation logic for passwords
+        //    manager.PasswordValidator = new PasswordValidator
+        //    {
+        //        RequiredLength = 1,
+        //        RequireNonLetterOrDigit = false,
+        //        RequireDigit = false,
+        //        RequireLowercase = false,
+        //        RequireUppercase = false,
+        //    };
 
-            var dataProtectionProvider = options.DataProtectionProvider;
-            if (dataProtectionProvider != null)
-            {
-                manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
-            }
-            return manager;
-        }
+        //    // Configure user lockout defaults
+        //    manager.UserLockoutEnabledByDefault = false;
+        //    manager.DefaultAccountLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        //    manager.MaxFailedAccessAttemptsBeforeLockout = 5;
+        //    // Register two factor authentication providers. This application uses Phone and Emails as a step of receiving a code for verifying the user
+        //    // You can write your own provider and plug it in here.
+        //    //manager.RegisterTwoFactorProvider("Phone Code", new PhoneNumberTokenProvider<ApplicationUser>
+        //    //{
+        //    //    MessageFormat = "Your security code is {0}"
+        //    //});
+        //    //manager.RegisterTwoFactorProvider("Email Code", new EmailTokenProvider<ApplicationUser>
+        //    //{
+        //    //    Subject = "Security Code",
+        //    //    BodyFormat = "Your security code is {0}"
+        //    //});
+        //    //manager.EmailService = new EmailService();            
+
+        //    var dataProtectionProvider = options.DataProtectionProvider;
+        //    if (dataProtectionProvider != null)
+        //    {
+        //        manager.UserTokenProvider =
+        //            new DataProtectorTokenProvider<ApplicationUser>(dataProtectionProvider.Create("ASP.NET Identity"));
+        //    }
+        //    return manager;
+        //}
 
         public async override Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
         {
@@ -94,21 +96,21 @@ namespace ITJakub.Web.Hub.Identity
             
         }
 
-        public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
-        {
-            var claimsIdentity = await base.CreateIdentityAsync(user, authenticationType);
+        //public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
+        //{
+        //    var claimsIdentity = await base.claCreateIdentityAsync(user, authenticationType);
 
-            claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
+        //    claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
 
-            using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
-            {
-                var specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
-                var roleClaims = GetClaimsFromSpecialPermissions(specialPermissions);
-                claimsIdentity.AddClaims(roleClaims);
-            }
+        //    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
+        //    {
+        //        var specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
+        //        var roleClaims = GetClaimsFromSpecialPermissions(specialPermissions);
+        //        claimsIdentity.AddClaims(roleClaims);
+        //    }
 
-            return claimsIdentity;
-        }
+        //    return claimsIdentity;
+        //}
 
 
         private IList<Claim> GetClaimsFromSpecialPermissions(IList<SpecialPermissionContract> specialPermissions)
