@@ -10,7 +10,7 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public HomeController(StaticTextManager staticTextManager)
+        public HomeController(CommunicationProvider communicationProvider, StaticTextManager staticTextManager) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }

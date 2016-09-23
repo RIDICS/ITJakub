@@ -13,11 +13,15 @@ namespace ITJakub.Web.Hub.Identity
 {
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+        private readonly CommunicationProvider m_communication;
 
-        public ApplicationUserManager(IUserStore<ApplicationUser> store, IOptions<IdentityOptions> optionsAccessor, IPasswordHasher<ApplicationUser> passwordHasher, IEnumerable<IUserValidator<ApplicationUser>> userValidators, IEnumerable<IPasswordValidator<ApplicationUser>> passwordValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, IServiceProvider services, ILogger<UserManager<ApplicationUser>> logger) : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, IOptions<IdentityOptions> optionsAccessor,
+            IPasswordHasher<ApplicationUser> passwordHasher, IEnumerable<IUserValidator<ApplicationUser>> userValidators,
+            IEnumerable<IPasswordValidator<ApplicationUser>> passwordValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors,
+            IServiceProvider services, ILogger<UserManager<ApplicationUser>> logger, CommunicationProvider communicationProvider)
+            : base(store, optionsAccessor, passwordHasher, userValidators, passwordValidators, keyNormalizer, errors, services, logger)
         {
-
+            m_communication = communicationProvider;
         }
 
         // Before ASP.NET Core:

@@ -10,7 +10,10 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(Roles = CustomRole.CanManageFeedbacks)]
     public class FeedbackController : BaseController
     {
-        
+        public FeedbackController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult Feedback()
         {
             return View();

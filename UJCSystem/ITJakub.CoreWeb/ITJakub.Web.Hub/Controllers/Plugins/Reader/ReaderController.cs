@@ -12,6 +12,9 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 {
     public class ReaderController : BaseController
     {
+        public ReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
 
         public ActionResult HasBookPageByXmlId(string bookId, string versionId)
         {

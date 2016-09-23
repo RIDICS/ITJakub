@@ -15,7 +15,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Keyboard
         private readonly Lazy<Dictionary<string, LayoutListItem>> m_layoutKeys;
         private readonly Lazy<Dictionary<string, string>> m_layouts;
 
-        public KeyboardController(IHostingEnvironment environment)
+        public KeyboardController(CommunicationProvider communicationProvider, IHostingEnvironment environment) : base(communicationProvider)
         {
             m_layoutKeys = new Lazy<Dictionary<string, LayoutListItem>>(LoadLayoutKeys);
             m_layouts = new Lazy<Dictionary<string, string>>(LoadLayouts);

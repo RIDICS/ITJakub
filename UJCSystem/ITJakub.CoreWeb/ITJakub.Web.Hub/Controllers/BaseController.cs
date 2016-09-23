@@ -11,8 +11,12 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
-        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+        private readonly CommunicationProvider m_communication;
 
+        protected BaseController(CommunicationProvider communicationProvider)
+        {
+            m_communication = communicationProvider;
+        }
 
         public ItJakubServiceEncryptedClient GetEncryptedClient()
         {

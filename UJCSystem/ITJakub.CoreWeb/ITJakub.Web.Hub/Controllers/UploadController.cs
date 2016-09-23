@@ -11,6 +11,10 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(Roles = CustomRole.CanUploadBooks)]
     public class UploadController : BaseController
     {
+        public UploadController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult Upload()
         {
             return View(new UploadViewModel {SessionId = Guid.NewGuid().ToString()});

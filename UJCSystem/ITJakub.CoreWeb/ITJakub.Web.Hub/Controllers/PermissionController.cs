@@ -9,6 +9,9 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(Roles = CustomRole.CanManagePermissions)]
     public class PermissionController : BaseController
     {
+        public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
 
         public ActionResult UserPermission()
         {

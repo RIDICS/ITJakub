@@ -13,6 +13,10 @@ namespace ITJakub.Web.Hub.Controllers
     [Authorize(Roles = CustomRole.CanAddNews)]
     public class NewsController : BaseController
     {
+        public NewsController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult Feed(string feedType, string feedCount = "10")

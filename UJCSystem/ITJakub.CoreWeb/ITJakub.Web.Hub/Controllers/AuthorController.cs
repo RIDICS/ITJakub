@@ -4,6 +4,10 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class AuthorController : BaseController
     {
+        public AuthorController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult GetAllAuthors()
         {
             using (var client = GetMainServiceClient())

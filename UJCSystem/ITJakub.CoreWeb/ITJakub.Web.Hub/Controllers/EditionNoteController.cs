@@ -5,6 +5,10 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class EditionNoteController : BaseController
     {
+        public EditionNoteController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult EditionNote(long bookId)
         {
             using (var client = GetMainServiceClient())

@@ -2,6 +2,8 @@ using System;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
+using ITJakub.Web.Hub.Models.Options;
+using Microsoft.Extensions.Options;
 
 namespace ITJakub.Web.Hub
 {
@@ -16,7 +18,9 @@ namespace ITJakub.Web.Hub
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
-
+        public CommunicationProvider(IOptions<EndpointsOption> endpointOptions)
+        {
+        }
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)
         {

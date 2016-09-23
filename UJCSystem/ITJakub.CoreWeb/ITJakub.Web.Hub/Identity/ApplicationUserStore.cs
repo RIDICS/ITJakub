@@ -9,7 +9,12 @@ namespace ITJakub.Web.Hub.Identity
     public class ApplicationUserStore : IUserStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserLockoutStore<ApplicationUser>,
         IUserEmailStore<ApplicationUser>, IUserTwoFactorStore<ApplicationUser>
     {
-        private readonly CommunicationProvider m_communication = new CommunicationProvider();        
+        private readonly CommunicationProvider m_communication;
+
+        public ApplicationUserStore(CommunicationProvider communicationProvider)
+        {
+            m_communication = communicationProvider;
+        }
 
         public async Task SetEmailAsync(ApplicationUser user, string email, CancellationToken cancellationToken)
         {
