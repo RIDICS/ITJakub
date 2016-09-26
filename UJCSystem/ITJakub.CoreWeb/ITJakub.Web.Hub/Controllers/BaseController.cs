@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Security.Claims;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
@@ -60,7 +59,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         private string GetCommunicationToken()
         {
-            var communicationToken = ClaimsPrincipal.Current.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
+            var communicationToken = User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
             if (communicationToken == null)
                 throw new ArgumentException("Cannot find communicationToken");
 

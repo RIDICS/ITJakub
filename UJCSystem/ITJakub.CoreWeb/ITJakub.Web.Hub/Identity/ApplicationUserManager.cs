@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using ITJakub.Shared.Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -88,7 +85,6 @@ namespace ITJakub.Web.Hub.Identity
         {
             var result = await base.FindByNameAsync(userName);
             return result;
-
         }
 
         public bool RenewCommunicationToken(string userName)
@@ -97,81 +93,6 @@ namespace ITJakub.Web.Hub.Identity
             {
                 return client.RenewCommToken(userName);
             }
-            
-        }
-
-        //public async override Task<ClaimsIdentity> CreateIdentityAsync(ApplicationUser user, string authenticationType)
-        //{
-        //    var claimsIdentity = await base.claCreateIdentityAsync(user, authenticationType);
-
-        //    claimsIdentity.AddClaim(new Claim(CustomClaimType.CommunicationToken, user.CommunicationToken));
-
-        //    using (var authenticatedClient = m_communication.GetAuthenticatedClient(user.UserName, user.CommunicationToken))
-        //    {
-        //        var specialPermissions = authenticatedClient.GetSpecialPermissionsForUserByType(SpecialPermissionCategorizationEnumContract.Action);
-        //        var roleClaims = GetClaimsFromSpecialPermissions(specialPermissions);
-        //        claimsIdentity.AddClaims(roleClaims);
-        //    }
-
-        //    return claimsIdentity;
-        //}
-
-
-        private IList<Claim> GetClaimsFromSpecialPermissions(IList<SpecialPermissionContract> specialPermissions)
-        {
-            var claims = new List<Claim>();
-
-            if (specialPermissions.Count != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanViewAdminModule));
-            }
-
-            if (specialPermissions.OfType<UploadBookPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanUploadBooks));
-            }
-
-            if (specialPermissions.OfType<NewsPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanAddNews));
-            }
-
-            if (specialPermissions.OfType<ManagePermissionsPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManagePermissions));
-            }
-
-            if (specialPermissions.OfType<FeedbackPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanManageFeedbacks));
-            }
-
-            if (specialPermissions.OfType<ReadLemmatizationPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanReadLemmatization));
-            }
-
-            if (specialPermissions.OfType<EditLemmatizationPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditLemmatization));
-            }
-
-            if (specialPermissions.OfType<DerivateLemmatizationPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanDerivateLemmatization));
-            }
-
-            if (specialPermissions.OfType<EditionPrintPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditionPrint));
-            }
-
-            if (specialPermissions.OfType<EditStaticTextPermissionContract>().Count() != 0)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, CustomRole.CanEditStaticText));
-            }
-
-            return claims;
         }
     }
 }

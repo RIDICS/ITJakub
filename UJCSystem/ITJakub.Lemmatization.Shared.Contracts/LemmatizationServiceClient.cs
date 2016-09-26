@@ -12,6 +12,10 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public LemmatizationServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         public LemmatizationServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }

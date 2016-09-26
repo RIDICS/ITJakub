@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Identity
         //{
         //    return await UserManager.CreateIdentityAsync(user, DefaultAuthenticationTypes. ApplicationCookie);            
         //}
-
+        
         public override async Task<SignInResult> PasswordSignInAsync(string userName, string password, bool isPersistent, bool shouldLockout)
         {
             return await base.PasswordSignInAsync(userName, password, isPersistent, shouldLockout);

@@ -63,6 +63,8 @@ namespace ITJakub.Web.Hub
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseStatusCodePages();
+
             ConfigureAuth(app);
 
             app.UseStaticFiles();

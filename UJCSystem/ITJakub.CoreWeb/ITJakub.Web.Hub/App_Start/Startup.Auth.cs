@@ -35,6 +35,7 @@ namespace ITJakub.Web.Hub
 
             services.AddScoped<SignInManager<ApplicationUser>, ApplicationSignInManager>();
             services.AddScoped<IPasswordHasher<ApplicationUser>, CustomPasswordHasher>();
+            services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
         }
 
         public void ConfigureAuth(IApplicationBuilder app)

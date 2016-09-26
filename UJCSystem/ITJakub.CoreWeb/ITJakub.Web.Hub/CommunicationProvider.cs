@@ -57,6 +57,7 @@ namespace ITJakub.Web.Hub
             behavior.ClientCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindByThumbprint, "C787F20847606DC40E50E015A5D2E3A9E59B704C");
 
             var client = new ItJakubServiceEncryptedClient(binding, endpoint);
+            client.Endpoint.Behaviors.Remove<ClientCredentials>();
             client.Endpoint.Behaviors.Add(behavior);
 
             return client;

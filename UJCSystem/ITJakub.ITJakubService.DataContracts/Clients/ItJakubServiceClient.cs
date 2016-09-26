@@ -19,6 +19,10 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+        public ItJakubServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        {
+        }
+
         public ItJakubServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }

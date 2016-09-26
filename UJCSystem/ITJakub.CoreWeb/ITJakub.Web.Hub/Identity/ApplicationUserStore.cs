@@ -111,12 +111,12 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task<string> GetUserIdAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => user.Id, cancellationToken);
         }
 
         public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => user.UserName, cancellationToken);
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
@@ -136,7 +136,7 @@ namespace ITJakub.Web.Hub.Identity
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            var task = Task.Factory.StartNew<IdentityResult>(() =>
+            var task = Task.Factory.StartNew(() =>
             {
                 var userContract = new UserContract
                 {
