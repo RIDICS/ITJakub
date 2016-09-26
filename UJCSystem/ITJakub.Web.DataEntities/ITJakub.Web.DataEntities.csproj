@@ -99,9 +99,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ITJakub.Web.DataEntities.Container.Config" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Database\Entities\StaticText.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

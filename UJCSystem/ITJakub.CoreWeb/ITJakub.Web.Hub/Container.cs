@@ -39,10 +39,7 @@ namespace ITJakub.Web.Hub
             AddSubresolvers();
 
             InstallComponents();
-
-            ////Configure Nhibernate
-            //InstallFacilities();
-
+            
             //configure AutoMapper
             ConfigureAutoMapper();
             if (m_log.IsDebugEnabled)
@@ -52,8 +49,7 @@ namespace ITJakub.Web.Hub
         private void InstallComponents()
         {
             Install(FromAssembly.InThisApplication());
-            Install(Configuration.FromXml(GetConfigResource()));
-
+            
             //var controllerFactory = new WindsorControllerFactory(Kernel);
             //ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }

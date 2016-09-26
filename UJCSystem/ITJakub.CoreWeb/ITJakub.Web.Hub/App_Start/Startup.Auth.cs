@@ -3,7 +3,6 @@ using ITJakub.Web.Hub.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ITJakub.Web.Hub
@@ -24,6 +23,7 @@ namespace ITJakub.Web.Hub
                     options.Password.RequireUppercase = false;
 
                     //options.Lockout.UserLockoutEnabledByDefault = false;
+                    options.Lockout.AllowedForNewUsers = false;
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                     options.Lockout.MaxFailedAccessAttempts = 5;
                     

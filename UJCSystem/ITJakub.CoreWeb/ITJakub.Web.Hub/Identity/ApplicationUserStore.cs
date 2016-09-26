@@ -46,12 +46,12 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(user.Email.ToUpperInvariant());
         }
 
         public Task SetNormalizedEmailAsync(ApplicationUser user, string normalizedEmail, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(0);
         }
 
         public Task<DateTimeOffset?> GetLockoutEndDateAsync(ApplicationUser user, CancellationToken cancellationToken)
@@ -111,27 +111,27 @@ namespace ITJakub.Web.Hub.Identity
 
         public Task<string> GetUserIdAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => user.Id, cancellationToken);
+            return Task.FromResult(user.Id);
         }
 
         public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.Run(() => user.UserName, cancellationToken);
+            return Task.FromResult(user.UserName);
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(0);
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(user.UserName.ToUpperInvariant());
         }
 
         public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(0);
         }
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)

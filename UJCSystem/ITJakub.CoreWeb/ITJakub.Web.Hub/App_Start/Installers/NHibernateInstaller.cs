@@ -1,6 +1,7 @@
 using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.Web.DataEntities.Database.Daos;
+using Microsoft.Extensions.Configuration;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -37,11 +38,11 @@ namespace ITJakub.Web.Hub.App_Start.Installers
         {
             get
             {
+                var connectionString = Startup.Configuration.GetConnectionString("DefaultConnection");
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {
-                        db.ConnectionString = "Server=localhost;Database=ITJakubWebDB;User Id=admin;Password=***REMOVED***;";
-                        //db.ConnectionString = Properties.Settings.Default.DefaultConnectionString; // TODO use this way
+                        db.ConnectionString = connectionString;
                         db.Dialect<MsSql2008Dialect>();
                         db.Driver<SqlClientDriver>();
                         db.ConnectionProvider<DriverConnectionProvider>();
