@@ -1,14 +1,17 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
-using ITJakub.Web.Hub.Models.Options;
-using Microsoft.Extensions.Options;
 
 namespace ITJakub.Web.Hub
 {
     public class CommunicationProvider
     {
+        private readonly CommunicationConfigurationProvider m_configurationProvider;
+
         private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
@@ -18,13 +21,16 @@ namespace ITJakub.Web.Hub
 
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
-        public CommunicationProvider(IOptions<EndpointsOption> endpointOptions)
+        public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
         {
+            m_configurationProvider = communicationConfigurationProvider;
         }
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)
         {
-            var client = new ItJakubServiceClient(MainServiceEndpointNameAuthenticated);
+            var endpoint = m_configurationProvider.GetEndpointAddress(MainServiceEndpointNameAuthenticated);
+            var binding = m_configurationProvider.GetBasicHttpsBindingUserNameAuthentication();
+            var client = new ItJakubServiceClient(binding, endpoint);
             if (client.ClientCredentials == null)
             {
                 throw new ArgumentException("Cannot set credentials for client");
@@ -37,25 +43,38 @@ namespace ITJakub.Web.Hub
 
         public IItJakubService GetUnsecuredClient()
         {
-            var client = new ItJakubServiceClient(MainServiceEndpointName);
+            var endpoint = m_configurationProvider.GetEndpointAddress(MainServiceEndpointName);
+            var binding = m_configurationProvider.GetBasicHttpBinding();
+            var client = new ItJakubServiceClient(binding, endpoint);
             return client;
         }
 
         public ItJakubServiceEncryptedClient GetEncryptedClient()
         {
-            var client = new ItJakubServiceEncryptedClient(EncryptedEndpointName);
+            var endpoint = m_configurationProvider.GetEndpointAddress(EncryptedEndpointName);
+            var binding = m_configurationProvider.GetBasicHttpsBindingCertificateAuthentication();
+            var behavior = new ClientCredentials();
+            behavior.ClientCertificate.SetCertificate(StoreLocation.LocalMachine, StoreName.My, X509FindType.FindByThumbprint, "C787F20847606DC40E50E015A5D2E3A9E59B704C");
+
+            var client = new ItJakubServiceEncryptedClient(binding, endpoint);
+            client.Endpoint.Behaviors.Add(behavior);
+
             return client;
         }
 
         public ItJakubServiceStreamedClient GetStreamingClient()
         {
-            var client = new ItJakubServiceStreamedClient(StreamedServiceEndpointName);
+            var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointName);
+            var binding = m_configurationProvider.GetBasicHttpBindingStreamed();
+            var client = new ItJakubServiceStreamedClient(binding, endpoint);
             return client;
         }
 
         public ItJakubServiceStreamedClient GetStreamingClientAuthenticated(string username, string commToken)
         {
-            var client = new ItJakubServiceStreamedClient(StreamedServiceEndpointNameAuthenticated);
+            var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointNameAuthenticated);
+            var binding = m_configurationProvider.GetBasicHttpsBindingStreamed();
+            var client = new ItJakubServiceStreamedClient(binding, endpoint);
             if (client.ClientCredentials == null)
             {
                 throw new ArgumentException("Cannot set credentials for client");
@@ -68,7 +87,9 @@ namespace ITJakub.Web.Hub
 
         public LemmatizationServiceClient GetLemmatizationClient()
         {
-            return new LemmatizationServiceClient(LemmatizationServiceEndpointName);
+            var endpoint = m_configurationProvider.GetEndpointAddress(LemmatizationServiceEndpointName);
+            var binding = new BasicHttpBinding();
+            return new LemmatizationServiceClient(binding, endpoint);
         }
     }
 }

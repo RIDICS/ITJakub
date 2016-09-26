@@ -11,9 +11,9 @@ namespace ITJakub.Web.Hub.Controllers
     public class AccountController : BaseController
     {
         private readonly ApplicationUserManager m_userManager;
-        private readonly ApplicationSignInManager m_signInManager;
+        private readonly SignInManager<ApplicationUser> m_signInManager;
 
-        public AccountController(CommunicationProvider communicationProvider, ApplicationUserManager userManager, ApplicationSignInManager signInManager) : base(communicationProvider)
+        public AccountController(CommunicationProvider communicationProvider, ApplicationUserManager userManager, SignInManager<ApplicationUser> signInManager) : base(communicationProvider)
         {
             m_userManager = userManager;
             m_signInManager = signInManager;

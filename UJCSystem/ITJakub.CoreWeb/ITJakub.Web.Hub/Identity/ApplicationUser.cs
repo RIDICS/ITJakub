@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    public class ApplicationUser : IdentityUser<string>
+    public class ApplicationUser
     {
-        public override string Id { get; set; }
+        public string Id { get; set; }
 
-        public override string UserName { get; set; }
+        public string UserName { get; set; }
 
-        public override string Email { get; set; }
+        public string Email { get; set; }
 
-        public override string PasswordHash { get; set; }
+        public string PasswordHash { get; set; }
 
         public string FirstName { get; set; }
 

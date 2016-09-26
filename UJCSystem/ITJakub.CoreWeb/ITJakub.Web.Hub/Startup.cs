@@ -1,4 +1,5 @@
-﻿using ITJakub.Web.Hub.Managers;
+﻿using System.Collections.Generic;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -36,10 +37,11 @@ namespace ITJakub.Web.Hub
             ConfigureAuthServices(services);
 
             services.AddScoped<CommunicationProvider>();
+            services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
 
             services.AddOptions();
-            services.Configure<EndpointsOption>(Configuration.GetSection("Endpoints"));
+            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
 
             services.AddMvc();
         }

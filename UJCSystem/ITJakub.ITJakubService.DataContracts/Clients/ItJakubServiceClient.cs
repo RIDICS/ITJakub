@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.News;
@@ -18,10 +19,10 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ItJakubServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        public ItJakubServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }
-          
+
         private string GetCurrentMethod([CallerMemberName] string methodName = null)
         {
             return methodName;

@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using ITJakub.Shared.Contracts;
 using log4net;
 
@@ -10,8 +11,8 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
     public class ItJakubServiceEncryptedClient : ClientBase<IItJakubServiceEncrypted>, IItJakubServiceEncrypted
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        public ItJakubServiceEncryptedClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        
+        public ItJakubServiceEncryptedClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }
 

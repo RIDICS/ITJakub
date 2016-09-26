@@ -12,7 +12,7 @@ namespace ITJakub.Web.Hub
     {
         public void ConfigureAuthServices(IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, CustomRole>(options =>
                 {
                     //options.User.AllowOnlyAlphanumericUserNames = false;
                     options.User.RequireUniqueEmail = false;
@@ -30,6 +30,7 @@ namespace ITJakub.Web.Hub
                 })
                 .AddUserManager<ApplicationUserManager>()
                 .AddUserStore<ApplicationUserStore>()
+                .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
             services.AddScoped<SignInManager<ApplicationUser>, ApplicationSignInManager>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using log4net;
 
 namespace ITJakub.Lemmatization.Shared.Contracts
@@ -11,7 +12,7 @@ namespace ITJakub.Lemmatization.Shared.Contracts
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public LemmatizationServiceClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        public LemmatizationServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }
 

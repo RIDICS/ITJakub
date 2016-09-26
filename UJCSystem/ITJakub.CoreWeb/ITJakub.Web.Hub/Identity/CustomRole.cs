@@ -1,6 +1,6 @@
 namespace ITJakub.Web.Hub.Identity
 {
-    public static class CustomRole
+    public class CustomRole
     {
         public const string CanViewAdminModule = "CanViewAdminModule";
         public const string CanUploadBooks = "CanUploadBooks";

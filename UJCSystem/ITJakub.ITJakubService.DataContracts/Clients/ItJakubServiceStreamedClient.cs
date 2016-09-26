@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
@@ -13,7 +14,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ItJakubServiceStreamedClient(string endpointConfigurationName) : base(endpointConfigurationName)
+        public ItJakubServiceStreamedClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
         }
 
