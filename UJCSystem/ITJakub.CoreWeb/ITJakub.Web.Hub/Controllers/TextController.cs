@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
-        public ActionResult SaveText(StaticTextViewModel viewModel)
+        public ActionResult SaveText([FromBody] StaticTextViewModel viewModel)
         {
             var username = User.Identity.Name;
             var modificationUpdate = m_staticTextManager.SaveText(viewModel.Name, viewModel.Text, viewModel.Format, username);
@@ -40,7 +40,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
-        public ActionResult RenderPreview(RenderTextPreviewRequest request)
+        public ActionResult RenderPreview([FromBody] RenderTextPreviewRequest request)
         {
             string result;
             switch (request.InputTextFormat)

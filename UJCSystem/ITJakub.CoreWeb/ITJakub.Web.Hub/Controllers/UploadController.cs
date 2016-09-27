@@ -24,9 +24,9 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult UploadFile(UploadFileRequest request)
         {
-            for (var i = 0; i < request.Files.Count; i++)
+            for (var i = 0; i < Request.Form.Files.Count; i++)
             {
-                var file = request.Files[i];
+                var file = Request.Form.Files[i];
                 if (file != null && file.Length != 0)
                 {
                     using (var client = GetStreamingClient())
@@ -46,7 +46,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult ProcessUploadedFiles(ProcessUploadedFilesRequest request)
+        public ActionResult ProcessUploadedFiles([FromBody] ProcessUploadedFilesRequest request)
         {
             using (var client = GetMainServiceClient())
             {

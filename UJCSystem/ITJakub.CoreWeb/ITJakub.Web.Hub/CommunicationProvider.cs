@@ -16,9 +16,8 @@ namespace ITJakub.Web.Hub
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
         private const string StreamedServiceEndpointName = "ItJakubServiceStreamed";
-        //private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
-        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed";
-
+        private const string StreamedServiceEndpointNameAuthenticated = "ItJakubServiceStreamed.Authenticated";
+        
         private const string LemmatizationServiceEndpointName = "LemmatizationService";
 
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
@@ -73,16 +72,17 @@ namespace ITJakub.Web.Hub
 
         public ItJakubServiceStreamedClient GetStreamingClientAuthenticated(string username, string commToken)
         {
-            var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointNameAuthenticated);
-            var binding = m_configurationProvider.GetBasicHttpsBindingStreamed();
-            var client = new ItJakubServiceStreamedClient(binding, endpoint);
-            if (client.ClientCredentials == null)
-            {
-                throw new ArgumentException("Cannot set credentials for client");
-            }
-            client.ClientCredentials.UserName.UserName = username;
-            client.ClientCredentials.UserName.Password = commToken;
-            return client;
+            return GetStreamingClient();
+            //var endpoint = m_configurationProvider.GetEndpointAddress(StreamedServiceEndpointNameAuthenticated);
+            //var binding = m_configurationProvider.GetBasicHttpsBindingStreamed();
+            //var client = new ItJakubServiceStreamedClient(binding, endpoint);
+            //if (client.ClientCredentials == null)
+            //{
+            //    throw new ArgumentException("Cannot set credentials for client");
+            //}
+            //client.ClientCredentials.UserName.UserName = username;
+            //client.ClientCredentials.UserName.Password = commToken;
+            //return client;
         }
 
 

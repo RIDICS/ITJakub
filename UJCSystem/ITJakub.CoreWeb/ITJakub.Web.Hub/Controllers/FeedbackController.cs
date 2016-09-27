@@ -54,7 +54,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFeedback(long feedbackId)
+        public ActionResult DeleteFeedback([FromBody] long feedbackId)
         {
             using (var client = GetMainServiceClient())
             {

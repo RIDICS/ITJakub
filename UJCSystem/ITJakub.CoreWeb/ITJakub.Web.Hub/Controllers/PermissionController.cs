@@ -60,7 +60,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddUserToGroup(AddUserToGroupRequest request)
+        public ActionResult AddUserToGroup([FromBody] AddUserToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -70,7 +70,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGroup(CreateGroupRequest request)
+        public ActionResult CreateGroup([FromBody] CreateGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -80,7 +80,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGroupWithUser(CreateGroupWithUserRequest request)
+        public ActionResult CreateGroupWithUser([FromBody] CreateGroupWithUserRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -91,7 +91,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveUserFromGroup(RemoveUserFromGroupRequest request)
+        public ActionResult RemoveUserFromGroup([FromBody] RemoveUserFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -137,7 +137,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteGroup(int groupId)
+        public ActionResult DeleteGroup([FromBody] int groupId)
         {
             using (var client = GetMainServiceClient())
             {
@@ -147,7 +147,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddBooksAndCategoriesToGroup(AddBooksAndCategoriesToGroupRequest request)
+        public ActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -157,7 +157,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveBooksAndCategoriesFromGroup(RemoveBooksAndCategoriesFromGroupRequest request)
+        public ActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -188,7 +188,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddSpecialPermissionsToGroup(AddSpecialPermissionsToGroupRequest request)
+        public ActionResult AddSpecialPermissionsToGroup([FromBody] AddSpecialPermissionsToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -198,7 +198,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveSpecialPermissionsFromGroup(RemoveSpecialPermissionsFromGroupRequest request)
+        public ActionResult RemoveSpecialPermissionsFromGroup([FromBody] RemoveSpecialPermissionsFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
