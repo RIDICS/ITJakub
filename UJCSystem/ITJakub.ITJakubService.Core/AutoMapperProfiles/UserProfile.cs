@@ -1,7 +1,6 @@
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.Shared.Contracts;
-using Microsoft.SqlServer.Server;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {
@@ -17,12 +16,15 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.LastName, opt => opt.MapFrom(src => src.LastName))
                 .ForMember(m => m.Email, opt => opt.MapFrom(src => src.Email))
                 .ForMember(m => m.CreateTime, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(m => m.CommunicationToken, opt => opt.MapFrom(src => src.CommunicationToken))                
-                .Include<User, UserDetailContract>();
+                .Include<User, UserDetailContract>()
+                .Include<User, PrivateUserContract>();
 
             CreateMap<User, UserDetailContract>()            
                 .ForMember(m => m.Groups, opt => opt.MapFrom(src => src.Groups));
 
+            CreateMap<User, PrivateUserContract>()
+                .ForMember(m => m.CommunicationToken, opt => opt.MapFrom(src => src.CommunicationToken))
+                .ForMember(m => m.PasswordHash, opt => opt.MapFrom(src => src.PasswordHash));
         }
     }
 }

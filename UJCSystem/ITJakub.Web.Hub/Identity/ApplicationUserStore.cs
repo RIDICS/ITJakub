@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.WebPages;
 using ITJakub.Shared.Contracts;
@@ -99,7 +98,7 @@ namespace ITJakub.Web.Hub.Identity
         {
             var task = Task.Factory.StartNew(() =>
             {
-                var userContract = new UserContract
+                var userContract = new PrivateUserContract
                 {
                     UserName = user.UserName,
                     Email = user.Email,
@@ -138,7 +137,7 @@ namespace ITJakub.Web.Hub.Identity
             {
                 using (var client = m_communication.GetEncryptedClient())
                 {
-                    var user = client.FindUserById(int.Parse(userId));
+                    var user = client.PrivateFindUserById(int.Parse(userId));
                     if (user == null) return null;                    
 
                     return new ApplicationUser
@@ -164,7 +163,7 @@ namespace ITJakub.Web.Hub.Identity
             {
                 using (var client = m_communication.GetEncryptedClient())
                 {
-                    var user = client.FindUserByUserName(userName);
+                    var user = client.PrivateFindUserByUserName(userName);
                     if (user == null) return null;
 
                     return new ApplicationUser
