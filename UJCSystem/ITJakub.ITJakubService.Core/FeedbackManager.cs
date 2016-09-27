@@ -95,8 +95,13 @@ namespace ITJakub.ITJakubService.Core
         public List<FeedbackContract> GetFeedbacks(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             m_authorizationManager.CheckUserCanManageFeedbacks();
-            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
+
             var sortCriteria = feedbackSearchCriteria.SortCriteria;
+            var categoriesContract = feedbackSearchCriteria.Categories;
+            var categories = categoriesContract != null && categoriesContract.Count > 0
+                ? categoriesContract.Select(category => (FeedbackCategoryEnum) category).ToList()
+                : null;
+            
             var feedbacks = m_feedbackRepository.GetFeedbacks(categories, (FeedbackSortEnum) sortCriteria.SortByField, sortCriteria.SortAsc,
                 feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
             return Mapper.Map<List<FeedbackContract>>(feedbacks);
@@ -105,7 +110,11 @@ namespace ITJakub.ITJakubService.Core
         public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
         {
             m_authorizationManager.CheckUserCanManageFeedbacks();
-            var categories = feedbackSearchCriteria.Categories?.Select(category => (FeedbackCategoryEnum) category).ToList();
+
+            var categoriesContract = feedbackSearchCriteria.Categories;
+            var categories = categoriesContract != null && categoriesContract.Count > 0
+                ? categoriesContract.Select(category => (FeedbackCategoryEnum) category).ToList()
+                : null;
             return m_feedbackRepository.GetFeedbacksCount(categories);
         }
 

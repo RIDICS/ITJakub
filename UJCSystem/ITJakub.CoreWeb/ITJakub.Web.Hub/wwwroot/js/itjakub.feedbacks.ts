@@ -1,4 +1,17 @@
-﻿var categoryTranslation = [
+﻿enum FeedbackCategoryEnum {
+    None = 0,
+    Dictionaries = 1,
+    Editions = 2,
+    BohemianTextBank = 3,
+    OldGrammar = 4,
+    ProfessionalLiterature = 5,
+    Bibliographies = 6,
+    CardFiles = 7,
+    AudioBooks = 8,
+    Tools = 9,
+}
+
+var categoryTranslation = [
     "Žádná",
     "Slovníky",
     "Edice",
@@ -42,7 +55,7 @@ $(document).ready(() => {
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Feedback/DeleteFeedback",
-            data: { feedbackId: feedbackId },
+            data: JSON.stringify({ feedbackId: feedbackId }),
             dataType: "json",
             contentType: "application/json",
             success: response => {
@@ -60,7 +73,7 @@ $(document).ready(() => {
             data: { categories: categories, start: start, count: count, sortCriteria: sortCriteria, sortAsc: sortOrderAsc },
             dataType: "json",
             contentType: "application/json",
-            success: results => {
+            success: (results: IFeedback[]) => {
                 var feedbacksContainer = document.getElementById("feedbacks");
                 $(feedbacksContainer).empty();
 
@@ -69,7 +82,7 @@ $(document).ready(() => {
 
                     var feedbackDiv = document.createElement("div");
                     $(feedbackDiv).addClass("feedback");
-                    feedbackDiv.id = actualFeedback["Id"];
+                    feedbackDiv.id = actualFeedback.id.toString();
 
                     var feedbackHeaderDiv = document.createElement("div");
                     $(feedbackHeaderDiv).addClass("feedback-header");
@@ -82,17 +95,17 @@ $(document).ready(() => {
                     var name = "";
                     var email = "";
                     var signed = "";
-                    var category = actualFeedback["Category"];
-                    var date = convertDate(actualFeedback["CreateDate"]);
+                    var category = actualFeedback.category;
+                    var date = convertDate(actualFeedback.createDate);
 
-                    var user = actualFeedback["User"];
+                    var user = actualFeedback.user;
                     if (typeof user !== "undefined" && user !== null) {
-                        name = user["FirstName"] + " " + user["LastName"];
-                        email = user["Email"];
+                        name = user.firstName + " " + user.lastName;
+                        email = user.email;
                         signed = "ano";
                     } else {
-                        name = actualFeedback["FilledName"];
-                        email = actualFeedback["FilledEmail"];
+                        name = actualFeedback.filledName;
+                        email = actualFeedback.filledEmail;
                         signed = "ne";
                     }
 
@@ -124,7 +137,7 @@ $(document).ready(() => {
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation[parseInt(category)]}`;
+                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation[category]}`;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
@@ -162,7 +175,7 @@ $(document).ready(() => {
 
                     var feedbackTextDiv = document.createElement("div");
                     $(feedbackTextDiv).addClass("feedback-text");
-                    $(feedbackTextDiv).html(actualFeedback.Text);
+                    $(feedbackTextDiv).html(actualFeedback.text);
 
 
                     feedbackDiv.appendChild(feedbackHeaderDiv);

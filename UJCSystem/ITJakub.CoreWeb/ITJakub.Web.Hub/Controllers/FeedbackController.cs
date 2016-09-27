@@ -2,6 +2,7 @@
 using System.Linq;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,11 +55,11 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteFeedback([FromBody] long feedbackId)
+        public ActionResult DeleteFeedback([FromBody] DeleteFeedbackRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteFeedback(feedbackId);
+                client.DeleteFeedback(request.FeedbackId);
                 return Json(new {});
             }
         }

@@ -59,9 +59,9 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("message");
 
-        var date = convertDate(item.CreateDate);
+        var date = convertDate(item.createDate);
         var titleHeader = document.createElement("h2");
-        titleHeader.innerHTML = item.Title;
+        titleHeader.innerHTML = item.title;
 
         itemDiv.appendChild(titleHeader);
 
@@ -72,7 +72,7 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         itemDiv.appendChild(dateDiv);
 
         var itemMessage = document.createElement("p");
-        itemMessage.innerHTML = item.Text;
+        itemMessage.innerHTML = item.text;
 
         itemDiv.appendChild(itemMessage);
 
@@ -86,16 +86,4 @@ function clearLoading() {
 
 function showLoading() {
     $(this.newsContainer).addClass("loader");
-}
-
-
-interface INewsSyndicationItemContract {
-
-    Title: string;
-    Text: string;
-    Url: string;
-    UserEmail: string;
-    CreateDate: string;
-    UserFirstName: string;
-    UserLastName: string;
 }
