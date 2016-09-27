@@ -43,8 +43,8 @@ class GroupPermissionEditor {
         }
         this.searchBox = new SingleSetTypeaheadSearchBox<IGroup>("#mainSearchInput",
             "Permission",
-            (item) => item.Name,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Name, item.Description));
+            (item) => item.name,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
         this.searchBox.setDataSet("Group");
 
         this.searchBox.create((selectedExist, selectionConfirmed) => {
@@ -92,7 +92,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/DeleteGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id}),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id}),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -117,7 +117,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/AddBooksAndCategoriesToGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: selectedBookIds, categoryIds: selectedCategoryIds }),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id, bookIds: selectedBookIds, categoryIds: selectedCategoryIds }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -144,7 +144,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/AddSpecialPermissionsToGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, specialPermissionIds: specialPermissionIds}),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id, specialPermissionIds: specialPermissionIds}),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -168,14 +168,14 @@ class GroupPermissionEditor {
             return;
         }
 
-        updateQueryStringParameter("groupId", group.Id);
+        updateQueryStringParameter("groupId", group.id);
 
         $("#createGroupButton").addClass("hidden");
         $("#selected-item-div").removeClass("hidden");
         $("#right-panel").removeClass("hidden");
 
-        $("#specificGroupName").text(group.Name);
-        $("#specificGroupDescription").text(group.Description);
+        $("#specificGroupName").text(group.name);
+        $("#specificGroupDescription").text(group.description);
 
         var allowedBooksUl = $("#allowedBooksList");
         $(allowedBooksUl).empty();
@@ -207,7 +207,7 @@ class GroupPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetSpecialPermissionsForGroup",
-            data: {groupId: group.Id},
+            data: {groupId: group.id},
             dataType: "json",
             contentType: "application/json",
             success: (specialPermissions) => {
@@ -248,7 +248,7 @@ class GroupPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetCategoryContent",
-            data: { groupId: this.currentGroupSelectedItem.Id, categoryId: categoryId },
+            data: { groupId: this.currentGroupSelectedItem.id, categoryId: categoryId },
             dataType: "json",
             contentType: "application/json",
             success: (response: ICategoryContent) => {
@@ -256,14 +256,14 @@ class GroupPermissionEditor {
                 var detailsUl: HTMLUListElement = document.createElement("ul");
                 $(detailsUl).addClass("list-item-details-list");
 
-                for (var i = 0; i < response.Categories.length; i++) {
-                    var category = response.Categories[i];
+                for (var i = 0; i < response.categories.length; i++) {
+                    var category = response.categories[i];
                     var item = this.createCategoryListItem(category);
                     detailsUl.appendChild(item);
                 }
 
-                for (var i = 0; i < response.Books.length; i++) {
-                    var book = response.Books[i];
+                for (var i = 0; i < response.books.length; i++) {
+                    var book = response.books[i];
                     var bookItem = this.createBookListItem(book);
                     detailsUl.appendChild(bookItem);
                 }
@@ -292,7 +292,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: new Array<number>(), categoryIds: [category.Id] }),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id, bookIds: new Array<number>(), categoryIds: [category.id] }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -336,7 +336,7 @@ class GroupPermissionEditor {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.Id);
+                    this.loadCategoryContent(detailsDiv, category.id);
                 }
 
                 detailsDiv.slideDown();
@@ -356,7 +356,7 @@ class GroupPermissionEditor {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = category.Description;
+        nameSpan.innerHTML = category.description;
 
         groupLi.appendChild(nameSpan);
 
@@ -385,7 +385,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/RemoveBooksAndCategoriesFromGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, bookIds: [book.Id], categoryIds: new Array<number>() }),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id, bookIds: [book.id], categoryIds: new Array<number>() }),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -407,7 +407,7 @@ class GroupPermissionEditor {
         
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = book.Title;
+        nameSpan.innerHTML = book.title;
 
         bookLi.appendChild(nameSpan);
 
@@ -504,7 +504,7 @@ class GroupPermissionEditor {
                 type: "POST",
                 traditional: true,
                 url: getBaseUrl() + "Permission/RemoveSpecialPermissionsFromGroup",
-                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.Id, specialPermissionIds: [specialPermission.Id]}),
+                data: JSON.stringify({ groupId: this.currentGroupSelectedItem.id, specialPermissionIds: [specialPermission.id]}),
                 dataType: "json",
                 contentType: "application/json",
                 success: (response) => {
@@ -627,11 +627,11 @@ class SpecialPermissionTextResolver {
     }
 
     private static resolveCardFileText(cardFilePermission: ICardFilePermission):string {
-        return cardFilePermission.CardFileName;
+        return cardFilePermission.cardFileName;
     }
 
     private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
-        return autoimportPermission.Category.Description;
+        return autoimportPermission.category.description;
     }
 
 }
@@ -776,9 +776,9 @@ class SpecialPermissionsSelector {
             var target: HTMLInputElement = <HTMLInputElement>event.target;
 
             if (target.checked) {
-                this.addToSelectedPermissions(specialPermission.Id);
+                this.addToSelectedPermissions(specialPermission.id);
             } else {
-                this.removeFromSelectedPermissions(specialPermission.Id);
+                this.removeFromSelectedPermissions(specialPermission.id);
             }
 
             var parentNodeItem: HTMLLIElement = <HTMLLIElement>$(specPermissionLi).parents("li.list-item.non-leaf").first()[0];
@@ -887,7 +887,7 @@ class BooksSelector {
     private createCategoryListItem(category: ICategory): HTMLLIElement {
         var groupLi = document.createElement("li");
         $(groupLi).addClass("list-item non-leaf");
-        $(groupLi).data("id", category.Id);
+        $(groupLi).data("id", category.id);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -906,11 +906,11 @@ class BooksSelector {
                 $(listItems).find(".list-item-check input").prop("checked", false).trigger("change", [{ propagate: false }]);
                 $(listItems).find(".list-item-check input").prop("checked", true);
                 $(target).prop("checked", true);
-                this.addToSelectedCategories(category.Id);
+                this.addToSelectedCategories(category.id);
             } else {
                 $(listItems).find(".list-item-check input").prop("checked", false);
                 $(target).prop("checked", false);
-                this.removeFromSelectedCategories(category.Id);
+                this.removeFromSelectedCategories(category.id);
             }
             
             if (typeof data === "undefined" || data === null || data.propagate === true) {
@@ -941,7 +941,7 @@ class BooksSelector {
                 $(target).addClass("glyphicon-chevron-up");
 
                 if (!detailsDiv.hasClass("loaded")) {
-                    this.loadCategoryContent(detailsDiv, category.Id);
+                    this.loadCategoryContent(detailsDiv, category.id);
                 }
 
                 detailsDiv.slideDown();
@@ -961,7 +961,7 @@ class BooksSelector {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = category.Description;
+        nameSpan.innerHTML = category.description;
 
         groupLi.appendChild(nameSpan);
 
@@ -978,7 +978,7 @@ class BooksSelector {
     private createBookListItem(book: IBook): HTMLLIElement {
         var bookLi = document.createElement("li");
         $(bookLi).addClass("list-item leaf");
-        $(bookLi).data("id", book.Id);
+        $(bookLi).data("id", book.id);
 
         var buttonsSpan = document.createElement("span");
         $(buttonsSpan).addClass("list-item-buttons");
@@ -993,9 +993,9 @@ class BooksSelector {
             var target: HTMLInputElement = <HTMLInputElement>event.target;
 
             if (target.checked) {
-                this.addToSelectedBooks(book.Id);
+                this.addToSelectedBooks(book.id);
             } else {
-                this.removeFromSelectedBooks(book.Id);
+                this.removeFromSelectedBooks(book.id);
             }
 
             if (typeof data === "undefined" || data === null || data.propagate === true) {
@@ -1012,7 +1012,7 @@ class BooksSelector {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = book.Title;
+        nameSpan.innerHTML = book.title;
 
         bookLi.appendChild(nameSpan);
 
@@ -1070,14 +1070,14 @@ class BooksSelector {
                 var detailsUl: HTMLUListElement = document.createElement("ul");
                 $(detailsUl).addClass("list-item-details-list");
 
-                for (var i = 0; i < response.Categories.length; i++) {
-                    var category = response.Categories[i];
+                for (var i = 0; i < response.categories.length; i++) {
+                    var category = response.categories[i];
                     var item = this.createCategoryListItem(category);
                     detailsUl.appendChild(item);
                 }
 
-                for (var i = 0; i < response.Books.length; i++) {
-                    var book = response.Books[i];
+                for (var i = 0; i < response.books.length; i++) {
+                    var book = response.books[i];
                     var bookItem = this.createBookListItem(book);
                     detailsUl.appendChild(bookItem);
                 }

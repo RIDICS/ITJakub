@@ -1,50 +1,49 @@
 ﻿
-
 interface IUser {
-    Id: number;
-    UserName: string;
-    Email: string;
-    FirstName: string;
-    LastName: string;
+    id: number;
+    userName: string;
+    email: string;
+    firstName: string;
+    lastName: string;
 }
 
 interface IGroup {
-    Id: number;
-    Name: string;
-    Description: string;
+    id: number;
+    name: string;
+    description: string;
 }
 
 interface ICategory {
-    Id: number;
-    Description: string;
+    id: number;
+    description: string;
 }
 
 interface IBook {
-    Id: number;
-    Guid: string;
-    Title: string;
+    id: number;
+    guid: string;
+    title: string;
 }
 
 interface ISpecialPermission {
-    Id: number;
+    id: number;
 }
 
 
 interface ICardFilePermission extends ISpecialPermission {
-    CardFileId: string;
-    CardFileName: string;
+    cardFileId: string;
+    cardFileName: string;
 }
 
 interface IAutoImportPermission extends ISpecialPermission {
-    Category: IBookCategory;
+    category: IBookCategory;
 }
 
 interface IBookCategory {
-    Id: number;
-    Description: string;
+    id: number;
+    description: string;
 }
 
 interface ICategoryContent {
-    Categories: ICategory[];
-    Books: IBook[];
+    categories: ICategory[];
+    books: IBook[];
 }

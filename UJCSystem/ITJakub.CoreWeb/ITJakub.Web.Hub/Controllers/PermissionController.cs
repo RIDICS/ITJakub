@@ -137,11 +137,11 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteGroup([FromBody] int groupId)
+        public ActionResult DeleteGroup([FromBody] DeleteGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteGroup(groupId);
+                client.DeleteGroup(request.GroupId);
                 return Json(new {});
             }
         }

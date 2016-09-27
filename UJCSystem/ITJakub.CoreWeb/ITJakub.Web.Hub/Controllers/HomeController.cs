@@ -42,7 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
 
-            var username = User.Identity.Name;
+            var username = GetUserName();
             if (string.IsNullOrWhiteSpace(username))
             {
                 var viewModel = new FeedbackViewModel

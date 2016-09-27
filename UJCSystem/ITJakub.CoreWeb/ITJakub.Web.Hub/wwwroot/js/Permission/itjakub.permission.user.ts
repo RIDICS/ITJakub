@@ -18,14 +18,14 @@ class UserPermissionEditor {
         this.mainContainer = mainContainer;
         this.searchBox = new SingleSetTypeaheadSearchBox<IUser>("#mainSearchInput", "Permission",
             this.getFullNameString,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item), item.Email));
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(this.getFullNameString(item), item.email));
         this.groupSearchBox = new SingleSetTypeaheadSearchBox<IGroup>("#groupSearchInput", "Permission",
-            (item) => item.Name,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Name, item.Description));
+            (item) => item.name,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.name, item.description));
     }
 
     private getFullNameString(user: IUser): string {
-        return user.UserName + " - " + user.FirstName + " " + user.LastName;
+        return user.userName + " - " + user.firstName + " " + user.lastName;
     }
 
     public make() {
@@ -53,8 +53,8 @@ class UserPermissionEditor {
             if (selectionConfirmed) {
                 var selectedItem = <IGroup>this.groupSearchBox.getValue();
                 this.groupSearchCurrentSelectedItem = selectedItem;
-                $("#specificGroupName").text(selectedItem.Name);
-                $("#specificGroupDescription").text(selectedItem.Description);
+                $("#specificGroupName").text(selectedItem.name);
+                $("#specificGroupDescription").text(selectedItem.description);
             }
         });
 
@@ -70,7 +70,7 @@ class UserPermissionEditor {
                     type: "POST",
                     traditional: true,
                     url: getBaseUrl() + "Permission/AddUserToGroup",
-                    data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupId: this.groupSearchCurrentSelectedItem.Id }),
+                    data: JSON.stringify({ userId: this.currentUserSelectedItem.id, groupId: this.groupSearchCurrentSelectedItem.id }),
                     dataType: "json",
                     contentType: "application/json",
                     success: (response) => {
@@ -90,7 +90,7 @@ class UserPermissionEditor {
                     type: "POST",
                     traditional: true,
                     url: getBaseUrl() + "Permission/CreateGroupWithUser",
-                    data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupName: groupName, groupDescription: groupDescription }),
+                    data: JSON.stringify({ userId: this.currentUserSelectedItem.id, groupName: groupName, groupDescription: groupDescription }),
                     dataType: "json",
                     contentType: "application/json",
                     success: (response) => {
@@ -107,13 +107,13 @@ class UserPermissionEditor {
 
     private loadUser(user: IUser) {
         this.currentUserSelectedItem = user;
-        updateQueryStringParameter("userId", user.Id);
+        updateQueryStringParameter("userId", user.id);
 
         $("#selected-item-div").removeClass("hidden");
-        $("#specificUserFirstName").text(user.FirstName);
-        $("#specificUserLastName").text(user.LastName);
-        $("#specificUserUsername").text(user.UserName);
-        $("#specificUserEmail").text(user.Email);
+        $("#specificUserFirstName").text(user.firstName);
+        $("#specificUserLastName").text(user.lastName);
+        $("#specificUserUsername").text(user.userName);
+        $("#specificUserEmail").text(user.email);
 
         var groupsUl = $("ul.items-list");
         $(groupsUl).empty();
@@ -122,7 +122,7 @@ class UserPermissionEditor {
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Permission/GetGroupsByUser",
-            data: { userId: user.Id },
+            data: { userId: user.id },
             dataType: "json",
             contentType: "application/json",
             success: (results) => {
@@ -163,7 +163,7 @@ class UserPermissionEditor {
         $(buttonsSpan).addClass("list-item-buttons");
 
         var editAnchor = document.createElement("a");
-        editAnchor.href = "/Permission/GroupPermission?groupId=" + group.Id;
+        editAnchor.href = "/Permission/GroupPermission?groupId=" + group.id;
 
         var editSpan = document.createElement("span");
         $(editSpan).addClass("glyphicon glyphicon-edit list-item-edit");
@@ -176,7 +176,7 @@ class UserPermissionEditor {
         $(removeSpan).addClass("glyphicon glyphicon-trash list-item-remove");
 
         $(removeSpan).click(() => {
-            this.removeGroup(group.Id);
+            this.removeGroup(group.id);
         });
 
         buttonsSpan.appendChild(removeSpan);
@@ -209,13 +209,13 @@ class UserPermissionEditor {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = group.Name;
+        nameSpan.innerHTML = group.name;
 
         groupLi.appendChild(nameSpan);
 
         var detailsDiv = document.createElement("div");
         $(detailsDiv).addClass("list-item-details");
-        detailsDiv.innerHTML = group.Description;
+        detailsDiv.innerHTML = group.description;
 
         $(detailsDiv).hide();
 
@@ -230,7 +230,7 @@ class UserPermissionEditor {
             type: "POST",
             traditional: true,
             url: getBaseUrl() + "Permission/RemoveUserFromGroup",
-            data: JSON.stringify({ userId: this.currentUserSelectedItem.Id, groupId: groupId }),
+            data: JSON.stringify({ userId: this.currentUserSelectedItem.id, groupId: groupId }),
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

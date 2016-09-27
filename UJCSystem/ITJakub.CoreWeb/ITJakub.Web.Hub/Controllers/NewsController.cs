@@ -88,7 +88,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            var username = GetUserName();
 
             using (var client = GetMainServiceClient())
                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);
