@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Managers;
 using Microsoft.AspNetCore.Identity;
 
 namespace ITJakub.Web.Hub.Identity

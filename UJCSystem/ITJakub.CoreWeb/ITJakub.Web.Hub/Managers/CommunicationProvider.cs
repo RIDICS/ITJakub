@@ -6,7 +6,7 @@ using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.Web.Hub.Managers
 {
     public class CommunicationProvider
     {

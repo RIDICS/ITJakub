@@ -1,4 +1,5 @@
 using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Managers;
 
 namespace ITJakub.Web.Hub.Controllers
 {

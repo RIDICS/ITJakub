@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using ITJakub.Web.Hub.Models.Options;
 using Microsoft.Extensions.Options;
-using System.Linq;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.Web.Hub.Managers
 {
     public class CommunicationConfigurationProvider
     {

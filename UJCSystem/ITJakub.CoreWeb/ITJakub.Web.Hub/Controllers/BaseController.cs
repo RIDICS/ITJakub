@@ -4,6 +4,7 @@ using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers

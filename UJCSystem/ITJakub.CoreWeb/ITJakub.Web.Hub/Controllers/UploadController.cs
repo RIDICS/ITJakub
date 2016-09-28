@@ -1,6 +1,7 @@
 ﻿using System;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
