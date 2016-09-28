@@ -1,12 +1,12 @@
-﻿@{
-    ViewBag.Title = "Edice - Vyhledávání";
-}
-@section styles{
-    <link href="~/wwwroot/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />
+﻿@section styles{
+    <link href="~/Areas/Bibliographies/css/itjakub.bibliographies.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/wwwroot/Areas/Editions/js/itjakub.editions.js"></script>
-    <script src="~/wwwroot/Areas/Editions/js/itjakub.editions.search.js"></script>
+    <script src="~/Areas/Bibliographies/js/itjakub.bibliographies.search.js"></script>
+}
+
+@{
+    ViewBag.Title = "Bibliografie - Vyhledávání";
 }
 
 <div id="listHeader">
@@ -25,3 +25,9 @@
 
 <div id="listResults" style="clear: both;">
 </div>
+
+<script>
+    $(document).ready(function(){
+        initBiblSearch();
+    });
+</script>

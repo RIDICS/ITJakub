@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
@@ -12,16 +11,18 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
-    [RouteArea("Editions")]
+    [Area("Editions")]
     public class EditionsController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
-
-        public EditionsController(StaticTextManager staticTextManager)
+        
+        public EditionsController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -30,6 +31,36 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             get { return BookTypeEnumContract.Edition; }
         }
+
+        public ActionResult GetListConfiguration()
+        {
+            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/list_configuration.json";
+            return File(fullPath, "application/json", fullPath);
+        }
+
+        public ActionResult GetSearchConfiguration()
+        {
+            var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
+            return File(fullPath, "application/json", fullPath);
+        }
+
+        public ActionResult HasBookImage(string bookId, string versionId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                return Json(new { HasBookImage = client.HasBookImage(bookId, versionId) });
+            }
+        }
+        public FileResult GetBookImage(string bookId, int position)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var imageDataStream = client.GetBookPageImage(bookId, position);
+                return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
+            }
+        }
+
+        #region Views and Feedback
 
         // GET: Editions/Editions
         public ActionResult Index()
@@ -61,35 +92,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     });
             }
         }
-
-        public ActionResult GetListConfiguration()
-        {
-            var fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/list_configuration.json");
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetSearchConfiguration()
-        {
-            var fullPath = Server.MapPath("~/Areas/Editions/Content/BibliographyPlugin/search_configuration.json");
-            return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult HasBookImage(string bookId, string versionId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                return Json(new {HasBookImage = client.HasBookImage(bookId, versionId) });
-            }
-        }
-        public FileResult GetBookImage(string bookId, int position)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var imageDataStream = client.GetBookPageImage(bookId, position);
-                return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
-            }
-        }
-
+        
         public ActionResult List()
         {
             return View();
@@ -158,12 +161,14 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View(pageStaticText);
         }
 
+        #endregion
+        
         public ActionResult GetTypeaheadAuthor(string query)
         {
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -172,7 +177,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -181,9 +186,12 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-                return Json(grammarsWithCategories, JsonRequestBehavior.AllowGet);
+                return Json(grammarsWithCategories);
             }
         }
+
+
+        #region Search book
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
@@ -201,7 +209,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -236,7 +244,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -272,7 +280,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -308,7 +316,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -359,7 +367,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -410,11 +418,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
-        #region search in book
+        #endregion
+
+        #region Search in book
 
         public ActionResult AdvancedSearchInBookPaged(string json, int start, int count, string bookXmlId, string versionXmlId)
         {
@@ -442,10 +452,10 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.Results}, JsonRequestBehavior.AllowGet);
+                    return Json(new {results = result.Results});
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
@@ -470,10 +480,10 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 if (result != null)
                 {
                     var count = result.TotalHitCount;
-                    return Json(new {count}, JsonRequestBehavior.AllowGet);
+                    return Json(new {count});
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
@@ -496,7 +506,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 
-                return Json(new {pages = result.PageList}, JsonRequestBehavior.AllowGet);
+                return Json(new {pages = result.PageList});
             }
         }
 
@@ -540,10 +550,10 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.Results}, JsonRequestBehavior.AllowGet);
+                    return Json(new {results = result.Results});
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
@@ -582,10 +592,10 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 if (result != null)
                 {
                     var count = result.TotalHitCount;
-                    return Json(new {count}, JsonRequestBehavior.AllowGet);
+                    return Json(new {count});
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
@@ -622,7 +632,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 
-                return Json(new {pages = result.PageList}, JsonRequestBehavior.AllowGet);
+                return Json(new {pages = result.PageList});
             }
         }
 

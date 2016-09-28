@@ -20,9 +20,8 @@
     </p>*@
 
     <p>
-        @using (Html.BeginForm("Feedback", "Home", new {}, FormMethod.Post, null, new {@class = "form-horizontal", role = "form"}))
+        @using (Html.BeginForm("Feedback", "Home", new {}, FormMethod.Post, true, new {@class = "form-horizontal", role = "form"}))
         {
-            @Html.AntiForgeryToken()
             <div class="form-group">
                 @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
             </div>

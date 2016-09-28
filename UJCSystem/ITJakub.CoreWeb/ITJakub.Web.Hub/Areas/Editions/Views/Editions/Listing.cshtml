@@ -4,10 +4,10 @@
 }
 
 @section styles{
-    <link href="~/wwwroot/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />
+    <link href="~/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/wwwroot/Areas/Editions/js/itjakub.editions.js"></script>
+    <script src="~/Areas/Editions/js/itjakub.editions.js"></script>
 }
 
 
@@ -21,6 +21,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initReader(@Html.Raw(Json.Encode(@Model.BookXmlId)), @Html.Raw(Json.Encode(@Model.VersionXmlId)),  @Html.Raw(Json.Encode(@Model.BookTitle)), @Html.Raw(Json.Encode(@Model.BookPages)),@Html.Raw(Json.Encode(@Model.SearchText)),@Html.Raw(Json.Encode(@Model.InitPageXmlId)));
+        initReader(@Json.Serialize(Model.BookXmlId), @Json.Serialize(Model.VersionXmlId), @Json.Serialize(Model.BookTitle), @Json.Serialize(Model.BookPages), @Json.Serialize(Model.SearchText), @Json.Serialize(Model.InitPageXmlId));
     });
 </script>

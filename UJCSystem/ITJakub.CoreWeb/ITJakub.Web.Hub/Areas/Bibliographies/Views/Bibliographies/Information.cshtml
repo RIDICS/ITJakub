@@ -1,12 +1,14 @@
 ﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
-@{
-    ViewBag.Title = "Edice - Nápověda";
-}
 
 @section styles{
-    <link href="~/wwwroot/Areas/Editions/css/itjakub.editions.css" rel="stylesheet" />
+    <link href="~/Areas/Bibliographies/css/itjakub.bibliographies.css" rel="stylesheet" />
+}
+
+@{
+    ViewBag.Title = "Bibliografie - Informace";
 }
 
 <div class="content-container">
     @Html.Partial("_StaticText", Model)
+    
 </div>

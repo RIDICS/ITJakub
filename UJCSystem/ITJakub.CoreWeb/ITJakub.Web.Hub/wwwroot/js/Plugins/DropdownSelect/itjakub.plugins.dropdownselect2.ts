@@ -121,12 +121,12 @@
         this.categories = {};
         this.bookIdList = [];
 
-        for (var i = 0; i < result.Categories.length; i++) {
-            var resultCategory = result.Categories[i];
+        for (let i = 0; i < result.categories.length; i++) {
+            let resultCategory = result.categories[i];
             var category = new DropDownCategory();
-            category.id = resultCategory.Id;
-            category.name = resultCategory.Description;
-            category.parentCategoryId = resultCategory.ParentCategoryId;
+            category.id = resultCategory.id;
+            category.name = resultCategory.description;
+            category.parentCategoryId = resultCategory.parentCategoryId;
             category.bookIds = [];
             category.subcategoryIds = [];
             this.categories[category.id] = category;
@@ -135,21 +135,21 @@
                 this.rootCategory = category;
         }
 
-        for (var i = 0; i < result.Categories.length; i++) {
-            var resultCategory = result.Categories[i];
-            if (!resultCategory.ParentCategoryId)
+        for (let i = 0; i < result.categories.length; i++) {
+            let resultCategory = result.categories[i];
+            if (!resultCategory.parentCategoryId)
                 continue;
 
-            var parentCategory = this.categories[resultCategory.ParentCategoryId];
-            parentCategory.subcategoryIds.push(resultCategory.Id);
+            var parentCategory = this.categories[resultCategory.parentCategoryId];
+            parentCategory.subcategoryIds.push(resultCategory.id);
         }
 
-        for (var j = 0; j < result.Books.length; j++) {
-            var resultBook = result.Books[j];
+        for (var j = 0; j < result.books.length; j++) {
+            var resultBook = result.books[j];
             var book = new DropDownBook();
-            book.id = resultBook.Id;
-            book.name = resultBook.Title;
-            book.categoryIds = resultBook.CategoryIds;
+            book.id = resultBook.id;
+            book.name = resultBook.title;
+            book.categoryIds = resultBook.categoryIds;
             book.checkboxes = [];
             this.books[book.id] = book;
             this.bookIdList.push(book.id);
@@ -356,12 +356,12 @@
         state.SelectedItems = [];
         state.IsOnlyRootSelected = selectedIds.isOnlyRootSelected;
 
-        for (var i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
-            var id = selectedIds.selectedCategoryIds[i];
+        for (let i = 0; i < selectedIds.selectedCategoryIds.length; i++) {
+            let id = selectedIds.selectedCategoryIds[i];
             state.SelectedCategories.push(new Category(String(id), this.categories[id].name));
         }
-        for (var i = 0; i < selectedIds.selectedBookIds.length; i++) {
-            var id = selectedIds.selectedBookIds[i];
+        for (let i = 0; i < selectedIds.selectedBookIds.length; i++) {
+            let id = selectedIds.selectedBookIds[i];
             state.SelectedItems.push(new Item(String(id), this.books[id].name));
         }
 
@@ -398,13 +398,13 @@
         var selectedCategories = state.SelectedCategories;
         var resultString = "";
 
-        for (var i = 0; i < selectedBooks.length; i++) {
+        for (let i = 0; i < selectedBooks.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
             resultString += DropDownSelect2.selectedBookUrlKey + "=" + selectedBooks[i].Id;
         }
 
-        for (var i = 0; i < selectedCategories.length; i++) {
+        for (let i = 0; i < selectedCategories.length; i++) {
             if (resultString.length > 0)
                 resultString += "&";
             resultString += DropDownSelect2.selectedCategoryUrlKey + "=" + selectedCategories[i].Id;
@@ -465,19 +465,3 @@ interface IDropDownCategoryDictionary {
     [categoryId: string]: DropDownCategory;
 }
 
-interface IDropDownBookResult {
-    Id: number;
-    Title: string;
-    CategoryIds: Array<number>;
-}
-    
-interface IDropDownCategoryResult {
-    Id: number;
-    Description: string;
-    ParentCategoryId: number;
-}
-
-interface IDropDownRequestResult {
-    Books: Array<IDropDownBookResult>;
-    Categories: Array<IDropDownCategoryResult>;
-}
