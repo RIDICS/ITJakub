@@ -6,6 +6,7 @@ using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -49,10 +50,14 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            if (ft == FeedType.Rss)
-                return new RssResult("Vokabular feed", items);
-
-            return new AtomResult("Vokabular feed", items);
+            var requestUrl = new Uri(Request.GetDisplayUrl());
+            switch (ft)
+            {
+                case FeedType.Rss:
+                    return new RssResult("Vokabular feed", items, requestUrl);
+                default:
+                    return new AtomResult("Vokabular feed", items, requestUrl);
+            }
         }
 
         [HttpGet]

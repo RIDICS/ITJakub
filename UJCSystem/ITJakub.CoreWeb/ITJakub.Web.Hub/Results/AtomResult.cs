@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Web;
 using System.Xml;
@@ -27,10 +28,11 @@ namespace ITJakub.Web.Hub.Results
         /// </summary>
         /// <param name="title">The title for the feed.</param>
         /// <param name="feedItems">The items of the feed.</param>
-        public AtomResult(string title, List<SyndicationItem> feedItems)
+        /// <param name="requestUrl">The URL of feed alternate link.</param>
+        public AtomResult(string title, List<SyndicationItem> feedItems, Uri requestUrl)
             : base("application/atom+xml")
         {
-            m_feed = new SyndicationFeed(title, title, HttpContext.Current.Request.Url) { Items = feedItems };
+            m_feed = new SyndicationFeed(title, title, requestUrl) { Items = feedItems };
         }
 
         public override void ExecuteResult(ActionContext context)
