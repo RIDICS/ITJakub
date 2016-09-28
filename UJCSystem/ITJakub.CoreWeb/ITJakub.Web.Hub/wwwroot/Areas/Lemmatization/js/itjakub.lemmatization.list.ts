@@ -78,10 +78,10 @@
             var td2 = document.createElement("td");
             var tokenLink = document.createElement("a");
 
-            tokenLink.setAttribute("href", "Lemmatization?tokenId=" + token.Id);
-            $(tokenLink).text(token.Text);
+            tokenLink.setAttribute("href", getBaseUrl() + "Lemmatization/Lemmatization?tokenId=" + token.id);
+            $(tokenLink).text(token.text);
             $(td1).append(tokenLink);
-            $(td2).text(token.Description);
+            $(td2).text(token.description);
 
             $(tr).append(td1)
                 .append(td2);

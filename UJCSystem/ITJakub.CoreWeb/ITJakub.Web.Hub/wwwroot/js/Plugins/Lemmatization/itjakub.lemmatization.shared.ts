@@ -1,44 +1,44 @@
 ﻿interface IToken {
-    Id: number;
-    Text: string;
-    Description: string;
+    id: number;
+    text: string;
+    description: string;
 }
 
 interface ITokenCharacteristic {
-    Id: number;
-    MorphologicalCharacteristic: string;
-    Description: string;
-    CanonicalFormList: Array<ICanonicalForm>;
+    id: number;
+    morphologicalCharacteristic: string;
+    description: string;
+    canonicalFormList: Array<ICanonicalForm>;
 }
 
 interface IInverseTokenCharacteristic {
-    Id: number;
-    MorphologicalCharacteristic: string;
-    Description: string;
-    Token: IToken;
+    id: number;
+    morphologicalCharacteristic: string;
+    description: string;
+    token: IToken;
 }
 
 interface ICanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: CanonicalFormTypeEnum;
-    HyperCanonicalForm: IHyperCanonicalForm;
+    id: number;
+    text: string;
+    description: string;
+    type: CanonicalFormTypeEnum;
+    hyperCanonicalForm: IHyperCanonicalForm;
 }
 
 interface IInverseCanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: CanonicalFormTypeEnum;
-    CanonicalFormFor: Array<IInverseTokenCharacteristic>;
+    id: number;
+    text: string;
+    description: string;
+    type: CanonicalFormTypeEnum;
+    canonicalFormFor: Array<IInverseTokenCharacteristic>;
 }
 
 interface IHyperCanonicalForm {
-    Id: number;
-    Text: string;
-    Description: string;
-    Type: HyperCanonicalFormTypeEnum;
+    id: number;
+    text: string;
+    description: string;
+    type: HyperCanonicalFormTypeEnum;
 }
 
 enum CanonicalFormTypeEnum {

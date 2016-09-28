@@ -16,7 +16,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
         // GET: Bibliography
         public ActionResult GetConfiguration()
         {
-            string fullPath = Path.Combine(m_environment.WebRootPath, "Content/BibliographyConfiguration/configuration.json");
+            string fullPath = Path.Combine(m_environment.ContentRootPath, "Content/BibliographyConfiguration/configuration.json");
             return File(fullPath, "application/json", fullPath);
         }
     }

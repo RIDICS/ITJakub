@@ -8,8 +8,8 @@
         this.container = container;
         this.searchBox = new SingleSetTypeaheadSearchBox<IHyperCanonicalForm>("#mainSearchInput",
             "Derivation/Derivation",
-            (item) => item.Text,
-            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
+            (item) => item.text,
+            (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.text, item.description));
     }
 
     public make() {
@@ -54,14 +54,14 @@
     }
 
     private loadData(value: IHyperCanonicalForm) {
-        $("#descriptionContainer").text(value.Description);
+        $("#descriptionContainer").text(value.description);
 
         $.ajax({
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Derivation/Derivation/GetCanonicalFormIdList",
             data: {
-                hyperCanonicalFormId: value.Id
+                hyperCanonicalFormId: value.id
             },
             dataType: "json",
             contentType: "application/json",
@@ -145,17 +145,17 @@
 
     private processCanonicalForm(canonicalForm: IInverseCanonicalForm) {
         var rows = 1;
-        var tr = $("tr[data-id=\"" + canonicalForm.Id + "\"]", this.tbody);
+        var tr = $("tr[data-id=\"" + canonicalForm.id + "\"]", this.tbody);
         var td1 = document.createElement("td");
-        $(td1).text(canonicalForm.Text);
+        $(td1).text(canonicalForm.text);
         tr.empty();
         tr.append(td1);
 
-        var characteristicCount = canonicalForm.CanonicalFormFor.length;
+        var characteristicCount = canonicalForm.canonicalFormFor.length;
         if (characteristicCount > 1)
             rows = characteristicCount;
         for (var i = 0; i < characteristicCount; i++) {
-            var characteristic = canonicalForm.CanonicalFormFor[i];
+            var characteristic = canonicalForm.canonicalFormFor[i];
             if (i > 0) {
                 var lastTr = tr;
                 tr = $(document.createElement("tr"));
@@ -163,11 +163,11 @@
             }
 
             var td2 = document.createElement("td");
-            $(td2).text(characteristic.MorphologicalCharacteristic);
+            $(td2).text(characteristic.morphologicalCharacteristic);
             tr.append(td2);
 
             var td3 = document.createElement("td");
-            $(td3).text(characteristic.Token.Text);
+            $(td3).text(characteristic.token.text);
             tr.append(td3);
         }
 

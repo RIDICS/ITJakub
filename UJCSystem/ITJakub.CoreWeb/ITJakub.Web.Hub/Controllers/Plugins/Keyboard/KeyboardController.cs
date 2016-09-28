@@ -20,7 +20,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Keyboard
         {
             m_layoutKeys = new Lazy<Dictionary<string, LayoutListItem>>(LoadLayoutKeys);
             m_layouts = new Lazy<Dictionary<string, string>>(LoadLayouts);
-            m_contentLayouts = Path.Combine(environment.WebRootPath, "Content/KeyboardLayouts");
+            m_contentLayouts = Path.Combine(environment.ContentRootPath, "Content/KeyboardLayouts");
         }
 
 

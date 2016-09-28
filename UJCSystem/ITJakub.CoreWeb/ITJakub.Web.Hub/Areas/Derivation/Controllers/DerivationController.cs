@@ -1,12 +1,19 @@
-﻿using System.Web.Mvc;
-using ITJakub.Lemmatization.Shared.Contracts;
+﻿using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
 {
+    [Area("Derivation")]
     public class DerivationController : BaseController
     {
+        public DerivationController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         [Authorize(Roles = CustomRole.CanDerivateLemmatization)]
         public ActionResult Index()
         {
@@ -25,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
             using (var client = GetLemmationzationServiceClient())
             {
                 var result = client.GetTypeaheadHyperCanonicalForm(type, query);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -35,7 +42,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
             using (var client = GetLemmationzationServiceClient())
             {
                 var list = client.GetCanonicalFormIdList(hyperCanonicalFormId);
-                return Json(list, JsonRequestBehavior.AllowGet);
+                return Json(list);
             }
         }
 
@@ -45,7 +52,7 @@ namespace ITJakub.Web.Hub.Areas.Derivation.Controllers
             using (var client = GetLemmationzationServiceClient())
             {
                 var result = client.GetCanonicalFormDetail(canonicalFormId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
     }
