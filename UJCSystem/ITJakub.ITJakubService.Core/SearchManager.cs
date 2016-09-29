@@ -440,18 +440,27 @@ namespace ITJakub.ITJakubService.Core
 
         private IList<long> GetCompleteBookIdList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, BookTypeEnum? currentBookType)
         {
+            if (selectedCategoryIds == null)
+            {
+                selectedCategoryIds = new List<int>(0);
+            }
+            if (selectedBookIds == null)
+            {
+                selectedBookIds = new List<long>(0);
+            }
+
             //Get all books for current module
-            if (selectedBookIds == null && selectedCategoryIds == null)
+            if (selectedBookIds.Count == 0 && selectedCategoryIds.Count == 0)
             {
                 if(currentBookType.HasValue)
                     return m_categoryRepository.GetAllBookIdsByBookType(currentBookType.Value);
                 return m_categoryRepository.GetAllBookIds();
             }
 
-            if (selectedCategoryIds != null && selectedCategoryIds.Count > 0)
+            if (selectedCategoryIds.Count > 0)
             {
                 var bookIdsFromCategory = m_categoryRepository.GetBookIdsFromCategory(selectedCategoryIds);
-                return selectedBookIds == null ? bookIdsFromCategory : bookIdsFromCategory.Concat(selectedBookIds).ToList();
+                return bookIdsFromCategory.Concat(selectedBookIds).ToList();
             }
 
             return selectedBookIds;

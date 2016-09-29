@@ -88,7 +88,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookPages = book.BookPages,
                         SearchText = searchText,
                         InitPageXmlId = page,
-                        CanPrintEdition = User.IsInRole("CanEditionPrint")
+                        CanPrintEdition = User.IsInRole("CanEditionPrint"),
+                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
             }
         }
@@ -452,7 +453,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.Results});
+                    return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
                 }
 
                 return Json(new {});
@@ -506,7 +507,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 
-                return Json(new {pages = result.PageList});
+                return Json(new {pages = result.PageList}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -550,7 +551,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.Results});
+                    return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
                 }
 
                 return Json(new {});
@@ -632,7 +633,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 var result = client.GetSearchEditionsPageList(listSearchCriteriaContracts);
 
-                return Json(new {pages = result.PageList});
+                return Json(new {pages = result.PageList}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 

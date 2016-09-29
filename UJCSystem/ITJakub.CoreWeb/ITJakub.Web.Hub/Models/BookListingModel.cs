@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Shared.Contracts;
+using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Models
 {
@@ -13,5 +14,6 @@ namespace ITJakub.Web.Hub.Models
         public string SearchText { get; set; }
         public string InitPageXmlId { get; set; }
         public bool CanPrintEdition { get; set; }
+        public JsonSerializerSettings JsonSerializerSettingsForBiblModule { get; set; }
     }
 }

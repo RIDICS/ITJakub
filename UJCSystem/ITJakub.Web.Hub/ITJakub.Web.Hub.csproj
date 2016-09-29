@@ -87,9 +87,6 @@
     <Compile Include="Areas\AudioBooks\AudioBooksAreaRegistration.cs" />
     <Compile Include="Areas\AudioBooks\Controllers\AudioBooksController.cs" />
     <Compile Include="Areas\AudioBooks\RouteConfig.cs" />
-    <Compile Include="Areas\Bibliographies\BibliographiesAreaRegistration.cs" />
-    <Compile Include="Areas\Bibliographies\Controllers\BibliographiesController.cs" />
-    <Compile Include="Areas\Bibliographies\RouteConfig.cs" />
     <Compile Include="Areas\BohemianTextBank\BohemianTextBankAreaRegistration.cs" />
     <Compile Include="Areas\BohemianTextBank\Controllers\BohemianTextBankController.cs" />
     <Compile Include="Areas\BohemianTextBank\RouteConfig.cs" />
@@ -135,9 +132,6 @@
     <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
     <Compile Include="Areas\Dictionaries\DictionariesAreaRegistration.cs" />
     <Compile Include="Models\BookListingModel.cs" />
-    <Compile Include="Areas\Editions\RouteConfig.cs" />
-    <Compile Include="Areas\Editions\Controllers\EditionsController.cs" />
-    <Compile Include="Areas\Editions\EditionsAreaRegistration.cs" />
     <Compile Include="Areas\OldGrammar\Controllers\OldGrammarController.cs" />
     <Compile Include="Areas\OldGrammar\OldGrammarAreaRegistration.cs" />
     <Compile Include="Areas\OldGrammar\RouteConfig.cs" />
@@ -1281,12 +1275,7 @@
     <Content Include="wwwroot\css\ITJakub.NumberedOrderedList.min.css">
       <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
     </Content>
-    <Content Include="Areas\Bibliographies\Views\web.config" />
     <Content Include="wwwroot\Areas\Bibliographies\css\itjakub.bibliographies.less" />
-    <Content Include="Areas\Bibliographies\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\Search.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\Information.cshtml" />
-    <Content Include="Areas\Bibliographies\Views\Bibliographies\Feedback.cshtml" />
     <Content Include="Content\BibliographyConfiguration\configuration.json" />
     <Content Include="wwwroot\css\ITJakub.css">
       <DependentUpon>ITJakub.less</DependentUpon>
@@ -1362,9 +1351,7 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\Editions\Views\web.config" />
     <Content Include="Areas\Dictionaries\Views\web.config" />
-    <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.less" />
     <Content Include="wwwroot\css\ITJakub.less" />
@@ -1377,9 +1364,6 @@
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Listing.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.less" />
@@ -1413,12 +1397,9 @@
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
     <Content Include="wwwroot\css\ITJakub.Footer.less" />
-    <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.less" />
-    <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Help.cshtml" />
@@ -1437,12 +1418,9 @@
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
-    <Content Include="Areas\Editions\Content\BibliographyPlugin\list_configuration.json" />
-    <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
-    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\ListTerms.cshtml" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
     <Content Include="package.json" />
@@ -1601,9 +1579,6 @@
     <Folder Include="Areas\AudioBooks\Content\" />
     <Folder Include="Areas\AudioBooks\Models\" />
     <Folder Include="Areas\AudioBooks\Views\Shared\" />
-    <Folder Include="Areas\Bibliographies\Content\" />
-    <Folder Include="Areas\Bibliographies\Models\" />
-    <Folder Include="Areas\Bibliographies\Views\Shared\" />
     <Folder Include="Areas\BohemianTextBank\Content\" />
     <Folder Include="Areas\BohemianTextBank\Models\" />
     <Folder Include="Areas\BohemianTextBank\Views\Shared\" />
@@ -1612,8 +1587,6 @@
     <Folder Include="Areas\CardFiles\Views\Shared\" />
     <Folder Include="Areas\Dictionaries\Content\" />
     <Folder Include="Areas\Dictionaries\Views\Shared\" />
-    <Folder Include="Areas\Editions\Models\" />
-    <Folder Include="Areas\Editions\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
     <Folder Include="Areas\ProfessionalLiterature\Models\" />
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
