@@ -1,17 +1,18 @@
-﻿using System.Web.Mvc;
-using ITJakub.Shared.Contracts.Notes;
+﻿using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 {
-    [RouteArea("Tools")]
+    [Area("Tools")]
     public class ToolsController : BaseController
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public ToolsController(StaticTextManager staticTextManager)
+        public ToolsController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -26,6 +27,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsInfo);
             return View(pageStaticText);
         }
+
         public ActionResult Feedback()
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
@@ -35,18 +37,19 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             {
                 return View();
             }
+
             using (var client = GetEncryptedClient())
             {
                 var user = client.FindUserByUserName(username);
-            var viewModel = new FeedbackViewModel
-            {
-                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                Email = user.Email,
-                PageStaticText = pageStaticText
-            };
+                var viewModel = new FeedbackViewModel
+                {
+                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
+                };
 
-            return View(viewModel);
-        }
+                return View(viewModel);
+            }
         }
 
         [HttpPost]

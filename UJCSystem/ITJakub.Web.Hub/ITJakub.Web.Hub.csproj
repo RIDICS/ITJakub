@@ -97,9 +97,6 @@
     <Compile Include="AutoMapperProfiles\StaticTextProfile.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
-    <Compile Include="Areas\Tools\Controllers\ToolsController.cs" />
-    <Compile Include="Areas\Tools\RouteConfig.cs" />
-    <Compile Include="Areas\Tools\ToolsAreaRegistration.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\DatingCriteriaDescriptionProfile.cs" />
     <Compile Include="AutoMapperProfiles\DatingListCriteriaDescriptionProfile.cs" />
@@ -123,14 +120,10 @@
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
-    <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\ModificationUpdateViewModel.cs" />
     <Compile Include="Models\NewsSyndicationItemViewModel.cs" />
     <Compile Include="Models\Plugins\Keyboard\LayoutListItem.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
-    <Compile Include="Areas\Dictionaries\RouteConfig.cs" />
-    <Compile Include="Areas\Dictionaries\Controllers\DictionariesController.cs" />
-    <Compile Include="Areas\Dictionaries\DictionariesAreaRegistration.cs" />
     <Compile Include="Models\BookListingModel.cs" />
     <Compile Include="Areas\OldGrammar\Controllers\OldGrammarController.cs" />
     <Compile Include="Areas\OldGrammar\OldGrammarAreaRegistration.cs" />
@@ -1351,8 +1344,6 @@
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Areas\Dictionaries\Views\web.config" />
-    <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\Dictionaries\css\itjakub.dictionaries.less" />
     <Content Include="wwwroot\css\ITJakub.less" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.less" />
@@ -1361,9 +1352,6 @@
     <TypeScriptCompile Include="wwwroot\js\itjakub.upload.ts" />
     <Content Include="wwwroot\css\ITJakub.Dropzone.less" />
     <Content Include="wwwroot\css\ITJakub.DefaultTheme.less" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Listing.cshtml" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.less" />
     <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.less" />
@@ -1397,24 +1385,16 @@
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
     <Content Include="wwwroot\css\ITJakub.Footer.less" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.less" />
     <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
-    <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
     <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Help.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Help.cshtml" />
     <Content Include="Areas\AudioBooks\Views\web.config" />
-    <Content Include="Areas\Tools\Views\web.config" />
     <Content Include="Areas\AudioBooks\Views\_ViewStart.cshtml" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\Feedback.cshtml" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\Information.cshtml" />
     <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.less" />
     <Content Include="Areas\AudioBooks\Views\AudioBooks\List.cshtml" />
-    <Content Include="Areas\Tools\Views\Tools\Feedback.cshtml" />
-    <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
-    <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
-    <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
     <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
     <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
@@ -1585,14 +1565,9 @@
     <Folder Include="Areas\CardFiles\Content\" />
     <Folder Include="Areas\CardFiles\Models\" />
     <Folder Include="Areas\CardFiles\Views\Shared\" />
-    <Folder Include="Areas\Dictionaries\Content\" />
-    <Folder Include="Areas\Dictionaries\Views\Shared\" />
     <Folder Include="Areas\OldGrammar\Views\Shared\" />
     <Folder Include="Areas\ProfessionalLiterature\Models\" />
     <Folder Include="Areas\ProfessionalLiterature\Views\Shared\" />
-    <Folder Include="Areas\Tools\Content\" />
-    <Folder Include="Areas\Tools\Models\" />
-    <Folder Include="Areas\Tools\Views\Shared\" />
     <Folder Include="wwwroot\Areas\Tools\css\" />
   </ItemGroup>
   <ItemGroup>

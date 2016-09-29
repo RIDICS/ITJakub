@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Net.Mime;
-using System.Web.Mvc;
-using System.Web.WebPages;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
@@ -14,16 +12,18 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using ITJakub.Web.Hub.Models.Requests.Dictionary;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
-    [RouteArea("Dictionaries")]
+    [Area("Dictionaries")]
     public class DictionariesController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public DictionariesController(StaticTextManager staticTextManager)
+        public DictionariesController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -47,7 +47,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Listing(string xmlId, string[] books)
         {
-            if (!xmlId.IsEmpty())
+            if (!string.IsNullOrEmpty(xmlId))
             {
                 using (var client = GetMainServiceClient())
                 {
@@ -73,7 +73,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
 
-                return Json(dictionariesAndCategories, JsonRequestBehavior.AllowGet);
+                return Json(dictionariesAndCategories);
             }
         }
 
@@ -182,7 +182,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var headwordCount = client.SearchHeadwordByCriteriaResultsCount(searchContractBasic, DictionarySearchTarget.Headword);
-                return Json(headwordCount, JsonRequestBehavior.AllowGet);
+                return Json(headwordCount);
             }
         }
 
@@ -202,7 +202,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var fulltextCount = client.SearchHeadwordByCriteriaResultsCount(searchContractFulltext, DictionarySearchTarget.Fulltext);
-                return Json(fulltextCount, JsonRequestBehavior.AllowGet);
+                return Json(fulltextCount);
             }
         }
 
@@ -223,7 +223,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -244,12 +244,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
         [HttpPost]
-        public ActionResult SearchCriteriaResultsCount(DictionarySearchCriteriaCountRequest request)
+        public ActionResult SearchCriteriaResultsCount([FromBody] DictionarySearchCriteriaCountRequest request)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
 
@@ -263,7 +263,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
 
         [HttpPost]
-        public ActionResult SearchCriteria(DictionarySearchCriteriaRequest request)
+        public ActionResult SearchCriteria([FromBody] DictionarySearchCriteriaRequest request)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
             listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count));
@@ -282,7 +282,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -304,7 +304,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
                     AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -313,7 +313,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var resultCount = client.GetHeadwordCount(selectedCategoryIds, selectedBookIds, AreaBookType);
-                return Json(resultCount, JsonRequestBehavior.AllowGet);
+                return Json(resultCount);
             }
         }
 
@@ -323,7 +323,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 var start = (page - 1)*pageSize;
                 HeadwordListContract result = client.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -335,7 +335,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
                 var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
-                return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
+                return Json(resultPageNumber);
             }
         }
 
@@ -346,7 +346,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, AreaBookType);
                 var resultPageNumber = (rowNumber - 1)/pageSize + 1;
-                return Json(resultPageNumber, JsonRequestBehavior.AllowGet);
+                return Json(resultPageNumber);
             }
         }
 
@@ -355,7 +355,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -364,7 +364,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -373,26 +373,26 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var list = client.GetHeadwordBookmarks(HttpContext.User.Identity.Name);
-                return Json(list, JsonRequestBehavior.AllowGet);
+                return Json(list);
             }
         }
 
 
-        public ActionResult AddHeadwordBookmark(AddHeadwordBookmarkRequest request)
+        public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest request)
         {
             using (var client = GetMainServiceClient())
             {
                 client.AddHeadwordBookmark(request.BookId, request.EntryXmlId, HttpContext.User.Identity.Name);
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
-        public ActionResult RemoveHeadwordBookmark(RemoveHeadwordBookmarkRequest request)
+        public ActionResult RemoveHeadwordBookmark([FromBody] RemoveHeadwordBookmarkRequest request)
         {
             using (var client = GetMainServiceClient())
             {
                 client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId, HttpContext.User.Identity.Name);
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {});
             }
         }
 
@@ -453,7 +453,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -470,7 +470,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -490,7 +490,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -514,7 +514,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -523,7 +523,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetBookInfoWithPages(bookXmlId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
     }

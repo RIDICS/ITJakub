@@ -1,8 +1,8 @@
 ﻿@section styles{
-    <link href="~/wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
+    <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.list.js"></script>
+    <script src="~/Areas/Dictionaries/js/itjakub.dictionaries.list.js"></script>
 }
 
 @{
@@ -11,7 +11,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        initDictionaryList("@Request["bookId"]");
+        initDictionaryList("@Context.Request.Query["bookId"]");
     });
 </script>
 

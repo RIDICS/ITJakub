@@ -1,9 +1,9 @@
 ﻿@model ITJakub.Web.Hub.Areas.Dictionaries.Models.HeadwordFeedbackViewModel
 @section styles{
-    <link href="~/wwwroot/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
+    <link href="~/Areas/Dictionaries/css/itjakub.dictionaries.css" rel="stylesheet" />
 }
 @section scripts{
-    <script src="~/wwwroot/Areas/Dictionaries/js/itjakub.dictionaries.feedback.js"></script>
+    <script src="~/Areas/Dictionaries/js/itjakub.dictionaries.feedback.js"></script>
 }
 
 @{
@@ -15,25 +15,23 @@
     @Html.Partial("_StaticText", Model.PageStaticText)
 
     <p>
-        @using (Html.BeginForm("Feedback", "Dictionaries", new {}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
+        @using (Html.BeginForm("Feedback", "Dictionaries", new {}, FormMethod.Post, true, new {@class = "form-horizontal", role = "form"}))
         {
-            @Html.AntiForgeryToken()
-
-            @Html.HiddenFor(m => m.BookXmlId, new {Value = @Request["bookId"]})
-            @Html.HiddenFor(m => m.BookVersionXmlId, new {Value = @Request["versionId"]})
-            @Html.HiddenFor(m => m.EntryXmlId, new {Value = @Request["entryId"]})
+            @Html.HiddenFor(m => m.BookXmlId, new {Value = @Context.Request.Query["bookId"]})
+            @Html.HiddenFor(m => m.BookVersionXmlId, new {Value = @Context.Request.Query["versionId"]})
+            @Html.HiddenFor(m => m.EntryXmlId, new {Value = @Context.Request.Query["entryId"]})
 
             <div class="form-group optional">
                 @Html.LabelFor(m => m.Dictionary, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Dictionary, new {@class = "form-control", @readonly = "readonly", Value = @Request["dictionary"]})
+                    @Html.TextBoxFor(m => m.Dictionary, new {@class = "form-control", @readonly = "readonly", Value = @Context.Request.Query["dictionary"]})
                 </div>
             </div>
 
             <div class="form-group optional">
                 @Html.LabelFor(m => m.Headword, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Headword, new {@class = "form-control", @readonly = "readonly", Value = @Request["headword"]})
+                    @Html.TextBoxFor(m => m.Headword, new {@class = "form-control", @readonly = "readonly", Value = @Context.Request.Query["headword"]})
                 </div>
             </div>
 
@@ -46,14 +44,14 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
+                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
                 <div class="col-md-3">
-                    @(Request.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
+                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
                 </div>
             </div>
 

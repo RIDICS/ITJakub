@@ -29,7 +29,7 @@
                 $(this).children().addClass("glyphicon-collapse-up");
                 area.addClass("uncollapsed");
                 var actualHeight = area.height();
-                var targetHeight = area.css("height", 'auto').height();
+                let targetHeight = area.css("height", 'auto').height();
                 area.height(actualHeight);
                 area.animate({
                     height: targetHeight
@@ -39,7 +39,7 @@
                 $(this).children().removeClass("glyphicon-collapse-up");
                 $(this).children().addClass("glyphicon-collapse-down");
                 area.removeClass("uncollapsed");
-                var targetHeight = $(".dictionary-header", area).innerHeight();
+                let targetHeight = $(".dictionary-header", area).innerHeight();
                 area.animate({
                     height: targetHeight
                 });
@@ -81,16 +81,16 @@
 
     public addNewHeadword(bookId: string, entryXmlId: string) {
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/AddHeadwordBookmark",
-            data: {
+            data: JSON.stringify({
                 bookId: bookId,
                 entryXmlId: entryXmlId
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
-            success: (response) => {
+            success: () => {
                 this.getAllHeadwords();
             }
         });
@@ -110,8 +110,8 @@
             var textWordSpan = document.createElement("span");
 
             $(wordSpan).addClass("saved-word");
-            $(wordSpan).data("entryXmlId", favoriteHeadword.EntryXmlId);
-            $(wordSpan).data("bookId", favoriteHeadword.BookId);
+            $(wordSpan).data("entryXmlId", favoriteHeadword.entryXmlId);
+            $(wordSpan).data("bookId", favoriteHeadword.bookId);
             
             $(removeWordSpan).addClass("saved-word-remove")
                 .addClass("glyphicon")
@@ -121,7 +121,7 @@
             });
 
             $(textWordSpan).addClass("saved-word-text");
-            $(textWordSpan).text(favoriteHeadword.Headword);
+            $(textWordSpan).text(favoriteHeadword.headword);
             $(textWordSpan).click(event => {
                 this.goToPageWithSelectedHeadword(event.target.parentElement);
             });
@@ -166,25 +166,23 @@
 
         for (var i = 0; i < this.headwordList.length; i++) {
             var headword = this.headwordList[i];
-            if (headword.BookId === bookId && headword.EntryXmlId === entryXmlId) {
+            if (headword.bookId === bookId && headword.entryXmlId === entryXmlId) {
                 this.headwordList.splice(i, 1); // remove item from array
                 break;
             }
         }
 
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/RemoveHeadwordBookmark",
-            data: {
+            data: JSON.stringify({
                 bookId: bookId,
                 entryXmlId: entryXmlId
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
-            success: (response) => {
-                
-            }
+            success: () => {}
         });
         this.headwordListChanged();
     }
@@ -206,10 +204,4 @@
             this.headwordListChangedCallback(listCopy);
         }
     }
-}
-
-interface IDictionaryFavoriteHeadword {
-    Headword: string;
-    EntryXmlId: string;
-    BookId: string;
 }
