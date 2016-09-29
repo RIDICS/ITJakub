@@ -61,7 +61,7 @@
         var glyphIconType = this.isItemLabeled ? "glyphicon-star" : "glyphicon-star-empty";
         var glyphIcon = this.createGlyphIcon(glyphIconType);
         $(glyphIcon)
-            .attr("data-title", "Oblíbené položky")
+            .attr("data-title", "Štítky této položky")
             .attr("data-toggle", "popover")
             .popover(popoverOptions);
         $(glyphIcon).on("shown.bs.popover", () => {
@@ -184,9 +184,9 @@
 }
 
 class FavoritePopoverBuilder {
-    private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků</h6><div class="favorite-label-popover-container">';
+    private templateStart = '<div class="row"><div class="col-md-12"><h6>Seznam přiřazených štítků:</h6><div class="favorite-label-popover-container">';
     private templateMiddle = '</div><hr></div></div><div class="row"><div class="col-md-12"><h6>Přidat štítek z naposledy použitých:</h6>';
-    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Přiřadit nový štítek</button></div></div>';
+    private templateEnd = '<hr></div></div><div class="row"><div class="col-md-12"><button type="button" class="btn btn-default btn-block btn-sm show-all-favorite-button">Pokročilé možnosti</button></div></div>';
 
     private favoriteItems: Array<IFavoriteBaseInfo>;
     private favoriteLabels: Array<IFavoriteLabel>;
@@ -199,7 +199,8 @@ class FavoritePopoverBuilder {
     private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
         var fontColor = FavoriteHelper.getFontColor(item.FavoriteLabel.Color);
         return '<div class="favorite-item"><a href="#" class="favorite-book-remove" data-id="' + escapeHtmlChars(item.Id.toString())
-            + '"><span class="glyphicon glyphicon-trash"></span></a><span class="label label-favorite" style="background-color: ' + escapeHtmlChars(item.FavoriteLabel.Color) + '; color: ' + fontColor + ';">'
+            + '"><span class="glyphicon glyphicon-trash"></span></a><span class="label label-favorite" title="' + item.Title
+            + '" style="background-color: ' + escapeHtmlChars(item.FavoriteLabel.Color) + '; color: ' + fontColor + ';">'
             + escapeHtmlChars(item.FavoriteLabel.Name) + '</span><span> ' + escapeHtmlChars(item.Title) + '</span></div>';
     }
 

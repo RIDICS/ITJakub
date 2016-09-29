@@ -15,7 +15,7 @@
         this.inputTextbox = inputTextbox;
         this.renderContainer = renderContainer;
         this.isCreated = false;
-        this.hide();
+        this.renderContainer.hide();
     }
 
     public make() {
@@ -110,11 +110,14 @@
             var labelLink = document.createElement("a");
             var label = document.createElement("span");
 
-            let fontColor = FavoriteHelper.getFontColor(favoriteLabel.Color);
+            let color = new HexColor(favoriteLabel.Color);
+            let fontColor = FavoriteHelper.getDefaultFontColor(color);
+            let borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
             $(label)
                 .addClass("label")
                 .css("background-color", favoriteLabel.Color)
+                .css("border-color", borderColor)
                 .css("color", fontColor)
                 .text(favoriteLabel.Name);
 
@@ -167,11 +170,14 @@
                 .data("id", favoriteQuery.Id)
                 .append(queryRemoveIcon);
 
-            let fontColor = FavoriteHelper.getFontColor(favoriteQuery.FavoriteLabel.Color);
+            let color = new HexColor(favoriteQuery.FavoriteLabel.Color);
+            let fontColor = FavoriteHelper.getDefaultFontColor(color);
+            let borderColor = FavoriteHelper.getDefaultBorderColor(color);
             
             $(queryLabel)
                 .addClass("label")
                 .css("background-color", favoriteQuery.FavoriteLabel.Color)
+                .css("border-color", borderColor)
                 .css("color", fontColor)
                 .text(favoriteQuery.FavoriteLabel.Name);
 
@@ -268,14 +274,16 @@
     }
 
     public hide() {
-        this.renderContainer.hide();
+        //this.renderContainer.hide();
+        this.renderContainer.slideUp();
     }
 
     public show() {
         if (!this.isCreated) {
             this.make();
         }
-        this.renderContainer.show();
+        //this.renderContainer.show();
+        this.renderContainer.slideDown();
     }
 
     private bindEvents() {

@@ -763,26 +763,36 @@
 }
 
 class FavoriteHelper {
-    static getColorBrightness(red: number, green: number, blue: number): number {
-        return ((red * 299) + (green * 587) + (blue * 114)) / 1000;
-    }
-
     static isValidHexColor(color: string): boolean {
-        return color.length === 7 && color.charAt(0) === "#";
+        return new HexColor(color).isValidHexColor();
     }
-
+    
     static getFontColor(hexBackgroundColor: string): string {
-        if (!FavoriteHelper.isValidHexColor(hexBackgroundColor)) {
+        var color = new HexColor(hexBackgroundColor);
+        if (!color.isValidHexColor()) {
             console.warn("Invalid color format: " + hexBackgroundColor);
             return "#000000";
         }
 
-        var red = parseInt(hexBackgroundColor.substr(1, 2), 16);
-        var green = parseInt(hexBackgroundColor.substr(3, 2), 16);
-        var blue = parseInt(hexBackgroundColor.substr(5, 2), 16);
-        var brightness = FavoriteHelper.getColorBrightness(red, green, blue);
-
+        var brightness = color.getColorBrightness();
         return brightness > 192 ? "#000000" : "#FFFFFF";
+    }
+
+    static getDefaultFontColor(color: HexColor): string {
+        if (!color.isValidHexColor()) {
+            return "#000000";
+        }
+
+        var brightness = color.getColorBrightness();
+        return brightness > 192 ? "#000000" : "#FFFFFF";
+    }
+
+    static getDefaultBorderColor(color: HexColor): string {
+        if (!color.isValidHexColor()) {
+            return "#000000";
+        }
+
+        return color.getDecreasedHexColor(30);
     }
 }
 

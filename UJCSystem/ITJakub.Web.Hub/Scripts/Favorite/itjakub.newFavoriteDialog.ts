@@ -71,19 +71,26 @@
             this.selectedLabelName = $(checkbox).data("name");
             this.selectedLabelColor = $(checkbox).data("color");
             var fontColor = FavoriteHelper.getFontColor(this.selectedLabelColor);
+            var borderColor = FavoriteHelper.getDefaultBorderColor(new HexColor(this.selectedLabelColor));
 
             $(".favorite-selected-label-info", this.container)
                 .text(this.selectedLabelName)
                 .css("background-color", this.selectedLabelColor)
-                .css("color", fontColor);
+                .css("color", fontColor)
+                .css("border-color", borderColor);
         });
 
         $("[name=favorite-label]:checked", this.container).trigger("change");
 
         $(".favorite-select-label-item", this.container).each((index, element) => {
             var backgroundColor = $("input", element).data("color");
-            var fontColor = FavoriteHelper.getFontColor(backgroundColor);
-            $(element).css("color", fontColor);
+            var color = new HexColor(backgroundColor);
+            var fontColor = FavoriteHelper.getDefaultFontColor(color);
+            var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+
+            $(element)
+                .css("color", fontColor)
+                .css("border-color", borderColor);
         });
 
         //$(".favorite-selected-label-info", this.container)

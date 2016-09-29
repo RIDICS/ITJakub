@@ -113,13 +113,16 @@
         var link = document.createElement("a");
         var labelSpan = document.createElement("span");
 
-        var fontColor = FavoriteHelper.getFontColor(favoriteLabel.Color);
+        var color = new HexColor(favoriteLabel.Color);
+        var fontColor = FavoriteHelper.getDefaultFontColor(color);
+        var borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
         $(labelSpan)
             .addClass("label")
             .addClass("favorite-dropdown-item-label")
             .text(favoriteLabel.Name)
             .css("background-color", favoriteLabel.Color)
+            .css("border-color", borderColor)
             .css("color", fontColor);
 
         $(link)

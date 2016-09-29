@@ -1,8 +1,9 @@
 ﻿@import "ITJakub.DefaultTheme.less";
 
 .label-favorite {
-    font-size: 84%;
+    font-size: 90%;
     display: inline-block;
+    border: solid 1px black;
 }
 
 .label-favorite-container {
@@ -23,20 +24,28 @@
 .favorite-select-label {
     height: 200px;
     overflow-y: auto;
+
+    .favorite-select-label-item {
+        width: 100%;
+        padding-left: 27px;
+        padding-right: 7px;
+        padding-top: 1px;
+        padding-bottom: 1px;
+        border-radius: 0.25em;
+        color: white;
+        border: solid 1px black;
+    }
+
+    .radio {
+        padding-top: 3px;
+    }
 }
 
 .favorite-selected-label-info {
-    margin-top: 8px;
-    font-size: 84%;
+    margin-top: 6px;
+    font-size: 90%;
     display: inline-block;
-}
-
-.favorite-select-label .favorite-select-label-item {
-    width: 100%;
-    padding-left: 27px;
-    padding-right: 7px;
-    border-radius: 5px;
-    color: white;
+    border: solid 1px black;
 }
 
 .favorite-star .popover {
@@ -58,17 +67,14 @@
 
 .favorite-label-management {
     border: solid 1px black;
-    border-radius: 2px;
-    padding: 5px;
+    border-radius: 0.25em;
+    padding: 2px 5px 2px 5px;
     margin-bottom: 2px;
 }
 
 .favorite-label-management.active {
     border-width: 3px;
     border-right-width: 0;
-    border-radius: 5px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
     font-weight: bold;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -92,11 +98,15 @@ div.favorite-label-management a:hover {
 }
 
 .favorite-query {
-    min-height: 70px;
+    min-height: 300px;
     background-color: white;
     padding: 10px;
     margin-bottom: 10px;
-    margin-right: 182px;
+    /*margin-right: 182px;*/
+
+    .label {
+        border: solid 1px black;
+    }
 }
 
 .favorite-query hr {
@@ -105,7 +115,7 @@ div.favorite-label-management a:hover {
 }
 
 .favorite-query-list {
-    max-height: 200px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
@@ -154,6 +164,7 @@ div.favorite-label-management a:hover {
     font-size: 100%;
     font-weight: normal;
     margin-bottom: 3px;
+    border: solid 1px black;
 }
 
 .favorite-book-remove {

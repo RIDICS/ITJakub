@@ -26,9 +26,7 @@ class FavoriteManagement {
         this.labelColorInput.make();
 
         $(".favorite-label-management").each((index, element) => {
-            var backgroundColor = $(element).data("color");
-            var fontColor = FavoriteHelper.getFontColor(backgroundColor);
-            $("a", element).css("color", fontColor);
+            this.renderLabelColor($(element));
         });
         
         $("#add-new-label").click(() => {
@@ -68,10 +66,18 @@ class FavoriteManagement {
         this.loadFavoriteItems();
     }
 
+    private renderLabelColor(element: JQuery) {
+        var backgroundColor = $(element).data("color");
+        var color = new HexColor(backgroundColor);
+        var fontColor = FavoriteHelper.getDefaultFontColor(color);
+        var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+
+        $("a", element).css("color", fontColor);
+        $(element).css("border-color", borderColor);
+    }
+
     private initFavoriteLabel(item: JQuery) {
-        var backgroundColor = item.data("color");
-        var fontColor = FavoriteHelper.getFontColor(backgroundColor);
-        $("a", item).css("color", fontColor);
+        this.renderLabelColor(item);
 
         $(".favorite-label-link", item).click(() => {
             this.setActiveLabel(item);
@@ -202,9 +208,11 @@ class FavoriteManagement {
 
             this.newFavoriteLabelDialog.hide();
 
+            var hexColor = new HexColor(color);
             $(".favorite-label-name", labelItem).text(name);
             labelItem.css("background-color", color);
-            labelItem.css("color", FavoriteHelper.getFontColor(color));
+            labelItem.css("border-color", FavoriteHelper.getDefaultBorderColor(hexColor));
+            labelItem.css("color", FavoriteHelper.getDefaultFontColor(hexColor));
             labelItem.data("name", name);
             labelItem.data("color", color);
         });
