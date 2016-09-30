@@ -96,6 +96,17 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteLabel> GetFavoriteLabelsById(IList<long> labelIds)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FavoriteLabel>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(labelIds)
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<FavoriteBook> GetFavoriteLabeledBooks(IList<long> bookIds, int userId)
         {
             FavoriteBook favoriteItemAlias = null;

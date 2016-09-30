@@ -127,7 +127,7 @@ class ReaderModule {
 
         this.loadBookmarks();
         this.newFavoriteDialog.make();
-        this.newFavoriteDialog.setSaveCallback(this.createBookmark.bind(this));
+        this.newFavoriteDialog.setSaveCallback(this.createBookmarks.bind(this));
 
         this.moveToPageNumber(0, false); //load first page
     }
@@ -926,14 +926,20 @@ class ReaderModule {
         return $(outputBooks);
     }
 
-    createBookmark(data: INewFavoriteItemData) {
+    createBookmarks(data: INewFavoriteItemData) {
+        if (data.labels.length === 0) {
+            // TODO possible create default label
+            return;
+        }
+
         var pageIndex: number = this.actualPageIndex;
         var page: BookPage = this.pages[pageIndex];
 
+        var firstLabel = data.labels[0];
         var favoriteLabel: IFavoriteLabel = {
-            Id: data.labelId,
-            Name: data.labelName,
-            Color: data.labelColor,
+            Id: firstLabel.labelId,
+            Name: firstLabel.labelName,
+            Color: firstLabel.labelColor,
             IsDefault: false,
             LastUseTime: null
         }
@@ -949,7 +955,7 @@ class ReaderModule {
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, data.labelId, (id, error) => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, firstLabel.labelId, (id, error) => {
             if (error) {
                 this.newFavoriteDialog.showError("Chyba při vytváření záložky");
                 return;

@@ -116,30 +116,30 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult CreateFavoriteBook(long bookId, string title, long? labelId)
+        public ActionResult CreateFavoriteBook(long bookId, string title, IList<long> labelIds)
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreateFavoriteBook(bookId, title, labelId, CurrentUserName);
-                return Json(resultId);
+                var resultIds = client.CreateFavoriteBook(bookId, title, labelIds, CurrentUserName);
+                return Json(resultIds);
             }
         }
 
-        public ActionResult CreateFavoriteCategory(int categoryId, string title, long? labelId)
+        public ActionResult CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds)
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreateFavoriteCategory(categoryId, title, labelId, CurrentUserName);
-                return Json(resultId);
+                var resultIds = client.CreateFavoriteCategory(categoryId, title, labelIds, CurrentUserName);
+                return Json(resultIds);
             }
         }
 
-        public ActionResult CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId)
+        public ActionResult CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds)
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreateFavoriteQuery(bookType, queryType, query, title, labelId, CurrentUserName);
-                return Json(resultId);
+                var resultIds = client.CreateFavoriteQuery(bookType, queryType, query, title, labelIds, CurrentUserName);
+                return Json(resultIds);
             }
         }
 

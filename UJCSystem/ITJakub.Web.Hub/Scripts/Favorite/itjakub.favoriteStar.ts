@@ -116,7 +116,13 @@
     }
 
     private createFavoriteItem(data: INewFavoriteItemData) {
-        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, data.itemName, data.labelId, (id, error) => {
+        var labelIds = new Array<number>();
+        for (let i = 0; i < data.labels.length; i++) {
+            var id = data.labels[i].labelId;
+            labelIds.push(id);
+        }
+
+        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, data.itemName, labelIds, (ids, error) => {
             if (error) {
                 this.favoriteDialog.showError("Chyba při vytváření oblíbené položky");
                 return;
@@ -124,21 +130,24 @@
 
             this.favoriteDialog.hide();
 
-            var itemData = this.createFavoriteItemObject(id, data.itemName, data.labelId, data.labelName, data.labelColor);
-            this.popoverBuilder.addFavoriteItem(itemData);
+            for (let i = 0; i < ids.length; i++) {
+                var labelData = data.labels[i];
+                var itemData = this.createFavoriteItemObject(ids[i], data.itemName, labelData.labelId, labelData.labelName, labelData.labelColor);
+                this.popoverBuilder.addFavoriteItem(itemData);
+            }
             this.notifyFavoritesChanged();
         });
     }
 
     private createFavoriteItemFast(labelId: number, favoriteTitle: string, labelName: string, labelColor: string) {
-        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, favoriteTitle, labelId, (id, error) => {
+        this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, favoriteTitle, [labelId], (ids, error) => {
             if (error) {
                 return;
             }
 
             $(this.starGlyphIcon).popover("hide");
 
-            var itemData = this.createFavoriteItemObject(id, favoriteTitle, labelId, labelName, labelColor);
+            var itemData = this.createFavoriteItemObject(ids[0], favoriteTitle, labelId, labelName, labelColor);
             this.popoverBuilder.addFavoriteItem(itemData);
             this.notifyFavoritesChanged();
         });

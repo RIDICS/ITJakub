@@ -332,7 +332,12 @@
         });
 
         this.favoriteDialog.setSaveCallback(data => {
-            this.saveFavoriteQuery(data.itemName, data.labelId);
+            var labelIds = new Array<number>();
+            for (var i = 0; i < data.labels.length; i++) {
+                var id = data.labels[i].labelId;
+                labelIds.push(id);
+            }
+            this.saveFavoriteQuery(data.itemName, labelIds);
         });
     }
     
@@ -359,9 +364,9 @@
         }
     }
 
-    private saveFavoriteQuery(itemName: string, labelId: number) {
+    private saveFavoriteQuery(itemName: string, labelIds: number[]) {
         var query = this.inputTextbox.val();
-        this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelId, (id, error) => {
+        this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelIds, (id, error) => {
             if (error) {
                 this.favoriteDialog.showError("Chyba při vytváření oblíbeného dotazu");
                 return;

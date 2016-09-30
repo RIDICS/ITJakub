@@ -74,8 +74,14 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
+            var labelIds = new List<long>();
+            if (labelId != null)
+            {
+                labelIds.Add(labelId.Value);
+            }
+
             Book book = m_bookVersionRepository.Load<Book>(bookPage.BookVersion.Book.Id);
-            FavoriteLabel favoriteLabel = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
+            FavoriteLabel favoriteLabel = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id).First();
             favoriteLabel.LastUseTime = now;
 
             PageBookmark bookmark = new PageBookmark
@@ -160,86 +166,121 @@ namespace ITJakub.ITJakubService.Core
             return resultList;
         }
 
-        private FavoriteLabel GetFavoriteLabelAndCheckAuthorization(long? labelId, int userId)
+        private IList<FavoriteLabel> GetFavoriteLabelsAndCheckAuthorization(IList<long> labelIds, int userId)
         {
-            var label = labelId == null
-                ? m_favoritesRepository.GetDefaultFavoriteLabel(userId)
-                : m_favoritesRepository.FindById<FavoriteLabel>(labelId.Value);
+            if (labelIds == null || labelIds.Count == 0)
+            {
+                var defaultLabel = m_favoritesRepository.GetDefaultFavoriteLabel(userId);
+                return new List<FavoriteLabel> {defaultLabel};
+            }
 
-            if (label.User.Id != userId)
+            var labels = m_favoritesRepository.GetFavoriteLabelsById(labelIds);
+            if (labels.Any(x => x.User.Id != userId))
             {
                 throw new UnauthorizedAccessException();
             }
 
-            return label;
+            if (labels.Count != labelIds.Count)
+            {
+                throw new ArgumentException("All specified labels were not found");
+            }
+
+            return labels;
         }
 
-        public long CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var book = m_favoritesRepository.Load<Book>(bookId);
 
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
-            label.LastUseTime = now;
-            
-            var favoriteItem = new FavoriteBook
-            {
-                Book = book,
-                CreateTime = now,
-                User = user,
-                FavoriteLabel = label,
-                Title = title
-            };
+            var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
+            var labelsDictionary = labels.ToDictionary(x => x.Id);
+            var itemsToSave = new List<FavoriteBook>();
 
-            return (long) m_favoritesRepository.Create(favoriteItem);
+            foreach (var labelId in labelIds)
+            {
+                var label = labelsDictionary[labelId];
+                label.LastUseTime = now;
+
+                var favoriteItem = new FavoriteBook
+                {
+                    Book = book,
+                    CreateTime = now,
+                    User = user,
+                    FavoriteLabel = label,
+                    Title = title
+                };
+                itemsToSave.Add(favoriteItem);
+            }
+
+            var result = m_favoritesRepository.CreateAll(itemsToSave);
+            return result.Cast<long>().ToList();
         }
 
-        public long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
             var category = m_favoritesRepository.Load<Category>(categoryId);
 
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
-            label.LastUseTime = now;
-            
-            var favoriteItem = new FavoriteCategory
-            {
-                Category = category,
-                CreateTime = now,
-                User = user,
-                FavoriteLabel = label,
-                Title = title
-            };
+            var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
+            var labelsDictionary = labels.ToDictionary(x => x.Id);
+            var itemsToSave = new List<FavoriteCategory>();
 
-            return (long) m_favoritesRepository.Create(favoriteItem);
+            foreach (var labelId in labelIds)
+            {
+                var label = labelsDictionary[labelId];
+                label.LastUseTime = now;
+
+                var favoriteItem = new FavoriteCategory
+                {
+                    Category = category,
+                    CreateTime = now,
+                    User = user,
+                    FavoriteLabel = label,
+                    Title = title
+                };
+                itemsToSave.Add(favoriteItem);
+            }
+
+            var result = m_favoritesRepository.CreateAll(itemsToSave);
+            return result.Cast<long>().ToList();
         }
 
-        public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds, string userName)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser(userName);
-            var label = GetFavoriteLabelAndCheckAuthorization(labelId, user.Id);
-            label.LastUseTime = now;
+
+            var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
+            var labelsDictionary = labels.ToDictionary(x => x.Id);
+            var itemsToSave = new List<FavoriteQuery>();
 
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
-
             var bookTypeEntity = m_bookVersionRepository.GetBookType(bookTypeEnum);
-            
-            var favoriteItem = new FavoriteQuery
-            {
-                BookType = bookTypeEntity,
-                Query = query,
-                QueryType = queryTypeEnum,
-                CreateTime = now,
-                User = user,
-                FavoriteLabel = label,
-                Title = title,
-            };
 
-            return (long) m_favoritesRepository.Create(favoriteItem);
+            foreach (var labelId in labelIds)
+            {
+                var label = labelsDictionary[labelId];
+                label.LastUseTime = now;
+
+                var favoriteItem = new FavoriteQuery
+                {
+                    BookType = bookTypeEntity,
+                    Query = query,
+                    QueryType = queryTypeEnum,
+                    CreateTime = now,
+                    User = user,
+                    FavoriteLabel = label,
+                    Title = title,
+                };
+                itemsToSave.Add(favoriteItem);
+            }
+
+            var result = m_favoritesRepository.CreateAll(itemsToSave);
+            return result.Cast<long>().ToList();
         }
 
         public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)

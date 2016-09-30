@@ -2247,11 +2247,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long CreateFavoriteBook(long bookId, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds, string userName)
         {
             try
             {
-                return Channel.CreateFavoriteBook(bookId, title, labelId, userName);
+                return Channel.CreateFavoriteBook(bookId, title, labelIds, userName);
             }
             catch (CommunicationException ex)
             {
@@ -2273,11 +2273,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long CreateFavoriteCategory(int categoryId, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds, string userName)
         {
             try
             {
-                return Channel.CreateFavoriteCategory(categoryId, title, labelId, userName);
+                return Channel.CreateFavoriteCategory(categoryId, title, labelIds, userName);
             }
             catch (CommunicationException ex)
             {
@@ -2299,11 +2299,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, long? labelId, string userName)
+        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds, string userName)
         {
             try
             {
-                return Channel.CreateFavoriteQuery(bookType, queryType, query, title, labelId, userName);
+                return Channel.CreateFavoriteQuery(bookType, queryType, query, title, labelIds, userName);
             }
             catch (CommunicationException ex)
             {

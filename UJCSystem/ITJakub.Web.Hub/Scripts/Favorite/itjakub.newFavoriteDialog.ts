@@ -2,9 +2,6 @@
     private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
-    private selectedLabelId: number;
-    private selectedLabelName: string;
-    private selectedLabelColor: string;
     
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -74,18 +71,18 @@
                 return;
             }
 
-            this.selectedLabelId = labelId;
-            this.selectedLabelName = checkboxJQuery.data("name");
-            this.selectedLabelColor = checkboxJQuery.data("color");
-            var fontColor = FavoriteHelper.getFontColor(this.selectedLabelColor);
-            var borderColor = FavoriteHelper.getDefaultBorderColor(new HexColor(this.selectedLabelColor));
+            var selectedLabelName = checkboxJQuery.data("name");
+            var selectedLabelColor = checkboxJQuery.data("color");
+            var color = new HexColor(selectedLabelColor);
+            var fontColor = FavoriteHelper.getDefaultFontColor(color);
+            var borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
             var newLabelSpan = document.createElement("span");
             $(newLabelSpan)
                 .attr("data-id", labelId)
-                .text(this.selectedLabelName)
+                .text(selectedLabelName)
                 .addClass("label")
-                .css("background-color", this.selectedLabelColor)
+                .css("background-color", selectedLabelColor)
                 .css("color", fontColor)
                 .css("border-color", borderColor);
 
@@ -181,20 +178,33 @@
 
     private getData(): INewFavoriteItemData {
         var itemName: string = $("#favorite-name").val();
-        
+        var labels = new Array<INewFavoriteItemDataLabel>();
+
+        $("[name=favorite-label]:checked", this.container).each((index, element) => {
+            var elementJQuery = $(element);
+            var label: INewFavoriteItemDataLabel = {
+                labelId: elementJQuery.val(),
+                labelName: elementJQuery.data("name"),
+                labelColor: elementJQuery.data("color")
+            };
+            labels.push(label);
+        });
+
         var resultData: INewFavoriteItemData = {
             itemName: itemName,
-            labelId: this.selectedLabelId,
-            labelName: this.selectedLabelName,
-            labelColor: this.selectedLabelColor
+            labels: labels
         };
         return resultData;
     }
 }
 
 interface INewFavoriteItemData {
-    labelId: number;
     itemName: string;
+    labels: INewFavoriteItemDataLabel[];
+}
+
+interface INewFavoriteItemDataLabel {
+    labelId: number;
     labelName: string;
     labelColor: string;
 }

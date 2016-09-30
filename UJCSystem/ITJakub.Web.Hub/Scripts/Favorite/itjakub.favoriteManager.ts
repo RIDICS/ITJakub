@@ -546,20 +546,20 @@
         });
     }
 
-    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
+    public createFavoriteItem(itemType: FavoriteType, itemId: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         switch (itemType) {
             case FavoriteType.Book:
-                this.createFavoriteBook(Number(itemId), favoriteTitle, favoriteLabelId, callback);
+                this.createFavoriteBook(Number(itemId), favoriteTitle, favoriteLabelIds, callback);
                 break;
             case FavoriteType.Category:
-                this.createFavoriteCategory(Number(itemId), favoriteTitle, favoriteLabelId, callback);
+                this.createFavoriteCategory(Number(itemId), favoriteTitle, favoriteLabelIds, callback);
                 break;
             default:
                 throw new Error("Not supported favorite type");
         }
     }
 
-    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
+    private createFavoriteBook(bookId: number, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledBooks: IFavoriteLabeledBook[] = this.getFromStorage("favoriteLabeledBooks");
             var favoriteLabeledBook: IFavoriteLabeledBook = null;
@@ -589,7 +589,7 @@
             favoriteLabeledBook.FavoriteInfo.push(newFavoriteBook);
             
             this.storage.save("favoriteLabeledBooks", favoriteLabeledBooks);
-            callback(newFavoriteBook.Id, null);
+            callback([newFavoriteBook.Id], null);
             return;
         }
 
@@ -600,12 +600,12 @@
             data: JSON.stringify({
                 bookId: bookId,
                 title: favoriteTitle,
-                labelId: favoriteLabelId
+                labelIds: favoriteLabelIds
             }),
             dataType: "json",
             contentType: "application/json",
-            success: (resultId) => {
-                callback(resultId, null);
+            success: (resultIds) => {
+                callback(resultIds, null);
             },
             error: (request, status) => {
                 callback(null, status);
@@ -613,7 +613,7 @@
         });
     }
 
-    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
+    private createFavoriteCategory(categoryId: number, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteLabeledCategories: IFavoriteLabeledCategory[] = this.getFromStorage("favoriteLabeledCategories");
             var favoriteLabeledCategory: IFavoriteLabeledCategory = null;
@@ -643,7 +643,7 @@
             favoriteLabeledCategory.FavoriteInfo.push(newFavoriteCategory);
 
             this.storage.save("favoriteLabeledCategories", favoriteLabeledCategories);
-            callback(newFavoriteCategory.Id, null);
+            callback([newFavoriteCategory.Id], null);
             return;
         }
 
@@ -654,12 +654,12 @@
             data: JSON.stringify({
                 categoryId: categoryId,
                 title: favoriteTitle,
-                labelId: favoriteLabelId
+                labelIds: favoriteLabelIds
             }),
             dataType: "json",
             contentType: "application/json",
-            success: (resultId) => {
-                callback(resultId, null);
+            success: (resultIds) => {
+                callback(resultIds, null);
             },
             error: (request, status) => {
                 callback(null, status);
@@ -667,7 +667,7 @@
         });
     }
 
-    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
+    public createFavoriteQuery(bookType: BookTypeEnum, queryType: QueryTypeEnum, query: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteQueries = <IFavoriteQuery[]>this.getFromStorage("favoriteQueries");
             var favoriteQuery: IFavoriteQuery = {
@@ -681,7 +681,7 @@
             favoriteQueries.push(favoriteQuery);
             this.storage.save("favoriteQueries", favoriteQueries);
 
-            callback(favoriteQuery.Id, null);
+            callback([favoriteQuery.Id], null);
             return;
         }
 
@@ -694,12 +694,12 @@
                 queryType: queryType,
                 query: query,
                 title: favoriteTitle,
-                labelId: favoriteLabelId
+                labelIds: favoriteLabelIds
             }),
             dataType: "json",
             contentType: "application/json",
-            success: (resultId) => {
-                callback(resultId, null);
+            success: (resultIds) => {
+                callback(resultIds, null);
             },
             error: (request, status) => {
                 callback(null, status);
