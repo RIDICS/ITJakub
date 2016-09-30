@@ -105,7 +105,7 @@ class DropDownSelect {
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
         this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
-        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager);
+        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
     private getType(response): string {

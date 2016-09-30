@@ -51,7 +51,7 @@ class ReaderModule {
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager(storage);
-        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager);
+        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, false);
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {

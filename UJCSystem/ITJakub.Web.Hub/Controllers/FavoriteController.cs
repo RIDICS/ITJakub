@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
@@ -29,10 +28,10 @@ namespace ITJakub.Web.Hub.Controllers
                     FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
                     SortList = new List<FavoriteSortViewModel>
                     {
-                        new FavoriteSortViewModel(FavoriteSortContract.TitleAsc, "Seřadit podle názvu vzestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.TitleDesc, "Seřadit podle názvu sestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeAsc, "Seřadit podle času vytvoření vzestupně"),
-                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeDesc, "Seřadit podle času vytvoření sestupně")
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleAsc, "Název vzestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.TitleDesc, "Název sestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeAsc, "Čas vytvoření vzestupně"),
+                        new FavoriteSortViewModel(FavoriteSortContract.CreateTimeDesc, "Čas vytvoření sestupně")
                     },
                     FilterList = new List<FavoriteFilterViewModel>
                     {

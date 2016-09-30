@@ -15,11 +15,35 @@
     
     <div class="row">
         <div class="col-md-3">
-            <span class="favorite-management-heading" style="margin-right: 10px;">Štítky</span>
-            (<a href="#" id="show-all-link">Zobrazit všechny</a>)
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="favorite-management-heading">Štítky</span>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default btn-block btn-sm" id="add-new-label" style="margin-top: 20px;">
+                        Vytvořit nový
+                    </button>
+                </div>
+            </div>
+
             <hr/>
+
+            <div class="row favorite-management-subheading">
+                <div class="col-md-5">
+                    <a href="#" id="show-all-link">Zobrazit vše</a>
+                </div>
+                <div class="col-md-7">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="label-name-filter" placeholder="Filtrovat" title="Filtrovat štítky podle názvu" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" id="label-name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <div id="favorite-labels">
-                
+
                 @foreach (var favoriteLabel in Model.FavoriteLabels)
                 {
                     @Html.Partial("_FavoriteLabelManagement", favoriteLabel)
@@ -28,13 +52,6 @@
             </div>
 
             <hr/>
-            <div class="row">
-                <div class="col-md-6 col-md-offset-6">
-                    <button type="button" class="btn btn-default btn-block" id="add-new-label">
-                        Vytvořit nový
-                    </button>
-                </div>
-            </div>
         </div>
         
 
@@ -44,24 +61,27 @@
                     <span class="favorite-management-heading">Oblíbené položky</span>
                 </div>
                 <div class="col-md-2">
+                    <label for="sort-select">Řadit podle:</label>
                     <select class="form-control input-sm" id="sort-select" title="Seřadit oblíbené položky">
                         @foreach (var sort in Model.SortList)
                         {
-                            <option value="@((short)sort.SortType)">@sort.Name</option>
+                            <option value="@((short) sort.SortType)">@sort.Name</option>
                         }
                     </select>
                 </div>
                 <div class="col-md-2">
+                    <label for="type-filter-select">Filtrovat podle:</label>
                     <select class="form-control input-sm" id="type-filter-select" title="Filtrovat oblíbené položky podle typu">
                         @foreach (var filter in Model.FilterList)
                         {
-                            <option value="@((short)filter.FavoriteType)">@filter.Name</option>
+                            <option value="@((short) filter.FavoriteType)">@filter.Name</option>
                         }
                     </select>
                 </div>
                 <div class="col-md-3">
+                    <label for="name-filter">Filtrovat podle názvu:</label>
                     <div class="input-group input-group-sm">
-                        <input type="text" class="form-control" id="name-filter" placeholder="Filtr podle názvu" />
+                        <input type="text" class="form-control" id="name-filter" placeholder="Názvu" title="Filtrovat oblíbené položky podle názvu"/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
                         </span>
@@ -94,7 +114,12 @@
                     <div class="form-group">
                         <label for="favorite-label-color" class="col-md-3 control-label">Barva</label>
                         <div class="col-md-8">
-                            <input class="form-control" id="favorite-label-color" type="text">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-tint"></span></button>
+                                </span>
+                                <input class="form-control" id="favorite-label-color" type="text">
+                            </div>
                         </div>
                     </div>
                 </div>

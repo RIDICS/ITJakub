@@ -1,9 +1,11 @@
 ﻿class NewFavoriteDialog {
+    private allowMultipleLabels: boolean;
     private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
     
-    constructor(favoriteManager: FavoriteManager) {
+    constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
+        this.allowMultipleLabels = allowMultipleLabels;
         this.favoriteManager = favoriteManager;
     }
 
@@ -24,7 +26,7 @@
     }
 
     private finishInitialization() {
-        $(".modal-title", this.container).text("Přidat novou oblíbenou položku");
+        $(".modal-title", this.container).text("Přiřadit štítky k vybrané položce");
         $(".save-button").click(this.onSaveButtonClick.bind(this));
     }
 
@@ -60,11 +62,20 @@
         $(".modal-body", this.container).removeClass("loading");
         $(".no-label-info", this.container).hide();
 
+        if (!this.allowMultipleLabels) {
+            $("[name=favorite-label]", this.container)
+                .attr("type", "radio")
+                .parent().css("padding-left", "27px");
+        }
+
         $("[name=favorite-label]", this.container).change(event => {
             var checkbox = <HTMLInputElement>event.target;
             var checkboxJQuery = $(checkbox);
             var labelId = checkboxJQuery.val();
 
+            if (!this.allowMultipleLabels) {
+                $(".favorite-selected-label-info", this.container).empty();
+            }
             if (!checkbox.checked) {
                 $(".favorite-selected-label-info [data-id=" + labelId + "]", this.container).remove();
                 this.checkSelectedItems();

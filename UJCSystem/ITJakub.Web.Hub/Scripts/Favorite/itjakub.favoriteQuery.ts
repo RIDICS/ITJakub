@@ -12,7 +12,7 @@
         this.queryType = queryType;
         this.bookType = bookType;
         this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
-        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager);
+        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
         this.inputTextbox = inputTextbox;
         this.renderContainer = renderContainer;
         this.isCreated = false;
