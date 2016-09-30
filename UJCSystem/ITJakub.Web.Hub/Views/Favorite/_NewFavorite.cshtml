@@ -1,33 +1,77 @@
 ﻿@model ITJakub.Web.Hub.Models.Favorite.NewFavoriteViewModel
 
-<div class="form-horizontal new-favorite">
-    <div class="form-group">
-        <label for="favorite-name" class="col-md-3 control-label">Název položky</label>
-        <div class="col-md-8">
-            <input class="form-control" id="favorite-name" type="text" value="@Model.ItemName">
-        </div>
-    </div>
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#" data-tab-class="tab-favorite-label-assign">Přiřadit štítky</a>
+    </li>
+    <li>
+        <a href="#" data-tab-class="tab-favorite-label-create">Vytvořit a přiřadit nový štítek</a>
+    </li>
+</ul>
 
-    <div class="form-group">
-        <label class="col-md-3 control-label">Vyberte štítek</label>
-        <div class="col-md-8">
-            <div class="form-control favorite-select-label">
-                @foreach (var label in Model.Labels)
-                {
-                    <div class="radio">
-                        <label class="favorite-select-label-item" style="background-color: @label.Color;">
-                            <input type="radio" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "checked=checked" : string.Empty)> @label.Name
-                        </label>
+<div class="tab-content">
+    <div class="tab-pane tab-favorite-label-assign active">
+        <div class="form-horizontal new-favorite">
+            <div class="form-group">
+                <label for="favorite-name" class="col-md-3 control-label">Název položky</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="favorite-name" type="text" value="@Model.ItemName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Vyberte štítek</label>
+                <div class="col-md-8">
+                    <input class="form-control favorite-label-filter" type="text" placeholder="Filtrovat štítky" />
+                
+                    <div class="form-control favorite-select-label">
+                        @foreach (var label in Model.Labels)
+                        {
+                            <div class="radio">
+                                <label class="favorite-select-label-item" style="background-color: @label.Color;">
+                                    <input type="checkbox" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "checked=checked" : string.Empty)> @label.Name
+                                </label>
+                            </div>
+                        }
+
+                        <div class="text-center no-label-info">Žádný štítek odpovídající zadanému filtru</div>
                     </div>
-                }
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-3 control-label">Vybrané štítky</label>
+                <div class="col-md-8">
+                    <div class="favorite-selected-label-info">
+                        <span class="label label-default">Žádný štítek</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-md-3 control-label">Vybraný štítek</label>
-        <div class="col-md-8">
-            <span class="label label-default favorite-selected-label-info">Žádný štítek</span>
+    <div class="tab-pane tab-favorite-label-create">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label for="favorite-name-2" class="col-md-3 control-label">Název položky</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="favorite-name-2" type="text" value="@Model.ItemName">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="favorite-label-name" class="col-md-3 control-label">Název štítku</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="favorite-label-name" type="text">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="favorite-label-color" class="col-md-3 control-label">Barva</label>
+                <div class="col-md-8">
+                    <input class="form-control" id="favorite-label-color" type="text">
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -6,6 +6,7 @@
     private favoriteManager: FavoriteManager;
     private favoriteDialog: NewFavoriteDialog;
     private isCreated: boolean;
+    private noQueryDiv: HTMLDivElement;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.queryType = queryType;
@@ -150,6 +151,14 @@
             .append(listSeparator)
             .append(listContainer);
 
+        var noQueryDiv = document.createElement("div");
+        $(noQueryDiv)
+            .css("margin-left", "15px")
+            .text("Žádný oblíbený dotaz pro zvolený štítek")
+            .hide();
+        $(listContainer).append(noQueryDiv);
+        this.noQueryDiv = noQueryDiv;
+
         for (let i = 0; i < favoriteQueries.length; i++) {
             var favoriteQuery = favoriteQueries[i];
             var queryLink = document.createElement("a");
@@ -205,11 +214,7 @@
             $(listContainer).append(queryLink);
         }
         if (favoriteQueries.length === 0) {
-            var noQueryDiv = document.createElement("div");
-            $(noQueryDiv)
-                .css("margin-left", "15px")
-                .text("Žádný oblíbený dotaz");
-            $(listContainer).append(noQueryDiv);
+            $(this.noQueryDiv).show();
         }
 
         $(row1Div)
@@ -292,10 +297,15 @@
             var labelId = elementJquery.data("id");
             var labelName = elementJquery.data("name");
             var labelColor = elementJquery.data("color");
+            var color = new HexColor(labelColor);
+            var fontColor = FavoriteHelper.getDefaultFontColor(color);
+            var borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
             $(".favorite-query-label-selected")
                 .data("id", labelId)
                 .text(labelName)
+                .css("color", fontColor)
+                .css("border-color", borderColor)
                 .css("background-color", labelColor);
 
             this.filterQueryList(labelId);
@@ -330,14 +340,22 @@
         if (!labelId) {
             $(".favorite-query-item").removeClass("hidden");
         } else {
+            var isAnyVisible = false;
             $(".favorite-query-item")
                 .addClass("hidden")
                 .each((index, element) => {
                     var elementLabelId = $(element).data("label-id");
                     if (elementLabelId === labelId) {
                         $(element).removeClass("hidden");
+                        isAnyVisible = true;
                     }
                 });
+
+            if (isAnyVisible) {
+                $(this.noQueryDiv).hide();
+            } else {
+                $(this.noQueryDiv).show();
+            }
         }
     }
 

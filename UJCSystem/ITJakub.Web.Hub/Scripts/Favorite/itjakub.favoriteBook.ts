@@ -111,6 +111,7 @@
     private createFavoriteLabel(favoriteLabel: IFavoriteLabelsWithBooksAndCategories): HTMLDivElement {
         var mainDiv = document.createElement("div");
         var link = document.createElement("a");
+        var innerDiv = document.createElement("div");
         var labelSpan = document.createElement("span");
 
         var color = new HexColor(favoriteLabel.Color);
@@ -125,13 +126,17 @@
             .css("border-color", borderColor)
             .css("color", fontColor);
 
+        $(innerDiv)
+            .addClass("text-center")
+            .append(labelSpan);
+
         $(link)
             .attr("href", "#")
             .data("id", favoriteLabel.Id)
             .data("bookIdList", favoriteLabel.BookIdList)
             .data("categoryIdList", favoriteLabel.CategoryIdList)
             .click(this.onLabelClick.bind(this))
-            .append(labelSpan);
+            .append(innerDiv);
 
         $(mainDiv)
             .append(link);

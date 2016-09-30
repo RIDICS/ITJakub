@@ -197,19 +197,23 @@ class FavoritePopoverBuilder {
     }
 
     private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
-        var fontColor = FavoriteHelper.getFontColor(item.FavoriteLabel.Color);
-        return '<div class="favorite-item"><a href="#" class="favorite-book-remove" data-id="' + escapeHtmlChars(item.Id.toString())
-            + '"><span class="glyphicon glyphicon-trash"></span></a><span class="label label-favorite" title="' + item.Title
-            + '" style="background-color: ' + escapeHtmlChars(item.FavoriteLabel.Color) + '; color: ' + fontColor + ';">'
-            + escapeHtmlChars(item.FavoriteLabel.Name) + '</span><span> ' + escapeHtmlChars(item.Title) + '</span></div>';
+        var color = new HexColor(item.FavoriteLabel.Color);
+        var fontColor = FavoriteHelper.getDefaultFontColor(color);
+        var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+        return `<div class="favorite-item"><span class="label label-favorite" title="${item.Title
+            }" style="background-color: ${escapeHtmlChars(item.FavoriteLabel.Color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.FavoriteLabel.Name)
+            }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.Id.toString())
+            }" style="color: ${fontColor}"><span class="glyphicon glyphicon-remove"></span></a></span></div>`;
     }
 
     private getFavoriteLabelHtml(label: IFavoriteLabel): string {
-        var fontColor = FavoriteHelper.getFontColor(label.Color);
-        return '<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="' + escapeHtmlChars(label.Id.toString())
-            + '" data-color="' + escapeHtmlChars(label.Color) + '" + data-name="' + escapeHtmlChars(label.Name)
-            + '"><span class="label label-favorite" style="background-color: ' + escapeHtmlChars(label.Color) + '; color: ' + fontColor + ';">'
-            + escapeHtmlChars(label.Name) + '</span></a></span>';
+        var color = new HexColor(label.Color);
+        var fontColor = FavoriteHelper.getDefaultFontColor(color);
+        var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+        return `<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="${escapeHtmlChars(label.Id.toString())
+            }" data-color="${escapeHtmlChars(label.Color)}" + data-name="${escapeHtmlChars(label.Name)
+            }"><span class="label label-favorite" style="background-color: ${escapeHtmlChars(label.Color)}; border-color: ${borderColor}; color: ${fontColor};">${escapeHtmlChars(label.Name)
+            }</span></a></span>`;
     }
 
     private getFavoriteItemsHtml(): string {

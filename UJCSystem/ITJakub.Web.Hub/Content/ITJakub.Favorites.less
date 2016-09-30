@@ -27,7 +27,7 @@
 
     .favorite-select-label-item {
         width: 100%;
-        padding-left: 27px;
+        padding-left: 7px;
         padding-right: 7px;
         padding-top: 1px;
         padding-bottom: 1px;
@@ -43,9 +43,13 @@
 
 .favorite-selected-label-info {
     margin-top: 6px;
-    font-size: 90%;
-    display: inline-block;
-    border: solid 1px black;
+    
+    .label {
+        font-size: 90%;
+        display: inline-block;
+        border: solid 1px black;
+        margin-right: 3px;
+    }
 }
 
 .favorite-star .popover {
@@ -98,7 +102,6 @@ div.favorite-label-management a:hover {
 }
 
 .favorite-query {
-    min-height: 300px;
     background-color: white;
     padding: 10px;
     margin-bottom: 10px;
@@ -115,7 +118,8 @@ div.favorite-label-management a:hover {
 }
 
 .favorite-query-list {
-    max-height: 250px;
+    min-height: 170px;
+    max-height: 300px;
     overflow-y: auto;
 }
 
@@ -160,19 +164,29 @@ div.favorite-label-management a:hover {
 }
 
 .favorite-dropdown-item-label {
-    display: block;
-    font-size: 100%;
-    font-weight: normal;
-    margin-bottom: 3px;
+    display: inline-block;
+    font-size: 90%;
+    margin-bottom: 1px;
     border: solid 1px black;
 }
 
 .favorite-book-remove {
-    display: block;
-    float: right;
+    margin-left: 7px;
+
+    .glyphicon {
+        top: 3px;
+    }
 }
 
 .favorite-book-select-body {
     padding-left: 20px;
     padding-right: 20px;
+}
+
+.favorite-book-select-body > div:hover {
+    background-color: whitesmoke;
+}
+
+.favorite-item {
+    margin-bottom: 1px;
 }

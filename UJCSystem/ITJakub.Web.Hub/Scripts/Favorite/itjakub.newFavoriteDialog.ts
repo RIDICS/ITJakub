@@ -61,23 +61,37 @@
 
     private finishInnerInitialization() {
         $(".modal-body", this.container).removeClass("loading");
+        $(".no-label-info", this.container).hide();
 
         $("[name=favorite-label]", this.container).change(event => {
             var checkbox = <HTMLInputElement>event.target;
-            if (!checkbox.checked)
-                return;
+            var checkboxJQuery = $(checkbox);
+            var labelId = checkboxJQuery.val();
 
-            this.selectedLabelId = $(checkbox).val();
-            this.selectedLabelName = $(checkbox).data("name");
-            this.selectedLabelColor = $(checkbox).data("color");
+            if (!checkbox.checked) {
+                $(".favorite-selected-label-info [data-id=" + labelId + "]", this.container).remove();
+                this.checkSelectedItems();
+                return;
+            }
+
+            this.selectedLabelId = labelId;
+            this.selectedLabelName = checkboxJQuery.data("name");
+            this.selectedLabelColor = checkboxJQuery.data("color");
             var fontColor = FavoriteHelper.getFontColor(this.selectedLabelColor);
             var borderColor = FavoriteHelper.getDefaultBorderColor(new HexColor(this.selectedLabelColor));
 
-            $(".favorite-selected-label-info", this.container)
+            var newLabelSpan = document.createElement("span");
+            $(newLabelSpan)
+                .attr("data-id", labelId)
                 .text(this.selectedLabelName)
+                .addClass("label")
                 .css("background-color", this.selectedLabelColor)
                 .css("color", fontColor)
                 .css("border-color", borderColor);
+
+            $(".favorite-selected-label-info", this.container)
+                .append(newLabelSpan);
+            this.checkSelectedItems();
         });
 
         $("[name=favorite-label]:checked", this.container).trigger("change");
@@ -93,7 +107,55 @@
                 .css("border-color", borderColor);
         });
 
-        //$(".favorite-selected-label-info", this.container)
+        $(".nav-tabs a", this.container).click((event) => {
+            $(".nav-tabs li, .tab-pane").removeClass("active");
+            var navLinkJQuery = $(event.currentTarget);
+            var tabClass = navLinkJQuery.data("tab-class");
+
+            navLinkJQuery.closest("li").addClass("active");
+            $("." + tabClass, this.container).addClass("active");
+        });
+
+        $(".favorite-label-filter", this.container).on("change keyup paste", (event) => {
+            var filter = $(event.currentTarget).val().toLocaleLowerCase();
+            var isAnyVisible = false;
+            $(".favorite-select-label .radio").each((index, element) => {
+                var name = <string>$("input", element).data("name").toLocaleLowerCase();
+                if (name.indexOf(filter) !== -1) {
+                    $(element).show();
+                    isAnyVisible = true;
+                } else {
+                    $(element).hide();
+                }
+            });
+
+            if (isAnyVisible) {
+                $(".no-label-info").hide();
+            } else {
+                $(".no-label-info").show();
+            }
+        });
+    }
+
+    private checkSelectedItems() {
+        var labelsJQuery = $(".favorite-selected-label-info .label", this.container);
+        if (labelsJQuery.length === 0) {
+            var emptyLabel = document.createElement("span");
+            $(emptyLabel)
+                .addClass("label")
+                .addClass("label-default")
+                .text("Žádný štítek");
+            $(".favorite-selected-label-info", this.container)
+                .append(emptyLabel);
+        } else {
+            var emptyLabelJQuery = $(".favorite-selected-label-info .label-default");
+            var isEmptyLabelExists = emptyLabelJQuery.length > 0;
+            var isAnyLabel = $("[name=favorite-label]:checked", this.container).length > 0;
+
+            if (isAnyLabel && isEmptyLabelExists) {
+                emptyLabelJQuery.remove();
+            }
+        }
     }
 
     public hide() {
