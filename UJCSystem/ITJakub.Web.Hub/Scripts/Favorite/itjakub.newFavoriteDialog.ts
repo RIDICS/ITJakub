@@ -4,6 +4,7 @@
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
     private labelColorInput: ColorInput;
+    private activeTabClass: string;
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
@@ -136,6 +137,7 @@
             $(".nav-tabs li, .tab-pane").removeClass("active");
             var navLinkJQuery = $(event.currentTarget);
             var tabClass = navLinkJQuery.data("tab-class");
+            this.activeTabClass = tabClass;
 
             navLinkJQuery.closest("li").addClass("active");
             $("." + tabClass, this.container).addClass("active");
@@ -197,10 +199,53 @@
             .text(text);
     }
 
+    private createFavoriteLabel() {
+        var itemName = $("#favorite-name-2").val();
+        var labelName = $("#favorite-label-name").val();
+        var color = this.labelColorInput.getValue();
+
+        var error = "";
+        if (!labelName) {
+            error = "Nebylo zadáno jméno.";
+        }
+        if (!FavoriteHelper.isValidHexColor(color)) {
+            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+        }
+        if (error.length > 0) {
+            this.showError(error);
+            return;
+        }
+
+        this.favoriteManager.createFavoriteLabel(labelName, color, (id, error) => {
+            if (error) {
+                this.showError("Chyba při vytváření nového štítku");
+                return;
+            }
+
+            if (this.onSaveCallback) {
+                var resultLabel: INewFavoriteItemDataLabel = {
+                    labelId: id,
+                    labelName: labelName,
+                    labelColor: color
+                };
+                var resultData: INewFavoriteItemData = {
+                    itemName: itemName,
+                    labels: [resultLabel]
+                };
+                this.onSaveCallback(resultData);
+            }
+        });
+    }
+
     private onSaveButtonClick() {
         $(".saving-icon", this.container).removeClass("hidden");
         $(".error", this.container).addClass("hidden");
-        
+
+        if (this.activeTabClass === "tab-favorite-label-create") {
+            this.createFavoriteLabel();
+            return;
+        }
+
         if (this.onSaveCallback) {
             var resultData = this.getData();
             this.onSaveCallback(resultData);

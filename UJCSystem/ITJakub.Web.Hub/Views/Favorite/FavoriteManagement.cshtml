@@ -88,6 +88,7 @@
             <hr/>
             
             <div id="favorite-item-container"></div>
+            <div id="no-results" class="text-center hidden">Žádné výsledky k zobrazení</div>
         </div>
     </div>
 </div>
@@ -104,7 +105,7 @@
                     <div class="form-group">
                         <label for="favorite-label-name" class="col-md-3 control-label">Název štítku</label>
                         <div class="col-md-8">
-                            <input class="form-control" id="favorite-label-name" type="text">
+                            <input class="form-control" id="favorite-label-name" type="text" maxlength="50">
                         </div>
                     </div>
                     
@@ -161,7 +162,7 @@
                     <div class="form-group">
                         <label for="favorite-item-name" class="col-md-3 control-label">Název oblíbené položky</label>
                         <div class="col-md-8">
-                            <input class="form-control" id="favorite-item-name" type="text">
+                            <input class="form-control" id="favorite-item-name" type="text" maxlength="250">
                         </div>
                     </div>
                 </div>

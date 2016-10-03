@@ -7,6 +7,12 @@
     private favoriteDialog: NewFavoriteDialog;
     private isCreated: boolean;
     private noQueryDiv: HTMLDivElement;
+    private insertDialog: InsertQueryDialog;
+    private filterQuerySearchBox: FilterSearchBox;
+    private filterLabelInput: HTMLInputElement;
+    private noFilteredLabel: HTMLDivElement;
+    private selectedFilterLabelId: number;
+    private selectedFilterName: string;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.queryType = queryType;
@@ -16,6 +22,7 @@
         this.inputTextbox = inputTextbox;
         this.renderContainer = renderContainer;
         this.isCreated = false;
+        this.insertDialog = new InsertQueryDialog();
         this.renderContainer.hide();
     }
 
@@ -26,6 +33,7 @@
 
         this.forceRerender();
         this.favoriteDialog.make();
+        this.insertDialog.make();
     }
 
     private forceRerender() {
@@ -75,18 +83,43 @@
         var mainDiv = document.createElement("div");
         var row1Div = document.createElement("div");
         var filterColumnDiv = document.createElement("div");
-        var filterHeadingSpan = document.createElement("span");
+        var filterHeading = document.createElement("div");
+        var filterHeaderSpan = document.createElement("span");
+        var filterInputContainer = document.createElement("div");
+        var filterInput = document.createElement("input");
         var filterSeparator = document.createElement("hr");
         var filterContainer = document.createElement("div");
+        var noFilteredLabel = document.createElement("div");
         var displayAllLink = document.createElement("a");
         
         var listColumnDiv = document.createElement("div");
-        var listHeadingSpan = document.createElement("span");
-        var listHeadingLabel = document.createElement("span");
+        var listHeading = document.createElement("div");
+        var listHeaderContainer = document.createElement("div");
+        var listHeaderSpan = document.createElement("span");
+        var listHeaderLabel = document.createElement("span");
+        var listHeaderFilterContainer = document.createElement("div");
         var listSeparator = document.createElement("hr");
         var listContainer = document.createElement("div");
 
-        $(filterHeadingSpan).text("Filtrovat:");
+        $(filterHeaderSpan)
+            .addClass("col-md-5")
+            .addClass("favorite-query-header")
+            .text("Filtrovat:");
+        $(filterInput)
+            .attr("type", "text")
+            .attr("placeholder", "Filtrovat")
+            .attr("title", "Filtrovat štítky podle názvu")
+            .addClass("form-control")
+            .addClass("input-sm");
+        $(filterInputContainer)
+            .addClass("col-md-7")
+            .append(filterInput);
+        this.filterLabelInput = filterInput;
+
+        $(filterHeading)
+            .addClass("row")
+            .append(filterHeaderSpan)
+            .append(filterInputContainer);
 
         $(displayAllLink)
             .attr("href", "#")
@@ -96,13 +129,20 @@
             .data("color", "#0000DD")
             .text("Zobrazit vše");
 
+        $(noFilteredLabel)
+            .addClass("text-center")
+            .text("Žádný štítek odpovídající zadanému filtru")
+            .hide();
+        this.noFilteredLabel = noFilteredLabel;
+
         $(filterContainer)
             .addClass("favorite-query-list")
-            .append(displayAllLink);
+            .append(displayAllLink)
+            .append(noFilteredLabel);
 
         $(filterColumnDiv)
             .addClass("col-md-3")
-            .append(filterHeadingSpan)
+            .append(filterHeading)
             .append(filterSeparator)
             .append(filterContainer);
 
@@ -133,28 +173,45 @@
             $(filterContainer).append(labelLink);
         }
 
-        $(listHeadingSpan)
+        $(listHeaderSpan)
             .text("Vložit dotaz z oblíbených: ");
-        $(listHeadingLabel)
+        $(listHeaderLabel)
             .addClass("label")
             .addClass("favorite-query-label-selected")
             .css("background-color", "#0000DD")
             .text("Zobrazeno vše");
+
+        $(listHeaderContainer)
+            .addClass("col-md-8")
+            .addClass("favorite-query-header")
+            .append(listHeaderSpan)
+            .append(listHeaderLabel);
+
+        this.filterQuerySearchBox = new FilterSearchBox();
+        this.filterQuerySearchBox.make();
+        
+        $(listHeaderFilterContainer)
+            .addClass("col-md-4")
+            .append(this.filterQuerySearchBox.getRootElement());
+
+        $(listHeading)
+            .addClass("row")
+            .append(listHeaderContainer)
+            .append(listHeaderFilterContainer);
 
         $(listContainer)
             .addClass("favorite-query-list");
 
         $(listColumnDiv)
             .addClass("col-md-9")
-            .append(listHeadingSpan)
-            .append(listHeadingLabel)
+            .append(listHeading)
             .append(listSeparator)
             .append(listContainer);
 
         var noQueryDiv = document.createElement("div");
         $(noQueryDiv)
             .css("margin-left", "15px")
-            .text("Žádný oblíbený dotaz pro zvolený štítek")
+            .text("Žádný oblíbený dotaz odpovídající zvoleným filtrům")
             .hide();
         $(listContainer).append(noQueryDiv);
         this.noQueryDiv = noQueryDiv;
@@ -205,6 +262,7 @@
                 .attr("href", "#")
                 .addClass("favorite-query-item")
                 .data("id", favoriteQuery.Id)
+                .data("name", favoriteQuery.Title)
                 .data("query", favoriteQuery.Query)
                 .data("label-id", favoriteQuery.FavoriteLabel.Id)
                 .append(queryRemoveLink)
@@ -245,7 +303,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonText)
-            .text(" Uložit dotaz jako oblíbený");
+            .text(" Uložit stávající dotaz");
 
         $(saveButton)
             .addClass("btn")
@@ -308,13 +366,23 @@
                 .css("border-color", borderColor)
                 .css("background-color", labelColor);
 
-            this.filterQueryList(labelId);
+            if (labelId === 0) {
+                this.selectedFilterLabelId = 0;
+                this.selectedFilterName = null;
+                this.filterQuerySearchBox.clear();
+                $(this.filterLabelInput).val("");
+                this.filterLabels("");
+            }
+
+            this.selectedFilterLabelId = labelId;
+            this.filterQueryList();
         });
 
         $(".favorite-query-item", this.renderContainer).click((event) => {
             var elementJquery = $(event.currentTarget);
             var query = elementJquery.data("query");
-            this.inputTextbox.val(query);
+
+            this.insertQueryToSearchField(query);
         });
 
         $(".favorite-query-save-button", this.renderContainer).click(() => {
@@ -331,6 +399,17 @@
             });
         });
 
+        $(this.filterLabelInput).on("change keyup paste", () => {
+            var value = String($(this.filterLabelInput).val());
+            this.filterLabels(value);
+        });
+
+        this.filterQuerySearchBox.change(() => {
+            var value = this.filterQuerySearchBox.val();
+            this.selectedFilterName = value.toLocaleLowerCase();
+            this.filterQueryList();
+        });
+
         this.favoriteDialog.setSaveCallback(data => {
             var labelIds = new Array<number>();
             for (var i = 0; i < data.labels.length; i++) {
@@ -340,27 +419,85 @@
             this.saveFavoriteQuery(data.itemName, labelIds);
         });
     }
-    
-    private filterQueryList(labelId?: number) {
-        if (!labelId) {
-            $(".favorite-query-item").removeClass("hidden");
-        } else {
-            var isAnyVisible = false;
-            $(".favorite-query-item")
-                .addClass("hidden")
-                .each((index, element) => {
-                    var elementLabelId = $(element).data("label-id");
-                    if (elementLabelId === labelId) {
-                        $(element).removeClass("hidden");
-                        isAnyVisible = true;
-                    }
-                });
 
-            if (isAnyVisible) {
+    private insertQueryToSearchField(newQuery: string) {
+        var originalQuery = this.inputTextbox.val();
+        
+        if (originalQuery) {
+            this.insertDialog.show(() => {
+                this.inputTextbox.val(newQuery); 
+                this.insertDialog.hide();
+            });
+            return;
+        }
+
+        this.inputTextbox.val(newQuery);
+    }
+
+    private filterLabels(filter: string) {
+        filter = filter.toLocaleLowerCase();
+        var anyVisible = false;
+        $(".favorite-query-label", this.renderContainer).each((index, element) => {
+            if (index === 0) return;
+
+            var labelName = String($(element).data("name")).toLocaleLowerCase();
+            if (labelName.indexOf(filter) !== -1) {
+                $(element).show();
+                anyVisible = true;
+            } else {
+                $(element).hide();
+            }
+        });
+
+        if (anyVisible) {
+            $(this.noFilteredLabel).hide();
+        } else {
+            $(this.noFilteredLabel).show();
+        }
+    }
+
+    private filterQueryList() {
+        var labelId = this.selectedFilterLabelId;
+        var nameFilter = this.selectedFilterName;
+        if (!labelId && !nameFilter) {
+            $(".favorite-query-item").removeClass("hidden");
+            if ($(".favorite-query-item").length > 0) {
                 $(this.noQueryDiv).hide();
             } else {
                 $(this.noQueryDiv).show();
             }
+            return;
+        }
+        
+        var isAnyVisible = false;
+        $(".favorite-query-item")
+            .addClass("hidden")
+            .each((index, element) => {
+                var elementLabelId = $(element).data("label-id");
+                var queryName = String($(element).data("name")).toLocaleLowerCase();
+
+                if (labelId && nameFilter) {
+                    if (elementLabelId === labelId && queryName.indexOf(nameFilter) !== -1) {
+                        $(element).removeClass("hidden");
+                        isAnyVisible = true;
+                    }
+                } else if (labelId) {
+                    if (elementLabelId === labelId) {
+                        $(element).removeClass("hidden");
+                        isAnyVisible = true;
+                    }
+                } else if (nameFilter) {
+                    if (queryName.indexOf(nameFilter) !== -1) {
+                        $(element).removeClass("hidden");
+                        isAnyVisible = true;
+                    }
+                }
+            });
+
+        if (isAnyVisible) {
+            $(this.noQueryDiv).hide();
+        } else {
+            $(this.noQueryDiv).show();
         }
     }
 
@@ -375,5 +512,147 @@
             this.forceRerender();
             this.favoriteDialog.hide();
         });
+    }
+}
+
+class InsertQueryDialog {
+    private container: HTMLDivElement;
+    private submitCallback: () => void;
+    
+    public make() {
+        this.container = document.createElement("div");
+        var dialog = document.createElement("div");
+        var content = document.createElement("div");
+        var header = document.createElement("div");
+        var body = document.createElement("div");
+        var footer = document.createElement("div");
+        var closeButton = document.createElement("button");
+        var title = document.createElement("h4");
+        var noButton = document.createElement("button");
+        var yesButton = document.createElement("button");
+
+        $(title)
+            .addClass("modal-title")
+            .text("Vložit dotaz");
+        $(closeButton)
+            .attr("type", "button")
+            .attr("data-dismiss", "modal")
+            .addClass("close")
+            .html("&times;");
+
+        $(body)
+            .addClass("modal-body")
+            .text("Opravdu chcete vložit zvolený dotaz a nahradit ním stávající?");
+
+        $(noButton)
+            .attr("type", "button")
+            .attr("data-dismiss", "modal")
+            .addClass("btn")
+            .addClass("btn-default")
+            .text("Zavřít");
+
+        $(yesButton)
+            .attr("type", "button")
+            .addClass("btn")
+            .addClass("btn-default")
+            .text("Vložit")
+            .click(this.onSubmitClick.bind(this));
+
+        $(header)
+            .addClass("modal-header")
+            .append(closeButton)
+            .append(title);
+
+        $(footer)
+            .addClass("modal-footer")
+            .append(noButton)
+            .append(yesButton);
+
+        $(content)
+            .addClass("modal-content")
+            .append(header)
+            .append(body)
+            .append(footer);
+
+        $(dialog)
+            .addClass("modal-dialog")
+            .append(content);
+        $(this.container)
+            .addClass("modal")
+            .addClass("fade")
+            .attr("role", "dialog")
+            .append(dialog);
+
+        $("body").append(this.container);
+    }
+
+    public show(submitCallback: () => void) {
+        this.submitCallback = submitCallback;
+        $(this.container).modal("show");
+    }
+
+    public hide() {
+        $(this.container).modal("hide");
+    }
+
+    private onSubmitClick() {
+        if (this.submitCallback) {
+            this.submitCallback();
+        }
+    }
+}
+
+class FilterSearchBox{
+    private groupContainer: HTMLDivElement;
+    private input: HTMLInputElement;
+
+    public make() {
+        this.groupContainer = document.createElement("div");
+        var input = document.createElement("input");
+        var buttonGroup = document.createElement("span");
+        var searchButton = document.createElement("button");
+        var searchIcon = document.createElement("span");
+
+        $(searchIcon)
+            .addClass("glyphicon")
+            .addClass("glyphicon-search");
+        $(searchButton)
+            .attr("type", "button")
+            .addClass("btn")
+            .addClass("btn-default")
+            .append(searchIcon);
+
+        $(buttonGroup)
+            .addClass("input-group-btn")
+            .append(searchButton);
+
+        $(input)
+            .attr("type", "text")
+            .addClass("form-control")
+            .attr("placeholder", "Filtrovat")
+            .attr("title", "Filtrovat podle názvu");
+        this.input = input;
+
+        $(this.groupContainer)
+            .addClass("input-group")
+            .addClass("input-group-sm")
+            .append(input)
+            .append(buttonGroup);
+    }
+
+    public getRootElement(): HTMLDivElement {
+        return this.groupContainer;
+    }
+
+    public change(handler: (eventObject: JQueryEventObject) => any) {
+        return $(this.input).change(handler);
+    }
+
+    public val(): string {
+        return $(this.input).val();
+    }
+
+    public clear() {
+        $(this.input).val("");
     }
 }

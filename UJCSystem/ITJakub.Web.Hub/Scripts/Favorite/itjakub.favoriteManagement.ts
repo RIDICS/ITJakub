@@ -148,6 +148,11 @@ class FavoriteManagement {
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
                 item.make();
             }
+            if (favorites.length === 0) {
+                $("#no-results").removeClass("hidden");
+            } else {
+                $("#no-results").addClass("hidden");
+            }
         });
     }
 
