@@ -5,6 +5,7 @@
 });
 
 class FavoriteManagement {
+    private static decreaseBackgroundColorPercent = 60;
     private favoriteManager: FavoriteManager;
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;
@@ -22,7 +23,7 @@ class FavoriteManagement {
     }
 
     public init() {
-        this.labelColorInput = new ColorInput($("#favorite-label-color"));
+        this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();
 
         $(".favorite-label-management").each((index, element) => {
@@ -59,7 +60,12 @@ class FavoriteManagement {
         $("#name-filter").change(this.loadFavoriteItems.bind(this));
         //$("#name-filter-button").click(this.loadFavoriteItems.bind(this));
 
+        $("#label-name-filter").change(this.filterLabels.bind(this));
+
         $("#show-all-link").click(() => {
+            $("#label-name-filter")
+                .val("")
+                .trigger("change");
             this.setActiveLabel(null);
         });
 
@@ -71,9 +77,13 @@ class FavoriteManagement {
         var color = new HexColor(backgroundColor);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+        var inactiveBackground = color.getIncreasedHexColor(FavoriteManagement.decreaseBackgroundColorPercent);
 
         $("a", element).css("color", fontColor);
-        $(element).css("border-color", borderColor);
+        $(element)
+            .css("border-color", borderColor)
+            .data("font-color", fontColor)
+            .data("inactive-background", inactiveBackground);
     }
 
     private initFavoriteLabel(item: JQuery) {
@@ -92,6 +102,34 @@ class FavoriteManagement {
             var color = item.data("color");
             this.showEditLabelDialog(name, color, item);
         });
+    }
+
+    private filterLabels() {
+        var filterValue = $("#label-name-filter").val().toLocaleLowerCase();
+        if (!filterValue) {
+            $(".favorite-label-management").show();
+            $("#no-label").hide();
+            return;
+        }
+
+        var isAnyVisible = false;
+        $(".favorite-label-management").each((index, element) => {
+            var item = $(element);
+            var name = String(item.data("name")).toLocaleLowerCase();
+
+            if (name.indexOf(filterValue) !== -1) {
+                isAnyVisible = true;
+                item.show();
+            } else {
+                item.hide();
+            }
+        });
+
+        if (isAnyVisible) {
+            $("#no-label").hide();
+        } else {
+            $("#no-label").show();
+        }
     }
 
     private loadFavoriteItems() {
@@ -114,10 +152,29 @@ class FavoriteManagement {
     }
 
     private setActiveLabel(item: JQuery) {
-        $(".favorite-label-management").removeClass("active");
+        $(".favorite-label-management")
+            .removeClass("active")
+            .each((index, element) => {
+                var elementJQuery = $(element);
+                let fontColor = FavoriteHelper.getInactiveFontColor();
+                let backgroundColor = elementJQuery.data("inactive-background");
+                if (item == null) {
+                    fontColor = elementJQuery.data("font-color");
+                    backgroundColor = elementJQuery.data("color");
+                }
+
+                elementJQuery.css("background-color", backgroundColor);
+                $("a", elementJQuery).css("color", fontColor);
+            });
 
         if (item != null) {
             item.addClass("active");
+            let backgroundColor = item.data("color");
+            let fontColor = item.data("font-color");
+
+            item.css("background-color", backgroundColor);
+            $("a", item).css("color", fontColor);
+
             this.activeLabelId = item.data("id");
         } else {
             this.activeLabelId = null;
@@ -456,51 +513,5 @@ class FavoriteManagementItem {
                 break;
         }
         return icon;
-    }
-}
-
-class ColorInput {
-    private inputElement: JQuery;
-
-    constructor(inputElement: JQuery) {
-        this.inputElement = inputElement;
-    }
-
-    public make() {
-        this.inputElement.colorpickerplus();
-        this.inputElement.on("changeColor", (event, color) => {
-            if (color == null) {
-                color = "#FFFFFF";
-            }
-
-            this.setValue(color);
-        });
-
-        this.inputElement.change(() => this.updateBackground());
-
-        // disable saving custom colors:
-        $(".colorpickerplus-container button").remove();
-        if (window.localStorage) {
-            window.localStorage.removeItem("colorpickerplus_custom_colors");
-        }
-    }
-
-    public setValue(value: string) {
-        this.inputElement.val(value);
-        this.updateBackground();
-    }
-
-    public getValue(): string {
-        return this.inputElement.val();
-    }
-
-    private updateBackground() {
-        var value = this.inputElement.val();
-        if (value.length !== 7) {
-            value = "#FFFFFF";
-        }
-
-        this.inputElement.css("background-color", value);
-        this.inputElement.css("color", FavoriteHelper.getFontColor(value));
     }
 }

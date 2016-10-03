@@ -3,6 +3,7 @@
     private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
     private onSaveCallback: (data: INewFavoriteItemData) => void;
+    private labelColorInput: ColorInput;
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
@@ -27,7 +28,23 @@
 
     private finishInitialization() {
         $(".modal-title", this.container).text("Přiřadit štítky k vybrané položce");
-        $(".save-button").click(this.onSaveButtonClick.bind(this));
+
+        var saveIcon = document.createElement("span");
+        var saveTitle = document.createElement("span");
+        $(saveIcon)
+            .addClass("glyphicon")
+            .addClass("glyphicon-star");
+        $(saveTitle)
+            .text("Potvrdit přiřazení štítků");
+
+        $(".close-button", this.container)
+            .addClass("hidden");
+
+        $(".save-button", this.container)
+            .empty()
+            .append(saveIcon)
+            .append(saveTitle)
+            .click(this.onSaveButtonClick.bind(this));
     }
 
     public show(itemName: string) {
@@ -128,7 +145,7 @@
             var filter = $(event.currentTarget).val().toLocaleLowerCase();
             var isAnyVisible = false;
             $(".favorite-select-label .radio").each((index, element) => {
-                var name = <string>$("input", element).data("name").toLocaleLowerCase();
+                var name = String($("input", element).data("name")).toLocaleLowerCase();
                 if (name.indexOf(filter) !== -1) {
                     $(element).show();
                     isAnyVisible = true;
@@ -143,6 +160,9 @@
                 $(".no-label-info").show();
             }
         });
+
+        this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
+        this.labelColorInput.make();
     }
 
     private checkSelectedItems() {
@@ -206,6 +226,59 @@
             labels: labels
         };
         return resultData;
+    }
+}
+
+class ColorInput {
+    private buttonElement: JQuery;
+    private inputElement: JQuery;
+
+    constructor(inputElement: JQuery, buttonElement: JQuery) {
+        this.buttonElement = buttonElement;
+        this.inputElement = inputElement;
+    }
+
+    public make() {
+        var elements = $(this.inputElement).add(this.buttonElement);
+        elements.colorpickerplus();
+        elements.on("changeColor", (event, color) => {
+            if (color == null) {
+                color = "#FFFFFF";
+            }
+
+            this.setValue(color);
+        });
+
+        this.inputElement.change(() => this.updateBackground());
+
+        // hack fix input type recognition in Color Picker Plus
+        this.buttonElement.data("colorpickerplus").hasInput = () => false;
+
+        // disable saving custom colors:
+        $(".colorpickerplus-container button").remove();
+        if (window.localStorage) {
+            window.localStorage.removeItem("colorpickerplus_custom_colors");
+        }
+    }
+
+    public setValue(value: string) {
+        this.inputElement.val(value);
+        this.buttonElement.data("cpp-color", value);
+        this.updateBackground();
+    }
+
+    public getValue(): string {
+        return this.inputElement.val();
+    }
+
+    private updateBackground() {
+        var value = this.inputElement.val();
+        if (value.length !== 7) {
+            value = "#FFFFFF";
+        }
+
+        this.inputElement.css("background-color", value);
+        this.inputElement.css("color", FavoriteHelper.getFontColor(value));
     }
 }
 

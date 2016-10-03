@@ -787,6 +787,10 @@ class FavoriteHelper {
         return brightness > 192 ? "#000000" : "#FFFFFF";
     }
 
+    static getInactiveFontColor(): string {
+        return "#808080";
+    }
+
     static getDefaultBorderColor(color: HexColor): string {
         if (!color.isValidHexColor()) {
             return "#000000";

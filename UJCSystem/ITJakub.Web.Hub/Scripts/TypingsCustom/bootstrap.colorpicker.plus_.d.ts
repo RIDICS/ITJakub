@@ -1,4 +1,4 @@
 ﻿interface JQuery {
-    colorpickerplus();
-    colorpickerembed();
+    colorpickerplus(options?: any);
+    colorpickerembed(options?: any);
 }
