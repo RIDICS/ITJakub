@@ -1,4 +1,5 @@
 ﻿class NewFavoriteDialog {
+    private static increaseBackgroundColorPercent = 80;
     private allowMultipleLabels: boolean;
     private favoriteManager: FavoriteManager;
     private container: HTMLDivElement;
@@ -94,17 +95,21 @@
             if (!this.allowMultipleLabels) {
                 $(".favorite-selected-label-info", this.container).empty();
             }
-            if (!checkbox.checked) {
-                $(".favorite-selected-label-info [data-id=" + labelId + "]", this.container).remove();
-                this.checkSelectedItems();
-                return;
-            }
 
             var selectedLabelName = checkboxJQuery.data("name");
             var selectedLabelColor = checkboxJQuery.data("color");
             var color = new HexColor(selectedLabelColor);
             var fontColor = FavoriteHelper.getDefaultFontColor(color);
             var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+
+            if (!checkbox.checked) {
+                $(".favorite-selected-label-info [data-id=" + labelId + "]", this.container).remove();
+                this.updateCheckboxColor(checkboxJQuery, checkbox.checked, color);
+                this.checkSelectedItems();
+                return;
+            }
+            
+            this.updateCheckboxColor(checkboxJQuery, checkbox.checked, color);
 
             var newLabelSpan = document.createElement("span");
             $(newLabelSpan)
@@ -120,18 +125,20 @@
             this.checkSelectedItems();
         });
 
-        $("[name=favorite-label]:checked", this.container).trigger("change");
-
         $(".favorite-select-label-item", this.container).each((index, element) => {
             var backgroundColor = $("input", element).data("color");
             var color = new HexColor(backgroundColor);
-            var fontColor = FavoriteHelper.getDefaultFontColor(color);
             var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+            var inactiveBackground = color.getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
+            var inactiveBorder = new HexColor(borderColor).getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
 
             $(element)
-                .css("color", fontColor)
-                .css("border-color", borderColor);
+                .css("color", FavoriteHelper.getInactiveFontColor())
+                .css("border-color", inactiveBorder)
+                .css("background-color", inactiveBackground);
         });
+
+        $("[name=favorite-label]:checked", this.container).trigger("change");
 
         $(".nav-tabs a", this.container).click((event) => {
             $(".nav-tabs li, .tab-pane").removeClass("active");
@@ -163,8 +170,54 @@
             }
         });
 
+        $("#favorite-label-name").change(this.updateLabelPreview.bind(this));
+
         this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();
+        this.labelColorInput.setColorChangedCallback(this.updateLabelPreview.bind(this));
+    }
+
+    private updateCheckboxColor(checkBoxJQuery: JQuery, isChecked: boolean, color: HexColor) {
+        var fontColor: string;
+        var borderColor: string;
+        var backgroundColor: string;
+
+        if (isChecked) {
+            fontColor = FavoriteHelper.getDefaultFontColor(color);
+            borderColor = FavoriteHelper.getDefaultBorderColor(color);
+            backgroundColor = color.getColor();
+        } else {
+            fontColor = FavoriteHelper.getInactiveFontColor();
+            backgroundColor = color.getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
+            borderColor = FavoriteHelper.getDefaultBorderColor(color);
+            borderColor = new HexColor(borderColor).getIncreasedHexColor(NewFavoriteDialog.increaseBackgroundColorPercent);
+        }
+
+        checkBoxJQuery.closest("label")
+            .css("color", fontColor)
+            .css("border-color", borderColor)
+            .css("background-color", backgroundColor);
+    }
+
+    private updateLabelPreview() {
+        var labelName = $("#favorite-label-name").val();
+        var hexColor = $("#favorite-label-color").val();
+        var color = new HexColor(hexColor);
+
+        $("#label-preview").text(labelName);
+
+        if (color.isValidHexColor()) {
+            var borderColor = FavoriteHelper.getDefaultBorderColor(color);
+            $("#label-preview")
+                .css("background-color", hexColor)
+                .css("border-color", borderColor)
+                .css("color", FavoriteHelper.getDefaultFontColor(color));
+        } else {
+            $("#label-preview")
+                .css("background-color", "#FFFFFF")
+                .css("border-color", "#000000")
+                .css("color", "#000000");
+        }
     }
 
     private checkSelectedItems() {
@@ -277,6 +330,7 @@
 class ColorInput {
     private buttonElement: JQuery;
     private inputElement: JQuery;
+    private colorChangedCallback: (color: string) => void;
 
     constructor(inputElement: JQuery, buttonElement: JQuery) {
         this.buttonElement = buttonElement;
@@ -310,6 +364,10 @@ class ColorInput {
         this.inputElement.val(value);
         this.buttonElement.data("cpp-color", value);
         this.updateBackground();
+
+        if (this.colorChangedCallback) {
+            this.colorChangedCallback(value);
+        }
     }
 
     public getValue(): string {
@@ -324,6 +382,10 @@ class ColorInput {
 
         this.inputElement.css("background-color", value);
         this.inputElement.css("color", FavoriteHelper.getFontColor(value));
+    }
+
+    public setColorChangedCallback(colorChangedCallback: (color: string) => void) {
+        this.colorChangedCallback = colorChangedCallback;
     }
 }
 

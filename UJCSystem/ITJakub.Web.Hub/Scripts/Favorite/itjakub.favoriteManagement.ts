@@ -5,11 +5,12 @@
 });
 
 class FavoriteManagement {
-    private static decreaseBackgroundColorPercent = 60;
+    private static increaseBackgroundColorPercent = 80;
     private favoriteManager: FavoriteManager;
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;
     private labelColorInput: ColorInput;
+    private pagination: Pagination;
     private newFavoriteLabelDialog: FavoriteManagementDialog;
     private removeDialog: FavoriteManagementDialog;
 
@@ -18,6 +19,7 @@ class FavoriteManagement {
         this.activeLabelForEditing = null;
         this.activeLabelId = null;
 
+        this.pagination = new Pagination("#pagination");
         this.newFavoriteLabelDialog = new FavoriteManagementDialog($("#new-favorite-label-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
     }
@@ -77,12 +79,15 @@ class FavoriteManagement {
         var color = new HexColor(backgroundColor);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        var inactiveBackground = color.getIncreasedHexColor(FavoriteManagement.decreaseBackgroundColorPercent);
+        var inactiveBackground = color.getIncreasedHexColor(FavoriteManagement.increaseBackgroundColorPercent);
+        var inactiveBorder = new HexColor(borderColor).getIncreasedHexColor(FavoriteManagement.increaseBackgroundColorPercent);
 
         $("a", element).css("color", fontColor);
         $(element)
             .css("border-color", borderColor)
+            .data("border-color", borderColor)
             .data("font-color", fontColor)
+            .data("inactive-border", inactiveBorder)
             .data("inactive-background", inactiveBackground);
     }
 
@@ -111,6 +116,8 @@ class FavoriteManagement {
             $("#no-label").hide();
             return;
         }
+
+        this.setActiveLabel(null);
 
         var isAnyVisible = false;
         $(".favorite-label-management").each((index, element) => {
@@ -163,12 +170,16 @@ class FavoriteManagement {
                 var elementJQuery = $(element);
                 let fontColor = FavoriteHelper.getInactiveFontColor();
                 let backgroundColor = elementJQuery.data("inactive-background");
+                let borderColor = elementJQuery.data("inactive-border");
                 if (item == null) {
                     fontColor = elementJQuery.data("font-color");
                     backgroundColor = elementJQuery.data("color");
+                    borderColor = elementJQuery.data("border-color");
                 }
 
-                elementJQuery.css("background-color", backgroundColor);
+                elementJQuery
+                    .css("background-color", backgroundColor)
+                    .css("border-color", borderColor);
                 $("a", elementJQuery).css("color", fontColor);
             });
 
@@ -176,8 +187,10 @@ class FavoriteManagement {
             item.addClass("active");
             let backgroundColor = item.data("color");
             let fontColor = item.data("font-color");
+            let borderColor = item.data("border-color");
 
-            item.css("background-color", backgroundColor);
+            item.css("background-color", backgroundColor)
+                .css("border-color", borderColor);
             $("a", item).css("color", fontColor);
 
             this.activeLabelId = item.data("id");

@@ -145,6 +145,8 @@
         });
     }
 
+    
+
     public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
         if (!this.isUserLoggedIn) {
             throw new Error("Not supported for anonymous users");

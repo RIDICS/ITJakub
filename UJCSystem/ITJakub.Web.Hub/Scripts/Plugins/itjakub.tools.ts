@@ -79,6 +79,10 @@ class HexColor {
         return this.isValidHexColorValue;
     }
 
+    public getColor(): string {
+        return this.hexColor;
+    }
+
     public getRed(): number {
         return this.red;
     }
