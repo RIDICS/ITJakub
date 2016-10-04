@@ -7,6 +7,7 @@
     private labelColorInput: ColorInput;
     private activeTabClass: string;
     private saveTitle: HTMLSpanElement;
+    private selectedRadioButton: HTMLInputElement;
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
@@ -87,6 +88,8 @@
             $("[name=favorite-label]", this.container)
                 .attr("type", "radio")
                 .parent().css("padding-left", "27px");
+
+            this.selectedRadioButton = <HTMLInputElement>$("[name=favorite-label]:checked", this.container)[0];
         }
 
         $("[name=favorite-label]", this.container).change(event => {
@@ -95,7 +98,13 @@
             var labelId = checkboxJQuery.val();
 
             if (!this.allowMultipleLabels) {
+                var $radioButton = $(this.selectedRadioButton);
+                let backgroundColor = $radioButton.data("color");
+                let color = new HexColor(backgroundColor);
+                this.updateCheckboxColor($(this.selectedRadioButton), this.selectedRadioButton.checked, color);
                 $(".favorite-selected-label-info", this.container).empty();
+
+                this.selectedRadioButton = checkbox;
             }
 
             var selectedLabelName = checkboxJQuery.data("name");

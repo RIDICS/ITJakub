@@ -330,9 +330,9 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetPageBookmarks",
-            data: JSON.stringify({
+            data: {
                 bookXmlId: bookXmlId
-            }),
+            },
             dataType: "json",
             contentType: "application/json",
             success: (bookmarks) => {
