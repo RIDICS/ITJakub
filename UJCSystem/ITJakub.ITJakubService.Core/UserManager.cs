@@ -32,7 +32,7 @@ namespace ITJakub.ITJakubService.Core
             m_defaultMembershipProvider = defaultMembershipProvider;
         }
 
-        public UserContract CreateLocalUser(UserContract user)
+        public PrivateUserContract CreateLocalUser(PrivateUserContract user)
         {
             var now = DateTime.UtcNow;
             var defaultFavoriteLabel = new FavoriteLabel
@@ -59,7 +59,7 @@ namespace ITJakub.ITJakubService.Core
             defaultFavoriteLabel.User = dbUser;
 
             var userId = m_userRepository.Create(dbUser);
-            return GetUserDetail(userId);
+            return GetPrivateUserDetail(userId);
         }
 
   
@@ -78,6 +78,24 @@ namespace ITJakub.ITJakubService.Core
             var dbUser = m_userRepository.FindByUserName(userName);
             if (dbUser == null) return null;
             var user = Mapper.Map<UserContract>(dbUser);
+            //user.CommunicationTokenExpirationTime = m_authenticationManager.GetExpirationTimeForToken(dbUser);
+            return user;
+        }
+
+        public PrivateUserContract PrivateFindByUserName(string userName)
+        {
+            if (string.IsNullOrWhiteSpace(userName))
+            {
+                var message = "Username could not be empty";
+
+                if (m_log.IsWarnEnabled)
+                    m_log.Warn(message);
+                throw new ArgumentException(message);
+            }
+
+            var dbUser = m_userRepository.FindByUserName(userName);
+            if (dbUser == null) return null;
+            var user = Mapper.Map<PrivateUserContract>(dbUser);
             user.CommunicationTokenExpirationTime = m_authenticationManager.GetExpirationTimeForToken(dbUser);
             return user;
         }
@@ -87,6 +105,14 @@ namespace ITJakub.ITJakubService.Core
             var dbUser = m_userRepository.FindByIdWithDetails(userId);
             if (dbUser == null) return null;
             var user = Mapper.Map<UserDetailContract>(dbUser);
+            return user;
+        }
+
+        public PrivateUserContract GetPrivateUserDetail(int userId)
+        {
+            var dbUser = m_userRepository.FindByIdWithDetails(userId);
+            if (dbUser == null) return null;
+            var user = Mapper.Map<PrivateUserContract>(dbUser);
             return user;
         }
 

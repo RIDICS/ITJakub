@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace ITJakub.Shared.Contracts
 {
     [DataContract]
     [KnownType(typeof(UserDetailContract))]
+    [KnownType(typeof(PrivateUserContract))]
     public class UserContract
     {
         [DataMember]
@@ -25,7 +25,11 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public DateTime CreateTime { get; set; }
+    }
 
+    [DataContract]
+    public class PrivateUserContract : UserContract
+    {
         [DataMember]
         public string PasswordHash { get; set; }
 

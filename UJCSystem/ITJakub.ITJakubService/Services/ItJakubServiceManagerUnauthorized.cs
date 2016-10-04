@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Castle.Windsor;
+﻿using Castle.Windsor;
 using ITJakub.ITJakubService.Core;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.News;
-using ITJakub.Shared.Contracts.Notes;
 
 namespace ITJakub.ITJakubService.Services
 {
@@ -28,12 +23,22 @@ namespace ITJakub.ITJakubService.Services
             return m_userManager.GetUserDetail(userId);
         }
 
+        public PrivateUserContract PrivateFindUserById(int userId)
+        {
+            return m_userManager.GetPrivateUserDetail(userId);
+        }
+
         public UserContract FindUserByUserName(string userName)
         {
             return m_userManager.FindByUserName(userName);
         }
 
-        public UserContract CreateUser(UserContract user)
+        public PrivateUserContract PrivateFindUserByUserName(string userName)
+        {
+            return m_userManager.PrivateFindByUserName(userName);
+        }
+
+        public PrivateUserContract CreateUser(PrivateUserContract user)
         {
             return m_userManager.CreateLocalUser(user);
         }

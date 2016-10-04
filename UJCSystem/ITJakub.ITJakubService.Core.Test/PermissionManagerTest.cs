@@ -35,7 +35,7 @@ namespace ITJakub.ITJakubService.Core.Test
         public void CreateUserTest()
         {
             var guid = Guid.NewGuid();
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -50,7 +50,7 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void CreateGroupTest()
         {
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -67,7 +67,7 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void AddMemberToGroupTest()
         {
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -79,7 +79,7 @@ namespace ITJakub.ITJakubService.Core.Test
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
             var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new UserContract
+            var firstMemberContract = new PrivateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
@@ -89,7 +89,7 @@ namespace ITJakub.ITJakubService.Core.Test
 
             var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
 
-            var secondMemberContract = new UserContract
+            var secondMemberContract = new PrivateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
@@ -113,7 +113,7 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void RemoveMemberFromGroupTest()
         {
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -125,7 +125,7 @@ namespace ITJakub.ITJakubService.Core.Test
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
             var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new UserContract
+            var firstMemberContract = new PrivateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
@@ -135,7 +135,7 @@ namespace ITJakub.ITJakubService.Core.Test
 
             var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
 
-            var secondMemberContract = new UserContract
+            var secondMemberContract = new PrivateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
@@ -162,7 +162,7 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void GetUsersByGroupTest()
         {
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -174,7 +174,7 @@ namespace ITJakub.ITJakubService.Core.Test
             var groupName = string.Format("TestGroup{0}", Guid.NewGuid());
             var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
 
-            var firstMemberContract = new UserContract
+            var firstMemberContract = new PrivateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
@@ -184,7 +184,7 @@ namespace ITJakub.ITJakubService.Core.Test
 
             var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
 
-            var secondMemberContract = new UserContract
+            var secondMemberContract = new PrivateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",
@@ -207,7 +207,7 @@ namespace ITJakub.ITJakubService.Core.Test
         [TestMethod]
         public void GetGroupsByUserTest()
         {
-            var newUserContract = new UserContract
+            var newUserContract = new PrivateUserContract
             {
                 FirstName = "Test",
                 LastName = "User",
@@ -221,7 +221,7 @@ namespace ITJakub.ITJakubService.Core.Test
             var group = m_permissionManager.CreateGroup(groupName, "Just testing group with member");
             var group2 = m_permissionManager.CreateGroup(groupName2, "Just testing group with member");
 
-            var firstMemberContract = new UserContract
+            var firstMemberContract = new PrivateUserContract
             {
                 FirstName = "First",
                 LastName = "Member",
@@ -231,7 +231,7 @@ namespace ITJakub.ITJakubService.Core.Test
 
             var firstMember = m_userManager.CreateLocalUser(firstMemberContract);
 
-            var secondMemberContract = new UserContract
+            var secondMemberContract = new PrivateUserContract
             {
                 FirstName = "Second",
                 LastName = "Member",

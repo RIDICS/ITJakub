@@ -35,6 +35,26 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public PrivateUserContract PrivateFindUserById(int userId)
+        {
+            try
+            {
+                return Channel.PrivateFindUserById(userId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public UserContract FindUserByUserName(string userName)
         {
             try
@@ -55,7 +75,27 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public UserContract CreateUser(UserContract user)
+        public PrivateUserContract PrivateFindUserByUserName(string userName)
+        {
+            try
+            {
+                return Channel.PrivateFindUserByUserName(userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public PrivateUserContract CreateUser(PrivateUserContract user)
         {
             try
             {
