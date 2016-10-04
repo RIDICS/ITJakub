@@ -11,6 +11,7 @@
     private filterQuerySearchBox: FilterSearchBox;
     private filterLabelInput: HTMLInputElement;
     private noFilteredLabel: HTMLDivElement;
+    private noSelectedLabelDiv: HTMLDivElement;
     private selectedFilterLabelId: number;
     private selectedFilterName: string;
 
@@ -213,8 +214,16 @@
             .css("margin-left", "15px")
             .text("Žádný oblíbený dotaz odpovídající zvoleným filtrům")
             .hide();
-        $(listContainer).append(noQueryDiv);
+        var noSelectedLabelDiv = document.createElement("div");
+        $(noSelectedLabelDiv)
+            .css("margin-left", "15px")
+            .text("Pro zobrazení oblíbených dotazů vyberte štítek ze seznamu")
+            .hide();
+        $(listContainer)
+            .append(noQueryDiv)
+            .append(noSelectedLabelDiv);
         this.noQueryDiv = noQueryDiv;
+        this.noSelectedLabelDiv = noSelectedLabelDiv;
 
         for (let i = 0; i < favoriteQueries.length; i++) {
             var favoriteQuery = favoriteQueries[i];
@@ -359,12 +368,13 @@
             var fontColor = FavoriteHelper.getDefaultFontColor(color);
             var borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
-            $(".favorite-query-label-selected")
+            $(".favorite-query-label-selected", this.renderContainer)
                 .data("id", labelId)
                 .text(labelName)
                 .css("color", fontColor)
                 .css("border-color", borderColor)
-                .css("background-color", labelColor);
+                .css("background-color", labelColor)
+                .show();
 
             if (labelId === 0) {
                 this.selectedFilterLabelId = 0;
@@ -454,9 +464,16 @@
         } else {
             $(this.noFilteredLabel).show();
         }
+
+        $(this.noQueryDiv).hide();
+        $(this.noSelectedLabelDiv).show();
+        $(".favorite-query-item", this.renderContainer).addClass("hidden");
+        $(".favorite-query-label-selected", this.renderContainer).hide();
     }
 
     private filterQueryList() {
+        $(this.noSelectedLabelDiv).hide();
+
         var labelId = this.selectedFilterLabelId;
         var nameFilter = this.selectedFilterName;
         if (!labelId && !nameFilter) {

@@ -241,7 +241,7 @@ class FavoritePopoverBuilder {
             resultStrings.push(labelHtml);
         }
 
-        var nextButtonString = '<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="Přidat ze seznamu všech štítků"><span class="label label-favorite" style="background-color: #606060">...</span></a></span>';
+        var nextButtonString = '<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="Přidat ze seznamu všech štítků"><span style="color: black; font-weight: bold; margin-left: 3px;">...</span></a></span>';
         resultStrings.push(nextButtonString);
 
         return resultStrings.join("");

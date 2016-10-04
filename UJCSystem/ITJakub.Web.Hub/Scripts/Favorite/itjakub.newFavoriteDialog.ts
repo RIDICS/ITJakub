@@ -6,6 +6,7 @@
     private onSaveCallback: (data: INewFavoriteItemData) => void;
     private labelColorInput: ColorInput;
     private activeTabClass: string;
+    private saveTitle: HTMLSpanElement;
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
@@ -38,6 +39,7 @@
             .addClass("glyphicon-star");
         $(saveTitle)
             .text("Potvrdit přiřazení štítků");
+        this.saveTitle = saveTitle;
 
         $(".close-button", this.container)
             .addClass("hidden");
@@ -148,6 +150,19 @@
 
             navLinkJQuery.closest("li").addClass("active");
             $("." + tabClass, this.container).addClass("active");
+
+            var newSaveTitle: string;
+            switch (tabClass) {
+                case "tab-favorite-label-assign":
+                    newSaveTitle = "Potvrdit přiřazení štítků";
+                    break;
+                case "tab-favorite-label-create":
+                    newSaveTitle = "Vytvořit a přiřadit štítek";
+                    break;
+                default:
+                    newSaveTitle = "Uložit";
+            }
+            $(this.saveTitle).text(newSaveTitle);
         });
 
         $(".favorite-label-filter", this.container).on("change keyup paste", (event) => {
@@ -170,7 +185,7 @@
             }
         });
 
-        $("#favorite-label-name").change(this.updateLabelPreview.bind(this));
+        $("#favorite-label-name, #favorite-label-color").change(this.updateLabelPreview.bind(this));
 
         this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();

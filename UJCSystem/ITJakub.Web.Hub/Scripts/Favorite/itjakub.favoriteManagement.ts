@@ -62,7 +62,7 @@ class FavoriteManagement {
         $("#name-filter").change(this.loadFavoriteItems.bind(this));
         //$("#name-filter-button").click(this.loadFavoriteItems.bind(this));
 
-        $("#label-name-filter").change(this.filterLabels.bind(this));
+        $("#label-name-filter").on("change keyup paste", this.filterLabels.bind(this));
 
         $("#show-all-link").click(() => {
             $("#label-name-filter")
@@ -93,16 +93,23 @@ class FavoriteManagement {
 
     private initFavoriteLabel(item: JQuery) {
         this.renderLabelColor(item);
+        if (this.activeLabelId != null) {
+            $("a", item).css("color", FavoriteHelper.getInactiveFontColor());
+            var backgroundColor = item.data("inactive-background");
+            var borderColor = item.data("inactive-border");
+            item.css("background-color", backgroundColor)
+                .css("border-color", borderColor);
+        }
 
         $(".favorite-label-link", item).click(() => {
             this.setActiveLabel(item);
         });
 
-        $(".favorite-label-management .favorite-label-remove-link").click(() => {
+        $(".favorite-label-remove-link", item).click(() => {
             this.showRemoveDialog(item);
         });
 
-        $(".favorite-label-management .favorite-label-edit-link").click(() => {
+        $(".favorite-label-edit-link", item).click(() => {
             var name = item.data("name");
             var color = item.data("color");
             this.showEditLabelDialog(name, color, item);
@@ -110,14 +117,14 @@ class FavoriteManagement {
     }
 
     private filterLabels() {
+        this.setInactiveLabel();
+
         var filterValue = $("#label-name-filter").val().toLocaleLowerCase();
         if (!filterValue) {
             $(".favorite-label-management").show();
             $("#no-label").hide();
             return;
         }
-
-        this.setActiveLabel(null);
 
         var isAnyVisible = false;
         $(".favorite-label-management").each((index, element) => {
@@ -163,7 +170,15 @@ class FavoriteManagement {
         });
     }
 
+    private setInactiveLabel() {
+        $("#no-selected-label").removeClass("hidden");
+        $("#no-results").addClass("hidden");
+        $("#favorite-item-container").empty();
+    }
+
     private setActiveLabel(item: JQuery) {
+        $("#no-selected-label").addClass("hidden");
+
         $(".favorite-label-management")
             .removeClass("active")
             .each((index, element) => {
@@ -438,7 +453,8 @@ class FavoriteManagementItem {
         $(editLink)
             .attr("href", "#")
             .attr("title", "Upravit oblíbenou položku")
-            .append(editIconContainer)
+            .append(editIconContainer);
+        $([editLink, nameLink])
             .click(() => {
                 $("#favorite-item-name").val(this.name);
 
