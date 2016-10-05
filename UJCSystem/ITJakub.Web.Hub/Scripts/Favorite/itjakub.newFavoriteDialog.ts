@@ -194,7 +194,7 @@
             }
         });
 
-        $("#favorite-label-name, #favorite-label-color").change(this.updateLabelPreview.bind(this));
+        $("#favorite-label-name").change(this.updateLabelPreview.bind(this));
 
         this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();
@@ -231,10 +231,9 @@
         $("#label-preview").text(labelName);
 
         if (color.isValidHexColor()) {
-            var borderColor = FavoriteHelper.getDefaultBorderColor(color);
             $("#label-preview")
                 .css("background-color", hexColor)
-                .css("border-color", borderColor)
+                .css("border-color", FavoriteHelper.getDefaultBorderColor(color))
                 .css("color", FavoriteHelper.getDefaultFontColor(color));
         } else {
             $("#label-preview")
@@ -372,7 +371,7 @@ class ColorInput {
             this.setValue(color);
         });
 
-        this.inputElement.change(() => this.updateBackground());
+        this.inputElement.change(() => this.setValue(this.inputElement.val()));
 
         // hack fix input type recognition in Color Picker Plus
         this.buttonElement.data("colorpickerplus").hasInput = () => false;

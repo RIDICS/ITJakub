@@ -27,6 +27,8 @@ class FavoriteManagement {
     public init() {
         this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();
+        this.labelColorInput.setColorChangedCallback(this.renderNewLabelPreview.bind(this));
+        $("#favorite-label-name").change(this.renderNewLabelPreview.bind(this));
 
         $(".favorite-label-management").each((index, element) => {
             this.renderLabelColor($(element));
@@ -72,6 +74,26 @@ class FavoriteManagement {
         });
 
         this.loadFavoriteItems();
+    }
+
+    private renderNewLabelPreview() {
+        var color = this.labelColorInput.getValue();
+        var name = $("#favorite-label-name").val();
+        var hexColor = new HexColor(color);
+
+        $("#label-preview").text(name);
+
+        if (hexColor.isValidHexColor()) {
+            $("#label-preview")
+                .css("background-color", color)
+                .css("border-color", FavoriteHelper.getDefaultBorderColor(hexColor))
+                .css("color", FavoriteHelper.getDefaultFontColor(hexColor));
+        } else {
+            $("#label-preview")
+                .css("background-color", "#FFFFFF")
+                .css("border-color", "#000000")
+                .css("color", "#000000");
+        }
     }
 
     private renderLabelColor(element: JQuery) {
@@ -239,6 +261,7 @@ class FavoriteManagement {
         this.activeLabelForEditing = item;
         this.labelColorInput.setValue(color);
         $("#favorite-label-name").val(name);
+        $("#label-preview").text("").removeClass("style");
         this.newFavoriteLabelDialog.show();
     }
 
