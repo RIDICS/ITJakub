@@ -25,19 +25,21 @@
             <div class="form-group">
                 <label class="col-md-3 control-label">Vyberte štítek</label>
                 <div class="col-md-8">
-                    <input class="form-control favorite-label-filter" type="text" placeholder="Filtrovat štítky" />
-                
-                    <div class="form-control favorite-select-label">
-                        @foreach (var label in Model.Labels)
-                        {
-                            <div class="radio">
-                                <label class="favorite-select-label-item" style="background-color: @label.Color;">
-                                    <input type="checkbox" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "checked=checked" : string.Empty)> @label.Name
-                                </label>
-                            </div>
-                        }
+                    <div class="input-group-vertical">
+                        <input class="form-control favorite-label-filter" type="text" placeholder="Filtrovat štítky" />
 
-                        <div class="text-center no-label-info">Žádný štítek odpovídající zadanému filtru</div>
+                        <div class="form-control favorite-select-label">
+                            @foreach (var label in Model.Labels)
+                            {
+                                <div class="radio">
+                                    <label class="favorite-select-label-item" style="background-color: @label.Color;">
+                                        <input type="checkbox" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "checked=checked" : string.Empty)> @label.Name
+                                    </label>
+                                </div>
+                            }
+
+                            <div class="text-center no-label-info">Žádný štítek odpovídající zadanému filtru</div>
+                        </div>
                     </div>
                 </div>
             </div>
