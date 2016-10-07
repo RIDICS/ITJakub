@@ -57,11 +57,11 @@
         });
     }
 
-    private loadQueries() {
+    private loadQueries(defaultPageNumber = 1) {
         this.renderLoadingQueries();
         this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
         this.favoriteManager.getFavoriteQueriesCount(this.selectedFilterLabelId, this.bookType, this.queryType, this.selectedFilterName, count => {
-            this.pagination.createPagination(count, FavoriteQuery.pageSize, this.loadQueriesPage.bind(this));
+            this.pagination.createPagination(count, FavoriteQuery.pageSize, this.loadQueriesPage.bind(this), defaultPageNumber);
         });
     }
 
@@ -466,7 +466,8 @@
             var elementJQuery = $(event.currentTarget);
             var favoriteId = elementJQuery.data("id");
             this.favoriteManager.deleteFavoriteItem(favoriteId, () => {
-                elementJQuery.closest(".favorite-query-item").remove();
+                //elementJQuery.closest(".favorite-query-item").remove();
+                this.loadQueries(this.pagination.getCurrentPage());
             });
         });
     }

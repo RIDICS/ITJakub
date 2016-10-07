@@ -308,8 +308,20 @@
 
     public getFavoriteQueries(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, start: number, count: number, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
         if (!this.isUserLoggedIn) {
-            var favoriteQueries = this.getFromStorage("favoriteQueries");
-            callback(favoriteQueries);
+            var favoriteQueries: IFavoriteQuery[] = this.getFromStorage("favoriteQueries");
+            if (!filterByTitle) {
+                callback(favoriteQueries);
+                return;
+            }
+
+            var result = new Array<IFavoriteQuery>();
+            for (var i = 0; i < favoriteQueries.length; i++) {
+                var favoriteQuery = favoriteQueries[i];
+                if (favoriteQuery.Title.indexOf(filterByTitle) !== -1) {
+                    result.push(favoriteQuery);
+                }
+            }
+            callback(result);
             return;
         }
 

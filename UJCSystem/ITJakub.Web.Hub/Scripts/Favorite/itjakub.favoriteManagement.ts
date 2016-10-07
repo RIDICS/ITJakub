@@ -211,6 +211,7 @@ class FavoriteManagement {
                 var favoriteItem = favorites[i];
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
                 item.make();
+                item.setOnRemoveCallback(() => this.loadFavoriteItemsPage(pageNumber));
             }
             if (favorites.length === 0) {
                 $("#no-results").removeClass("hidden");
@@ -426,6 +427,7 @@ class FavoriteManagementItem {
     private separatorHr: HTMLHRElement;
     private editFavoriteDialog: FavoriteManagementDialog;
     private removeDialog: FavoriteManagementDialog;
+    private onRemoveCallback: (id: number) => void;
 
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -535,6 +537,10 @@ class FavoriteManagementItem {
         this.separatorHr = separatorHr;
     }
 
+    public setOnRemoveCallback(callback: (id: number) => void) {
+        this.onRemoveCallback = callback;
+    }
+
     private remove() {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteItem(this.id, (error) => {
@@ -547,6 +553,10 @@ class FavoriteManagementItem {
 
             $(this.innerContainerDiv).remove();
             $(this.separatorHr).remove();
+
+            if (this.onRemoveCallback) {
+                this.onRemoveCallback(this.id);
+            }
         });
     }
 
