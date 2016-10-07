@@ -313,13 +313,13 @@ namespace ITJakub.ITJakubService.Core
             return resultCount;
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName)
         {
             var user = TryGetUser(userName);
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 
-            var dbResult = m_favoritesRepository.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, start, count, user.Id);
 
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
         }

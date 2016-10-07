@@ -1512,11 +1512,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName)
         {
             try
             {
-                return Channel.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, userName);
+                return Channel.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, userName);
             }
             catch (CommunicationException ex)
             {

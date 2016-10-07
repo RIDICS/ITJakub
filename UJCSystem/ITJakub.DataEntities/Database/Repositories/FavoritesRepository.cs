@@ -275,7 +275,7 @@ namespace ITJakub.DataEntities.Database.Repositories
 
             if (labelId != null)
             {
-                query.And(() => favoriteQueryAlias.Id == labelId.Value);
+                query.And(() => favoriteQueryAlias.FavoriteLabel.Id == labelId.Value);
             }
             if (!string.IsNullOrEmpty(filterByTitle))
             {
@@ -286,7 +286,7 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int userId)
+        public virtual IList<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int start, int count, int userId)
         {
             using (var session = GetSession())
             {
@@ -295,6 +295,8 @@ namespace ITJakub.DataEntities.Database.Repositories
                 return query.Fetch(x => x.FavoriteLabel).Eager
                     .Fetch(x => x.BookType).Eager
                     .OrderBy(x => x.Title).Asc
+                    .Skip(start)
+                    .Take(count)
                     .List();
             }
         }

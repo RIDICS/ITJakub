@@ -1,4 +1,5 @@
 ﻿class FavoriteQuery {
+    private static pageSize = 5;
     private queryType: QueryTypeEnum;
     private bookType: BookTypeEnum;
     private inputTextbox: JQuery;
@@ -6,24 +7,28 @@
     private favoriteManager: FavoriteManager;
     private favoriteDialog: NewFavoriteDialog;
     private isCreated: boolean;
+    private labelContainer: HTMLDivElement;
+    private listContainer: HTMLDivElement;
     private noQueryDiv: HTMLDivElement;
     private insertDialog: InsertQueryDialog;
     private filterQuerySearchBox: FilterSearchBox;
     private filterLabelInput: HTMLInputElement;
     private noFilteredLabel: HTMLDivElement;
+    private displayAllLink: HTMLAnchorElement;
     private noSelectedLabelDiv: HTMLDivElement;
-    private selectedFilterLabelId: number;
-    private selectedFilterName: string;
+    private selectedFilterLabelId: number = null;
+    private selectedFilterName: string = null;
+    private pagination: Pagination;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
+        this.inputTextbox = inputTextbox;
+        this.renderContainer = renderContainer;
         this.queryType = queryType;
         this.bookType = bookType;
         this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
         this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
-        this.inputTextbox = inputTextbox;
-        this.renderContainer = renderContainer;
-        this.isCreated = false;
         this.insertDialog = new InsertQueryDialog();
+        this.isCreated = false;
         this.renderContainer.hide();
     }
 
@@ -38,32 +43,34 @@
     }
 
     private forceRerender() {
+        this.selectedFilterLabelId = null;
+        this.selectedFilterName = null;
+
         this.renderLoading();
-
-        var labels = null;
-        var queries = null;
-        var labelsLoaded = false;
-        var queriesLoaded = false;
-
+        
         this.favoriteManager.getFavoriteLabels(favoriteLabels => {
-            labelsLoaded = true;
-            labels = favoriteLabels;
+            this.render(favoriteLabels);
+            this.bindEvents();
+            this.isCreated = true;
 
-            if (labelsLoaded && queriesLoaded) {
-                this.render(labels, queries);
-                this.bindEvents();
-                this.isCreated = true;
-            }
+            this.loadQueries();
         });
-        this.favoriteManager.getFavoriteQueries(this.bookType, this.queryType, favoriteQueries => {
-            queriesLoaded = true;
-            queries = favoriteQueries;
+    }
 
-            if (labelsLoaded && queriesLoaded) {
-                this.render(labels, queries);
-                this.bindEvents();
-                this.isCreated = true;
-            }
+    private loadQueries() {
+        this.renderLoadingQueries();
+        this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+        this.favoriteManager.getFavoriteQueriesCount(this.selectedFilterLabelId, this.bookType, this.queryType, this.selectedFilterName, count => {
+            this.pagination.createPagination(count, FavoriteQuery.pageSize, this.loadQueriesPage.bind(this));
+        });
+    }
+
+    private loadQueriesPage(pageNumber: number) {
+        var count = FavoriteQuery.pageSize;
+        var start = (pageNumber - 1) * count;
+        this.favoriteManager.getFavoriteQueries(this.selectedFilterLabelId, this.bookType, this.queryType, this.selectedFilterName, start, count, favoriteQueries => {
+            this.renderFavoriteQueries(favoriteQueries);
+            this.bindLabelEvents();
         });
     }
 
@@ -80,7 +87,16 @@
         this.renderContainer.append(innerContainerDiv);
     }
 
-    private render(favoriteLabels: IFavoriteLabel[], favoriteQueries: IFavoriteQuery[]) {
+    private renderLoadingQueries() {
+        var loadingDiv = document.createElement("div");
+        $(loadingDiv).addClass("loading");
+
+        $(this.listContainer)
+            .empty()
+            .append(loadingDiv);
+    }
+
+    private render(favoriteLabels: IFavoriteLabel[]) {
         var mainDiv = document.createElement("div");
         var row1Div = document.createElement("div");
         var filterColumnDiv = document.createElement("div");
@@ -129,6 +145,7 @@
             .data("name", "Zobrazeno vše")
             .data("color", "#0000DD")
             .text("Zobrazit vše");
+        this.displayAllLink = displayAllLink;
 
         $(noFilteredLabel)
             .addClass("text-center")
@@ -137,9 +154,8 @@
         this.noFilteredLabel = noFilteredLabel;
 
         $(filterContainer)
-            .addClass("favorite-query-list")
-            .append(displayAllLink)
-            .append(noFilteredLabel);
+            .addClass("favorite-query-list");
+        this.labelContainer = filterContainer;
 
         $(filterColumnDiv)
             .addClass("col-md-3")
@@ -147,33 +163,8 @@
             .append(filterSeparator)
             .append(filterContainer);
 
-        for (let i = 0; i < favoriteLabels.length; i++) {
-            var favoriteLabel = favoriteLabels[i];
-            var labelLink = document.createElement("a");
-            var label = document.createElement("span");
-
-            let color = new HexColor(favoriteLabel.Color);
-            let fontColor = FavoriteHelper.getDefaultFontColor(color);
-            let borderColor = FavoriteHelper.getDefaultBorderColor(color);
-
-            $(label)
-                .addClass("label")
-                .css("background-color", favoriteLabel.Color)
-                .css("border-color", borderColor)
-                .css("color", fontColor)
-                .text(favoriteLabel.Name);
-
-            $(labelLink)
-                .attr("href", "#")
-                .addClass("favorite-query-label")
-                .data("id", favoriteLabel.Id)
-                .data("name", favoriteLabel.Name)
-                .data("color", favoriteLabel.Color)
-                .append(label);
-
-            $(filterContainer).append(labelLink);
-        }
-
+        this.renderFavoriteLabels(favoriteLabels);
+        
         $(listHeaderSpan)
             .text("Vložit dotaz z oblíbených: ");
         $(listHeaderLabel)
@@ -202,6 +193,7 @@
 
         $(listContainer)
             .addClass("favorite-query-list");
+        this.listContainer = listContainer;
 
         $(listColumnDiv)
             .addClass("col-md-9")
@@ -219,11 +211,114 @@
             .css("margin-left", "15px")
             .text("Pro zobrazení oblíbených dotazů vyberte štítek ze seznamu")
             .hide();
-        $(listContainer)
-            .append(noQueryDiv)
-            .append(noSelectedLabelDiv);
         this.noQueryDiv = noQueryDiv;
         this.noSelectedLabelDiv = noSelectedLabelDiv;
+
+        $(row1Div)
+            .addClass("row")
+            .append(filterColumnDiv)
+            .append(listColumnDiv);
+
+        var row2Div = document.createElement("div");
+        var separatorDiv = document.createElement("div");
+        var separator = document.createElement("hr");
+
+        $(separatorDiv)
+            .addClass("col-md-12")
+            .append(separator);
+
+        $(row2Div)
+            .addClass("row")
+            .append(separatorDiv);
+
+        
+        var row3Div = document.createElement("div");
+        var row3ButtonDiv = document.createElement("div");
+        var row3Pagination = document.createElement("div");
+        var saveButton = document.createElement("button");
+        var buttonIcon = document.createElement("span");
+        var buttonText = document.createElement("span");
+
+        $(row3Pagination)
+            .addClass("col-md-offset-3")
+            .addClass("col-md-5")
+            .addClass("bottom-pagination")
+            .addClass("favorite-queries-pagination");
+
+        $(buttonIcon)
+            .addClass("glyphicon")
+            .addClass("glyphicon-star-empty");
+        $(buttonText)
+            .text(" Uložit stávající dotaz");
+
+        $(saveButton)
+            .addClass("btn")
+            .addClass("btn-default")
+            .addClass("btn-block")
+            .addClass("favorite-query-save-button")
+            .append(buttonIcon)
+            .append(buttonText);
+
+        $(row3ButtonDiv)
+            .addClass("col-md-4")
+            .append(saveButton);
+        
+        $(row3Div)
+            .addClass("row")
+            .append(row3Pagination)
+            .append(row3ButtonDiv);
+
+        $(mainDiv)
+            .addClass("favorite-query")
+            .append(row1Div)
+            .append(row2Div)
+            .append(row3Div);
+
+        this.renderContainer.empty();
+        this.renderContainer.append(mainDiv);
+        this.pagination = new Pagination(".favorite-queries-pagination", 7);
+    }
+
+    private renderFavoriteLabels(favoriteLabels: IFavoriteLabel[]) {
+        $(this.labelContainer)
+            .empty()
+            .append(this.displayAllLink)
+            .append(this.noFilteredLabel);
+
+        for (let i = 0; i < favoriteLabels.length; i++) {
+            var favoriteLabel = favoriteLabels[i];
+            var labelLink = document.createElement("a");
+            var label = document.createElement("span");
+
+            let color = new HexColor(favoriteLabel.Color);
+            let fontColor = FavoriteHelper.getDefaultFontColor(color);
+            let borderColor = FavoriteHelper.getDefaultBorderColor(color);
+
+            $(label)
+                .addClass("label")
+                .css("background-color", favoriteLabel.Color)
+                .css("border-color", borderColor)
+                .css("color", fontColor)
+                .text(favoriteLabel.Name);
+
+            $(labelLink)
+                .attr("href", "#")
+                .addClass("favorite-query-label")
+                .data("id", favoriteLabel.Id)
+                .data("name", favoriteLabel.Name)
+                .data("color", favoriteLabel.Color)
+                .append(label);
+
+            $(this.labelContainer).append(labelLink);
+        }
+    }
+
+    private renderFavoriteQueries(favoriteQueries: IFavoriteQuery[]) {
+        $(this.listContainer)
+            .empty()
+            .append(this.noQueryDiv)
+            .append(this.noSelectedLabelDiv);
+        $([this.noQueryDiv, this.noSelectedLabelDiv]).hide();
 
         for (let i = 0; i < favoriteQueries.length; i++) {
             var favoriteQuery = favoriteQueries[i];
@@ -248,7 +343,7 @@
             let color = new HexColor(favoriteQuery.FavoriteLabel.Color);
             let fontColor = FavoriteHelper.getDefaultFontColor(color);
             let borderColor = FavoriteHelper.getDefaultBorderColor(color);
-            
+
             $(queryLabel)
                 .addClass("label")
                 .css("background-color", favoriteQuery.FavoriteLabel.Color)
@@ -278,67 +373,11 @@
                 .append(queryRow1)
                 .append(queryRow2);
 
-            $(listContainer).append(queryLink);
+            $(this.listContainer).append(queryLink);
         }
         if (favoriteQueries.length === 0) {
             $(this.noQueryDiv).show();
         }
-
-        $(row1Div)
-            .addClass("row")
-            .append(filterColumnDiv)
-            .append(listColumnDiv);
-
-        var row2Div = document.createElement("div");
-        var separatorDiv = document.createElement("div");
-        var separator = document.createElement("hr");
-
-        $(separatorDiv)
-            .addClass("col-md-12")
-            .append(separator);
-
-        $(row2Div)
-            .addClass("row")
-            .append(separatorDiv);
-
-        
-        var row3Div = document.createElement("div");
-        var row3InnerDiv = document.createElement("div");
-        var saveButton = document.createElement("button");
-        var buttonIcon = document.createElement("span");
-        var buttonText = document.createElement("span");
-
-        $(buttonIcon)
-            .addClass("glyphicon")
-            .addClass("glyphicon-star-empty");
-        $(buttonText)
-            .text(" Uložit stávající dotaz");
-
-        $(saveButton)
-            .addClass("btn")
-            .addClass("btn-default")
-            .addClass("btn-block")
-            .addClass("favorite-query-save-button")
-            .append(buttonIcon)
-            .append(buttonText);
-
-        $(row3InnerDiv)
-            .addClass("col-md-5")
-            .addClass("col-md-offset-7")
-            .append(saveButton);
-
-        $(row3Div)
-            .addClass("row")
-            .append(row3InnerDiv);
-
-        $(mainDiv)
-            .addClass("favorite-query")
-            .append(row1Div)
-            .append(row2Div)
-            .append(row3Div);
-
-        this.renderContainer.empty();
-        this.renderContainer.append(mainDiv);
     }
 
     public isHidden(): boolean {
@@ -377,7 +416,7 @@
                 .show();
 
             if (labelId === 0) {
-                this.selectedFilterLabelId = 0;
+                labelId = null;
                 this.selectedFilterName = null;
                 this.filterQuerySearchBox.clear();
                 $(this.filterLabelInput).val("");
@@ -385,18 +424,40 @@
             }
 
             this.selectedFilterLabelId = labelId;
-            this.filterQueryList();
+            this.loadQueries();
         });
 
+        $(".favorite-query-save-button", this.renderContainer).click(() => {
+            this.favoriteDialog.show("Nový oblíbený dotaz");
+        });
+
+        $(this.filterLabelInput).on("change keyup paste", () => {
+            var value = String($(this.filterLabelInput).val());
+            this.filterLabels(value);
+        });
+
+        this.filterQuerySearchBox.submit(() => {
+            var value = this.filterQuerySearchBox.val();
+            this.selectedFilterName = value.toLocaleLowerCase();
+            this.loadQueries();
+        });
+
+        this.favoriteDialog.setSaveCallback(data => {
+            var labelIds = new Array<number>();
+            for (var i = 0; i < data.labels.length; i++) {
+                var id = data.labels[i].labelId;
+                labelIds.push(id);
+            }
+            this.saveFavoriteQuery(data.itemName, labelIds);
+        });
+    }
+
+    private bindLabelEvents() {
         $(".favorite-query-item", this.renderContainer).click((event) => {
             var elementJquery = $(event.currentTarget);
             var query = elementJquery.data("query");
 
             this.insertQueryToSearchField(query);
-        });
-
-        $(".favorite-query-save-button", this.renderContainer).click(() => {
-            this.favoriteDialog.show("Nový oblíbený dotaz");
         });
 
         $(".favorite-query-remove", this.renderContainer).click((event) => {
@@ -407,26 +468,6 @@
             this.favoriteManager.deleteFavoriteItem(favoriteId, () => {
                 elementJQuery.closest(".favorite-query-item").remove();
             });
-        });
-
-        $(this.filterLabelInput).on("change keyup paste", () => {
-            var value = String($(this.filterLabelInput).val());
-            this.filterLabels(value);
-        });
-
-        this.filterQuerySearchBox.change(() => {
-            var value = this.filterQuerySearchBox.val();
-            this.selectedFilterName = value.toLocaleLowerCase();
-            this.filterQueryList();
-        });
-
-        this.favoriteDialog.setSaveCallback(data => {
-            var labelIds = new Array<number>();
-            for (var i = 0; i < data.labels.length; i++) {
-                var id = data.labels[i].labelId;
-                labelIds.push(id);
-            }
-            this.saveFavoriteQuery(data.itemName, labelIds);
         });
     }
 
@@ -470,54 +511,7 @@
         $(".favorite-query-item", this.renderContainer).addClass("hidden");
         $(".favorite-query-label-selected", this.renderContainer).hide();
     }
-
-    private filterQueryList() {
-        $(this.noSelectedLabelDiv).hide();
-
-        var labelId = this.selectedFilterLabelId;
-        var nameFilter = this.selectedFilterName;
-        if (!labelId && !nameFilter) {
-            $(".favorite-query-item").removeClass("hidden");
-            if ($(".favorite-query-item").length > 0) {
-                $(this.noQueryDiv).hide();
-            } else {
-                $(this.noQueryDiv).show();
-            }
-            return;
-        }
-        
-        var isAnyVisible = false;
-        $(".favorite-query-item")
-            .addClass("hidden")
-            .each((index, element) => {
-                var elementLabelId = $(element).data("label-id");
-                var queryName = String($(element).data("name")).toLocaleLowerCase();
-
-                if (labelId && nameFilter) {
-                    if (elementLabelId === labelId && queryName.indexOf(nameFilter) !== -1) {
-                        $(element).removeClass("hidden");
-                        isAnyVisible = true;
-                    }
-                } else if (labelId) {
-                    if (elementLabelId === labelId) {
-                        $(element).removeClass("hidden");
-                        isAnyVisible = true;
-                    }
-                } else if (nameFilter) {
-                    if (queryName.indexOf(nameFilter) !== -1) {
-                        $(element).removeClass("hidden");
-                        isAnyVisible = true;
-                    }
-                }
-            });
-
-        if (isAnyVisible) {
-            $(this.noQueryDiv).hide();
-        } else {
-            $(this.noQueryDiv).show();
-        }
-    }
-
+    
     private saveFavoriteQuery(itemName: string, labelIds: number[]) {
         var query = this.inputTextbox.val();
         this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelIds, (id, error) => {
@@ -622,6 +616,7 @@ class InsertQueryDialog {
 class FilterSearchBox{
     private groupContainer: HTMLDivElement;
     private input: HTMLInputElement;
+    private searchButton: HTMLButtonElement;
 
     public make() {
         this.groupContainer = document.createElement("div");
@@ -638,6 +633,7 @@ class FilterSearchBox{
             .addClass("btn")
             .addClass("btn-default")
             .append(searchIcon);
+        this.searchButton = searchButton;
 
         $(buttonGroup)
             .addClass("input-group-btn")
@@ -663,6 +659,15 @@ class FilterSearchBox{
 
     public change(handler: (eventObject: JQueryEventObject) => any) {
         return $(this.input).change(handler);
+    }
+
+    public submit(handler: (eventObject: JQueryEventObject) => any) {
+        $(this.input).keypress(event => {
+            if (event.keyCode === 13) {
+                handler(null);
+            }
+        });
+        return $(this.searchButton).click(handler);
     }
 
     public val(): string {

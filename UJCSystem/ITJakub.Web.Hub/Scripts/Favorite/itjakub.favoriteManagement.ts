@@ -67,6 +67,11 @@ class FavoriteManagement {
         $("#sort-select").change(this.loadFavoriteItems.bind(this));
         $("#type-filter-select").change(this.loadFavoriteItems.bind(this));
         $("#name-filter-button").click(this.loadFavoriteItems.bind(this));
+        $("#name-filter").keypress((event) => {
+            if (event.keyCode === 13) {
+                this.loadFavoriteItems();
+            }
+        });
 
         $("#label-name-filter").on("change keyup paste", this.filterLabels.bind(this));
 

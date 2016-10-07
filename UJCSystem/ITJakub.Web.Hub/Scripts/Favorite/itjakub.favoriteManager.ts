@@ -306,7 +306,7 @@
         });
     }
 
-    public getFavoriteQueries(bookType: BookTypeEnum, queryType: QueryTypeEnum, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
+    public getFavoriteQueries(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, start: number, count: number, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteQueries = this.getFromStorage("favoriteQueries");
             callback(favoriteQueries);
@@ -318,8 +318,12 @@
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteQueries",
             data: {
+                labelId: labelId,
                 bookType: bookType,
-                queryType: queryType
+                queryType: queryType,
+                filterByTitle: filterByTitle,
+                start: start,
+                count: count
             },
             dataType: "json",
             contentType: "application/json",

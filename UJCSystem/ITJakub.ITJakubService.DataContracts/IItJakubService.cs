@@ -277,7 +277,7 @@ namespace ITJakub.ITJakubService.DataContracts
         int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName);
 
         [OperationContract]
-        IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName);
+        IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName);
 
         [OperationContract]
         int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName);

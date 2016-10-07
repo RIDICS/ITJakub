@@ -160,11 +160,11 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
+        public ActionResult GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count)
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, CurrentUserName);
+                var result = client.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, CurrentUserName);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }

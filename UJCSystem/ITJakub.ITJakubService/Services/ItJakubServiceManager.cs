@@ -463,9 +463,9 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, userName);
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName)
         {
-            return m_favoriteManager.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, userName);
+            return m_favoriteManager.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, userName);
         }
 
         public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
