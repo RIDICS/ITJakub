@@ -1460,11 +1460,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName)
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName)
         {
             try
             {
-                return Channel.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, userName);
+                return Channel.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, start, count, userName);
             }
             catch (CommunicationException ex)
             {
@@ -1486,11 +1486,63 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName)
+        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName)
         {
             try
             {
-                return Channel.GetFavoriteQueries(bookType, queryType, userName);
+                return Channel.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        {
+            try
+            {
+                return Channel.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, userName);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
+        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        {
+            try
+            {
+                return Channel.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, userName);
             }
             catch (CommunicationException ex)
             {

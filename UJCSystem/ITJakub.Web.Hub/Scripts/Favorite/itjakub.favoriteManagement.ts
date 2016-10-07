@@ -6,6 +6,7 @@
 
 class FavoriteManagement {
     private static increaseBackgroundColorPercent = 80;
+    private static pageSize = 30;
     private favoriteManager: FavoriteManager;
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;
@@ -13,6 +14,10 @@ class FavoriteManagement {
     private pagination: Pagination;
     private newFavoriteLabelDialog: FavoriteManagementDialog;
     private removeDialog: FavoriteManagementDialog;
+
+    private currentSortOrder: number;
+    private currentTypeFilter: number;
+    private currentNameFilter: string;
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -61,8 +66,7 @@ class FavoriteManagement {
 
         $("#sort-select").change(this.loadFavoriteItems.bind(this));
         $("#type-filter-select").change(this.loadFavoriteItems.bind(this));
-        $("#name-filter").change(this.loadFavoriteItems.bind(this));
-        //$("#name-filter-button").click(this.loadFavoriteItems.bind(this));
+        $("#name-filter-button").click(this.loadFavoriteItems.bind(this));
 
         $("#label-name-filter").on("change keyup paste", this.filterLabels.bind(this));
 
@@ -168,17 +172,36 @@ class FavoriteManagement {
         }
     }
 
-    private loadFavoriteItems() {
-        var sortOrder = $("#sort-select").val();
-        var typeFilter = $("#type-filter-select").val();
-        var nameFilter = $("#name-filter").val();
-        
-        var container = $("#favorite-item-container");
-        container.empty();
-        container.addClass("loader");
+    private showLoader() {
+        var loaderDiv = document.createElement("div");
+        $(loaderDiv).addClass("loader");
 
-        this.favoriteManager.getFavorites(this.activeLabelId, typeFilter, nameFilter, sortOrder, (favorites) => {
-            container.removeClass("loader");
+        $("#favorite-item-container")
+            .empty()
+            .append(loaderDiv);
+    }
+
+    private loadFavoriteItems() {
+        this.currentSortOrder = $("#sort-select").val();
+        this.currentTypeFilter = $("#type-filter-select").val();
+        this.currentNameFilter = $("#name-filter").val();
+        
+        this.showLoader();
+
+        this.pagination.createPagination(0, FavoriteManagement.pageSize, () => {});
+        this.favoriteManager.getFavoritesCount(this.activeLabelId, this.currentTypeFilter, this.currentNameFilter, (itemsCount) => {
+            this.pagination.createPagination(itemsCount, FavoriteManagement.pageSize, this.loadFavoriteItemsPage.bind(this));
+        });
+    }
+
+    private loadFavoriteItemsPage(pageNumber: number) {
+        this.showLoader();
+
+        var container = $("#favorite-item-container");
+        var count = FavoriteManagement.pageSize;
+        var start = (pageNumber - 1) * count;
+        this.favoriteManager.getFavorites(this.activeLabelId, this.currentTypeFilter, this.currentNameFilter, this.currentSortOrder, start, count, (favorites) => {
+            container.empty();
             for (let i = 0; i < favorites.length; i++) {
                 var favoriteItem = favorites[i];
                 var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);

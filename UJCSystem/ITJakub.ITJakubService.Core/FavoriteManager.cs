@@ -294,25 +294,44 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteLabelContract>>(dbResult);
         }
 
-        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName)
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName)
         {
             var user = TryGetUser(userName);
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
-            var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, start, count, user.Id);
 
             return Mapper.Map<IList<FavoriteBaseInfoContract>>(dbResult);
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName)
+        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName)
+        {
+            var user = TryGetUser(userName);
+            var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
+
+            var resultCount = m_favoritesRepository.GetFavoriteItemsCount(labelId, typeFilter, filterByTitle, user.Id);
+            return resultCount;
+        }
+
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
         {
             var user = TryGetUser(userName);
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 
-            var dbResult = m_favoritesRepository.GetFavoriteQueries(bookTypeEnum, queryTypeEnum, user.Id);
+            var dbResult = m_favoritesRepository.GetFavoriteQueries(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, user.Id);
 
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
+        }
+
+        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        {
+            var user = TryGetUser(userName);
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
+            var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
+
+            var resultCount = m_favoritesRepository.GetFavoriteQueriesCount(labelId, bookTypeEnum, queryTypeEnum, filterByTitle, user.Id);
+            return resultCount;
         }
 
         public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId, string userName)

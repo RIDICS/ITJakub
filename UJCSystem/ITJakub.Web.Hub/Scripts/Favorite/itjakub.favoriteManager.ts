@@ -145,9 +145,7 @@
         });
     }
 
-    
-
-    public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
+    public getFavorites(labelId: number, filterByType: number, filterByTitle: string, sort: number, start: number, count: number, callback: (favorites: IFavoriteBaseInfo[]) => void) {
         if (!this.isUserLoggedIn) {
             throw new Error("Not supported for anonymous users");
         }
@@ -160,12 +158,36 @@
                 labelId: labelId,
                 filterByType: filterByType,
                 filterByTitle: filterByTitle,
-                sort: sort
+                sort: sort,
+                start: start,
+                count: count
             },
             dataType: "json",
             contentType: "application/json",
             success: (favorites: Array<IFavoriteBaseInfo>) => {
                 callback(favorites);
+            }
+        });
+    }
+
+    public getFavoritesCount(labelId: number, filterByType: number, filterByTitle: string, callback: (count: number) => void) {
+        if (!this.isUserLoggedIn) {
+            throw new Error("Not supported for anonymous users");
+        }
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetFavoriteListCount",
+            data: {
+                labelId: labelId,
+                filterByType: filterByType,
+                filterByTitle: filterByTitle
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (count: number) => {
+                callback(count);
             }
         });
     }
@@ -303,6 +325,30 @@
             contentType: "application/json",
             success: (queries) => {
                 callback(queries);
+            }
+        });
+    }
+
+    public getFavoriteQueriesCount(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, callback: (count: number) => void) {
+        if (!this.isUserLoggedIn) {
+            callback(1); // paging not supported when using local storage
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Favorite/GetFavoriteQueriesCount",
+            data: {
+                labelId: labelId,
+                bookType: bookType,
+                queryType: queryType,
+                filterByTitle: filterByTitle
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: (count) => {
+                callback(count);
             }
         });
     }

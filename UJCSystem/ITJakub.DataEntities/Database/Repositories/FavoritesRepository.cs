@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
 using ITJakub.Shared.Contracts.Favorites;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 
@@ -204,22 +205,29 @@ namespace ITJakub.DataEntities.Database.Repositories
             }
         }
 
+        private IQueryOver<FavoriteBase, FavoriteBase> CreateFavoriteItemsQuery(ISession session, long? labelId, FavoriteTypeEnum? filterByType, string filterByTitle, int userId)
+        {
+            var query = session.QueryOver<FavoriteBase>()
+                .Where(x => x.User.Id == userId);
+
+            if (labelId != null)
+                query.And(x => x.FavoriteLabel.Id == labelId.Value);
+
+            if (filterByType != null)
+                query.And(x => x.FavoriteType == GetFavoriteTypeDiscriminatorValue(filterByType.Value));
+
+            if (!string.IsNullOrWhiteSpace(filterByTitle))
+                query.AndRestrictionOn(x => x.Title).IsLike(filterByTitle, MatchMode.Anywhere);
+
+            return query;
+        }
+
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<FavoriteBase> GetFavoriteItems(long? labelId, FavoriteTypeEnum? filterByType, string filterByTitle, FavoriteSortContract sort, int userId)
+        public virtual IList<FavoriteBase> GetFavoriteItems(long? labelId, FavoriteTypeEnum? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, int userId)
         {
             using (var session = GetSession())
             {
-                var query = session.QueryOver<FavoriteBase>()
-                    .Where(x => x.User.Id == userId);
-
-                if (labelId != null)
-                    query.And(x => x.FavoriteLabel.Id == labelId.Value);
-
-                if (filterByType != null)
-                    query.And(x => x.FavoriteType == GetFavoriteTypeDiscriminatorValue(filterByType.Value));
-
-                if (!string.IsNullOrWhiteSpace(filterByTitle))
-                    query.AndRestrictionOn(x => x.Title).IsLike(filterByTitle, MatchMode.Anywhere);
+                var query = CreateFavoriteItemsQuery(session, labelId, filterByType, filterByTitle, userId);
 
                 switch (sort)
                 {
@@ -240,25 +248,64 @@ namespace ITJakub.DataEntities.Database.Repositories
                         break;
                 }
 
-                return query.List();
+                return query.Skip(start)
+                    .Take(count)
+                    .List();
             }
         }
 
         [Transaction(TransactionScopeOption.Required)]
-        public virtual IList<FavoriteQuery> GetFavoriteQueries(BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, int userId)
+        public virtual int GetFavoriteItemsCount(long? labelId, FavoriteTypeEnum? filterByType, string filterByTitle, int userId)
+        {
+            using (var session = GetSession())
+            {
+                var query = CreateFavoriteItemsQuery(session, labelId, filterByType, filterByTitle, userId);
+                return query.RowCount();
+            }
+        }
+        
+        private IQueryOver<FavoriteQuery, FavoriteQuery> CreateFavoriteQueriesQuery(ISession session, long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int userId)
         {
             FavoriteQuery favoriteQueryAlias = null;
             BookType bookTypeAlias = null;
 
+            var query = session.QueryOver(() => favoriteQueryAlias)
+                .JoinAlias(() => favoriteQueryAlias.BookType, () => bookTypeAlias)
+                .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteQueryAlias.User.Id == userId);
+
+            if (labelId != null)
+            {
+                query.And(() => favoriteQueryAlias.Id == labelId.Value);
+            }
+            if (!string.IsNullOrEmpty(filterByTitle))
+            {
+                query.AndRestrictionOn(() => favoriteQueryAlias.Title).IsLike(filterByTitle, MatchMode.Anywhere);
+            }
+
+            return query;
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int userId)
+        {
             using (var session = GetSession())
             {
-                return session.QueryOver(() => favoriteQueryAlias)
-                    .JoinAlias(() => favoriteQueryAlias.BookType, () => bookTypeAlias)
-                    .Where(() => bookTypeAlias.Type == bookTypeEnum && favoriteQueryAlias.QueryType == queryTypeEnum && favoriteQueryAlias.User.Id == userId)
-                    .Fetch(x => x.FavoriteLabel).Eager
+                var query = CreateFavoriteQueriesQuery(session, labelId, bookTypeEnum, queryTypeEnum, filterByTitle, userId);
+
+                return query.Fetch(x => x.FavoriteLabel).Eager
                     .Fetch(x => x.BookType).Eager
                     .OrderBy(x => x.Title).Asc
                     .List();
+            }
+        }
+        
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual int GetFavoriteQueriesCount(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int userId)
+        {
+            using (var session = GetSession())
+            {
+                var query = CreateFavoriteQueriesQuery(session, labelId, bookTypeEnum, queryTypeEnum, filterByTitle, userId);
+                return query.RowCount();
             }
         }
 

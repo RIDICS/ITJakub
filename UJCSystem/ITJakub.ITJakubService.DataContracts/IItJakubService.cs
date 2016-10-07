@@ -271,10 +271,16 @@ namespace ITJakub.ITJakubService.DataContracts
         void DeleteFavoriteLabel(long labelId, string userName);
 
         [OperationContract]
-        IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName);
+        IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName);
+        
+        [OperationContract]
+        int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName);
 
         [OperationContract]
-        IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName);
+        IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName);
+
+        [OperationContract]
+        int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName);
 
         [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);

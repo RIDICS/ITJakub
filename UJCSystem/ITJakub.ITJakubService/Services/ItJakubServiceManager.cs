@@ -453,14 +453,24 @@ namespace ITJakub.ITJakubService.Services
             m_favoriteManager.DeleteFavoriteLabel(labelId, userName);
         }
 
-        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, string userName)
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName)
         {
-            return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, userName);
+            return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, start, count, userName);
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string userName)
+        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName)
         {
-            return m_favoriteManager.GetFavoriteQueries(bookType, queryType, userName);
+            return m_favoriteManager.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, userName);
+        }
+
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        {
+            return m_favoriteManager.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, userName);
+        }
+
+        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        {
+            return m_favoriteManager.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, userName);
         }
 
         public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)

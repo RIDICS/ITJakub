@@ -160,11 +160,20 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetFavoriteQueries(BookTypeEnumContract bookType, QueryTypeEnumContract queryType)
+        public ActionResult GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteQueries(bookType, queryType, CurrentUserName);
+                var result = client.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, CurrentUserName);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -187,7 +196,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult GetFavoriteList(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract? sort)
+        public ActionResult GetFavoriteList(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract? sort, int start, int count)
         {
             if (sort == null)
                 sort = FavoriteSortContract.TitleAsc;
@@ -197,11 +206,23 @@ namespace ITJakub.Web.Hub.Controllers
 
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, CurrentUserName);
+                var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, start, count, CurrentUserName);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
 
+        public ActionResult GetFavoriteListCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle)
+        {
+            if (filterByType != null && filterByType.Value == FavoriteTypeContract.Unknown)
+                filterByType = null;
+
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, CurrentUserName);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
+        
         public ActionResult GetFavoriteLabelManagementPartial(long id, string name, string color)
         {
             var viewModel = new FavoriteLabelViewModel
