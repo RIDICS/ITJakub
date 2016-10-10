@@ -1,5 +1,5 @@
 ﻿class FavoriteQuery {
-    private static pageSize = 5;
+    private static pageSize = 20;
     private queryType: QueryTypeEnum;
     private bookType: BookTypeEnum;
     private inputTextbox: JQuery;

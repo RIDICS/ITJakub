@@ -6,7 +6,7 @@
 
 class FavoriteManagement {
     private static increaseBackgroundColorPercent = 80;
-    private static pageSize = 30;
+    private static pageSize = 50;
     private favoriteManager: FavoriteManager;
     private activeLabelId: number;
     private activeLabelForEditing: JQuery;

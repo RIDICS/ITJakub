@@ -269,7 +269,9 @@ class BibliographyFactory {
             .css("background-color", colorData.backgroundColor)
             .css("border-color", colorData.borderColor)
             .text(labelName)
-            .attr("title", "Uloženo jako: " + favoriteTitle);
+            .attr("data-toggle", "tooltip")
+            .attr("title", "Uloženo jako: " + favoriteTitle)
+            .tooltip();
         return label;
     }
 }

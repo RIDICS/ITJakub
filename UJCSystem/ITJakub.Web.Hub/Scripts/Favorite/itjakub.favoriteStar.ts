@@ -95,6 +95,8 @@
 
             this.deleteFavoriteItem(id, elementJQuery);
         });
+
+        $("[data-toggle=tooltip]").tooltip();
     }
 
     private createFavoriteItemObject(id: number, favoriteTitle: string, labelId: number, labelName: string, labelColor: string): IFavoriteBaseInfo {
@@ -212,7 +214,7 @@ class FavoritePopoverBuilder {
         var color = new HexColor(item.FavoriteLabel.Color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        return `<div class="favorite-item"><span class="label label-favorite" title="${item.Title
+        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="Uloženo jako: ${item.Title
             }" style="background-color: ${escapeHtmlChars(item.FavoriteLabel.Color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.FavoriteLabel.Name)
             }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.Id.toString())
             }" style="color: ${fontColor}"><span class="glyphicon glyphicon-remove"></span></a></span></div>`;
