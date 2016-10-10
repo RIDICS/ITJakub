@@ -159,13 +159,19 @@ class BibliographyFactory {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
+        if (config.containsFavorites()) {
+            var middlePanelFavorites: HTMLDivElement = document.createElement('div');
+            $(middlePanelFavorites).addClass('favorites');
+            middlePanel.appendChild(middlePanelFavorites);
+        }
+
         if (config.containsShortInfo()) {
             var middlePanelShortInfo: HTMLDivElement = document.createElement('div');
             $(middlePanelShortInfo).addClass('short-info');
             middlePanelShortInfo.innerHTML = config.getShortInfo(bookInfo);
             middlePanel.appendChild(middlePanelShortInfo);
         }
-
+        
         if (config.containsTitle()) {
             var middlePanelHeading: HTMLDivElement = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
@@ -211,6 +217,24 @@ class BibliographyFactory {
         }
 
         return bottomPanel;
+    }
+
+    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLDivElement {
+        var labelContainer = document.createElement("div");
+        for (var i = 0; i < bookFavorites.length; i++) {
+            var favoriteInfo = bookFavorites[i];
+            var colorData = FavoriteHelper.getDefaultLabelColorData(favoriteInfo.FavoriteLabel.Color);
+            var label = document.createElement("span");
+            $(label)
+                .addClass("label label-default")
+                .css("color", colorData.fontColor)
+                .css("background-color", colorData.backgroundColor)
+                .css("border-color", colorData.borderColor)
+                .text(favoriteInfo.FavoriteLabel.Name)
+                .attr("title", favoriteInfo.Title);
+            labelContainer.appendChild(label);
+        }
+        return labelContainer;
     }
 }
 

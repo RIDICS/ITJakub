@@ -85,13 +85,21 @@ class BibliographyModule {
         this.clearBooks();
         this.clearLoading();
         if (typeof books !== "undefined" && books !== null && books.length > 0) {
+            var bookDataList = new Array<IBookRenderData>();
             var rootElement: HTMLUListElement = document.createElement('ul');
             rootElement.classList.add('bib-listing');
             this.booksContainer.appendChild(rootElement);
             $.each(books, (index, book: IBookInfo) => {
                 var bibliographyHtml = this.makeBibliography(book);
                 rootElement.appendChild(bibliographyHtml);
+
+                bookDataList.push({
+                    bookId: book.BookId,
+                    bookType: book.BookType,
+                    element: bibliographyHtml
+                });
             });
+            this.showFavoriteLabels(bookDataList);
         } else {
             var divElement: HTMLDivElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
@@ -99,6 +107,31 @@ class BibliographyModule {
             this.booksContainer.appendChild(divElement);
         }
 
+    }
+
+    private showFavoriteLabels(bookDataList: IBookRenderData[]) {
+        var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        var bookIds = new Array<number>();
+        $.each(bookDataList, (index, bookData) => {
+            bookData.$favoritesContainer = $(".favorites", bookData.element);
+            if (bookData.$favoritesContainer.length > 0) {
+                bookIds.push(bookData.bookId);
+            }
+        });
+        if (bookIds.length === 0) return;
+        favoriteManager.getFavoritesForBooks(bookIds, favoriteBooks => {
+            var favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
+            $.each(favoriteBooks, (index, favoriteLabeledBook) => {
+                favoriteBooksDictionary.add(favoriteLabeledBook.Id, favoriteLabeledBook.FavoriteInfo); 
+            });
+            $.each(bookDataList, (index, bookData) => {
+                var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
+                if (bookFavorites) {
+                    var bibliographyFactory = this.getBibliographyFactory(bookData.bookType);
+                    bookData.$favoritesContainer.append(bibliographyFactory.makeFavoriteBookInfo(bookFavorites));
+                }
+            });
+        });
     }
 
     public clearBooks() {
@@ -111,6 +144,14 @@ class BibliographyModule {
 
     public showLoading() {
         $(this.booksContainer).addClass("loader");
+    }
+
+    private getBibliographyFactory(bookType: BookTypeEnum): BibliographyFactory {
+        if (typeof this.forcedBookType == 'undefined') {
+            return this.bibliographyFactoryResolver.getFactoryForType(bookType);
+        } else {
+            return this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
+        }
     }
 
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
@@ -126,13 +167,8 @@ class BibliographyModule {
         $(visibleContent).addClass('visible-content');
 
         this.runAsyncOnLoad(()=> {
-            var bibFactory: BibliographyFactory;
-            if (typeof this.forcedBookType == 'undefined') {
-                bibFactory = this.bibliographyFactoryResolver.getFactoryForType(bibItem.BookType);
-            } else {
-                bibFactory = this.bibliographyFactoryResolver.getFactoryForType(this.forcedBookType);
-            }
-
+            var bibFactory = this.getBibliographyFactory(bibItem.BookType);
+            
             var leftPanel = bibFactory.makeLeftPanel(bibItem);
             if (leftPanel != null) visibleContent.appendChild(leftPanel);
 
@@ -231,6 +267,13 @@ function addFavoriteFromBibliography(target) {
         });
         newFavoriteFromBibliographyDialog.show(bookName);
     };
+}
+
+interface IBookRenderData {
+    bookId: number;
+    bookType: BookTypeEnum;
+    element: HTMLLIElement;
+    $favoritesContainer?: JQuery;
 }
 
 interface IBookInfo {

@@ -862,6 +862,23 @@ class FavoriteHelper {
 
         return color.getDecreasedHexColor(30);
     }
+
+    static getDefaultLabelColorData(color: string): IFavoriteLabelColorData {
+        var hexColor = new HexColor(color);
+        var borderColor = FavoriteHelper.getDefaultBorderColor(hexColor);
+        var fontColor = FavoriteHelper.getDefaultFontColor(hexColor);
+        return {
+            backgroundColor: color,
+            borderColor: borderColor,
+            fontColor: fontColor
+        };
+    }
+}
+
+interface IFavoriteLabelColorData {
+    backgroundColor: string;
+    borderColor: string;
+    fontColor: string;
 }
 
 interface IPageBookmarkStorageItem {
