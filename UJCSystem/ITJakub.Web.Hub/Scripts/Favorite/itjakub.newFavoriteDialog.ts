@@ -8,10 +8,14 @@
     private activeTabClass: string;
     private saveTitle: HTMLSpanElement;
     private selectedRadioButton: HTMLInputElement;
+    private isInitialized;
+    private pendingShow: boolean|string;
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
         this.favoriteManager = favoriteManager;
+        this.isInitialized = false;
+        this.pendingShow = false;
     }
 
     public setSaveCallback(value: (data: INewFavoriteItemData) => void) {
@@ -50,9 +54,18 @@
             .append(saveIcon)
             .append(saveTitle)
             .click(this.onSaveButtonClick.bind(this));
+
+        this.isInitialized = true;
+        if (this.pendingShow !== false) {
+            this.show(<string>this.pendingShow);
+        }
     }
 
     public show(itemName: string) {
+        if (!this.isInitialized) {
+            this.pendingShow = itemName;
+            return;
+        }
         var queryParameters = {
             itemName: itemName
         };
@@ -78,6 +91,7 @@
             show: true,
             backdrop: "static"
         });
+        this.pendingShow = false;
     }
 
     private finishInnerInitialization() {

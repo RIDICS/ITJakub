@@ -116,6 +116,7 @@ class BibliographyModule {
     private makeBibliography(bibItem: IBookInfo): HTMLLIElement {
         var liElement: HTMLLIElement = document.createElement('li');
         $(liElement).addClass('list-item');
+        $(liElement).attr("data-id", bibItem.BookId);
         $(liElement).attr("data-bookid", bibItem.BookXmlId);
         $(liElement).attr("data-booktype", bibItem.BookType);
         $(liElement).attr("data-name", bibItem.Title);
@@ -200,6 +201,36 @@ class BibliographyModule {
     public setSortCriteria(sortCriteria: SortEnum) {
         return this.sortBar.setSortCriteria(sortCriteria);
     }
+}
+
+var newFavoriteFromBibliographyDialog: NewFavoriteDialog;
+function addFavoriteFromBibliography(target) {
+    return context => {
+        if (!newFavoriteFromBibliographyDialog) {
+            var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+            newFavoriteFromBibliographyDialog = new NewFavoriteDialog(favoriteManager, true);
+            newFavoriteFromBibliographyDialog.make();
+        }
+
+        var $item = $(target).parents("li.list-item");
+        var bookId = $item.attr("data-id");
+        var bookName = $item.attr("data-name");
+        newFavoriteFromBibliographyDialog.setSaveCallback(data => {
+            var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+            var labelIds: Array<number> = [];
+            for (var i = 0; i < data.labels.length; i++) {
+                labelIds.push(data.labels[i].labelId);
+            }
+            favoriteManager.createFavoriteItem(FavoriteType.Book, bookId, data.itemName, labelIds, (ids, error) => {
+                if (error) {
+                    newFavoriteFromBibliographyDialog.showError("Chyba při vytváření oblíbené knihy");
+                } else {
+                    newFavoriteFromBibliographyDialog.hide();
+                }
+            });
+        });
+        newFavoriteFromBibliographyDialog.show(bookName);
+    };
 }
 
 interface IBookInfo {
