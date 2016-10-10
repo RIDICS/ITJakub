@@ -376,7 +376,9 @@ class ColorInput {
 
     public make() {
         var elements = $(this.inputElement).add(this.buttonElement);
-        elements.colorpickerplus();
+        elements.colorpickerplus({
+            storeCustomColors: false
+        });
         elements.on("changeColor", (event, color) => {
             if (color == null) {
                 color = "#FFFFFF";
@@ -386,15 +388,6 @@ class ColorInput {
         });
 
         this.inputElement.change(() => this.setValue(this.inputElement.val()));
-
-        // hack fix input type recognition in Color Picker Plus
-        this.buttonElement.data("colorpickerplus").hasInput = () => false;
-
-        // disable saving custom colors:
-        $(".colorpickerplus-container button").remove();
-        if (window.localStorage) {
-            window.localStorage.removeItem("colorpickerplus_custom_colors");
-        }
     }
 
     public setValue(value: string) {
