@@ -219,22 +219,22 @@ class BibliographyFactory {
         return bottomPanel;
     }
 
-    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLDivElement {
-        var labelContainer = document.createElement("div");
+    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLElement[] {
+        var resultList = new Array<HTMLElement>();
         for (var i = 0; i < bookFavorites.length; i++) {
             var favoriteInfo = bookFavorites[i];
             var colorData = FavoriteHelper.getDefaultLabelColorData(favoriteInfo.FavoriteLabel.Color);
             var label = document.createElement("span");
             $(label)
-                .addClass("label label-default")
+                .addClass("label")
                 .css("color", colorData.fontColor)
                 .css("background-color", colorData.backgroundColor)
                 .css("border-color", colorData.borderColor)
                 .text(favoriteInfo.FavoriteLabel.Name)
                 .attr("title", favoriteInfo.Title);
-            labelContainer.appendChild(label);
+            resultList.push(label);
         }
-        return labelContainer;
+        return resultList;
     }
 }
 

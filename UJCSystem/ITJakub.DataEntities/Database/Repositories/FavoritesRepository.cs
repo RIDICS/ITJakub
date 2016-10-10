@@ -120,6 +120,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.FavoriteLabel).Eager
                     .WhereRestrictionOn(() => favoriteItemAlias.Book.Id).IsInG(bookIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
+                    .OrderBy(() => favoriteLabelAlias.Name).Asc
                     .OrderBy(() => favoriteItemAlias.Title).Asc
                     .List();
             }
@@ -138,6 +139,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .Fetch(x => x.FavoriteLabel).Eager
                     .WhereRestrictionOn(() => favoriteItemAlias.Category.Id).IsInG(categoryIds)
                     .And(() => favoriteLabelAlias.User.Id == userId)
+                    .OrderBy(() => favoriteLabelAlias.Name).Asc
                     .OrderBy(() => favoriteItemAlias.Title).Asc
                     .List();
             }
@@ -288,13 +290,17 @@ namespace ITJakub.DataEntities.Database.Repositories
         [Transaction(TransactionScopeOption.Required)]
         public virtual IList<FavoriteQuery> GetFavoriteQueries(long? labelId, BookTypeEnum bookTypeEnum, QueryTypeEnum queryTypeEnum, string filterByTitle, int start, int count, int userId)
         {
+            FavoriteLabel favoriteLabelAlias = null;
+
             using (var session = GetSession())
             {
                 var query = CreateFavoriteQueriesQuery(session, labelId, bookTypeEnum, queryTypeEnum, filterByTitle, userId);
 
-                return query.Fetch(x => x.FavoriteLabel).Eager
+                return query.JoinAlias(x => x.FavoriteLabel, () => favoriteLabelAlias)
+                    .Fetch(x => x.FavoriteLabel).Eager
                     .Fetch(x => x.BookType).Eager
                     .OrderBy(x => x.Title).Asc
+                    .OrderBy(() => favoriteLabelAlias.Name).Asc
                     .Skip(start)
                     .Take(count)
                     .List();

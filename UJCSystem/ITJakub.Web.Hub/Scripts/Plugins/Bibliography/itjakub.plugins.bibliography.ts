@@ -254,15 +254,29 @@ function addFavoriteFromBibliography(target) {
         newFavoriteFromBibliographyDialog.setSaveCallback(data => {
             var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
             var labelIds: Array<number> = [];
+            var labelElements: Array<HTMLSpanElement> = [];
             for (var i = 0; i < data.labels.length; i++) {
-                labelIds.push(data.labels[i].labelId);
+                var label = data.labels[i];
+                labelIds.push(label.labelId);
+                var labelSpan = document.createElement("span");
+                var colorData = FavoriteHelper.getDefaultLabelColorData(label.labelColor);
+                $(labelSpan)
+                    .addClass("label")
+                    .css("color", colorData.fontColor)
+                    .css("background-color", colorData.backgroundColor)
+                    .css("border-color", colorData.borderColor)
+                    .text(label.labelName)
+                    .attr("title", data.itemName);
+                labelElements.push(labelSpan);
             }
             favoriteManager.createFavoriteItem(FavoriteType.Book, bookId, data.itemName, labelIds, (ids, error) => {
                 if (error) {
                     newFavoriteFromBibliographyDialog.showError("Chyba při vytváření oblíbené knihy");
-                } else {
-                    newFavoriteFromBibliographyDialog.hide();
+                    return;
                 }
+
+                newFavoriteFromBibliographyDialog.hide();
+                $(".favorites", $item).append(labelElements);
             });
         });
         newFavoriteFromBibliographyDialog.show(bookName);
