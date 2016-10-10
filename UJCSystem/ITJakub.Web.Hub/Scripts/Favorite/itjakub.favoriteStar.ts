@@ -140,6 +140,9 @@
     }
 
     private createFavoriteItemFast(labelId: number, favoriteTitle: string, labelName: string, labelColor: string) {
+        if (favoriteTitle.length > 250) {
+            favoriteTitle = favoriteTitle.substr(0, 247) + "...";
+        }
         this.favoriteManager.createFavoriteItem(this.favoriteItemType, this.itemId, favoriteTitle, [labelId], (ids, error) => {
             if (error) {
                 return;

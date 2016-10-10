@@ -98,12 +98,14 @@ class MiddlePanelConfiguration extends Configuration {
     containsTitle() { return typeof this.configObject['title'] !== 'undefined'; }
     containsShortInfo() { return typeof this.configObject['short-info'] !== 'undefined'; }
     containsFavorites() { return typeof this.configObject['favorites'] !== 'undefined'; }
+    containsFavoritesMaxCount() { return typeof this.configObject['favorites']['maxCount'] !== 'undefined'; }
     containsCustom() { return typeof this.configObject['custom'] !== 'undefined'; }
 
     getCustom(bibItem: IBookInfo): string { return this.interpret(this.configObject['custom'], bibItem); }
     getTitle(bibItem: IBookInfo): string { return this.interpret(this.configObject['title'], bibItem); }
     getShortInfo(bibItem: IBookInfo): string { return this.interpret(this.configObject['short-info'], bibItem); }
     getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
+    getFavoritesMaxCount(): number { return this.configObject['favorites']['maxCount']; }
 }
 
 class BottomPanelConfiguration extends Configuration {

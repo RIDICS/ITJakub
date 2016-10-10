@@ -258,15 +258,7 @@ function addFavoriteFromBibliography(target) {
             for (var i = 0; i < data.labels.length; i++) {
                 var label = data.labels[i];
                 labelIds.push(label.labelId);
-                var labelSpan = document.createElement("span");
-                var colorData = FavoriteHelper.getDefaultLabelColorData(label.labelColor);
-                $(labelSpan)
-                    .addClass("label")
-                    .css("color", colorData.fontColor)
-                    .css("background-color", colorData.backgroundColor)
-                    .css("border-color", colorData.borderColor)
-                    .text(label.labelName)
-                    .attr("title", data.itemName);
+                var labelSpan = BibliographyFactory.makeFavoriteLabel(data.itemName, label.labelName, label.labelColor);
                 labelElements.push(labelSpan);
             }
             favoriteManager.createFavoriteItem(FavoriteType.Book, bookId, data.itemName, labelIds, (ids, error) => {

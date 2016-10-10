@@ -3,7 +3,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
-      "favorites": true,
+      "favorites": {
+        "maxCount": 3 
+      },
       "variables": {
         "$test": {
           "type": "if",

@@ -221,20 +221,56 @@ class BibliographyFactory {
 
     makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLElement[] {
         var resultList = new Array<HTMLElement>();
+        var config = this.configuration.getMidllePanelConfig();
+        var maxFavLabels = bookFavorites.length;
+        if (config.containsFavorites() && config.containsFavoritesMaxCount()) {
+            maxFavLabels = config.getFavoritesMaxCount();
+        }
+
+        var max = maxFavLabels < bookFavorites.length ? maxFavLabels : bookFavorites.length;
         for (var i = 0; i < bookFavorites.length; i++) {
             var favoriteInfo = bookFavorites[i];
-            var colorData = FavoriteHelper.getDefaultLabelColorData(favoriteInfo.FavoriteLabel.Color);
-            var label = document.createElement("span");
-            $(label)
-                .addClass("label")
-                .css("color", colorData.fontColor)
-                .css("background-color", colorData.backgroundColor)
-                .css("border-color", colorData.borderColor)
-                .text(favoriteInfo.FavoriteLabel.Name)
-                .attr("title", favoriteInfo.Title);
+            var label = BibliographyFactory.makeFavoriteLabel(favoriteInfo.Title, favoriteInfo.FavoriteLabel.Name, favoriteInfo.FavoriteLabel.Color);
             resultList.push(label);
+
+            if (i >= max) {
+                $(label).hide();
+            }
         }
+
+        if (bookFavorites.length > maxFavLabels) {
+            var showAllLink = document.createElement("a");
+            var showAllSpan = document.createElement("span");
+            $(showAllLink)
+                .attr("href", "#")
+                .append(showAllSpan)
+                .click(event => {
+                    var $item = $(event.currentTarget);
+                    $item.siblings().show();
+                    $item.hide();
+                });
+            $(showAllSpan)
+                .css("color", "black")
+                .css("font-weight", "bold")
+                .css("margin-left", "3px")
+                .text("...");
+            resultList.push(showAllLink);
+        }
+
         return resultList;
+    }
+
+    static makeFavoriteLabel(favoriteTitle: string, labelName: string, labelColor: string): HTMLSpanElement {
+        var colorData = FavoriteHelper.getDefaultLabelColorData(labelColor);
+        var label = document.createElement("span");
+        $(label)
+            .addClass("label")
+            .css("color", colorData.fontColor)
+            .css("background-color", colorData.backgroundColor)
+            .css("border-color", colorData.borderColor)
+            .text(labelName)
+            .attr("title", "Uloženo jako: " + favoriteTitle);
+        return label;
     }
 }
 
