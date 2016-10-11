@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
 using ITJakub.Shared.Contracts;
@@ -11,16 +10,18 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
-    [RouteArea("AudioBooks")]
+    [Area("AudioBooks")]
     public class AudioBooksController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public AudioBooksController(StaticTextManager staticTextManager)
+        public AudioBooksController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -96,7 +97,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -105,7 +106,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -114,7 +115,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-                return Json(audiosWithCategories, JsonRequestBehavior.AllowGet);
+                return Json(audiosWithCategories);
             }
         }
 
@@ -135,7 +136,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -165,7 +166,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-                return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results.Results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -204,7 +205,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             {
                 var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
 
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -252,7 +253,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-                return Json(new {books = results.Results}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = results.Results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 

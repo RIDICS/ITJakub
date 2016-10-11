@@ -84,13 +84,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WindsorControllerFactory.cs" />
-    <Compile Include="Areas\AudioBooks\AudioBooksAreaRegistration.cs" />
-    <Compile Include="Areas\AudioBooks\Controllers\AudioBooksController.cs" />
-    <Compile Include="Areas\AudioBooks\RouteConfig.cs" />
-    <Compile Include="Areas\CardFiles\CardFilesAreaRegistration.cs" />
-    <Compile Include="Areas\CardFiles\Controllers\CardFilesController.cs" />
-    <Compile Include="Areas\CardFiles\RouteConfig.cs" />
-    <Compile Include="Areas\OldGrammar\Models\TermCategoriesWithTermsModel.cs" />
     <Compile Include="AutoMapperProfiles\StaticTextProfile.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="AutoMapperProfiles\ConditionCriteriaDescriptionProfile.cs" />
@@ -121,9 +114,6 @@
     <Compile Include="Models\Plugins\Keyboard\LayoutListItem.cs" />
     <Compile Include="Models\Plugins\RegExSearch\ConditionCriteriaDescriptionBase.cs" />
     <Compile Include="Models\BookListingModel.cs" />
-    <Compile Include="Areas\OldGrammar\Controllers\OldGrammarController.cs" />
-    <Compile Include="Areas\OldGrammar\OldGrammarAreaRegistration.cs" />
-    <Compile Include="Areas\OldGrammar\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthorController.cs" />
     <Compile Include="Controllers\Plugins\Bibliography\BibliographyController.cs" />
@@ -1347,38 +1337,15 @@
     <Content Include="wwwroot\css\ITJakub.Dropzone.less" />
     <Content Include="wwwroot\css\ITJakub.DefaultTheme.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.Bibliography.less" />
-    <Content Include="Areas\CardFiles\Views\web.config" />
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfiles.less" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
-    <Content Include="Areas\CardFiles\Views\CardFiles\Listing.cshtml" />
-    <Content Include="Areas\CardFiles\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\CardFiles\css\itjakub.cardfile.less" />
-    <Content Include="Areas\OldGrammar\Views\web.config" />
     <Content Include="wwwroot\Areas\BohemianTextBank\css\itjakub.bohemiantextbank.less" />
     <Content Include="wwwroot\Areas\OldGrammar\css\itjakub.oldgrammar.less" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
-    <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
     <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.less" />
     <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.content.less" />
     <Content Include="wwwroot\css\ITJakub.Footer.less" />
     <Content Include="wwwroot\Areas\Editions\css\itjakub.editions.content.less" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\Help.cshtml" />
-    <Content Include="Areas\AudioBooks\Views\web.config" />
-    <Content Include="Areas\AudioBooks\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\AudioBooks\Views\AudioBooks\Feedback.cshtml" />
-    <Content Include="Areas\AudioBooks\Views\AudioBooks\Information.cshtml" />
     <Content Include="wwwroot\Areas\AudioBooks\css\itjakub.audiobooks.less" />
-    <Content Include="Areas\AudioBooks\Views\AudioBooks\List.cshtml" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
-    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
-    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
-    <Content Include="Areas\OldGrammar\Views\OldGrammar\ListTerms.cshtml" />
     <Content Include="wwwroot\Areas\Derivation\css\itjakub.derivation.less" />
     <Content Include="package.json" />
     <Content Include="tsconfig.json" />
@@ -1533,13 +1500,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Areas\AudioBooks\Content\" />
-    <Folder Include="Areas\AudioBooks\Models\" />
-    <Folder Include="Areas\AudioBooks\Views\Shared\" />
-    <Folder Include="Areas\CardFiles\Content\" />
-    <Folder Include="Areas\CardFiles\Models\" />
-    <Folder Include="Areas\CardFiles\Views\Shared\" />
-    <Folder Include="Areas\OldGrammar\Views\Shared\" />
+    <Folder Include="Areas\" />
     <Folder Include="wwwroot\Areas\Tools\css\" />
   </ItemGroup>
   <ItemGroup>

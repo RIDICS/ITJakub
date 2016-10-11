@@ -17,7 +17,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             return new JsonSerializerSettings
             {
-                ContractResolver = new DefaultContractResolver()
+                ContractResolver = new DefaultContractResolver(),
+                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
             };
         }
     }

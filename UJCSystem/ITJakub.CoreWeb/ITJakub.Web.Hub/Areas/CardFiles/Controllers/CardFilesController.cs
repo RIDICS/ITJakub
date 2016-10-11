@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Web.Mvc;
-using System.Web.WebPages;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
@@ -10,15 +8,17 @@ using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
-    [RouteArea("CardFiles")]
+    [Area("CardFiles")]
     public class CardFilesController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public CardFilesController(StaticTextManager staticTextManager)
+        public CardFilesController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -50,7 +50,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
         public ActionResult SearchList(string term)
         {
-            term = term.ToLower();
+            term = term == null ? string.Empty : term.ToLower();
 
             using (var client = GetMainServiceClient())
             {
@@ -69,7 +69,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                         });
                     }
                 }
-                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -132,7 +132,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             using (var client = GetMainServiceClient())
             {
                 var cardFiles = client.GetCardFiles();
-                return Json(new {cardFiles}, JsonRequestBehavior.AllowGet);
+                return Json(new {cardFiles}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -140,10 +140,10 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var buckets = headword.IsEmpty()
+                var buckets = string.IsNullOrEmpty(headword)
                     ? client.GetBuckets(cardFileId)
                     : client.GetBucketsWithHeadword(cardFileId, headword);
-                return Json(new {buckets}, JsonRequestBehavior.AllowGet);
+                return Json(new {buckets}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -152,7 +152,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             using (var client = GetMainServiceClient())
             {
                 var cards = client.GetCards(cardFileId, bucketId);
-                return Json(new {cards}, JsonRequestBehavior.AllowGet);
+                return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -161,7 +161,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             using (var client = GetMainServiceClient())
             {
                 var cards = client.GetCardsShort(cardFileId, bucketId);
-                return Json(new {cards}, JsonRequestBehavior.AllowGet);
+                return Json(new {cards}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -170,7 +170,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             using (var client = GetMainServiceClient())
             {
                 var card = client.GetCard(cardFileId, bucketId, cardId);
-                return Json(new {card}, JsonRequestBehavior.AllowGet);
+                return Json(new {card}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -181,7 +181,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 
             if (!parsingSucceeded)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "invalid image size");
+                return StatusCode((int) HttpStatusCode.BadRequest); // invalid image size
             }
             using (var client = GetMainServiceClient())
             {
