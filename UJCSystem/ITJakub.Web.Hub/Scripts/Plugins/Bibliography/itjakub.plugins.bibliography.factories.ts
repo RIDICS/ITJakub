@@ -253,7 +253,10 @@ class BibliographyFactory {
                 .css("color", "black")
                 .css("font-weight", "bold")
                 .css("margin-left", "3px")
-                .text("...");
+                .text("...")
+                .attr("title", "Zobrazit všechny přiřazené štítky")
+                .attr("data-toggle", "tooltip")
+                .tooltip();
             resultList.push(showAllLink);
         }
 
@@ -283,35 +286,35 @@ class DictionaryFactory extends BibliographyFactory {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
 
-        var inputCheckbox: HTMLInputElement = document.createElement('input');
-        inputCheckbox.type = "checkbox";
-        $(inputCheckbox).addClass('checkbox');
-        leftPanel.appendChild(inputCheckbox);
+        //var inputCheckbox: HTMLInputElement = document.createElement('input');
+        //inputCheckbox.type = "checkbox";
+        //$(inputCheckbox).addClass('checkbox');
+        //leftPanel.appendChild(inputCheckbox);
 
-        var starEmptyButton: HTMLButtonElement = document.createElement('button');
-        starEmptyButton.type = 'button';
-        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
-        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
-        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
-        starEmptyButton.appendChild(spanEmptyStar);
-        $(starEmptyButton).click(function(event) {
-            $(this).siblings('.star-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starEmptyButton);
+        //var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        //starEmptyButton.type = 'button';
+        //$(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        //var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        //$(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        //starEmptyButton.appendChild(spanEmptyStar);
+        //$(starEmptyButton).click(function(event) {
+        //    $(this).siblings('.star-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starEmptyButton);
 
-        var starButton: HTMLButtonElement = document.createElement('button');
-        starButton.type = 'button';
-        $(starButton).addClass('btn btn-xs star-button');
-        $(starButton).css('display', 'none');
-        var spanStar: HTMLSpanElement = document.createElement('span');
-        $(spanStar).addClass('glyphicon glyphicon-star');
-        starButton.appendChild(spanStar);
-        $(starButton).click(function(event) {
-            $(this).siblings('.star-empty-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starButton);
+        //var starButton: HTMLButtonElement = document.createElement('button');
+        //starButton.type = 'button';
+        //$(starButton).addClass('btn btn-xs star-button');
+        //$(starButton).css('display', 'none');
+        //var spanStar: HTMLSpanElement = document.createElement('span');
+        //$(spanStar).addClass('glyphicon glyphicon-star');
+        //starButton.appendChild(spanStar);
+        //$(starButton).click(function(event) {
+        //    $(this).siblings('.star-empty-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starButton);
 
         return leftPanel;
     }
@@ -322,35 +325,35 @@ class CardFileFactory extends BibliographyFactory {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
 
-        var inputCheckbox: HTMLInputElement = document.createElement('input');
-        inputCheckbox.type = "checkbox";
-        $(inputCheckbox).addClass('checkbox');
-        leftPanel.appendChild(inputCheckbox);
+        //var inputCheckbox: HTMLInputElement = document.createElement('input');
+        //inputCheckbox.type = "checkbox";
+        //$(inputCheckbox).addClass('checkbox');
+        //leftPanel.appendChild(inputCheckbox);
 
-        var starEmptyButton: HTMLButtonElement = document.createElement('button');
-        starEmptyButton.type = 'button';
-        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
-        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
-        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
-        starEmptyButton.appendChild(spanEmptyStar);
-        $(starEmptyButton).click(function(event) {
-            $(this).siblings('.star-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starEmptyButton);
+        //var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        //starEmptyButton.type = 'button';
+        //$(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        //var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        //$(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        //starEmptyButton.appendChild(spanEmptyStar);
+        //$(starEmptyButton).click(function(event) {
+        //    $(this).siblings('.star-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starEmptyButton);
 
-        var starButton: HTMLButtonElement = document.createElement('button');
-        starButton.type = 'button';
-        $(starButton).addClass('btn btn-xs star-button');
-        $(starButton).css('display', 'none');
-        var spanStar: HTMLSpanElement = document.createElement('span');
-        $(spanStar).addClass('glyphicon glyphicon-star');
-        starButton.appendChild(spanStar);
-        $(starButton).click(function(event) {
-            $(this).siblings('.star-empty-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starButton);
+        //var starButton: HTMLButtonElement = document.createElement('button');
+        //starButton.type = 'button';
+        //$(starButton).addClass('btn btn-xs star-button');
+        //$(starButton).css('display', 'none');
+        //var spanStar: HTMLSpanElement = document.createElement('span');
+        //$(spanStar).addClass('glyphicon glyphicon-star');
+        //starButton.appendChild(spanStar);
+        //$(starButton).click(function(event) {
+        //    $(this).siblings('.star-empty-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starButton);
 
         return leftPanel;
     }

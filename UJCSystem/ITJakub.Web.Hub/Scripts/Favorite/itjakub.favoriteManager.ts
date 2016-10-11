@@ -309,14 +309,22 @@
     public getFavoriteQueries(labelId: number, bookType: BookTypeEnum, queryType: QueryTypeEnum, filterByTitle: string, start: number, count: number, callback: (favoriteQueries: IFavoriteQuery[]) => void) {
         if (!this.isUserLoggedIn) {
             var favoriteQueries: IFavoriteQuery[] = this.getFromStorage("favoriteQueries");
+            var filteredQueries = new Array<IFavoriteQuery>();
+            for (let i = 0; i < favoriteQueries.length; i++) {
+                let favoriteQuery = favoriteQueries[i];
+                if (favoriteQuery.BookType === bookType && favoriteQuery.QueryType === queryType) {
+                    filteredQueries.push(favoriteQuery);
+                }
+            }
+
             if (!filterByTitle) {
-                callback(favoriteQueries);
+                callback(filteredQueries);
                 return;
             }
 
             var result = new Array<IFavoriteQuery>();
-            for (var i = 0; i < favoriteQueries.length; i++) {
-                var favoriteQuery = favoriteQueries[i];
+            for (let i = 0; i < filteredQueries.length; i++) {
+                let favoriteQuery = filteredQueries[i];
                 if (favoriteQuery.Title.indexOf(filterByTitle) !== -1) {
                     result.push(favoriteQuery);
                 }
@@ -739,6 +747,8 @@
                 CreateTime: this.getCurrentTime(),
                 Title: favoriteTitle,
                 Query: query,
+                BookType: bookType,
+                QueryType: queryType,
                 FavoriteLabel: this.getDefaultFavoriteLabel()
             }
 

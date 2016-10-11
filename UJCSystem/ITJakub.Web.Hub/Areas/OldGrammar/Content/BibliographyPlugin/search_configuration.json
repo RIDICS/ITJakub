@@ -1,8 +1,11 @@
 ﻿{
-   "Grammar": {
+  "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -152,6 +155,9 @@
       },
       "read-button": {
         "onclick-callable": "searchGrammarBookReadClicked(this)"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       },
       "variables": {
         "$test": {
