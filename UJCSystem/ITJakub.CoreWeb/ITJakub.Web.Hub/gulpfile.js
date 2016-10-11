@@ -162,7 +162,7 @@ gulp.task("bundle:itjakub_audiobooks", function () {
 
 gulp.task("bundle:itjakub_bohemiantextbank", function () {
     return gulp.src([
-            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiatextbank.modul.inicializator.js",
+            paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.modul.inicializator.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.search.js",
             paths.webroot + "Areas/BohemianTextBank/js/itjakub.bohemiantextbank.list.js"
         ])

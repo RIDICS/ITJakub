@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
@@ -13,16 +12,18 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
-    [RouteArea("OldGrammar")]
+    [Area("OldGrammar")]
     public class OldGrammarController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public OldGrammarController(StaticTextManager staticTextManager)
+        public OldGrammarController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
@@ -126,20 +127,21 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         BookTitle = book.Title,
                         BookPages = book.BookPages,
                         SearchText = searchText,
-                        InitPageXmlId = page
+                        InitPageXmlId = page,
+                        JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });
             }
         }
 
         public ActionResult GetListConfiguration()
         {
-            var fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json");
+            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/list_configuration.json";
             return File(fullPath, "application/json", fullPath);
         }
 
         public ActionResult GetSearchConfiguration()
         {
-            var fullPath = Server.MapPath("~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json");
+            var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json";
             return File(fullPath, "application/json", fullPath);
         }
 
@@ -148,7 +150,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -157,7 +159,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -166,7 +168,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -175,7 +177,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var editionsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-                return Json(editionsWithCategories, JsonRequestBehavior.AllowGet);
+                return Json(editionsWithCategories);
             }
         }
 
@@ -216,7 +218,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -236,7 +238,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -272,7 +274,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -308,7 +310,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
 
-                return Json(new {count}, JsonRequestBehavior.AllowGet);
+                return Json(new {count});
             }
         }
 
@@ -359,7 +361,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -416,7 +418,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = result}, JsonRequestBehavior.AllowGet);
+                return Json(new {books = result}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -461,10 +463,10 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.TermsPageHits}, JsonRequestBehavior.AllowGet);
+                    return Json(new {results = result.TermsPageHits}, GetJsonSerializerSettingsForBiblModule());
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -493,10 +495,10 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
                 if (result != null)
                 {
-                    return Json(new {results = result.TermsPageHits}, JsonRequestBehavior.AllowGet);
+                    return Json(new {results = result.TermsPageHits}, GetJsonSerializerSettingsForBiblModule());
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
