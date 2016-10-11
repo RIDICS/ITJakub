@@ -30,7 +30,7 @@ BEGIN TRAN
 		IsDefault,
 		[User]
 	)
-	SELECT 'Výchozí', '#EEB711', 1, u.Id FROM [dbo].[User] u
+	SELECT 'VÃ½chozÃ­', '#EEB711', 1, u.Id FROM [dbo].[User] u
 	
 
     INSERT INTO [dbo].[DatabaseVersion]
