@@ -15,6 +15,10 @@
                 advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                 text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",
                 textCount: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchCount"
+            },
+            favoriteQueries: {
+                bookType: BookTypeEnum.Grammar,
+                queryType: QueryTypeEnum.List
             }
         },
         searchBox: {

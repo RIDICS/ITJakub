@@ -1,0 +1,26 @@
+﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteLabelViewModel
+
+<div class="favorite-label-management" style="background-color: @Model.Color;" data-id="@Model.Id" data-name="@Model.Name" data-color="@Model.Color">
+    <div class="row">
+        <div class="col-xs-8">
+            <a href="#" class="favorite-label-link">
+                <div class="favorite-label-name">@Model.Name</div>
+            </a>
+        </div>
+        <div class="col-xs-4">
+            @if (!Model.IsDefault)
+            {
+                <a href="#" title="Smazat štítek" class="favorite-label-remove-link" style="float: right; width: 45%;">
+                    <div class="text-center">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </div>
+                </a>
+                <a href="#" title="Upravit štítek" class="favorite-label-edit-link">
+                    <div class="text-center">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+</div>

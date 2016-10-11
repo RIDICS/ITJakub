@@ -35,7 +35,11 @@
       <key column="ParentCategory" />
       <one-to-many class="Category" />
     </bag>
-    
+
+    <bag name="FavoriteItems" inverse="true" cascade="none" lazy="true">
+      <key column="Category" />
+      <one-to-many class="FavoriteCategory" />
+    </bag>
   </class>
 
   <sql-query name="GetCategoryHierarchy">

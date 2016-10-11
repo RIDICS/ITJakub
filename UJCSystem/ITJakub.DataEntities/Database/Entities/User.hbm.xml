@@ -47,8 +47,13 @@
     </property>
     
     <bag name="FavoriteItems" inverse="true">
-      <key column="User" />
+      <key column="[User]" />
       <one-to-many class="FavoriteBase" />
+    </bag>
+
+    <bag name="FavoriteLabels" inverse="true" cascade="save-update">
+      <key column="[User]" />
+      <one-to-many class="FavoriteLabel" />
     </bag>
 
     <bag name="Groups" table="User_Group" cascade="all">

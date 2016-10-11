@@ -75,6 +75,7 @@ class RightPanelConfiguration extends Configuration {
 
     containsInfoButton() { return typeof this.configObject['info-button'] !== 'undefined'; }
     containsReadButton() { return typeof this.configObject['read-button'] !== 'undefined'; }
+    containsFavoriteButton() { return typeof this.configObject['favorite-button'] !== 'undefined'; }
 
     getInfoButtonUrl(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject['info-button']['url'], bibItem); }
     getInfoButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject['info-button']['onclick'], bibItem); }
@@ -82,7 +83,8 @@ class RightPanelConfiguration extends Configuration {
     getReadButtonUrl(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject["read-button"]["url"], bibItem); }
     getReadButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["onclick"], bibItem); }
     getReadButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["onclick-callable"], bibItem); }
-
+    getFavoriteButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject["favorite-button"]["onclick"], bibItem); }
+    getFavoriteButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject["favorite-button"]["onclick-callable"], bibItem); }
 
 }
 
@@ -95,12 +97,15 @@ class MiddlePanelConfiguration extends Configuration {
     containsBody() { return typeof this.configObject['body'] !== 'undefined'; }
     containsTitle() { return typeof this.configObject['title'] !== 'undefined'; }
     containsShortInfo() { return typeof this.configObject['short-info'] !== 'undefined'; }
+    containsFavorites() { return typeof this.configObject['favorites'] !== 'undefined'; }
+    containsFavoritesMaxCount() { return typeof this.configObject['favorites']['maxCount'] !== 'undefined'; }
     containsCustom() { return typeof this.configObject['custom'] !== 'undefined'; }
 
     getCustom(bibItem: IBookInfo): string { return this.interpret(this.configObject['custom'], bibItem); }
     getTitle(bibItem: IBookInfo): string { return this.interpret(this.configObject['title'], bibItem); }
     getShortInfo(bibItem: IBookInfo): string { return this.interpret(this.configObject['short-info'], bibItem); }
     getBody(bibItem: IBookInfo): string { return this.interpret(this.configObject['body'], bibItem); }
+    getFavoritesMaxCount(): number { return this.configObject['favorites']['maxCount']; }
 }
 
 class BottomPanelConfiguration extends Configuration {

@@ -21,6 +21,8 @@ namespace ITJakub.DataEntities.Database.Entities {
 
         public virtual IList<Category> Categories { get; set; }
 
+        public virtual IList<FavoriteCategory> FavoriteItems { get; set; }
+
         public virtual bool Equals(Category other)
         {
             if (ReferenceEquals(null, other)) return false;

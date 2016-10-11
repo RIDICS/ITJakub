@@ -58,6 +58,8 @@
     <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
     <Compile Include="CategoryContentContract.cs" />
+    <Compile Include="Favorites\FavoriteSortContract.cs" />
+    <Compile Include="Favorites\QueryTypeEnumContract.cs" />
     <Compile Include="GroupContract.cs" />
     <Compile Include="GroupDetailContract.cs" />
     <Compile Include="News\NewsSyndicationItemContract.cs" />

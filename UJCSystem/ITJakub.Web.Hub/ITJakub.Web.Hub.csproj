@@ -262,6 +262,7 @@
     <Compile Include="Areas\Lemmatization\LemmatizationAreaRegistration.cs" />
     <Compile Include="Areas\Lemmatization\RouteConfig.cs" />
     <Compile Include="Areas\OldGrammar\Models\TermCategoriesWithTermsModel.cs" />
+    <Compile Include="AutoMapperProfiles\FavoriteProfile.cs" />
     <Compile Include="AutoMapperProfiles\StaticTextProfile.cs" />
     <Compile Include="Controllers\AreaController.cs" />
     <Compile Include="Areas\ProfessionalLiterature\Controllers\ProfessionalLiteratureController.cs" />
@@ -280,6 +281,7 @@
     <Compile Include="Areas\Lemmatization\Controllers\LemmatizationController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="CommunicationProvider.cs" />
+    <Compile Include="Controllers\FavoriteController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
     <Compile Include="Controllers\EditionNoteController.cs" />
     <Compile Include="Controllers\PermissionController.cs" />
@@ -292,6 +294,13 @@
     <Compile Include="Managers\StaticTextManager.cs" />
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />
+    <Compile Include="Models\Favorite\FavoriteFilterViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteLabelViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteManagementViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteQueriesViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteQueryViewModel.cs" />
+    <Compile Include="Models\Favorite\FavoriteSortViewModel.cs" />
+    <Compile Include="Models\Favorite\NewFavoriteViewModel.cs" />
     <Compile Include="Models\FeedbackViewModel.cs" />
     <Compile Include="Areas\Dictionaries\Models\HeadwordFeedbackViewModel.cs" />
     <Compile Include="Models\ModificationUpdateViewModel.cs" />
@@ -438,6 +447,12 @@
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.Favorites.css">
+      <DependentUpon>ITJakub.Favorites.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Favorites.min.css">
+      <DependentUpon>ITJakub.Favorites.css</DependentUpon>
+    </Content>
     <Content Include="Content\KeyboardLayouts\cs_quertz.xml" />
     <Content Include="Content\KeyboardLayouts\cyrilic.xml" />
     <Content Include="Content\KeyboardLayouts\greek_qwerty.xml" />
@@ -450,6 +465,19 @@
     </Content>
     <Content Include=".bowerrc" />
     <Content Include="bower.json" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\css\bootstrap-colorpicker-plus.css" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\css\bootstrap-colorpicker-plus.min.css" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\css\bootstrap-colorpicker.css" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\css\bootstrap-colorpicker.min.css" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\img\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\img\bootstrap-colorpicker\alpha.png" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\img\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\img\bootstrap-colorpicker\hue.png" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\js\bootstrap-colorpicker-plus.js" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\js\bootstrap-colorpicker-plus.min.js" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\js\bootstrap-colorpicker.js" />
+    <Content Include="wwwroot\lib\bootstrap-colorpicker-plus\dist\js\bootstrap-colorpicker.min.js" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.css" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.min.css" />
     <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrap.css" />
@@ -1573,6 +1601,7 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
+    <Content Include="Content\ITJakub.Favorites.less" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
@@ -1601,6 +1630,10 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Content Include="Views\Favorite\_NewFavorite.cshtml" />
+    <Content Include="Views\Shared\Plugins\_Dialog.cshtml" />
+    <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
+    <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1671,10 +1704,19 @@
     <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
     <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteBook.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManagement.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManager.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteQuery.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteStar.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteDialog.ts" />
+    <TypeScriptCompile Include="Scripts\itjakub.dataContracts.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.tools.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
     <TypeScriptCompile Include="Scripts\Text\itjakub.text.editor.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\bootstrap.colorpicker.plus_.d.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde-tests_.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
     <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />

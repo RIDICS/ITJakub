@@ -58,7 +58,7 @@ namespace ITJakub.ITJakubService.Core
             var type = Mapper.Map<BookTypeEnum>(bookType);
             var books = m_bookRepository.FindBookVersionsByTypeWithCategories(type);
             m_authorizationManager.FilterBookVersionsByCurrentUser(ref books);
-            var categories = m_categoryRepository.FindCategoriesByBookType(type).OrderBy(x => x.Description);
+            var categories = m_categoryRepository.FindCategoriesByBookType(type);
 
             return new BookTypeSearchResultContract
             {

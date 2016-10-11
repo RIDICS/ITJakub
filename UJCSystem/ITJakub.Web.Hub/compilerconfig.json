@@ -148,5 +148,10 @@
     "outputFile": "Content/ITJakub.TextEditor.css",
     "inputFile": "Content/ITJakub.TextEditor.less",
     "sourceMap": false
+  },
+  {
+    "outputFile": "Content/ITJakub.Favorites.css",
+    "inputFile": "Content/ITJakub.Favorites.less",
+    "sourceMap": false
   }
 ]

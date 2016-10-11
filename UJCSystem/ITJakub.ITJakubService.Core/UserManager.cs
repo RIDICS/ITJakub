@@ -13,7 +13,11 @@ namespace ITJakub.ITJakubService.Core
 {
     public class UserManager
     {
+        private const string DefaultFavoriteLabelName = "Výchozí";
+        private const string DefaultFavoriteLabelColor = "#EEB711";
+
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        
         private readonly CommunicationTokenGenerator m_communicationTokenGenerator;
         private readonly AuthenticationManager m_authenticationManager;
         private readonly DefaultUserProvider m_defaultMembershipProvider;
@@ -31,6 +35,13 @@ namespace ITJakub.ITJakubService.Core
         public PrivateUserContract CreateLocalUser(PrivateUserContract user)
         {
             var now = DateTime.UtcNow;
+            var defaultFavoriteLabel = new FavoriteLabel
+            {
+                Name = DefaultFavoriteLabelName,
+                Color = DefaultFavoriteLabelColor,
+                IsDefault = true,
+                LastUseTime = now
+            };
             var dbUser = new User
             {
                 UserName = user.UserName,
@@ -42,8 +53,11 @@ namespace ITJakub.ITJakubService.Core
                 AuthenticationProvider = AuthenticationProvider.ItJakub,
                 CommunicationToken = m_communicationTokenGenerator.GetNewCommunicationToken(),
                 CommunicationTokenCreateTime = now,
-                Groups = new List<Group> {m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup()}
+                Groups = new List<Group> {m_defaultMembershipProvider.GetDefaultRegisteredUserGroup(), m_defaultMembershipProvider.GetDefaultUnRegisteredUserGroup()},
+                FavoriteLabels = new List<FavoriteLabel> {defaultFavoriteLabel}
             };
+            defaultFavoriteLabel.User = dbUser;
+
             var userId = m_userRepository.Create(dbUser);
             return GetPrivateUserDetail(userId);
         }

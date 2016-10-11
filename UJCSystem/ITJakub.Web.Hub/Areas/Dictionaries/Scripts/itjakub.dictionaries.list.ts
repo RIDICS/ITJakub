@@ -15,6 +15,10 @@
                     advanced: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryAdvancedSearchPaged",
                     text: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryBasicSearchPaged",
                     textCount: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryBasicSearchResultsCount"
+                },
+                favoriteQueries: {
+                    bookType: BookTypeEnum.Dictionary,
+                    queryType: QueryTypeEnum.List
                 }
             },
             searchBox: {

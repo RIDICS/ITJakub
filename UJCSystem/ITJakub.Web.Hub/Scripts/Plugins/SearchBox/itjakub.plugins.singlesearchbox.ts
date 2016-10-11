@@ -132,6 +132,6 @@
     }
 
     public static getDefaultSuggestionTemplate(name: string, description: string) {
-        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + name + "</div><div class=\"description\">" + description + "</div></div>";
+        return "<div><div class=\"suggestion\" style='font-weight: bold'>" + escapeHtmlChars(name) + "</div><div class=\"description\">" + escapeHtmlChars(description) + "</div></div>";
     }
 }

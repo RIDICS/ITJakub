@@ -28,7 +28,18 @@ function replaceSpecialChars(text : string): string {
     decoded = decoded.replace(/&quot;/g, '"');
     decoded = decoded.replace(/&#39;/g, "'");
     return decoded;
-} 
+}
+
+function escapeHtmlChars(text: string): string {
+    var map = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    };
+    return text.replace(/[&<>"']/g, char => map[char]);
+}
 
 function updateQueryStringParameter(key, value) {
     var uri = window.location.href;
@@ -80,3 +91,14 @@ function onClickHref(event:JQueryEventObject, targetUrl) {
 // jQuery case-insensitive contains
 jQuery.expr[':'].containsCI = (a, i, m) => (jQuery(a).text().toLowerCase()
     .indexOf(m[3].toLowerCase()) >= 0);
+
+// Automatic popover close, fix 2 clicks for reopening problem
+$(document).on('click', (e) => {
+    $('[data-toggle="popover"],[data-original-title]').each(function () {
+        //the 'is' for buttons that trigger popups
+        //the 'has' for icons within a button that triggers a popup
+        if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+            (($(this).popover('hide').data('bs.popover') || {}).inState || {}).click = false; // fix for BS 3.3.6
+        }
+    });
+});

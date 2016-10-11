@@ -1,0 +1,189 @@
+﻿@model ITJakub.Web.Hub.Models.Favorite.FavoriteManagementViewModel
+@{
+    ViewBag.Title = "Administrace - Správa oblíbených položek";
+}
+@section scripts{
+    @Scripts.Render("~/itjakub/favorite/management/javascript")
+}
+
+<div class="content-container favorite-management">
+    <h2>Správa oblíbených položek</h2>
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-6">
+                    <span class="favorite-management-heading">Štítky</span>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-default btn-block btn-sm" id="add-new-label" style="margin-top: 20px;">
+                        Vytvořit nový
+                    </button>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row favorite-management-subheading">
+                <div class="col-md-5">
+                    <a href="#" id="show-all-link">Zobrazit vše</a>
+                </div>
+                <div class="col-md-7">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="label-name-filter" placeholder="Filtrovat" title="Filtrovat štítky podle názvu" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default disabled" id="label-name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="favorite-labels">
+                <div id="no-label" class="text-center" style="display: none;">Žádný štítek neodpovídá zadanému filtru</div>
+
+                @foreach (var favoriteLabel in Model.FavoriteLabels)
+                {
+                    @Html.Partial("_FavoriteLabelManagement", favoriteLabel)
+                }
+
+            </div>
+
+            <hr/>
+        </div>
+        
+
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-5">
+                    <span class="favorite-management-heading">Oblíbené položky</span>
+                </div>
+                <div class="col-md-2">
+                    <label for="sort-select">Řadit podle:</label>
+                    <select class="form-control input-sm" id="sort-select" title="Seřadit oblíbené položky">
+                        @foreach (var sort in Model.SortList)
+                        {
+                            <option value="@((short) sort.SortType)">@sort.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label for="type-filter-select">Filtrovat podle:</label>
+                    <select class="form-control input-sm" id="type-filter-select" title="Filtrovat oblíbené položky podle typu">
+                        @foreach (var filter in Model.FilterList)
+                        {
+                            <option value="@((short) filter.FavoriteType)">@filter.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="name-filter">Filtrovat podle názvu:</label>
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" id="name-filter" placeholder="Názvu" title="Filtrovat oblíbené položky podle názvu"/>
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            
+            <div id="no-results" class="text-center hidden">Žádné výsledky k zobrazení</div>
+            <div id="no-selected-label" class="hidden" style="margin-left: 20px; margin-top: 20px;">Pro zobrazení oblíbených položek vyberte štítek ze seznamu</div>
+            <div id="favorite-item-container"></div>
+            
+            <div id="pagination" class="bottom-pagination"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="new-favorite-label-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Vytvořit nový štítek</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="favorite-label-name" class="col-md-3 control-label">Název štítku</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="favorite-label-name" type="text" maxlength="50">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="favorite-label-color" class="col-md-3 control-label">Barva</label>
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" id="favorite-label-color-button"><span class="glyphicon glyphicon-tint"></span></button>
+                                </span>
+                                <input class="form-control" id="favorite-label-color" type="text">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="favorite-label-name" class="col-md-3 control-label">Náhled štítku</label>
+                        <div class="col-md-8">
+                            <div class="favorite-selected-label-info-2">
+                                <span class="label label-default" id="label-preview"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při ukládání štítku</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="remove-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Smazat</h4>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat vybranou položku?
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při mazání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default remove-button"><span class="saving-icon loading-small-inline"></span>Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="edit-favorite-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upravit oblíbenou položku</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="favorite-item-name" class="col-md-3 control-label">Název oblíbené položky</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="favorite-item-name" type="text" maxlength="250">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při ukládání oblíbené položky</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>

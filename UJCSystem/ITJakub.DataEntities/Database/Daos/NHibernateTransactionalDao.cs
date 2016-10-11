@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 using System.Transactions;
@@ -118,6 +119,27 @@ namespace ITJakub.DataEntities.Database.Daos
             }
         }
 
+        public virtual IList<object> CreateAll(IEnumerable data)
+        {
+            var result = new List<object>();
+            using (ISession session = GetSession())
+            {
+                foreach (var instance in data)
+                {
+                    try
+                    {
+                        var id = session.Save(instance);
+                        result.Add(id);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new DataException(string.Format("Create operation failed for type:{0}", instance.GetType().Name), ex);
+                    }
+                }
+            }
+            return result;
+        }
+
         public virtual void Delete(object instance)
         {
             using (ISession session = GetSession())
@@ -224,6 +246,12 @@ namespace ITJakub.DataEntities.Database.Daos
         public override void Save(object instance)
         {
             base.Save(instance);
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public override IList<object> CreateAll(IEnumerable data)
+        {
+            return base.CreateAll(data);
         }
 
         [Transaction(TransactionScopeOption.Required)]

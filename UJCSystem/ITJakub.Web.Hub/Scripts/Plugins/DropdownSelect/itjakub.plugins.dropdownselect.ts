@@ -86,12 +86,16 @@ class DropDownSelect {
     protected dropDownSelectContainer: string;
     protected dataUrl: string;
     protected showStar: boolean;
+    protected favoriteCategoryUrl: string;
+    protected favoriteLeafUrl: string;
     private type: string;
     private selectedItems: Array<Item>;
     private selectedCategories: Array<Category>;
     protected callbackDelegate: DropDownSelectCallbackDelegate;
     private moreSpan: HTMLSpanElement;
-    private dropDownBodyDiv: HTMLDivElement;
+    protected dropDownBodyDiv: HTMLDivElement;
+    protected favoriteManager: FavoriteManager;
+    protected favoriteDialog: NewFavoriteDialog;
 
     constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         this.dropDownSelectContainer = dropDownSelectContainer;
@@ -100,6 +104,8 @@ class DropDownSelect {
         this.callbackDelegate = callbackDelegate;
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
+        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
     private getType(response): string {
@@ -142,7 +148,14 @@ class DropDownSelect {
         return this.callbackDelegate.getChildLeafItemsCallback(leafItems, currentCategory);
     }
 
+    public setFavoritesFetchUrl(categoryUrl: string, leafUrl: string) {
+        this.favoriteCategoryUrl = categoryUrl;
+        this.favoriteLeafUrl = leafUrl;
+    }
+
     makeDropdown() {
+        this.favoriteDialog.make();
+
         var dropDownDiv = document.createElement("div");
         $(dropDownDiv).addClass("dropdown-select");
 
@@ -151,7 +164,8 @@ class DropDownSelect {
 
         $(document).unbind("click.dropdown");
         $(document).bind("click.dropdown", (event) => {
-            if (!$(event.target).parents().is(dropDownDiv)) {
+            var parents = $(event.target).parents();
+            if (!parents.is(dropDownDiv) && !parents.is(".popover")) {
                 this.hideBody();
             }
         });
@@ -209,7 +223,7 @@ class DropDownSelect {
         dropDownDiv.appendChild(dropDownHeadDiv);
     }
 
-    private showBody() {
+    showBody() {
         $(this.moreSpan).children().removeClass("glyphicon-chevron-down");
         $(this.moreSpan).children().addClass("glyphicon-chevron-up");
         $(this.dropDownBodyDiv).slideDown("fast");
@@ -290,10 +304,59 @@ class DropDownSelect {
                 var rootCategory = this.getRootCategory(categories);
                 var rootCategoryId = this.getCategoryId(rootCategory);
                 this.dataLoaded(rootCategoryId);
+
+                this.downloadFavoriteData(dropDownItemsDiv);
             }
         });
     }
 
+    protected downloadFavoriteData(dropDownItemsDiv: HTMLDivElement) {
+        throw new Error("Not implemented");
+    }
+
+    protected updateFavoriteIcons(categoryItems: Array<IDropdownFavoriteItem>, leafItems: Array<IDropdownFavoriteItem>, favoriteLabels: Array<IFavoriteLabel>, dropdownItemsDiv: HTMLDivElement) {
+        var categoriesDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
+        var leafsDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
+        
+        for (var i = 0; i < categoryItems.length; i++) {
+            categoriesDictionary.add(categoryItems[i].Id, categoryItems[i]);
+        }
+        for (var j = 0; j < leafItems.length; j++) {
+            leafsDictionary.add(leafItems[j].Id, leafItems[j]);
+        }
+
+        $(".concrete-item", dropdownItemsDiv).each((index, element) => {
+            var id = $(element).data("id");
+            var type = $(element).data("type");
+            var itemName = $(element).data("name");
+
+            var favoriteItem: IDropdownFavoriteItem = null;
+            var favoriteType: FavoriteType = FavoriteType.Unknown;
+
+            if (type === "category") {
+                favoriteItem = categoriesDictionary.get(id);
+                favoriteType = FavoriteType.Category;
+            } else if (type === "item") {
+                favoriteItem = leafsDictionary.get(id);
+                favoriteType = FavoriteType.Book;
+            }
+
+            var favoriteStarContainer = $(element).children(".save-item");
+            var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager, () => this.onFavoritesChanged(favoriteType, id));
+
+            if (favoriteItem != null) {
+                favoriteStar.addFavoriteItems(favoriteItem.FavoriteInfo);
+            }
+
+            favoriteStar.addFavoriteLabels(favoriteLabels);
+            favoriteStar.make(true);
+        });
+    }
+
+    protected onFavoritesChanged(favoriteType: FavoriteType, id: number) {
+        
+    }
+    
     protected makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {
         var rootCategory = this.getRootCategory(categories);
 
@@ -504,33 +567,10 @@ class DropDownSelect {
 
         if (this.showStar) {
 
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
-
-            $(saveStarSpan).click(function() {
-                $(this).siblings(".delete-item").show();
-                $(this).hide();
-                //TODO populate request on save to favorites
-                if (self.callbackDelegate.starSaveCategoryCallback) {
-                    self.callbackDelegate.starSaveCategoryCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(saveStarSpan);
-
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            $(deleteStarSpan).click(function() {
-                $(this).siblings(".save-item").show();
-                $(this).hide();
-                //TODO populate request on delete from favorites
-                if (self.callbackDelegate.starDeleteCategoryCallback) {
-                    self.callbackDelegate.starDeleteCategoryCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(deleteStarSpan);
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
+            
+            itemDiv.appendChild(favoriteStarContainer);
         }
 
         var nameSpan = document.createElement("span");
@@ -595,33 +635,10 @@ class DropDownSelect {
 
         if (this.showStar) {
 
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
-
-            $(saveStarSpan).click(function() {
-                $(this).siblings(".delete-item").show();
-                $(this).hide();
-                //TODO populate request on save to favorites
-                if (self.callbackDelegate.starSaveItemCallback) {
-                    self.callbackDelegate.starSaveItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(saveStarSpan);
-
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            $(deleteStarSpan).click(function() {
-                $(this).siblings(".save-item").show();
-                $(this).hide();
-                //TODO populate request on delete from favorites
-                if (self.callbackDelegate.starDeleteItemCallback) {
-                    self.callbackDelegate.starDeleteItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(deleteStarSpan);
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
+            
+            itemDiv.appendChild(favoriteStarContainer);
         }
 
         var nameSpan = document.createElement("span");
@@ -730,4 +747,9 @@ class Category {
         this.Id = id;
         this.Name = name;
     }
+}
+
+interface IDropdownFavoriteItem {
+    Id: number;
+    FavoriteInfo: Array<IFavoriteBaseInfo>;
 }

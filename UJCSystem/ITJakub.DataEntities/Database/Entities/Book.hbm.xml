@@ -21,6 +21,10 @@
       <key column="Book" />
       <one-to-many class="Permission" />
     </bag>
-    
+
+    <bag name="FavoriteItems" cascade="all-delete-orphan" inverse="true">
+      <key column="BookmarkBook" />
+      <one-to-many class="FavoriteBook" />
+    </bag>
   </class>
 </hibernate-mapping>

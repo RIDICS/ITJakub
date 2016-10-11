@@ -30,6 +30,8 @@ namespace ITJakub.DataEntities.Database.Entities
 
         public virtual IList<FavoriteBase> FavoriteItems { get; set; }
 
+        public virtual IList<FavoriteLabel> FavoriteLabels { get; set; }
+
         public virtual IList<Group> Groups { get; set; }
         
 

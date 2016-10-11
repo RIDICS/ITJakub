@@ -146,8 +146,11 @@
     }
 
 
-
-    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
+    var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+        bookType: BookTypeEnum.Edition,
+        queryType: QueryTypeEnum.Reader
+    };
+    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch, favoriteQueriesConfig);
     var enabledOptions = new Array<SearchTypeEnum>();
     enabledOptions.push(SearchTypeEnum.Fulltext);
     enabledOptions.push(SearchTypeEnum.TokenDistance);

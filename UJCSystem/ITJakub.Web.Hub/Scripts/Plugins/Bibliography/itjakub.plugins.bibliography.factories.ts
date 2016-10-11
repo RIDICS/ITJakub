@@ -111,6 +111,30 @@ class BibliographyFactory {
             rightPanel.appendChild(infoButton);
         }
 
+        if (config.containsFavoriteButton()) {
+            var favoriteButton = document.createElement("a");
+            var $favoriteButton = $(favoriteButton);
+            $favoriteButton.addClass("btn btn-sm favorite-button button");
+            var spanFavorite = document.createElement("span");
+            $(spanFavorite).addClass("glyphicon glyphicon-star");
+            $favoriteButton.append(spanFavorite);
+            $favoriteButton.attr("href", "#");
+            $favoriteButton.click((event: JQueryEventObject) => {
+                var buttonScript = config.getFavoriteButtonOnClick(bookInfo);
+                var buttonScriptCallable = config.getFavoriteButtonOnClickCallable(bookInfo);
+                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
+                    eval(buttonScript);
+                }
+                else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
+                    this.runEvalResponse(event, eval(buttonScriptCallable));
+                }
+                else {
+                    onClickHref(event, config.getReadButtonUrl(bookInfo));
+                }
+            });
+            rightPanel.appendChild(favoriteButton);
+        }
+
         if (this.configuration.containsBottomPanel()) {
             var contentButton: HTMLButtonElement = document.createElement('button');
             contentButton.type = 'button';
@@ -135,13 +159,19 @@ class BibliographyFactory {
         var middlePanel: HTMLDivElement = document.createElement('div');
         $(middlePanel).addClass('middle-panel');
 
+        if (config.containsFavorites()) {
+            var middlePanelFavorites: HTMLDivElement = document.createElement('div');
+            $(middlePanelFavorites).addClass('favorites');
+            middlePanel.appendChild(middlePanelFavorites);
+        }
+
         if (config.containsShortInfo()) {
             var middlePanelShortInfo: HTMLDivElement = document.createElement('div');
             $(middlePanelShortInfo).addClass('short-info');
             middlePanelShortInfo.innerHTML = config.getShortInfo(bookInfo);
             middlePanel.appendChild(middlePanelShortInfo);
         }
-
+        
         if (config.containsTitle()) {
             var middlePanelHeading: HTMLDivElement = document.createElement('div');
             $(middlePanelHeading).addClass('heading');
@@ -188,6 +218,65 @@ class BibliographyFactory {
 
         return bottomPanel;
     }
+
+    makeFavoriteBookInfo(bookFavorites: IFavoriteBaseInfo[]): HTMLElement[] {
+        var resultList = new Array<HTMLElement>();
+        var config = this.configuration.getMidllePanelConfig();
+        var maxFavLabels = bookFavorites.length;
+        if (config.containsFavorites() && config.containsFavoritesMaxCount()) {
+            maxFavLabels = config.getFavoritesMaxCount();
+        }
+
+        var max = maxFavLabels < bookFavorites.length ? maxFavLabels : bookFavorites.length;
+        for (var i = 0; i < bookFavorites.length; i++) {
+            var favoriteInfo = bookFavorites[i];
+            var label = BibliographyFactory.makeFavoriteLabel(favoriteInfo.Title, favoriteInfo.FavoriteLabel.Name, favoriteInfo.FavoriteLabel.Color);
+            resultList.push(label);
+
+            if (i >= max) {
+                $(label).hide();
+            }
+        }
+
+        if (bookFavorites.length > maxFavLabels) {
+            var showAllLink = document.createElement("a");
+            var showAllSpan = document.createElement("span");
+            $(showAllLink)
+                .attr("href", "#")
+                .append(showAllSpan)
+                .click(event => {
+                    var $item = $(event.currentTarget);
+                    $item.siblings().show();
+                    $item.hide();
+                });
+            $(showAllSpan)
+                .css("color", "black")
+                .css("font-weight", "bold")
+                .css("margin-left", "3px")
+                .text("...")
+                .attr("title", "Zobrazit všechny přiřazené štítky")
+                .attr("data-toggle", "tooltip")
+                .tooltip();
+            resultList.push(showAllLink);
+        }
+
+        return resultList;
+    }
+
+    static makeFavoriteLabel(favoriteTitle: string, labelName: string, labelColor: string): HTMLSpanElement {
+        var colorData = FavoriteHelper.getDefaultLabelColorData(labelColor);
+        var label = document.createElement("span");
+        $(label)
+            .addClass("label")
+            .css("color", colorData.fontColor)
+            .css("background-color", colorData.backgroundColor)
+            .css("border-color", colorData.borderColor)
+            .text(labelName)
+            .attr("data-toggle", "tooltip")
+            .attr("title", "Uloženo jako: " + favoriteTitle)
+            .tooltip();
+        return label;
+    }
 }
 
 class BasicFactory extends BibliographyFactory {}
@@ -197,35 +286,35 @@ class DictionaryFactory extends BibliographyFactory {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
 
-        var inputCheckbox: HTMLInputElement = document.createElement('input');
-        inputCheckbox.type = "checkbox";
-        $(inputCheckbox).addClass('checkbox');
-        leftPanel.appendChild(inputCheckbox);
+        //var inputCheckbox: HTMLInputElement = document.createElement('input');
+        //inputCheckbox.type = "checkbox";
+        //$(inputCheckbox).addClass('checkbox');
+        //leftPanel.appendChild(inputCheckbox);
 
-        var starEmptyButton: HTMLButtonElement = document.createElement('button');
-        starEmptyButton.type = 'button';
-        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
-        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
-        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
-        starEmptyButton.appendChild(spanEmptyStar);
-        $(starEmptyButton).click(function(event) {
-            $(this).siblings('.star-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starEmptyButton);
+        //var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        //starEmptyButton.type = 'button';
+        //$(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        //var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        //$(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        //starEmptyButton.appendChild(spanEmptyStar);
+        //$(starEmptyButton).click(function(event) {
+        //    $(this).siblings('.star-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starEmptyButton);
 
-        var starButton: HTMLButtonElement = document.createElement('button');
-        starButton.type = 'button';
-        $(starButton).addClass('btn btn-xs star-button');
-        $(starButton).css('display', 'none');
-        var spanStar: HTMLSpanElement = document.createElement('span');
-        $(spanStar).addClass('glyphicon glyphicon-star');
-        starButton.appendChild(spanStar);
-        $(starButton).click(function(event) {
-            $(this).siblings('.star-empty-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starButton);
+        //var starButton: HTMLButtonElement = document.createElement('button');
+        //starButton.type = 'button';
+        //$(starButton).addClass('btn btn-xs star-button');
+        //$(starButton).css('display', 'none');
+        //var spanStar: HTMLSpanElement = document.createElement('span');
+        //$(spanStar).addClass('glyphicon glyphicon-star');
+        //starButton.appendChild(spanStar);
+        //$(starButton).click(function(event) {
+        //    $(this).siblings('.star-empty-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starButton);
 
         return leftPanel;
     }
@@ -236,35 +325,35 @@ class CardFileFactory extends BibliographyFactory {
         var leftPanel: HTMLDivElement = document.createElement('div');
         $(leftPanel).addClass('left-panel');
 
-        var inputCheckbox: HTMLInputElement = document.createElement('input');
-        inputCheckbox.type = "checkbox";
-        $(inputCheckbox).addClass('checkbox');
-        leftPanel.appendChild(inputCheckbox);
+        //var inputCheckbox: HTMLInputElement = document.createElement('input');
+        //inputCheckbox.type = "checkbox";
+        //$(inputCheckbox).addClass('checkbox');
+        //leftPanel.appendChild(inputCheckbox);
 
-        var starEmptyButton: HTMLButtonElement = document.createElement('button');
-        starEmptyButton.type = 'button';
-        $(starEmptyButton).addClass('btn btn-xs star-empty-button');
-        var spanEmptyStar: HTMLSpanElement = document.createElement('span');
-        $(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
-        starEmptyButton.appendChild(spanEmptyStar);
-        $(starEmptyButton).click(function(event) {
-            $(this).siblings('.star-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starEmptyButton);
+        //var starEmptyButton: HTMLButtonElement = document.createElement('button');
+        //starEmptyButton.type = 'button';
+        //$(starEmptyButton).addClass('btn btn-xs star-empty-button');
+        //var spanEmptyStar: HTMLSpanElement = document.createElement('span');
+        //$(spanEmptyStar).addClass('glyphicon glyphicon-star-empty');
+        //starEmptyButton.appendChild(spanEmptyStar);
+        //$(starEmptyButton).click(function(event) {
+        //    $(this).siblings('.star-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starEmptyButton);
 
-        var starButton: HTMLButtonElement = document.createElement('button');
-        starButton.type = 'button';
-        $(starButton).addClass('btn btn-xs star-button');
-        $(starButton).css('display', 'none');
-        var spanStar: HTMLSpanElement = document.createElement('span');
-        $(spanStar).addClass('glyphicon glyphicon-star');
-        starButton.appendChild(spanStar);
-        $(starButton).click(function(event) {
-            $(this).siblings('.star-empty-button').show();
-            $(this).hide();
-        }); //TODO fill click action
-        leftPanel.appendChild(starButton);
+        //var starButton: HTMLButtonElement = document.createElement('button');
+        //starButton.type = 'button';
+        //$(starButton).addClass('btn btn-xs star-button');
+        //$(starButton).css('display', 'none');
+        //var spanStar: HTMLSpanElement = document.createElement('span');
+        //$(spanStar).addClass('glyphicon glyphicon-star');
+        //starButton.appendChild(spanStar);
+        //$(starButton).click(function(event) {
+        //    $(this).siblings('.star-empty-button').show();
+        //    $(this).hide();
+        //}); //TODO fill click action
+        //leftPanel.appendChild(starButton);
 
         return leftPanel;
     }

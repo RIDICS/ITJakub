@@ -58,8 +58,13 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/bundles/simplemde").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/colorpicker").Include(
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js",
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"));
+
             bundles.Add(new ScriptBundle("~/itjakub/javascript").Include(
                 "~/Scripts/itjakub.js",
+                "~/Scripts/itjakub.datacontracts.js",
                 "~/Scripts/Plugins/Progress/itjakub.plugins.progress.js",
                 "~/Scripts/Plugins/itjakub.modul.inicializator.js",
                 "~/Scripts/Plugins/itjakub.list.modul.inicializator.js",
@@ -75,6 +80,7 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
                 "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
                 "~/Scripts/Plugins/itjakub.plugins.pagination.js",
+                "~/Scripts/Plugins/itjakub.tools.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
 
             bundles.Add(new ScriptBundle("~/itjakub/home/javascript").Include(
@@ -94,6 +100,16 @@ namespace ITJakub.Web.Hub
             bundles.Add(new ScriptBundle("~/itjakub/text/javascript").Include(
                 "~/Scripts/Text/itjakub.text.editor.js"));
 
+            bundles.Add(new ScriptBundle("~/itjakub/favorite/javascript").Include(
+                "~/Scripts/Favorite/itjakub.favoriteManager.js",
+                "~/Scripts/Favorite/itjakub.favoriteStar.js",
+                "~/Scripts/Favorite/itjakub.favoriteQuery.js",
+                "~/Scripts/Favorite/itjakub.favoriteBook.js",
+                "~/Scripts/Favorite/itjakub.newFavoriteDialog.js"));
+
+            bundles.Add(new ScriptBundle("~/itjakub/favorite/management/javascript").Include(
+                "~/Scripts/Favorite/itjakub.favoriteManagement.js"));
+
 
             // ----- Styles ------
 
@@ -109,7 +125,8 @@ namespace ITJakub.Web.Hub
                 "~/Content/ITJakub.EuCookiePopup.css"));
 
             bundles.Add(new StyleBundle("~/Content/itjakub").Include(
-                "~/Content/ITJakub.css"));
+                "~/Content/ITJakub.css",
+                "~/Content/ITJakub.Favorites.css"));
 
             bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
                 "~/wwwroot/lib/dropzone/downloads/css/basic.css",
@@ -121,6 +138,10 @@ namespace ITJakub.Web.Hub
             bundles.Add(new StyleBundle("~/Content/simplemdecss").Include(
                 "~/wwwroot/lib/simplemde/dist/simplemde.min.css",
                 "~/Content/ITJakub.TextEditor.css"));
+
+            bundles.Add(new StyleBundle("~/Content/colorpicker").Include(
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css",
+                "~/wwwroot/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css"));
 
             // Set EnableOptimizations to false for debugging. For more information,
             // visit http://go.microsoft.com/fwlink/?LinkId=301862
