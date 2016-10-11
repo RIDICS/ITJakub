@@ -90,7 +90,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                return View(new HeadwordFeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                });
             }
 
             using (var client = GetEncryptedClient())

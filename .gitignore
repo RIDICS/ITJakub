@@ -87,4 +87,7 @@ packages/
 *.csdat
 
 #Bower libraries
-*/*/wwwroot/lib/
+**/wwwroot/lib/
+
+#NPM modules
+node_modules/

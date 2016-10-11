@@ -26,6 +26,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsInfo);
             return View(pageStaticText);
         }
+
         public ActionResult Feedback()
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
@@ -33,20 +34,23 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                return View(new FeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                });
             }
             using (var client = GetEncryptedClient())
             {
                 var user = client.FindUserByUserName(username);
-            var viewModel = new FeedbackViewModel
-            {
-                Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                Email = user.Email,
-                PageStaticText = pageStaticText
-            };
+                var viewModel = new FeedbackViewModel
+                {
+                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+                    Email = user.Email,
+                    PageStaticText = pageStaticText
+                };
 
-            return View(viewModel);
-        }
+                return View(viewModel);
+            }
         }
 
         [HttpPost]
