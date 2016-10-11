@@ -132,6 +132,10 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
         {
+            if (bookIds == null)
+            {
+                bookIds = new List<long>();
+            }
             var user = TryGetUser(userName);
             var dbResult = m_favoritesRepository.GetFavoriteLabeledBooks(bookIds, user.Id);
 
@@ -150,6 +154,10 @@ namespace ITJakub.ITJakubService.Core
 
         public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
         {
+            if (categoryIds == null)
+            {
+                categoryIds = new List<int>();
+            }
             var user = TryGetUser(userName);
             var dbResult = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
 
