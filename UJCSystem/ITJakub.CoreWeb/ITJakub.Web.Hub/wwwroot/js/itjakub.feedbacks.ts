@@ -96,7 +96,7 @@ $(document).ready(() => {
                     var email = "";
                     var signed = "";
                     var category = actualFeedback.category;
-                    var date = convertDate(actualFeedback.createDate);
+                    var date = new Date(actualFeedback.createDate);
 
                     var user = actualFeedback.user;
                     if (typeof user !== "undefined" && user !== null) {

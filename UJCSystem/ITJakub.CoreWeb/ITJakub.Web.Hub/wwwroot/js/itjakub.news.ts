@@ -59,7 +59,7 @@ function showNews(items: Array<INewsSyndicationItemContract>) {
         var itemDiv = document.createElement("div");
         $(itemDiv).addClass("message");
 
-        var date = convertDate(item.createDate);
+        var date = new Date(item.createDate);
         var titleHeader = document.createElement("h2");
         titleHeader.innerHTML = item.title;
 
