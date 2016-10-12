@@ -495,13 +495,9 @@
           "pattern": "{$printLength}"
         },
         "$printLength": {
-          "type": "basic",
-          "scope": "Length",
-          "pattern": "{Minutes}:{$printSeconds}"
-        },
-        "$printSeconds": {
           "type": "script",
-          "pattern": "fillLeadingZero({Seconds})"
+          "scope": "Length",
+          "pattern": "getAudioLengthString(\"{$this}\")"
         },
         "$trackRecordings": {
           "type": "array",

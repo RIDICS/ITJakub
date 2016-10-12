@@ -92,7 +92,6 @@ gulp.task("bundle:itjakub", function () {
 
 gulp.task("bundle:itjakub_plugins", function () {
     return gulp.src([
-            paths.webroot + "js/itjakub.js",
             paths.webroot + "js/Plugins/Progress/itjakub.plugins.progress.js",
             paths.webroot + "js/Plugins/itjakub.modul.inicializator.js",
             paths.webroot + "js/Plugins/itjakub.list.modul.inicializator.js",
