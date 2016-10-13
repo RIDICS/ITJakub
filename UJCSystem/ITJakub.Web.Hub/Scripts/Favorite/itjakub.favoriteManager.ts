@@ -211,12 +211,12 @@
         }
 
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteLabeledBooks",
-            data: {
+            data: JSON.stringify({
                 bookIds: bookIds
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (bookList: Array<IFavoriteLabeledBook>) => {
@@ -244,12 +244,12 @@
         }
 
         $.ajax({
-            type: "GET",
+            type: "POST",
             traditional: true,
             url: getBaseUrl() + "Favorite/GetFavoriteLabeledCategories",
-            data: {
+            data: JSON.stringify({
                 categoryIds: categoryIds
-            },
+            }),
             dataType: "json",
             contentType: "application/json",
             success: (bookList: Array<IFavoriteLabeledCategory>) => {

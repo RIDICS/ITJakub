@@ -158,6 +158,7 @@ namespace ITJakub.Web.Hub.Controllers
             return RedirectToAction(action, area, new {area = area, search = query});
         }
         
+        [HttpPost]
         public ActionResult GetFavoriteLabeledBooks(IList<long> bookIds)
         {
             using (var client = GetMainServiceClient())
@@ -167,6 +168,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
+        [HttpPost]
         public ActionResult GetFavoriteLabeledCategories(IList<int> categoryIds)
         {
             using (var client = GetMainServiceClient())
