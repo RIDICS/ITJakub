@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 
         public ActionResult Index()
         {
-            return View("List");
+            return List();
         }
 
         public ActionResult Information()
@@ -77,7 +77,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
         public ActionResult List()
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsList);
-            return View(pageStaticText);
+            return View("List", pageStaticText);
         }
 
     }
