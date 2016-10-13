@@ -18,6 +18,9 @@
     searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
     searchBox.create();
 
+    var keyboardComponent = KeyboardManager.getKeyboard("0");
+    keyboardComponent.registerInput($("#searchbox")[0]);
+
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         searchBox.clearAndDestroy();
