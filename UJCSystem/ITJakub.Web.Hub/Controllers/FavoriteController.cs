@@ -82,12 +82,82 @@ namespace ITJakub.Web.Hub.Controllers
                 return PartialView("_NewFavorite", viewModel);
             }
         }
+
+        public ActionResult Favorite(long id)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var favoriteItem = client.GetFavoriteItem(id, CurrentUserName);
+
+                switch (favoriteItem.FavoriteType)
+                {
+                    case FavoriteTypeContract.Book:
+                        return RedirectToAction("Listing", "Editions", new {area = "Editions", bookId = favoriteItem.Book.Guid});
+                    case FavoriteTypeContract.Category:
+                        return View("AmbiguousFavoriteRedirect");
+                    case FavoriteTypeContract.PageBookmark:
+                        return RedirectToAction("Listing", "Editions", new { area = "Editions", bookId = favoriteItem.Book.Guid, page = favoriteItem.PageXmlId });
+                    case FavoriteTypeContract.Query:
+                        return RedirectToFavoriteQuery(favoriteItem.BookType, favoriteItem.QueryType, favoriteItem.Query);
+                    default:
+                        return RedirectToAction("Management");
+                }
+            }
+        }
         
         public ActionResult Dialog()
         {
             return PartialView("Plugins/_Dialog");
         }
 
+        private ActionResult RedirectToFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query)
+        {
+            string area = null;
+            string action = null;
+
+            switch (bookType)
+            {
+                case BookTypeEnumContract.AudioBook:
+                    area = "AudioBooks";
+                    break;
+                case BookTypeEnumContract.BibliographicalItem:
+                    area = "Bibliographies";
+                    break;
+                case BookTypeEnumContract.CardFile:
+                    area = "CardFiles";
+                    break;
+                case BookTypeEnumContract.Dictionary:
+                    area = "Dictionaries";
+                    break;
+                case BookTypeEnumContract.Edition:
+                    area = "Editions";
+                    break;
+                case BookTypeEnumContract.Grammar:
+                    area = "OldGrammar";
+                    break;
+                case BookTypeEnumContract.ProfessionalLiterature:
+                    area = "ProfessionalLiterature";
+                    break;
+                case BookTypeEnumContract.TextBank:
+                    area = "BohemianTextBank";
+                    break;
+            }
+
+            switch (queryType)
+            {
+                case QueryTypeEnumContract.Search:
+                    action = "Search";
+                    break;
+                case QueryTypeEnumContract.List:
+                    action = "List";
+                    break;
+                case QueryTypeEnumContract.Reader:
+                    return View("AmbiguousFavoriteRedirect");
+            }
+
+            return RedirectToAction(action, area, new {area = area, search = query});
+        }
+        
         public ActionResult GetFavoriteLabeledBooks(IList<long> bookIds)
         {
             using (var client = GetMainServiceClient())

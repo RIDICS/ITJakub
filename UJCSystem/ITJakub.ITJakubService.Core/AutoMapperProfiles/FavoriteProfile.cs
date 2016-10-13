@@ -20,6 +20,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
             CreateMap<FavoriteBase, FavoriteBaseDetailContract>()
                 .ForMember(dest => dest.FavoriteLabel, opts => opts.MapFrom(src => src.FavoriteLabel));
 
+            CreateMap<FavoriteBase, FavoriteFullInfoContract>();
+
             CreateMap<FavoriteQuery, FavoriteQueryContract>()
                 .ForMember(dest => dest.Id, opts => opts.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))

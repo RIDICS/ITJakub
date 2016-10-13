@@ -289,6 +289,9 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
 
         [OperationContract]
+        FavoriteFullInfoContract GetFavoriteItem(long id, string userName);
+
+        [OperationContract]
         void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
 
         [OperationContract]

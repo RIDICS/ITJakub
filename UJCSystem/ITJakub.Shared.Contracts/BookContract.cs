@@ -18,7 +18,6 @@ namespace ITJakub.Shared.Contracts
 
         [DataMember]
         public string SubTitle { get; set; }
-
     }
 
     [DataContract]
@@ -26,6 +25,15 @@ namespace ITJakub.Shared.Contracts
     {
         [DataMember]
         public IList<int> CategoryIds { get; set; }
+    }
 
+    [DataContract]
+    public class BookIdContract
+    {
+        [DataMember]
+        public long Id { get; set; }
+
+        [DataMember]
+        public string Guid { get; set; }
     }
 }

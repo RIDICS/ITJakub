@@ -469,5 +469,43 @@ namespace ITJakub.ITJakubService.Core
 
             m_favoritesRepository.Delete(favoriteItem);
         }
+
+        public FavoriteFullInfoContract GetFavoriteItem(long id, string userName)
+        {
+            var user = TryGetUser(userName);
+            var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
+
+            CheckItemOwnership(favoriteItem.User.Id, user);
+
+            var result = Mapper.Map<FavoriteFullInfoContract>(favoriteItem);
+            switch (favoriteItem.FavoriteTypeEnum)
+            {
+                case FavoriteTypeEnum.Book:
+                    var favoriteBook = (FavoriteBook) favoriteItem;
+                    var book = m_favoritesRepository.FindById<Book>(favoriteBook.Book.Id);
+                    result.Book = Mapper.Map<BookIdContract>(book);
+                    break;
+                case FavoriteTypeEnum.Category:
+                    var favoriteCategory = (FavoriteCategory) favoriteItem;
+                    var category = m_favoritesRepository.FindById<Category>(favoriteCategory.Category.Id);
+                    result.Category = Mapper.Map<CategoryContract>(category);
+                    break;
+                case FavoriteTypeEnum.PageBookmark:
+                    var favoritePageBookmark = (PageBookmark) favoriteItem;
+                    var book2 = m_favoritesRepository.FindById<Book>(favoritePageBookmark.Book.Id);
+                    result.Book = Mapper.Map<BookIdContract>(book2);
+                    result.PageXmlId = favoritePageBookmark.PageXmlId;
+                    result.PagePosition = favoritePageBookmark.PagePosition;
+                    break;
+                case FavoriteTypeEnum.Query:
+                    var favoriteQuery = (FavoriteQuery) favoriteItem;
+                    var bookType = m_favoritesRepository.FindById<BookType>(favoriteQuery.BookType.Id);
+                    result.BookType = Mapper.Map<BookTypeEnumContract>(bookType.Type);
+                    result.QueryType = Mapper.Map<QueryTypeEnumContract>(favoriteQuery.QueryType);
+                    result.Query = favoriteQuery.Query;
+                    break;
+            }
+            return result;
+        }
     }
 }

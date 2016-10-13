@@ -459,10 +459,10 @@ class FavoriteManagementItem {
         var nameLink = document.createElement("a");
         var nameDiv = document.createElement("div");
         $(nameDiv)
-            .text(this.name)
+            .text(this.name != null && this.name !== "" ? this.name : "<bez názvu>")
             .addClass("favorite-item-name");
         $(nameLink)
-            .attr("href", "#")
+            .attr("href", getBaseUrl() + "Favorite/Favorite?id=" + this.id)
             .append(nameDiv);
         $(nameColumn)
             .addClass("col-md-10 col-xs-8")
@@ -506,8 +506,7 @@ class FavoriteManagementItem {
         $(editLink)
             .attr("href", "#")
             .attr("title", "Upravit oblíbenou položku")
-            .append(editIconContainer);
-        $([editLink, nameLink])
+            .append(editIconContainer)
             .click(() => {
                 $("#favorite-item-name").val(this.name);
 

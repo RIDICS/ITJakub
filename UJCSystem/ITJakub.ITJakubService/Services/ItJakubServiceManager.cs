@@ -483,6 +483,11 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.GetHeadwordBookmarks(userName);
         }
 
+        public FavoriteFullInfoContract GetFavoriteItem(long id, string userName)
+        {
+            return m_favoriteManager.GetFavoriteItem(id, userName);
+        }
+
         public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
         {
             m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
