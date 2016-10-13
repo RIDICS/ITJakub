@@ -165,6 +165,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             };
         }
 
+        private bool IsNullOrEmpty<T>(IList<T> list)
+        {
+            return list == null || list.Count == 0;
+        }
+
         public ActionResult SearchBasicResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var searchContractBasic = new List<SearchCriteriaContract>();
@@ -173,8 +178,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 searchContractBasic.Add(CreateWordListContract(CriteriaKey.Headword, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 searchContractBasic.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
@@ -194,11 +198,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 searchContractFulltext.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 searchContractFulltext.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
+
             using (var client = GetMainServiceClient())
             {
                 var fulltextCount = client.SearchHeadwordByCriteriaResultsCount(searchContractFulltext, DictionarySearchTarget.Fulltext);
@@ -217,9 +221,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 searchContract.Add(CreateWordListContract(CriteriaKey.Headword, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
+            {
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
@@ -238,9 +244,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 searchContract.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
+            {
                 searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
+            }
+
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
@@ -253,8 +261,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
 
-            if (request.SelectedBookIds != null || request.SelectedCategoryIds != null)
+            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
+            }
             using (var client = GetMainServiceClient())
             {
                 var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
@@ -268,8 +278,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
             listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count));
 
-            if (request.SelectedBookIds != null || request.SelectedCategoryIds != null)
+            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
+            }
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
@@ -446,7 +458,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
@@ -463,7 +475,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
             listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count, sortingEnum, sortAsc));
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
@@ -482,11 +494,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
+
             using (var client = GetMainServiceClient())
             {
                 var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
@@ -506,11 +518,11 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             {
                 listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
             }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
             {
                 listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
             }
+
             using (var client = GetMainServiceClient())
             {
                 var results = client.SearchByCriteria(listSearchCriteriaContracts);
