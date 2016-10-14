@@ -36,3 +36,12 @@
 	 8.3. - Click on each certificate in personal store and select "Manage private keys" and add "Everyone" for full control to all certificates
 	 8.4. - in IIS manager select website and add binding with localhost certificate issued by ITJakubCA
 9. Allow SSL in IIS - Edit bindings for Default Web Site and Add HTTPS with localhost (ITJAKUBCA) certificate. Allow SSL for default Website and select "Accept client certificate" in SSL settings for default WebSite
+10. Add new Application Pool with ".NET CLR version" set to "No Managed Code" in IIS.
+11. Switch Default Web Site to use Application Pool created in previous step (or other with "No Managed Code" option).
+
+
+DEPLOYMENT ON DEVELOPER'S COMPUTER
+ITJakub.Web.Hub project was switched to use ASP.NET Core, so this project is not deployed directly to local IIS, but use Kestrel server now.
+If ASP.NET 4 version of ITJakub.Web.Hub was deployed to local IIS, IIS's Default Web Site path has to be reconfigured from project folder to some other folder (C:\inetpub\wwwroot is default path).
+
+ITJakub.Web.Hub is deployed to IIS Express on debugging start. For deploy to IIS use Publish command directly on project.
