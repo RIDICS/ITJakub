@@ -1,22 +1,18 @@
-﻿@using Microsoft.AspNet.Identity
-@if (Request.IsAuthenticated)
+﻿@if (User.Identity.IsAuthenticated)
 {
-    using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
+    using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, true, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        @Html.AntiForgeryToken()
-
+        
     <ul class="navbar-right navbar-login">
-        <li><a href="#">@Html.Raw(User.Identity.GetUserName())</a></li>
+        <li><a href="#">@Html.Raw(User.Identity.Name)</a></li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
     </ul>
     }
 }
 else
 {
-    if (ViewContext.HttpContext.Request.UrlReferrer != null)
-    {
-        ViewBag.ReturnUrl = ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery;
-    }
+    ViewBag.ReturnUrl = ViewContext.HttpContext.Request.Headers["Referer"];
+
     <ul class="navbar-right navbar-login">
         <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
         <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>

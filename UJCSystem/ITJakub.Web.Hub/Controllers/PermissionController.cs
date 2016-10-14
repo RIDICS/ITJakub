@@ -1,13 +1,18 @@
 ﻿using System.Linq;
-using System.Web.Mvc;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests.Permission;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize(Roles = CustomRole.CanManagePermissions)]
     public class PermissionController : BaseController
     {
+        public PermissionController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
 
         public ActionResult UserPermission()
         {
@@ -24,7 +29,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadUsers(query);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -33,7 +38,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadGroups(query);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -42,7 +47,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetUserDetail(userId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -51,12 +56,12 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetGroupDetail(groupId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
         [HttpPost]
-        public ActionResult AddUserToGroup(AddUserToGroupRequest request)
+        public ActionResult AddUserToGroup([FromBody] AddUserToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -66,7 +71,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGroup(CreateGroupRequest request)
+        public ActionResult CreateGroup([FromBody] CreateGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -76,7 +81,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult CreateGroupWithUser(CreateGroupWithUserRequest request)
+        public ActionResult CreateGroupWithUser([FromBody] CreateGroupWithUserRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -87,7 +92,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveUserFromGroup(RemoveUserFromGroupRequest request)
+        public ActionResult RemoveUserFromGroup([FromBody] RemoveUserFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -101,7 +106,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetGroupsByUser(userId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -110,7 +115,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetRootCategories();
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -119,7 +124,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetCategoryContentForGroup(groupId, categoryId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -128,22 +133,22 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetAllCategoryContent(categoryId);
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
         [HttpPost]
-        public ActionResult DeleteGroup(int groupId)
+        public ActionResult DeleteGroup([FromBody] DeleteGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteGroup(groupId);
+                client.DeleteGroup(request.GroupId);
                 return Json(new {});
             }
         }
 
         [HttpPost]
-        public ActionResult AddBooksAndCategoriesToGroup(AddBooksAndCategoriesToGroupRequest request)
+        public ActionResult AddBooksAndCategoriesToGroup([FromBody] AddBooksAndCategoriesToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -153,7 +158,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveBooksAndCategoriesFromGroup(RemoveBooksAndCategoriesFromGroupRequest request)
+        public ActionResult RemoveBooksAndCategoriesFromGroup([FromBody] RemoveBooksAndCategoriesFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -169,7 +174,7 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var specialPermissions = client.GetSpecialPermissionsForGroup(groupId);
                 var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -179,12 +184,12 @@ namespace ITJakub.Web.Hub.Controllers
             {
                 var specialPermissions = client.GetSpecialPermissions();
                 var result = specialPermissions.GroupBy(x => x.GetType().FullName).ToDictionary(x => x.Key, x => x.ToList());
-                return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
         [HttpPost]
-        public ActionResult AddSpecialPermissionsToGroup(AddSpecialPermissionsToGroupRequest request)
+        public ActionResult AddSpecialPermissionsToGroup([FromBody] AddSpecialPermissionsToGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {
@@ -194,7 +199,7 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [HttpPost]
-        public ActionResult RemoveSpecialPermissionsFromGroup(RemoveSpecialPermissionsFromGroupRequest request)
+        public ActionResult RemoveSpecialPermissionsFromGroup([FromBody] RemoveSpecialPermissionsFromGroupRequest request)
         {
             using (var client = GetMainServiceClient())
             {

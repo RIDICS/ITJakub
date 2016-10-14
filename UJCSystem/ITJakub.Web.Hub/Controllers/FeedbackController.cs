@@ -1,15 +1,21 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Mvc;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize(Roles = CustomRole.CanManageFeedbacks)]
     public class FeedbackController : BaseController
     {
-        
+        public FeedbackController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult Feedback()
         {
             return View();
@@ -25,7 +31,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var count = client.GetFeedbacksCount(feedbackCriteria);
-                return Json(count, JsonRequestBehavior.AllowGet);
+                return Json(count);
             }
         }
 
@@ -45,16 +51,16 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.GetFeedbacks(feedbackCriteria);
-                return Json(results, JsonRequestBehavior.AllowGet);
+                return Json(results);
             }
         }
 
         [HttpPost]
-        public ActionResult DeleteFeedback(long feedbackId)
+        public ActionResult DeleteFeedback([FromBody] DeleteFeedbackRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteFeedback(feedbackId);
+                client.DeleteFeedback(request.FeedbackId);
                 return Json(new {});
             }
         }

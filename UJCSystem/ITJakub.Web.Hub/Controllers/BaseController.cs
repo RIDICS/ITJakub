@@ -1,18 +1,22 @@
 using System;
 using System.Linq;
-using System.Security.Claims;
-using System.Web.Mvc;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public abstract class BaseController : Controller
     {
-        private readonly CommunicationProvider m_communication = new CommunicationProvider();
+        private readonly CommunicationProvider m_communication;
 
+        protected BaseController(CommunicationProvider communicationProvider)
+        {
+            m_communication = communicationProvider;
+        }
 
         public ItJakubServiceEncryptedClient GetEncryptedClient()
         {
@@ -56,7 +60,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         private string GetCommunicationToken()
         {
-            var communicationToken = ClaimsPrincipal.Current.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
+            var communicationToken = User.Claims.FirstOrDefault(x => x.Type == CustomClaimType.CommunicationToken);
             if (communicationToken == null)
                 throw new ArgumentException("Cannot find communicationToken");
 

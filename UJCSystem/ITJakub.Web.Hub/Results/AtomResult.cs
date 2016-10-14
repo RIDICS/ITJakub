@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using System.Web;
-using System.Web.Mvc;
 using System.Xml;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Results
 {
@@ -27,16 +28,16 @@ namespace ITJakub.Web.Hub.Results
         /// </summary>
         /// <param name="title">The title for the feed.</param>
         /// <param name="feedItems">The items of the feed.</param>
-        public AtomResult(string title, List<SyndicationItem> feedItems)
+        /// <param name="requestUrl">The URL of feed alternate link.</param>
+        public AtomResult(string title, List<SyndicationItem> feedItems, Uri requestUrl)
             : base("application/atom+xml")
         {
-            m_feed = new SyndicationFeed(title, title, HttpContext.Current.Request.Url) { Items = feedItems };
+            m_feed = new SyndicationFeed(title, title, requestUrl) { Items = feedItems };
         }
 
-
-        protected override void WriteFile(HttpResponseBase response)
+        public override void ExecuteResult(ActionContext context)
         {
-            using (XmlWriter writer = XmlWriter.Create(response.OutputStream))
+            using (XmlWriter writer = XmlWriter.Create(context.HttpContext.Response.Body))
             {
                 m_feed.GetAtom10Formatter().WriteTo(writer);
             }

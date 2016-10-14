@@ -1,4 +1,5 @@
 ﻿@using ITJakub.Web.Hub.Identity
+@using Microsoft.AspNetCore.Http.Extensions
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
 
 <div class="static-text-container">
@@ -7,14 +8,14 @@
         {
             if (Model.IsRecordExists)
             {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span>
                     Upravit text
                 </a>
             }
             else
             {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Request.Url.PathAndQuery})" class="btn btn-default">
+                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span>
                     Vytvořit text
                 </a>

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using System.Web.Mvc;
 using AutoMapper;
 using Castle.Core.Resource;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using ITJakub.Web.Hub.App_Start;
 using log4net;
 using log4net.Config;
 
@@ -41,10 +39,7 @@ namespace ITJakub.Web.Hub
             AddSubresolvers();
 
             InstallComponents();
-
-            ////Configure Nhibernate
-            //InstallFacilities();
-
+            
             //configure AutoMapper
             ConfigureAutoMapper();
             if (m_log.IsDebugEnabled)
@@ -54,10 +49,9 @@ namespace ITJakub.Web.Hub
         private void InstallComponents()
         {
             Install(FromAssembly.InThisApplication());
-            Install(Configuration.FromXml(GetConfigResource()));
-
-            var controllerFactory = new WindsorControllerFactory(Kernel);
-            ControllerBuilder.Current.SetControllerFactory(controllerFactory);
+            
+            //var controllerFactory = new WindsorControllerFactory(Kernel);
+            //ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
         private void ConfigureAutoMapper()

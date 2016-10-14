@@ -1,45 +1,53 @@
 ﻿using System;
-using System.Web.Mvc;
 using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize(Roles = CustomRole.CanUploadBooks)]
     public class UploadController : BaseController
     {
+        public UploadController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult Upload()
         {
             return View(new UploadViewModel {SessionId = Guid.NewGuid().ToString()});
         }
 
         //Dropzone upload method
-        public ActionResult UploadFile(string sessionId)
+        [HttpPost]
+        public ActionResult UploadFile(UploadFileRequest request)
         {
-            for (var i = 0; i < Request.Files.Count; i++)
+            for (var i = 0; i < Request.Form.Files.Count; i++)
             {
-                var file = Request.Files[i];
-                if (file != null && file.ContentLength != 0)
+                var file = Request.Form.Files[i];
+                if (file != null && file.Length != 0)
                 {
                     using (var client = GetStreamingClient())
                     {
                         client.AddResource(
                             new UploadResourceContract
                             {
-                                SessionId = sessionId,
+                                SessionId = request.SessionId,
                                 FileName = file.FileName,
-                                Data = file.InputStream
+                                Data = file.OpenReadStream()
                             }
-                            );
+                        );
                     }
                 }
             }
             return Json(new {});
         }
 
-        public ActionResult ProcessUploadedFiles(ProcessUploadedFilesRequest request)
+        [HttpPost]
+        public ActionResult ProcessUploadedFiles([FromBody] ProcessUploadedFilesRequest request)
         {
             using (var client = GetMainServiceClient())
             {

@@ -1,10 +1,15 @@
-﻿using System.Web.Mvc;
-using ITJakub.Shared.Contracts;
+﻿using ITJakub.Shared.Contracts;
+using ITJakub.Web.Hub.Managers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     public class EditionNoteController : BaseController
     {
+        public EditionNoteController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         public ActionResult EditionNote(long bookId)
         {
             using (var client = GetMainServiceClient())

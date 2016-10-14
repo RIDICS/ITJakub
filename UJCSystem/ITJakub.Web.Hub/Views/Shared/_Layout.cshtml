@@ -5,13 +5,13 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UJC - @ViewBag.Title</title>
-    <link href="~/wwwroot/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-    <link href="~/wwwroot/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
-    <link href="~/wwwroot/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
-    <link href="~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
-    <link href="~/wwwroot/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
-    <link href="~/wwwroot/css/ITJakub.css" rel="stylesheet" />
-    <script src="~/wwwroot/lib/modernizr/modernizr.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
+    <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
+    <link href="~/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
+    <link href="~/css/ITJakub.css" rel="stylesheet" />
+    <script src="~/lib/modernizr/modernizr.js"></script>
     
     @RenderSection("styles", false)
 </head>
@@ -33,7 +33,7 @@
             </button>
 
             <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                <img src="@Url.Content("~/wwwroot/images/logo.png")" alt="main_logo" class="main_logo"/> @*TODO make logo small as this size*@
+                <img src="@Url.Content("~/images/logo.png")" alt="main_logo" class="main_logo"/> @*TODO make logo small as this size*@
                 <div class="main_logo_text">
                     <h1>Vokabulář</h1>
                     <h2>webový</h2>
@@ -45,7 +45,7 @@
         </div>
     </div>
 </div>
-<div id="permissions-div" class="hidden" data-is-authenticated="@Request.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
+<div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
                                                                                                       {@Html.Raw("EditLemmatization")
                                                                                                       } "></div>
 
@@ -275,7 +275,7 @@
         </li>
     </ul>
 </li>
-@if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
+@if (User.Identity.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
 {
     <li id="admin-menu" class="has-sub last">
         @if (User.IsInRole(CustomRole.CanUploadBooks))
@@ -399,24 +399,24 @@
 </div>
 <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
 
-<script src="~/wwwroot/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/wwwroot/lib/jquery-ui/jquery-ui.min.js"></script>
-<script src="~/wwwroot/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="~/wwwroot/lib/respond/dest/respond.min.js"></script>
-<script src="~/wwwroot/lib-custom/typeahead.bundle.js"></script>
-<script src="~/wwwroot/lib/dropzone/downloads/dropzone.js"></script>
-<script src="~/wwwroot/lib/jquery-appear/src/jquery.appear.js"></script>
-<script src="~/wwwroot/lib/jquery-zoom/jquery.zoom.js"></script>
-<script src="~/wwwroot/lib/wheelzoom/wheelzoom.js"></script>
-<script src="~/wwwroot/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
-<script src="~/wwwroot/lib/simplemde/dist/simplemde.min.js"></script>
-<script src="~/wwwroot/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/wwwroot/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="~/lib/respond/dest/respond.min.js"></script>
+<script src="~/lib-custom/typeahead.bundle.js"></script>
+<script src="~/lib/dropzone/downloads/dropzone.js"></script>
+<script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
+<script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
+<script src="~/lib/wheelzoom/wheelzoom.js"></script>
+<script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
+<script src="~/lib/simplemde/dist/simplemde.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 
-<script src="~/wwwroot/js/bundles/itjakub.keyboard.bundle.js"></script>
-<script src="~/wwwroot/js/bundles/itjakub.storage.bundle.js"></script>
-<script src="~/wwwroot/js/bundles/itjakub.bundle.js"></script>
-<script src="~/wwwroot/js/bundles/itjakub.plugins.bundle.js"></script>
+<script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
+<script src="~/js/bundles/itjakub.storage.bundle.js"></script>
+<script src="~/js/bundles/itjakub.bundle.js"></script>
+<script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
 
 @RenderSection("scripts", false)
 
@@ -427,12 +427,12 @@
 </div>
 
 <footer class="footer">
-    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-        <img src="@Url.Content("~/wwwroot/images/logo.png")" alt="main_logo"/> @*TODO make logo small as this size*@
-    </a>
+    @*<a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+        <img src="@Url.Content("~/images/logo.png")" alt="main_logo"/> TODO make logo small as this size
+    </a>*@
 
-    <div class="footer-text-area">
-        <ul>
+    <div class="footer-text-area" style="width: 100%;">
+        <ul style="padding-left: 0;">
             <li class="footer-first">
                 <a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a>
             </li>

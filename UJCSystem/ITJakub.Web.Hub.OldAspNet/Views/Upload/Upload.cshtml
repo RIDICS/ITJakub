@@ -1,0 +1,47 @@
+﻿@model ITJakub.Web.Hub.Models.UploadViewModel
+@{
+    ViewBag.Title = "Administrace - Nahrání díla";
+}
+@section scripts{
+    <script src="~/wwwroot/js/itjakub.upload.js"></script>
+}
+
+<div class="content-container">
+    <h2>Nahrání díla</h2>
+    
+    <div class="centered">
+        <div id="upload">
+            <p> Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
+
+            <form action="@Url.Action("UploadFile", "Upload")" method="post" class="dropzone" enctype="multipart/form-data" id="dropzoneFileForm">
+                <div id="dropzoneFileFormPreview"></div>
+                <div class="fallback">
+                    <input name="file" type="file" />
+                </div>
+                <div class="additionalData">
+                    <input type="hidden" id="sessionId" name="sessionId" value="@Model.SessionId"/>
+                </div>
+            </form>
+
+            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="Zde napiste zpravu k nove verzi" style="width: 400px"/>
+
+            <button id="ProcessUploadedButton" type="button" class="btn btn-default style-button" disabled>
+                Zpracovat
+            </button>
+        </div>
+        <div id="processing" style="display: none">
+            <div id="progressbar"></div>
+            <h2>Zpracovává se...</h2>
+        </div>
+
+        <div id="done" style="display: none">
+            <h2 class="success" style="display: none">Zpracování proběhlo v pořádku</h2>
+            <div class="error" style="display: none">
+                <h2>Zpracování souborů se nezdařilo</h2>
+                <div class="message"></div>
+            </div>
+        </div>
+
+        <div id="music"></div>
+        </div>
+</div>

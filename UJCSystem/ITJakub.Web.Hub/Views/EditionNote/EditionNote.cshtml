@@ -1,4 +1,5 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Html
+@{
     ViewBag.Title = "Ediční poznámka";
 }
 
@@ -6,6 +7,6 @@
     <h1>Ediční poznámka</h1>
 
     <p>
-    @MvcHtmlString.Create(@ViewData["noteText"].ToString())
+    @(new HtmlString(@ViewData["noteText"].ToString()))
     </p>
 </div>

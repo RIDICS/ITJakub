@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
-using System.Web.Mvc;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
     [Authorize(Roles = CustomRole.CanAddNews)]
     public class NewsController : BaseController
     {
+        public NewsController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public virtual ActionResult Feed(string feedType, string feedCount = "10")
@@ -44,10 +51,14 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            if (ft == FeedType.Rss)
-                return new RssResult("Vokabular feed", items);
-
-            return new AtomResult("Vokabular feed", items);
+            var requestUrl = new Uri(Request.GetDisplayUrl());
+            switch (ft)
+            {
+                case FeedType.Rss:
+                    return new RssResult("Vokabular feed", items, requestUrl);
+                default:
+                    return new AtomResult("Vokabular feed", items, requestUrl);
+            }
         }
 
         [HttpGet]
@@ -57,7 +68,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var feeds = client.GetWebNewsSyndicationItems(start, count);
-                return Json(feeds, JsonRequestBehavior.AllowGet);
+                return Json(feeds);
             }
         }
 
@@ -68,7 +79,7 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var feedCount = client.GetWebNewsSyndicationItemCount();
-                return Json(feedCount, JsonRequestBehavior.AllowGet);
+                return Json(feedCount);
             }
         }
 
@@ -83,7 +94,7 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(NewsSyndicationItemViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            var username = GetUserName();
 
             using (var client = GetMainServiceClient())
                 client.CreateNewsSyndicationItem(model.Title, model.Content, model.Url, (NewsTypeContract) model.ItemType, username);

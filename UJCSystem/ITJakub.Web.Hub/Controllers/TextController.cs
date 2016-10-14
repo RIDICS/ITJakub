@@ -1,19 +1,20 @@
-﻿using System.Web.Mvc;
-using ITJakub.Web.Hub.Identity;
+﻿using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
 using MarkdownDeep;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
-    public class TextController : Controller
+    public class TextController : BaseController
     {
         private readonly StaticTextManager m_staticTextManager;
         private readonly Markdown m_markdownDeep;
 
-        public TextController(StaticTextManager staticTextManager)
+        public TextController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
             m_markdownDeep = new Markdown
@@ -31,15 +32,15 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
-        public ActionResult SaveText(StaticTextViewModel viewModel)
+        public ActionResult SaveText([FromBody] StaticTextViewModel viewModel)
         {
-            var username = User.Identity.Name;
+            var username = GetUserName();
             var modificationUpdate = m_staticTextManager.SaveText(viewModel.Name, viewModel.Text, viewModel.Format, username);
             return Json(modificationUpdate);
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
-        public ActionResult RenderPreview(RenderTextPreviewRequest request)
+        public ActionResult RenderPreview([FromBody] RenderTextPreviewRequest request)
         {
             string result;
             switch (request.InputTextFormat)

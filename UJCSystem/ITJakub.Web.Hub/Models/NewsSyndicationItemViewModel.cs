@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Web.Http.Results;
-using ITJakub.Shared.Contracts.News;
 
 namespace ITJakub.Web.Hub.Models
 {

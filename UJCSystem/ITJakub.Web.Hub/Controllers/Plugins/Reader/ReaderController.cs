@@ -1,25 +1,36 @@
 ﻿using System.Collections.Generic;
-using System.Net;
-using System.Web.Mvc;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
+using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using ITJakub.Web.Hub.Models.Requests.Reader;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 {
     public class ReaderController : BaseController
     {
+        public ReaderController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
+        }
+
+        private JsonSerializerSettings GetJsonSerializerSettings()
+        {
+            return new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver()
+            };
+        }
 
         public ActionResult HasBookPageByXmlId(string bookId, string versionId)
         {
             using (var client = GetMainServiceClient())
             {
-                return Json(new {HasBookPage = client.HasBookPageByXmlId(bookId, versionId)},
-                    JsonRequestBehavior.AllowGet);
+                return Json(new {HasBookPage = client.HasBookPageByXmlId(bookId, versionId)}, GetJsonSerializerSettings());
             }
         }
 
@@ -29,7 +40,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             {
                 var text = client.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html,
                     BookTypeEnumContract.Edition);
-                return Json(new {pageText = text}, JsonRequestBehavior.AllowGet);
+                return Json(new {pageText = text}, GetJsonSerializerSettings());
             }
         }
 
@@ -38,7 +49,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
             {
                 var terms = client.GetTermsOnPage(bookId, pageXmlId);
-                return Json(new {terms}, JsonRequestBehavior.AllowGet);
+                return Json(new {terms}, GetJsonSerializerSettings());
             }
         }
 
@@ -73,7 +84,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             {
                 var text = client.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId,
                     OutputFormatEnumContract.Html);
-                return Json(new {pageText = text}, JsonRequestBehavior.AllowGet);
+                return Json(new {pageText = text}, GetJsonSerializerSettings());
             }
         }
 
@@ -82,7 +93,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
             {
                 var pages = client.GetBookPageList(bookId);
-                return Json(new {pageList = pages}, JsonRequestBehavior.AllowGet);
+                return Json(new {pageList = pages}, GetJsonSerializerSettings());
             }
         }
 
@@ -91,7 +102,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
             {
                 var contentItems = client.GetBookContent(bookId);
-                return Json(new {content = contentItems}, JsonRequestBehavior.AllowGet);
+                return Json(new {content = contentItems}, GetJsonSerializerSettings());
             }
         }
 
@@ -112,7 +123,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
                 if (!successSave)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    return BadRequest();
                 }
 
                 return Json(new {});
@@ -134,7 +145,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             using (var client = GetMainServiceClient())
             {
                 var bookmarsList = client.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
-                return Json(new {bookmarks = bookmarsList}, JsonRequestBehavior.AllowGet);
+                return Json(new {bookmarks = bookmarsList}, GetJsonSerializerSettings());
             }
         }
     }

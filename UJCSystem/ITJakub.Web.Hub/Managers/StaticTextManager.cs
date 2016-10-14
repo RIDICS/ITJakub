@@ -9,14 +9,14 @@ using MarkdownDeep;
 
 namespace ITJakub.Web.Hub.Managers
 {
-    public class StaticTextManager
+    public class StaticTextManager : IDisposable
     {
         private readonly StaticTextRepository m_staticTextRepository;
         private readonly Markdown m_markdownDeep;
 
-        public StaticTextManager(StaticTextRepository staticTextRepository)
+        public StaticTextManager()
         {
-            m_staticTextRepository = staticTextRepository;
+            m_staticTextRepository = Container.Current.Resolve<StaticTextRepository>();
             m_markdownDeep = new Markdown
             {
                 ExtraMode = true,
@@ -88,6 +88,11 @@ namespace ITJakub.Web.Hub.Managers
             m_staticTextRepository.Save(staticTextEntity);
 
             return Mapper.Map<ModificationUpdateViewModel>(staticTextEntity);
+        }
+
+        public void Dispose()
+        {
+            Container.Current.Release(m_staticTextRepository);
         }
     }
 }

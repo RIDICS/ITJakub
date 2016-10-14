@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
-using Microsoft.AspNet.Identity;
 
 namespace ITJakub.Web.Hub.Identity
 {
-    public class ApplicationUser : IUser<string>
+    public class ApplicationUser
     {
         public string Id { get; set; }
 
@@ -30,10 +27,10 @@ namespace ITJakub.Web.Hub.Identity
         public DateTime CommunicationTokenExpirationTime { get; set; }
 
 
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
-        {
-            var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
-            return userIdentity;
-        }
+        //public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        //{
+        //    var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
+        //    return userIdentity;
+        //}
     }
 }

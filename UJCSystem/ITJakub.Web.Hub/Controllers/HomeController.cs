@@ -1,10 +1,8 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Web.Hub.Identity;
+﻿using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
-using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -12,17 +10,11 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private readonly StaticTextManager m_staticTextManager;
 
-        public HomeController(StaticTextManager staticTextManager)
+        public HomeController(CommunicationProvider communicationProvider, StaticTextManager staticTextManager) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
         }
-
-        private ApplicationUserManager UserManager
-        {
-            get { return HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-        }
-
-
+        
         public ActionResult Index()
         {
             return View();
@@ -50,7 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
 
-            var username = User.Identity.Name;
+            var username = GetUserName();
             if (string.IsNullOrWhiteSpace(username))
             {
                 var viewModel = new FeedbackViewModel
@@ -83,7 +75,7 @@ namespace ITJakub.Web.Hub.Controllers
            
             using (var client = GetMainServiceClient())
             {
-                if (Request.IsAuthenticated)
+                if (User.Identity.IsAuthenticated)
                 {
                     client.CreateFeedback(model.Text, GetUserName(), FeedbackCategoryEnumContract.None);
                 }
@@ -116,17 +108,19 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient()) { 
-            var result = client.GetTypeaheadAuthors(query);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetTypeaheadAuthors(query);
+                return Json(result);
             }
         }
 
         public ActionResult GetTypeaheadTitle(string query)
         {
-            using (var client = GetMainServiceClient()) { 
+            using (var client = GetMainServiceClient())
+            {
                 var result = client.GetTypeaheadTitles(query);
-            return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
             }
         }
 
@@ -135,8 +129,8 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadDictionaryHeadwords(null, null, query, null);
-            return Json(result, JsonRequestBehavior.AllowGet);
+                return Json(result);
+            }
         }
     }
-}
 }

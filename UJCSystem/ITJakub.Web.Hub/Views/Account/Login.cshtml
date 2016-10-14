@@ -2,10 +2,7 @@
 @{
     ViewBag.Title = "Přihlášení";
     
-    if (ViewContext.HttpContext.Request.UrlReferrer != null)
-    {
-        ViewBag.ReturnUrl = ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery;
-    }
+    ViewBag.ReturnUrl = ViewContext.HttpContext.Request.Headers["Referer"];
 }
 
 <div class="content-container top-offset-without-submenu">
@@ -13,9 +10,8 @@
     <div class="row" style="margin-left: 5px; width: 80%;">
         <div class="col-md-12">
             <section id="loginForm">
-                @using (Html.BeginForm("Login", "Account", new { model = Model, returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                @using (Html.BeginForm("Login", "Account", new { model = Model, returnUrl = ViewBag.ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
                 {
-                    @Html.AntiForgeryToken()
                     <h4>Přihlaste se pomocí svého účtu</h4>
                     <hr />
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
