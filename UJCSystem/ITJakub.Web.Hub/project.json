@@ -85,7 +85,7 @@
     "include": [
       "wwwroot",
       "Views",
-      "Areas/**/Views",
+      "Areas/**/Views/**/*.cshtml",
       "Content",
       "appsettings.json",
       "web.config"
