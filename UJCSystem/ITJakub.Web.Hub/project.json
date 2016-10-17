@@ -83,14 +83,17 @@
 
   "publishOptions": {
     "include": [
-      "Areas/**/*.cshtml",
       "wwwroot",
+      "Views",
+      "Areas/**/Views",
+      "Content",
+      "appsettings.json",
       "web.config"
     ]
   },
 
   "scripts": {
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp build" ],
+    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp build:ts", "gulp default" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }

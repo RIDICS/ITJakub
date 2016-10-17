@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='build' Clean='clean' />
+﻿/// <binding AfterBuild='default' Clean='clean' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -10,7 +10,9 @@ var gulp = require("gulp"),
   cssmin = require("gulp-cssmin"),
   less = require("gulp-less"),
   sourcemaps = require('gulp-sourcemaps'),
-  uglify = require("gulp-uglify");
+  uglify = require("gulp-uglify"),
+  ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
 
 var paths = {
     webroot: "./wwwroot/"
@@ -74,6 +76,15 @@ gulp.task("build:less_areas", function () {
 });
 
 gulp.task("build:less", ["build:less_root", "build:less_areas"]);
+
+
+// TypeScript build
+gulp.task("build:ts", function () {
+    var tsResult = tsProject.src()
+        .pipe(tsProject());
+
+    return tsResult.js.pipe(gulp.dest(""));
+});
 
 
 // Bundle JavaScript
@@ -261,4 +272,4 @@ gulp.task("bundlejs_areas",
 
 // Main build
 
-gulp.task("build", ["build:less", "bundlejs", "bundlejs_areas"]);
+gulp.task("default", ["build:less", "bundlejs", "bundlejs_areas"]);
