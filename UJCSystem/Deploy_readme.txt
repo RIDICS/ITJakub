@@ -37,7 +37,10 @@
 	 8.4. - in IIS manager select website and add binding with localhost certificate issued by ITJakubCA
 9. Allow SSL in IIS - Edit bindings for Default Web Site and Add HTTPS with localhost (ITJAKUBCA) certificate. Allow SSL for default Website and select "Accept client certificate" in SSL settings for default WebSite
 10. Add new Application Pool with ".NET CLR version" set to "No Managed Code" in IIS.
-11. Switch Default Web Site to use Application Pool created in previous step (or other with "No Managed Code" option).
+11. Switch site with deployed ITJakub.Web.Hub to use Application Pool created in previous step (or other with "No Managed Code" option).
+    Other ASP.NET applications or services have to be deployed to another site. (Another option is deploy ITJakub.Web.Hub as non-root application and other service deploy to the same site.)
+
+Note: If ASP.NET Core is deployed as a site, any of application in this site which is not ASP.NET Core won't work. ASP.NET Core application can be deployed as non-root application in any site.
 
 
 DEPLOYMENT ON DEVELOPER'S COMPUTER
