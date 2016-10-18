@@ -10,6 +10,8 @@
     <link href="~/lib/jquery-ui/themes/base/jquery-ui.css" rel="stylesheet" />
     <link href="~/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css" rel="stylesheet" />
     <link href="~/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
     <link href="~/css/ITJakub.css" rel="stylesheet" />
     <script src="~/lib/modernizr/modernizr.js"></script>
     
@@ -322,7 +324,7 @@
         }
         else
         {
-            <a href='#'>
+            <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
                 <span>Administrace</span>
             </a>
         }
@@ -381,6 +383,12 @@
                     </a>
                 </li>
             }
+            
+            <li>
+                <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
+                    <span>Správa oblíbených položek</span>
+                </a>
+            </li>
 
             @if (User.IsInRole(CustomRole.CanAddNews))
             {
@@ -412,11 +420,19 @@
 <script src="~/lib/simplemde/dist/simplemde.min.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
+<script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
 
 <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
 <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
 <script src="~/js/bundles/itjakub.bundle.js"></script>
 <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
+
+<script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
+<script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
+<script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
+<script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
+<script src="~/js/Favorite/itjakub.favoriteStar.js"></script>
 
 @RenderSection("scripts", false)
 

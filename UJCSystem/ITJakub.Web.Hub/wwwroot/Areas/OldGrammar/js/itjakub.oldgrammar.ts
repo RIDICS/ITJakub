@@ -86,7 +86,11 @@
     var enabledOptions = new Array<SearchTypeEnum>();
     enabledOptions.push(SearchTypeEnum.Term);
 
-    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch);
+    var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+        bookType: BookTypeEnum.Grammar,
+        queryType: QueryTypeEnum.Reader
+    };
+    search = new Search(<any>$("#SearchDiv")[0], advancedSearch, basicSearch, favoriteQueriesConfig);
     search.makeSearch(enabledOptions);
 
     var typeaheadSearchBox = new SearchBox(".searchbar-input", "OldGrammar/OldGrammar");

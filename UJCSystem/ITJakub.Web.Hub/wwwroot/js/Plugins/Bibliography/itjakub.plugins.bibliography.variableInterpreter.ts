@@ -262,7 +262,7 @@ class TableBuilder {
         var rowDiv: HTMLDivElement = document.createElement('div');
         $(rowDiv).addClass('bib-table-row');
         var labelDiv: HTMLDivElement = document.createElement('div');
-        $(labelDiv).addClass('bib-table-cell label');
+        $(labelDiv).addClass('bib-table-cell bib-label');
         labelDiv.innerHTML = label;
         rowDiv.appendChild(labelDiv);
         var valueDiv: HTMLDivElement = document.createElement('div');

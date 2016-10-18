@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts.Contracts;
+using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -257,25 +259,70 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Favorite Items
 
         [OperationContract]
+        IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName);
+
+        [OperationContract]
+        long CreateFavoriteLabel(string name, string color, string userName);
+
+        [OperationContract]
+        void UpdateFavoriteLabel(long labelId, string name, string color, string userName);
+
+        [OperationContract]
+        void DeleteFavoriteLabel(long labelId, string userName);
+
+        [OperationContract]
+        IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName);
+        
+        [OperationContract]
+        int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName);
+
+        [OperationContract]
+        IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName);
+
+        [OperationContract]
+        int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName);
+
+        [OperationContract]
         List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName);
-
-        [OperationContract]
-        void AddPageBookmark(string bookId, string pageName, string userName);
-
-        [OperationContract]
-        bool SetPageBookmarkTitle(string bookId, string pageName, string title, string userName);
-
-        [OperationContract]
-        void RemovePageBookmark(string bookId, string pageName, string userName);
-
+        
         [OperationContract]
         IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName);
+
+        [OperationContract]
+        FavoriteFullInfoContract GetFavoriteItem(long id, string userName);
 
         [OperationContract]
         void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
 
         [OperationContract]
         void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName);
+
+        [OperationContract]
+        IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName);
+
+        [OperationContract]
+        IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName);
+
+        [OperationContract]
+        IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName);
+
+        [OperationContract]
+        void UpdateFavoriteItem(long id, string title, string userName);
+
+        [OperationContract]
+        void DeleteFavoriteItem(long id, string userName);
+
+        [OperationContract]
+        IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds, string userName);
+
+        [OperationContract]
+        IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds, string userName);
+
+        [OperationContract]
+        IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds, string userName);
+
+        [OperationContract]
+        long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName);
 
         #endregion
 

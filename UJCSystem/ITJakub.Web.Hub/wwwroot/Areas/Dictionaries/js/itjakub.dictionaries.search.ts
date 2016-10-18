@@ -27,7 +27,7 @@ class DictionarySearch {
 
             this.updateTypeaheadSearchBox(state);
         };
-        this.dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", true, this.callbackDelegate);
+        this.dictionarySelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "Dictionaries/Dictionaries/GetDictionariesWithCategories", BookTypeEnum.Dictionary, true, this.callbackDelegate);
         
         this.dictionaryViewerHeadword = new DictionaryViewer("#headwords-list", "#headwords-pagination", "#description-headwords", true);
         this.dictionaryViewerFulltext = new DictionaryViewer("#headwords-list-fulltext", "#headwords-pagination-fulltext", "#description-fulltext", true);
@@ -35,7 +35,12 @@ class DictionarySearch {
 
         this.dictionaryWrapperBasic = new DictionaryViewerTextWrapper(this.dictionaryViewerHeadword, this.dictionaryViewerFulltext, pageSize, this.tabs, this.dictionarySelector);
         this.dictionaryWrapperAdvanced = new DictionaryViewerJsonWrapper(this.dictionaryViewerAdvanced, pageSize, this.tabs, this.dictionarySelector);
-        this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this));
+
+        var favoriteQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+            bookType: BookTypeEnum.Dictionary,
+            queryType: QueryTypeEnum.Search
+        };
+        this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this), favoriteQueriesConfig);
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
         
         this.disabledShowOptions = [

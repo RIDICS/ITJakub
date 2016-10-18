@@ -105,48 +105,5 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                 return Json(new {content = contentItems}, GetJsonSerializerSettings());
             }
         }
-
-        public ActionResult AddBookmark(AddBookmarkRequest request)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                client.AddPageBookmark(request.BookId, request.PageXmlId, HttpContext.User.Identity.Name);
-            }
-            return Json(new {});
-        }
-
-        public ActionResult SetBookmakTitle(SetBookmakTitleRequest request)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var successSave=client.SetPageBookmarkTitle(request.BookId, request.PageXmlId, request.Title, HttpContext.User.Identity.Name);
-
-                if (!successSave)
-                {
-                    return BadRequest();
-                }
-
-                return Json(new {});
-            }
-        }
-
-
-        public ActionResult RemoveBookmark(RemoveBookmarkRequest request)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                client.RemovePageBookmark(request.BookId, request.PageXmlId, HttpContext.User.Identity.Name);
-            }
-            return Json(new {});
-        }
-
-        public ActionResult GetAllBookmarks(string bookId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var bookmarsList = client.GetPageBookmarks(bookId, HttpContext.User.Identity.Name);
-                return Json(new {bookmarks = bookmarsList}, GetJsonSerializerSettings());
-            }
-        }
     }
 }

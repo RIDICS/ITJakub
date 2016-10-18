@@ -57,7 +57,10 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                return View(new FeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                });
             }
             using (var client = GetEncryptedClient())
             {

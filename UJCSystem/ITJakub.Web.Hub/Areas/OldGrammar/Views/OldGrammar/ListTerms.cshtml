@@ -18,7 +18,7 @@
                     <ul>
                         @foreach (var term in @termCategory.Terms)
                         {
-                            <li><a href=@string.Format("/OldGrammar/OldGrammar/Search?search={0}", @Uri.EscapeDataString(@term.Text))>@term.Text</a></li>
+                            <li><a href=@Url.Action("Search", "OldGrammar", new {area = "OldGrammar", search = term.Text})>@term.Text</a></li>
                         }
                     </ul>
                  </div>

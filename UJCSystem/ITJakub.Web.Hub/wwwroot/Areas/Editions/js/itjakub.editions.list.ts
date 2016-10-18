@@ -15,6 +15,10 @@
                     advanced: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
                     text: getBaseUrl() + "Editions/Editions/TextSearchPaged",
                     textCount: getBaseUrl() + "Editions/Editions/TextSearchCount"
+                },
+                favoriteQueries: {
+                    bookType: BookTypeEnum.Edition,
+                    queryType: QueryTypeEnum.List
                 }
             },
             searchBox: {

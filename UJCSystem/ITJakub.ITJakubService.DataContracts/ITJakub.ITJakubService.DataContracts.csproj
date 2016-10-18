@@ -65,6 +65,12 @@
     <Compile Include="Contracts\AudioBooks\FileDataContract.cs" />
     <Compile Include="Clients\ItJakubServiceClient.cs" />
     <Compile Include="Clients\ItJakubServiceEncryptedClient.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteBaseInfoContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteBookInfoContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteCategoryContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteLabelContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteLabelWithBooksAndCategories.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteTypeContract.cs" />
     <Compile Include="Contracts\HeadwordBookmarkContract.cs" />
     <Compile Include="Contracts\ImageSizeEnumContract.cs" />
     <Compile Include="Contracts\ImageContract.cs" />
@@ -72,10 +78,11 @@
     <Compile Include="Contracts\BucketShortContract.cs" />
     <Compile Include="Contracts\CardFileContract.cs" />
     <Compile Include="Contracts\SelectedCategoriesContract.cs" />
+    <Compile Include="Contracts\Favorite\FavoriteQueryContract.cs" />
     <Compile Include="IItJakubServiceEncrypted.cs" />
     <Compile Include="Contracts\CreateUserResultContract.cs" />
     <Compile Include="IItJakubService.cs" />
-    <Compile Include="Contracts\PageBookmarkContract.cs" />
+    <Compile Include="Contracts\Favorite\PageBookmarkContract.cs" />
     <Compile Include="Contracts\ProcessedFileInfoContract.cs" />
     <Compile Include="IITJakubServiceStreamed.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

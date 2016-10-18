@@ -19,7 +19,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
 
         public ActionResult Index()
         {
-            return View("List");
+            return List();
         }
 
         public ActionResult Information()
@@ -35,7 +35,10 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
             var username = HttpContext.User.Identity.Name;
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View();
+                return View(new FeedbackViewModel
+                {
+                    PageStaticText = pageStaticText
+                });
             }
 
             using (var client = GetEncryptedClient())
@@ -76,7 +79,7 @@ namespace ITJakub.Web.Hub.Areas.Tools.Controllers
         public ActionResult List()
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextToolsList);
-            return View(pageStaticText);
+            return View("List", pageStaticText);
         }
 
     }

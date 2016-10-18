@@ -1,5 +1,6 @@
 ﻿class DropDownSelect2 extends DropDownSelect {
     private bookIdList: Array<number>;
+    private categoryIdList: Array<number>;
     private books: IDropDownBookDictionary;
     private categories: IDropDownCategoryDictionary;
     private rootCategory: DropDownCategory;
@@ -8,13 +9,16 @@
     private restoreBookIds: Array<number>;
     private descriptionDiv: HTMLDivElement;
     private isLoaded: boolean;
+    private favoriteBook: FavoriteBook;
+    private bookType: BookTypeEnum;
 
     private static selectedBookUrlKey = "selectedBookIds";
     private static selectedCategoryUrlKey = "selectedCategoryIds";
 
-    constructor(dropDownSelectContainer: string, dataUrl: string, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
+    constructor(dropDownSelectContainer: string, dataUrl: string, bookType:BookTypeEnum, showStar: boolean, callbackDelegate: DropDownSelectCallbackDelegate) {
         super(dropDownSelectContainer, dataUrl, showStar, callbackDelegate);
 
+        this.bookType = bookType;
         this.selectedChangedCallback = callbackDelegate.selectedChangedCallback;
         callbackDelegate.selectedChangedCallback = null;
 
@@ -56,24 +60,54 @@
         this.descriptionDiv = document.createElement("div");
         $(this.descriptionDiv).addClass("dropdown-description");
         $(this.dropDownSelectContainer).append(this.descriptionDiv);
+
+        if (this.showStar) {
+            var favoriteDropdownDiv = document.createElement("div");
+            this.favoriteBook = new FavoriteBook($(favoriteDropdownDiv), this.bookType, this);
+            this.favoriteBook.make();
+
+            $(this.dropDownSelectContainer).append(favoriteDropdownDiv);
+        }
     }
 
-    private restore() {
+    setSelected(categoryIds: Array<number>, bookIds: Array<number>) {
+        $("input[type=checkbox]", this.dropDownBodyDiv).prop("checked", false);
+        this.restore(categoryIds, bookIds);
+    }
+
+    restore(categoryIds: Array<number>, bookIds: Array<number>) {
+        this.restoreCategoryIds = categoryIds;
+        this.restoreBookIds = bookIds;
+
+        this.doRestore();
+    }
+
+    protected onFavoritesChanged(favoriteType: FavoriteType, id: number): void {
+        this.favoriteBook.loadData();
+    }
+
+    private doRestore() {
         var categoriesCount = 0;
         var booksCount = 0;
 
         if (this.restoreCategoryIds) {
             for (var i = 0; i < this.restoreCategoryIds.length; i++) {
                 var category = this.categories[this.restoreCategoryIds[i]];
+                if (!category) {
+                    continue;
+                }
                 category.checkBox.checked = true;
                 this.propagateSelectChange(<HTMLDivElement>$(category.checkBox).parent(".concrete-item")[0]);
+                categoriesCount++;
             }
-            categoriesCount = this.restoreCategoryIds.length;
         }
 
         if (this.restoreBookIds) {
             for (var j = 0; j < this.restoreBookIds.length; j++) {
                 var book = this.books[this.restoreBookIds[j]];
+                if (!book) {
+                    continue;
+                }
 
                 for (var k = 0; k < book.checkboxes.length; k++) {
                     var checkbox = book.checkboxes[k];
@@ -109,17 +143,58 @@
                 this.processDownloadedData(response);
                 this.makeTreeStructure(this.categories, this.books, dropDownItemsDiv);
                 this.rootCategory.checkBox = <HTMLInputElement>($(dropDownItemsDiv).parent().children(".dropdown-select-header").children("span.dropdown-select-checkbox").children("input").get(0));
-                this.restore();
+                this.doRestore();
                 this.isLoaded = true;
                 this.dataLoaded(this.rootCategory.id);
+
+                this.downloadFavoriteData(dropDownItemsDiv);
             }
         });
     }
-    
+
+    public downloadFavoriteData(dropDownItemsDiv: HTMLDivElement): void {
+        if (!this.showStar) {
+            return;
+        }
+
+        var loadedFavoriteCategories: Array<IDropdownFavoriteItem> = null;
+        var loadedFavoriteBooks: Array<IDropdownFavoriteItem> = null;
+        var loadedFavoriteLabels: Array<IFavoriteLabel> = null;
+
+        var isAllLoaded = () => (loadedFavoriteCategories != null &&
+            loadedFavoriteBooks != null &&
+            loadedFavoriteLabels != null);
+
+        this.favoriteManager.getFavoritesForCategories(this.categoryIdList, (favoriteCategories) => {
+            loadedFavoriteCategories = favoriteCategories;
+
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
+            }
+        });
+
+        this.favoriteManager.getFavoritesForBooks(this.bookIdList, (favoriteBooks) => {
+            loadedFavoriteBooks = favoriteBooks;
+
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
+            }
+        });
+
+        this.favoriteManager.getLatestFavoriteLabels(favoriteLabels => {
+            loadedFavoriteLabels = favoriteLabels;
+
+            if (isAllLoaded()) {
+                this.updateFavoriteIcons(loadedFavoriteCategories, loadedFavoriteBooks, loadedFavoriteLabels, dropDownItemsDiv);
+            }
+        });
+    }
+
     private processDownloadedData(result: IDropDownRequestResult) {
         this.books = {};
         this.categories = {};
         this.bookIdList = [];
+        this.categoryIdList = [];
 
         for (let i = 0; i < result.categories.length; i++) {
             let resultCategory = result.categories[i];
@@ -130,6 +205,7 @@
             category.bookIds = [];
             category.subcategoryIds = [];
             this.categories[category.id] = category;
+            this.categoryIdList.push(category.id);
 
             if (!category.parentCategoryId)
                 this.rootCategory = category;
@@ -193,34 +269,10 @@
         itemDiv.appendChild(checkbox);
 
         if (this.showStar) {
-
-            var saveStarSpan = document.createElement("span");
-            $(saveStarSpan).addClass("save-item glyphicon glyphicon-star-empty");
-
-            $(saveStarSpan).click(() => {
-                $(saveStarSpan).siblings(".delete-item").show();
-                $(saveStarSpan).hide();
-                //TODO populate request on save to favorites
-                if (this.callbackDelegate.starSaveItemCallback) {
-                    this.callbackDelegate.starSaveItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(saveStarSpan);
-
-            var deleteStarSpan = document.createElement("span");
-            $(deleteStarSpan).addClass("delete-item glyphicon glyphicon-star");
-
-            $(deleteStarSpan).click(() => {
-                $(deleteStarSpan).siblings(".save-item").show();
-                $(deleteStarSpan).hide();
-                //TODO populate request on delete from favorites
-                if (this.callbackDelegate.starDeleteItemCallback) {
-                    this.callbackDelegate.starDeleteItemCallback(info);
-                }
-            });
-
-            itemDiv.appendChild(deleteStarSpan);
+            var favoriteStarContainer = document.createElement("span");
+            $(favoriteStarContainer).addClass("save-item");
+            
+            itemDiv.appendChild(favoriteStarContainer);
         }
 
         var nameSpan = document.createElement("span");
@@ -413,25 +465,14 @@
         return resultString;
     }
 
-    setStateFromUrlString(urlString: string) {
-        var selectedBooksAndCategories: string[] = urlString.split("&");
-        var bookIds = new Array<number>();
-        var categoryIds = new Array<number>();
+    getSerializedState(): string {
+        var state = this.getSelectedIds();
+        return JSON.stringify(state);
+    }
 
-        for (var i = 0; i < selectedBooksAndCategories.length; i++) {
-            var item = selectedBooksAndCategories[i];
-            var indexOfEqualSign = item.indexOf("=");
-            var name = item.slice(0, indexOfEqualSign);
-            var value = parseInt(item.slice(indexOfEqualSign + 1, item.length));
-
-            if (name === DropDownSelect2.selectedBookUrlKey) {
-                bookIds.push(value);
-            } else if (name === DropDownSelect2.selectedCategoryUrlKey) {
-                categoryIds.push(value);
-            }
-        }
-
-        this.makeAndRestore(categoryIds, bookIds);
+    restoreFromSerializedState(serializedState: string) {
+        var state: DropDownSelected = JSON.parse(serializedState);
+        this.restore(state.selectedCategoryIds, state.selectedBookIds);
     }
 }
 

@@ -32,17 +32,8 @@
         const callbackDelegate = new DropDownSelectCallbackDelegate();
 
         callbackDelegate.selectedChangedCallback = (state: State) => {
-            this.selectedBookIds = new Array();
-
-            for (let i = 0; i < state.SelectedItems.length; i++) {
-                this.selectedBookIds.push(state.SelectedItems[i].Id);
-            }
-
-            this.selectedCategoryIds = new Array();
-
-            for (let i = 0; i < state.SelectedCategories.length; i++) {
-                this.selectedCategoryIds.push(state.SelectedCategories[i].Id);
-            }
+            var serializedState = this.dropDownSelect.getSerializedState();
+            updateQueryStringParameter(this.configuration.base.url.selectionKey, serializedState);
 
             var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
             var searchBox = this.getSearchBox();
@@ -59,15 +50,12 @@
         const dropDownSelect = new DropDownSelect2(
             this.configuration.dropDownSelect.dropDownSelectContainer,
             this.configuration.dropDownSelect.dataUrl,
+            this.configuration.search.favoriteQueries.bookType,
             this.configuration.dropDownSelect.showStar,
             callbackDelegate
         );
 
         callbackDelegate.dataLoadedCallback = () => {
-            var selectedIds = dropDownSelect.getSelectedIds();
-
-            this.selectedBookIds = selectedIds.selectedBookIds;
-            this.selectedCategoryIds = selectedIds.selectedCategoryIds;
             $("#listResults").removeClass("loader");
             this.initializeFromUrlParams();
         };

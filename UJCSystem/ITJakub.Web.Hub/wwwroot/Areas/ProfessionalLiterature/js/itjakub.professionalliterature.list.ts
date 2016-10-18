@@ -16,6 +16,10 @@
                 text: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchPaged",
                 textCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchCount",
                 advancedCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchResultsCount"
+            },
+            favoriteQueries: {
+                bookType: BookTypeEnum.ProfessionalLiterature,
+                queryType: QueryTypeEnum.List
             }
         },
         searchBox: {

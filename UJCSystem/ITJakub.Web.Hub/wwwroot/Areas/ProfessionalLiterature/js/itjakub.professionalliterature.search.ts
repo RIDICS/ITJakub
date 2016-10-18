@@ -21,6 +21,10 @@
                     text: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchFulltextPaged",
                     textCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/TextSearchFulltextCount",
                     advancedCount: getBaseUrl() + "ProfessionalLiterature/ProfessionalLiterature/AdvancedSearchResultsCount"
+                },
+                favoriteQueries: {
+                    bookType: BookTypeEnum.ProfessionalLiterature,
+                    queryType: QueryTypeEnum.Search
                 }
             },
             dropDownSelect: {

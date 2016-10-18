@@ -139,7 +139,7 @@ namespace ITJakub.Web.Hub.Identity
         {
             var task = Task.Factory.StartNew(() =>
             {
-                var userContract = new UserContract
+                var userContract = new PrivateUserContract
                 {
                     UserName = user.UserName,
                     Email = user.Email,
@@ -179,7 +179,7 @@ namespace ITJakub.Web.Hub.Identity
             {
                 using (var client = m_communication.GetEncryptedClient())
                 {
-                    var user = client.FindUserById(int.Parse(userId));
+                    var user = client.PrivateFindUserById(int.Parse(userId));
                     if (user == null) return null;                    
 
                     return new ApplicationUser
@@ -205,7 +205,7 @@ namespace ITJakub.Web.Hub.Identity
             {
                 using (var client = m_communication.GetEncryptedClient())
                 {
-                    var user = client.FindUserByUserName(normalizedUserName);
+                    var user = client.PrivateFindUserByUserName(normalizedUserName);
                     if (user == null) return null;
 
                     return new ApplicationUser

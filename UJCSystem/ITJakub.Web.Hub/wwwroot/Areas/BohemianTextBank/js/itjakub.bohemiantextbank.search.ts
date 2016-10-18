@@ -19,9 +19,6 @@ function initSearch() {
 
     var bookIdsInQuery = new Array();
     var categoryIdsInQuery = new Array();
-
-    var selectedBookIds = new Array();
-    var selectedCategoryIds = new Array();
     
     var booksSelector: DropDownSelect2;
     var sortBar: SortBar;
@@ -117,7 +114,7 @@ function initSearch() {
             search.writeTextToTextField(searched);
 
             if (selected) {
-                booksSelector.setStateFromUrlString(selected);
+                booksSelector.restoreFromSerializedState(selected);
             }
 
         } else if (!notInitialized) {
@@ -129,8 +126,9 @@ function initSearch() {
     }
 
     function actualizeSelectedBooksAndCategoriesInQuery() {
-        bookIdsInQuery = selectedBookIds;
-        categoryIdsInQuery = selectedCategoryIds;
+        var selectedIds = booksSelector.getSelectedIds();
+        bookIdsInQuery = selectedIds.selectedBookIds;
+        categoryIdsInQuery = selectedIds.selectedCategoryIds;
     }
 
     function sortOrderChanged() {
@@ -409,7 +407,7 @@ function initSearch() {
                 var count = response["count"];
                 createPagination(count);
                 updateQueryStringParameter(urlSearchKey, text);
-                updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(booksSelector.getState()));
+                updateQueryStringParameter(urlSelectionKey, booksSelector.getSerializedState());
                 updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
                 updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
             }, error: response => {
@@ -435,7 +433,7 @@ function initSearch() {
                 var count = response["count"];
                 createPagination(count);
                 updateQueryStringParameter(urlSearchKey, json);
-                updateQueryStringParameter(urlSelectionKey, DropDownSelect2.getUrlStringFromState(booksSelector.getState()));
+                updateQueryStringParameter(urlSelectionKey, booksSelector.getSerializedState());
                 updateQueryStringParameter(urlSortAscKey, sortBar.isSortedAsc());
                 updateQueryStringParameter(urlSortCriteriaKey, sortBar.getSortCriteria());
             }, error: response => {
@@ -455,33 +453,22 @@ function initSearch() {
     enabledOptions.push(SearchTypeEnum.Term);
     enabledOptions.push(SearchTypeEnum.TokenDistance);
 
-    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount);
+    var favoritesQueriesConfig: IModulInicializatorConfigurationSearchFavorites = {
+        bookType: BookTypeEnum.TextBank,
+        queryType: QueryTypeEnum.Search
+    }
+    var search = new Search(<any>$("#listSearchDiv")[0], corpusAdvancedSearchCount, corpusBasicSearchCount, favoritesQueriesConfig);
     search.makeSearch(enabledOptions);
     
     const callbackDelegate = new DropDownSelectCallbackDelegate();
     callbackDelegate.selectedChangedCallback = (state: State) => {
-        selectedBookIds = new Array();
-
-        for (var i = 0; i < state.SelectedItems.length; i++) {
-            selectedBookIds.push(state.SelectedItems[i].Id);
-        }
-
-        selectedCategoryIds = new Array();
-
-        for (var i = 0; i < state.SelectedCategories.length; i++) {
-            selectedCategoryIds.push(state.SelectedCategories[i].Id);
-        }
-
-        var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
+        
     };
     callbackDelegate.dataLoadedCallback = () => {
-        var selectedIds = booksSelector.getSelectedIds();
-        selectedBookIds = selectedIds.selectedBookIds;
-        selectedCategoryIds = selectedIds.selectedCategoryIds;
         initializeFromUrlParams();
     };
 
-    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", true, callbackDelegate);
+    booksSelector = new DropDownSelect2("#dropdownSelectDiv", getBaseUrl() + "BohemianTextBank/BohemianTextBank/GetCorpusWithCategories", BookTypeEnum.TextBank, true, callbackDelegate);
     booksSelector.makeDropdown();
 
     function printDetailInfo(tableRow: HTMLElement) {

@@ -15,6 +15,10 @@
                 text: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchPaged",
                 textCount: getBaseUrl() + "AudioBooks/AudioBooks/TextSearchCount",
                 advancedCount: getBaseUrl() + "AudioBooks/AudioBooks/AdvancedSearchResultsCount"
+            },
+            favoriteQueries: {
+                bookType: BookTypeEnum.AudioBook,
+                queryType: QueryTypeEnum.List
             }
         },
         searchBox: {
