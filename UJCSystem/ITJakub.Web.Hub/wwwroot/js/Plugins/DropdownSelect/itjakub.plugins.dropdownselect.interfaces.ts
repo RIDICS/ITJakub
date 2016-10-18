@@ -14,3 +14,8 @@ interface IDropDownRequestResult {
     books: Array<IDropDownBookResult>;
     categories: Array<IDropDownCategoryResult>;
 }
+
+interface IDropdownFavoriteItem {
+    id: number;
+    favoriteInfo: Array<IFavoriteBaseInfo>;
+}

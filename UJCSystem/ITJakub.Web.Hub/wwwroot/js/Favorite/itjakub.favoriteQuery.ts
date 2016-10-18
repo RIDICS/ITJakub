@@ -290,23 +290,23 @@
             var labelLink = document.createElement("a");
             var label = document.createElement("span");
 
-            let color = new HexColor(favoriteLabel.Color);
+            let color = new HexColor(favoriteLabel.color);
             let fontColor = FavoriteHelper.getDefaultFontColor(color);
             let borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
             $(label)
                 .addClass("label")
-                .css("background-color", favoriteLabel.Color)
+                .css("background-color", favoriteLabel.color)
                 .css("border-color", borderColor)
                 .css("color", fontColor)
-                .text(favoriteLabel.Name);
+                .text(favoriteLabel.name);
 
             $(labelLink)
                 .attr("href", "#")
                 .addClass("favorite-query-label")
-                .data("id", favoriteLabel.Id)
-                .data("name", favoriteLabel.Name)
-                .data("color", favoriteLabel.Color)
+                .data("id", favoriteLabel.id)
+                .data("name", favoriteLabel.name)
+                .data("color", favoriteLabel.color)
                 .append(label);
 
             $(this.labelContainer).append(labelLink);
@@ -337,22 +337,22 @@
             $(queryRemoveLink)
                 .attr("href", "#")
                 .addClass("favorite-query-remove")
-                .data("id", favoriteQuery.Id)
+                .data("id", favoriteQuery.id)
                 .append(queryRemoveIcon);
 
-            let color = new HexColor(favoriteQuery.FavoriteLabel.Color);
+            let color = new HexColor(favoriteQuery.favoriteLabel.color);
             let fontColor = FavoriteHelper.getDefaultFontColor(color);
             let borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
             $(queryLabel)
                 .addClass("label")
-                .css("background-color", favoriteQuery.FavoriteLabel.Color)
+                .css("background-color", favoriteQuery.favoriteLabel.color)
                 .css("border-color", borderColor)
                 .css("color", fontColor)
-                .text(favoriteQuery.FavoriteLabel.Name);
+                .text(favoriteQuery.favoriteLabel.name);
 
             $(queryTitle)
-                .text(" " + favoriteQuery.Title);
+                .text(" " + favoriteQuery.title);
 
             $(queryRow1)
                 .append(queryLabel)
@@ -360,15 +360,15 @@
 
             $(queryRow2)
                 .addClass("favorite-query-raw")
-                .text(favoriteQuery.Query);
+                .text(favoriteQuery.query);
 
             $(queryLink)
                 .attr("href", "#")
                 .addClass("favorite-query-item")
-                .data("id", favoriteQuery.Id)
-                .data("name", favoriteQuery.Title)
-                .data("query", favoriteQuery.Query)
-                .data("label-id", favoriteQuery.FavoriteLabel.Id)
+                .data("id", favoriteQuery.id)
+                .data("name", favoriteQuery.title)
+                .data("query", favoriteQuery.query)
+                .data("label-id", favoriteQuery.favoriteLabel.id)
                 .append(queryRemoveLink)
                 .append(queryRow1)
                 .append(queryRow2);

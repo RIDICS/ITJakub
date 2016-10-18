@@ -122,7 +122,7 @@ class BibliographyModule {
         favoriteManager.getFavoritesForBooks(bookIds, favoriteBooks => {
             var favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
             $.each(favoriteBooks, (index, favoriteLabeledBook) => {
-                favoriteBooksDictionary.add(favoriteLabeledBook.Id, favoriteLabeledBook.FavoriteInfo); 
+                favoriteBooksDictionary.add(favoriteLabeledBook.id, favoriteLabeledBook.favoriteInfo); 
             });
             $.each(bookDataList, (index, bookData) => {
                 var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);

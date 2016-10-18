@@ -101,18 +101,18 @@
 
     private createFavoriteItemObject(id: number, favoriteTitle: string, labelId: number, labelName: string, labelColor: string): IFavoriteBaseInfo {
         var favoriteLabel: IFavoriteLabel = {
-            Id: labelId,
-            Name: labelName,
-            Color: labelColor,
-            IsDefault: null,
-            LastUseTime: null
+            id: labelId,
+            name: labelName,
+            color: labelColor,
+            isDefault: null,
+            lastUseTime: null
         };
         var favoriteItem: IFavoriteBaseInfo = {
-            Id: id,
-            FavoriteType: this.favoriteItemType,
-            Title: favoriteTitle,
-            CreateTime: null,
-            FavoriteLabel: favoriteLabel
+            id: id,
+            favoriteType: this.favoriteItemType,
+            title: favoriteTitle,
+            createTime: null,
+            favoriteLabel: favoriteLabel
         };
         return favoriteItem;
     }
@@ -211,22 +211,22 @@ class FavoritePopoverBuilder {
     }
 
     private getFavoriteItemHtml(item: IFavoriteBaseInfo): string {
-        var color = new HexColor(item.FavoriteLabel.Color);
+        var color = new HexColor(item.favoriteLabel.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="Uloženo jako: ${item.Title
-            }" style="background-color: ${escapeHtmlChars(item.FavoriteLabel.Color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.FavoriteLabel.Name)
-            }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.Id.toString())
+        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="Uloženo jako: ${item.title
+            }" style="background-color: ${escapeHtmlChars(item.favoriteLabel.color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.favoriteLabel.name)
+            }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.id.toString())
             }" style="color: ${fontColor}"><span class="glyphicon glyphicon-remove"></span></a></span></div>`;
     }
 
     private getFavoriteLabelHtml(label: IFavoriteLabel): string {
-        var color = new HexColor(label.Color);
+        var color = new HexColor(label.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        return `<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="${escapeHtmlChars(label.Id.toString())
-            }" data-color="${escapeHtmlChars(label.Color)}" + data-name="${escapeHtmlChars(label.Name)
-            }"><span class="label label-favorite" style="background-color: ${escapeHtmlChars(label.Color)}; border-color: ${borderColor}; color: ${fontColor};">${escapeHtmlChars(label.Name)
+        return `<span class="label-favorite-container"><a href="#" class="fast-add-favorite-label" data-id="${escapeHtmlChars(label.id.toString())
+            }" data-color="${escapeHtmlChars(label.color)}" + data-name="${escapeHtmlChars(label.name)
+            }"><span class="label label-favorite" style="background-color: ${escapeHtmlChars(label.color)}; border-color: ${borderColor}; color: ${fontColor};">${escapeHtmlChars(label.name)
             }</span></a></span>`;
     }
 
@@ -269,7 +269,7 @@ class FavoritePopoverBuilder {
     public removeFavoriteItem(id: number) {
         for (var i = 0; i < this.favoriteItems.length; i++) {
             var favoriteItem = this.favoriteItems[i];
-            if (favoriteItem.Id === id) {
+            if (favoriteItem.id === id) {
                 this.favoriteItems.splice(i, 1);
                 return;
             }

@@ -92,6 +92,8 @@ gulp.task("build:ts", function () {
 gulp.task("bundle:itjakub", function () {
     return gulp.src([
             paths.webroot + "js/itjakub.js",
+            paths.webroot + "js/itjakub.dataContracts.js",
+            paths.webroot + "js/Plugins/itjakub.tools.js",
             paths.webroot + "js/Plugins/itjakub.eucookiepopup.js"
         ])
         .pipe(sourcemaps.init())
@@ -153,7 +155,22 @@ gulp.task("bundle:itjakub_storage", function () {
         .pipe(gulp.dest(paths.webroot + "js/bundles"));
 });
 
-gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage"]);
+gulp.task("bundle:itjakub_favorite", function () {
+    return gulp.src([
+            paths.webroot + "js/Favorite/itjakub.favoriteBook.js",
+            paths.webroot + "js/Favorite/itjakub.favoriteManager.js",
+            paths.webroot + "js/Favorite/itjakub.favoriteQuery.js",
+            paths.webroot + "js/Favorite/itjakub.favoriteStar.js",
+            paths.webroot + "js/Favorite/itjakub.newFavoriteDialog.js"
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat("itjakub.favorite.bundle.js"))
+        .pipe(sourcemaps.write())
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "js/bundles"));
+});
+
+gulp.task("bundlejs", ["bundle:itjakub", "bundle:itjakub_plugins", "bundle:itjakub_keyboard", "bundle:itjakub_storage", "bundle:itjakub_favorite"]);
 
 
 // Bundle JavaScript in Areas

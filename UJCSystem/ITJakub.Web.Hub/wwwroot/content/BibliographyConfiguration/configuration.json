@@ -3,6 +3,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -153,6 +156,9 @@
       "read-button": {
         "onclick": "listBook(this)"
       },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
+      },
       "variables": {
         "$test": {
           "type": "basic",
@@ -168,6 +174,9 @@
       "short-info": "{$linked}",
       "title": "{Title} <span class=\"acronym\">[{Acronym}]</span>",
       "body": "{BiblText} <br> {PublishPlace}, {PublishDate} <br> {$authors}{$description}{$year}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$linked": {
           "type": "if",
@@ -199,6 +208,9 @@
       },
       "read-button": {
         "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       }
     }
   },
@@ -207,6 +219,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -357,6 +372,9 @@
       "read-button": {
         "url": "Editions\\Editions\\Listing?bookId={BookXmlId}"
       },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
+      },
       "variables": {
         "$test": {
           "type": "basic",
@@ -425,6 +443,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Stáhnout celou audioknihu: {$fullRecords}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$manuscripts": {
           "type": "array",
@@ -467,8 +488,10 @@
     "right-panel": {
       "info-button": {
         "url": "AudioBooks\\AudioBooks\\Listing?bookId={BookXmlId}"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       }
-
     },
     "bottom-panel": {
       "body": "{$tracksList}",
@@ -523,6 +546,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -672,6 +698,9 @@
       },
       "read-button": {
         "onclick": "listGrammarBook(this)"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       },
       "variables": {
         "$test": {
@@ -687,6 +716,9 @@
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -836,6 +868,9 @@
       },
       "read-button": {
         "onclick": "listBook(this)"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       },
       "variables": {
         "$test": {
@@ -846,10 +881,14 @@
       }
 
     }
-  },"BibliographicalItem": {
+  },
+  "BibliographicalItem": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
       "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "favorites": {
+        "maxCount": 5
+      },
       "variables": {
         "$test": {
           "type": "if",
@@ -999,6 +1038,9 @@
       },
       "read-button": {
         "onclick": "listBook(this)"
+      },
+      "favorite-button": {
+        "onclick-callable": "addFavoriteFromBibliography(this)"
       },
       "variables": {
         "$test": {

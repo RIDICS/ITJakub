@@ -9,11 +9,11 @@
 
     private getDefaultFavoriteLabel(): IFavoriteLabel {
         return {
-            Id: 0,
-            Name: "Všechny položky",
-            Color: "#CC9900",
-            IsDefault: true,
-            LastUseTime: null
+            id: 0,
+            name: "Všechny položky",
+            color: "#CC9900",
+            isDefault: true,
+            lastUseTime: null
         };
     }
 
@@ -40,7 +40,7 @@
 
             for (let j = 0; j < item.bookmarks.length; j++) {
                 var bookmark = item.bookmarks[j];
-                if (bookmark.Id === id) {
+                if (bookmark.id === id) {
                     return {
                         favoriteType: FavoriteType.PageBookmark,
                         storageItemIndex: j,
@@ -56,9 +56,9 @@
         for (let i = 0; i < favoriteLabeledBooks.length; i++) {
             var favoriteLabeledBook = favoriteLabeledBooks[i];
 
-            for (let j = 0; j < favoriteLabeledBook.FavoriteInfo.length; j++) {
-                var favoriteBook = favoriteLabeledBook.FavoriteInfo[j];
-                if (favoriteBook.Id === id) {
+            for (let j = 0; j < favoriteLabeledBook.favoriteInfo.length; j++) {
+                var favoriteBook = favoriteLabeledBook.favoriteInfo[j];
+                if (favoriteBook.id === id) {
                     return {
                         favoriteType: FavoriteType.Book,
                         storageItemIndex: j,
@@ -74,9 +74,9 @@
         for (let i = 0; i < favoriteLabeledCategories.length; i++) {
             var favoriteLabeledCategory = favoriteLabeledCategories[i];
 
-            for (let j = 0; j < favoriteLabeledCategory.FavoriteInfo.length; j++) {
-                var favoriteCategory = favoriteLabeledCategory.FavoriteInfo[j];
-                if (favoriteCategory.Id === id) {
+            for (let j = 0; j < favoriteLabeledCategory.favoriteInfo.length; j++) {
+                var favoriteCategory = favoriteLabeledCategory.favoriteInfo[j];
+                if (favoriteCategory.id === id) {
                     return {
                         favoriteType: FavoriteType.Category,
                         storageItemIndex: j,
@@ -91,7 +91,7 @@
         var favoriteQueries: IFavoriteQuery[] = this.getFromStorage("favoriteQueries");
         for (let i = 0; i < favoriteQueries.length; i++) {
             var favoriteQuery = favoriteQueries[i];
-            if (favoriteQuery.Id === id) {
+            if (favoriteQuery.id === id) {
                 return {
                     favoriteType: FavoriteType.Query,
                     storageItemIndex: null,
@@ -201,7 +201,7 @@
             bookIdSet.addAll(bookIds);
             for (var i = 0; i < favoriteLabeledBooks.length; i++) {
                 var favoriteLabeledBook = favoriteLabeledBooks[i];
-                if (bookIdSet.contains(favoriteLabeledBook.Id)) {
+                if (bookIdSet.contains(favoriteLabeledBook.id)) {
                     resultArray.push(favoriteLabeledBook);
                 }
             }
@@ -234,7 +234,7 @@
             categoryIdSet.addAll(categoryIds);
             for (var i = 0; i < favoriteLabeledCategories.length; i++) {
                 var favoriteLabeledCategory = favoriteLabeledCategories[i];
-                if (categoryIdSet.contains(favoriteLabeledCategory.Id)) {
+                if (categoryIdSet.contains(favoriteLabeledCategory.id)) {
                     resultArray.push(favoriteLabeledCategory);
                 }
             }
@@ -267,20 +267,20 @@
             var defaultLabel = this.getDefaultFavoriteLabel();
 
             var resultLabel: IFavoriteLabelsWithBooksAndCategories = {
-                Id: defaultLabel.Id,
-                Name: defaultLabel.Name,
-                Color: defaultLabel.Color,
-                BookIdList: [],
-                CategoryIdList: []
+                id: defaultLabel.id,
+                name: defaultLabel.name,
+                color: defaultLabel.color,
+                bookIdList: [],
+                categoryIdList: []
             }
 
             for (let i = 0; i < favoriteLabeledBooks.length; i++) {
                 var favoriteLabeledBook = favoriteLabeledBooks[i];
-                resultLabel.BookIdList.push(favoriteLabeledBook.Id);
+                resultLabel.bookIdList.push(favoriteLabeledBook.id);
             }
             for (let i = 0; i < favoriteLabeledCategories.length; i++) {
                 var favoriteLabeledCategory = favoriteLabeledCategories[i];
-                resultLabel.CategoryIdList.push(favoriteLabeledCategory.Id);
+                resultLabel.categoryIdList.push(favoriteLabeledCategory.id);
             }
 
             resultList.push(resultLabel);
@@ -312,7 +312,7 @@
             var filteredQueries = new Array<IFavoriteQuery>();
             for (let i = 0; i < favoriteQueries.length; i++) {
                 let favoriteQuery = favoriteQueries[i];
-                if (favoriteQuery.BookType === bookType && favoriteQuery.QueryType === queryType) {
+                if (favoriteQuery.bookType === bookType && favoriteQuery.queryType === queryType) {
                     filteredQueries.push(favoriteQuery);
                 }
             }
@@ -325,7 +325,7 @@
             var result = new Array<IFavoriteQuery>();
             for (let i = 0; i < filteredQueries.length; i++) {
                 let favoriteQuery = filteredQueries[i];
-                if (favoriteQuery.Title.indexOf(filterByTitle) !== -1) {
+                if (favoriteQuery.title.indexOf(filterByTitle) !== -1) {
                     result.push(favoriteQuery);
                 }
             }
@@ -491,24 +491,24 @@
                     case FavoriteType.Book:
                         var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
                         var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
-                        var favoriteBook = favoriteLabeledBook.FavoriteInfo[storageItemInfo.storageItemIndex];
+                        var favoriteBook = favoriteLabeledBook.favoriteInfo[storageItemInfo.storageItemIndex];
 
-                        favoriteBook.Title = title;
+                        favoriteBook.title = title;
                         this.storage.save("favoriteLabeledBooks", bookStorage);
                         break;
                     case FavoriteType.Category:
                         var categoryStorage = <IFavoriteLabeledCategory[]>storageItemInfo.storage;
                         var favoriteLabeledCategory = <IFavoriteLabeledCategory>storageItemInfo.storageItem;
-                        var favoriteCategory = favoriteLabeledCategory.FavoriteInfo[storageItemInfo.storageItemIndex];
+                        var favoriteCategory = favoriteLabeledCategory.favoriteInfo[storageItemInfo.storageItemIndex];
 
-                        favoriteCategory.Title = title;
+                        favoriteCategory.title = title;
                         this.storage.save("favoriteLabeledCategories", categoryStorage);
                         break;
                     case FavoriteType.Query:
                         var queryStorage = <IFavoriteQuery[]>storageItemInfo.storage;
                         var favoriteQuery = <IFavoriteQuery>storageItemInfo.storageItem;
 
-                        favoriteQuery.Title = title;
+                        favoriteQuery.title = title;
                         this.storage.save("favoriteQueries", queryStorage);
                         break;
                     case FavoriteType.PageBookmark:
@@ -516,7 +516,7 @@
                         var bookmarkStorageItem = <IPageBookmarkStorageItem>storageItemInfo.storageItem;
                         var bookmark = bookmarkStorageItem.bookmarks[storageItemInfo.storageItemIndex];
 
-                        bookmark.Title = title;
+                        bookmark.title = title;
                         this.storage.save("favoritePageBookmarkItems", bookmarkStorage);
                         break;
                     default:
@@ -556,8 +556,8 @@
                         var bookStorage = <IFavoriteLabeledBook[]>storageItemInfo.storage;
                         var favoriteLabeledBook = <IFavoriteLabeledBook>storageItemInfo.storageItem;
 
-                        favoriteLabeledBook.FavoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
-                        if (favoriteLabeledBook.FavoriteInfo.length === 0) {
+                        favoriteLabeledBook.favoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
+                        if (favoriteLabeledBook.favoriteInfo.length === 0) {
                             bookStorage.splice(storageItemInfo.storageIndex, 1);
                         }
 
@@ -567,8 +567,8 @@
                         var categoryStorage = <IFavoriteLabeledCategory[]>storageItemInfo.storage;
                         var favoriteLabeledCategory = <IFavoriteLabeledCategory>storageItemInfo.storageItem;
 
-                        favoriteLabeledCategory.FavoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
-                        if (favoriteLabeledCategory.FavoriteInfo.length === 0) {
+                        favoriteLabeledCategory.favoriteInfo.splice(storageItemInfo.storageItemIndex, 1);
+                        if (favoriteLabeledCategory.favoriteInfo.length === 0) {
                             categoryStorage.splice(storageItemInfo.storageIndex, 1);
                         }
 
@@ -638,30 +638,30 @@
             
             for (let i = 0; i < favoriteLabeledBooks.length; i++) {
                 var item = favoriteLabeledBooks[i];
-                if (item.Id === bookId) {
+                if (item.id === bookId) {
                     favoriteLabeledBook = item;
                     break;
                 }
             }
             if (favoriteLabeledBook == null) {
                 favoriteLabeledBook = {
-                    Id: bookId,
-                    FavoriteInfo: []
+                    id: bookId,
+                    favoriteInfo: []
                 };
                 favoriteLabeledBooks.push(favoriteLabeledBook);
             }
 
             var newFavoriteBook: IFavoriteBaseInfo = {
-                Id: this.generateLocalId(),
-                CreateTime: this.getCurrentTime(),
-                FavoriteLabel: this.getDefaultFavoriteLabel(),
-                FavoriteType: FavoriteType.Book,
-                Title: favoriteTitle
+                id: this.generateLocalId(),
+                createTime: this.getCurrentTime(),
+                favoriteLabel: this.getDefaultFavoriteLabel(),
+                favoriteType: FavoriteType.Book,
+                title: favoriteTitle
             };
-            favoriteLabeledBook.FavoriteInfo.push(newFavoriteBook);
+            favoriteLabeledBook.favoriteInfo.push(newFavoriteBook);
             
             this.storage.save("favoriteLabeledBooks", favoriteLabeledBooks);
-            callback([newFavoriteBook.Id], null);
+            callback([newFavoriteBook.id], null);
             return;
         }
 
@@ -692,30 +692,30 @@
 
             for (let i = 0; i < favoriteLabeledCategories.length; i++) {
                 var item = favoriteLabeledCategories[i];
-                if (item.Id === categoryId) {
+                if (item.id === categoryId) {
                     favoriteLabeledCategory = item;
                     break;
                 }
             }
             if (favoriteLabeledCategory == null) {
                 favoriteLabeledCategory = {
-                    Id: categoryId,
-                    FavoriteInfo: []
+                    id: categoryId,
+                    favoriteInfo: []
                 };
                 favoriteLabeledCategories.push(favoriteLabeledCategory);
             }
 
             var newFavoriteCategory: IFavoriteBaseInfo = {
-                Id: this.generateLocalId(),
-                CreateTime: this.getCurrentTime(),
-                FavoriteLabel: this.getDefaultFavoriteLabel(),
-                FavoriteType: FavoriteType.Category,
-                Title: favoriteTitle
+                id: this.generateLocalId(),
+                createTime: this.getCurrentTime(),
+                favoriteLabel: this.getDefaultFavoriteLabel(),
+                favoriteType: FavoriteType.Category,
+                title: favoriteTitle
             };
-            favoriteLabeledCategory.FavoriteInfo.push(newFavoriteCategory);
+            favoriteLabeledCategory.favoriteInfo.push(newFavoriteCategory);
 
             this.storage.save("favoriteLabeledCategories", favoriteLabeledCategories);
-            callback([newFavoriteCategory.Id], null);
+            callback([newFavoriteCategory.id], null);
             return;
         }
 
@@ -743,19 +743,19 @@
         if (!this.isUserLoggedIn) {
             var favoriteQueries = <IFavoriteQuery[]>this.getFromStorage("favoriteQueries");
             var favoriteQuery: IFavoriteQuery = {
-                Id: this.generateLocalId(),
-                CreateTime: this.getCurrentTime(),
-                Title: favoriteTitle,
-                Query: query,
-                BookType: bookType,
-                QueryType: queryType,
-                FavoriteLabel: this.getDefaultFavoriteLabel()
+                id: this.generateLocalId(),
+                createTime: this.getCurrentTime(),
+                title: favoriteTitle,
+                query: query,
+                bookType: bookType,
+                queryType: queryType,
+                favoriteLabel: this.getDefaultFavoriteLabel()
             }
 
             favoriteQueries.push(favoriteQuery);
             this.storage.save("favoriteQueries", favoriteQueries);
 
-            callback([favoriteQuery.Id], null);
+            callback([favoriteQuery.id], null);
             return;
         }
 
@@ -801,16 +801,16 @@
             }
 
             var bookmark: IBookPageBookmark = {
-                Id: this.generateLocalId(),
-                Title: favoriteTitle,
-                PageXmlId: pageXmlId,
-                PagePosition: null,
-                FavoriteLabel: this.getDefaultFavoriteLabel()
+                id: this.generateLocalId(),
+                title: favoriteTitle,
+                pageXmlId: pageXmlId,
+                pagePosition: null,
+                favoriteLabel: this.getDefaultFavoriteLabel()
             };
             item.bookmarks.push(bookmark);
 
             this.storage.save("favoritePageBookmarkItems", favoritePageBookmarkItems);
-            callback(bookmark.Id, null);
+            callback(bookmark.id, null);
             return;
         }
 

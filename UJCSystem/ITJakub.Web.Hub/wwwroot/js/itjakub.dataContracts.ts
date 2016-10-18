@@ -1,53 +1,53 @@
 ﻿interface IFavoriteBaseInfo {
-    Id: number;
-    Title: string;
-    FavoriteLabel: IFavoriteLabel;
-    CreateTime: string;
-    FavoriteType: FavoriteType;
+    id: number;
+    title: string;
+    favoriteLabel: IFavoriteLabel;
+    createTime: string;
+    favoriteType: FavoriteType;
 }
 
 interface IFavoriteLabel {
-    Id: number;
-    Name: string;
-    Color: string;
-    IsDefault: boolean;
-    LastUseTime: string;
+    id: number;
+    name: string;
+    color: string;
+    isDefault: boolean;
+    lastUseTime: string;
 }
 
 interface IFavoriteLabelsWithBooksAndCategories {
-    Id: number;
-    Name: string;
-    Color: string;
-    BookIdList: number[];
-    CategoryIdList: number[];
+    id: number;
+    name: string;
+    color: string;
+    bookIdList: number[];
+    categoryIdList: number[];
 }
 
 interface IFavoriteLabeledBook {
-    Id: number;
-    FavoriteInfo: Array<IFavoriteBaseInfo>;
+    id: number;
+    favoriteInfo: Array<IFavoriteBaseInfo>;
 }
 
 interface IFavoriteLabeledCategory {
-    Id: number;
-    FavoriteInfo: Array<IFavoriteBaseInfo>;
+    id: number;
+    favoriteInfo: Array<IFavoriteBaseInfo>;
 }
 
 interface IFavoriteQuery {
-    Id: number;
-    Title: string;
-    CreateTime: string;
-    Query: string;
-    FavoriteLabel: IFavoriteLabel;
-    BookType?: BookTypeEnum;
-    QueryType?: QueryTypeEnum;
+    id: number;
+    title: string;
+    createTime: string;
+    query: string;
+    favoriteLabel: IFavoriteLabel;
+    bookType?: BookTypeEnum;
+    queryType?: QueryTypeEnum;
 }
 
 interface IBookPageBookmark {
-    Id: number;
-    PageXmlId: string;
-    PagePosition: number;
-    Title: string;
-    FavoriteLabel: IFavoriteLabel;
+    id: number;
+    pageXmlId: string;
+    pagePosition: number;
+    title: string;
+    favoriteLabel: IFavoriteLabel;
 }
 
 enum FavoriteType {

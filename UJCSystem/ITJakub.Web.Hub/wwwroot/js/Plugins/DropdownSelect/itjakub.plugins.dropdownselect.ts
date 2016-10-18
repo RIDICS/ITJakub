@@ -316,10 +316,10 @@ class DropDownSelect {
         var leafsDictionary = new DictionaryWrapper<IDropdownFavoriteItem>();
         
         for (var i = 0; i < categoryItems.length; i++) {
-            categoriesDictionary.add(categoryItems[i].Id, categoryItems[i]);
+            categoriesDictionary.add(categoryItems[i].id, categoryItems[i]);
         }
         for (var j = 0; j < leafItems.length; j++) {
-            leafsDictionary.add(leafItems[j].Id, leafItems[j]);
+            leafsDictionary.add(leafItems[j].id, leafItems[j]);
         }
 
         $(".concrete-item", dropdownItemsDiv).each((index, element) => {
@@ -342,7 +342,7 @@ class DropDownSelect {
             var favoriteStar = new FavoriteStar(favoriteStarContainer, favoriteType, id, itemName, this.favoriteDialog, this.favoriteManager, () => this.onFavoritesChanged(favoriteType, id));
 
             if (favoriteItem != null) {
-                favoriteStar.addFavoriteItems(favoriteItem.FavoriteInfo);
+                favoriteStar.addFavoriteItems(favoriteItem.favoriteInfo);
             }
 
             favoriteStar.addFavoriteLabels(favoriteLabels);
@@ -744,9 +744,4 @@ class Category {
         this.Id = id;
         this.Name = name;
     }
-}
-
-interface IDropdownFavoriteItem {
-    Id: number;
-    FavoriteInfo: Array<IFavoriteBaseInfo>;
 }

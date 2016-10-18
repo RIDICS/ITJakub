@@ -230,7 +230,7 @@ class BibliographyFactory {
         var max = maxFavLabels < bookFavorites.length ? maxFavLabels : bookFavorites.length;
         for (var i = 0; i < bookFavorites.length; i++) {
             var favoriteInfo = bookFavorites[i];
-            var label = BibliographyFactory.makeFavoriteLabel(favoriteInfo.Title, favoriteInfo.FavoriteLabel.Name, favoriteInfo.FavoriteLabel.Color);
+            var label = BibliographyFactory.makeFavoriteLabel(favoriteInfo.title, favoriteInfo.favoriteLabel.name, favoriteInfo.favoriteLabel.color);
             resultList.push(label);
 
             if (i >= max) {

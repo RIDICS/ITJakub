@@ -648,9 +648,9 @@
     private loadBookmark(actualBookmark: IBookPageBookmark) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
-            if (actualBookmark.PageXmlId === actualPage.xmlId) {
-                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.Title, actualBookmark.FavoriteLabel);
-                $(bookmarkSpan).data("favorite-id", actualBookmark.Id);
+            if (actualBookmark.pageXmlId === actualPage.xmlId) {
+                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.title, actualBookmark.favoriteLabel);
+                $(bookmarkSpan).data("favorite-id", actualBookmark.id);
                 
                 this.showBookmark(bookmarkSpan);
                 break;
@@ -871,10 +871,10 @@
         });
 
         if (favoriteLabel) {
-            $bookmarkSpan.css("color", favoriteLabel.Color);
-            $bookmarkSpan.data("label-id", favoriteLabel.Id);
-            $bookmarkSpan.data("label-name", favoriteLabel.Name);
-            $bookmarkSpan.data("label-color", favoriteLabel.Color);
+            $bookmarkSpan.css("color", favoriteLabel.color);
+            $bookmarkSpan.data("label-id", favoriteLabel.id);
+            $bookmarkSpan.data("label-name", favoriteLabel.name);
+            $bookmarkSpan.data("label-color", favoriteLabel.color);
         }
 
         var tooltipOptions: TooltipOptions = {
@@ -882,7 +882,7 @@
             title: function() {
                 var bookmarkTitle = $(this).data("title");
                 return favoriteLabel
-                    ? bookmarkTitle + " (Štítek: " + favoriteLabel.Name + ")"
+                    ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
                     : bookmarkTitle;
             }
         };
@@ -935,11 +935,11 @@
 
         var firstLabel = data.labels[0];
         var favoriteLabel: IFavoriteLabel = {
-            Id: firstLabel.labelId,
-            Name: firstLabel.labelName,
-            Color: firstLabel.labelColor,
-            IsDefault: false,
-            LastUseTime: null
+            id: firstLabel.labelId,
+            name: firstLabel.labelName,
+            color: firstLabel.labelColor,
+            isDefault: false,
+            lastUseTime: null
         }
         var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, favoriteLabel);
 

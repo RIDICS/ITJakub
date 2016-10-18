@@ -209,7 +209,7 @@ class FavoriteManagement {
             container.empty();
             for (let i = 0; i < favorites.length; i++) {
                 var favoriteItem = favorites[i];
-                var item = new FavoriteManagementItem(container, favoriteItem.FavoriteType, favoriteItem.Id, favoriteItem.Title, favoriteItem.CreateTime, this.favoriteManager);
+                var item = new FavoriteManagementItem(container, favoriteItem.favoriteType, favoriteItem.id, favoriteItem.title, favoriteItem.createTime, this.favoriteManager);
                 item.make();
                 item.setOnRemoveCallback(() => this.loadFavoriteItemsPage(pageNumber));
             }

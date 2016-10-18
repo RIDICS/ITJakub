@@ -114,15 +114,15 @@
         var innerDiv = document.createElement("div");
         var labelSpan = document.createElement("span");
 
-        var color = new HexColor(favoriteLabel.Color);
+        var color = new HexColor(favoriteLabel.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
 
         $(labelSpan)
             .addClass("label")
             .addClass("favorite-dropdown-item-label")
-            .text(favoriteLabel.Name)
-            .css("background-color", favoriteLabel.Color)
+            .text(favoriteLabel.name)
+            .css("background-color", favoriteLabel.color)
             .css("border-color", borderColor)
             .css("color", fontColor);
 
@@ -132,9 +132,9 @@
 
         $(link)
             .attr("href", "#")
-            .data("id", favoriteLabel.Id)
-            .data("bookIdList", favoriteLabel.BookIdList)
-            .data("categoryIdList", favoriteLabel.CategoryIdList)
+            .data("id", favoriteLabel.id)
+            .data("bookIdList", favoriteLabel.bookIdList)
+            .data("categoryIdList", favoriteLabel.categoryIdList)
             .click(this.onLabelClick.bind(this))
             .append(innerDiv);
 
