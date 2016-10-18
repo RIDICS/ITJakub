@@ -42,8 +42,6 @@
         $(saveIcon)
             .addClass("glyphicon")
             .addClass("glyphicon-star");
-        $(saveTitle)
-            .text("Potvrdit přiřazení štítků");
         this.saveTitle = saveTitle;
 
         $(".close-button", this.container)
@@ -72,6 +70,8 @@
         var queryString = $.param(queryParameters);
         var url = getBaseUrl() + "Favorite/NewFavorite?" + queryString;
 
+        $(this.saveTitle)
+            .text("Potvrdit");
         $(".modal-body", this.container)
             .addClass("loading")
             .empty();
@@ -165,27 +165,13 @@
 
         $("[name=favorite-label]:checked", this.container).trigger("change");
 
+        this.setActiveTab("tab-favorite-label-assign");
         $(".nav-tabs a", this.container).click((event) => {
             $(".nav-tabs li, .tab-pane").removeClass("active");
             var navLinkJQuery = $(event.currentTarget);
             var tabClass = navLinkJQuery.data("tab-class");
-            this.activeTabClass = tabClass;
-
-            navLinkJQuery.closest("li").addClass("active");
-            $("." + tabClass, this.container).addClass("active");
-
-            var newSaveTitle: string;
-            switch (tabClass) {
-                case "tab-favorite-label-assign":
-                    newSaveTitle = "Potvrdit přiřazení štítků";
-                    break;
-                case "tab-favorite-label-create":
-                    newSaveTitle = "Vytvořit a přiřadit štítek";
-                    break;
-                default:
-                    newSaveTitle = "Uložit";
-            }
-            $(this.saveTitle).text(newSaveTitle);
+            
+            this.setActiveTab(tabClass);
         });
 
         $(".favorite-label-filter", this.container).on("change keyup paste", (event) => {
@@ -213,6 +199,26 @@
         this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
         this.labelColorInput.make();
         this.labelColorInput.setColorChangedCallback(this.updateLabelPreview.bind(this));
+    }
+
+    private setActiveTab(tabClass: string) {
+        this.activeTabClass = tabClass;
+
+        $("." + tabClass, this.container).addClass("active");
+        $(`[data-tab-class=${tabClass}]`, this.container).closest("li").addClass("active");
+
+        var newSaveTitle: string;
+        switch (tabClass) {
+            case "tab-favorite-label-assign":
+                newSaveTitle = "Potvrdit přiřazení štítků";
+                break;
+            case "tab-favorite-label-create":
+                newSaveTitle = "Vytvořit a přiřadit štítek";
+                break;
+            default:
+                newSaveTitle = "Uložit";
+        }
+        $(this.saveTitle).text(newSaveTitle);
     }
 
     private updateCheckboxColor(checkBoxJQuery: JQuery, isChecked: boolean, color: HexColor) {
