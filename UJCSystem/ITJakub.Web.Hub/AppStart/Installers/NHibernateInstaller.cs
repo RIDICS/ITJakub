@@ -8,7 +8,7 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 
-namespace ITJakub.Web.Hub.App_Start.Installers
+namespace ITJakub.Web.Hub.Installers
 {
     public class NHibernateInstaller : INHibernateInstaller
     {

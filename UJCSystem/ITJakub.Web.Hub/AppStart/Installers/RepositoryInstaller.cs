@@ -3,7 +3,7 @@ using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 using ITJakub.Web.DataEntities.Database.Repositories;
 
-namespace ITJakub.Web.Hub.App_Start.Installers
+namespace ITJakub.Web.Hub.Installers
 {
     public class RepositoryInstaller : IWindsorInstaller
     {

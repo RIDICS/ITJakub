@@ -5,7 +5,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
 using Castle.Windsor;
 
-namespace ITJakub.Web.Hub.App_Start.Installers
+namespace ITJakub.Web.Hub.Installers
 {
     public class FacilitiesInstaller : IWindsorInstaller
     {

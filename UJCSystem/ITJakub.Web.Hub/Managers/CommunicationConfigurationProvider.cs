@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using System.Xml;
 using ITJakub.Web.Hub.Models.Options;
 using Microsoft.Extensions.Options;
 
@@ -32,7 +33,7 @@ namespace ITJakub.Web.Hub.Managers
                 CloseTimeout = new TimeSpan(0, 10, 0),
                 OpenTimeout = new TimeSpan(0, 10, 0),
                 SendTimeout = new TimeSpan(0, 10, 0),
-                ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
+                ReaderQuotas = new XmlDictionaryReaderQuotas
                 {
                     MaxDepth = 2000000,
                     MaxStringContentLength = 2147483647,
@@ -67,7 +68,7 @@ namespace ITJakub.Web.Hub.Managers
                 CloseTimeout = new TimeSpan(0, 10, 0),
                 OpenTimeout = new TimeSpan(0, 10, 0),
                 SendTimeout = new TimeSpan(0, 10, 0),
-                ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
+                ReaderQuotas = new XmlDictionaryReaderQuotas
                 {
                     MaxDepth = 2000000,
                     MaxStringContentLength = 2147483647,

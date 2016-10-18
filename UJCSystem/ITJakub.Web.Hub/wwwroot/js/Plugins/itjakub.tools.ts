@@ -3,7 +3,7 @@
     [key: string]: T;
 }
 
-class DictionaryWrapper<T>  {
+class DictionaryWrapper<T> {
     private data: IDictionary<T>;
 
     constructor() {
@@ -54,6 +54,59 @@ class Set {
 
     public isEmpty(): boolean {
         return $.isEmptyObject(this.data);
+    }
+}
+
+class TimeSpan {
+    private hours = 0;
+    private minutes = 0;
+    private seconds = 0;
+    private milliseconds = 0;
+
+    constructor(data: string) {
+        var tokens = data.split(":");
+        this.hours = Number(tokens[0]);
+
+        if (tokens.length >= 2) {
+            this.minutes = Number(tokens[1]);
+        }
+        if (tokens.length >= 3) {
+            var secTokens = tokens[2].split(".");
+            this.seconds = Number(secTokens[0]);
+
+            if (secTokens.length > 1) {
+                this.milliseconds = Number(secTokens[1]);
+            }
+        }
+    }
+
+    getHours(): number {
+        return this.hours;
+    }
+    getMinutes(): number {
+        return this.minutes;
+    }
+    getSeconds(): number {
+        return this.seconds;
+    }
+    getMilliseconds(): number {
+        return this.milliseconds;
+    }
+
+    toShortString(): string {
+        if (this.hours > 0) {
+            return this.hours.toString() + ":" + this.fillLeadingZero(this.minutes) + ":" + this.fillLeadingZero(this.seconds);
+        } else {
+            return this.minutes.toString() + ":" + this.fillLeadingZero(this.seconds);
+        }
+    }
+
+    private fillLeadingZero(timeValue: number) {
+        var secondsString = timeValue.toString();
+        if (secondsString.length === 1) {
+            secondsString = `0${secondsString}`;
+        }
+        return secondsString;
     }
 }
 

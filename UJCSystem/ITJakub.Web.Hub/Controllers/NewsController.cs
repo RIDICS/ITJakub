@@ -5,7 +5,7 @@ using ITJakub.Shared.Contracts.News;
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models;
-using ITJakub.Web.Hub.Results;
+using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
