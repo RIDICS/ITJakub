@@ -291,6 +291,7 @@
     <Compile Include="Identity\CustomClaimType.cs" />
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
+    <Compile Include="Managers\Favorites.cs" />
     <Compile Include="Managers\StaticTextManager.cs" />
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />

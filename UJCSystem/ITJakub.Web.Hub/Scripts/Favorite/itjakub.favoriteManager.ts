@@ -1,4 +1,6 @@
 ﻿class FavoriteManager {
+    public static maxTitleLength = 250;
+    public static maxLabelLength = 50;
     private static localStorageVersion = 2;
     private storage: IStorage;
     private isUserLoggedIn: boolean;

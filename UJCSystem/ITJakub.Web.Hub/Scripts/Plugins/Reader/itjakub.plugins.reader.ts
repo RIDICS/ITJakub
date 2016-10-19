@@ -1645,6 +1645,7 @@ class SettingsPanel extends LeftSidePanel {
         const titleInput = document.createElement("input");
         titleInput.classList.add("reader-bookmarks-content-item-title-input", "hide");
         titleInput.value = $bookmark.data("title");
+        $(titleInput).attr("maxlength", FavoriteManager.maxTitleLength);
         bookmarkItem.appendChild(titleInput);
 
         const title = document.createElement("span");
