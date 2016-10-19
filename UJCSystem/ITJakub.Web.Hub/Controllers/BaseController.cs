@@ -44,7 +44,7 @@ namespace ITJakub.Web.Hub.Controllers
             return m_communication.GetLemmatizationClient();
         }
 
-        private bool IsUserLoggedIn()
+        protected bool IsUserLoggedIn()
         {
             return User.Identity.IsAuthenticated;            
         }

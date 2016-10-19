@@ -12,17 +12,12 @@ namespace ITJakub.Web.Hub.Controllers
     {
         private const int AllFavoriteCount = 0;
         private const int LatestFavoriteCount = 5;
-
-        private string CurrentUserName
-        {
-            get { return GetUserName(); }
-        }
-
+        
         public ActionResult Management()
         {
             using (var client = GetMainServiceClient())
             {
-                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
+                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount);
                 var viewModel = new FavoriteManagementViewModel
                 {
                     FavoriteLabels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels),
@@ -48,7 +43,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult NewFavorite(string itemName)
         {
-            if (string.IsNullOrWhiteSpace(CurrentUserName))
+            if (!IsUserLoggedIn())
             {
                 var viewModel = new NewFavoriteViewModel
                 {
@@ -70,7 +65,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             using (var client = GetMainServiceClient())
             {
-                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
+                var favoriteLabels = client.GetFavoriteLabels(AllFavoriteCount);
 
                 var favoriteLabelViewModels = Mapper.Map<IList<FavoriteLabelViewModel>>(favoriteLabels);
                 var viewModel = new NewFavoriteViewModel
@@ -87,7 +82,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var favoriteItem = client.GetFavoriteItem(id, CurrentUserName);
+                var favoriteItem = client.GetFavoriteItem(id);
 
                 switch (favoriteItem.FavoriteType)
                 {
@@ -163,7 +158,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabeledBooks(bookIds, CurrentUserName);
+                var result = client.GetFavoriteLabeledBooks(bookIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -173,7 +168,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabeledCategories(categoryIds, CurrentUserName);
+                var result = client.GetFavoriteLabeledCategories(categoryIds);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -182,7 +177,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType, CurrentUserName);
+                var result = client.GetFavoriteLabelsWithBooksAndCategories(bookType);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -191,7 +186,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultIds = client.CreateFavoriteBook(bookId, title, labelIds, CurrentUserName);
+                var resultIds = client.CreateFavoriteBook(bookId, title, labelIds);
                 return Json(resultIds);
             }
         }
@@ -200,7 +195,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultIds = client.CreateFavoriteCategory(categoryId, title, labelIds, CurrentUserName);
+                var resultIds = client.CreateFavoriteCategory(categoryId, title, labelIds);
                 return Json(resultIds);
             }
         }
@@ -209,7 +204,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultIds = client.CreateFavoriteQuery(bookType, queryType, query, title, labelIds, CurrentUserName);
+                var resultIds = client.CreateFavoriteQuery(bookType, queryType, query, title, labelIds);
                 return Json(resultIds);
             }
         }
@@ -218,7 +213,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId, CurrentUserName);
+                var resultId = client.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
                 return Json(resultId);
             }
         }
@@ -227,7 +222,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetPageBookmarks(bookXmlId, CurrentUserName);
+                var result = client.GetPageBookmarks(bookXmlId);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -236,7 +231,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, CurrentUserName);
+                var result = client.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -245,7 +240,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, CurrentUserName);
+                var result = client.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -254,7 +249,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabels(AllFavoriteCount, CurrentUserName);
+                var result = client.GetFavoriteLabels(AllFavoriteCount);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -263,7 +258,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteLabels(LatestFavoriteCount, CurrentUserName);
+                var result = client.GetFavoriteLabels(LatestFavoriteCount);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -278,7 +273,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, start, count, CurrentUserName);
+                var result = client.GetFavoriteItems(labelId, filterByType, filterByTitle, sort.Value, start, count);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -290,7 +285,7 @@ namespace ITJakub.Web.Hub.Controllers
 
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, CurrentUserName);
+                var result = client.GetFavoriteItemsCount(labelId, filterByType, filterByTitle);
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
@@ -312,7 +307,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreateFavoriteLabel(name, color, CurrentUserName);
+                var resultId = client.CreateFavoriteLabel(name, color);
                 return Json(resultId);
             }
         }
@@ -321,7 +316,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.UpdateFavoriteLabel(labelId, name, color, CurrentUserName);
+                client.UpdateFavoriteLabel(labelId, name, color);
                 return Json(new { });
             }
         }
@@ -330,7 +325,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteFavoriteLabel(labelId, CurrentUserName);
+                client.DeleteFavoriteLabel(labelId);
                 return Json(new {});
             }
         }
@@ -339,7 +334,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.UpdateFavoriteItem(id, title, CurrentUserName);
+                client.UpdateFavoriteItem(id, title);
                 return Json(new {});
             }
         }
@@ -348,7 +343,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.DeleteFavoriteItem(id, CurrentUserName);
+                client.DeleteFavoriteItem(id);
                 return Json(new {});
             }
         }
