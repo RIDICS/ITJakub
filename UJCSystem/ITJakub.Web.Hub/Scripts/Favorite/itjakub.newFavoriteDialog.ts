@@ -194,9 +194,11 @@
             }
         });
 
-        $("#favorite-label-name").change(this.updateLabelPreview.bind(this));
+        $(".favorite-label-name", this.container).change(this.updateLabelPreview.bind(this));
 
-        this.labelColorInput = new ColorInput($("#favorite-label-color"), $("#favorite-label-color-button"));
+        var $favoriteLabelColor = $(".favorite-label-color", this.container);
+        var $favoriteLabelColorButton = $(".favorite-label-color-button", this.container);
+        this.labelColorInput = new ColorInput($favoriteLabelColor, $favoriteLabelColorButton);
         this.labelColorInput.make();
         this.labelColorInput.setColorChangedCallback(this.updateLabelPreview.bind(this));
     }
@@ -244,19 +246,20 @@
     }
 
     private updateLabelPreview() {
-        var labelName = $("#favorite-label-name").val();
-        var hexColor = $("#favorite-label-color").val();
+        var labelName = $(".favorite-label-name", this.container).val();
+        var hexColor = $(".favorite-label-color", this.container).val();
         var color = new HexColor(hexColor);
 
-        $("#label-preview").text(labelName);
+        var $labelPreview = $(".label-preview", this.container);
+        $labelPreview.text(labelName);
 
         if (color.isValidHexColor()) {
-            $("#label-preview")
+            $labelPreview
                 .css("background-color", hexColor)
                 .css("border-color", FavoriteHelper.getDefaultBorderColor(color))
                 .css("color", FavoriteHelper.getDefaultFontColor(color));
         } else {
-            $("#label-preview")
+            $labelPreview
                 .css("background-color", "#FFFFFF")
                 .css("border-color", "#000000")
                 .css("color", "#000000");
@@ -296,8 +299,8 @@
     }
 
     private createFavoriteLabel() {
-        var itemName = $("#favorite-name-2").val();
-        var labelName = $("#favorite-label-name").val();
+        var itemName = $(".favorite-name-2", this.container).val();
+        var labelName = $(".favorite-label-name", this.container).val();
         var color = this.labelColorInput.getValue();
 
         var error = "";
@@ -349,7 +352,7 @@
     }
 
     private getData(): INewFavoriteItemData {
-        var itemName: string = $("#favorite-name").val();
+        var itemName: string = $(".favorite-name", this.container).val();
         var labels = new Array<INewFavoriteItemDataLabel>();
 
         $("[name=favorite-label]:checked", this.container).each((index, element) => {
