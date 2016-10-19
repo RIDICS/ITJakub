@@ -1,17 +1,14 @@
 ﻿@using ITJakub.Web.Hub.Managers
 @model ITJakub.Web.Hub.Models.Favorite.NewFavoriteViewModel
 
-@if (User.Identity.IsAuthenticated)
-{
-    <ul class="nav nav-tabs">
-        <li class="active">
-            <a href="#" data-tab-class="tab-favorite-label-assign">Přiřadit štítky</a>
-        </li>
-        <li>
-            <a href="#" data-tab-class="tab-favorite-label-create">Vytvořit a přiřadit nový štítek</a>
-        </li>
-    </ul>
-}
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a href="#" data-tab-class="tab-favorite-label-assign">Přiřadit štítky</a>
+    </li>
+    <li>
+        <a href="#" data-tab-class="tab-favorite-label-create">Vytvořit a přiřadit nový štítek</a>
+    </li>
+</ul>
 
 <div class="tab-content">
     <div class="tab-pane tab-favorite-label-assign active">
@@ -56,9 +53,10 @@
         </div>
     </div>
     
-    @if (User.Identity.IsAuthenticated)
-    {
-        <div class="tab-pane tab-favorite-label-create">
+    
+    <div class="tab-pane tab-favorite-label-create">
+        @if (User.Identity.IsAuthenticated)
+        {
             <div class="form-horizontal">
                 <div class="form-group">
                     <label class="col-md-3 control-label">Název položky</label>
@@ -95,6 +93,14 @@
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+        else
+        {
+            <div class="alert alert-warning">
+                <strong>Tato funkcionalita je dostupná pouze pro přihlášené uživatele</strong>
+                <br/>
+                <span>Funkcionalita přidávání nových štítků je dostupná pouze pro přihlášené uživatele. Pro nepřihlášené uživatele je k dispozici pouze zjednodušená varianta pracující pouze s jedním přednastaveným štítkem.</span>
+            </div>
+        }
+    </div>
 </div>
