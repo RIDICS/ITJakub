@@ -10,7 +10,7 @@
         this.dropdownSelect = dropdownSelect;
         this.bookType = bookType;
         this.container = container;
-        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteManager = new FavoriteManager();
         this.loading = false;
     }
 

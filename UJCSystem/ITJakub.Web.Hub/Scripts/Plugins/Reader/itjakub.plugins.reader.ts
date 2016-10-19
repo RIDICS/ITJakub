@@ -43,14 +43,14 @@ class ReaderModule {
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(protected storage: IStorage, readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
         this.showPanelList = showPanelList;
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
-        this.favoriteManager = new FavoriteManager(storage);
+        this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, false);
     }
 

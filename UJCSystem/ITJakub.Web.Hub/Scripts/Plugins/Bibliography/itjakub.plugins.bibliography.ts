@@ -110,7 +110,7 @@ class BibliographyModule {
     }
 
     private showFavoriteLabels(bookDataList: IBookRenderData[]) {
-        var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        var favoriteManager = new FavoriteManager();
         var bookIds = new Array<number>();
         $.each(bookDataList, (index, bookData) => {
             bookData.$favoritesContainer = $(".favorites", bookData.element);
@@ -243,7 +243,7 @@ var newFavoriteFromBibliographyDialog: NewFavoriteDialog;
 function addFavoriteFromBibliography(target) {
     return context => {
         if (!newFavoriteFromBibliographyDialog) {
-            var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+            var favoriteManager = new FavoriteManager();
             newFavoriteFromBibliographyDialog = new NewFavoriteDialog(favoriteManager, true);
             newFavoriteFromBibliographyDialog.make();
         }
@@ -252,7 +252,7 @@ function addFavoriteFromBibliography(target) {
         var bookId = $item.attr("data-id");
         var bookName = $item.attr("data-name");
         newFavoriteFromBibliographyDialog.setSaveCallback(data => {
-            var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+            var favoriteManager = new FavoriteManager();
             var labelIds: Array<number> = [];
             var labelElements: Array<HTMLSpanElement> = [];
             for (var i = 0; i < data.labels.length; i++) {

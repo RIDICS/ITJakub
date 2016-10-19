@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-    var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+    var favoriteManager = new FavoriteManager();
     var favoriteManagement = new FavoriteManagement(favoriteManager);
     favoriteManagement.init();
 });

@@ -25,7 +25,7 @@
         this.renderContainer = renderContainer;
         this.queryType = queryType;
         this.bookType = bookType;
-        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteManager = new FavoriteManager();
         this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
         this.insertDialog = new InsertQueryDialog();
         this.isCreated = false;
