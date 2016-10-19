@@ -41,6 +41,7 @@ class Search {
 
     private processSearchTextCallback: (text: string) => void;
     private processSearchJsonCallback: (json: string) => void;
+    private overrideSetQueryCallback: (text: string) => void;
 
     private lastQuery: string;
     private lastQueryWasJson: boolean;
@@ -54,6 +55,10 @@ class Search {
         this.container = container;
         this.processSearchJsonCallback = processSearchJsonCallback;
         this.processSearchTextCallback = processSearchTextCallback;
+    }
+
+    public setOverrideQueryCallback(callback: (text: string) => void) {
+        this.overrideSetQueryCallback = callback;
     }
 
     makeSearch(enabledOptions: Array<SearchTypeEnum>) {
@@ -225,6 +230,11 @@ class Search {
     }
 
     public writeTextToTextField(text: string) {
+        if (typeof this.overrideSetQueryCallback === "function") {
+            this.overrideSetQueryCallback(text);
+            return;
+        }
+
         $(this.searchInputTextbox).text(text);
         $(this.searchInputTextbox).val(text);
         $(this.searchInputTextbox).change();

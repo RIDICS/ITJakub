@@ -40,9 +40,10 @@ class DictionarySearch {
             bookType: BookTypeEnum.Dictionary,
             queryType: QueryTypeEnum.Search
         };
-        this.search = new Search(<any>$("#dictionarySearchDiv")[0], this.processSearchJson.bind(this), this.processSearchText.bind(this), favoriteQueriesConfig);
+        this.search = new Search(document.getElementById("dictionarySearchDiv") as HTMLDivElement, this.processSearchJson.bind(this), this.processSearchText.bind(this), favoriteQueriesConfig);
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Dictionaries/Dictionaries");
-        
+        this.search.setOverrideQueryCallback(text => this.typeaheadSearchBox.value(text));
+
         this.disabledShowOptions = [
             SearchTypeEnum.Author,
             SearchTypeEnum.Title,
