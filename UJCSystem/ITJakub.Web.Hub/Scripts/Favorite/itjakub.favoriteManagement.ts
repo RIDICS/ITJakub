@@ -183,6 +183,8 @@ class FavoriteManagement {
         } else {
             $("#no-label").show();
         }
+
+        this.pagination.createPagination(0, FavoriteManagement.pageSize, () => {});
     }
 
     private showLoader() {

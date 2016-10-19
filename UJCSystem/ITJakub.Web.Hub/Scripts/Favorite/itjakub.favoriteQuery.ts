@@ -511,6 +511,10 @@
         $(this.noSelectedLabelDiv).show();
         $(".favorite-query-item", this.renderContainer).addClass("hidden");
         $(".favorite-query-label-selected", this.renderContainer).hide();
+
+        if (filter.length > 0) {
+            this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+        }
     }
     
     private saveFavoriteQuery(itemName: string, labelIds: number[]) {
