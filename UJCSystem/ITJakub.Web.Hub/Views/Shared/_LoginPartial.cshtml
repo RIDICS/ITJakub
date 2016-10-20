@@ -13,9 +13,9 @@
 }
 else
 {
-    if (ViewContext.HttpContext.Request.UrlReferrer != null)
+    if (Request.Url != null && Request.Url.PathAndQuery != "/" && !Request.Url.PathAndQuery.StartsWith("/Account/"))
     {
-        ViewBag.ReturnUrl = ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery;
+        ViewBag.ReturnUrl = Request.Url.PathAndQuery;
     }
     <ul class="navbar-right navbar-login">
         <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
