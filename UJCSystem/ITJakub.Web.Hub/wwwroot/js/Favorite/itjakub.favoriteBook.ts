@@ -10,7 +10,7 @@
         this.dropdownSelect = dropdownSelect;
         this.bookType = bookType;
         this.container = container;
-        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteManager = new FavoriteManager();
         this.loading = false;
     }
 
@@ -49,8 +49,7 @@
             .append(this.bodyDiv);
 
         this.container.append(innerContainer);
-        this.loadData();
-
+        
         $(document).unbind("click.favoriteBooks");
         $(document).bind("click.favoriteBooks", (event) => {
             var parents = $(event.target).parents();
@@ -70,6 +69,8 @@
     }
 
     public show() {
+        this.loadData();
+
         $(this.bodyDiv).slideDown("fast");
     }
 
@@ -84,11 +85,11 @@
 
         this.loading = true;
         $(this.bodyDiv)
-            .addClass("loading")
-            .empty();
+            .empty()
+            .append($('<span class="loading" style="display: block;"></span>'));
 
         this.favoriteManager.getFavoriteLabelsForBooksAndCategories(this.bookType, (favoriteLabels) => {
-            $(this.bodyDiv).removeClass("loading");
+            $(this.bodyDiv).empty();
 
             for (var i = 0; i < favoriteLabels.length; i++) {
                 var favoriteLabel = favoriteLabels[i];

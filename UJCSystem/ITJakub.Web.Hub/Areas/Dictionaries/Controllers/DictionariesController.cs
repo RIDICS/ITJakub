@@ -387,17 +387,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var list = client.GetHeadwordBookmarks(HttpContext.User.Identity.Name);
+                var list = client.GetHeadwordBookmarks();
                 return Json(list);
             }
         }
-
-
+        
         public ActionResult AddHeadwordBookmark([FromBody] AddHeadwordBookmarkRequest request)
         {
             using (var client = GetMainServiceClient())
             {
-                client.AddHeadwordBookmark(request.BookId, request.EntryXmlId, HttpContext.User.Identity.Name);
+                client.AddHeadwordBookmark(request.BookId, request.EntryXmlId);
                 return Json(new {});
             }
         }
@@ -406,7 +405,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId, HttpContext.User.Identity.Name);
+                client.RemoveHeadwordBookmark(request.BookId, request.EntryXmlId);
                 return Json(new {});
             }
         }

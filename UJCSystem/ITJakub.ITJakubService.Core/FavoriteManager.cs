@@ -16,38 +16,40 @@ namespace ITJakub.ITJakubService.Core
 {
     public class FavoriteManager
     {
+        private readonly UserManager m_userManager;
+        private readonly DefaultUserProvider m_defaultUserProvider;
         private readonly FavoritesRepository m_favoritesRepository;
-        private readonly UserRepository m_userRepository;
         private readonly BookVersionRepository m_bookVersionRepository;
         private readonly BookRepository m_bookRepository;
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public FavoriteManager(FavoritesRepository favoritesRepository, UserRepository userRepository, BookRepository bookRepository, BookVersionRepository bookVersionRepository)
+        public FavoriteManager(UserManager userManager, DefaultUserProvider defaultUserProvider, FavoritesRepository favoritesRepository, BookRepository bookRepository, BookVersionRepository bookVersionRepository)
         {
+            m_userManager = userManager;
+            m_defaultUserProvider = defaultUserProvider;
             m_favoritesRepository = favoritesRepository;
-            m_userRepository = userRepository;
             m_bookRepository = bookRepository;
             m_bookVersionRepository = bookVersionRepository;
         }
         
-        private User TryGetUser(string userName)
+        private User TryGetUser()
         {
-            if (string.IsNullOrWhiteSpace(userName))
-            {
-                string message = "Username is empty, cannot execute specified action.";
-
-                if (m_log.IsWarnEnabled)
-                    m_log.Warn(message);
-                throw new ArgumentException(message);
-            }
-            User user = m_userRepository.FindByUserName(userName);
-
+            User user = m_userManager.GetCurrentUser();
+            
             if (user == null)
             {
-                string message = string.Format("Cannot locate user by username: '{0}'", userName);
+                string message = string.Format("Cannot locate user by username: '{0}'", m_userManager.GetCurrentUserName());
                 if (m_log.IsErrorEnabled)
                     m_log.Error(message);
+                throw new ArgumentException(message);
+            }
+
+            if (user.UserName == m_defaultUserProvider.GetDefaultUserName())
+            {
+                string message = "Unregistered user, cannot execute specified action.";
+                if (m_log.IsWarnEnabled)
+                    m_log.Warn(message);
                 throw new ArgumentException(message);
             }
 
@@ -60,10 +62,10 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Current user ({0}) doesn't have permission manipulate with specified item owned by user with ID={1}", user.UserName, itemOwnerUserId));
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName)
+        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var bookPage = m_bookVersionRepository.GetPageByXmlId(bookXmlId, pageXmlId);
 
             if (bookPage == null)
@@ -98,8 +100,9 @@ namespace ITJakub.ITJakubService.Core
             return (long) m_favoritesRepository.Create(bookmark);
         }
         
-        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks()
         {
+            var userName = m_userManager.GetCurrentUserName();
             if (string.IsNullOrWhiteSpace(userName))
                 return new List<HeadwordBookmarkContract>();
 
@@ -107,10 +110,10 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<HeadwordBookmarkContract>>(headwordResults);
         }
 
-        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var defaultFavoriteLabel = m_favoritesRepository.GetDefaultFavoriteLabel(user.Id);
 
             var bookmark = new HeadwordBookmark
@@ -125,18 +128,19 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Save(bookmark);
         }
 
-        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId)
         {
+            var userName = m_userManager.GetCurrentUserName();
             m_favoritesRepository.DeleteHeadwordBookmark(bookXmlId, entryXmlId, userName);
         }
 
-        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
+        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds)
         {
             if (bookIds == null)
             {
                 bookIds = new List<long>();
             }
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var dbResult = m_favoritesRepository.GetFavoriteLabeledBooks(bookIds, user.Id);
 
             var resultList = new List<FavoriteBookInfoContract>();
@@ -152,13 +156,13 @@ namespace ITJakub.ITJakubService.Core
             return resultList;
         }
 
-        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
+        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds)
         {
             if (categoryIds == null)
             {
                 categoryIds = new List<int>();
             }
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var dbResult = m_favoritesRepository.GetFavoriteLabeledCategories(categoryIds, user.Id);
 
             var resultList = new List<FavoriteCategoryContract>();
@@ -196,10 +200,10 @@ namespace ITJakub.ITJakubService.Core
             return labels;
         }
 
-        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var book = m_favoritesRepository.Load<Book>(bookId);
 
             var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
@@ -226,10 +230,10 @@ namespace ITJakub.ITJakubService.Core
             return result.Cast<long>().ToList();
         }
 
-        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var category = m_favoritesRepository.Load<Category>(categoryId);
 
             var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
@@ -256,10 +260,10 @@ namespace ITJakub.ITJakubService.Core
             return result.Cast<long>().ToList();
         }
 
-        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
 
             var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
             var labelsDictionary = labels.ToDictionary(x => x.Id);
@@ -291,9 +295,9 @@ namespace ITJakub.ITJakubService.Core
             return result.Cast<long>().ToList();
         }
 
-        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)
+        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
 
             var dbResult = latestLabelCount == 0
                 ? m_favoritesRepository.GetAllFavoriteLabels(user.Id)
@@ -302,9 +306,9 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteLabelContract>>(dbResult);
         }
 
-        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName)
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
             var dbResult = m_favoritesRepository.GetFavoriteItems(labelId, typeFilter, filterByTitle, sort, start, count, user.Id);
@@ -312,18 +316,18 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteBaseInfoContract>>(dbResult);
         }
 
-        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName)
+        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var typeFilter = Mapper.Map<FavoriteTypeEnum?>(filterByType);
 
             var resultCount = m_favoritesRepository.GetFavoriteItemsCount(labelId, typeFilter, filterByTitle, user.Id);
             return resultCount;
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName)
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 
@@ -332,9 +336,9 @@ namespace ITJakub.ITJakubService.Core
             return Mapper.Map<IList<FavoriteQueryContract>>(dbResult);
         }
 
-        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var queryTypeEnum = Mapper.Map<QueryTypeEnum>(queryType);
 
@@ -342,9 +346,9 @@ namespace ITJakub.ITJakubService.Core
             return resultCount;
         }
 
-        public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId, string userName)
+        public List<PageBookmarkContract> GetPageBookmarks(string bookXmlId)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             
             var allBookmarks = m_favoritesRepository.GetAllPageBookmarksByBookId(bookXmlId, user.Id);
 
@@ -363,9 +367,9 @@ namespace ITJakub.ITJakubService.Core
             };
         }
 
-        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName)
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
 
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var booksDbResult = m_favoritesRepository.GetFavoriteBooksWithLabel(bookTypeEnum, user.Id);
@@ -400,10 +404,10 @@ namespace ITJakub.ITJakubService.Core
                 .ToList();
         }
 
-        public long CreateFavoriteLabel(string name, string color, string userName, bool isDefault)
+        public long CreateFavoriteLabel(string name, string color, bool isDefault)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteLabel = new FavoriteLabel
             {
                 Name = name,
@@ -417,10 +421,10 @@ namespace ITJakub.ITJakubService.Core
             return (long) id;
         }
 
-        public void UpdateFavoriteLabel(long labelId, string name, string color, string userName)
+        public void UpdateFavoriteLabel(long labelId, string name, string color)
         {
             var now = DateTime.UtcNow;
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
 
             CheckItemOwnership(favoriteLabel.User.Id, user);
@@ -435,9 +439,9 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Update(favoriteLabel);
         }
 
-        public void DeleteFavoriteLabel(long labelId, string userName)
+        public void DeleteFavoriteLabel(long labelId)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteLabel = m_favoritesRepository.FindById<FavoriteLabel>(labelId);
 
             CheckItemOwnership(favoriteLabel.User.Id, user);
@@ -448,9 +452,9 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Delete(favoriteLabel);
         }
 
-        public void UpdateFavoriteItem(long id, string title, string userName)
+        public void UpdateFavoriteItem(long id, string title)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
 
             CheckItemOwnership(favoriteItem.User.Id, user);
@@ -460,9 +464,9 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Update(favoriteItem);
         }
 
-        public void DeleteFavoriteItem(long id, string userName)
+        public void DeleteFavoriteItem(long id)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
 
             CheckItemOwnership(favoriteItem.User.Id, user);
@@ -470,9 +474,9 @@ namespace ITJakub.ITJakubService.Core
             m_favoritesRepository.Delete(favoriteItem);
         }
 
-        public FavoriteFullInfoContract GetFavoriteItem(long id, string userName)
+        public FavoriteFullInfoContract GetFavoriteItem(long id)
         {
-            var user = TryGetUser(userName);
+            var user = TryGetUser();
             var favoriteItem = m_favoritesRepository.FindById<FavoriteBase>(id);
 
             CheckItemOwnership(favoriteItem.User.Id, user);

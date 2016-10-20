@@ -41,14 +41,14 @@
     pageChangedCallback: (pageXmlId: string) => void;
 
 
-    constructor(protected storage: IStorage, readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
         this.showPanelList = showPanelList;
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
-        this.favoriteManager = new FavoriteManager(storage);
+        this.favoriteManager = new FavoriteManager();
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, false);
     }
 
@@ -1643,6 +1643,7 @@ class SettingsPanel extends LeftSidePanel {
         const titleInput = document.createElement("input");
         titleInput.classList.add("reader-bookmarks-content-item-title-input", "hide");
         titleInput.value = $bookmark.data("title");
+        $(titleInput).attr("maxlength", FavoriteManager.maxTitleLength);
         bookmarkItem.appendChild(titleInput);
 
         const title = document.createElement("span");

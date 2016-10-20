@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-    var favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+    var favoriteManager = new FavoriteManager();
     var favoriteManagement = new FavoriteManagement(favoriteManager);
     favoriteManagement.init();
 });
@@ -154,6 +154,7 @@ class FavoriteManagement {
         if (!filterValue) {
             $(".favorite-label-management").show();
             $("#no-label").hide();
+            this.setActiveLabel(null);
             return;
         }
 
@@ -161,6 +162,13 @@ class FavoriteManagement {
         $(".favorite-label-management").each((index, element) => {
             var item = $(element);
             var name = String(item.data("name")).toLocaleLowerCase();
+            var inactiveBackgroundColor = item.data("inactive-background");
+            var inactiveBorderColor = item.data("inactive-border");
+
+            item.removeClass("active")
+                .css("background-color", inactiveBackgroundColor)
+                .css("border-color", inactiveBorderColor);
+            $("a", item).css("color", FavoriteHelper.getInactiveFontColor());
 
             if (name.indexOf(filterValue) !== -1) {
                 isAnyVisible = true;
@@ -175,6 +183,8 @@ class FavoriteManagement {
         } else {
             $("#no-label").show();
         }
+
+        this.pagination.createPagination(0, FavoriteManagement.pageSize, () => {});
     }
 
     private showLoader() {

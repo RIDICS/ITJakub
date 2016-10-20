@@ -1,4 +1,10 @@
-﻿@if (User.Identity.IsAuthenticated)
+﻿@using Microsoft.AspNetCore.Http.Extensions
+
+@{
+    var requestUrl = Context.Request.GetDisplayUrl();
+}
+
+@if (User.Identity.IsAuthenticated)
 {
     using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, true, new { id = "logoutForm", @class = "navbar-right" }))
     {
@@ -11,8 +17,10 @@
 }
 else
 {
-    ViewBag.ReturnUrl = ViewContext.HttpContext.Request.Headers["Referer"];
-
+    if (requestUrl != null && requestUrl != "/" && !requestUrl.StartsWith("/Account/"))
+    {
+        ViewBag.ReturnUrl = requestUrl;
+    }
     <ul class="navbar-right navbar-login">
         <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
         <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>

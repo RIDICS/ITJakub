@@ -101,7 +101,7 @@ class DropDownSelect {
         this.callbackDelegate = callbackDelegate;
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
-        this.favoriteManager = new FavoriteManager(StorageManager.getInstance().getStorage());
+        this.favoriteManager = new FavoriteManager();
         this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 

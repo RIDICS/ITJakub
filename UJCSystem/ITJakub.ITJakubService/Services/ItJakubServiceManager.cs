@@ -433,114 +433,114 @@ namespace ITJakub.ITJakubService.Services
 
         #region Favorite Items
 
-        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount, string userName)
+        public IList<FavoriteLabelContract> GetFavoriteLabels(int latestLabelCount)
         {
-            return m_favoriteManager.GetFavoriteLabels(latestLabelCount, userName);
+            return m_favoriteManager.GetFavoriteLabels(latestLabelCount);
         }
 
-        public long CreateFavoriteLabel(string name, string color, string userName)
+        public long CreateFavoriteLabel(string name, string color)
         {
-            return m_favoriteManager.CreateFavoriteLabel(name, color, userName, false);
+            return m_favoriteManager.CreateFavoriteLabel(name, color, false);
         }
 
-        public void UpdateFavoriteLabel(long labelId, string name, string color, string userName)
+        public void UpdateFavoriteLabel(long labelId, string name, string color)
         {
-            m_favoriteManager.UpdateFavoriteLabel(labelId, name, color, userName);
+            m_favoriteManager.UpdateFavoriteLabel(labelId, name, color);
         }
 
-        public void DeleteFavoriteLabel(long labelId, string userName)
+        public void DeleteFavoriteLabel(long labelId)
         {
-            m_favoriteManager.DeleteFavoriteLabel(labelId, userName);
+            m_favoriteManager.DeleteFavoriteLabel(labelId);
         }
 
-        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count, string userName)
+        public IList<FavoriteBaseInfoContract> GetFavoriteItems(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, FavoriteSortContract sort, int start, int count)
         {
-            return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, start, count, userName);
+            return m_favoriteManager.GetFavoriteItems(labelId, filterByType, filterByTitle, sort, start, count);
         }
 
-        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle, string userName)
+        public int GetFavoriteItemsCount(long? labelId, FavoriteTypeContract? filterByType, string filterByTitle)
         {
-            return m_favoriteManager.GetFavoriteItemsCount(labelId, filterByType, filterByTitle, userName);
+            return m_favoriteManager.GetFavoriteItemsCount(labelId, filterByType, filterByTitle);
         }
 
-        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count, string userName)
+        public IList<FavoriteQueryContract> GetFavoriteQueries(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, int start, int count)
         {
-            return m_favoriteManager.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count, userName);
+            return m_favoriteManager.GetFavoriteQueries(labelId, bookType, queryType, filterByTitle, start, count);
         }
 
-        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle, string userName)
+        public int GetFavoriteQueriesCount(long? labelId, BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string filterByTitle)
         {
-            return m_favoriteManager.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle, userName);
+            return m_favoriteManager.GetFavoriteQueriesCount(labelId, bookType, queryType, filterByTitle);
         }
 
-        public List<PageBookmarkContract> GetPageBookmarks(string bookId, string userName)
+        public List<PageBookmarkContract> GetPageBookmarks(string bookId)
         {
-            return m_favoriteManager.GetPageBookmarks(bookId, userName);
+            return m_favoriteManager.GetPageBookmarks(bookId);
         }
         
-        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks(string userName)
+        public IList<HeadwordBookmarkContract> GetHeadwordBookmarks()
         {
-            return m_favoriteManager.GetHeadwordBookmarks(userName);
+            return m_favoriteManager.GetHeadwordBookmarks();
         }
 
-        public FavoriteFullInfoContract GetFavoriteItem(long id, string userName)
+        public FavoriteFullInfoContract GetFavoriteItem(long id)
         {
-            return m_favoriteManager.GetFavoriteItem(id, userName);
+            return m_favoriteManager.GetFavoriteItem(id);
         }
 
-        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        public void AddHeadwordBookmark(string bookXmlId, string entryXmlId)
         {
-            m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId, userName);
+            m_favoriteManager.AddHeadwordBookmark(bookXmlId, entryXmlId);
         }
 
-        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId, string userName)
+        public void RemoveHeadwordBookmark(string bookXmlId, string entryXmlId)
         {
-            m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId, userName);
+            m_favoriteManager.RemoveHeadwordBookmark(bookXmlId, entryXmlId);
         }
 
-        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds, string userName)
+        public IList<FavoriteBookInfoContract> GetFavoriteLabeledBooks(IList<long> bookIds)
         {
-            return m_favoriteManager.GetFavoriteLabeledBooks(bookIds, userName);
+            return m_favoriteManager.GetFavoriteLabeledBooks(bookIds);
         }
 
-        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds, string userName)
+        public IList<FavoriteCategoryContract> GetFavoriteLabeledCategories(IList<int> categoryIds)
         {
-            return m_favoriteManager.GetFavoriteLabeledCategories(categoryIds, userName);
+            return m_favoriteManager.GetFavoriteLabeledCategories(categoryIds);
         }
 
-        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType, string userName)
+        public IList<FavoriteLabelWithBooksAndCategories> GetFavoriteLabelsWithBooksAndCategories(BookTypeEnumContract bookType)
         {
-            return m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(bookType, userName);
+            return m_favoriteManager.GetFavoriteLabelsWithBooksAndCategories(bookType);
         }
 
-        public void UpdateFavoriteItem(long id, string title, string userName)
+        public void UpdateFavoriteItem(long id, string title)
         {
-            m_favoriteManager.UpdateFavoriteItem(id, title, userName);
+            m_favoriteManager.UpdateFavoriteItem(id, title);
         }
 
-        public void DeleteFavoriteItem(long id, string userName)
+        public void DeleteFavoriteItem(long id)
         {
-            m_favoriteManager.DeleteFavoriteItem(id, userName);
+            m_favoriteManager.DeleteFavoriteItem(id);
         }
 
-        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteBook(long bookId, string title, IList<long> labelIds)
         {
-            return m_favoriteManager.CreateFavoriteBook(bookId, title, labelIds, userName);
+            return m_favoriteManager.CreateFavoriteBook(bookId, title, labelIds);
         }
 
-        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteCategory(int categoryId, string title, IList<long> labelIds)
         {
-            return m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelIds, userName);
+            return m_favoriteManager.CreateFavoriteCategory(categoryId, title, labelIds);
         }
 
-        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds, string userName)
+        public IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds)
         {
-            return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelIds, userName);
+            return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelIds);
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId, string userName)
+        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
         {
-            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId, userName);
+            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
         }
 
         #endregion

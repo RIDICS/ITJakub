@@ -1,10 +1,17 @@
 ﻿class FavoriteManager {
+    public static maxTitleLength = 250;
+    public static maxLabelLength = 50;
+    private static localStorageVersion = 2;
     private storage: IStorage;
     private isUserLoggedIn: boolean;
 
-    constructor(storage: IStorage) {
-        this.storage = storage;
+    constructor() {
+        this.storage = StorageManager.getInstance().getStorage(StorageTypeEnum.Local);
         this.isUserLoggedIn = isUserLoggedIn();
+
+        if (!this.isUserLoggedIn) {
+            this.updateLocalStorage();
+        }
     }
 
     private getDefaultFavoriteLabel(): IFavoriteLabel {
@@ -31,6 +38,17 @@
 
     private getCurrentTime(): string {
         return new Date().getTime().toString();
+    }
+
+    private updateLocalStorage() {
+        var currentVersion = this.getFromStorage("favoriteStorageVersion");
+        if (typeof currentVersion !== "number" || currentVersion < FavoriteManager.localStorageVersion) {
+            this.storage.delete("favoritePageBookmarkItems");
+            this.storage.delete("favoriteLabeledBooks");
+            this.storage.delete("favoriteLabeledCategories");
+            this.storage.delete("favoriteQueries");
+            this.storage.save("favoriteStorageVersion", FavoriteManager.localStorageVersion);
+        }
     }
 
     private findLocalItemById(id: number): IFavoriteStorageItem {
