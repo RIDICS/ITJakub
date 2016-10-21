@@ -41,7 +41,7 @@
   },
 
   "frameworks": {
-    "net46": {
+    "net461": {
       "dependencies": {
         "ITJakub.ITJakubService.DataContracts": {
           "target": "project"
