@@ -439,6 +439,11 @@
     <Content Include="Content\Images\Feeds\50.png" />
     <Content Include="Content\Images\glyphicons_chevron_white.png" />
     <Content Include="Content\Images\klavesnice.gif" />
+    <Content Include="Content\Images\Logo\logo_av21_white.png" />
+    <Content Include="Content\Images\Logo\logo_fel_white.png" />
+    <Content Include="Content\Images\Logo\logo_msmt_white.png" />
+    <Content Include="Content\Images\Logo\logo_ujc_white.png" />
+    <Content Include="Content\Images\Logo\main_logo.png" />
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
@@ -1607,6 +1612,7 @@
     <Content Include="Content\ITJakub.Colors.less" />
     <Content Include="Content\ITJakub.Fonts.less" />
     <Content Include="Content\ITJakub.FontData.less" />
+    <Content Include="Content\ITJakub.BootstrapStyle.less" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />

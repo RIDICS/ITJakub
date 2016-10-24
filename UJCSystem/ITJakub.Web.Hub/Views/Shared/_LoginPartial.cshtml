@@ -1,4 +1,14 @@
 ﻿@using Microsoft.AspNet.Identity
+
+<ul class="navbar-language">
+    <li>
+        <a href="#">CZ</a>
+    </li>
+    <li>
+        <a href="#">EN</a>
+    </li>
+</ul>
+
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
