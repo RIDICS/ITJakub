@@ -437,6 +437,7 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\glyphicons_chevron_white.png" />
     <Content Include="Content\Images\klavesnice.gif" />
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
@@ -447,6 +448,7 @@
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\news_background2_green.png" />
     <Content Include="Content\ITJakub.Favorites.css">
       <DependentUpon>ITJakub.Favorites.less</DependentUpon>
     </Content>
@@ -1602,6 +1604,9 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Content\ITJakub.Favorites.less" />
+    <Content Include="Content\ITJakub.Colors.less" />
+    <Content Include="Content\ITJakub.Fonts.less" />
+    <Content Include="Content\ITJakub.FontData.less" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
@@ -1924,4 +1929,3 @@
   <Target Name="AfterBuild">
   </Target> -->
 </Project>
-

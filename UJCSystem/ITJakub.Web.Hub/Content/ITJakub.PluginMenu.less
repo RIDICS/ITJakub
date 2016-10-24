@@ -1,4 +1,4 @@
-﻿@import "ITJakub.DefaultTheme.less";
+﻿@import "ITJakub.Colors.less";
 
 
 
@@ -17,10 +17,17 @@
     display: table-cell;
 }
 
+@media screen and (max-width: 1500px) {
+  #main-plugins-menu > ul > li > a > span {
+    height: auto;
+  }
+}
+
 #main-plugins-menu li {
     margin: 0;
     padding: 0;
     display: block;
+    font-weight: 600;
 }
 
 #main-plugins-menu .has-sub {
@@ -28,7 +35,9 @@
 }
 
 #main-plugins-menu .has-sub.active {
-    position: static;
+    background-color: @menu-active-background-color;
+    /* background-color: rgba(76, 175, 80, .85); */
+    /* position: static; */
 }
 
 /*#main-plugins-menu ul li.active ul.has-sub{
@@ -41,11 +50,22 @@
 
 #main-plugins-menu {
     line-height: 1;
-    background: white;
-    /*border-bottom: 2px solid #0fa1e0;*/
-    width: 100%;
-    position: absolute; //ADDED
+    /*background: #00897B;*/
+    /*background-color: #4c6b4b;*/
+    /*width: 100%;*/
+    /*position: absolute;*/
+    display: inline-block;
+    float: left;
+    margin-left: 1rem;
+    /* height: 6rem; */
 }
+
+@media screen and (max-width: 1500px) {
+  #main-plugins-menu {
+    margin-left: 0;
+  }
+}
+
 
 #main-plugins-menu:after,
 #main-plugins-menu ul:after {
@@ -55,11 +75,11 @@
 }
 
 #main-plugins-menu a {
-    background: white;
+    /*background: white;*/
     color: black;
     display: block;
-    font-family: Helvetica, Arial, Verdana, sans-serif;
-    padding: 5px 20px;
+    /*font-family: Helvetica, Arial, Verdana, sans-serif;*/
+    padding: 5px 15px;
     text-decoration: none;
 }
 
@@ -75,7 +95,15 @@
     float: left;
     margin: 0;
     height: 100%;
+    /*padding: 1rem 0 1rem;*/
 }
+
+@media screen and (max-width: 1500px) {
+  #main-plugins-menu > ul > li {
+    /*padding: 0;*/
+  }
+}
+
 
 #main-plugins-menu.align-center {
     text-align: center;
@@ -98,15 +126,23 @@
 }
 
 #main-plugins-menu > ul > li > a {
-    color: black;
-    font-size: 15px;
-    background-image: url('Images/glyphicons_chevron.png');
-    background-position: center 90%;
+    color: @menu-font-color;
+    font-size: 16px;
+    /*background-image: @icon-chevron;*/
+    background-position: center bottom .1rem;
     background-repeat: no-repeat;
     background-size: 10px;
     /*padding-bottom: 15px;*/
     vertical-align: middle;
+    padding: 1.2rem .5rem;
 }
+
+@media screen and (max-width: 1500px) {
+  #main-plugins-menu > ul > li > a {
+    padding: 1.5rem .6rem;
+  }
+}
+
 
 #main-plugins-menu > ul > li:hover:after {
     content: '';
@@ -124,14 +160,20 @@
 
 #main-plugins-menu > ul > li.active > a,
 #main-plugins-menu > ul > li.active:hover > a {
-    background-color: @item-background-color;
-    color: black;
-    background-image: url('Images/glyphicons_chevron.png');
+    /*background-color: @menu-active-background-color;*/
+    background-color: transparent;
+    /*color: black;*/
+    /*background-image: url('Images/glyphicons_chevron.png');*/
 }
 
 #main-plugins-menu > ul > li:hover > a {
-    color: @item-background-color;
-    background-image: url('Images/glyphicons_chevron_green.png');
+    /*color: @item-background-color;*/
+    background-image: @icon-chevron-white;
+    background-color: @menu-hover-color;
+}
+
+#main-plugins-menu > ul > li:hover > a > span {
+  /* opacity: .7; */
 }
 
 #main-plugins-menu > ul > li > ul > li.active > a {
@@ -145,7 +187,10 @@
 
 #main-plugins-menu .has-sub:hover > ul {
     display: block;
-    border: 1px solid white;
+    /* border: 1px solid white; */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    -webkit-box-shadow: 0 3px 4px rgba(0,0,0,0.26);
+    -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 }
 
 #main-plugins-menu .has-sub.active:hover > ul {
@@ -171,9 +216,10 @@
 }
 
 #main-plugins-menu .has-sub ul li a {
-    background: @item-background-color;
-    /*border-bottom: 1px dotted #31b7f1;*/
-    font-size: 11px;
+    background: @menu-background-color;
+    background: @menu-hover-color;
+    /* background-color: rgba(56, 142, 60, .9); */
+    font-size: 14px;
     filter: none;
     display: block;
     line-height: 120%;
@@ -183,7 +229,12 @@
 
 #main-plugins-menu .has-sub ul li:hover a {
     /*background: @item-background-color;*/
-    color: black;
+    /*color: black;*/
+    background: @menu-item-hover-color;
+}
+
+#main-plugins-menu .has-sub ul li:hover a > span {
+  /* opacity: .5; */
 }
 
 #main-plugins-menu ul ul li:hover > a {
@@ -234,21 +285,28 @@
 }
 
 #main-plugins-menu ul > li.active > ul {
-    display: inline;
+    /*display: inline;
     position: absolute;
     float: left;
     width: @max-body-width;
     background-color: @background-color;
-    padding-bottom: 5px;
+    padding-bottom: 5px;*/
 }
 
 #main-plugins-menu ul > li.active > ul > li {
-    position: relative;
-    display: inline;
-    float: left;
+    /*position: relative;*/
+    /*display: inline;*/
+    /*float: left;*/
+}
+
+#main-plugins-menu ul > li.active > ul > li a {
+    background-color: @menu-active-background-color;
+}
+#main-plugins-menu ul > li.active > ul > li:hover a {
+	background: @menu-background-color;
 }
 
 #main-plugins-menu ul > li.active > ul {
-    background-color: @item-background-color;
-    padding-bottom: 0;
+    /*background-color: @item-background-color;*/
+    /*padding-bottom: 0;*/
 }

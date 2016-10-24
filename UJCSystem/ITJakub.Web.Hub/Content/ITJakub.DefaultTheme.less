@@ -1,14 +1,4 @@
-﻿@item-background-color:#84CED7;
-@background-color:#E5E5E5;
-@text-color:#AFDEE4;
-@white-color:white;
-@loader-bright-color:white;
-
-@reader-bookmark-ico-online: #FD4F31;
-@reader-bookmark-ico-local: purple;
-
-@icon-chevron: url("Images/glyphicons_chevron.png");
-@icon-chevron-green: url("Images/glyphicons_chevron_green.png");
+﻿@import "ITJakub.Colors.less";
 
 @max-body-width: 1100px;
 
@@ -30,7 +20,7 @@
 }
 
 a:hover {
-    .hovered-link;
+    /*.hovered-link;*/
 }
 
 /*a, a:visited {
@@ -43,16 +33,23 @@ a:hover {
 
 body {
     background-color: @background-color;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smooth: always;
+    -moz-text-shadow: 0 0 0;
 }
 
 
 .navbar {
-    width: @max-body-width;
     margin: 0 auto;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    -webkit-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+    /* height: 6rem; */
 }
 
 .page-body-content {
-    width: @max-body-width;
+    /*width: @max-body-width;*/
     margin: auto;
 }
 
@@ -62,13 +59,20 @@ body {
 
 
 .page-body-content a:hover {
-    .hovered-link;
+    /*.hovered-link;*/
+    opacity: .7;
 }
 
 
 .module-content {
-    margin: 88px 0 0 0;
+    margin: 4rem auto 0;
     min-height: 74vh;
+}
+
+@media screen and (max-width: 1500px) {
+  .module-content {
+    margin: 2rem auto 0;
+  }
 }
 
 
@@ -84,12 +88,12 @@ body {
 }
 
 .transparent-content-container {
-    padding: 5px;
+    /*padding: 5px;*/
 }
 
 .centered {
     align-content: center;
-    vertical-align: central;
+    vertical-align: middle;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -98,9 +102,26 @@ body {
 
 div.container {
     padding: 0;
-    width: 100%;
-    max-width: @max-body-width;
+    /*width: 100%;
+    max-width: @max-body-width;*/
 }
+
+@media (min-width: 1400px) {
+  .container {
+    width: 1370px;
+  }
+}
+@media (min-width: 1600px) {
+  .container {
+    width: 1570px;
+  }
+}
+/*@media (min-width: 1800px) {
+  .container {
+    width: 1770px;
+  }
+}*/
+
 
 .style-button {
     border-radius: 0;

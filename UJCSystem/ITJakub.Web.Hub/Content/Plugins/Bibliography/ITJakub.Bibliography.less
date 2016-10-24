@@ -1,12 +1,16 @@
-﻿@import "../../ITJakub.DefaultTheme.less";
+﻿@import "../../ITJakub.Colors.less";
+@import "../../ITJakub.Fonts.less";
 
 ul.bib-listing {
-    width: 80%;
+    /*width: 80%;*/
+    padding: 0;
 }
 
 ul.bib-listing li.list-item {
     background-color: white;
-    margin-top : 10px;
+    margin-top: 10px;
+    /* display: table; */
+    /* width: 100%; */
 }
 
 ul.bib-listing li.list-item a{
@@ -14,7 +18,13 @@ ul.bib-listing li.list-item a{
 }
 
 ul.bib-listing li.list-item .visible-content{
-    height: 120px;
+    /*height: 120px;*/
+    display: table;
+    width: 100%;
+}
+
+ul.bib-listing li.list-item .visible-wrapper {
+  display: table-row;
 }
 
 ul.bib-listing li.list-item .left-panel {
@@ -28,16 +38,21 @@ ul.bib-listing li.list-item .left-panel {
 
 ul.bib-listing li.list-item .middle-panel {
     padding: 10px 5px 10px 15px;
-    overflow-y: auto;
-    max-height: 120px;
+    padding: 1rem;
+    /*overflow-y: auto;*/
+    /*max-height: 120px;*/
+    display: table-cell;
+    /* max-height: 60px; */
+    /* width: 93%; */
+    /* width: calc(100% - 6rem); */
 }
 
-ul.bib-listing li.list-item .middle-panel .short-info{
+ul.bib-listing li.list-item .middle-panel .short-info {
    color: darkgray;
    float : right;
 }
 
-ul.bib-listing li.list-item .middle-panel .favorites{
+ul.bib-listing li.list-item .middle-panel .favorites {
     float: right;
     max-width: 300px;
     margin-top: -2px;
@@ -53,22 +68,33 @@ ul.bib-listing li.list-item .middle-panel .favorites{
     }
 }
 
-ul.bib-listing li.list-item .middle-panel .heading{
-    font-size: 24px;
+ul.bib-listing li.list-item .middle-panel .heading {
+    font-size: 22px;
     font-weight: 500;
     margin-bottom: 5px;
+    font-family: @serif-font-family;
 }
 
-ul.bib-listing li.list-item .middle-panel .body{
+ul.bib-listing li.list-item .middle-panel .body .sub {
+  font-family: @serif-font-family;
+}
+
+ul.bib-listing li.list-item .middle-panel .body {
 }
 
 ul.bib-listing li.list-item .right-panel {
-    float: right;
-    width: 100px;
-    background-color: @item-background-color;
+    /*float: right;*/
+    float: none;
+    width: 6rem;
+    background-color: @menu-background-color;
     align-items: center;
     text-align: center;
     position: relative;
+    min-width: 0;
+    margin: 0;
+    /* height: 100%; */
+    display: table-cell;
+    /* max-height: 60px; */
 
     .content-button {
         position: absolute;
@@ -81,7 +107,7 @@ ul.bib-listing li.list-item .right-panel {
         background-color: transparent;
         border: none;
         color: white;
-        outline: none!important;
+        /*outline: none!important;*/
         box-shadow:none !important;
 
         &> span{
@@ -91,17 +117,26 @@ ul.bib-listing li.list-item .right-panel {
 }
 
 ul.bib-listing li.list-item .hidden-content {
-    border-top: 1px solid @background-color;
+    border-top: 1px solid @separation-line-color;
     clear: both;
-    width: 100%;
-    padding: 2px;
-    display: none;
+    /*width: 100%;*/
+    /*padding: 2px;*/
+    /*display: none;*/
     overflow-y: auto;
     /*max-height: 200px;*/
+    /*display: table;*/
+}
+
+ul.bib-listing li.list-item .hidden-content .bottom-panel {
+    /* display: table-cell; */
+    /* -webkit-column-span: all; */
+    -moz-column-span: all;
+    /* column-span: all; */
 }
 
 ul.bib-listing li.list-item .hidden-content .bottom-panel .body{
-     padding: 10px 5px 10px 30px;
+     /*padding: 10px 5px 10px 30px;*/
+     padding: 1rem;
 }
 
 ul.bib-listing li.list-item .left-panel button, ul.listing li.list-item .left-panel input{
@@ -148,7 +183,8 @@ ul.bib-listing li.list-item .bib-label{
     background-color: transparent;
     border: none;
     outline: none!important;
-    box-shadow:none !important;
+    box-shadow: none !important;
+    padding-right: 0;
 }
 
 .bib-listing-pagination-div {
