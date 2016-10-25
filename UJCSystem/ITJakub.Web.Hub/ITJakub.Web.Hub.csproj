@@ -455,6 +455,12 @@
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
     <Content Include="Content\Images\news_background2_green.png" />
+    <Content Include="Content\ITJakub.BootstrapStyle.css">
+      <DependentUpon>ITJakub.BootstrapStyle.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.BootstrapStyle.min.css">
+      <DependentUpon>ITJakub.BootstrapStyle.css</DependentUpon>
+    </Content>
     <Content Include="Content\ITJakub.Favorites.css">
       <DependentUpon>ITJakub.Favorites.less</DependentUpon>
     </Content>

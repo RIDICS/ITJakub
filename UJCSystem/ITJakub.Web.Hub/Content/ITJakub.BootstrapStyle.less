@@ -82,7 +82,7 @@ fieldset[disabled] .btn-default.active {
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-    color: initial;
+    /*color: initial;*/
     background-color: initial;
     opacity: .5;
 }
@@ -100,10 +100,33 @@ fieldset[disabled] .btn-default.active {
 }
 
 .navbar-collapse.in {
-    /* overflow-y: auto; */
+     overflow-y: initial; 
 }
 
 // TODO missing rewrite from 768px to @media (min-width: 1200px)
+@media (min-width: 1200px) {
+    .navbar-collapse {
+        width: auto;
+        border-top: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+    .navbar-collapse.collapse {
+        display: block !important;
+        height: auto !important;
+        padding-bottom: 0;
+        overflow: visible !important;
+    }
+    .navbar-collapse.in {
+        overflow-y: visible;
+    }
+    .navbar-fixed-top .navbar-collapse,
+    .navbar-static-top .navbar-collapse,
+    .navbar-fixed-bottom .navbar-collapse {
+        padding-right: 0;
+        padding-left: 0;
+    }
+}
 
 .navbar-toggle .icon-bar {
     border-radius: initial;
@@ -185,6 +208,15 @@ fieldset[disabled] .btn-default.active {
     border-color: #633107;
     border-color: #633107;
     background-color: #633107;
+}
+
+.pagination > .disabled > span,
+.pagination > .disabled > span:hover,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > a,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > a:focus {
+    border-color: #8E5523;
 }
 
 .pagination-sm > li:first-child > a,
