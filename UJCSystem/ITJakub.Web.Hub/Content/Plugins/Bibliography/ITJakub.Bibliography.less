@@ -28,12 +28,14 @@ ul.bib-listing li.list-item .visible-wrapper {
 }
 
 ul.bib-listing li.list-item .left-panel {
-    float: left;
+    /*float: left;*/
+    float: none;
     width: 10px;
     padding: 2px;
     align-items: center;
     text-align: center;
     position: relative;
+    display: table-cell;
 }
 
 ul.bib-listing li.list-item .middle-panel {
@@ -121,7 +123,7 @@ ul.bib-listing li.list-item .hidden-content {
     clear: both;
     /*width: 100%;*/
     /*padding: 2px;*/
-    /*display: none;*/
+    display: none;
     overflow-y: auto;
     /*max-height: 200px;*/
     /*display: table;*/
@@ -137,6 +139,8 @@ ul.bib-listing li.list-item .hidden-content .bottom-panel {
 ul.bib-listing li.list-item .hidden-content .bottom-panel .body{
      /*padding: 10px 5px 10px 30px;*/
      padding: 1rem;
+     margin-left: 10px;
+     margin-right: 10px;
 }
 
 ul.bib-listing li.list-item .left-panel button, ul.listing li.list-item .left-panel input{

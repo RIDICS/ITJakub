@@ -10,19 +10,4 @@
     @Scripts.Render("~/itjakub/professionalliterature/searchjs")
 }
 
-<div id="listHeader">
-    <div id="listSearchDiv" style="float: left; width: 70%">
-    </div>
-    <div style="float: left; margin-left: 50px;">
-        Řadit podle
-        <div id="listResultsHeader" style="display: inline-block">
-        </div>
-    </div>
-</div>
-
-
-<div id="dropdownSelectDiv" style="margin-top: 50px; clear: both;">
-</div>
-
-<div id="listResults" style="clear: both;">
-</div>
+@Html.Partial("_BibliographySearch")

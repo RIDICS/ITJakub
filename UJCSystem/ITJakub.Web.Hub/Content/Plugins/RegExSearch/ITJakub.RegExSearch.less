@@ -17,11 +17,12 @@
 }
 
 .regexsearch-button {
-    margin-left: 3px;
-    margin-right: 3px;
+    /*margin-left: 3px;*/
+    /*margin-right: 3px;*/
     border-radius: 0;
-    background-color: @item-background-color;
+    background-color: @button-background-color;
     color: white;
+    margin-top: -3px;
 }
 
 .regexsearch-input-button {
@@ -46,15 +47,19 @@
     color: @regexsearch-gray-color;
 }
 
+.regexsearch-button .glyphicon {
+    left: -1px;
+}
+
 .regexsearch-condition-input-button {
-    position: relative;
     width: 40px;
     height: 34px;
     margin-top: -2px;
     background-color: transparent;
     border-style: none;
     font-weight: bold;
-    color: @regexsearch-gray-color;
+    /*color: @regexsearch-gray-color;*/
+    opacity: .5;
 }
 
 .regexsearch-condition-select, .regexsearch-input {
@@ -303,16 +308,16 @@ input.regexsearch-checkbox {
 }
 
 .searchbar-input:disabled {
-    background-color: lightgray!important;
+    background-color: @input-disabled-color!important;
 }
 
 .searchbar-buttons button:disabled {
-    background-color: @item-background-color;
+    background-color: @button-background-color;
 }
 
 .regex-searchbar-inputs {
     display: block;
-    margin-right: 172px;
+    margin-right: 180px;
     padding-right: 10px;
 }
 
@@ -321,5 +326,16 @@ input.regexsearch-checkbox {
 }
 
 .regex-search-buttons-bottom-area {
-    height: 40px;
+    /*height: 40px;*/
+    margin-bottom: 1rem;
+
+    &::after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+    button {
+        margin-left: 1rem;
+    }
 }

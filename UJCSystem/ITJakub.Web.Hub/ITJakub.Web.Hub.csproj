@@ -1614,6 +1614,22 @@
     <Content Include="Content\ITJakub.Fonts.less" />
     <Content Include="Content\ITJakub.FontData.less" />
     <Content Include="Content\ITJakub.BootstrapStyle.less" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff2" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
@@ -1647,6 +1663,7 @@
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <Content Include="Views\Favorite\AmbiguousFavoriteRedirect.cshtml" />
+    <Content Include="Views\Shared\_BibliographySearch.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
