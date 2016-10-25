@@ -1,56 +1,66 @@
 ﻿@import "../../../Content/ITJakub.Colors.less";
+@import "../../../Content/ITJakub.Fonts.less";
 
 ol.tracks-list li::before  {
     content: counter(li);
     counter-increment: li;
     position: absolute;
     top: -2px;
-    left: -1.7em;
+    left: -1.7rem;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
-    width: 1.7em;
+    width: 1.7rem;
     margin-right: 8px;
     padding: 4px;
-    border-top: 2px solid #666;
+    border-top: 2px solid @menu-background-color;
     color: #fff;
-    background: #666;
+    background: @menu-background-color;
     font-weight: bold;
-    font-family: "Helvetica Neue" , Arial, sans-serif;
     text-align: center;
 }
 
 ol.tracks-list > li {
     position: relative;
-    margin: 0 0 6px 2em;
+    margin: 0 0 0 1.7rem;
     padding: 4px 8px;
     list-style: none;
-    border-top: 2px solid #666;
-    width: 85%; 
+    border-top: 2px solid @menu-background-color;
+    /*width: 85%;*/
     margin-bottom: 30px;
     font-weight: bold;
+    font-family: @serif-font-family
 }
 
 ol.tracks-list {
     counter-reset: li;
+    padding: 0;
 }
 
 div.audio {
     margin-top: 20px;
-    margin-left: 50px;
+    /*margin-left: 50px;*/
     font-weight: normal;
+    margin-left: -2.33rem;
+    font-family: @sanserif-font-family-2;
+
+    audio {
+        float: left;
+    }
 }
 
 .audio-download {
     display: inline-block;
-    margin-left: 50px;
+    margin-left: 2rem;
+    margin-top: .5rem;
 }
 
 .audio-length {
     display: inline-block;
-    margin-left: 40px;
+    margin-left: 2rem;
     min-width: 130px;
+    margin-top: .5rem;
 }
 
 .audio-length-value {
@@ -61,22 +71,30 @@ div.audio {
 
 .audio-text {
     margin-bottom: 20px;
+    font-family: @serif-font-family;
 }
 
  ul.bib-listing li.list-item a.audio-download-href { 
-    border-radius: 5px 15px; 
-    background: @item-background-color; 
-    padding: 5px;  
-    width: 120px; 
-    height:100px;      
-    color: white; 
-    text-decoration:none; 
-    font-weight: bold; 
-    font-family: "Arial"; 
+    border-radius: 5px 15px;
+    border-radius: 5px;
+    background: @button-background-color;
+    padding: 5px;
+    /*width: 120px;*/
+    /*height: 100px;*/
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: "Arial";
+    margin-left: .25rem;
+    margin-top: .25rem;
+    display: inline-block;
 }
  
  ul.bib-listing li.list-item a.audio-download-href:hover {      
-    color: black; 
+    /*color: black;*/
+    background-color: @button-hover-background-color;
+    opacity: 1;
+    cursor: pointer;
 }
 
  .bib-listing-books-div.loader {

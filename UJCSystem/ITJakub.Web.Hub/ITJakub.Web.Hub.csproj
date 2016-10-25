@@ -431,6 +431,7 @@
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\favicon_green.png" />
     <Content Include="Content\Images\Feeds\04.png" />
     <Content Include="Content\Images\Feeds\07.png" />
     <Content Include="Content\Images\Feeds\25.png" />

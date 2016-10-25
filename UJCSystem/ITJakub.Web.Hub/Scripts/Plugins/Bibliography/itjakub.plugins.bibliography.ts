@@ -165,19 +165,22 @@ class BibliographyModule {
 
         var visibleContent: HTMLDivElement = document.createElement('div');
         $(visibleContent).addClass('visible-content');
+        var visibleWrapper: HTMLDivElement = document.createElement('div');
+        $(visibleWrapper).addClass('visible-wrapper');
 
         this.runAsyncOnLoad(()=> {
             var bibFactory = this.getBibliographyFactory(bibItem.BookType);
             
             var leftPanel = bibFactory.makeLeftPanel(bibItem);
-            if (leftPanel != null) visibleContent.appendChild(leftPanel);
-
-            var rightPanel = bibFactory.makeRightPanel(bibItem);
-            if (rightPanel != null) visibleContent.appendChild(rightPanel);
+            if (leftPanel != null) visibleWrapper.appendChild(leftPanel);
 
             var middlePanel = bibFactory.makeMiddlePanel(bibItem);
-            if (middlePanel != null) visibleContent.appendChild(middlePanel);
+            if (middlePanel != null) visibleWrapper.appendChild(middlePanel);
 
+            var rightPanel = bibFactory.makeRightPanel(bibItem);
+            if (rightPanel != null) visibleWrapper.appendChild(rightPanel);
+
+            $(visibleContent).append(visibleWrapper);
             $(liElement).append(visibleContent);
 
             var hiddenContent: HTMLDivElement = document.createElement('div');
