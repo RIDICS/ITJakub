@@ -1,4 +1,5 @@
 ﻿@import "ITJakub.Fonts.less";
+@import "ITJakub.Colors.less";
 
 html {
     font-size: 14px;
@@ -12,21 +13,26 @@ body {
 .form-control {
     height: 32px;
     color: #000;
-    border: none;
+    /*border: none;*/
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
     -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 0;
 }
 
 .btn:hover, .btn:focus, .btn.focus {
     color: initial;
     opacity: 1;
+    background-color: @button-background-color;
 }
 
 .btn-default {
     border-color: initial;
     border: none;
     font-weight: bold;
+    color: #fff;
+    background-color: @button-background-color;
+    border-radius: 0;
 }
 
 .btn-default:hover,
@@ -36,7 +42,21 @@ body {
 .btn-default.active,
 .open > .dropdown-toggle.btn-default {
     color: #ffffff;
-    background-color: #633107;
+    background-color: @button-hover-background-color;
+    border-color: initial;
+}
+
+.btn-default:active:hover,
+.btn-default.active:hover,
+.open > .dropdown-toggle.btn-default:hover,
+.btn-default:active:focus,
+.btn-default.active:focus,
+.open > .dropdown-toggle.btn-default:focus,
+.btn-default:active.focus,
+.btn-default.active.focus,
+.open > .dropdown-toggle.btn-default.focus {
+    color: #ffffff;
+    background-color: @button-hover-background-color;
     border-color: initial;
 }
 
@@ -58,7 +78,7 @@ fieldset[disabled] .btn-default:active,
 .btn-default.disabled.active,
 .btn-default[disabled].active,
 fieldset[disabled] .btn-default.active {
-    background-color: #633107;
+    background-color: @button-hover-background-color;
     border-color: initial;
 }
 
@@ -103,7 +123,33 @@ fieldset[disabled] .btn-default.active {
      overflow-y: initial; 
 }
 
-// TODO missing rewrite from 768px to @media (min-width: 1200px)
+@media (min-width: 768px) {
+    .navbar-collapse {
+        width: initial;
+        border-top: initial;
+        -webkit-box-shadow: initial;
+        box-shadow: initial;
+        overflow-x: visible;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
+    }
+    .navbar-collapse.collapse {
+        display: none !important;
+        height: initial;
+        padding-bottom: initial;
+        overflow: initial;
+    }
+    .navbar-collapse.in {
+        overflow-y: initial !important;
+        display: block !important;
+    }
+    .navbar-fixed-top .navbar-collapse,
+    .navbar-static-top .navbar-collapse,
+    .navbar-fixed-bottom .navbar-collapse {
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+}
+
 @media (min-width: 1200px) {
     .navbar-collapse {
         width: auto;
@@ -165,9 +211,9 @@ fieldset[disabled] .btn-default.active {
 
 .pagination > li > a,
 .pagination > li > span {
-    color: #8E5523;
-    border-color: #633107;
-    border-color: #8E5523;
+    color: @button-background-color;
+    border-color: @button-hover-background-color;
+    border-color: @button-background-color;
 }
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
@@ -183,7 +229,7 @@ fieldset[disabled] .btn-default.active {
 .pagination > li > span:hover,
 .pagination > li > a:focus,
 .pagination > li > span:focus {
-    color: #633107;
+    color: @button-hover-background-color;
     border-color: initial;
     opacity: 1;
 }
@@ -193,9 +239,9 @@ fieldset[disabled] .btn-default.active {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-    border-color: #633107;
-    border-color: #8E5523;
-    background-color: #8E5523;
+    border-color: @button-hover-background-color;
+    border-color: @button-background-color;
+    background-color: @button-background-color;
 }
 .pagination > .active > a:hover,
 .pagination > .active > span:hover,
@@ -205,9 +251,9 @@ fieldset[disabled] .btn-default.active {
     opacity: 1;
     color: #fff;
     cursor: pointer;
-    border-color: #633107;
-    border-color: #633107;
-    background-color: #633107;
+    border-color: @button-hover-background-color;
+    border-color: @button-hover-background-color;
+    background-color: @button-hover-background-color;
 }
 
 .pagination > .disabled > span,
@@ -216,7 +262,7 @@ fieldset[disabled] .btn-default.active {
 .pagination > .disabled > a,
 .pagination > .disabled > a:hover,
 .pagination > .disabled > a:focus {
-    border-color: #8E5523;
+    border-color: @button-background-color;
 }
 
 .pagination-sm > li:first-child > a,
@@ -243,4 +289,35 @@ fieldset[disabled] .btn-default.active {
 .nav-pills > li > a > .badge {
     margin-left: .2rem;
     margin-top: -2px;
+}
+
+.input-group-sm > .form-control,
+.input-group-sm > .input-group-addon,
+.input-group-sm > .input-group-btn > .btn {
+    border-radius: 0;
+}
+
+.input-group > .input-group-btn > .btn {
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+
+    &:hover {
+        background-color: #e6e6e6;
+        border-color: #adadad;
+    }
+
+    &.disabled:hover {
+        background-color: #fff;
+        border-color: #dedede;
+        color: #8f8f8f;
+    }
+}
+
+.input-group-btn > .btn {
+    height: 32px;
+}
+
+.alert, .panel {
+    border-radius: 0;
 }

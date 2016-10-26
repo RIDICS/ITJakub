@@ -1,10 +1,12 @@
-﻿div.editor-toolbar.fullscreen {
-	top: 100px;
+﻿@text-editor-top: 75px;
+
+div.editor-toolbar.fullscreen {
+	top: @text-editor-top;
 	max-width: none;
 }
 
 div.CodeMirror-fullscreen, div.editor-preview-side {
-	top: 150px;
+	top: @text-editor-top + 50px;
 }
 
 .editor-preview ul, .editor-preview-side ul {
@@ -21,4 +23,13 @@ div.CodeMirror-fullscreen, div.editor-preview-side {
 
 .CodeMirror-fullscreen .CodeMirror-scroll {
     max-height: none;
+}
+
+
+.editor-toolbar, .CodeMirror {
+    border-radius: 0;
+}
+
+.editor-toolbar a {
+    border-radius: 0;
 }
