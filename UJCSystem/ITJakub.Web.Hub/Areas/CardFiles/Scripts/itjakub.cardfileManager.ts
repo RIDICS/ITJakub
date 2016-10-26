@@ -93,8 +93,8 @@ class CardFileViewer {
 
     private makePanel(initCardPosition?: number) {
         var cardFileDiv = this.htmlBody;
-        this.makeLeftPanel(cardFileDiv);
         this.makeRightPanel(cardFileDiv);
+        this.makeLeftPanel(cardFileDiv);
         this.displayCardFileName(this.cardFileName);
         this.displayBucketName(this.actualBucket.getName());
         if (initCardPosition != null) {
@@ -293,6 +293,9 @@ class CardFileViewer {
         var cardFileRightPanelDiv: HTMLDivElement = document.createElement("div");
         $(cardFileRightPanelDiv).addClass("card-file-listing-right-panel");
 
+        var cardFileControlPanelDiv: HTMLDivElement = document.createElement("div");
+        $(cardFileControlPanelDiv).addClass("cardfile-listing-controls");
+
         var cardFileDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDescDiv).addClass("cardfile-description");
         cardFileDescDiv.innerHTML = "Kartotéka: ";
@@ -302,8 +305,8 @@ class CardFileViewer {
         cardFileNameSpan.innerHTML = "";
 
         cardFileDescDiv.appendChild(cardFileNameSpan);
-        cardFileRightPanelDiv.appendChild(cardFileDescDiv);
-
+        cardFileControlPanelDiv.appendChild(cardFileDescDiv);
+        
         var cardFileDrawerDescDiv: HTMLDivElement = document.createElement("div");
         $(cardFileDrawerDescDiv).addClass("cardfile-drawer-description");
         cardFileDrawerDescDiv.innerHTML = "Zásuvka: ";
@@ -313,7 +316,7 @@ class CardFileViewer {
         cardFileDrawerNameSpan.innerHTML = "";
 
         cardFileDrawerDescDiv.appendChild(cardFileDrawerNameSpan);
-        cardFileRightPanelDiv.appendChild(cardFileDrawerDescDiv);
+        cardFileControlPanelDiv.appendChild(cardFileDrawerDescDiv);
 
         var cardFilePageControlsDiv: HTMLDivElement = document.createElement("div");
         $(cardFilePageControlsDiv).addClass("cardfile-paging-controls");
@@ -322,13 +325,13 @@ class CardFileViewer {
 
         this.makeNavButtons(cardFilePageControlsDiv);
         
-        cardFileRightPanelDiv.appendChild(cardFilePageControlsDiv);
+        cardFileControlPanelDiv.appendChild(cardFilePageControlsDiv);
 
         var cardFilePagesDiv: HTMLDivElement = document.createElement("div");
         $(cardFilePagesDiv).addClass("cardfile-pages");
         cardFilePagesDiv.innerHTML = "Stránky: ";
 
-        cardFileRightPanelDiv.appendChild(cardFilePagesDiv);
+        cardFileControlPanelDiv.appendChild(cardFilePagesDiv);
 
         var cardFileScrollableRightPanelDiv: HTMLDivElement = document.createElement("div");
         $(cardFileScrollableRightPanelDiv).addClass("cardfile-scrollable-part-right-panel");
@@ -364,8 +367,9 @@ class CardFileViewer {
         cardFileNoteDiv.appendChild(cardFileNoteList);
         cardFileScrollableRightPanelDiv.appendChild(cardFileNoteDiv);
 
-        cardFileRightPanelDiv.appendChild(cardFileScrollableRightPanelDiv);
+        cardFileControlPanelDiv.appendChild(cardFileScrollableRightPanelDiv);
 
+        cardFileRightPanelDiv.appendChild(cardFileControlPanelDiv);
         cardFileDiv.appendChild(cardFileRightPanelDiv);
     }
 

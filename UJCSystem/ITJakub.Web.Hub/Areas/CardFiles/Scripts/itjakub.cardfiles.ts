@@ -138,7 +138,7 @@ function createListing() {
 
     $(cardFileSelector).hide();
     $(bucketSelector).hide();
-    var cardFileManager = new CardFileManager("div.cardfile-result-area");
+    var cardFileManager = new CardFileManager("#cardfile-result-area");
     var cardFileIdListed: string = "";
     var cardFileNameListed: string = "";
 
