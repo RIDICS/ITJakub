@@ -237,7 +237,7 @@ class Keyboard {
             "height: 100%; overflow: hidden; " +
             "margin-left: " + horizontalCellMar + "px; " +
             "margin-right: " + horizontalCellMar + "px; " +
-            "border: 1px solid black;" +
+            "border: 1px solid #CCC;" +
             "font-size: " + defaultCellHeightPx / 3 + "px;\">";
 
             if (cell.type === "Letter") {

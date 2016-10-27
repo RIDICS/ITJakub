@@ -1,11 +1,5 @@
 ﻿@import "../ITJakub.Colors.less";
 
-.permission-button {
-    border-radius: 0;
-    background-color: @item-background-color;
-    color: white;
-}
-
 .permission-search-input {
     border-radius: 0;
     margin: 0;
@@ -19,16 +13,8 @@
     width: 85%;
 }
 
-.permission-left-panel {
-    width: 45%;
-    display: inline-table;
-}
-
-
 .permission-right-panel {
-    width: 45%;
-    display: inline-table;
-    margin-left: 5%;
+    padding-top: 30px;
 }
 
 .content {
@@ -60,16 +46,18 @@
     font-weight: bold;
     margin-bottom: 10px;
     font-size: 21px;
+    margin-top: 1rem;
 }
 
 .permission-right-panel .nav-tabs > li.active > a, .permission-right-panel .nav-tabs > li.active > a:hover, .permission-right-panel .nav-tabs > li.active > a:focus {
-    background-color: @item-background-color;
+    background-color: @menu-background-color;
+    color: white;
 }
 
 /* Details right panel styles */
 
 ul.items-list li {
-    background-color: @item-background-color;
+    background-color: @menu-background-color;
     margin-bottom: 2px;
     padding: 5px;
     color: white;
@@ -88,7 +76,7 @@ ul.list-item-details-list li.non-leaf {
     width: 100%;
     margin-bottom: 4px;
     padding: 3px;
-    background-color: @item-background-color;
+    background-color: @menu-active-background-color;
 }
 
 ul.list-item-details-list li.leaf .list-item-more:hover, ul.list-item-details-list li.leaf  .list-item-remove:hover, ul.list-item-details-list li.leaf  .list-item-edit:hover {
