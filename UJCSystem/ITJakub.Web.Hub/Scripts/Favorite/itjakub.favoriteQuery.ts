@@ -154,7 +154,8 @@
         this.noFilteredLabel = noFilteredLabel;
 
         $(filterContainer)
-            .addClass("favorite-query-list");
+            .addClass("favorite-query-list")
+            .addClass("favorite-query-list-left");
         this.labelContainer = filterContainer;
 
         $(filterColumnDiv)
@@ -355,6 +356,7 @@
                 .text(" " + favoriteQuery.Title);
 
             $(queryRow1)
+                .addClass("favorite-query-item-header")
                 .append(queryLabel)
                 .append(queryTitle);
 
