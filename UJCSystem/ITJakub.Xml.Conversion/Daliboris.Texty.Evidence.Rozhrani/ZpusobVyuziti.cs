@@ -69,6 +69,12 @@ namespace Daliboris.Texty.Evidence.Rozhrani
         Mluvnice = 512,
 
         /// <summary>
+        /// Text určený pro ediční modul transliterovaných textů
+        /// </summary>
+        [EnumDescription("Transliterace")]
+        Transliterace = 1024,
+
+        /// <summary>
         /// Text určený pro interní textovou banku
         /// </summary>
         [EnumDescription("ITB")]
