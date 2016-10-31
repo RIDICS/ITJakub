@@ -31,7 +31,7 @@
                             {
                                 <div class="radio">
                                     <label class="favorite-select-label-item" style="background-color: @label.Color;">
-                                        <input type="checkbox" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "checked=checked" : string.Empty)> @label.Name
+                                        <input type="checkbox" name="favorite-label" value="@label.Id" data-color="@label.Color" data-name="@label.Name" @(label.IsDefault ? "data-isdefault=true" : string.Empty)> @label.Name
                                     </label>
                                 </div>
                             }

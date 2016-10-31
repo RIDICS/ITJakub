@@ -35,7 +35,10 @@
     }
 
     private finishInitialization() {
-        $(".modal-title", this.container).text("Přiřadit štítky k vybrané položce");
+        var dialogHeading = this.allowMultipleLabels
+            ? "Přiřadit nové štítky k vybrané položce"
+            : "Přiřadit nový štítek k vybrané položce";
+        $(".modal-title", this.container).text(dialogHeading);
 
         var saveIcon = document.createElement("span");
         var saveTitle = document.createElement("span");
@@ -103,7 +106,14 @@
                 .attr("type", "radio")
                 .parent().css("padding-left", "27px");
 
-            this.selectedRadioButton = <HTMLInputElement>$("[name=favorite-label]:checked", this.container)[0];
+            var defaultLabel = $("[data-isdefault=true]", this.container);
+            if (defaultLabel.length > 0) {
+                var radioButton = <HTMLInputElement>defaultLabel[0];
+                radioButton.checked = true;
+                this.selectedRadioButton = radioButton;
+            } else {
+                this.selectedRadioButton = null;
+            }
         }
 
         $("[name=favorite-label]", this.container).change(event => {
@@ -212,7 +222,7 @@
         var newSaveTitle: string;
         switch (tabClass) {
             case "tab-favorite-label-assign":
-                newSaveTitle = "Potvrdit přiřazení štítků";
+                newSaveTitle = this.allowMultipleLabels ? "Potvrdit přiřazení štítků" : "Potvrdit přiřazení štítku";
                 break;
             case "tab-favorite-label-create":
                 newSaveTitle = "Vytvořit a přiřadit štítek";

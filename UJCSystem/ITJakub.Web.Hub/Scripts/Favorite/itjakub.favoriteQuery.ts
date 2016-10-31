@@ -124,7 +124,7 @@
             .text("Filtrovat:");
         $(filterInput)
             .attr("type", "text")
-            .attr("placeholder", "Filtrovat")
+            .attr("placeholder", "Filtr štítků")
             .attr("title", "Filtrovat štítky podle názvu")
             .addClass("form-control")
             .addClass("input-sm");
@@ -329,6 +329,7 @@
             var queryTitle = document.createElement("span");
             var queryRemoveLink = document.createElement("a");
             var queryRemoveIcon = document.createElement("span");
+            var querySeparator = document.createElement("hr");
 
             $(queryRemoveIcon)
                 .addClass("glyphicon")
@@ -373,7 +374,7 @@
                 .append(queryRow1)
                 .append(queryRow2);
 
-            $(this.listContainer).append(queryLink);
+            $(this.listContainer).append(queryLink).append(querySeparator);
         }
         if (favoriteQueries.length === 0) {
             $(this.noQueryDiv).show();
@@ -510,6 +511,7 @@
         $(this.noQueryDiv).hide();
         $(this.noSelectedLabelDiv).show();
         $(".favorite-query-item", this.renderContainer).addClass("hidden");
+        $(".favorite-query-list hr", this.renderContainer).addClass("hidden");
         $(".favorite-query-label-selected", this.renderContainer).hide();
 
         if (filter.length > 0) {
@@ -647,8 +649,8 @@ class FilterSearchBox{
         $(input)
             .attr("type", "text")
             .addClass("form-control")
-            .attr("placeholder", "Filtrovat")
-            .attr("title", "Filtrovat podle názvu");
+            .attr("placeholder", "Vyhledat dotaz")
+            .attr("title", "Vyhledat dotaz podle názvu");
         this.input = input;
 
         $(this.groupContainer)

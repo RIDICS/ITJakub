@@ -274,7 +274,7 @@
         </li>
     </ul>
 </li>
-@if (Request.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
+@if (Request.IsAuthenticated)
 {
     <li id="admin-menu" class="has-sub last">
         @if (User.IsInRole(CustomRole.CanUploadBooks))
@@ -383,7 +383,7 @@
             
             <li>
                 <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                    <span>Správa oblíbených položek</span>
+                    <span>Oblíbené položky</span>
                 </a>
             </li>
 
