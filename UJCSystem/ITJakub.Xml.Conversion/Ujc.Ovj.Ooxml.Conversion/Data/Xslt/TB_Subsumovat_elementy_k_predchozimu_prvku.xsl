@@ -4,7 +4,8 @@
 	exclude-result-prefixes="xd"
 	version="1.0">
 	<xsl:import href="Kopirovani_prvku.xsl"/>
-	<xsl:import href="Subsumovat_elementy_k_predchozimu_prvku_rekonstrukce.xsl"/>
+	<!-- proč je potřeba element inculde, aby se aplikovala šablona s prioritou 20? -->
+	<xsl:include href="Subsumovat_elementy_k_predchozimu_prvku_rekonstrukce.xsl"/>
 	
 	<xd:doc scope="stylesheet">
 		<xd:desc>

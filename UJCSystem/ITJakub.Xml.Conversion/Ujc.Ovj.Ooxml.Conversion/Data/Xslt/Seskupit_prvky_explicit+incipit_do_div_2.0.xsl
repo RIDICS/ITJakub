@@ -30,6 +30,7 @@
 		</xsl:copy>
 	</xsl:template>
 	
+		
 	<!--<xsl:template match="div[@type='explicit']" mode="group">
 		<div>
 			<xsl:apply-templates select="current-group()" />

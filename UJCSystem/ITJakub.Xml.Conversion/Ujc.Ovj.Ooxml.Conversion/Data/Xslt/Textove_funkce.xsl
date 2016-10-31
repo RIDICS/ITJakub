@@ -246,6 +246,44 @@
 		
 	</xsl:function>
 	
+	<xsl:function name="vwf:substring-after-first-from-many">
+		<xsl:param name="input" as="xs:string"/>
+		<xsl:param name="substr" as="xs:string"/>
+		
+		<xsl:variable name="znak">
+			<xsl:call-template name="najitPrvniVyskytujiciSeZnak">
+				<xsl:with-param name="text" select="$input" />
+				<xsl:with-param name="interpunkce" select="$substr" />
+			</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="string-length($znak) = 0">
+				<xsl:value-of select="''" />
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="vwf:substring-after-first($input, $znak)" />
+			</xsl:otherwise>
+		</xsl:choose>
+		
+	</xsl:function>	
+	
+	<xsl:function name="vwf:substring-after-first">
+		<xsl:param name="input" as="xs:string"/>
+		<xsl:param name="substr" as="xs:string"/>
+		
+		<xsl:variable name="delka" select="string-length(substring-before($input, $substr)) + 2"/>
+		<xsl:choose>
+			<xsl:when test="$delka > 0">
+				<xsl:value-of select="substring($input, $delka)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="''"/>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+	</xsl:function>
+	
 	<xsl:function name="vwf:substring-after-last">
 		<xsl:param name="input" as="xs:string"/>
 		<xsl:param name="substr" as="xs:string"/>
@@ -269,7 +307,44 @@
 		
 		<xsl:sequence select="vwf:substring-before-last($input,$matchstr)"/>
 	</xsl:function>
+
+	<xsl:function name="vwf:substring-before-last-from-many-including" as="xs:string">
+		<xsl:param name="input" as="xs:string"/>
+		<xsl:param name="substr" as="xs:string"/>
+		<xsl:variable name="znak">
+			<xsl:call-template name="najitPosledniVyskytujiciSeZnak">
+				<xsl:with-param name="text" select="$input" />
+				<xsl:with-param name="interpunkce" select="$substr" />
+			</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:variable name="delka">
+		<xsl:value-of select="string-length(vwf:substring-before-last($input,$znak)) + 1"/>
+		</xsl:variable>
+		
+		<xsl:value-of select="substring($input, 1, $delka)"/>
+		
+	</xsl:function>
 	
+	
+	<xsl:function name="vwf:substring-before-first-from-many-including" as="xs:string">
+		<xsl:param name="input" as="xs:string"/>
+		<xsl:param name="substr" as="xs:string"/>
+		<xsl:variable name="znak">
+			<xsl:call-template name="najitPrvniVyskytujiciSeZnak">
+				<xsl:with-param name="text" select="$input" />
+				<xsl:with-param name="interpunkce" select="$substr" />
+			</xsl:call-template>
+		</xsl:variable>
+		
+		<xsl:variable name="delka">
+			<xsl:value-of select="string-length(substring-before($input,$znak)) + 1"/>
+		</xsl:variable>
+		
+		<xsl:value-of select="substring($input, 1, $delka)"/>
+		
+	</xsl:function>
+
 	<xsl:function name="vwf:substring-after-last">
 		<xsl:param name="input" as="xs:string"/>
 		<xsl:param name="substr" as="xs:string"/>
@@ -324,6 +399,37 @@
 			<xsl:otherwise>
 				<!--<xsl:value-of select="substring-before(substring($text, string-length(substring-before($text, $znak)) + 1), $mezera)" />-->
 				<xsl:value-of select="substring-before(substring($text, string-length(substring-before($text, $znak)) + 1), $znak)" />
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		<!--		<xsl:value-of select="$mezera" />-->
+		
+	</xsl:template>
+	
+	<xsl:template name="vlozit-text-za-interpunkci-vcetne">
+		<xsl:param name="text" />
+		<xsl:param name="hledanyZnak" select="''" />
+		<xsl:variable name="znak">
+			
+			<xsl:choose>
+				<xsl:when test="$hledanyZnak != ''">
+					<xsl:value-of select="$hledanyZnak"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="najitPrvniVyskytujiciSeZnak">
+						<xsl:with-param name="text" select="$text" />
+						<xsl:with-param name="interpunkce" select="$interpunkcePlusMezera" />
+					</xsl:call-template>
+				</xsl:otherwise>
+			</xsl:choose>
+			
+		</xsl:variable>
+		
+		<xsl:choose>
+			<xsl:when test="$znak = ''" />
+			<xsl:otherwise>
+				<!--<xsl:value-of select="substring-before(substring($text, string-length(substring-before($text, $znak)) + 1), $mezera)" />-->
+				<xsl:value-of select="substring($text, string-length(substring-before($text, $znak)) + 1)" />
 			</xsl:otherwise>
 		</xsl:choose>
 		

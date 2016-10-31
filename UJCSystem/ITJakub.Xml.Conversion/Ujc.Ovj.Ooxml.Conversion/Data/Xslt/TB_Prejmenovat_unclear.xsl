@@ -14,7 +14,7 @@
 	</xd:doc>
 	
 	<xsl:template match="/">
-		<xsl:comment> TB_Prejmenovat_rekonstrukci </xsl:comment>
+		<xsl:comment> TB_Prejmenovat_unclear </xsl:comment>
 		<xsl:apply-templates />
 	</xsl:template>
 	
@@ -26,7 +26,7 @@
 	
 	<xsl:template match="unclear[supplied]">
 		<xsl:element name="rekonstrukce">
-			<xsl:copy-of select=".//text()" />
+			<xsl:copy-of select=".//node()[not(self::supplied)]" />
 		</xsl:element>
 	</xsl:template>
 	

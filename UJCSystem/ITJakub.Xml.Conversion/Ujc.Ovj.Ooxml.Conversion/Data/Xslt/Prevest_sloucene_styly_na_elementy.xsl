@@ -129,6 +129,23 @@
 		</xsl:element>
 	</xsl:template>
 	
+	<xsl:template match="pripisek_interlinearni_soudoby_cizi_jazyk">
+		<xsl:element name="pripisek_interlinearni_soudoby">
+			<xsl:element name="cizi_jazyk">
+				<xsl:value-of select="."/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+
+	
+	<xsl:template match="pripisek_marginalni_soudoby_cizi_jazyk">
+		<xsl:element name="pripisek_marginalni_soudoby">
+			<xsl:element name="cizi_jazyk">
+				<xsl:value-of select="."/>
+			</xsl:element>
+		</xsl:element>
+	</xsl:template>
+	
 	<xsl:template match="popisek_k_obrazku_rekonstrukce">
 		<xsl:element name="popisek_k_obrazku">
 			<xsl:element name="rekonstrukce">
