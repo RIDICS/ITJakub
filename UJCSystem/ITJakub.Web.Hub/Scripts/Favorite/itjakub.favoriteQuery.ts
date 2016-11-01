@@ -119,22 +119,24 @@
         var listContainer = document.createElement("div");
 
         $(filterHeaderSpan)
-            .addClass("col-md-5")
+            //.addClass("col-md-5")
             .addClass("favorite-query-header")
+            .addClass("favorite-query-header-label")
             .text("Filtrovat:");
         $(filterInput)
             .attr("type", "text")
-            .attr("placeholder", "Filtr štítků")
+            .attr("placeholder", "Název štítku")
             .attr("title", "Filtrovat štítky podle názvu")
             .addClass("form-control")
             .addClass("input-sm");
         $(filterInputContainer)
-            .addClass("col-md-7")
+            //.addClass("col-md-7")
+            .addClass("favorite-query-filter-container")
             .append(filterInput);
         this.filterLabelInput = filterInput;
 
         $(filterHeading)
-            .addClass("row")
+            //.addClass("row")
             .append(filterHeaderSpan)
             .append(filterInputContainer);
 
