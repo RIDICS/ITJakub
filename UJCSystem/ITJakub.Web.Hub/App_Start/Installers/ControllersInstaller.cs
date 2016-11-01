@@ -11,7 +11,7 @@ namespace ITJakub.Web.Hub.App_Start.Installers
         {
             container.Register(Classes.FromThisAssembly()
                 .BasedOn<IController>()
-                .LifestyleTransient());
+                .LifestylePerWebRequest());
         }
     }
 }

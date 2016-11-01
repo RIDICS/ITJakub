@@ -1,5 +1,6 @@
-﻿@import "ITJakub.DefaultTheme.less";
+﻿@import "ITJakub.Colors.less";
 
+@loader-color: @button-background-color;
 
 
 .loaderBaseThisBeforeAfter{
@@ -114,20 +115,20 @@
   0%,
   80%,
   100% {
-    box-shadow: 0 2.5em 0 -1.3em @item-background-color;
+    box-shadow: 0 2.5em 0 -1.3em @loader-color;
   }
   40% {
-    box-shadow: 0 2.5em 0 0 @item-background-color;
+    box-shadow: 0 2.5em 0 0 @loader-color;
   }
 }
 @keyframes load7 {
   0%,
   80%,
   100% {
-    box-shadow: 0 2.5em 0 -1.3em @item-background-color;
+    box-shadow: 0 2.5em 0 -1.3em @loader-color;
   }
   40% {
-    box-shadow: 0 2.5em 0 0 @item-background-color;
+    box-shadow: 0 2.5em 0 0 @loader-color;
   }
 }
 

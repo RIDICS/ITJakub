@@ -55,6 +55,11 @@
     "sourceMap": false
   },
   {
+    "outputFile": "Content/ITJakub.BootstrapStyle.css",
+    "inputFile": "Content/ITJakub.BootstrapStyle.less",
+    "sourceMap": false
+  },
+  {
     "outputFile": "Content/ITJakub.DefaultTheme.css",
     "inputFile": "Content/ITJakub.DefaultTheme.less",
     "sourceMap": false

@@ -1,4 +1,4 @@
-﻿@import "../../../Content/ITJakub.DefaultTheme.less";
+﻿@import "../../../Content/ITJakub.Colors.less";
 
 @corpus-search-width: @max-body-width - 20px;
 
@@ -49,7 +49,8 @@
     float: right;
     width: @corpus-search-width - @search-results-area-width;
     height:@search-results-area-height;
-    background-color: @item-background-color;
+    background-color: @menu-background-color;
+    color: white;
     line-height: 1.1;
     padding: 15px;
 }
@@ -133,7 +134,8 @@
 }
 
 .corpus-search-results-table-div table td.match {
-    background-color: @item-background-color;
+    background-color: @menu-active-background-color;
+    color: #fff;
     margin-left: 5px;
     margin-right: 5px;
     text-align: center;
@@ -197,7 +199,7 @@
 
 .corpus-search-detail a, .corpus-search-results-abbrev-table-div a {
     text-decoration: none;
-    color: @item-background-color;
+    //color: @item-background-color;
 }
 
 .corpus-search-detail a:hover, .corpus-search-results-abbrev-table-div a:hover {

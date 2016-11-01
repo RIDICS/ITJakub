@@ -113,6 +113,23 @@
         element.parentElement.appendChild(clonedImage);
     }
 
+    public registerButton(buttonElement: HTMLButtonElement, inputElement: HTMLInputElement) {
+        var jElement = $(inputElement);
+
+        inputElement.addEventListener("focus", () => {
+            if (!buttonElement.classList.contains("disabled")) {
+                this.setInput(jElement);
+            }
+        });
+
+        buttonElement.addEventListener("click", (event: JQueryEventObject) => {
+            if (!buttonElement.classList.contains("disabled")) {
+                this.setInput(jElement);
+                this.toggleKeyboard(event);
+            }
+        });
+    }
+
     protected toggleKeyboard(event?: JQueryEventObject) {
         const keyboard = this.getKeyboard();
 

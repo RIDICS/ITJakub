@@ -431,13 +431,20 @@
     <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\favicon_green.png" />
     <Content Include="Content\Images\Feeds\04.png" />
     <Content Include="Content\Images\Feeds\07.png" />
     <Content Include="Content\Images\Feeds\25.png" />
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\glyphicons_chevron_white.png" />
     <Content Include="Content\Images\klavesnice.gif" />
+    <Content Include="Content\Images\Logo\logo_av21_white.png" />
+    <Content Include="Content\Images\Logo\logo_fel_white.png" />
+    <Content Include="Content\Images\Logo\logo_msmt_white.png" />
+    <Content Include="Content\Images\Logo\logo_ujc_white.png" />
+    <Content Include="Content\Images\Logo\main_logo.png" />
     <Content Include="Content\Images\mlceni_blue.jpg" />
     <Content Include="Content\Images\mlceni_hangman.jpg" />
     <Content Include="Content\Images\Mlceni_pink.jpg" />
@@ -446,6 +453,13 @@
     </Content>
     <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
+    </Content>
+    <Content Include="Content\Images\news_background2_green.png" />
+    <Content Include="Content\ITJakub.BootstrapStyle.css">
+      <DependentUpon>ITJakub.BootstrapStyle.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.BootstrapStyle.min.css">
+      <DependentUpon>ITJakub.BootstrapStyle.css</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.Favorites.css">
       <DependentUpon>ITJakub.Favorites.less</DependentUpon>
@@ -1602,6 +1616,26 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Content\ITJakub.Favorites.less" />
+    <Content Include="Content\ITJakub.Colors.less" />
+    <Content Include="Content\ITJakub.Fonts.less" />
+    <Content Include="Content\ITJakub.FontData.less" />
+    <Content Include="Content\ITJakub.BootstrapStyle.less" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff2" />
     <None Include="Content\ITJakub.HorizontalLoader.less" />
     <None Include="Content\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
@@ -1635,6 +1669,7 @@
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <Content Include="Views\Favorite\AmbiguousFavoriteRedirect.cshtml" />
+    <Content Include="Views\Shared\_BibliographySearch.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1924,4 +1959,3 @@
   <Target Name="AfterBuild">
   </Target> -->
 </Project>
-

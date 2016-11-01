@@ -319,7 +319,7 @@ class ReaderModule {
         $(pageInputButton).addClass("btn btn-default page-input-button");
 
         var pageInputButtonSpan = document.createElement("span");
-        $(pageInputButtonSpan).addClass("glyphicon glyphicon-indent-left");
+        $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
         $(pageInputButton).append(pageInputButtonSpan);
 
         $(pageInputButton).click((event: Event) => {
@@ -354,8 +354,6 @@ class ReaderModule {
         });
 
         this.activateTypeahead(pageInputText);
-
-        var paginationUlHelper=document.createElement("div");
 
         var paginationUl: HTMLUListElement = document.createElement("ul");
         paginationUl.classList.add("pagination", "pagination-sm");
@@ -473,9 +471,8 @@ class ReaderModule {
         var listingContainer = document.createElement("div");
         listingContainer.classList.add("page-navigation-container-helper");
         listingContainer.appendChild(toLeft);
+        listingContainer.appendChild(paginationUl);
         listingContainer.appendChild(toRight);
-        paginationUlHelper.appendChild(paginationUl);
-        listingContainer.appendChild(paginationUlHelper);
 
         var buttonsDiv: HTMLDivElement = document.createElement("div");
         $(buttonsDiv).addClass("buttons");

@@ -148,13 +148,23 @@ class Search {
         searchbarInputClassList.add("keyboard-input");
         searchbarInputDiv.appendChild(searchbarInput);
 
+        var keyboardButton = document.createElement("button");
+        keyboardButton.type = "button";
+        keyboardButton.classList.add("btn", "regexsearch-input-button");
+        keyboardButton.style.right = "45px";
+        var keyboardIcon = document.createElement("div");
+        keyboardIcon.classList.add("custom-glyphicon-keyboard");
+        keyboardIcon.style.height = "100%";
+        keyboardButton.appendChild(keyboardIcon);
+        searchbarInputDiv.appendChild(keyboardButton);
+
         var favoriteButton = document.createElement("button");
         favoriteButton.type = "button";
         favoriteButton.classList.add("btn", "regexsearch-input-button");
         var favoriteIcon = document.createElement("span");
         favoriteIcon.classList.add("glyphicon", "glyphicon-star");
         favoriteIcon.style.fontSize = "110%";
-        favoriteIcon.style.marginTop = "3px";
+        favoriteIcon.style.marginTop = "1px";
         favoriteButton.appendChild(favoriteIcon);
         searchbarInputDiv.appendChild(favoriteButton);
         
@@ -210,7 +220,8 @@ class Search {
         });
 
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerInput(searchbarInput);
+        //keyboardComponent.registerInput(searchbarInput);
+        keyboardComponent.registerButton(keyboardButton, searchbarInput);
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -1838,12 +1849,22 @@ class RegExWordInput {
         
         lineDiv.appendChild(this.conditionInput);
         
+        var keyboardButton = document.createElement("button");
+        $(keyboardButton).attr("type", "button");
+        $(keyboardButton).addClass("btn");
+        $(keyboardButton).addClass("regexsearch-condition-input-button");
+        var keyboardIcon = document.createElement("div");
+        $(keyboardIcon).addClass("custom-glyphicon-keyboard");
+        $(keyboardIcon).css("height", "100%");
+        keyboardButton.appendChild(keyboardIcon);
+        lineDiv.appendChild(keyboardButton);
+
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerInput(this.conditionInput);
+        keyboardComponent.registerButton(keyboardButton, this.conditionInput);
 
         var regExButton = document.createElement("button");
         $(regExButton).text("R");
-        regExButton.type = "button";
+        $(regExButton).attr("type", "button");
         $(regExButton).addClass("btn");
         $(regExButton).addClass("regexsearch-condition-input-button");
         $(regExButton).click(() => {
@@ -1860,6 +1881,7 @@ class RegExWordInput {
         $(removeGlyph).addClass("glyphicon");
         $(removeGlyph).addClass("glyphicon-trash");
         removeButton.appendChild(removeGlyph);
+        $(removeButton).css("margin-left", "3px");
         $(removeButton).click(() => {
             this.parentRegExWordCondition.removeInput(this);
         });
