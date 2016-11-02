@@ -52,21 +52,12 @@ a.main_logo_href img {
     margin-right: 0;
     float: left;
 
-    /*@media screen and (min-width: 768px) {
-        float: left;
-    }
-    @media screen and (min-width: 1200px) {
-        float: none;
-    }*/
     @media screen and (max-width: 1500px) {
         height: 3rem;
         margin: 0.5rem;
         margin-right: 0;
         margin-left: 1rem;
     }
-    /*@media screen and (min-width: 1501px) {
-        float: left;
-    }*/
 }
 
 @media screen and (min-width: 1501px) {
@@ -114,12 +105,7 @@ a.main_logo_href img {
 }
 
 @media screen and (max-width: 1500px) {
-    /*.main_logo_text {
-        display: none;
-    }*/
-
     .main_logo_text {
-        //display: inline-block;
         margin: .65rem 0 0 .75rem;
     }
 
@@ -132,50 +118,19 @@ a.main_logo_href img {
     }
 }
 
-@media screen and (max-width: 1199px) {
-    /*.main_logo_text {
-        display: inline-block;
-        margin: .65rem 0 0 .75rem;
-    }*/
-
-    /*.main_logo_text h1 {
-        font-size: 18px;
-    }
-
-    .main_logo_text h2 {
-        font-size: 18px;
-    }*/
-}
-
-@media screen and (max-width: 767px) {
-    /*.main_logo_text {
-        display: none;
-    }*/
-}
-
-@media screen and (max-width: 1100px) {
-    .main_logo_text {
+.main_logo_text {
+    @media screen and (max-width: 1200px) {
         display: none;
     }
-}
 
-@media screen and (max-width: 1000px) {
-    .main_logo_text {
+    @media screen and (max-width: 1099px) {
         display: inline-block;
     }
-}
 
-@media screen and (max-width: 400px) {
-    .main_logo_text {
+    @media screen and (max-width: 400px) {
         display: none;
     }
 }
-
-.main-navbar-container {
-    /*margin-left: 2px;*/
-    /*margin-right: 2px;*/
-}
-
 
 .main-navbar-container a {
     .white-link;
@@ -191,7 +146,6 @@ a.main_logo_href img {
 
 ul.navbar-login,
 ul.navbar-language {
-    /* margin-right: 20px!important; */
     margin: 2.1rem 1rem 0 0;
     float: right;
     font-size: 16px;
@@ -209,23 +163,6 @@ ul.navbar-language li:hover a {
     background: @menu-hover-color;
 }
 
-/*@media screen and (max-width: 1500px) {
-    ul.navbar-login,
-    ul.navbar-language {
-        margin: 1.4rem .5rem 0 0;
-        padding-left: 0;
-    }
-    ul.navbar-language {
-        margin-left: 1rem;
-    }
-    ul.navbar-login li a {
-        padding: 1.5rem .6rem 1.225rem;
-    }
-    ul.navbar-language li a {
-        padding: 1.5rem .3rem 1.225rem;
-    }
-}*/
-
 .secondary-navbar-toggle {
     position: relative;
     float: right;
@@ -237,11 +174,7 @@ ul.navbar-language li:hover a {
     font-size: 200%;
     color: white;
     cursor: pointer;
-
-    > span {
-        //padding-bottom: 6px;
-    }
-
+    
     ul.navbar-login,
     ul.navbar-language {
         display: none;
@@ -250,27 +183,21 @@ ul.navbar-language li:hover a {
         -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
         z-index: 2;
         background-color: @menu-background-color;
-
-
         float: none;
-    margin: 0;
-    position: absolute;
-   // display: block;
-    
-    top: 100%;
-    padding: 0;
-    //left: 14px-148/2px;
-    right: -14px;
-    width: 148px;
-
+        margin: 0;
+        position: absolute;
+        top: 100%;
+        padding: 0;
+        right: -14px;
+        width: 148px;
         border: solid 1px @menu-hover-color;
     }
 
     .navbar-login li a,
-  .navbar-language li a {
-      padding: 8px 10px 8px 10px;
-      display: block;
-  }
+    .navbar-language li a {
+        padding: 8px 10px 8px 10px;
+        display: block;
+    }
 
     &:focus {
         outline: none;
@@ -280,38 +207,19 @@ ul.navbar-language li:hover a {
         opacity: 0.5;
     }
 
-    &:hover > ul {
+    &:hover ul {
         display: block;
     }
 }
 
-@media screen and (max-width: 1199px) {
-  ul.navbar-login,
-  ul.navbar-language {
-    /*float: none;
-    margin: 0;
-    position: absolute;
-    display: block;
-    
-    top: 100%;
-    padding: 0;
-    left: 14px-148/2px;
-    width: 148px;*/
-  }
-  //ul.navbar-language {
-   // right: 5.5rem;
-  //}
-
-  /*.navbar-login li a,
-  .navbar-language li a {
-      padding: 8px 10px 8px 10px;
-      display: block;
-  }*/
+.secondary-navbar-toggle.login span {
+    margin-right: 10px;
 }
 
 @media screen and (min-width: 1500px) {
     .secondary-navbar-toggle.login span {
         display: none;
+        margin-right: 0;
     }
 
     .secondary-navbar-toggle.login {
@@ -328,6 +236,8 @@ ul.navbar-language li:hover a {
         border: none;
         width: 200px;
         z-index: 1;
+        text-align: right;
+        margin-right: 20px;
 
         li a {
             padding: 2rem 0.5rem;
@@ -342,13 +252,6 @@ ul.navbar-language li:hover a {
     }
     .secondary-navbar-toggle ul.navbar-language li {
         display: block;
-    }
-
-    ul.navbar-login,
-    ul.navbar-language {
-        span {
-           // display: none;
-        }
     }
 }
 
@@ -369,20 +272,7 @@ ul.navbar-language li:hover a {
         position: relative;
     }
 }
-.navbar-login li {
-    /* margin-left: 1rem; */
-}
-/*.navbar-language li {
-    margin-left: 0;
-}
-.navbar-language li::before {
-    content: '|';
-    color: #fff;
-}
-.navbar-language li:first-child::before {
-    display: none;
-    content: '';
-}*/
+
 .navbar-toggle {
     border: none;
     margin: 0.55rem 1rem;
