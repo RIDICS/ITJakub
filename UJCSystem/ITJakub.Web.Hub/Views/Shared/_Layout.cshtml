@@ -23,12 +23,12 @@
     <div class="navbar navbar-inverse navbar-fixed-top header-content">
         <div class="">
             <div class="main-navbar-container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
+                <div class="navbar-header-not">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Menu">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
                     </button>
+                    
+                    @Html.Partial("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
                         <img src="@Url.Content("~/Content/Images/Logo/main_logo.png")" alt="main_logo" class="main_logo" />
@@ -37,9 +37,7 @@
                             <h2>webový</h2>
                         </div>
                     </a>
-                </div>
-
-                @Html.Partial("_LoginPartial")
+                @*</div>*@
 
                 <div class="navbar-collapse collapse">
                     <div id="main-plugins-menu" class="main-plugins-menu">
@@ -444,6 +442,7 @@
                             }
                         </ul>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

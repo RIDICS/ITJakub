@@ -1,34 +1,48 @@
 ﻿@using Microsoft.AspNet.Identity
 
-@*<ul class="navbar-language">
-    <li>
-        <a href="#">CZ</a>
-    </li>
-    <li>
-        <a href="#">EN</a>
-    </li>
-</ul>*@
-
-@if (Request.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
-    {
-        @Html.AntiForgeryToken()
-
-    <ul class="navbar-right navbar-login">
-        <li><a href="#">@Html.Raw(User.Identity.GetUserName())</a></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
+<div class="secondary-navbar-toggle language" title="Jazyk">
+    <span class="glyphicon glyphicon-text-background"></span>
+    <ul class="navbar-language">
+        <li>
+            <a href="#">CZ - Česky</a>
+        </li>
+        <li>
+            <a href="#">EN - English</a>
+        </li>
     </ul>
-    }
-}
-else
-{
-    if (Request.Url != null && Request.Url.PathAndQuery != "/" && !Request.Url.PathAndQuery.StartsWith("/Account/"))
-    {
-        ViewBag.ReturnUrl = Request.Url.PathAndQuery;
-    }
-    <ul class="navbar-right navbar-login">
-        <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
+</div>
+
+<div class="secondary-navbar-toggle login" title="Uživatelský účet">
+    <span class="glyphicon glyphicon-user"></span>
+    <ul class="navbar-login">
+        <li>@Html.ActionLink("Přihlášení", "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
         <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
     </ul>
-}
+</div>
+
+
+@*<div class="navbar-collapse-3 collapse">
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <ul class="navbar-right navbar-login">
+                <li><a href="#">@Html.Raw(User.Identity.GetUserName())</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
+            </ul>
+        }
+    }
+    else
+    {
+        if (Request.Url != null && Request.Url.PathAndQuery != "/" && !Request.Url.PathAndQuery.StartsWith("/Account/"))
+        {
+            ViewBag.ReturnUrl = Request.Url.PathAndQuery;
+        }
+        <ul class="navbar-right navbar-login">
+            <li>@Html.ActionLink("Přihlášení", "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
+            <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
+        </ul>
+    }
+</div>*@

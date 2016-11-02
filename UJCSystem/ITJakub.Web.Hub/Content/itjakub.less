@@ -31,6 +31,7 @@ a.main_logo_href {
     /* display: block; */
     /* padding: 0.1rem 0; */
     padding-right: 1rem;
+    float: left;
 }
 
 a.main_logo_href:hover {
@@ -49,22 +50,23 @@ a.main_logo_href img {
     width: auto;
     margin: .8rem 1rem;
     margin-right: 0;
+    float: left;
 
-    @media screen and (min-width: 768px) {
+    /*@media screen and (min-width: 768px) {
         float: left;
     }
     @media screen and (min-width: 1200px) {
         float: none;
-    }
+    }*/
     @media screen and (max-width: 1500px) {
         height: 3rem;
         margin: 0.5rem;
         margin-right: 0;
         margin-left: 1rem;
     }
-    @media screen and (min-width: 1501px) {
+    /*@media screen and (min-width: 1501px) {
         float: left;
-    }
+    }*/
 }
 
 @media screen and (min-width: 1501px) {
@@ -112,14 +114,12 @@ a.main_logo_href img {
 }
 
 @media screen and (max-width: 1500px) {
-    .main_logo_text {
+    /*.main_logo_text {
         display: none;
-    }
-}
+    }*/
 
-@media screen and (max-width: 1199px) {
     .main_logo_text {
-        display: inline-block;
+        //display: inline-block;
         margin: .65rem 0 0 .75rem;
     }
 
@@ -132,7 +132,40 @@ a.main_logo_href img {
     }
 }
 
+@media screen and (max-width: 1199px) {
+    /*.main_logo_text {
+        display: inline-block;
+        margin: .65rem 0 0 .75rem;
+    }*/
+
+    /*.main_logo_text h1 {
+        font-size: 18px;
+    }
+
+    .main_logo_text h2 {
+        font-size: 18px;
+    }*/
+}
+
 @media screen and (max-width: 767px) {
+    /*.main_logo_text {
+        display: none;
+    }*/
+}
+
+@media screen and (max-width: 1100px) {
+    .main_logo_text {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .main_logo_text {
+        display: inline-block;
+    }
+}
+
+@media screen and (max-width: 400px) {
     .main_logo_text {
         display: none;
     }
@@ -150,6 +183,10 @@ a.main_logo_href img {
 
 .main-navbar-container a:hover {
     .hovered-link;
+}
+
+.navbar-header {
+    display: block;
 }
 
 ul.navbar-login,
@@ -172,7 +209,7 @@ ul.navbar-language li:hover a {
     background: @menu-hover-color;
 }
 
-@media screen and (max-width: 1500px) {
+/*@media screen and (max-width: 1500px) {
     ul.navbar-login,
     ul.navbar-language {
         margin: 1.4rem .5rem 0 0;
@@ -187,21 +224,132 @@ ul.navbar-language li:hover a {
     ul.navbar-language li a {
         padding: 1.5rem .3rem 1.225rem;
     }
+}*/
+
+.secondary-navbar-toggle {
+    position: relative;
+    float: right;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    margin: 0.55rem 1rem;
+    padding: 4px 0px 0px 0px;
+    font-size: 200%;
+    color: white;
+    cursor: pointer;
+
+    > span {
+        //padding-bottom: 6px;
+    }
+
+    ul.navbar-login,
+    ul.navbar-language {
+        display: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        -webkit-box-shadow: 0 3px 4px rgba(0,0,0,0.26);
+        -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        z-index: 2;
+        background-color: @menu-background-color;
+
+
+        float: none;
+    margin: 0;
+    position: absolute;
+   // display: block;
+    
+    top: 100%;
+    padding: 0;
+    //left: 14px-148/2px;
+    right: -14px;
+    width: 148px;
+
+        border: solid 1px @menu-hover-color;
+    }
+
+    .navbar-login li a,
+  .navbar-language li a {
+      padding: 8px 10px 8px 10px;
+      display: block;
+  }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:hover > span {
+        opacity: 0.5;
+    }
+
+    &:hover > ul {
+        display: block;
+    }
 }
 
 @media screen and (max-width: 1199px) {
   ul.navbar-login,
   ul.navbar-language {
-    float: none;
+    /*float: none;
     margin: 0;
     position: absolute;
-    top: 1.35rem;
-    /*right: 6rem;*/
-    right: 10rem;
+    display: block;
+    
+    top: 100%;
+    padding: 0;
+    left: 14px-148/2px;
+    width: 148px;*/
   }
-  ul.navbar-language {
-    right: 5.5rem;
-  }
+  //ul.navbar-language {
+   // right: 5.5rem;
+  //}
+
+  /*.navbar-login li a,
+  .navbar-language li a {
+      padding: 8px 10px 8px 10px;
+      display: block;
+  }*/
+}
+
+@media screen and (min-width: 1500px) {
+    .secondary-navbar-toggle.login span {
+        display: none;
+    }
+
+    .secondary-navbar-toggle.login {
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .secondary-navbar-toggle ul.navbar-login {
+        display: block;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        border: none;
+        width: 200px;
+        z-index: 1;
+
+        li a {
+            padding: 2rem 0.5rem;
+            display: inline-block;
+            height: 78px;
+        }
+    }
+
+    .secondary-navbar-toggle.language span {
+        margin: 10px 0;
+        margin-right: 20px;
+    }
+    .secondary-navbar-toggle ul.navbar-language li {
+        display: block;
+    }
+
+    ul.navbar-login,
+    ul.navbar-language {
+        span {
+           // display: none;
+        }
+    }
 }
 
 .navbar-login li, .navbar-language li, ul {
@@ -215,11 +363,16 @@ ul.navbar-language li:hover a {
 .navbar-login li,
 .navbar-language li {
     display: inline-block;
+
+    @media screen and (max-width: 1500px) {
+        display: block;
+        position: relative;
+    }
 }
 .navbar-login li {
     /* margin-left: 1rem; */
 }
-.navbar-language li {
+/*.navbar-language li {
     margin-left: 0;
 }
 .navbar-language li::before {
@@ -229,10 +382,13 @@ ul.navbar-language li:hover a {
 .navbar-language li:first-child::before {
     display: none;
     content: '';
-}
+}*/
 .navbar-toggle {
     border: none;
     margin: 0.55rem 1rem;
+    padding: 4px 0px 0px 0px;
+    font-size: 200%;
+    color: white;
 }
 .navbar-toggle .icon-bar {
     height: 3px;
