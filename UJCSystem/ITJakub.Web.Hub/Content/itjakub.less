@@ -189,7 +189,7 @@ ul.navbar-language li:hover a {
         top: 100%;
         padding: 0;
         right: -14px;
-        width: 148px;
+        width: 155px;
         border: solid 1px @menu-hover-color;
     }
 
@@ -203,11 +203,13 @@ ul.navbar-language li:hover a {
         outline: none;
     }
 
-    &:hover > span {
+    &:hover > span,
+    &.hover > span {
         opacity: 0.5;
     }
 
-    &:hover ul {
+    &:hover ul,
+    &.hover ul {
         display: block;
     }
 }

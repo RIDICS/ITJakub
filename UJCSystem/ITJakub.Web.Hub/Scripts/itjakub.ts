@@ -9,6 +9,22 @@ $(document).ready(() => {
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
     $(liTargetingActualPage).addClass('active');
     $(liTargetingActualPage).parents('li').addClass('active');
+
+    // Fix navigation menu behavior for touch devices
+    $("#main-plugins-menu > ul > li > a").on("touchstart", (event) => {
+        event.preventDefault();
+        var $liElement = $(event.currentTarget).closest(".has-sub");
+        $liElement.siblings().removeClass("hover");
+        $liElement.toggleClass("hover");
+    });
+    $(".secondary-navbar-toggle").on("touchstart", (event) => {
+        if ($(event.target).is("a")) {
+            return;
+        }
+        var $buttonElement = $(event.currentTarget);
+        $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
+        $buttonElement.toggleClass("hover");
+    });
 });
 
 function getQueryStringParameterByName(name) {

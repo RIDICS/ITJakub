@@ -144,7 +144,8 @@
 }
 
 
-#main-plugins-menu > ul > li:hover:after {
+#main-plugins-menu > ul > li:hover:after,
+#main-plugins-menu > ul > li.hover:after {
     content: '';
     display: block;
     width: 0;
@@ -159,33 +160,32 @@
 }
 
 #main-plugins-menu > ul > li.active > a,
-#main-plugins-menu > ul > li.active:hover > a {
+#main-plugins-menu > ul > li.active:hover > a,
+#main-plugins-menu > ul > li.active.hover > a {
     /*background-color: @menu-active-background-color;*/
     background-color: transparent;
     /*color: black;*/
     /*background-image: url('Images/glyphicons_chevron.png');*/
 }
 
-#main-plugins-menu > ul > li:hover > a {
+#main-plugins-menu > ul > li:hover > a,
+#main-plugins-menu > ul > li.hover > a {
     /*color: @item-background-color;*/
     background-image: @icon-chevron-white;
     background-color: @menu-hover-color;
 }
 
-#main-plugins-menu > ul > li:hover > a > span {
-  /* opacity: .7; */
+#main-plugins-menu > ul > li:hover,
+#main-plugins-menu > ul > li.hover {
+    z-index: 10;
 }
 
 #main-plugins-menu > ul > li > ul > li.active > a {
     color: black;
 }
 
-
-#main-plugins-menu > ul > li:hover {
-    z-index: 10;
-}
-
-#main-plugins-menu .has-sub:hover > ul {
+#main-plugins-menu .has-sub:hover > ul,
+#main-plugins-menu .has-sub.hover > ul {
     display: block;
     /* border: 1px solid white; */
     box-shadow: 0 2px 5px rgba(0,0,0,0.26);
@@ -193,7 +193,8 @@
     -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 }
 
-#main-plugins-menu .has-sub.active:hover > ul {
+#main-plugins-menu .has-sub.active:hover > ul,
+#main-plugins-menu .has-sub.active.hover > ul {
     display: block;
     border: none;
 }
@@ -201,7 +202,7 @@
 #main-plugins-menu .has-sub ul {
     display: none;
     position: absolute;
-    width: 148px;
+    width: 155px;
     top: 100%;
     left: 0;
 }
