@@ -354,7 +354,7 @@ class DropDownSelect {
     }
 
     protected onFavoritesChanged(favoriteType: FavoriteType, id: number) {
-        
+        new NewFavoriteNotification().show();
     }
     
     protected makeTreeStructure(categories, leafItems, dropDownItemsDiv: HTMLDivElement) {

@@ -84,6 +84,7 @@
 
     protected onFavoritesChanged(favoriteType: FavoriteType, id: number): void {
         this.favoriteBook.loadData();
+        new NewFavoriteNotification().show();
     }
 
     private doRestore() {

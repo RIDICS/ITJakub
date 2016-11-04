@@ -1746,6 +1746,7 @@
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteQuery.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteStar.ts" />
     <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteDialog.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteNotification.ts" />
     <TypeScriptCompile Include="Scripts\itjakub.dataContracts.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
     <TypeScriptCompile Include="Scripts\Plugins\itjakub.tools.ts" />

@@ -140,7 +140,7 @@ class BibliographyModule {
                 }
                 var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
                 var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
-                    alert("favorites changed");
+                    new NewFavoriteNotification().show();
                 });
                 if (bookFavorites) {
                     favoriteStar.addFavoriteItems(bookFavorites);
