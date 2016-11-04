@@ -112,26 +112,10 @@ class BibliographyFactory {
         }
 
         if (config.containsFavoriteButton()) {
-            var favoriteButton = document.createElement("a");
+            var favoriteButton = document.createElement("span");
             var $favoriteButton = $(favoriteButton);
-            $favoriteButton.addClass("btn btn-sm favorite-button button");
-            var spanFavorite = document.createElement("span");
-            $(spanFavorite).addClass("glyphicon glyphicon-star");
-            $favoriteButton.append(spanFavorite);
-            $favoriteButton.attr("href", "#");
-            $favoriteButton.click((event: JQueryEventObject) => {
-                var buttonScript = config.getFavoriteButtonOnClick(bookInfo);
-                var buttonScriptCallable = config.getFavoriteButtonOnClickCallable(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
-                    eval(buttonScript);
-                }
-                else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
-                    this.runEvalResponse(event, eval(buttonScriptCallable));
-                }
-                else {
-                    onClickHref(event, config.getReadButtonUrl(bookInfo));
-                }
-            });
+            $favoriteButton.addClass("favorite-button");
+            $favoriteButton.data("buttonClass", "btn btn-sm button");
             rightPanel.appendChild(favoriteButton);
         }
 

@@ -43,7 +43,7 @@
         }
     }
     
-    public make(fixPosition = false) {
+    public make(placement = "right", fixPosition = false) {
         var innerContainer = document.createElement("a");
         $(innerContainer)
             .addClass("favorite-star")
@@ -51,7 +51,7 @@
 
         var popoverOptions: PopoverOptions = {
             html: true,
-            placement: "right",
+            placement: placement ? placement : "right",
             content: () => this.renderPopover()
         };
         if (fixPosition) {
@@ -291,4 +291,10 @@ class FavoritePopoverBuilder {
             favoriteLabelsString +
             this.templateEnd;
     }
+}
+
+interface IFavoriteChangedInfo {
+    addedLabelsName: string;
+    addedLabels: Array<IFavoriteLabel>;
+    removedLabelIds: Array<number>;
 }

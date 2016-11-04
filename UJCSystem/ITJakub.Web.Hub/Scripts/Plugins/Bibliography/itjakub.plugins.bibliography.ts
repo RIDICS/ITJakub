@@ -96,6 +96,7 @@ class BibliographyModule {
                 bookDataList.push({
                     bookId: book.BookId,
                     bookType: book.BookType,
+                    bookName: book.Title,
                     element: bibliographyHtml
                 });
             });
@@ -114,7 +115,8 @@ class BibliographyModule {
         var bookIds = new Array<number>();
         $.each(bookDataList, (index, bookData) => {
             bookData.$favoritesContainer = $(".favorites", bookData.element);
-            if (bookData.$favoritesContainer.length > 0) {
+            bookData.$favoriteButton = $(".favorite-button", bookData.element);
+            if (bookData.$favoritesContainer.length > 0 || bookData.$favoriteButton.length > 0) {
                 bookIds.push(bookData.bookId);
             }
         });
@@ -124,12 +126,29 @@ class BibliographyModule {
             $.each(favoriteBooks, (index, favoriteLabeledBook) => {
                 favoriteBooksDictionary.add(favoriteLabeledBook.Id, favoriteLabeledBook.FavoriteInfo); 
             });
+
             $.each(bookDataList, (index, bookData) => {
                 var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
                 if (bookFavorites) {
                     var bibliographyFactory = this.getBibliographyFactory(bookData.bookType);
                     bookData.$favoritesContainer.append(bibliographyFactory.makeFavoriteBookInfo(bookFavorites));
                 }
+
+                // create FavoriteStar
+                if (bookData.$favoriteButton.length === 0) {
+                    return;
+                }
+                var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
+                var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
+                    alert("favorites changed");
+                });
+                if (bookFavorites) {
+                    favoriteStar.addFavoriteItems(bookFavorites);
+                }
+                favoriteStar.make("left", true);
+
+                var className = bookData.$favoriteButton.data("buttonClass");
+                $("a", bookData.$favoriteButton).addClass(className);
             });
         });
     }
@@ -242,47 +261,49 @@ class BibliographyModule {
     }
 }
 
-var newFavoriteFromBibliographyDialog: NewFavoriteDialog;
-function addFavoriteFromBibliography(target) {
-    return context => {
-        if (!newFavoriteFromBibliographyDialog) {
-            var favoriteManager = new FavoriteManager();
-            newFavoriteFromBibliographyDialog = new NewFavoriteDialog(favoriteManager, true);
-            newFavoriteFromBibliographyDialog.make();
-        }
+//var newFavoriteFromBibliographyDialog: NewFavoriteDialog;
+//function addFavoriteFromBibliography(target) {
+//    return context => {
+//        if (!newFavoriteFromBibliographyDialog) {
+//            var favoriteManager = new FavoriteManager();
+//            newFavoriteFromBibliographyDialog = new NewFavoriteDialog(favoriteManager, true);
+//            newFavoriteFromBibliographyDialog.make();
+//        }
 
-        var $item = $(target).parents("li.list-item");
-        var bookId = $item.attr("data-id");
-        var bookName = $item.attr("data-name");
-        newFavoriteFromBibliographyDialog.setSaveCallback(data => {
-            var favoriteManager = new FavoriteManager();
-            var labelIds: Array<number> = [];
-            var labelElements: Array<HTMLSpanElement> = [];
-            for (var i = 0; i < data.labels.length; i++) {
-                var label = data.labels[i];
-                labelIds.push(label.labelId);
-                var labelSpan = BibliographyFactory.makeFavoriteLabel(data.itemName, label.labelName, label.labelColor);
-                labelElements.push(labelSpan);
-            }
-            favoriteManager.createFavoriteItem(FavoriteType.Book, bookId, data.itemName, labelIds, (ids, error) => {
-                if (error) {
-                    newFavoriteFromBibliographyDialog.showError("Chyba při vytváření oblíbené knihy");
-                    return;
-                }
+//        var $item = $(target).parents("li.list-item");
+//        var bookId = $item.attr("data-id");
+//        var bookName = $item.attr("data-name");
+//        newFavoriteFromBibliographyDialog.setSaveCallback(data => {
+//            var favoriteManager = new FavoriteManager();
+//            var labelIds: Array<number> = [];
+//            var labelElements: Array<HTMLSpanElement> = [];
+//            for (var i = 0; i < data.labels.length; i++) {
+//                var label = data.labels[i];
+//                labelIds.push(label.labelId);
+//                var labelSpan = BibliographyFactory.makeFavoriteLabel(data.itemName, label.labelName, label.labelColor);
+//                labelElements.push(labelSpan);
+//            }
+//            favoriteManager.createFavoriteItem(FavoriteType.Book, bookId, data.itemName, labelIds, (ids, error) => {
+//                if (error) {
+//                    newFavoriteFromBibliographyDialog.showError("Chyba při vytváření oblíbené knihy");
+//                    return;
+//                }
 
-                newFavoriteFromBibliographyDialog.hide();
-                $(".favorites", $item).append(labelElements);
-            });
-        });
-        newFavoriteFromBibliographyDialog.show(bookName);
-    };
-}
+//                newFavoriteFromBibliographyDialog.hide();
+//                $(".favorites", $item).append(labelElements);
+//            });
+//        });
+//        newFavoriteFromBibliographyDialog.show(bookName);
+//    };
+//}
 
 interface IBookRenderData {
     bookId: number;
     bookType: BookTypeEnum;
+    bookName: string;
     element: HTMLLIElement;
     $favoritesContainer?: JQuery;
+    $favoriteButton?: JQuery;
 }
 
 interface IBookInfo {

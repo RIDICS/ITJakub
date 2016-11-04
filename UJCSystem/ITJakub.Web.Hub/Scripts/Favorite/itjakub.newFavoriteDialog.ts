@@ -438,6 +438,25 @@ class ColorInput {
     }
 }
 
+class NewFavoriteDialogProvider {
+    private static dialogs = new DictionaryWrapper<NewFavoriteDialog>();
+
+    constructor() {
+        throw Error("Could not initialize static class");
+    }
+
+    public static getInstance(allowMultipleLabels: boolean): NewFavoriteDialog {
+        var key = Number(allowMultipleLabels);
+        var dialog = this.dialogs.get(key);
+        if (!dialog) {
+            dialog = new NewFavoriteDialog(new FavoriteManager(), true);
+            dialog.make();
+            this.dialogs.add(key, dialog);
+        }
+        return dialog;
+    }
+}
+
 interface INewFavoriteItemData {
     itemName: string;
     labels: INewFavoriteItemDataLabel[];

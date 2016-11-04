@@ -105,7 +105,7 @@ class DropDownSelect {
         this.selectedCategories = new Array();
         this.selectedItems = new Array();
         this.favoriteManager = new FavoriteManager();
-        this.favoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
+        this.favoriteDialog = NewFavoriteDialogProvider.getInstance(true);
     }
 
     private getType(response): string {
@@ -349,7 +349,7 @@ class DropDownSelect {
             }
 
             favoriteStar.addFavoriteLabels(favoriteLabels);
-            favoriteStar.make(true);
+            favoriteStar.make(null, true);
         });
     }
 
