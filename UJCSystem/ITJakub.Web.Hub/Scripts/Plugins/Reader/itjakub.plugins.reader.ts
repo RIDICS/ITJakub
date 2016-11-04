@@ -25,6 +25,7 @@ class ReaderModule {
     textPanelIdentificator: string = "TextPanel";
     searchPanelIdentificator: string = "SearchPanel";
     termsPanelIdentificator: string = "TermsPanel";
+    bookmarksPanelIdentificator: string = "BookmarksPanel";
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
@@ -32,6 +33,7 @@ class ReaderModule {
     imagePanel: ImagePanel;
     textPanel: TextPanel;
     searchPanel: SearchResultPanel;
+    bookmarksPanel: BookmarksPanel;
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
     termsPanel: TermsPanel;
@@ -477,6 +479,24 @@ class ReaderModule {
         var buttonsDiv: HTMLDivElement = document.createElement("div");
         $(buttonsDiv).addClass("buttons");
 
+        var addBookmarkButton = document.createElement("button");
+        $(addBookmarkButton).addClass("bookmark-button");
+
+        var addBookmarkSpan = document.createElement("span");
+        $(addBookmarkSpan).addClass("glyphicon glyphicon-bookmark");
+        $(addBookmarkButton).append(addBookmarkSpan);
+
+        var addBookmarkSpanText = document.createElement("span");
+        $(addBookmarkSpanText).addClass("button-text");
+        $(addBookmarkSpanText).append("Přidat/odebrat záložku");
+        $(addBookmarkButton).append(addBookmarkSpanText);
+
+        $(addBookmarkButton).click((event: Event) => {
+            if (!this.removeBookmark()) {
+                this.newFavoriteDialog.show("");
+            }
+        });
+
         var bookmarkButton = document.createElement("button");
         $(bookmarkButton).addClass("bookmark-button");
 
@@ -486,15 +506,21 @@ class ReaderModule {
 
         var bookmarkSpanText = document.createElement("span");
         $(bookmarkSpanText).addClass("button-text");
-        $(bookmarkSpanText).append("Záložka");
+        $(bookmarkSpanText).append("Záložky");
         $(bookmarkButton).append(bookmarkSpanText);
 
         $(bookmarkButton).click((event: Event) => {
-            if (!this.removeBookmark()) {
-                this.newFavoriteDialog.show("");
+            var panelId = this.bookmarksPanelIdentificator;
+            if (!this.existSidePanel(panelId)) {
+                var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                this.loadSidePanel(bookmarksPanel.panelHtml);
+                this.leftSidePanels.push(bookmarksPanel);
+                this.bookmarksPanel = bookmarksPanel;
             }
+            this.changeSidePanelVisibility(this.bookmarksPanelIdentificator, "left");
         });
 
+        buttonsDiv.appendChild(addBookmarkButton);
         buttonsDiv.appendChild(bookmarkButton);
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.SettingsPanel) >= 0) {
@@ -944,10 +970,10 @@ class ReaderModule {
 
         const postShowAction = () => {
             const $bookmarksContainer = $(".reader-bookmarks-container");
-            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
-                this.settingsPanel.createBookmarkList(
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
                     $bookmarksContainer.parent().get(0),
-                    this.settingsPanel
+                    this.bookmarksPanel
                 );
             }
         };
@@ -1002,10 +1028,10 @@ class ReaderModule {
     public persistRemoveBookmark(targetBookmark: JQuery) {
         const postRemoveAction = () => {
             const $bookmarksContainer = $(".reader-bookmarks-container");
-            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
-                this.settingsPanel.createBookmarkList(
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
                     $bookmarksContainer.parent().get(0),
-                    this.settingsPanel
+                    this.bookmarksPanel
                 );
             }
         };
@@ -1508,16 +1534,26 @@ class SettingsPanel extends LeftSidePanel {
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent: HTMLDivElement = window.document.createElement("div");
-        var bookmarksHead = document.createElement("h2");
-        bookmarksHead.innerHTML = "Možnosti zobrazení";
-        bookmarksHead.classList.add("reader-view-head");
-        innerContent.appendChild(bookmarksHead);
+        var displaySettingsHead = document.createElement("h2");
+        displaySettingsHead.innerHTML = "Možnosti zobrazení";
+        displaySettingsHead.classList.add("reader-view-head");
+        innerContent.appendChild(displaySettingsHead);
 
         innerContent.appendChild(buttonsDiv);
         innerContent.appendChild(checkboxesDiv);
 
-        this.createBookmarkList(innerContent, rootReference);
+        return innerContent;
+    }
+}
 
+class BookmarksPanel extends LeftSidePanel {
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Záložky", readerModule, showPanelButtonList);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        this.createBookmarkList(innerContent, rootReference);
         return innerContent;
     }
 
@@ -1545,13 +1581,13 @@ class SettingsPanel extends LeftSidePanel {
         bookmarksHead.innerHTML = "Všechny záložky";
         bookmarksHead.classList.add("reader-bookmarks-head");
         bookmarksContainer.appendChild(bookmarksHead);
-        
+
         var bookmarksContent = document.createElement("div");
         bookmarksContent.classList.add("reader-bookmarks-content");
         bookmarksContainer.appendChild(bookmarksContent);
 
         var bookmarks = rootReference.parentReader.getBookmarks();
-        
+
         var pageInContainer: Array<HTMLUListElement> = [];
         var pagesContainer: HTMLDivElement = document.createElement("div");
         bookmarksContent.appendChild(pagesContainer);
@@ -1563,7 +1599,7 @@ class SettingsPanel extends LeftSidePanel {
         for (let i = 0; i < Math.ceil(bookmarks.length / bookmarksPerPage); i++) {
             pageInContainer[i] = document.createElement("ul");
             pageInContainer[i].classList.add("reader-bookmarks-content-list");
-            pageInContainer[i].setAttribute("data-page-index", (i+1).toString());
+            pageInContainer[i].setAttribute("data-page-index", (i + 1).toString());
             if (i != actualBookmarkPage) {
                 pageInContainer[i].classList.add("hide");
             }
@@ -1599,11 +1635,11 @@ class SettingsPanel extends LeftSidePanel {
         $(pagesContainer).children(`[data-page-index="${page}"]`).removeClass("hide");
     }
 
-    protected createBookmark(bookmark: HTMLElement, rootReference: SidePanel, local:boolean) {
+    protected createBookmark(bookmark: HTMLElement, rootReference: SidePanel, local: boolean) {
         const $bookmark = $(bookmark);
         const bookmarkItem = document.createElement("li");
-        bookmarkItem.classList.add("reader-bookmarks-content-item", local ? "reader-bookmarks-content-item-local" :"reader-bookmarks-content-item-online");
-        
+        bookmarkItem.classList.add("reader-bookmarks-content-item", local ? "reader-bookmarks-content-item-local" : "reader-bookmarks-content-item-online");
+
         const bookmarkRemoveIco = document.createElement("a");
         bookmarkRemoveIco.href = "#";
         bookmarkRemoveIco.classList.add("glyphicon", "glyphicon-trash", "bookmark-remote-ico");
@@ -1648,7 +1684,7 @@ class SettingsPanel extends LeftSidePanel {
         const title = document.createElement("span");
         this.setBookmarkTitle(title, bookmark, rootReference, $bookmark.data("title"));
         title.classList.add("reader-bookmarks-content-item-title");
-        
+
         titleContainer.addEventListener("click", () => {
             titleContainer.classList.add("hide");
             titleInput.classList.remove("hide");
@@ -1674,7 +1710,7 @@ class SettingsPanel extends LeftSidePanel {
         const titleEdit = document.createElement("span");
         titleEdit.classList.add("glyphicon", "glyphicon-pencil", "edit-button");
         titleContainer.appendChild(titleEdit);
-        
+
         return bookmarkItem;
     }
 
