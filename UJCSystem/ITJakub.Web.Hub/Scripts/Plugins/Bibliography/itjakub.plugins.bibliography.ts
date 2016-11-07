@@ -205,8 +205,13 @@ class BibliographyModule {
             var hiddenContent: HTMLDivElement = document.createElement('div');
             $(hiddenContent).addClass('hidden-content');
 
-            var bottomPanel = bibFactory.makeBottomPanel(bibItem);
-            if (bottomPanel != null) hiddenContent.appendChild(bottomPanel);
+            if (bibFactory.configuration.containsBottomPanel()) {
+                $(hiddenContent).addClass("not-loaded");
+
+                var loadingDiv = document.createElement("div");
+                $(loadingDiv).addClass("loading");
+                hiddenContent.appendChild(loadingDiv);
+            }
 
             $(liElement).append(hiddenContent);
         });

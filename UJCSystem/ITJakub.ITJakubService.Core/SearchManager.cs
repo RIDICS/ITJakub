@@ -246,6 +246,15 @@ namespace ITJakub.ITJakubService.Core
 
             return searchResultFullContext;
         }
+        
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            m_authorizationManager.AuthorizeBook(bookId);
+
+            var dbResult = m_bookVersionRepository.GetBookVersionDetailByBookId(bookId);
+            var result = Mapper.Map<SearchResultDetailContract>(dbResult);
+            return result;
+        }
 
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {

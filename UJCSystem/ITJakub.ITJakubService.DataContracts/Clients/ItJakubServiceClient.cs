@@ -69,6 +69,32 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            try
+            {
+                return Channel.GetBookDetailInfoById(bookId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public bool HasBookPageByXmlId(string documentId, string versionId)
         {
             try

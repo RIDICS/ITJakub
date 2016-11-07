@@ -45,6 +45,9 @@ namespace ITJakub.ITJakubService.DataContracts
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
         [OperationContract]
+        SearchResultDetailContract GetBookDetailInfoById(long bookId);
+
+        [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
 
         [OperationContract]

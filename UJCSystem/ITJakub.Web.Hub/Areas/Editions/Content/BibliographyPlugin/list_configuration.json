@@ -174,9 +174,8 @@
       "read-button": {
         "onclick-callable": "listBookReadClicked(this)"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",

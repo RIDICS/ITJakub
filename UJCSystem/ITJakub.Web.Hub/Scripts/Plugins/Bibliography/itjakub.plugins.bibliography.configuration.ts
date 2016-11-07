@@ -76,6 +76,7 @@ class RightPanelConfiguration extends Configuration {
     containsInfoButton() { return typeof this.configObject['info-button'] !== 'undefined'; }
     containsReadButton() { return typeof this.configObject['read-button'] !== 'undefined'; }
     containsFavoriteButton() { return typeof this.configObject['favorite-button'] !== 'undefined'; }
+    containsLoadDetailUrl() { return typeof this.configObject['load-detail-url'] !== 'undefined'; }
 
     getInfoButtonUrl(bibItem: IBookInfo): string { return this.interpret(getBaseUrl()+this.configObject['info-button']['url'], bibItem); }
     getInfoButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject['info-button']['onclick'], bibItem); }
@@ -85,6 +86,7 @@ class RightPanelConfiguration extends Configuration {
     getReadButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject["read-button"]["onclick-callable"], bibItem); }
     getFavoriteButtonOnClick(bibItem: IBookInfo): string { return this.interpret(this.configObject["favorite-button"]["onclick"], bibItem); }
     getFavoriteButtonOnClickCallable(bibItem: IBookInfo): string { return this.interpret(this.configObject["favorite-button"]["onclick-callable"], bibItem); }
+    getLoadDetailUrl(bibItem: IBookInfo): string { return this.interpret(this.configObject["load-detail-url"], bibItem); }
 
 }
 

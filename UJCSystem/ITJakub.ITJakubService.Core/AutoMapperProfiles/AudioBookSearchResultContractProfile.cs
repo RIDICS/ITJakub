@@ -1,8 +1,6 @@
 using System.Globalization;
-using System.Linq;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.Shared.Contracts.Searching.Results;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
@@ -26,9 +24,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Acronym, opts => opts.MapFrom(src => src.Acronym))
                 .ForMember(dest => dest.BiblText, opts => opts.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
-                .ForMember(dest => dest.Keywords, opts => opts.MapFrom(src => src.Keywords.Select(x => x.Text).ToList()))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
-                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Responsibles.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor)))
                 .ForMember(dest => dest.Tracks, opt => opt.Ignore())    //tracks are mapped individually
                 .ForMember(dest => dest.FullBookRecordings, opt => opt.MapFrom(src => src.FullBookRecordings));
                 

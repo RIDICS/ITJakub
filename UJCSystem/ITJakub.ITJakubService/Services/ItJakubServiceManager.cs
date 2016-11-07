@@ -54,6 +54,11 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookInfoWithPages(bookGuid);
         }
 
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            return m_searchManager.GetBookDetailInfoById(bookId);
+        }
+
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
