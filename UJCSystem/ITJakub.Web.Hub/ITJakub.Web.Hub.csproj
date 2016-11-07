@@ -1651,6 +1651,7 @@
     <None Include="Content\KeyboardLayouts\layoutdefinition.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Content\Plugins\Bibliography\ITJakub.Bibliography.Audio.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Views\Text\TextEditor.cshtml" />

@@ -19,5 +19,14 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Bibliography
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
         }
+
+        public ActionResult GetAudioBookDetailInfo(long bookId)
+        {
+            using (var client = GetMainServiceClient())
+            {
+                var result = client.GetAudioBookDetailInfoById(bookId);
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }

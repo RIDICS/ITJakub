@@ -1301,6 +1301,31 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId)
+        {
+            try
+            {
+                return Channel.GetAudioBookDetailInfoById(bookId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
 
         public IList<TermContract> GetTermsOnPage(string bookId, string pageXmlId)
         {

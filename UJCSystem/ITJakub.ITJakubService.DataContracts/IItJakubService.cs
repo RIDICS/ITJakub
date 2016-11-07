@@ -186,6 +186,9 @@ namespace ITJakub.ITJakubService.DataContracts
         [OperationContract]
         int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
 
+        [OperationContract]
+        AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId);
+
         #endregion
 
         #region Permissions

@@ -302,6 +302,26 @@ class BibliographyModule {
 //    };
 //}
 
+//functions used in VariableInterpreter.interpretScript
+var audioTypeTranslation = [
+    "Neznámý",
+    "Mp3",
+    "Ogg",
+    "Wav"
+];
+
+function translateAudioType(audioType: number): string {
+    return audioTypeTranslation[audioType];
+}
+
+function fillLeadingZero(seconds: number): string {
+    var secondsString = seconds.toString();
+    if (secondsString.length === 1) {
+        secondsString = `0${secondsString}`;
+    }
+    return secondsString;
+}
+
 interface IBookRenderData {
     bookId: number;
     bookType: BookTypeEnum;

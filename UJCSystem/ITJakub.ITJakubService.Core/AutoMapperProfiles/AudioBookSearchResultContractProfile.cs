@@ -26,7 +26,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
                 .ForMember(dest => dest.Tracks, opt => opt.Ignore())    //tracks are mapped individually
-                .ForMember(dest => dest.FullBookRecordings, opt => opt.MapFrom(src => src.FullBookRecordings));
+                .ForMember(dest => dest.FullBookRecordings, opt => opt.Ignore());  // mapped individually
                 
 
             CreateMap<FullBookRecording, RecordingContract>()

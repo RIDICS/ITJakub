@@ -280,6 +280,11 @@ namespace ITJakub.ITJakubService.Services
             return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
         }
 
+        public AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId)
+        {
+            return m_searchManager.GetAudioBookDetailInfoById(bookId);
+        }
+
         public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
         {
             return m_bookManager.GetTermsOnPage(bookXmlId, pageXmlId);

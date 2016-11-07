@@ -282,22 +282,34 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FullBookRecording> GetFullBookRecordings(long bookVersionId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FullBookRecording>()
+                    .Where(x => x.BookVersion.Id == bookVersionId)
+                    .OrderBy(x => x.AudioType).Asc
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Track> GetTracksForBookVersion(long bookVersionId)
         {
             using (var session = GetSession())
             {
                 Track trackAlias = null;
+                TrackRecording recordingAlias = null;
 
                 var query = session.QueryOver(() => trackAlias)
+                    .JoinAlias(() => trackAlias.Recordings, () => recordingAlias, JoinType.LeftOuterJoin)
                     .Where(() => trackAlias.BookVersion.Id == bookVersionId)
-                    .Future<Track>();
-
-                session.QueryOver(() => trackAlias)
                     .Fetch(x => x.Recordings).Eager
-                    .Future<Track>();
-
-                var result = query.ToList();
-                return result;
+                    .OrderBy(x => x.Position).Asc
+                    .OrderBy(() => recordingAlias.AudioType).Asc
+                    .TransformUsing(Transformers.DistinctRootEntity);
+                
+                return query.List();
             }
         }
 
