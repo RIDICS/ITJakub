@@ -49,6 +49,9 @@ html,body {
         bottom: 120%;
         margin-left: -3.5em;
     }
+    .tooltip.in {
+        opacity: 1;
+    }
     .tooltip-inner {
         background-color: @menu-background-color;
         color: white;
@@ -250,9 +253,9 @@ html,body {
         position: absolute;
         margin-left: -7px;
         cursor: pointer;
-
-        &.bookmark-local {
-            color: purple;
+        
+        &:hover {
+            z-index: 2;
         }
     }
 
