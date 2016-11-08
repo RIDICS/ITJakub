@@ -54,7 +54,7 @@ class ReaderModule {
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager();
-        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, false);
+        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -1029,29 +1029,36 @@ class ReaderModule {
             this.bookmarks[pageIndex] = bookmarkPosition;
         }
 
-        var firstLabel = data.labels[0];
-        var favoriteLabel: IFavoriteLabel = {
-            Id: firstLabel.labelId,
-            Name: firstLabel.labelName,
-            Color: firstLabel.labelColor,
-            IsDefault: false,
-            LastUseTime: null
+        var newBookmarks = new Array<IBookPageBookmark>();
+        var labelIds = new Array<number>();
+        for (let i = 0; i < data.labels.length; i++) {
+            var labelItem = data.labels[i];
+            var favoriteLabel: IFavoriteLabel = {
+                Id: labelItem.labelId,
+                Name: labelItem.labelName,
+                Color: labelItem.labelColor,
+                IsDefault: false,
+                LastUseTime: null
+            }
+            var bookPageBookmark: IBookPageBookmark = {
+                Id: 0,
+                FavoriteLabel: favoriteLabel,
+                PagePosition: page.position,
+                PageXmlId: page.xmlId,
+                Title: data.itemName
+            };
+
+            newBookmarks.push(bookPageBookmark);
+            bookmarkPosition.bookmarks.push(bookPageBookmark);
+            labelIds.push(labelItem.labelId);
         }
-        var bookPageBookmark: IBookPageBookmark = {
-            Id: 0,
-            FavoriteLabel: favoriteLabel,
-            PagePosition: page.position,
-            PageXmlId: page.xmlId,
-            Title: data.itemName
-        };
-
+        
         $(bookmarkPosition.bookmarkSpan).remove();
-        bookmarkPosition.bookmarks.push(bookPageBookmark);
-
+        
         if (bookmarkPosition.bookmarks.length > 1) {
             bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, page.text, page.xmlId, bookmarkPosition.bookmarks.length);
         } else {
-            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, favoriteLabel);
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, bookmarkPosition.bookmarks[0].FavoriteLabel);
         }
         
         const postShowAction = () => {
@@ -1064,14 +1071,18 @@ class ReaderModule {
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, firstLabel.labelId, (id, error) => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, labelIds, (ids, error) => {
             if (error) {
                 this.newFavoriteDialog.showError("Chyba při vytváření záložky");
                 return;
             }
 
-            bookPageBookmark.Id = id;
-            $(bookmarkPosition.bookmarkSpan).data("favorite-id", id);
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var bookmark = newBookmarks[i];
+                bookmark.Id = id;
+
+            }
             this.newFavoriteDialog.hide();
             this.showBookmark(bookmarkPosition.bookmarkSpan);
             postShowAction();

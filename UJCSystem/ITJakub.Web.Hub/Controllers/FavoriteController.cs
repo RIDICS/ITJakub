@@ -209,12 +209,12 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        public ActionResult CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public ActionResult CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
-                return Json(resultId);
+                var resultIds = client.CreatePageBookmark(bookXmlId, pageXmlId, title, labelIds);
+                return Json(resultIds);
             }
         }
 

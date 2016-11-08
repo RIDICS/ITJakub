@@ -328,7 +328,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds);
 
         [OperationContract]
-        long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId);
+        IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds);
 
         #endregion
 

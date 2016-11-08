@@ -2454,11 +2454,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
             try
             {
-                return Channel.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
+                return Channel.CreatePageBookmark(bookXmlId, pageXmlId, title, labelIds);
             }
             catch (CommunicationException ex)
             {

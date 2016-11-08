@@ -799,7 +799,7 @@
         });
     }
 
-    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelId: number, callback: (id: number, error: string) => void) {
+    public createPageBookmark(bookXmlId: string, pageXmlId: string, favoriteTitle: string, favoriteLabelIds: number[], callback: (ids: number[], error: string) => void) {
         if (!this.isUserLoggedIn) {
             var favoritePageBookmarkItems: IPageBookmarkStorageItem[] = this.getFromStorage("favoritePageBookmarkItems");
             var item: IPageBookmarkStorageItem = null;
@@ -828,7 +828,7 @@
             item.bookmarks.push(bookmark);
 
             this.storage.save("favoritePageBookmarkItems", favoritePageBookmarkItems);
-            callback(bookmark.Id, null);
+            callback([bookmark.Id], null);
             return;
         }
 
@@ -840,12 +840,12 @@
                 bookXmlId: bookXmlId,
                 pageXmlId: pageXmlId,
                 title: favoriteTitle,
-                labelId: favoriteLabelId
+                labelIds: favoriteLabelIds
             }),
             dataType: "json",
             contentType: "application/json",
-            success: (resultId) => {
-                callback(resultId, null);
+            success: (resultIds) => {
+                callback(resultIds, null);
             },
             error: (request, status) => {
                 callback(null, status);

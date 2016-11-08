@@ -548,9 +548,9 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelIds);
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
-            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
+            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelIds);
         }
 
         #endregion
