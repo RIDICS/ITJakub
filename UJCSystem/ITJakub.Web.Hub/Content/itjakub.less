@@ -31,7 +31,18 @@ a.main_logo_href {
     /* display: block; */
     /* padding: 0.1rem 0; */
     padding-right: 1rem;
+    padding-top: 2px;
+    padding-bottom: 0;
     float: left;
+
+    @media screen and (min-width: 1100px) {
+        padding-top: 0;
+        padding-bottom: 2px;
+    }
+
+    @media screen and (min-width: 1501px) {
+		padding: 0.1rem 0;
+	}
 }
 
 a.main_logo_href:hover {
@@ -58,12 +69,6 @@ a.main_logo_href img {
         margin-right: 0;
         margin-left: 1rem;
     }
-}
-
-@media screen and (min-width: 1501px) {
-	a.main_logo_href {
-		padding: 0.1rem 0;
-	}
 }
 
 .main_logo_text {
@@ -119,7 +124,7 @@ a.main_logo_href img {
 }
 
 .main_logo_text {
-    @media screen and (max-width: 1200px) {
+    @media screen and (max-width: 1199px) {
         display: none;
     }
 
@@ -127,7 +132,7 @@ a.main_logo_href img {
         display: inline-block;
     }
 
-    @media screen and (max-width: 400px) {
+    @media screen and (max-width: 399px) {
         display: none;
     }
 }
@@ -222,7 +227,7 @@ ul.navbar-language li:hover a {
     margin-right: 10px;
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (min-width: 1501px) {
     .secondary-navbar-toggle.login span {
         display: none;
         margin-right: 0;
@@ -261,7 +266,7 @@ ul.navbar-language li:hover a {
     }
 }
 
-.navbar-login li, .navbar-language li, ul {
+.navbar-login li, .navbar-language li {
     display: inline;
     /*margin-left: 5px;*/
     list-style: none;
@@ -532,7 +537,7 @@ ul.navbar-language li:hover a {
 }
 
 .top-offset-without-submenu {
-    margin: -32px 0 0 0;
+    margin: -20px 0 0 0;
 }
 
 .top-offset-main-site{
