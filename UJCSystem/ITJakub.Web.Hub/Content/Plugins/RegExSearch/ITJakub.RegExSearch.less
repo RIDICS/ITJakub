@@ -100,6 +100,10 @@
 
 .regexsearch-condition-type-div {
     float: left;
+
+    @media screen and (max-width: 667px) {
+        float: none;
+	}
 }
 
 .regexsearch-condition-select {
@@ -165,6 +169,11 @@
     margin-left: 30px;
     margin-right: 30px;
     padding-top: 5px;
+
+    @media screen and (max-width: 667px) {
+        margin-left: 10px;
+        margin-right: 10px;
+	}
 }
 
 .regexsearch-upper-select-label {
@@ -184,6 +193,14 @@
     margin-right: -80px;
     padding-right: 66px;
     margin-left: 20px;
+
+    @media screen and (max-width: 667px) {
+        margin-left: 0;
+	}
+
+    @media screen and (max-width: 440px) {
+        width: 220px;
+	}
 }
 
 .regexsearch-condition-main-div {
@@ -224,11 +241,15 @@ input.regexsearch-checkbox {
 .regexsearch-add-input-button{
     font-size: 0.8em;
     margin-left: 180px;
+
+    @media screen and (max-width: 667px) {
+        margin-left: 0;
+	}
 }
 
 .regex-clickable-text:hover {
     cursor: pointer;
-    color: @item-background-color;
+    opacity: 0.7;
 }
 
 .regex-search-button{

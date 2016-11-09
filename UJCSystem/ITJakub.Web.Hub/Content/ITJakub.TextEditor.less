@@ -1,12 +1,30 @@
 ﻿@text-editor-top: 75px;
+@text-editor-top-2: 58px;
+@text-editor-top-3: 54px;
 
 div.editor-toolbar.fullscreen {
 	top: @text-editor-top;
 	max-width: none;
+
+    @media screen and (max-width: 1500px) {
+        top: @text-editor-top-2;
+    }
+
+    @media screen and (max-width: 1099px) {
+        top: @text-editor-top-3;
+    }
 }
 
 div.CodeMirror-fullscreen, div.editor-preview-side {
 	top: @text-editor-top + 50px;
+
+    @media screen and (max-width: 1500px) {
+        top: @text-editor-top-2 + 50px;
+    }
+
+    @media screen and (max-width: 1099px) {
+        top: @text-editor-top-3 + 50px;
+    }
 }
 
 .editor-preview ul, .editor-preview-side ul {
