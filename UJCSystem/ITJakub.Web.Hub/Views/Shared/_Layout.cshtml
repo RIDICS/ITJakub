@@ -1,4 +1,5 @@
-﻿@using ITJakub.Web.Hub.Identity
+﻿@using ITJakub.Web.Hub.Helpers
+@using ITJakub.Web.Hub.Identity
 <!DOCTYPE html>
 <html>
 <head>
@@ -471,11 +472,7 @@
         @RenderSection("scripts", false)
         @*main page content*@
         <div class="container module-content">
-            <ul class="breadcrumb">
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Library</a></li>
-                <li class="active">Data</li>
-            </ul>
+            @BreadcrumbsHelper.Create(ViewBag.Title)
             @RenderBody()
         </div>
     </div>
