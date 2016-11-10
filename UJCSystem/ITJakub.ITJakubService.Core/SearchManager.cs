@@ -410,7 +410,7 @@ namespace ITJakub.ITJakubService.Core
                 {
                     dictionaryContract = new DictionaryContract
                     {
-                        BookAcronym = headword.BookAcronym,
+                        BookAcronym = headword.BookAcronym ?? headword.SourceAbbreviation,
                         BookTitle = headword.BookTitle,
                         BookXmlId = headword.BookGuid,
                         BookVersionXmlId = headword.BookVersionId

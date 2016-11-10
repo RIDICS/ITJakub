@@ -22,6 +22,8 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Title, opts => opts.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opts => opts.MapFrom(src => src.SubTitle))
                 .ForMember(dest => dest.Acronym, opts => opts.MapFrom(src => src.Acronym))
+                .ForMember(dest => dest.SourceAbbreviation, opts => opts.MapFrom(src => src.SourceAbbreviation))
+                .ForMember(dest => dest.RelicAbbreviation, opts => opts.MapFrom(src => src.RelicAbbreviation))
                 .ForMember(dest => dest.BiblText, opts => opts.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.BookType, opts => opts.MapFrom(src => src.Book.LastVersion.DefaultBookType.Type))
                 .ForMember(dest => dest.Manuscripts, opts => opts.MapFrom(src => src.ManuscriptDescriptions))
