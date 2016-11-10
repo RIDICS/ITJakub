@@ -439,6 +439,9 @@
     <Content Include="Content\Images\Feeds\26.png" />
     <Content Include="Content\Images\Feeds\49.png" />
     <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\Feeds\blue.png" />
+    <Content Include="Content\Images\Feeds\green.png" />
+    <Content Include="Content\Images\Feeds\red.png" />
     <Content Include="Content\Images\glyphicons_chevron_white.png" />
     <Content Include="Content\Images\klavesnice.gif" />
     <Content Include="Content\Images\Logo\logo_av21_white.png" />
