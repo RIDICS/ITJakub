@@ -17,10 +17,6 @@ html,body {
 
 .reader {
     position: relative;
-
-    ul {
-        display: inline;
-    }
 }
 
 .reader-controls {
@@ -115,6 +111,8 @@ html,body {
         padding: 1rem 0 .5rem;
     }
     ul {
+        display: inline;
+
         &.page-navigation-container {
             &.page-navigation-container-right {
                 /*float: right;*/
@@ -598,12 +596,18 @@ html,body {
     margin-top: ~"calc(100% - 50px)";
 }
 
+.reader-left-panel-body .content-item-root-list,
+.reader-left-panel-body .content-item-list {
+    list-style: none;
+    padding-left: 0;
+}
+
 .reader-left-panel-body .content-item a:hover{
     color: @item-background-color;
 }
 
 .reader-left-panel-body .content-item-list li.content-item {
-  padding-left: 15px;
+    padding-left: 15px;
 }
 
 .reader-settings-button {

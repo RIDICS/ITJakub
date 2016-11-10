@@ -56,6 +56,12 @@
 
 /* Details right panel styles */
 
+ul.items-list,
+ul.list-item-details-list {
+    padding-left: 0;
+    list-style: none;
+}
+
 ul.items-list li {
     background-color: @menu-background-color;
     margin-bottom: 2px;
@@ -126,6 +132,10 @@ span.list-item-name {
 .list-item-more:hover, .list-item-remove:hover, .list-item-edit:hover {
     cursor: pointer;
     color: black;
+}
+
+.list-item-check input {
+    margin-top: 2px;
 }
 
 .selected-item-buttons {

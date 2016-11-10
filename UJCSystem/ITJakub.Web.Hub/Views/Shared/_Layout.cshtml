@@ -471,8 +471,12 @@
         @Scripts.Render("~/bundles/colorpicker")
         @RenderSection("scripts", false)
         @*main page content*@
+        <div class="container-header">
+            <div class="container">
+                @BreadcrumbsHelper.Create(ViewBag.Title)
+            </div>
+        </div>
         <div class="container module-content">
-            @BreadcrumbsHelper.Create(ViewBag.Title)
             @RenderBody()
         </div>
     </div>
