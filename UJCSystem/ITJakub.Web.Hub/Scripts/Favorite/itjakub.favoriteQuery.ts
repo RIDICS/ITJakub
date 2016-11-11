@@ -19,6 +19,7 @@
     private selectedFilterLabelId: number = null;
     private selectedFilterName: string = null;
     private pagination: Pagination;
+    private overrideSetQueryCallback: (text: string) => void;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.inputTextbox = inputTextbox;
@@ -40,6 +41,10 @@
         this.forceRerender();
         this.favoriteDialog.make();
         this.insertDialog.make();
+    }
+
+    public setOverrideQueryCallback(callback: (text: string) => void) {
+        this.overrideSetQueryCallback = callback;
     }
 
     private forceRerender() {
@@ -482,13 +487,21 @@
         
         if (originalQuery) {
             this.insertDialog.show(() => {
-                this.inputTextbox.val(newQuery); 
+                this.directInsertQueryToSearchField(newQuery);
                 this.insertDialog.hide();
             });
             return;
         }
 
-        this.inputTextbox.val(newQuery);
+        this.directInsertQueryToSearchField(newQuery);
+    }
+
+    private directInsertQueryToSearchField(query: string) {
+        if (typeof this.overrideSetQueryCallback === "function") {
+            this.overrideSetQueryCallback(query);
+        } else {
+            this.inputTextbox.val(query);
+        }
     }
 
     private filterLabels(filter: string) {

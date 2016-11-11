@@ -30,6 +30,7 @@ class Search {
     private speedAnimation: number = 200; //200=fast, 600=slow
     private advancedRegexEditor: RegExAdvancedSearchEditor;
     private favoriteQueryComponent: FavoriteQuery;
+    private keyboardComponent: KeyboardComponent;
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
@@ -59,6 +60,10 @@ class Search {
 
     public setOverrideQueryCallback(callback: (text: string) => void) {
         this.overrideSetQueryCallback = callback;
+
+        if (this.favoriteQueryComponent) {
+            this.favoriteQueryComponent.setOverrideQueryCallback(callback);
+        }
     }
 
     makeSearch(enabledOptions: Array<SearchTypeEnum>) {
@@ -212,6 +217,7 @@ class Search {
         }
 
         this.favoriteQueryComponent = new FavoriteQuery($(this.favoritesContainer), $(this.searchInputTextbox), this.favoriteQueriesConfig.bookType, this.favoriteQueriesConfig.queryType);
+        this.favoriteQueryComponent.setOverrideQueryCallback(this.overrideSetQueryCallback);
         
         $(this.container).append(searchAreaDiv);
 
@@ -221,7 +227,13 @@ class Search {
 
         var keyboardComponent = KeyboardManager.getKeyboard("0");
         //keyboardComponent.registerInput(searchbarInput);
-        keyboardComponent.registerButton(keyboardButton, searchbarInput);
+        keyboardComponent.registerButton(keyboardButton, searchbarInput, (text) => {
+            if (typeof this.overrideSetQueryCallback === "function") {
+                this.overrideSetQueryCallback(text);
+            } else {
+                $(searchbarInput).val(text);
+            }
+        });
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -1860,7 +1872,7 @@ class RegExWordInput {
         lineDiv.appendChild(keyboardButton);
 
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerButton(keyboardButton, this.conditionInput);
+        keyboardComponent.registerButton(keyboardButton, this.conditionInput, null);
 
         var regExButton = document.createElement("button");
         $(regExButton).text("R");

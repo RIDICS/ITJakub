@@ -8,7 +8,8 @@
         Id: string,
         Url: string;
     }> = [];
-    private loaded=false;
+    private loaded = false;
+    private overrideSetQueryCallback: (text: string) => void;
     
     private keyboardShowLeftSpace=40;
 
@@ -104,6 +105,8 @@
         });
 
         clonedImage.addEventListener("click", (event: JQueryEventObject) => {
+            this.overrideSetQueryCallback = null;
+
             if (!clonedImage.classList.contains("disabled")) {
                 this.setInput(jElement);
                 this.toggleKeyboard(event);
@@ -113,7 +116,7 @@
         element.parentElement.appendChild(clonedImage);
     }
 
-    public registerButton(buttonElement: HTMLButtonElement, inputElement: HTMLInputElement) {
+    public registerButton(buttonElement: HTMLButtonElement, inputElement: HTMLInputElement, overrideSetQueryCallback: (text: string) => void) {
         var jElement = $(inputElement);
 
         inputElement.addEventListener("focus", () => {
@@ -123,6 +126,8 @@
         });
 
         buttonElement.addEventListener("click", (event: JQueryEventObject) => {
+            this.overrideSetQueryCallback = overrideSetQueryCallback;
+
             if (!buttonElement.classList.contains("disabled")) {
                 this.setInput(jElement);
                 this.toggleKeyboard(event);
@@ -182,6 +187,14 @@
 
     getApiUrl(): string {
         return this.getComponent().attr("data-keyboard-api-url");
+    }
+
+    public setInputValue(value: string) {
+        if (typeof this.overrideSetQueryCallback === "function") {
+            this.overrideSetQueryCallback(value);
+        } else {
+            this.input.val(value);
+        }
     }
 
     public executeScripts() {
@@ -339,4 +352,4 @@
             }
         });
     }
- }
+}

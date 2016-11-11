@@ -294,7 +294,7 @@ class Keyboard {
                 let cursorPosition = thisComponent.getCursorPosition(keyboardInput);
                 let originalVal = <string>keyboardInput.val();
                 let newVal = originalVal.slice(0, cursorPosition) + newChar + originalVal.slice(cursorPosition);
-                keyboardInput.val(newVal);
+                keyboardComponent.setInputValue(newVal);
                 thisComponent.setCursorPosition(keyboardInput, cursorPosition + 1);
 
                 if (layout.shiftUsed) {
@@ -314,7 +314,7 @@ class Keyboard {
 
                         let originalVal = <string>keyboardInput.val();
                         let newVal = originalVal.slice(0, cursorPosition - 1) + originalVal.slice(cursorPosition);
-                        keyboardInput.val(newVal);
+                        keyboardComponent.setInputValue(newVal);
                         thisComponent.setCursorPosition(keyboardInput, cursorPosition - 1);
                         
                         break;
