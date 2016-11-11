@@ -37,6 +37,7 @@ class BibliographiesSearch {
         };
         this.search = new Search(<any>$("#listSearchDiv")[0], (json: string) => { this.advancedSearch(json) }, (text: string) => { this.basicSearch(text) }, favoriteQueriesConfig);
         this.search.makeSearch(enabledOptions);
+        this.search.setOverrideQueryCallback(newQuery => this.typeaheadSearchBox.value(newQuery));
 
         this.typeaheadSearchBox = new SearchBox(".searchbar-input", "Bibliographies/Bibliographies");
         this.typeaheadSearchBox.addDataSet("Title", "Názvy");
@@ -45,12 +46,7 @@ class BibliographiesSearch {
         this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
 
         this.bibliographyModule = new BibliographyModule("#listResults", "#listResultsHeader", () => { this.sortOrderChanged() });
-
-
-        $(".searchbar-input.tt-input").change(() => { //prevent clearing input value on blur() 
-            this.typeaheadSearchBox.value($(".searchbar-input.tt-input").val());
-        });
-
+        
         this.initializeFromUrlParams();
     }
 
