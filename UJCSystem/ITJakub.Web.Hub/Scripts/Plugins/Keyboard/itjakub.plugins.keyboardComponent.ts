@@ -118,7 +118,7 @@
 
     public registerButton(buttonElement: HTMLButtonElement, inputElement: HTMLInputElement, overrideSetQueryCallback: (text: string) => void) {
         var jElement = $(inputElement);
-
+        
         inputElement.addEventListener("focus", () => {
             if (!buttonElement.classList.contains("disabled")) {
                 this.setInput(jElement);
@@ -132,7 +132,13 @@
                 this.setInput(jElement);
                 this.toggleKeyboard(event);
             }
+
             $(inputElement).focus();
+        });
+
+        $(inputElement).blur(() => { // Fix: preserve cursor position on focus lost
+            var cursorPositionBackup = this.getCursorPosition();
+            setTimeout(() => this.setCursorPosition(cursorPositionBackup));
         });
     }
 
@@ -351,5 +357,22 @@
                 });
             }
         });
+    }
+    
+    public getCursorPosition(): number {
+        var el = <HTMLInputElement>this.input.get(0);
+        var pos = el.value.length;
+        if ('selectionStart' in el) {
+            pos = el.selectionStart;
+        }
+        return pos;
+    }
+
+    public setCursorPosition(position: number) {
+        var el = <HTMLInputElement>this.input.get(0);
+        if ('selectionStart' in el) {
+            el.selectionStart = position;
+            el.selectionEnd = position;
+        }
     }
 }

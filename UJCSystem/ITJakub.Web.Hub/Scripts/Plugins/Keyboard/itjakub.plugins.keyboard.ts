@@ -291,11 +291,11 @@ class Keyboard {
                     newChar = String.fromCharCode(parseInt(this.dataset.unicode, 16));
                 }
 
-                let cursorPosition = thisComponent.getCursorPosition(keyboardInput);
+                let cursorPosition = keyboardComponent.getCursorPosition();
                 let originalVal = <string>keyboardInput.val();
                 let newVal = originalVal.slice(0, cursorPosition) + newChar + originalVal.slice(cursorPosition);
                 keyboardComponent.setInputValue(newVal);
-                thisComponent.setCursorPosition(keyboardInput, cursorPosition + 1);
+                keyboardComponent.setCursorPosition(cursorPosition + 1);
 
                 if (layout.shiftUsed) {
                     layout.resizeAction(layout.keyboardLowerCase, layout, cell);
@@ -309,13 +309,13 @@ class Keyboard {
                 switch (this.dataset.action) {
                     case "Backspace":
                         console.log("Backspace action");
-                        let cursorPosition = thisComponent.getCursorPosition(keyboardInput);
+                        let cursorPosition = keyboardComponent.getCursorPosition();
                         if (cursorPosition === 0) break;
 
                         let originalVal = <string>keyboardInput.val();
                         let newVal = originalVal.slice(0, cursorPosition - 1) + originalVal.slice(cursorPosition);
                         keyboardComponent.setInputValue(newVal);
-                        thisComponent.setCursorPosition(keyboardInput, cursorPosition - 1);
+                        keyboardComponent.setCursorPosition(cursorPosition - 1);
                         
                         break;
                     case "Enter":
@@ -366,20 +366,4 @@ class Keyboard {
         });
     }
 
-    private getCursorPosition(element: HTMLElement|JQuery): number {
-        var el = <HTMLInputElement>(element instanceof HTMLElement ? element : element.get(0));
-        var pos = el.value.length;
-        if ('selectionStart' in el) {
-            pos = el.selectionStart;
-        }
-        return pos;
-    }
-
-    private setCursorPosition(element: HTMLElement|JQuery, position: number) {
-        var el = <HTMLInputElement>(element instanceof HTMLElement ? element : element.get(0));
-        if ('selectionStart' in el) {
-            el.selectionStart = position;
-            el.selectionEnd = position;
-        }
-    }
 }
