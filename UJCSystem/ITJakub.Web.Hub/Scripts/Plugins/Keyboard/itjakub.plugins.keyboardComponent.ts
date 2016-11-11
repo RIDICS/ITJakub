@@ -127,6 +127,7 @@
                 this.setInput(jElement);
                 this.toggleKeyboard(event);
             }
+            $(inputElement).focus();
         });
     }
 
