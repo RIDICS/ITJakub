@@ -217,6 +217,7 @@
             },
             stop() {
                 keyboard.css("cursor", "default");
+                keyboard.css("height", ""); //fix: unset fixed CSS height
             },
             containment: "body",
             appendTo: "body",
