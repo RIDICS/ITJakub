@@ -67,21 +67,16 @@ html,body {
         color: white;
         height: 32px;
         padding: .2rem .85rem;
-        /*margin-top: 3px;*/
-        /*width: 30px;*/
 
         &:hover {
             background-color: @button-hover-background-color;
-            /*color: black;*/
         }
     }
 
     .page-input-text {
         height: 32px;
-        /*width: 120px;*/
         padding: .2rem .7rem;
         border: none;
-        /* border-right: none; */
         outline: 0;
         margin-top: -5px;
     }
@@ -115,18 +110,15 @@ html,body {
 
         &.page-navigation-container {
             &.page-navigation-container-right {
-                /*float: right;*/
                 padding: 0;
                 margin: 0 1rem 1rem 0;
             }
             &.page-navigation-container-left {
-                /*float: left;*/
                 padding: 0;
                 margin: 0 0 1rem 1rem;
             }
 
             > li {
-                /*min-width: 24px;*/
                 display: inline-block;
                 padding: .3rem .1rem;
                 margin: 0 .3rem;
@@ -200,7 +192,6 @@ html,body {
 
     .buttons {
         float: right;
-        /*padding-top: 5px;*/
         margin-right: 2.5%;
         margin-right: @reader-computed-side-margin;
         margin-top: 1rem;
@@ -311,8 +302,6 @@ html,body {
 .title {
     font-size: 22px;
     font-weight: 600;
-    /* margin-bottom: 5px; */
-    /* margin-left: 10px; */
     text-align: center;
     padding: 1rem 5% 2rem;
     padding: 1rem calc(~'0% + 4rem') 2rem;
@@ -324,11 +313,8 @@ html,body {
     position: absolute;
     left: 95%;
     left: calc(~'100% - 4rem');
-    /* margin-top: -5px; */
     background-color: transparent;
     font-size: 2em;
-    /* color: lightgray; */
-    /* opacity: .5; */
     border: none;
     outline: 0;
     padding: 1rem;
@@ -341,7 +327,6 @@ html,body {
 
 .reader button.fullscreen-button:hover, .fullscreen .fullscreen-close-button:hover {
     color: @button-hover-background-color;
-    /*opacity: .5;*/
 }
 
 .fullscreen .fullscreen-button {
@@ -402,12 +387,8 @@ html,body {
     width : 250px;
     border-right: 1px solid @separation-line-color;
     height: @reader-body-height;
-    //height: @reader-computed-height;
-    /*min-width: 200px;*/
-}
 
-@media screen and (max-width: @max-width-media) {
-    .reader-left-panel {
+    @media screen and (max-width: @max-width-media) {
         float: none;
         width: auto;
         border-right: none;
@@ -421,10 +402,8 @@ html,body {
     width: 100%;
     height : ~"calc(100% - 30px)";
     padding: 5px;
-}
 
-@media screen and (max-width: @max-width-media) {
-    .reader-left-panel-body {
+    @media screen and (max-width: @max-width-media) {
         height: auto;
     }
 }
@@ -433,12 +412,9 @@ html,body {
     width: auto;
     background-color : white;
     height: @reader-body-height;
-    //height: @reader-computed-height;
     min-width: 200px;
-}
 
-@media screen and (max-width: @max-width-media) {
-    .reader-right-panel {
+    @media screen and (max-width: @max-width-media) {
         min-height: 0;
         min-width: 0;
     }
@@ -448,7 +424,6 @@ html,body {
     background-color : white;
     width: 100%;
     height : ~"calc(100% - 30px)";
-    /*padding-top: 5px;*/
 }
 
 .both-pinned .reader-right-panel { 
@@ -458,7 +433,6 @@ html,body {
 
 .fullscreen .reader-right-panel, .fullscreen .reader-left-panel {
     height: @reader-body-height;
-    //height: @reader-computed-height-fullscreen;
 }
 
 .reader-left-panel.ui-draggable, .reader-right-panel.ui-draggable {
@@ -524,12 +498,6 @@ html,body {
      width: 100%;
 }
 
-@media screen and (max-width: @max-width-media) {
-    .reader-left-panel-header {
-        /* margin-top: 2px; */
-    }
-}
-
 .reader-text-container .search-hit {
      background-color: yellow;
 }
@@ -567,7 +535,6 @@ html,body {
     .reader-image {
         max-width: 100%;
         max-height:100%;
-        //position:absolute;
         top:0;
         bottom:0;
         left:0;
@@ -801,14 +768,6 @@ html,body {
   display: inherit;
 }
 
-/*.reader-text.show-notes .itj-page {
-  width: 75%;
-}
-
-.reader-text.show-notes .itj-notes {
-  width: 25%;
-}*/
-
 .reader-text.show-notes .itj-notes .itj-note {
   display: inherit;
   margin-bottom: 2px;
@@ -872,9 +831,8 @@ div.dummy-page {
 
 .reader .content-container {
     background-color: white;
-    padding: 0; 
-    /*padding-top: 5px;*/ 
-    min-height: 0; 
+    padding: 0;
+    min-height: 0;
 }
 
 .reader .twitter-typeahead {
@@ -893,24 +851,23 @@ div.dummy-page {
     overflow-y: auto;
 }
 
-.reader-terms-result-div h2, .reader-search-result-div h2, .reader-bookmarks-container h2, h2.reader-view-head {
+.reader-terms-result-div h2,
+.reader-search-result-div h2,
+.reader-bookmarks-container h2,
+h2.reader-view-head {
     font-size: 16px;
     font-weight: bold;
     text-align: center;
     margin: 1rem auto;
 }
 
-.reader-terms-result-items-div, .reader-terms-search-result-items-div {
-    overflow-y: auto;
-    /*padding: 5px;*/
-    /*height: 100%;*/
-}
-
+.reader-terms-result-items-div,
 .reader-terms-search-result-items-div {
-    /*height: 85%;*/
+    overflow-y: auto;
 }
 
-.reader-terms-result-items-div.loader, .reader-terms-search-result-items-div.loader {
+.reader-terms-result-items-div.loader,
+.reader-terms-search-result-items-div.loader {
     overflow-y: initial;
 }
 
@@ -941,16 +898,19 @@ div.dummy-page {
     }
 }
 
-.reader-terms-result-items-div ol, .reader-terms-search-result-items-div ol {
+.reader-terms-result-items-div ol,
+.reader-terms-search-result-items-div ol {
     list-style-type: none;
     padding: 0;
 }
 
-.reader-terms-result-items-div ol.no-items, .reader-terms-search-result-items-div ol.no-items {
+.reader-terms-result-items-div ol.no-items,
+.reader-terms-search-result-items-div ol.no-items {
     padding: 0;
 }
 
-.reader-terms-result-items-div ol li a span, .reader-terms-search-result-items-div ol li a span {
+.reader-terms-result-items-div ol li a span,
+.reader-terms-search-result-items-div ol li a span {
     display: inline-block;
 }
 
@@ -979,6 +939,7 @@ a.no-click-href {
 .modal-text {
     margin-top: 10px;
 }
+
 .modal-text-center {
     text-align: center;
     display: block;

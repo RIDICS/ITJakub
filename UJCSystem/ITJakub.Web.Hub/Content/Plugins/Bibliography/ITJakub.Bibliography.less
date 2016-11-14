@@ -3,17 +3,13 @@
 @import "ITJakub.Bibliography.Audio.less";
 
 ul.bib-listing {
-    /*width: 80%;*/
     padding: 0;
-    /*display: inline;*/
     list-style: none;
 }
 
 ul.bib-listing li.list-item {
     background-color: white;
     margin-top: 10px;
-    /* display: table; */
-    /* width: 100%; */
 }
 
 ul.bib-listing li.list-item a{
@@ -21,17 +17,15 @@ ul.bib-listing li.list-item a{
 }
 
 ul.bib-listing li.list-item .visible-content{
-    /*height: 120px;*/
     display: table;
     width: 100%;
 }
 
 ul.bib-listing li.list-item .visible-wrapper {
-  display: table-row;
+    display: table-row;
 }
 
 ul.bib-listing li.list-item .left-panel {
-    /*float: left;*/
     float: none;
     width: 10px;
     padding: 2px;
@@ -44,17 +38,12 @@ ul.bib-listing li.list-item .left-panel {
 ul.bib-listing li.list-item .middle-panel {
     padding: 10px 5px 10px 15px;
     padding: 1rem;
-    /*overflow-y: auto;*/
-    /*max-height: 120px;*/
     display: table-cell;
-    /* max-height: 60px; */
-    /* width: 93%; */
-    /* width: calc(100% - 6rem); */
 }
 
 ul.bib-listing li.list-item .middle-panel .short-info {
-   color: darkgray;
-   float : right;
+    color: darkgray;
+    float : right;
 }
 
 ul.bib-listing li.list-item .middle-panel .favorites {
@@ -88,7 +77,6 @@ ul.bib-listing li.list-item .middle-panel .body {
 }
 
 ul.bib-listing li.list-item .right-panel {
-    /*float: right;*/
     float: none;
     width: 6rem;
     background-color: @menu-background-color;
@@ -97,9 +85,7 @@ ul.bib-listing li.list-item .right-panel {
     position: relative;
     min-width: 0;
     margin: 0;
-    /* height: 100%; */
     display: table-cell;
-    /* max-height: 60px; */
 
     .content-button {
         position: absolute;
@@ -112,7 +98,6 @@ ul.bib-listing li.list-item .right-panel {
         background-color: transparent;
         border: none;
         color: white;
-        /*outline: none!important;*/
         box-shadow:none !important;
 
         &> span{
@@ -124,29 +109,21 @@ ul.bib-listing li.list-item .right-panel {
 ul.bib-listing li.list-item .hidden-content {
     border-top: 1px solid @separation-line-color;
     clear: both;
-    /*width: 100%;*/
-    /*padding: 2px;*/
     display: none;
     overflow-y: auto;
-    /*max-height: 200px;*/
-    /*display: table;*/
 }
 
 ul.bib-listing li.list-item .hidden-content .bottom-panel {
-    /* display: table-cell; */
-    /* -webkit-column-span: all; */
-    -moz-column-span: all;
-    /* column-span: all; */
 }
 
-ul.bib-listing li.list-item .hidden-content .bottom-panel .body{
-     /*padding: 10px 5px 10px 30px;*/
-     padding: 1rem;
-     margin-left: 10px;
-     margin-right: 10px;
+ul.bib-listing li.list-item .hidden-content .bottom-panel .body {
+    padding: 1rem;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
-ul.bib-listing li.list-item .left-panel button, ul.listing li.list-item .left-panel input{
+ul.bib-listing li.list-item .left-panel button,
+ul.listing li.list-item .left-panel input {
     background-color: transparent;
     border: none;
     outline: none!important;
@@ -156,30 +133,30 @@ ul.bib-listing li.list-item .left-panel button, ul.listing li.list-item .left-pa
 }
 
 
-ul.bib-listing li.list-item .left-panel button> span{
+ul.bib-listing li.list-item .left-panel button> span {
     font-size:14px;
     margin: 0;
     padding: 0;
 }
 
-ul.bib-listing li.list-item .table{
+ul.bib-listing li.list-item .table {
     display: table;
     width: 80%;   
     line-height: 1.1;
     margin-bottom: 0;    
 }
 
-ul.bib-listing li.list-item .bib-table-row{
+ul.bib-listing li.list-item .bib-table-row {
     display: table-row;
 }
 
-ul.bib-listing li.list-item .bib-table-cell{
+ul.bib-listing li.list-item .bib-table-cell {
     display: table-cell;
     text-align: left;
     padding-left: 20px;
 }
 
-ul.bib-listing li.list-item .bib-label{
+ul.bib-listing li.list-item .bib-label {
     font-weight: bold;
     font-size: 100%;
     color: black;

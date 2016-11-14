@@ -471,6 +471,30 @@
     <Content Include="Content\ITJakub.Favorites.min.css">
       <DependentUpon>ITJakub.Favorites.css</DependentUpon>
     </Content>
+    <Content Include="Content\ITJakub.Feedbacks.css">
+      <DependentUpon>ITJakub.Feedbacks.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Feedbacks.min.css">
+      <DependentUpon>ITJakub.Feedbacks.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Header.css">
+      <DependentUpon>ITJakub.Header.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Header.min.css">
+      <DependentUpon>ITJakub.Header.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Home.css">
+      <DependentUpon>ITJakub.Home.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Home.min.css">
+      <DependentUpon>ITJakub.Home.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.UploadBook.css">
+      <DependentUpon>ITJakub.UploadBook.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.UploadBook.min.css">
+      <DependentUpon>ITJakub.UploadBook.css</DependentUpon>
+    </Content>
     <Content Include="Content\KeyboardLayouts\cs_quertz.xml" />
     <Content Include="Content\KeyboardLayouts\cyrilic.xml" />
     <Content Include="Content\KeyboardLayouts\greek_qwerty.xml" />
@@ -1411,15 +1435,9 @@
     <Content Include="wwwroot\lib\wheelzoom\daisy.jpg" />
     <Content Include="wwwroot\lib\wheelzoom\demo.html" />
     <Content Include="wwwroot\lib\wheelzoom\wheelzoom.js" />
-    <Content Include="Content\ITJakub.EuCookiePopup.less" />
+    <Content Include="Content\Plugins\ITJakub.EuCookiePopup.less" />
     <Content Include="Content\ITJakub.TextEditor.less" />
     <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
-    <Content Include="Content\dropzones.css">
-      <DependentUpon>dropzones.less</DependentUpon>
-    </Content>
-    <Content Include="Content\dropzones.min.css">
-      <DependentUpon>dropzones.css</DependentUpon>
-    </Content>
     <Content Include="Content\Images\glyphicons_chevron.png" />
     <Content Include="Content\Images\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\loading.gif" />
@@ -1432,16 +1450,16 @@
     <Content Include="Content\ITJakub.Footer.min.css">
       <DependentUpon>ITJakub.Footer.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.HorizontalLoader.css">
+    <Content Include="Content\Plugins\ITJakub.HorizontalLoader.css">
       <DependentUpon>ITJakub.HorizontalLoader.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.HorizontalLoader.min.css">
+    <Content Include="Content\Plugins\ITJakub.HorizontalLoader.min.css">
       <DependentUpon>ITJakub.HorizontalLoader.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.NumberedOrderedList.css">
+    <Content Include="Content\Plugins\ITJakub.NumberedOrderedList.css">
       <DependentUpon>ITJakub.NumberedOrderedList.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.NumberedOrderedList.min.css">
+    <Content Include="Content\Plugins\ITJakub.NumberedOrderedList.min.css">
       <DependentUpon>ITJakub.NumberedOrderedList.css</DependentUpon>
     </Content>
     <Content Include="Areas\Bibliographies\Views\web.config" />
@@ -1463,10 +1481,10 @@
     <Content Include="Content\ITJakub.min.css">
       <DependentUpon>ITJakub.css</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.EuCookiePopup.css">
+    <Content Include="Content\Plugins\ITJakub.EuCookiePopup.css">
       <DependentUpon>ITJakub.EuCookiePopup.less</DependentUpon>
     </Content>
-    <Content Include="Content\ITJakub.EuCookiePopup.min.css">
+    <Content Include="Content\Plugins\ITJakub.EuCookiePopup.min.css">
       <DependentUpon>ITJakub.EuCookiePopup.css</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.TextEditor.css">
@@ -1538,7 +1556,6 @@
     <Content Include="Areas\Editions\Content\itjakub.editions.less" />
     <Content Include="Content\ITJakub.PluginMenu.less" />
     <Content Include="Scripts\itjakub.upload.js" />
-    <Content Include="Content\dropzones.less" />
     <Content Include="Content\ITJakub.DefaultTheme.less" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
     <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
@@ -1640,8 +1657,13 @@
     <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.ttf" />
     <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff" />
     <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff2" />
-    <None Include="Content\ITJakub.HorizontalLoader.less" />
-    <None Include="Content\ITJakub.NumberedOrderedList.less" />
+    <Content Include="Content\ITJakub.Header.less" />
+    <Content Include="Content\ITJakub.Home.less" />
+    <Content Include="Content\ITJakub.Feedbacks.less" />
+    <Content Include="Content\ITJakub.BibliographySearch.less" />
+    <None Include="Content\ITJakub.UploadBook.less" />
+    <None Include="Content\Plugins\ITJakub.HorizontalLoader.less" />
+    <None Include="Content\Plugins\ITJakub.NumberedOrderedList.less" />
     <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
     <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.less" />
     <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.less" />
