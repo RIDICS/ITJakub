@@ -3,6 +3,11 @@
     var lemmatization = new Lemmatization("#mainContainer", canEdit);
     lemmatization.make();
 
+    var inputElement = <HTMLInputElement>$("#mainSearchInput").get(0);
+    var keyboardButton = <HTMLButtonElement>$("#keyboard-button").get(0);
+    var keyboardComponent = KeyboardManager.getKeyboard("0");
+    keyboardComponent.registerButton(keyboardButton, inputElement, (newQuery) => lemmatization.setMainSearchBoxValue(newQuery));
+
     if (tokenId)
         lemmatization.load(Number(tokenId));
 }
@@ -23,7 +28,11 @@ class Lemmatization {
             (item) => SingleSetTypeaheadSearchBox.getDefaultSuggestionTemplate(item.Text, item.Description));
         this.lemmatizationCharacteristic = new LemmatizationCharacteristicEditor();
     }
-    
+
+    public setMainSearchBoxValue(value: string) {
+        this.searchBox.setValue(value);
+    }
+
     public make() {
         $(this.mainContainer).empty();
         this.searchBox.setDataSet("Token");
