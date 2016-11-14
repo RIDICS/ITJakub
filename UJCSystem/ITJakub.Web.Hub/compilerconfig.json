@@ -56,16 +56,16 @@
     "inputFile": "Content/ITJakub.Footer.less"
   },
   {
-    "outputFile": "Content/ITJakub.HorizontalLoader.css",
-    "inputFile": "Content/ITJakub.HorizontalLoader.less"
+    "outputFile": "Content/Plugins/ITJakub.HorizontalLoader.css",
+    "inputFile": "Content/Plugins/ITJakub.HorizontalLoader.less"
   },
   {
     "outputFile": "Content/itjakub.css",
     "inputFile": "Content/ITJakub.less"
   },
   {
-    "outputFile": "Content/ITJakub.NumberedOrderedList.css",
-    "inputFile": "Content/ITJakub.NumberedOrderedList.less"
+    "outputFile": "Content/Plugins/ITJakub.NumberedOrderedList.css",
+    "inputFile": "Content/Plugins/ITJakub.NumberedOrderedList.less"
   },
   {
     "outputFile": "Content/ITJakub.PluginMenu.css",
@@ -104,12 +104,8 @@
     "inputFile": "Areas/AudioBooks/Content/itjakub.audiobooks.less"
   },
   {
-    "outputFile": "Content/dropzones.css",
-    "inputFile": "Content/dropzones.less"
-  },
-  {
-    "outputFile": "Content/ITJakub.EuCookiePopup.css",
-    "inputFile": "Content/ITJakub.EuCookiePopup.less"
+    "outputFile": "Content/Plugins/ITJakub.EuCookiePopup.css",
+    "inputFile": "Content/Plugins/ITJakub.EuCookiePopup.less"
   },
   {
     "outputFile": "Content/Permission/itjakub.permission.css",

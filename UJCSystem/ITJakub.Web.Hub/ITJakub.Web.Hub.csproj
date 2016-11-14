@@ -442,8 +442,8 @@
     <Content Include="Content\Images\Feeds\blue.png" />
     <Content Include="Content\Images\Feeds\green.png" />
     <Content Include="Content\Images\Feeds\red.png" />
-    <Content Include="Content\Images\glyphicons_chevron_white.png" />
-    <Content Include="Content\Images\klavesnice.gif" />
+    <Content Include="Content\Images\Glyphs\glyphicons_chevron_white.png" />
+    <Content Include="Content\Images\Glyphs\klavesnice.gif" />
     <Content Include="Content\Images\Logo\logo_av21_white.png" />
     <Content Include="Content\Images\Logo\logo_fel_white.png" />
     <Content Include="Content\Images\Logo\logo_msmt_white.png" />
@@ -1438,10 +1438,10 @@
     <Content Include="Content\Plugins\ITJakub.EuCookiePopup.less" />
     <Content Include="Content\ITJakub.TextEditor.less" />
     <Content Include="Content\Plugins\Keyboard\ITJakub.Keyboard.less" />
-    <Content Include="Content\Images\glyphicons_chevron.png" />
-    <Content Include="Content\Images\glyphicons_chevron_green.png" />
+    <Content Include="Content\Images\Glyphs\glyphicons_chevron.png" />
+    <Content Include="Content\Images\Glyphs\glyphicons_chevron_green.png" />
     <Content Include="Content\Images\loading.gif" />
-    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\Logo\logo.png" />
     <Content Include="Content\Images\news_background.png" />
     <Content Include="Content\Images\small_trans_loading.gif" />
     <Content Include="Content\ITJakub.Footer.css">
