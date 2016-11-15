@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../wwwroot/lib/pagination-scalesoft/dist/pagination.d.ts" />
+﻿/// <reference path="../../../wwwroot/lib/s-pagination/dist/pagination.d.ts" />
 class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;

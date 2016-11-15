@@ -79,7 +79,7 @@ namespace ITJakub.Web.Hub
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js",
                 "~/Scripts/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js",
                 "~/Scripts/Plugins/RegExSearch/itjakub.plugins.regexsearch.js",
-                "~/wwwroot/lib/pagination-scalesoft/dist/pagination.js",
+                "~/wwwroot/lib/s-pagination/dist/pagination.js",
                 "~/Scripts/Plugins/itjakub.tools.js",
                 "~/Scripts/Plugins/SearchBox/itjakub.plugins.searchbox.js"));
 

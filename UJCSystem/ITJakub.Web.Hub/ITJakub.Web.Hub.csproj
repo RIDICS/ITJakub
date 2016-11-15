@@ -1418,8 +1418,6 @@
     <Content Include="wwwroot\lib\modernizr\test\qunit\qunit.css" />
     <Content Include="wwwroot\lib\modernizr\test\qunit\qunit.js" />
     <Content Include="wwwroot\lib\modernizr\test\qunit\run-qunit.js" />
-    <Content Include="wwwroot\lib\pagination-scalesoft\dist\pagination.css" />
-    <Content Include="wwwroot\lib\pagination-scalesoft\dist\pagination.js" />
     <Content Include="wwwroot\lib\respond\cross-domain\example.html" />
     <Content Include="wwwroot\lib\respond\cross-domain\respond-proxy.html" />
     <Content Include="wwwroot\lib\respond\cross-domain\respond.proxy.gif" />
@@ -1432,6 +1430,8 @@
     <Content Include="wwwroot\lib\respond\src\matchmedia.addListener.js" />
     <Content Include="wwwroot\lib\respond\src\matchmedia.polyfill.js" />
     <Content Include="wwwroot\lib\respond\src\respond.js" />
+    <Content Include="wwwroot\lib\s-pagination\dist\pagination.css" />
+    <Content Include="wwwroot\lib\s-pagination\dist\pagination.js" />
     <Content Include="wwwroot\lib\simplemde\dist\simplemde.min.css" />
     <Content Include="wwwroot\lib\simplemde\dist\simplemde.min.js" />
     <Content Include="wwwroot\lib\wheelzoom\daisy.jpg" />
@@ -1828,7 +1828,7 @@
     <Content Include="Views\News\AddNews.cshtml" />
     <Content Include="Areas\Derivation\Views\Derivation\Derivation.cshtml" />
     <Content Include="Views\EditionNote\EditionNote.cshtml" />
-    <TypeScriptCompile Include="wwwroot\lib\pagination-scalesoft\dist\pagination.d.ts" />
+    <TypeScriptCompile Include="wwwroot\lib\s-pagination\dist\pagination.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
