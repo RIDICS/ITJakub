@@ -272,6 +272,18 @@ input.regexsearch-checkbox {
     width: 70%;
     margin-left: 2.5%;
     border: none;
+
+    @media screen and (max-width: 768px) {
+        width: 65%;
+    }
+
+    @media screen and (max-width: 560px) {
+        width: 55%;
+    }
+
+    @media screen and (max-width: 420px) {
+        width: 40%;
+    }
 }
 
 .regex-dating-condition .ui-slider > .ui-slider-handle {
@@ -305,12 +317,23 @@ input.regexsearch-checkbox {
     margin-top: -68px;
     margin-left: 200px;
     width: 500px;
+
+    @media screen and (max-width: 768px) {
+        margin-top: 0;
+        margin-left: 0;
+        margin-bottom: 35px;
+        width: auto;
+	}
 }
 
 .regex-dating-condition-selects .regex-dating-condition-select{
     width: 200px;
     margin-left: 30px;
     display: inline-block;
+
+    @media screen and (max-width: 768px) {
+        margin-left: 15px;
+	}
 }
 
 .regex-slider-div {
@@ -321,6 +344,10 @@ input.regexsearch-checkbox {
 .regex-dating-checkbox-div {
     width: 150px;
     display: inline-block;
+
+    @media screen and (max-width: 768px) {
+        width: 120px;
+    }
 }
 
 .regex-dating-condition-displayed-value { //displayed date

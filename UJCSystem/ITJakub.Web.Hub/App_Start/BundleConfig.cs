@@ -123,7 +123,7 @@ namespace ITJakub.Web.Hub
 
             bundles.Add(new StyleBundle("~/Content/cookiescss").Include(
                 "~/wwwroot/lib/jquery-eu-cookie-law-popup/css/jquery-eu-cookie-law-popup.css",
-                "~/Content/ITJakub.EuCookiePopup.css"));
+                "~/Content/Plugins/ITJakub.EuCookiePopup.css"));
 
             bundles.Add(new StyleBundle("~/Content/itjakub").Include(
                 "~/Content/ITJakub.css",
