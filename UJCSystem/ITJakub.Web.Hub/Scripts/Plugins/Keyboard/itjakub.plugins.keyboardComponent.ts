@@ -48,10 +48,10 @@
         var container=document.createElement('div');
         container.classList.add( 'keyboard_container');
         container.id= `${this.componentPrefix}container-${this.id}`;
-        container.innerHTML = `<button type="button" class="close keyboardHideButton" id="${this.componentPrefix}hideButton-${this.id}">
+        container.innerHTML = `<button type="button" class="btn btn-link btn-sm pin-button close" id="${this.componentPrefix}hideButton-${this.id}">
                         <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                     </button>
-                    <button type="button" class="btn btn-link btn-sm pin-button" id="${this.componentPrefix}pin-button-${this.id}">
+                    <button type="button" class="btn btn-link btn-sm pin-button" style="right: 40px;" id="${this.componentPrefix}pin-button-${this.id}">
                         <span class="glyphicon glyphicon-pushpin"></span>
                     </button>
                     <div class="tabs" id="${this.componentPrefix}tabs-container-${this.id}">
