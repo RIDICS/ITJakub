@@ -1,4 +1,4 @@
-﻿/// <reference path="../../../Scripts/Plugins/itjakub.plugins.pagination.ts" />
+﻿/// <reference path="../../../wwwroot/lib/pagination-scalesoft/dist/pagination.d.ts" />
 class DictionaryViewer {
     private headwordDescriptionContainer: string;
     private paginationContainer: string;
@@ -25,7 +25,13 @@ class DictionaryViewer {
         this.paginationContainer = paginationContainer;
         this.headwordListContainer = headwordListContainer;
         this.isLazyLoad = lazyLoad;
-        this.pagination = new Pagination(paginationContainer);
+        this.pagination = new Pagination({
+            container: $(this.paginationContainer),
+            pageClickCallback: this.searchAndDisplay.bind(this),
+            callPageClickCallbackOnInit: true,
+            maxVisibleElements: 11,
+            showInput: true
+        });
     }
 
     public createViewer(recordCount: number, showPageCallback: (pageNumber: number) => void, pageSize: number, searchCriteria: string = null,
@@ -38,9 +44,9 @@ class DictionaryViewer {
         this.isCriteriaJson = isCriteriaJson;
 
         if (this.defaultPageNumber)
-            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this), this.defaultPageNumber);
+            this.pagination.make(this.recordCount, this.pageSize, this.defaultPageNumber);
         else
-            this.pagination.createPagination(this.recordCount, this.pageSize, this.searchAndDisplay.bind(this));
+            this.pagination.make(this.recordCount, this.pageSize);
     }
 
     public setDefaultPageNumber(pageNumber: number) {

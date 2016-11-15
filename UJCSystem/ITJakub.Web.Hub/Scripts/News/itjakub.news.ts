@@ -4,7 +4,11 @@ var newsContainer;
 
 
 function initNews() {
-    paginator = new Pagination("#news-paginator", newsOnPage);
+    paginator = new Pagination({
+        container: $("#news-paginator"),
+        pageClickCallback: paginatorClickedCallback,
+        callPageClickCallbackOnInit: true
+    });
     newsContainer = document.getElementById("news-container");
     getNewsCount();
 }
@@ -15,12 +19,12 @@ function getNewsCount() {
     $.ajax({
         type: "GET",
         traditional: true,
-        url: getBaseUrl() + "News/GetSyndicationItemCount",        
+        url: getBaseUrl() + "News/GetSyndicationItemCount",
         dataType: "json",
         contentType: "application/json",
         success: response => {
-            var count = response;            
-            paginator.createPagination(count, newsOnPage, paginatorClickedCallback);
+            var count = response;
+            paginator.make(count, newsOnPage);
         }
     });
 }

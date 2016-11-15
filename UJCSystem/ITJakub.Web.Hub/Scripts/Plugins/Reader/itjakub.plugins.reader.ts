@@ -1712,13 +1712,13 @@ class BookmarksPanel extends LeftSidePanel {
             }
         }
         
-        const paginator = new Pagination(<any>paginationContainer);
-        paginator.createPagination(bookmarks.totalCount, bookmarksPerPage, (pageNumber: number) => {
-            this.showBookmarkPage(
-                pagesContainer,
-                pageNumber
-            );
-        }, actualBookmarkPage);
+        const paginator = new Pagination({
+            container: paginationContainer,
+            pageClickCallback: (pageNumber: number) => this.showBookmarkPage(pagesContainer, pageNumber),
+            callPageClickCallbackOnInit: true
+        });
+        paginator.make(bookmarks.totalCount, bookmarksPerPage, actualBookmarkPage);
+        
         $(".pagination", paginationContainer).addClass("pagination-extra-small");
     }
 
@@ -1824,6 +1824,7 @@ class SearchResultPanel extends LeftSidePanel {
     private searchPagingDiv: HTMLDivElement;
 
     private paginator: Pagination;
+    private paginatorOptions: Pagination.Options;
     private resultsOnPage;
     private maxPaginatorVisibleElements;
 
@@ -1853,12 +1854,18 @@ class SearchResultPanel extends LeftSidePanel {
         this.searchResultItemsDiv = searchResultItemsDiv;
 
         var pagingDiv = window.document.createElement("div");
-        $(pagingDiv).addClass("reader-search-result-paging");
+        $(pagingDiv).addClass("reader-search-result-paging pagination-extra-small");
         this.searchPagingDiv = pagingDiv;
 
         this.resultsOnPage = 8;
-        this.maxPaginatorVisibleElements = 5;
-        this.paginator = new Pagination(<any>this.searchPagingDiv, this.maxPaginatorVisibleElements);
+        this.maxPaginatorVisibleElements = 11;
+
+        this.paginatorOptions = {
+            container: this.searchPagingDiv,
+            maxVisibleElements: this.maxPaginatorVisibleElements,
+            callPageClickCallbackOnInit: true
+        };
+        this.paginator = new Pagination(this.paginatorOptions);
 
         innerContent.appendChild(this.searchPagingDiv);
         innerContent.appendChild(searchResultItemsDiv);
@@ -1867,7 +1874,8 @@ class SearchResultPanel extends LeftSidePanel {
     }
 
     createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
-        this.paginator.createPagination(itemsCount, this.resultsOnPage, pageChangedCallback);
+        this.paginatorOptions.pageClickCallback = pageChangedCallback;
+        this.paginator.make(itemsCount, this.resultsOnPage);
     }
 
     getResultsCountOnPage(): number {

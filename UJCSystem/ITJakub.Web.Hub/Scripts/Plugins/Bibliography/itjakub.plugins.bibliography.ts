@@ -2,7 +2,7 @@
 /// <reference path="itjakub.plugins.bibliography.factories.ts" />
 /// <reference path="itjakub.plugins.bibliography.configuration.ts" />
 /// <reference path="../Sort/itjakub.plugins.sort.ts" />
-/// <reference path="../itjakub.plugins.pagination.ts" />
+/// <reference path="../../../wwwroot/lib/pagination-scalesoft/dist/pagination.d.ts" />
 
 class BibliographyModule {
 
@@ -227,9 +227,13 @@ class BibliographyModule {
     public createPagination(booksOnPage: number, pageClickCallback: (pageNumber: number) => void, booksCount: number, initPageNumber: number = 1) {
         this.booksCount = booksCount;
         this.booksOnPage = booksOnPage;
-        this.paginator = new Pagination(<any>this.paginatorContainer, booksOnPage);
-        this.paginator.createPagination(booksCount, booksOnPage, pageClickCallback, initPageNumber);
-
+        var paginationOptions: Pagination.Options = {
+            container: this.paginatorContainer,
+            pageClickCallback: pageClickCallback,
+            callPageClickCallbackOnInit: true
+        };
+        this.paginator = new Pagination(paginationOptions);
+        this.paginator.make(booksCount, booksOnPage, initPageNumber);
     }
 
     public getPagesCount(): number {

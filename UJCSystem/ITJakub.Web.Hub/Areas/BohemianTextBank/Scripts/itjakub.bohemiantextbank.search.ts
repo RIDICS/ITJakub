@@ -375,14 +375,19 @@ function initSearch() {
 
     function createPagination(resultsCount: number) {
         var paginatorContainer = document.getElementById("paginationContainer");
-        paginator = new Pagination(<any>paginatorContainer, paginationMaxVisibleElements);
+        paginator = new Pagination({
+            container: <HTMLDivElement>paginatorContainer,
+            maxVisibleElements: paginationMaxVisibleElements,
+            pageClickCallback: searchForPageNumber,
+            callPageClickCallbackOnInit: true
+        });
 
         var pages = Math.ceil(resultsCount / resultsCountOnPage);
 
         if (initPage && initPage <= pages) {
-            paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber, initPage);
+            paginator.make(resultsCount, resultsCountOnPage, initPage);
         } else {
-            paginator.createPagination(resultsCount, resultsCountOnPage, searchForPageNumber);
+            paginator.make(resultsCount, resultsCountOnPage);
         }
 
         const totalResultsDiv = document.getElementById("totalResultCountDiv");

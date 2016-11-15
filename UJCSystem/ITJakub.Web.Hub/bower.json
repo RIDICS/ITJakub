@@ -15,6 +15,7 @@
     "jquery-zoom": "1.7.15",
     "wheelzoom": "3.0.4",
     "simplemde": "1.11.2",
-    "bootstrap-colorpicker-plus": "#0fdd970"
+    "bootstrap-colorpicker-plus": "#0fdd970",
+    "pagination-scalesoft": "1.0.3"
   }
 }

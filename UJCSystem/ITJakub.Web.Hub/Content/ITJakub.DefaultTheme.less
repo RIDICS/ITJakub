@@ -82,6 +82,23 @@
     text-align: center;
 }
 
+.pagination-input {
+    input {
+        border-color: @button-background-color;
+    }
+
+    &.input-group > .input-group-btn > .btn {
+        border-color: @button-background-color;
+        background-color: @button-background-color;
+        color: white;
+
+        &:hover {
+            border-color: @button-hover-background-color;
+            background-color: @button-hover-background-color;
+        }
+    }
+}
+
 .top-notification {
     position: fixed;
     top: 1px;

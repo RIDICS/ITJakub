@@ -19,6 +19,7 @@
     private selectedFilterLabelId: number = null;
     private selectedFilterName: string = null;
     private pagination: Pagination;
+    private paginationOptions: Pagination.Options;
     private overrideSetQueryCallback: (text: string) => void;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
@@ -64,9 +65,11 @@
 
     private loadQueries(defaultPageNumber = 1) {
         this.renderLoadingQueries();
-        this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+        this.paginationOptions.callPageClickCallbackOnInit = false;
+        this.pagination.make(0, FavoriteQuery.pageSize);
         this.favoriteManager.getFavoriteQueriesCount(this.selectedFilterLabelId, this.bookType, this.queryType, this.selectedFilterName, count => {
-            this.pagination.createPagination(count, FavoriteQuery.pageSize, this.loadQueriesPage.bind(this), defaultPageNumber);
+            this.paginationOptions.callPageClickCallbackOnInit = true;
+            this.pagination.make(count, FavoriteQuery.pageSize, defaultPageNumber);
         });
     }
 
@@ -284,7 +287,13 @@
 
         this.renderContainer.empty();
         this.renderContainer.append(mainDiv);
-        this.pagination = new Pagination(".favorite-queries-pagination", 7);
+
+        this.paginationOptions = {
+            container: $(".favorite-queries-pagination"),
+            maxVisibleElements: 7,
+            pageClickCallback: this.loadQueriesPage.bind(this)
+        }
+        this.pagination = new Pagination(this.paginationOptions);
     }
 
     private renderFavoriteLabels(favoriteLabels: IFavoriteLabel[]) {
@@ -532,7 +541,8 @@
         $(".favorite-query-label-selected", this.renderContainer).hide();
 
         if (filter.length > 0) {
-            this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+            this.paginationOptions.callPageClickCallbackOnInit = false;
+            this.pagination.make(0, FavoriteQuery.pageSize);
         }
     }
     
