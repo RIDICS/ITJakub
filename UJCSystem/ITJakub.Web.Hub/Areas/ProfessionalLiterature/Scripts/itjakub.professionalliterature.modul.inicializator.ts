@@ -78,5 +78,5 @@ interface IProfessionalLiteratureModulInicializatorConfigurationSearch extends I
 }
 
 interface IProfessionalLiteratureModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
-    advancedCount: string;
+    //advancedCount: string;
 }

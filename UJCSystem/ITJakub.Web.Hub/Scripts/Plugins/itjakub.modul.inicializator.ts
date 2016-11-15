@@ -35,7 +35,7 @@
         },
         search: {
             container: document.getElementById("listSearchDiv") as HTMLDivElement,
-            processSearchJsonCallback: this.editionAdvancedSearchPaged.bind(this),
+            processSearchJsonCallback: this.editionAdvancedSearch.bind(this),
             processSearchTextCallback: this.editionBasicSearch.bind(this)
         },
         dropDownSelect: {
@@ -191,7 +191,7 @@
         });
     }
 
-    editionBasicSearchPaged(text: string, pageNumber: number = 1) {
+    protected editionBasicSearchPaged(text: string, pageNumber: number = 1) {
         this.hideTypeahead();
         //if (typeof text === "undefined" || text === null || text === "") return;
 
@@ -247,6 +247,32 @@
         } else {
             this.editionBasicSearchPaged(search.getLastQuery(), pageNumber);
         }
+    }
+
+    protected editionAdvancedSearch(json: string) {
+        this.hideTypeahead();
+        this.actualizeSelectedBooksAndCategoriesInQuery();
+        if (typeof json === "undefined" || json === null || json === "") return;
+
+        var bibliographyModule = this.getBibliographyModule();
+
+        bibliographyModule.clearBooks();
+        bibliographyModule.showLoading();
+
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: this.configuration.search.url.advancedCount,
+            data: { json: json, selectedBookIds: this.bookIdsInQuery, selectedCategoryIds: this.categoryIdsInQuery },
+            dataType: "json",
+            contentType: "application/json",
+            success: response => {
+                this.createPagination(response["count"]); //enable pagination
+                updateQueryStringParameter(this.configuration.base.url.searchKey, json);
+                updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
+                updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+            }
+        });
     }
 
     protected editionBasicSearch(text: string) {
@@ -400,6 +426,7 @@ interface IModulInicializatorConfigurationSearch {
 interface IModulInicializatorConfigurationSearchUrl {
     advanced: string;
     text: string;
+    advancedCount: string;
     textCount: string;
 }
 

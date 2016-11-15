@@ -1,5 +1,5 @@
 ﻿$(document).ready(() => {
-    const modulInicializator = new ListModulInicializator({
+        const modulInicializator = new ListModulInicializator({
             bibliographyModule: {
                 forcedBookType: BookTypeEnum.Edition,
                 customConfigurationPath: "Editions/Editions/GetListConfiguration"
@@ -14,6 +14,7 @@
                 url: {
                     advanced: getBaseUrl() + "Editions/Editions/AdvancedSearchPaged",
                     text: getBaseUrl() + "Editions/Editions/TextSearchPaged",
+                    advancedCount: getBaseUrl() + "Editions/Editions/AdvancedSearchResultsCount",
                     textCount: getBaseUrl() + "Editions/Editions/TextSearchCount"
                 },
                 favoriteQueries: {

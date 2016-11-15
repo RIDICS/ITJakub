@@ -59,7 +59,7 @@
             dataType: "json",
             contentType: "application/json",
             success: response => {
-                this.bibliographyModule.showBooks(response["results"]);
+                this.bibliographyModule.showBooks(response["books"]);
                 updateQueryStringParameter(this.configuration.base.url.searchKey, json);
                 updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, this.bibliographyModule.isSortedAsc());
@@ -78,5 +78,5 @@ interface IAudioBooksModulInicializatorConfigurationSearch extends IModulInicial
 }
 
 interface IAudioBooksModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
-    advancedCount: string;
+    //advancedCount: string;
 }

@@ -14,6 +14,7 @@
             url: {
                 advanced: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchPaged",
                 text: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchPaged",
+                advancedCount: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchResultsCount",
                 textCount: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchCount"
             },
             favoriteQueries: {

@@ -78,5 +78,5 @@ interface IBohemiaTextBankModulInicializatorConfigurationSearch extends IModulIn
 }
 
 interface IBohemiaTextBankModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
-    advancedCount: string;
+    //advancedCount: string;
 }
