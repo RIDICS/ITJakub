@@ -1699,6 +1699,7 @@
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <Content Include="Views\Favorite\AmbiguousFavoriteRedirect.cshtml" />
     <Content Include="Views\Shared\_BibliographySearch.cshtml" />
+    <Content Include="Views\Home\FeedbackSuccess.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

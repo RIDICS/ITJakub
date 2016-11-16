@@ -27,6 +27,13 @@
         @using (Html.BeginForm("Feedback", "Home", new {}, FormMethod.Post, new {@class = "form-horizontal", role = "form"}))
         {
             @Html.AntiForgeryToken()
+            if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary()
+                </div>
+            }
+
             <div class="form-group">
                 @Html.TextAreaFor(m => m.Text, new {@class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..."})
             </div>

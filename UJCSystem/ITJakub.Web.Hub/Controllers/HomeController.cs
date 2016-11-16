@@ -80,7 +80,12 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-           
+            if (!ModelState.IsValid)
+            {
+                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+                return View(model);
+            }
+            
             using (var client = GetMainServiceClient())
             {
                 if (Request.IsAuthenticated)
@@ -93,7 +98,7 @@ namespace ITJakub.Web.Hub.Controllers
                 }
             }
 
-            return View("Index");
+            return View("FeedbackSuccess");
         }
 
         public ActionResult HowToCite()
