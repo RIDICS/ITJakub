@@ -43,6 +43,6 @@
             .append(info)
             .append(refreshLink)
             .append(closeButton)
-            .appendTo($(".container"));
+            .appendTo($(".module-content"));
     }
 }

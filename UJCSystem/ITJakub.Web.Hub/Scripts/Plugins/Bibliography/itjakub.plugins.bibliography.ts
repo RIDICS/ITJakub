@@ -121,35 +121,54 @@ class BibliographyModule {
             }
         });
         if (bookIds.length === 0) return;
+
+        var favoriteLabels: IFavoriteLabel[] = null;
+        var favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]> = null;
+
+        favoriteManager.getLatestFavoriteLabels(labels => {
+            favoriteLabels = labels;
+
+            if (favoriteBooksDictionary != null) {
+                this.finishShowingFavoriteLabels(bookDataList, favoriteBooksDictionary, favoriteLabels);
+            }
+        });
+
         favoriteManager.getFavoritesForBooks(bookIds, favoriteBooks => {
-            var favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
+            favoriteBooksDictionary = new DictionaryWrapper<IFavoriteBaseInfo[]>();
             $.each(favoriteBooks, (index, favoriteLabeledBook) => {
                 favoriteBooksDictionary.add(favoriteLabeledBook.Id, favoriteLabeledBook.FavoriteInfo); 
             });
 
-            $.each(bookDataList, (index, bookData) => {
-                var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
-                if (bookFavorites) {
-                    var bibliographyFactory = this.getBibliographyFactory(bookData.bookType);
-                    bookData.$favoritesContainer.append(bibliographyFactory.makeFavoriteBookInfo(bookFavorites));
-                }
+            if (favoriteLabels != null) {
+                this.finishShowingFavoriteLabels(bookDataList, favoriteBooksDictionary, favoriteLabels);
+            }
+        });
+    }
 
-                // create FavoriteStar
-                if (bookData.$favoriteButton.length === 0) {
-                    return;
-                }
-                var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
-                var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
-                    new NewFavoriteNotification().show();
-                });
-                if (bookFavorites) {
-                    favoriteStar.addFavoriteItems(bookFavorites);
-                }
-                favoriteStar.make("left", true);
+    private finishShowingFavoriteLabels(bookDataList: IBookRenderData[], favoriteBooksDictionary: DictionaryWrapper<IFavoriteBaseInfo[]>, favoriteLabels: IFavoriteLabel[]) {
+        $.each(bookDataList, (index, bookData) => {
+            var bookFavorites = favoriteBooksDictionary.get(bookData.bookId);
+            if (bookFavorites) {
+                var bibliographyFactory = this.getBibliographyFactory(bookData.bookType);
+                bookData.$favoritesContainer.append(bibliographyFactory.makeFavoriteBookInfo(bookFavorites));
+            }
 
-                var className = bookData.$favoriteButton.data("buttonClass");
-                $("a", bookData.$favoriteButton).addClass(className);
+            // create FavoriteStar
+            if (bookData.$favoriteButton.length === 0) {
+                return;
+            }
+            var newFavoriteDialog = NewFavoriteDialogProvider.getInstance(true);
+            var favoriteStar = new FavoriteStar(bookData.$favoriteButton, FavoriteType.Book, bookData.bookId.toString(), bookData.bookName, newFavoriteDialog, new FavoriteManager(), () => {
+                new NewFavoriteNotification().show();
             });
+            if (bookFavorites) {
+                favoriteStar.addFavoriteItems(bookFavorites);
+            }
+            favoriteStar.addFavoriteLabels(favoriteLabels);
+            favoriteStar.make("left", true);
+
+            var className = bookData.$favoriteButton.data("buttonClass");
+            $("a", bookData.$favoriteButton).addClass(className);
         });
     }
 
