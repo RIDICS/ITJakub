@@ -7,6 +7,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
@@ -428,7 +429,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {results = result.Results}, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {results = new PageResultContext[0]}, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -456,7 +457,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {count}, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {count = 0}, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -526,7 +527,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {results = result.Results}, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {results = new PageResultContext[0]}, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -568,7 +569,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {count}, JsonRequestBehavior.AllowGet);
                 }
 
-                return Json(new {}, JsonRequestBehavior.AllowGet);
+                return Json(new {count = 0}, JsonRequestBehavior.AllowGet);
             }
         }
 
