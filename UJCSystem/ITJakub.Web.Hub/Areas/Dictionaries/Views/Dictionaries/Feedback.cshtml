@@ -25,21 +25,21 @@
                 </div>
             }
 
-            @Html.HiddenFor(m => m.BookXmlId, new {Value = @Request["bookId"]})
-            @Html.HiddenFor(m => m.BookVersionXmlId, new {Value = @Request["versionId"]})
-            @Html.HiddenFor(m => m.EntryXmlId, new {Value = @Request["entryId"]})
+            @Html.HiddenFor(m => m.BookXmlId)
+            @Html.HiddenFor(m => m.BookVersionXmlId)
+            @Html.HiddenFor(m => m.EntryXmlId)
 
             <div class="form-group optional">
                 @Html.LabelFor(m => m.Dictionary, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Dictionary, new {@class = "form-control", @readonly = "readonly", Value = @Request["dictionary"]})
+                    @Html.TextBoxFor(m => m.Dictionary, new {@class = "form-control", @readonly = "readonly"})
                 </div>
             </div>
 
             <div class="form-group optional">
                 @Html.LabelFor(m => m.Headword, new {@class = "col-md-1 control-label"})
                 <div class="col-md-3">
-                    @Html.TextBoxFor(m => m.Headword, new {@class = "form-control", @readonly = "readonly", Value = @Request["headword"]})
+                    @Html.TextBoxFor(m => m.Headword, new {@class = "form-control", @readonly = "readonly"})
                 </div>
             </div>
 

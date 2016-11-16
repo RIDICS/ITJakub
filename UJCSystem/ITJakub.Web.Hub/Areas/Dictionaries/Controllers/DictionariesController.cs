@@ -85,29 +85,30 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View(pageStaticText);
         }
 
-        public ActionResult Feedback()
+        public ActionResult Feedback(string bookId, string versionId, string entryId, string headword, string dictionary)
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+            var viewModel = new HeadwordFeedbackViewModel
+            {
+                BookXmlId = bookId,
+                BookVersionXmlId = versionId,
+                EntryXmlId = entryId,
+                Dictionary = dictionary,
+                Headword = headword,
+                PageStaticText = pageStaticText
+            };
 
-            var username = HttpContext.User.Identity.Name;
+            var username = GetUserName();
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View(new HeadwordFeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
+                return View(viewModel);
             }
 
             using (var client = GetEncryptedClient())
             {
                 var user = client.FindUserByUserName(username);
-                var viewModel = new HeadwordFeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
+                viewModel.Name = string.Format("{0} {1}", user.FirstName, user.LastName);
+                viewModel.Email = user.Email;
 
                 return View(viewModel);
             }
