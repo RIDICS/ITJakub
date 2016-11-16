@@ -12,7 +12,7 @@ namespace ITJakub.Web.Hub.Controllers
         
         public ActionResult Feedback()
         {
-            return View();
+            return View("FeedbackManagement");
         }
 
         public ActionResult GetFeedbacksCount(IEnumerable<byte> categories)

@@ -21,5 +21,14 @@ namespace ITJakub.Web.Hub.Models
         public string Text { get; set; }
 
         public StaticTextViewModel PageStaticText { get; set; }
+
+        public FeedbackFormIdentification FormIdentification { get; set; }
+    }
+
+    public class FeedbackFormIdentification
+    {
+        public string Area { get; set; }
+
+        public string Controller { get; set; }
     }
 }

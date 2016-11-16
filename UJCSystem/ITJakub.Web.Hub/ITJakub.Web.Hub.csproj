@@ -292,6 +292,7 @@
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Managers\Favorites.cs" />
+    <Compile Include="Managers\FeedbacksManager.cs" />
     <Compile Include="Managers\StaticTextManager.cs" />
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />
@@ -1699,7 +1700,8 @@
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <Content Include="Views\Favorite\AmbiguousFavoriteRedirect.cshtml" />
     <Content Include="Views\Shared\_BibliographySearch.cshtml" />
-    <Content Include="Views\Home\FeedbackSuccess.cshtml" />
+    <Content Include="Views\Shared\Feedback\FeedbackSuccess.cshtml" />
+    <Content Include="Views\Shared\Feedback\_FeedbackForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1823,7 +1825,7 @@
     <Content Include="Views\Home\Feedback.cshtml" />
     <Content Include="Areas\Lemmatization\Views\Lemmatization\Lemmatization.cshtml" />
     <Content Include="Areas\Lemmatization\Views\Lemmatization\List.cshtml" />
-    <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\Feedback\FeedbackManagement.cshtml" />
     <Content Include="Views\Permission\UserPermission.cshtml" />
     <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />

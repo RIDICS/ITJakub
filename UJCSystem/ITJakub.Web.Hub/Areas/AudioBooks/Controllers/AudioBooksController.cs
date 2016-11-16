@@ -19,15 +19,22 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
     public class AudioBooksController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public AudioBooksController(StaticTextManager staticTextManager)
+        public AudioBooksController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.AudioBook; }
+        }
+
+        private FeedbackFormIdentification GetFeedbackFormIdentification()
+        {
+            return new FeedbackFormIdentification {Area = "AudioBooks", Controller = "AudioBooks"};
         }
 
         public ActionResult Index()
@@ -43,28 +50,31 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 
         public ActionResult Feedback()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            return View(viewModel);
 
-            var username = HttpContext.User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return View(new FeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
-            }
-            using (var client = GetEncryptedClient())
-            {
-                var user = client.FindUserByUserName(username);
-                var viewModel = new FeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
+            //var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
 
-                return View(viewModel);
-            }
+            //var username = HttpContext.User.Identity.Name;
+            //if (string.IsNullOrWhiteSpace(username))
+            //{
+            //    return View(new FeedbackViewModel
+            //    {
+            //        PageStaticText = pageStaticText
+            //    });
+            //}
+            //using (var client = GetEncryptedClient())
+            //{
+            //    var user = client.FindUserByUserName(username);
+            //    var viewModel = new FeedbackViewModel
+            //    {
+            //        Name = string.Format("{0} {1}", user.FirstName, user.LastName),
+            //        Email = user.Email,
+            //        PageStaticText = pageStaticText
+            //    };
+
+            //    return View(viewModel);
+            //}
         }
 
         [HttpPost]
@@ -72,20 +82,14 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            if (!ModelState.IsValid)
+            {
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                return View(model);
+            }
 
-            if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.AudioBooks);
-                }
-            else
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.AudioBooks);
-                }
-
-            return View("Information");
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.AudioBooks, GetMainServiceClient(), Request.IsAuthenticated, GetUserName());
+            return View("Feedback/FeedbackSuccess");
         }
 
         public ActionResult List()

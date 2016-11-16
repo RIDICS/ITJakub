@@ -21,13 +21,20 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
     public class OldGrammarController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public OldGrammarController(StaticTextManager staticTextManager)
+        public OldGrammarController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Grammar; } }
+
+        private FeedbackFormIdentification GetFeedbackFormIdentification()
+        {
+            return new FeedbackFormIdentification { Area = "OldGrammar", Controller = "OldGrammar" };
+        }
 
         public ActionResult Index()
         {
@@ -64,28 +71,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 
         public ActionResult Feedback()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
-
-            var username = HttpContext.User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return View(new FeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
-            }
-            using (var client = GetEncryptedClient())
-            {
-                var user = client.FindUserByUserName(username);
-                var viewModel = new FeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
-                return View(viewModel);
-            }
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -93,20 +80,14 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            if (!ModelState.IsValid)
+            {
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                return View(model);
+            }
 
-            if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.OldGrammar);
-                }
-            else
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.OldGrammar);
-                }
-
-            return View("Information");
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.OldGrammar, GetMainServiceClient(), Request.IsAuthenticated, GetUserName());
+            return View("Feedback/FeedbackSuccess");
         }
 
         public ActionResult Help()
