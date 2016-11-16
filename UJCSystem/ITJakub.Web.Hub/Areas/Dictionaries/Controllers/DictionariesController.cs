@@ -21,10 +21,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     public class DictionariesController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public DictionariesController(StaticTextManager staticTextManager)
+        public DictionariesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Dictionary; } }
@@ -116,8 +118,22 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(HeadwordFeedbackViewModel model)
         {
-            AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
-            return View("Information");
+            if (!ModelState.IsValid)
+            {
+                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+                return View(model);
+            }
+
+            if (model.BookXmlId == null || model.BookVersionXmlId == null || model.EntryXmlId == null)
+            {
+                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, GetMainServiceClient(), Request.IsAuthenticated, GetUserName());
+            }
+            else
+            {
+                AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
+            }
+                
+            return View("Feedback/FeedbackSuccess");
         }
 
         private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
@@ -408,43 +424,20 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         }
         }
 
-        public ActionResult AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
+        private void AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
         {
             var username = HttpContext.User.Identity.Name;
-            if (bookXmlId == null || bookVersionXmlId == null || entryXmlId == null)
+            using (var client = GetMainServiceClient())
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
-                    using (var client = GetMainServiceClient())
-                    {
-                        client.CreateAnonymousFeedback(content, name, email, FeedbackCategoryEnumContract.Dictionaries);
-                    }
+                    client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
                 }
-
                 else
                 {
-                    using (var client = GetMainServiceClient())
-                    {
-                        client.CreateFeedback(content, username, FeedbackCategoryEnumContract.Dictionaries);
-                    }
+                    client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
                 }
-
             }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(username))
-                    using (var client = GetMainServiceClient())
-                    {
-                        client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
-                    }
-                else
-                    using (var client = GetMainServiceClient())
-                    {
-                        client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
-                    }
-            }
-
-            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DictionaryAdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
