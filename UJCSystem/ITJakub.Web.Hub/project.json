@@ -72,6 +72,7 @@
       "Areas/**/Views/**/*.cshtml",
       "Content",
       "appsettings*.json",
+      "globalsettings.json",
       "web.config"
     ]
   },
