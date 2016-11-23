@@ -1,4 +1,5 @@
 ﻿@import "ITJakub.Colors.less";
+@import "ITJakub.Images.less";
 
 .centered {
     align-content: center;
@@ -43,11 +44,11 @@
 }
 
 .loading {
-    background: url(Images/loading.gif) no-repeat center;
+    background: @loading-gif-path no-repeat center;
 }
 
 .loading-small-inline {
-    background: url(Images/small_trans_loading.gif) no-repeat center;
+    background: @loading-small-gif-path no-repeat center;
     width: 20px;
     display: inline-block;
 }

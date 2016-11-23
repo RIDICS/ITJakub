@@ -1,5 +1,6 @@
 ﻿@import "../ITJakub.Colors.less";
 @import "../ITJakub.Fonts.less";
+@import "../ITJakub.Images.less";
 
 @reader-body-height: 77vh;
 @reader-computed-height : calc(~'100vh - 367px');
@@ -372,7 +373,7 @@ html,body {
 }
 
 .page.loading {
-    background: url(../../../Content/Images/loading.gif) no-repeat center;
+    background: @loading-gif-path no-repeat center;
     margin: 0 auto;
 }
 
@@ -933,7 +934,7 @@ a.no-click-href {
 }
 
 .loading-background, .loading {
-    background: url(../../../Content/Images/loading.gif) no-repeat top;
+    background: @loading-gif-path no-repeat top;
 }
 
 .modal-text {

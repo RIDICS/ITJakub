@@ -84,7 +84,7 @@
 
     public createImage(): HTMLImageElement {
         const image = document.createElement("img");
-        image.src = `${this.resourceRoot}Glyphs/keyboard.gif`;
+        image.src = `${this.resourceRoot}glyphs/keyboard.gif`;
         image.alt = "Show keyboard";
         image.classList.add("keyboard-icon-img");
         

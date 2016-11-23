@@ -36,7 +36,7 @@
                     @Html.Partial("_LoginPartial")
 
                     <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                        <img src="@Url.Content("~/Content/Images/Logo/main_logo.png")" alt="main_logo" class="main_logo" />
+                        <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" class="main_logo" />
                         <div class="main_logo_text">
                             <h1>Vokabulář</h1>
                             <h2>webový</h2>
@@ -475,6 +475,7 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
         <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
+        <script src="~/lib/s-pagination/dist/pagination.js"></script>
 
         <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
         <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
@@ -503,7 +504,7 @@
 
     <footer class="footer">
         <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-            <img src="@Url.Content("~/Content/Images/Logo/main_logo.png")" alt="main_logo" /> @*TODO make logo small as this size*@
+            <img src="@Url.Content("~/images/logo/main_logo.png")" alt="main_logo" /> @*TODO make logo small as this size*@
         </a>
 
         <div class="footer-text-area">
@@ -546,16 +547,16 @@
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="Ústav pro jazyk český">
-                    <img src="@Url.Content("~/Content/Images/Logo/logo_ujc_white.png")" alt="Ústav pro jazyk český" />
+                    <img src="@Url.Content("~/images/logo/logo_ujc_white.png")" alt="Ústav pro jazyk český" />
                 </a>
                 <a href="https://www.fel.cvut.cz/cz/" class="fel" title="ČVUT Fakulta Elektrotechnická">
-                    <img src="@Url.Content("~/Content/Images/Logo/logo_fel_white.png")" alt="ČVUT Fakulta Elektrotechnická" />
+                    <img src="@Url.Content("~/images/logo/logo_fel_white.png")" alt="ČVUT Fakulta Elektrotechnická" />
                 </a>
                 <a href="http://av21.avcr.cz/" class="av21" title="AVČR Strategie AV 21">
-                    <img src="@Url.Content("~/Content/Images/Logo/logo_av21_white.png")" alt="AVČR Strategie AV 21" />
+                    <img src="@Url.Content("~/images/logo/logo_av21_white.png")" alt="AVČR Strategie AV 21" />
                 </a>
                 <a href="http://www.msmt.cz" class="msmt" title="Ministerstvo školství, mládeže a tělovýchovy">
-                    <img src="@Url.Content("~/Content/Images/Logo/logo_msmt_white.png")" alt="Ministerstvo školství, mládeže a tělovýchovy" />
+                    <img src="@Url.Content("~/images/logo/logo_msmt_white.png")" alt="Ministerstvo školství, mládeže a tělovýchovy" />
                 </a>
             </div>
         </div>
