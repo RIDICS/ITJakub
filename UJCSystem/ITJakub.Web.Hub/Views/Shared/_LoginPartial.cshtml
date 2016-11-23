@@ -2,6 +2,7 @@
 
 @{
     var requestUrl = Context.Request.GetDisplayUrl();
+    var pathAndQuery = new Uri(requestUrl).PathAndQuery;
 }
 
 @*<div class="secondary-navbar-toggle language" title="Jazyk">
@@ -31,9 +32,9 @@
     }
     else
     {
-        if (requestUrl != null && requestUrl != "/" && !requestUrl.StartsWith("/Account/"))
+        if (!string.IsNullOrEmpty(pathAndQuery) && pathAndQuery != "/" && !pathAndQuery.StartsWith("/Account/"))
         {
-            ViewBag.ReturnUrl = requestUrl;
+            ViewBag.ReturnUrl = pathAndQuery;
         }
         <ul class="navbar-login">
             <li>@Html.ActionLink("Přihlášení", "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
