@@ -10,46 +10,49 @@
 
 <h2>Správa uživatelů</h2>
 
-<div class="permission-left-panel">
-    <div>
-        <div class="permission-main-buttons">
-            @*<button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>*@
+<div class="row">
+    <div class="permission-left-panel col-md-6">
+        <div>
+            <div class="permission-main-buttons">
+                @*<button id="loadButton" class="btn btn-default permission-button hidden">Vybrat</button>*@
+            </div>
+            <div class="permission-search">
+                <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="Hledat uživatele..." />
+            </div>
         </div>
-        <div class="permission-search">
-            <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="Hledat uživatele..."/>
+        <div id="selected-item-div" class="content hidden">
+            <div class="item-details-title">Vybraný uživatel</div>
+            <div class="item-details">
+                <div class="detail-item">
+                    <span class="detail-item-title">Křestní jméno: </span>
+                    <span id="specificUserFirstName"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-item-title">Příjmení: </span>
+                    <span id="specificUserLastName"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-item-title">Uživatelské jméno: </span>
+                    <span id="specificUserUsername"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-item-title">E-mail: </span>
+                    <span id="specificUserEmail"></span>
+                </div>
+            </div>
         </div>
     </div>
-    <div id="selected-item-div" class="content hidden">
-        <div class="item-details-title">Vybraný uživatel</div>
-        <div class="item-details">
-            <div class="detail-item">
-                <span class="detail-item-title">Křestní jméno: </span>
-                <span id="specificUserFirstName"></span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-item-title">Příjmení: </span>
-                <span id="specificUserLastName"></span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-item-title">Uživatelské jméno: </span>
-                <span id="specificUserUsername"></span>
-            </div>
-            <div class="detail-item">
-                <span class="detail-item-title">E-mail: </span>
-                <span id="specificUserEmail"></span>
-            </div>
-        </div>
-    </div>
-</div>
-<div id="right-panel" class="permission-right-panel hidden">
-    <div class="right-panel-title">Skupiny jichž je uživatel členem:</div>
-    <ul class="items-list">
-    </ul>
+    
+    <div id="right-panel" class="permission-right-panel col-md-6 hidden">
+        <div class="right-panel-title">Skupiny jichž je uživatel členem:</div>
+        <ul class="items-list"></ul>
 
-    <div class="groups-buttons">
-        <button id="addGroupButton" class="btn btn-default permission-button">+</button>
+        <div class="groups-buttons">
+            <button id="addGroupButton" class="btn btn-default permission-button">+</button>
+        </div>
     </div>
 </div>
+
 
 <div id="addToGroupDialog" class="modal fade" role="dialog">
     <div class="modal-dialog">

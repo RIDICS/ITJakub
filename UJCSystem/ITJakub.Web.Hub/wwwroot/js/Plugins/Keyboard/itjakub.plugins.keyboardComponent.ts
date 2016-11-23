@@ -8,7 +8,8 @@
         Id: string,
         Url: string;
     }> = [];
-    private loaded=false;
+    private loaded = false;
+    private overrideSetQueryCallback: (text: string) => void;
     
     private keyboardShowLeftSpace=40;
 
@@ -47,10 +48,10 @@
         var container=document.createElement('div');
         container.classList.add( 'keyboard_container');
         container.id= `${this.componentPrefix}container-${this.id}`;
-        container.innerHTML = `<button type="button" class="close keyboardHideButton" id="${this.componentPrefix}hideButton-${this.id}">
+        container.innerHTML = `<button type="button" class="btn btn-link btn-sm pin-button close" id="${this.componentPrefix}hideButton-${this.id}">
                         <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                     </button>
-                    <button type="button" class="btn btn-link btn-sm pin-button" id="${this.componentPrefix}pin-button-${this.id}">
+                    <button type="button" class="btn btn-link btn-sm pin-button" style="right: 40px;" id="${this.componentPrefix}pin-button-${this.id}">
                         <span class="glyphicon glyphicon-pushpin"></span>
                     </button>
                     <div class="tabs" id="${this.componentPrefix}tabs-container-${this.id}">
@@ -83,7 +84,7 @@
 
     public createImage(): HTMLImageElement {
         const image = document.createElement("img");
-        image.src = `${this.resourceRoot}keyboard.gif`;
+        image.src = `${this.resourceRoot}Glyphs/klavesnice.gif`;
         image.alt = "Show keyboard";
         image.classList.add("keyboard-icon-img");
         
@@ -104,6 +105,8 @@
         });
 
         clonedImage.addEventListener("click", (event: JQueryEventObject) => {
+            this.overrideSetQueryCallback = null;
+
             if (!clonedImage.classList.contains("disabled")) {
                 this.setInput(jElement);
                 this.toggleKeyboard(event);
@@ -111,6 +114,32 @@
         });
 
         element.parentElement.appendChild(clonedImage);
+    }
+
+    public registerButton(buttonElement: HTMLButtonElement, inputElement: HTMLInputElement, overrideSetQueryCallback: (text: string) => void) {
+        var jElement = $(inputElement);
+        
+        inputElement.addEventListener("focus", () => {
+            if (!buttonElement.classList.contains("disabled")) {
+                this.setInput(jElement);
+            }
+        });
+
+        buttonElement.addEventListener("click", (event: JQueryEventObject) => {
+            this.overrideSetQueryCallback = overrideSetQueryCallback;
+
+            if (!buttonElement.classList.contains("disabled")) {
+                this.setInput(jElement);
+                this.toggleKeyboard(event);
+            }
+
+            $(inputElement).focus();
+        });
+
+        $(inputElement).blur(() => { // Fix: preserve cursor position on focus lost
+            var cursorPositionBackup = this.getCursorPosition();
+            setTimeout(() => this.setCursorPosition(cursorPositionBackup));
+        });
     }
 
     protected toggleKeyboard(event?: JQueryEventObject) {
@@ -166,6 +195,14 @@
         return this.getComponent().attr("data-keyboard-api-url");
     }
 
+    public setInputValue(value: string) {
+        if (typeof this.overrideSetQueryCallback === "function") {
+            this.overrideSetQueryCallback(value);
+        } else {
+            this.input.val(value);
+        }
+    }
+
     public executeScripts() {
         this.loaded = true;
         var listLink = this.getApiUrl();
@@ -180,6 +217,7 @@
             },
             stop() {
                 keyboard.css("cursor", "default");
+                keyboard.css("height", ""); //fix: unset fixed CSS height
             },
             containment: "body",
             appendTo: "body",
@@ -321,4 +359,21 @@
             }
         });
     }
- }
+    
+    public getCursorPosition(): number {
+        var el = <HTMLInputElement>this.input.get(0);
+        var pos = el.value.length;
+        if ('selectionStart' in el) {
+            pos = el.selectionStart;
+        }
+        return pos;
+    }
+
+    public setCursorPosition(position: number) {
+        var el = <HTMLInputElement>this.input.get(0);
+        if ('selectionStart' in el) {
+            el.selectionStart = position;
+            el.selectionEnd = position;
+        }
+    }
+}

@@ -62,7 +62,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(string.Format("Current user ({0}) doesn't have permission manipulate with specified item owned by user with ID={1}", user.UserName, itemOwnerUserId));
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
             var now = DateTime.UtcNow;
             var user = TryGetUser();
@@ -76,28 +76,32 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
-            var labelIds = new List<long>();
-            if (labelId != null)
+            var labels = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id);
+            var labelsDictionary = labels.ToDictionary(x => x.Id);
+            var itemsToSave = new List<PageBookmark>();
+            
+            foreach (var labelId in labelIds)
             {
-                labelIds.Add(labelId.Value);
+                var label = labelsDictionary[labelId];
+                label.LastUseTime = now;
+
+                Book book = m_bookVersionRepository.Load<Book>(bookPage.BookVersion.Book.Id);
+                PageBookmark favoriteItem = new PageBookmark
+                {
+                    PageXmlId = pageXmlId,
+                    User = user,
+                    PagePosition = bookPage.Position,
+                    Book = book,
+                    Title = title,
+                    FavoriteLabel = label,
+                    CreateTime = now,
+                };
+
+                itemsToSave.Add(favoriteItem);
             }
-
-            Book book = m_bookVersionRepository.Load<Book>(bookPage.BookVersion.Book.Id);
-            FavoriteLabel favoriteLabel = GetFavoriteLabelsAndCheckAuthorization(labelIds, user.Id).First();
-            favoriteLabel.LastUseTime = now;
-
-            PageBookmark bookmark = new PageBookmark
-            {
-                PageXmlId = pageXmlId,
-                User = user,
-                PagePosition = bookPage.Position,
-                Book = book,
-                Title = title,
-                FavoriteLabel = favoriteLabel,
-                CreateTime = now,
-            };
-
-            return (long) m_favoritesRepository.Create(bookmark);
+            
+            var result = m_favoritesRepository.CreateAll(itemsToSave);
+            return result.Cast<long>().ToList();
         }
         
         public IList<HeadwordBookmarkContract> GetHeadwordBookmarks()

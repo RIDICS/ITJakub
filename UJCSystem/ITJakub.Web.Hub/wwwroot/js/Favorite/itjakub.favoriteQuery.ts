@@ -19,6 +19,8 @@
     private selectedFilterLabelId: number = null;
     private selectedFilterName: string = null;
     private pagination: Pagination;
+    private paginationOptions: Pagination.Options;
+    private overrideSetQueryCallback: (text: string) => void;
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.inputTextbox = inputTextbox;
@@ -42,6 +44,10 @@
         this.insertDialog.make();
     }
 
+    public setOverrideQueryCallback(callback: (text: string) => void) {
+        this.overrideSetQueryCallback = callback;
+    }
+
     private forceRerender() {
         this.selectedFilterLabelId = null;
         this.selectedFilterName = null;
@@ -59,9 +65,11 @@
 
     private loadQueries(defaultPageNumber = 1) {
         this.renderLoadingQueries();
-        this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+        this.paginationOptions.callPageClickCallbackOnInit = false;
+        this.pagination.make(0, FavoriteQuery.pageSize);
         this.favoriteManager.getFavoriteQueriesCount(this.selectedFilterLabelId, this.bookType, this.queryType, this.selectedFilterName, count => {
-            this.pagination.createPagination(count, FavoriteQuery.pageSize, this.loadQueriesPage.bind(this), defaultPageNumber);
+            this.paginationOptions.callPageClickCallbackOnInit = true;
+            this.pagination.make(count, FavoriteQuery.pageSize, defaultPageNumber);
         });
     }
 
@@ -119,22 +127,24 @@
         var listContainer = document.createElement("div");
 
         $(filterHeaderSpan)
-            .addClass("col-md-5")
+            //.addClass("col-md-5")
             .addClass("favorite-query-header")
+            .addClass("favorite-query-header-label")
             .text("Filtrovat:");
         $(filterInput)
             .attr("type", "text")
-            .attr("placeholder", "Filtrovat")
+            .attr("placeholder", "Název štítku")
             .attr("title", "Filtrovat štítky podle názvu")
             .addClass("form-control")
             .addClass("input-sm");
         $(filterInputContainer)
-            .addClass("col-md-7")
+            //.addClass("col-md-7")
+            .addClass("favorite-query-filter-container")
             .append(filterInput);
         this.filterLabelInput = filterInput;
 
         $(filterHeading)
-            .addClass("row")
+            //.addClass("row")
             .append(filterHeaderSpan)
             .append(filterInputContainer);
 
@@ -154,7 +164,8 @@
         this.noFilteredLabel = noFilteredLabel;
 
         $(filterContainer)
-            .addClass("favorite-query-list");
+            .addClass("favorite-query-list")
+            .addClass("favorite-query-list-left");
         this.labelContainer = filterContainer;
 
         $(filterColumnDiv)
@@ -276,7 +287,13 @@
 
         this.renderContainer.empty();
         this.renderContainer.append(mainDiv);
-        this.pagination = new Pagination(".favorite-queries-pagination", 7);
+
+        this.paginationOptions = {
+            container: $(".favorite-queries-pagination"),
+            maxVisibleElements: 7,
+            pageClickCallback: this.loadQueriesPage.bind(this)
+        }
+        this.pagination = new Pagination(this.paginationOptions);
     }
 
     private renderFavoriteLabels(favoriteLabels: IFavoriteLabel[]) {
@@ -329,6 +346,7 @@
             var queryTitle = document.createElement("span");
             var queryRemoveLink = document.createElement("a");
             var queryRemoveIcon = document.createElement("span");
+            var querySeparator = document.createElement("hr");
 
             $(queryRemoveIcon)
                 .addClass("glyphicon")
@@ -355,6 +373,7 @@
                 .text(" " + favoriteQuery.title);
 
             $(queryRow1)
+                .addClass("favorite-query-item-header")
                 .append(queryLabel)
                 .append(queryTitle);
 
@@ -373,7 +392,7 @@
                 .append(queryRow1)
                 .append(queryRow2);
 
-            $(this.listContainer).append(queryLink);
+            $(this.listContainer).append(queryLink).append(querySeparator);
         }
         if (favoriteQueries.length === 0) {
             $(this.noQueryDiv).show();
@@ -477,13 +496,21 @@
         
         if (originalQuery) {
             this.insertDialog.show(() => {
-                this.inputTextbox.val(newQuery); 
+                this.directInsertQueryToSearchField(newQuery);
                 this.insertDialog.hide();
             });
             return;
         }
 
-        this.inputTextbox.val(newQuery);
+        this.directInsertQueryToSearchField(newQuery);
+    }
+
+    private directInsertQueryToSearchField(query: string) {
+        if (typeof this.overrideSetQueryCallback === "function") {
+            this.overrideSetQueryCallback(query);
+        } else {
+            this.inputTextbox.val(query);
+        }
     }
 
     private filterLabels(filter: string) {
@@ -510,10 +537,12 @@
         $(this.noQueryDiv).hide();
         $(this.noSelectedLabelDiv).show();
         $(".favorite-query-item", this.renderContainer).addClass("hidden");
+        $(".favorite-query-list hr", this.renderContainer).addClass("hidden");
         $(".favorite-query-label-selected", this.renderContainer).hide();
 
         if (filter.length > 0) {
-            this.pagination.createPagination(0, FavoriteQuery.pageSize, () => {});
+            this.paginationOptions.callPageClickCallbackOnInit = false;
+            this.pagination.make(0, FavoriteQuery.pageSize);
         }
     }
     
@@ -647,8 +676,8 @@ class FilterSearchBox{
         $(input)
             .attr("type", "text")
             .addClass("form-control")
-            .attr("placeholder", "Filtrovat")
-            .attr("title", "Filtrovat podle názvu");
+            .attr("placeholder", "Vyhledat dotaz")
+            .attr("title", "Vyhledat dotaz podle názvu");
         this.input = input;
 
         $(this.groupContainer)

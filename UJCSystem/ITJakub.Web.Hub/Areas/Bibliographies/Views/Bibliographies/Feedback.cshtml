@@ -10,34 +10,5 @@
 <div class="content-container">
     @Html.Partial("_StaticText", Model.PageStaticText)
 
-    <p>
-        @using (Html.BeginForm("Feedback", "Bibliographies", new { }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
-        {
-            <div class="form-group">
-                @Html.TextAreaFor(m => m.Text, new { @class = "form-control feedback-text-area", @style = "margin-left: 15px; width:97%; min-height: 100px; max-width: 97%", @placeholder = "Zde napište vaši připomínku..." })
-            </div>
-
-            @Html.Partial("Plugins/_CharRemaining")
-
-            <div class="form-group">
-                @Html.LabelFor(m => m.Name, new { @class = "col-md-1 control-label" })
-                <div class="col-md-3">
-                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Name, new { @class = "form-control", @placeholder = "Zde zadejte Vaše jméno..." }))
-                </div>
-            </div>
-
-            <div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-1 control-label" })
-                <div class="col-md-3">
-                    @(User.Identity.IsAuthenticated ? Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail...", @disabled = "disabled" }) : Html.TextBoxFor(m => m.Email, new { @class = "form-control", @placeholder = "Zde zadejte Váš e-mail..." }))
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-md-offset-9 col-md-2">
-                    <input type="submit" value="Odeslat" class="btn btn-default">
-                </div>
-            </div>
-        }
-    </p>
+    @Html.Partial("Feedback/_FeedbackForm", Model)
 </div>

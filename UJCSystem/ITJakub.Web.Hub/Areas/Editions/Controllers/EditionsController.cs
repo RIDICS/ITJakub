@@ -6,6 +6,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Managers;
@@ -21,15 +22,22 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
     public class EditionsController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
-        
-        public EditionsController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly FeedbacksManager m_feedbacksManager;
+
+        public EditionsController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.Edition; }
+        }
+
+        private FeedbackFormIdentification GetFeedbackFormIdentification()
+        {
+            return new FeedbackFormIdentification { Area = "Editions", Controller = "Editions" };
         }
 
         public ActionResult GetListConfiguration()
@@ -107,29 +115,8 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult Feedback()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
-
-            var username = HttpContext.User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return View(new FeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
-            }
-
-            using (var client = GetEncryptedClient())
-            {
-                var user = client.FindUserByUserName(username);
-                var viewModel = new FeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
-                return View(viewModel);
-            }
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -137,20 +124,14 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
+            if (!ModelState.IsValid)
+            {
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                return View(model);
+            }
 
-            if (string.IsNullOrWhiteSpace(username))
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Editions);
-                }
-            else
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Editions);
-                }
-
-            return View("Information");
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Editions, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            return View("Feedback/FeedbackSuccess");
         }
 
         public ActionResult Help()
@@ -459,7 +440,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
                 }
 
-                return Json(new {});
+                return Json(new {results = new PageResultContext[0]}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -487,7 +468,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {count});
                 }
 
-                return Json(new {});
+                return Json(new {count = 0});
             }
         }
 
@@ -557,7 +538,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {results = result.Results}, GetJsonSerializerSettingsForBiblModule());
                 }
 
-                return Json(new {});
+                return Json(new {results = new PageResultContext[0]}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -599,7 +580,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     return Json(new {count});
                 }
 
-                return Json(new {});
+                return Json(new {count = 0});
             }
         }
 

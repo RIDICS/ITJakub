@@ -7,6 +7,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
 {
     [DataContract]
     [KnownType(typeof(AudioBookSearchResultContract))]
+    [KnownType(typeof(SearchResultDetailContract))]
     public class SearchResultContract
     {
         [DataMember]
@@ -44,10 +45,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
 
         [DataMember]
         public PublisherContract Publisher { get; set; }
-
-        [DataMember]
-        public List<string> Keywords { get; set; }
-
+        
         [DataMember]
         public string Copyright { get; set; }
 
@@ -59,10 +57,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
 
         [DataMember]
         public string CreateTimeString { get; set; }
-
-        [DataMember]
-        public List<EditorContract> Editors { get; set; }
-
+        
         [DataMember]
         public List<ManuscriptContract> Manuscripts { get; set; }
 
@@ -84,14 +79,6 @@ namespace ITJakub.Shared.Contracts.Searching.Results
         [DataMember]
         public string SourceAbbreviation { get; set; }
 
-        [DataMember]
-        public IList<string> LiteraryOriginals { get; set; }
-
-        [DataMember]
-        public IList<string> LiteraryKinds { get; set; }
-
-        [DataMember]
-        public IList<string> LiteraryGenres { get; set; }
 
         public virtual string ToXml()
         {
@@ -124,5 +111,25 @@ namespace ITJakub.Shared.Contracts.Searching.Results
                 return (SearchResultContract)result;
             }
         }
+    }
+
+    [DataContract]
+    public class SearchResultDetailContract : SearchResultContract
+    {
+
+        [DataMember]
+        public List<string> Keywords { get; set; }
+
+        [DataMember]
+        public List<EditorContract> Editors { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryOriginals { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryKinds { get; set; }
+
+        [DataMember]
+        public IList<string> LiteraryGenres { get; set; }
     }
 }

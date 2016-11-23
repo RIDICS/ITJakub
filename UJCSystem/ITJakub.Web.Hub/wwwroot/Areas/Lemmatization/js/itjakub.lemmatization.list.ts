@@ -33,7 +33,12 @@
             .append(thead)
             .append(tbody);
 
-        this.pagination = new Pagination(this.paginationContainer, 15);
+        this.pagination = new Pagination({
+            container: $(this.paginationContainer),
+            maxVisibleElements: 15,
+            pageClickCallback: this.loadPage.bind(this),
+            callPageClickCallbackOnInit: true
+        });
         
         $.ajax({
             type: "GET",
@@ -44,7 +49,7 @@
             contentType: "application/json",
             success: (tokenCount) => {
                 this.tokenCount = tokenCount;
-                this.pagination.createPagination(this.tokenCount, this.tokenPerPage, this.loadPage.bind(this));
+                this.pagination.make(this.tokenCount, this.tokenPerPage);
             }
         });
 

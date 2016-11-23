@@ -9,12 +9,20 @@ namespace ITJakub.Web.Hub.Controllers
     public class HomeController : BaseController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public HomeController(CommunicationProvider communicationProvider, StaticTextManager staticTextManager) : base(communicationProvider)
+        public HomeController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
         
+        private FeedbackFormIdentification GetFeedbackFormIdentification()
+        {
+            return new FeedbackFormIdentification {Area = string.Empty, Controller = "Home"};
+        }
+
+
         public ActionResult Index()
         {
             return View();
@@ -40,31 +48,8 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult Feedback()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
-
-            var username = GetUserName();
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                var viewModel = new FeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                };
-
-                return View(viewModel);
-            }
-
-            using (var client = GetEncryptedClient())
-            {
-                var user = client.FindUserByUserName(username);
-                var viewModel = new FeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
-                return View(viewModel);
-            }
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -72,20 +57,14 @@ namespace ITJakub.Web.Hub.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-           
-            using (var client = GetMainServiceClient())
+            if (!ModelState.IsValid)
             {
-                if (User.Identity.IsAuthenticated)
-                {
-                    client.CreateFeedback(model.Text, GetUserName(), FeedbackCategoryEnumContract.None);
-                }
-                else
-                {
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.None);
-                }
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                return View(model);
             }
 
-            return View("Index");
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.None, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            return View("Feedback/FeedbackSuccess");
         }
 
         public ActionResult HowToCite()

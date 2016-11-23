@@ -21,6 +21,10 @@
 		<xsl:apply-templates/>
 	</xsl:template>
 	
+	<xsl:template match="ref[@target]/text()" priority="15">
+		<xsl:value-of select="."/>
+	</xsl:template>
+	
 	<xsl:template match="text()" priority="10">
 		<xsl:call-template name="generovat-obrazek">
 			<xsl:with-param name="text"  select="."/>

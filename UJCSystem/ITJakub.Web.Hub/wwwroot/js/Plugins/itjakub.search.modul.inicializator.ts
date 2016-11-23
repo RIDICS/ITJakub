@@ -51,5 +51,5 @@ interface ISearchModulInicializatorConfigurationSearch extends IModulInicializat
 }
 
 interface ISearchModulInicializatorConfigurationSearchUrl extends IModulInicializatorConfigurationSearchUrl {
-    advancedCount: string;
+    //advancedCount: string;
 }

@@ -62,6 +62,8 @@ class BibliographyFactory {
         var rightPanel: HTMLDivElement = document.createElement('div');
         $(rightPanel).addClass('right-panel');
 
+        var self = this;
+
         if (config.containsReadButton()) {
             var bookButton: HTMLAnchorElement = document.createElement('a');
             var $bookButton = $(bookButton);
@@ -112,26 +114,10 @@ class BibliographyFactory {
         }
 
         if (config.containsFavoriteButton()) {
-            var favoriteButton = document.createElement("a");
+            var favoriteButton = document.createElement("span");
             var $favoriteButton = $(favoriteButton);
-            $favoriteButton.addClass("btn btn-sm favorite-button button");
-            var spanFavorite = document.createElement("span");
-            $(spanFavorite).addClass("glyphicon glyphicon-star");
-            $favoriteButton.append(spanFavorite);
-            $favoriteButton.attr("href", "#");
-            $favoriteButton.click((event: JQueryEventObject) => {
-                var buttonScript = config.getFavoriteButtonOnClick(bookInfo);
-                var buttonScriptCallable = config.getFavoriteButtonOnClickCallable(bookInfo);
-                if (typeof buttonScript !== "undefined" && buttonScript != null && buttonScript !== "") {
-                    eval(buttonScript);
-                }
-                else if (typeof buttonScriptCallable !== "undefined" && buttonScriptCallable != null && buttonScriptCallable !== "") {
-                    this.runEvalResponse(event, eval(buttonScriptCallable));
-                }
-                else {
-                    onClickHref(event, config.getReadButtonUrl(bookInfo));
-                }
-            });
+            $favoriteButton.addClass("favorite-button");
+            $favoriteButton.data("buttonClass", "btn btn-sm button");
             rightPanel.appendChild(favoriteButton);
         }
 
@@ -142,9 +128,14 @@ class BibliographyFactory {
             var spanChevrDown: HTMLSpanElement = document.createElement('span');
             $(spanChevrDown).addClass('glyphicon glyphicon-chevron-down');
             contentButton.appendChild(spanChevrDown);
-            $(contentButton).click(function(event) {
-                $(this).parents('li.list-item').first().find('.hidden-content').slideToggle("slow");
+            $(contentButton).click(function (event) {
+                var $hiddenContent = $(this).parents('li.list-item').first().find('.hidden-content');
+                $hiddenContent.slideToggle("slow");
                 $(this).children('span').toggleClass('glyphicon-chevron-down glyphicon-chevron-up');
+
+                if ($hiddenContent.hasClass("not-loaded")) {
+                    self.makeBottomPanelAsync(bookInfo, config, $hiddenContent);
+                }
             });
             rightPanel.appendChild(contentButton);
         }
@@ -261,6 +252,45 @@ class BibliographyFactory {
         }
 
         return resultList;
+    }
+
+    private makeBottomPanelAsync(bookInfo: IBookInfo, rightPanelConfig: RightPanelConfiguration, $container: JQuery) {
+        if (!rightPanelConfig.containsLoadDetailUrl()) {
+            var bottomPanel = this.makeBottomPanel(bookInfo);
+            this.appendBottomPanel($container, bottomPanel);
+            return;
+        }
+
+        var url = rightPanelConfig.getLoadDetailUrl(bookInfo);
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + url,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: (response) => {
+                var bottomPanel = this.makeBottomPanel(response);
+                this.appendBottomPanel($container, bottomPanel);
+            }
+        });
+    }
+
+    private appendBottomPanel($container: JQuery, bottomPanel: HTMLElement) {
+        var height = $container.height();
+        $container
+            .finish()
+            .empty()
+            .removeClass("not-loaded")
+            .append(bottomPanel);
+
+        var newHeight = $container.height();
+        $container
+            .height(height)
+            .animate({
+                height: newHeight
+            }, null, null, () => {
+                $container.css("height", "");
+            });
     }
 
     static makeFavoriteLabel(favoriteTitle: string, labelName: string, labelColor: string): HTMLSpanElement {

@@ -1,0 +1,98 @@
+﻿@import "ITJakub.FontData.less";
+@import "ITJakub.BootstrapStyle.less";
+@import "ITJakub.DefaultTheme.less";
+@import "ITJakub.PluginMenu.less";
+@import "ITJakub.Header.less";
+@import "ITJakub.Footer.less";
+@import "ITJakub.BibliographySearch.less";
+@import "Plugins/ITJakub.Bibliography.less";
+@import "Plugins/ITJakub.Reader.less";
+@import "Plugins/ITJakub.DropdownSelect.less";
+@import "Plugins/ITJakub.Keyboard.less";
+@import "Plugins/ITJakub.RegExSearch.less";
+@import "Plugins/ITJakub.SearchBox.less";
+@import "Plugins/ITJakub.Pagination.less";
+@import "Plugins/ITJakub.NumberedOrderedList.less";
+@import "Plugins/ITJakub.HorizontalLoader.less";
+
+body {
+    background-color: @background-color;
+    /*-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smooth: always;
+    -moz-text-shadow: 0 0 0;*/
+}
+
+.page-body-content {
+    margin: auto;
+}
+
+.module-content {
+    margin: 0 auto 0;
+    min-height: 74vh;
+}
+
+.container-header {
+    margin-top: 1.7rem;
+    margin-bottom: 20px;
+    background-color: @breadcrumb-background-color;
+
+    @media screen and (max-width: 1500px) {
+        margin-top: 0.6rem;
+    }
+
+    @media screen and (max-width: 1100px) {
+        margin-top: 0.3rem;
+    }
+
+    .breadcrumb {
+        margin-bottom: 0;
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+}
+
+.content-container {
+    background-color: @white-color;
+    padding: 15px;
+    padding-top: 5px;
+    min-height: 77vh;
+}
+
+.content-container.top-offset-without-submenu {
+    min-height: 80vh;
+}
+
+div.container {
+    padding: 0;
+
+    @media (min-width: 1400px) {
+        width: 1370px;
+    }
+
+    @media (min-width: 1600px) {
+        width: 1570px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    div.container {
+        padding: 0 1rem;
+    }
+
+    .content-container {
+        min-height: 0;
+    }
+
+    .module-content {
+        min-height: 0;
+    }
+
+    .page-body-content > .container > .top-offset-main-site div[style*="height"] {
+        height: auto!important;
+    }
+}
+
+.top-offset-without-submenu {
+    margin: -20px 0 0 0;
+}

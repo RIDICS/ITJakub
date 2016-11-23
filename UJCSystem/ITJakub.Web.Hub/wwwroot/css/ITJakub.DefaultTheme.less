@@ -1,107 +1,12 @@
-﻿@item-background-color:#84CED7;
-@background-color:#E5E5E5;
-@text-color:#AFDEE4;
-@white-color:white;
-@loader-bright-color:white;
-
-@reader-bookmark-ico-online: #FD4F31;
-@reader-bookmark-ico-local: purple;
-
-@icon-chevron: url("../images/glyphicons_chevron.png");
-@icon-chevron-green: url("../images/glyphicons_chevron_green.png");
-@image-loading: url(../images/loading.gif);
-@image-small-loading: url(../images/small_trans_loading.gif);
-
-@max-body-width: 1100px;
-
-
-
-.white-link {
-    color: @white-color;
-    text-decoration: none;
-}
-
-.hovered-link {
-    color: @text-color;
-    /*text-decoration: none;*/
-}
-
-.black-link {
-    color: black;
-    text-decoration: none;
-}
-
-a:hover {
-    .hovered-link;
-}
-
-/*a, a:visited {
-    .black-link;
-}*/
-
-.styled-background {
-    background-color: @item-background-color;
-}
-
-body {
-    background-color: @background-color;
-}
-
-
-.navbar {
-    width: @max-body-width;
-    margin: 0 auto;
-}
-
-.page-body-content {
-    width: @max-body-width;
-    margin: auto;
-}
-
-/*.page-body-content a {
-    .black-link;
-}*/
-
-
-.page-body-content a:hover {
-    .hovered-link;
-}
-
-
-.module-content {
-    margin: 88px 0 0 0;
-    min-height: 74vh;
-}
-
-
-.content-container {
-    background-color: @white-color;
-    padding: 15px;
-    padding-top: 5px;
-    min-height: 77vh;
-}
-
-.content-container.top-offset-without-submenu {
-    min-height: 80vh;
-}
-
-.transparent-content-container {
-    padding: 5px;
-}
+﻿@import "ITJakub.Colors.less";
 
 .centered {
     align-content: center;
-    vertical-align: central;
+    vertical-align: middle;
     display: block;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-}
-
-div.container {
-    padding: 0;
-    width: 100%;
-    max-width: @max-body-width;
 }
 
 .style-button {
@@ -112,4 +17,94 @@ div.container {
 
 .error {
     color: #B84442;
+}
+
+.inline-alert {
+    margin-bottom: 0;
+    padding: 6px 12px;
+}
+
+.alert h2 {
+    margin-top: 0;
+}
+
+.static-text-container ul {
+    display: block;
+    list-style: disc;
+    margin-left: 0;
+    margin-top: 0;
+    margin-right:0; 
+}
+
+.static-text-panel {
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 6px;
+}
+
+.loading {
+    background: url(Images/loading.gif) no-repeat center;
+}
+
+.loading-small-inline {
+    background: url(Images/small_trans_loading.gif) no-repeat center;
+    width: 20px;
+    display: inline-block;
+}
+
+.loading-small-inline::before {
+    content: "";
+    display: inline-block;
+}
+
+.version-info {
+    margin-top: 30px;
+    font-size: 80%;
+}
+
+.input-group-vertical {
+    .form-control {
+        border-radius: 0;
+    }
+
+    > :first-child {
+        //border-top-left-radius: 4px;
+        //border-top-right-radius: 4px;
+    }
+
+    > :last-child {
+        //border-bottom-left-radius: 4px;
+        //border-bottom-right-radius: 4px;
+    }
+}
+
+.bottom-pagination {
+    text-align: center;
+}
+
+.pagination-input {
+    input {
+        border-color: @button-background-color;
+    }
+
+    &.input-group > .input-group-btn > .btn {
+        border-color: @button-background-color;
+        background-color: @button-background-color;
+        color: white;
+
+        &:hover {
+            border-color: @button-hover-background-color;
+            background-color: @button-hover-background-color;
+        }
+    }
+}
+
+.top-notification {
+    position: fixed;
+    top: 1px;
+    z-index: 2000;
+}
+
+#loginForm input[type=checkbox] {
+    margin-left: 0;
 }

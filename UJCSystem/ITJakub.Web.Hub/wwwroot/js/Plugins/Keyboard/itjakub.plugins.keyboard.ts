@@ -237,7 +237,7 @@ class Keyboard {
             "height: 100%; overflow: hidden; " +
             "margin-left: " + horizontalCellMar + "px; " +
             "margin-right: " + horizontalCellMar + "px; " +
-            "border: 1px solid black;" +
+            "border: 1px solid #CCC;" +
             "font-size: " + defaultCellHeightPx / 3 + "px;\">";
 
             if (cell.type === "Letter") {
@@ -291,7 +291,11 @@ class Keyboard {
                     newChar = String.fromCharCode(parseInt(this.dataset.unicode, 16));
                 }
 
-                keyboardInput.val(keyboardInput.val() + newChar);
+                let cursorPosition = keyboardComponent.getCursorPosition();
+                let originalVal = <string>keyboardInput.val();
+                let newVal = originalVal.slice(0, cursorPosition) + newChar + originalVal.slice(cursorPosition);
+                keyboardComponent.setInputValue(newVal);
+                keyboardComponent.setCursorPosition(cursorPosition + 1);
 
                 if (layout.shiftUsed) {
                     layout.resizeAction(layout.keyboardLowerCase, layout, cell);
@@ -305,7 +309,14 @@ class Keyboard {
                 switch (this.dataset.action) {
                     case "Backspace":
                         console.log("Backspace action");
-                        keyboardInput.val(keyboardInput.val().slice(0, -1));
+                        let cursorPosition = keyboardComponent.getCursorPosition();
+                        if (cursorPosition === 0) break;
+
+                        let originalVal = <string>keyboardInput.val();
+                        let newVal = originalVal.slice(0, cursorPosition - 1) + originalVal.slice(cursorPosition);
+                        keyboardComponent.setInputValue(newVal);
+                        keyboardComponent.setCursorPosition(cursorPosition - 1);
+                        
                         break;
                     case "Enter":
                         console.log("Enter action");
@@ -352,9 +363,7 @@ class Keyboard {
                         break;
                 }
             }
-
         });
-     
-
     }
+
 }

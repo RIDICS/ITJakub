@@ -30,19 +30,3 @@
     });
     modulInicializator.init();
 });
-
-//functions used in VariableInterpreter.interpretScript
-var aduioTypeTranslation = [
-    "Neznámý",
-    "Mp3",
-    "Ogg",
-    "Wav"
-];
-
-function translateAudioType(audioType: number): string {
-    return aduioTypeTranslation[audioType];
-}
-
-function getAudioLengthString(value: string): string {
-    return new TimeSpan(value).toShortString();
-}

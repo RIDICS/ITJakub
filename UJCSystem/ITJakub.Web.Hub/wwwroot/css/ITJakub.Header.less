@@ -1,0 +1,283 @@
+﻿@import "ITJakub.Colors.less";
+@import "ITJakub.Fonts.less";
+
+.main_logo {
+    margin: 10px;
+    margin-left: 0;
+    margin-right: 5px;
+    display: inline;
+    display: inline-block;
+}
+
+a.main_logo_href {
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    padding-right: 1rem;
+    padding-top: 2px;
+    padding-bottom: 0;
+    float: left;
+
+    @media screen and (min-width: 1100px) {
+        padding-top: 0;
+        padding-bottom: 2px;
+    }
+
+    @media screen and (min-width: 1501px) {
+		padding: 0.1rem 0;
+        padding-right: 0.5rem;
+	}
+}
+
+a.main_logo_href:hover {
+	background-color: @menu-hover-color;
+}
+
+a.main_logo_href img {
+    height: 3.5rem;
+    width: auto;
+    margin: .8rem 1rem;
+    margin-right: 0;
+    float: left;
+
+    @media screen and (max-width: 1500px) {
+        height: 3rem;
+        margin: 0.5rem;
+        margin-right: 0;
+        margin-left: 1rem;
+    }
+}
+
+.main_logo_text {
+    color: white;
+    line-height: normal;
+    display: inline-block;
+    margin: .85rem 0 0;
+    margin-left: .75rem;
+    font-weight: bold;
+}
+
+.main_logo_text h1 {
+    display: inline;
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+    font-family: @sanserif-font-family-1;
+    font-family: @sanserif-font-family-2;
+}
+
+.main_logo_text h2 {
+    display: inline;
+    display: block;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0px 0 0;
+    font-family: @sanserif-font-family-3;
+    font-family: @sanserif-font-family-2;
+}
+
+@media screen and (max-width: 1500px) {
+    .main_logo_text {
+        margin: .65rem 0 0 .75rem;
+    }
+
+    .main_logo_text h1 {
+        font-size: 18px;
+    }
+
+    .main_logo_text h2 {
+        font-size: 18px;
+    }
+}
+
+.main_logo_text {
+    @media screen and (max-width: 1199px) {
+        display: none;
+    }
+
+    @media screen and (max-width: 1099px) {
+        display: inline-block;
+    }
+
+    @media screen and (max-width: 399px) {
+        display: none;
+    }
+}
+
+.main-navbar-container {
+    margin-bottom: -4px;
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.navbar-header {
+    display: block;
+}
+
+ul.navbar-login,
+ul.navbar-language {
+    margin: 2.1rem 1rem 0 0;
+    float: right;
+    font-size: 16px;
+    font-weight: bold;
+    padding-left: 2rem;
+}
+
+.navbar-login li,
+.navbar-language li {
+    display: inline-block;
+    list-style: none;
+
+    @media screen and (max-width: 1500px) {
+        display: block;
+        position: relative;
+    }
+}
+
+.navbar-login li a,
+.navbar-language li a {
+    padding: 2.1rem .5rem 1.75rem;
+}
+
+ul.navbar-login li:hover a,
+ul.navbar-language li:hover a {
+    background: @menu-hover-color;
+}
+
+.navbar-login li a,
+.navbar-login li a:visited,
+.navbar-language li a,
+.navbar-language li a:visited {
+    color: white;
+}
+
+.navbar-login li a:hover,
+.navbar-language li a:hover {
+    color: white;
+    opacity: 1;
+}
+
+.secondary-navbar-toggle {
+    position: relative;
+    float: right;
+    background-color: transparent;
+    background-image: none;
+    border: none;
+    margin: 0.55rem 1rem;
+    padding: 4px 0px 0px 0px;
+    font-size: 200%;
+    color: white;
+    cursor: pointer;
+    
+    ul.navbar-login,
+    ul.navbar-language {
+        display: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        -webkit-box-shadow: 0 3px 4px rgba(0,0,0,0.26);
+        -moz-box-shadow: 0 2px 5px rgba(0,0,0,0.26);
+        z-index: 2;
+        background-color: @menu-background-color;
+        float: none;
+        margin: 0;
+        position: absolute;
+        top: 100%;
+        padding: 0;
+        right: -14px;
+        width: 155px;
+        border: solid 1px @menu-hover-color;
+    }
+
+    .navbar-login li a,
+    .navbar-language li a {
+        padding: 8px 10px 8px 10px;
+        display: block;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &:hover > span,
+    &.hover > span {
+        opacity: 0.5;
+    }
+
+    &:hover ul,
+    &.hover ul {
+        display: block;
+    }
+}
+
+.secondary-navbar-toggle.login span {
+    margin-right: 10px;
+}
+
+@media screen and (min-width: 1501px) {
+    .secondary-navbar-toggle.login span {
+        display: none;
+        margin-right: 0;
+    }
+
+    .secondary-navbar-toggle.login {
+        padding: 0;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    .secondary-navbar-toggle ul.navbar-login {
+        display: block;
+        box-shadow: none;
+        -webkit-box-shadow: none;
+        -moz-box-shadow: none;
+        border: none;
+        width: 200px;
+        z-index: 1;
+        text-align: right;
+        margin-right: 20px;
+
+        li a {
+            padding: 2rem 0.5rem;
+            display: inline-block;
+            height: 74px;
+        }
+    }
+
+    .secondary-navbar-toggle.language span {
+        margin: 10px 0;
+        margin-right: 20px;
+    }
+    .secondary-navbar-toggle ul.navbar-language li {
+        display: block;
+    }
+}
+
+.navbar-toggle {
+    border: none;
+    margin: 0.55rem 1rem;
+    padding: 4px 0px 0px 0px;
+    font-size: 200%;
+    color: white;
+}
+
+.navbar-toggle .icon-bar {
+    height: 3px;
+    width: 2rem;
+}
+
+.navbar-toggle .icon-bar + .icon-bar {
+    margin-top: .5rem;
+}
+
+.navbar-inverse .navbar-toggle {
+    &:hover, &:focus {
+        background: transparent;
+        border: none;
+    }
+
+    &:hover {
+        opacity: .5;
+    }
+}

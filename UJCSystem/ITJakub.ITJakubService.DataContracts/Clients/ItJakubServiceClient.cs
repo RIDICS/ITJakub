@@ -74,6 +74,32 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            try
+            {
+                return Channel.GetBookDetailInfoById(bookId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} timeouted with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
+
         public bool HasBookPageByXmlId(string documentId, string versionId)
         {
             try
@@ -1280,6 +1306,31 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
+        public AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId)
+        {
+            try
+            {
+                return Channel.GetAudioBookDetailInfoById(bookId);
+            }
+            catch (CommunicationException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (TimeoutException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+            catch (ObjectDisposedException ex)
+            {
+                if (m_log.IsErrorEnabled)
+                    m_log.ErrorFormat("{0} failed with: {1}", GetCurrentMethod(), ex);
+                throw;
+            }
+        }
 
         public IList<TermContract> GetTermsOnPage(string bookId, string pageXmlId)
         {
@@ -2408,11 +2459,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
             }
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
             try
             {
-                return Channel.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
+                return Channel.CreatePageBookmark(bookXmlId, pageXmlId, title, labelIds);
             }
             catch (CommunicationException ex)
             {

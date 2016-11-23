@@ -54,6 +54,11 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookInfoWithPages(bookGuid);
         }
 
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            return m_searchManager.GetBookDetailInfoById(bookId);
+        }
+
         public BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType)
         {
             return m_searchManager.GetBooksWithCategoriesByBookType(bookType);
@@ -273,6 +278,11 @@ namespace ITJakub.ITJakubService.Services
         public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)
         {
             return m_searchManager.GetAudioBooksSearchResultsCount(searchCriterias);
+        }
+
+        public AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId)
+        {
+            return m_searchManager.GetAudioBookDetailInfoById(bookId);
         }
 
         public IList<TermContract> GetTermsOnPage(string bookXmlId, string pageXmlId)
@@ -538,9 +548,9 @@ namespace ITJakub.ITJakubService.Services
             return m_favoriteManager.CreateFavoriteQuery(bookType, queryType, query, title, labelIds);
         }
 
-        public long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId)
+        public IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds)
         {
-            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelId);
+            return m_favoriteManager.CreatePageBookmark(bookXmlId, pageXmlId, title, labelIds);
         }
 
         #endregion

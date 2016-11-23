@@ -161,7 +161,8 @@ gulp.task("bundle:itjakub_favorite", function () {
             paths.webroot + "js/Favorite/itjakub.favoriteManager.js",
             paths.webroot + "js/Favorite/itjakub.favoriteQuery.js",
             paths.webroot + "js/Favorite/itjakub.favoriteStar.js",
-            paths.webroot + "js/Favorite/itjakub.newFavoriteDialog.js"
+            paths.webroot + "js/Favorite/itjakub.newFavoriteDialog.js",
+            paths.webroot + "js/Favorite/itjakub.newFavoriteNotification.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("itjakub.favorite.bundle.js"))

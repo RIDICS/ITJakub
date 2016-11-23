@@ -1,0 +1,114 @@
+﻿@import "ITJakub.Colors.less";
+
+.left-panel {
+    float: left;
+    margin-right: 1%;
+    width: 39%;
+    height: 100%;
+    padding: 0;
+    width: calc(~'0% + 496px');
+    max-width: 39%;
+    min-height: 0;
+    height: auto;
+}
+
+.right-panel {
+    float: left;
+    margin-left: 1%;
+    padding-right: 0;
+    padding-left: 0;
+    width: 59%;
+    height: 100%;
+    width: calc(~'98% - 496px');
+    min-width: 59%;
+}
+
+@media screen and (max-width: 767px) {
+    .left-panel,
+    .right-panel {
+        float: none;
+        width: auto;
+        margin: 0 auto;
+        margin-bottom: 2rem;
+    }
+
+    .left-panel {
+        margin-top: 2rem;
+        max-width: 496px;
+    }
+
+    .right-panel {
+        margin-bottom: 0;
+    }
+}
+
+.news {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+
+.news > h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-align: center;
+    margin: 0 2rem 2rem;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid @menu-background-color;
+    color: @menu-background-color;
+    background-image: url('Images/news_background2_green.png');
+    background-size: auto 2.5rem;
+    background-position: 0rem 1.15rem;
+    background-repeat: no-repeat;
+}
+
+.news .message .news-date{
+    float: right;
+    margin-top: -30px;
+}
+
+.news .message {
+    margin: 2em;
+    margin-bottom: 2em;
+    margin-top: 2em;
+    max-height: 300px;
+    overflow: auto;
+    padding-bottom: 2em;
+    border-bottom: 2px solid @menu-background-color;
+    border-bottom-style: dashed;
+}
+
+.news .message > h2 {
+    font-size: 17px;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.news-feeds {
+    float: right;
+    margin-top: -6.5rem;
+    margin-right: .5rem;
+
+    a:hover {
+        opacity: .7;
+    }
+}
+
+.news-feed-atom {
+    margin-bottom: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background:transparent url('Images/Feeds/blue.png') center top no-repeat;
+}
+
+.news-feed-rss {
+    margin-bottom: 10px;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    background:transparent url('Images/Feeds/red.png') center top no-repeat;
+}

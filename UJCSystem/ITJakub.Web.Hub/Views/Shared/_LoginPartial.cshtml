@@ -4,25 +4,41 @@
     var requestUrl = Context.Request.GetDisplayUrl();
 }
 
-@if (User.Identity.IsAuthenticated)
-{
-    using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, true, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        
-    <ul class="navbar-right navbar-login">
-        <li><a href="#">@Html.Raw(User.Identity.Name)</a></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
+@*<div class="secondary-navbar-toggle language" title="Jazyk">
+    <span class="glyphicon glyphicon-text-background"></span>
+    <ul class="navbar-language">
+        <li>
+            <a href="#">CZ - Česky</a>
+        </li>
+        <li>
+            <a href="#">EN - English</a>
+        </li>
     </ul>
-    }
-}
-else
-{
-    if (requestUrl != null && requestUrl != "/" && !requestUrl.StartsWith("/Account/"))
+</div>*@
+
+<div class="secondary-navbar-toggle login" title="Uživatelský účet">
+    <span class="glyphicon glyphicon-user"></span>
+    @if (User.Identity.IsAuthenticated)
     {
-        ViewBag.ReturnUrl = requestUrl;
+        using (Html.BeginForm("LogOut", "Account", new { area = "" }, FormMethod.Post, true, new { id = "logoutForm", @class = "navbar-right" }))
+        {
+
+            <ul class="navbar-login">
+                <li><a href="#">@Html.Raw(User.Identity.Name)</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
+            </ul>
+        }
     }
-    <ul class="navbar-right navbar-login">
-        <li>@Html.ActionLink("Přihlášení", "Login", "Account", new {area = "" , returnUrl = ViewBag.ReturnUrl }, new {id = "loginLink"})</li>
-        <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
-    </ul>
-}
+    else
+    {
+        if (requestUrl != null && requestUrl != "/" && !requestUrl.StartsWith("/Account/"))
+        {
+            ViewBag.ReturnUrl = requestUrl;
+        }
+        <ul class="navbar-login">
+            <li>@Html.ActionLink("Přihlášení", "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
+            <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
+        </ul>
+    }
+</div>
+

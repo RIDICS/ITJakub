@@ -7,6 +7,7 @@ namespace ITJakub.DataEntities.Database.Entities.SelectResults
         public string BookGuid { get; set; }
         public string BookVersionId { get; set; }
         public string BookAcronym { get; set; }
+        public string SourceAbbreviation { get; set; }
         public string BookTitle { get; set; }
         public string Image { get; set; }
         public string SortOrder { get; set; }

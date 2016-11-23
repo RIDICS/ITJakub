@@ -53,21 +53,32 @@
 	</xsl:template>
 	
 
-	<xsl:template match="body/*/emendace[following-sibling::*[1]/self::pramen]" />
-	<xsl:template match="body/*/pramen[preceding-sibling::*[1]/self::emendace]" priority="10" />
+	<xsl:template match="body/*/emendace[following-sibling::*[1]/self::pramen]" >
+<!--		<xsl:message>x</xsl:message>-->
+	</xsl:template>
+	<xsl:template match="body/*/pramen[preceding-sibling::*[1]/self::emendace]" priority="10" >
+<!--		<xsl:message>x</xsl:message>-->
+	</xsl:template>
 
-	<xsl:template match="body/*/*[not(self::bible_cislo_verse) and not(self::iniciala) and not(self::foliace) and not(self::relator)][following-sibling::*[1]/self::poznamka]">
+
+	<xsl:template match="body/*/*[not(self::bible_cislo_verse) and not(self::iniciala) and not(self::foliace) and not(self::relator) and not(self::pramen)][following-sibling::*[1]/self::poznamka]">
 		<xsl:copy><xsl:copy-of select="@*"/><xsl:apply-templates /><xsl:copy-of select="following-sibling::*[1]"/></xsl:copy>
 	</xsl:template>
 	
-	<xsl:template match="body/*[not(self::bible_cislo_verse)]/poznamka[not(following-sibling::*[1]/self::poznamka)]" priority="10" />
+	<xsl:template match="body/*/poznamka[preceding-sibling::*[1]/self::pramen][not(preceding-sibling::*[2]/self::emendace)]" priority="15">
+		<xsl:copy-of select="."/>
+	</xsl:template>
+	
+	<xsl:template match="body/*[not(self::bible_cislo_verse)]/poznamka[not(following-sibling::*[1]/self::poznamka)]" priority="10" >
+		<!--<xsl:message>x</xsl:message>-->
+	</xsl:template>
 	
 <!--	<xsl:template match="bible_cislo_verse[following-sibling::*[1]/self::poznamka[not(following-sibling::*[1]/self::poznamka)]]" >
 		<xsl:copy-of select="."/>
 	</xsl:template>
 -->	
 
-	<xsl:template match="poznamka[(preceding-sibling::*[1]/self::bible_cislo_verse or preceding-sibling::*[1]/self::iniciala or preceding-sibling::*[1]/self::foliace or preceding-sibling::*[1]/self::relator) and not(following-sibling::*[1]/self::poznamka)]" priority="15" >
+	<xsl:template match="poznamka[(preceding-sibling::*[1]/self::bible_cislo_verse or preceding-sibling::*[1]/self::iniciala or preceding-sibling::*[1]/self::foliace or preceding-sibling::*[1]/self::relator or preceding-sibling::*[1]/self::prmaen) and not(following-sibling::*[1]/self::poznamka)]" priority="15" >
 		<xsl:copy-of select="."/>
 	</xsl:template>
 	

@@ -1,4 +1,5 @@
-﻿@import "../../../css/ITJakub.DefaultTheme.less";
+﻿@import "../../../css/ITJakub.Colors.less";
+@import "../../../css/ITJakub.Fonts.less";
 @cardfile-viewer-height: 380px;
 @cardfile-viewer-width: @max-body-width - 10px;
 @cardfile-viewer-right-panel-width: 325px;
@@ -12,58 +13,95 @@
 }
 
 .cardfile-listing {
-    height: @cardfile-viewer-height;
-    margin-bottom: 5px;
+    /*height: @cardfile-viewer-height;*/
+    /*margin-bottom: 5px;*/
+}
+
+.cardfile-listing::after {
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .card-file-listing-left-panel {
-    background-color: white;    
+    background-color: white;
+    padding: 0 1rem 1rem 1rem;
+    margin-bottom: 0.5rem;
     height: 100%;
-    width: @cardfile-viewer-left-panel-width;
+    width: 75%;
+    width: calc(~'100% - 300px - 1rem');
     float: left;
+
+    @media screen and (max-width: 991px) {
+        width: 100%;
+        float: none;
+        margin-bottom: 1.5rem;
+    }
 }
 
 .headword-description {
-    font-size: 1.5em;
-    margin-left : 5px;
-    margin-top : 5px;
-    margin-bottom : 5px;
+    font-size: 22px;
+    padding: 1rem 0;
+    text-align: center;
+    font-weight: bold;
+    color: @menu-background-color;
+    font-family: @serif-font-family;
 }
 
 .cardfile-image {
-    width: 560px;
-    height: 343px;
+    /*width: 560px;*/
+    /*height: 343px;*/
     margin-left: auto;
     margin-right: auto;
     text-align : center;
-    padding-bottom: 2px;
+    /*padding-bottom: 2px;*/
+}
+
+.cardfile-image a,
+.cardfile-image a:hover {
+    opacity: 1;
 }
 
 .cardfile-image img {
-    width: 99%;
-    height: 99%;
+    /*width: 99%;*/
+    /*height: 99%;*/
+    max-width: 100%;
+    height: auto;
 }
 
 .card-file-listing-right-panel {
-    background-color: @item-background-color;
     height: 100%;
-    width: @cardfile-viewer-right-panel-width;
-    float: left;
-    padding: 5px;
+    width: 25%;
+    width: calc(~'0% + 300px');
+    float: right;
+    margin-bottom: 0.5rem;
+
+    @media screen and (max-width: 991px) {
+        width: 100%;
+        float: none;
+        margin-bottom: 0;
+    }
+}
+
+.cardfile-listing-controls {
+    background-color: @menu-background-color;
+    padding: 1rem;
     color: white;
 }
 
 .cardfile-paging-controls {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 2rem 0 1rem;
 }
 
 .cardfile-pagination {
-    display: inline-block;
+    display: block;
+    margin: .5rem auto;
+    text-align: center;
+    padding: 0;
 }
 
 .cardfile-pagination > li {
-    display: inline;
+    display: inline-block;
 }
 
 .cardfile-pagination > li > a {
@@ -75,7 +113,9 @@
 }
 
 .cardfile-pagination > li > a:hover {
-    color: black;
+    /*color: black;*/
+    opacity: .7;
+    text-decoration: none;
 }
 
 .cardfile-pagination > li.card-position-text > a {
@@ -92,19 +132,35 @@
 
 
 .cardfile-pages {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
     display: inline-block;
     height: 30px;
+    margin: 1rem 1rem 1rem 0;
 }
 
 .cardfile-image-thumbnail {
-  display: inline;
-  padding-left: 5px;
+    display: inline-block;
+    /*padding-left: 5px;*/
 }
 
 .cardfile-description {
     font-size: 1.3em;
+    margin-bottom: .5rem;
+}
+
+.cardfile-name {
+    font-weight: 600;
+    font-family: @serif-font-family;
+}
+
+.cardfile-drawer-description {
+
+}
+
+.cardfile-drawer-name {
+    font-weight: 600;
+    font-family: @serif-font-family;
 }
 
 
@@ -113,16 +169,19 @@
 .cardfile-paging-controls .ui-slider {
     background: white;
     height: 2px;
-    width: 95%;
-    margin-left: 2.5%;
+    width: 100%;
+    /*margin-left: 2.5%;*/
     border: none;
 }
 
 .cardfile-paging-controls .ui-slider > .ui-slider-handle {
-    background: gray;
+    background: @button-background-color;
     border-radius: 50%;
     border: none;
     top: -.5em;
+    -webkit-box-shadow: 0 0 0 2px #fff;
+    -moz-box-shadow: 0 0 0 2px #fff;
+    box-shadow: 0 0 0 2px #fff;
 }
 
 .cardfile-paging-controls span.ui-slider-handle:focus {
@@ -137,19 +196,19 @@
 }
 
 .cardfile-paging-controls .tooltip-inner {
-    background-color: white;
-    color: black;
+    background-color: black;
+    color: white;
 }
 
 
 .cardfile-paging-controls .tooltip-arrow {
-    border-top-color: white !important;
+    border-top-color: black !important;
 }
 
 .loading {
-    margin: 0 auto;
+    margin: 0;
     margin-bottom: 5px;
-    width: @cardfile-viewer-width;
+    width: 100%;
     height: @cardfile-viewer-height;
     background-color: white;
 }
@@ -166,7 +225,11 @@
 
 .cardfile-scrollable-part-right-panel{
     overflow-y : auto;
-    max-height: 150px;
+    max-height: 145px;
+}
+
+.cardfile-headword-text {
+    font-family: @serif-font-family;
 }
 
 .cardFilesResultsHeaderWrapper {
@@ -176,5 +239,9 @@
 }
 
 #cardFilesListResults{
-    margin-top: 30px
+    margin-top: 70px;
+
+    @media screen and (max-width: 767px) {
+        margin-top: 15px;
+    }
 }

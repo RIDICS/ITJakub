@@ -5,6 +5,9 @@
 @section scripts{
     <script src="~/js/itjakub.upload.js"></script>
 }
+@section styles{
+    <link rel="stylesheet" href="~/Content/ITJakub.UploadBook.css" />
+}
 
 <div class="content-container">
     <h2>Nahrání díla</h2>
@@ -23,9 +26,9 @@
                 </div>
             </form>
 
-            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="Zde napiste zpravu k nove verzi" style="width: 400px"/>
+            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="Zde napiste zpravu k nove verzi" style="width: 400px; height: 28px;"/>
 
-            <button id="ProcessUploadedButton" type="button" class="btn btn-default style-button" disabled>
+            <button id="ProcessUploadedButton" type="button" class="btn btn-default" disabled>
                 Zpracovat
             </button>
         </div>
@@ -35,8 +38,11 @@
         </div>
 
         <div id="done" style="display: none">
-            <h2 class="success" style="display: none">Zpracování proběhlo v pořádku</h2>
-            <div class="error" style="display: none">
+            <div class="alert alert-success success" style="display: none">
+                <h2>Zpracování proběhlo v pořádku</h2>
+            </div>
+            
+            <div class="alert alert-danger error" style="display: none">
                 <h2>Zpracování souborů se nezdařilo</h2>
                 <div class="message"></div>
             </div>

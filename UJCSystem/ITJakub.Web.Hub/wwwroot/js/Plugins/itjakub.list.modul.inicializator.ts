@@ -85,13 +85,15 @@
             this.configuration.searchBox.dataSet.groupHeader
         );
         searchBox.create();
-        var searchBoxOnput = $(this.configuration.searchBox.searchBoxInputSelector);
-        searchBox.value(searchBoxOnput.val());
+        //var searchBoxOnput = $(this.configuration.searchBox.searchBoxInputSelector);
+        //searchBox.value(searchBoxOnput.val());
 
-        searchBoxOnput.change(() => { //prevent clearing input value on blur() 
-            searchBox.value(searchBoxOnput.val());
-        });
+        //searchBoxOnput.change(() => { //prevent clearing input value on blur() 
+        //    searchBox.value(searchBoxOnput.val());
+        //});
 
+        this.search.setOverrideQueryCallback(newQuery => searchBox.value(newQuery));
+        
         return searchBox;
     }
 }

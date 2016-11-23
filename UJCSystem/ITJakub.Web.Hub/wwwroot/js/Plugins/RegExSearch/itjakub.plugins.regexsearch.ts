@@ -30,6 +30,7 @@ class Search {
     private speedAnimation: number = 200; //200=fast, 600=slow
     private advancedRegexEditor: RegExAdvancedSearchEditor;
     private favoriteQueryComponent: FavoriteQuery;
+    private keyboardComponent: KeyboardComponent;
 
     private searchButton: HTMLButtonElement;
     private advancedButton: HTMLButtonElement;
@@ -59,6 +60,10 @@ class Search {
 
     public setOverrideQueryCallback(callback: (text: string) => void) {
         this.overrideSetQueryCallback = callback;
+
+        if (this.favoriteQueryComponent) {
+            this.favoriteQueryComponent.setOverrideQueryCallback(callback);
+        }
     }
 
     makeSearch(enabledOptions: Array<SearchTypeEnum>) {
@@ -148,13 +153,23 @@ class Search {
         searchbarInputClassList.add("keyboard-input");
         searchbarInputDiv.appendChild(searchbarInput);
 
+        var keyboardButton = document.createElement("button");
+        keyboardButton.type = "button";
+        keyboardButton.classList.add("btn", "regexsearch-input-button");
+        keyboardButton.style.right = "45px";
+        var keyboardIcon = document.createElement("div");
+        keyboardIcon.classList.add("custom-glyphicon-keyboard");
+        keyboardIcon.style.height = "100%";
+        keyboardButton.appendChild(keyboardIcon);
+        searchbarInputDiv.appendChild(keyboardButton);
+
         var favoriteButton = document.createElement("button");
         favoriteButton.type = "button";
         favoriteButton.classList.add("btn", "regexsearch-input-button");
         var favoriteIcon = document.createElement("span");
         favoriteIcon.classList.add("glyphicon", "glyphicon-star");
         favoriteIcon.style.fontSize = "110%";
-        favoriteIcon.style.marginTop = "3px";
+        favoriteIcon.style.marginTop = "1px";
         favoriteButton.appendChild(favoriteIcon);
         searchbarInputDiv.appendChild(favoriteButton);
         
@@ -202,6 +217,7 @@ class Search {
         }
 
         this.favoriteQueryComponent = new FavoriteQuery($(this.favoritesContainer), $(this.searchInputTextbox), this.favoriteQueriesConfig.bookType, this.favoriteQueriesConfig.queryType);
+        this.favoriteQueryComponent.setOverrideQueryCallback(this.overrideSetQueryCallback);
         
         $(this.container).append(searchAreaDiv);
 
@@ -210,7 +226,14 @@ class Search {
         });
 
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerInput(searchbarInput);
+        //keyboardComponent.registerInput(searchbarInput);
+        keyboardComponent.registerButton(keyboardButton, searchbarInput, (text) => {
+            if (typeof this.overrideSetQueryCallback === "function") {
+                this.overrideSetQueryCallback(text);
+            } else {
+                $(searchbarInput).val(text);
+            }
+        });
     }
 
     closeAdvancedSearchEditorWithImport(jsonData: string) {
@@ -1838,12 +1861,22 @@ class RegExWordInput {
         
         lineDiv.appendChild(this.conditionInput);
         
+        var keyboardButton = document.createElement("button");
+        $(keyboardButton).attr("type", "button");
+        $(keyboardButton).addClass("btn");
+        $(keyboardButton).addClass("regexsearch-condition-input-button");
+        var keyboardIcon = document.createElement("div");
+        $(keyboardIcon).addClass("custom-glyphicon-keyboard");
+        $(keyboardIcon).css("height", "100%");
+        keyboardButton.appendChild(keyboardIcon);
+        lineDiv.appendChild(keyboardButton);
+
         var keyboardComponent = KeyboardManager.getKeyboard("0");
-        keyboardComponent.registerInput(this.conditionInput);
+        keyboardComponent.registerButton(keyboardButton, this.conditionInput, null);
 
         var regExButton = document.createElement("button");
         $(regExButton).text("R");
-        regExButton.type = "button";
+        $(regExButton).attr("type", "button");
         $(regExButton).addClass("btn");
         $(regExButton).addClass("regexsearch-condition-input-button");
         $(regExButton).click(() => {
@@ -1860,6 +1893,7 @@ class RegExWordInput {
         $(removeGlyph).addClass("glyphicon");
         $(removeGlyph).addClass("glyphicon-trash");
         removeButton.appendChild(removeGlyph);
+        $(removeButton).css("margin-left", "3px");
         $(removeButton).click(() => {
             this.parentRegExWordCondition.removeInput(this);
         });

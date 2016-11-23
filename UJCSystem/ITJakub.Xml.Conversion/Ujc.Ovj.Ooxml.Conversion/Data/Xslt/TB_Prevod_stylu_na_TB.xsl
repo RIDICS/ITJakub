@@ -54,6 +54,11 @@
 		</xsl:element>
 	</xsl:template>
 
+	<xsl:template match="Predmluva">
+		<xsl:element name="predmluva">
+			<xsl:apply-templates/>
+		</xsl:element>
+	</xsl:template>
 
 	<xsl:template match="Vers">
 		<xsl:element name="vers">
@@ -117,6 +122,19 @@
 		</xsl:element>
 	</xsl:template>
 
+	<!--<xsl:template match="pramen[poznamka]" priority="10">
+		<xsl:element name="pramen">
+			<xsl:for-each select=".//text()[normalize-space() != '']">
+				<xsl:value-of select="normalize-space(.)"/>
+				<xsl:if test="position() != last()">
+					<xsl:text>; </xsl:text>
+				</xsl:if>
+			</xsl:for-each>
+			<!-\-<xsl:value-of select="normalize-space(.)"/>-\->
+			<!-\-<xsl:apply-templates />-\->
+		</xsl:element>
+	</xsl:template>-->
+	
 	<xsl:template match="pramen_horni_index">
 		<xsl:element name="pramen">
 				<xsl:value-of select="normalize-space(.)"/>
@@ -311,6 +329,7 @@
 	<xsl:template match="pripisek_interlinearni_mladsi" />
 	<xsl:template match="pripisek_interlinearni_mladsi_cizi_jazyk" />
 	<xsl:template match="pripisek_marginalni_mladsi_cizi_jazyk" />
+	<xsl:template match="hyperlemma[preceding-sibling::*[1][contains(name(.), '_mladsi')]]" />
 	<xsl:template match="poznamka" />
 	<xsl:template match="poznamka_kurziva" />
 	<xsl:template match="poznamka_horni_index" />
@@ -324,6 +343,9 @@
 	<xsl:template match="cell" />
 	
 	<xsl:template match="relator" />
+	<xsl:template match="relator[. = '} '][following-sibling::*[1][substring(., string-length(.) -1, 1) != ' ']]" priority="10">
+		<xsl:text> </xsl:text>
+	</xsl:template>
 	<xsl:template match="znackovani" />
 	
 
@@ -424,7 +446,7 @@
 	</xsl:template>
 	
 	
-	<xsl:template match="*">
+<!--	<xsl:template match="*">
 		<xsl:message>
 			<xsl:text>Prvek '</xsl:text>
 			<xsl:value-of select="name(.)"/>
@@ -439,5 +461,5 @@
 			</obsah>
 		</chyba>
 	</xsl:template>
-	
+-->	
 </xsl:stylesheet>

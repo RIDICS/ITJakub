@@ -6,6 +6,7 @@
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
+    bookmarks: Array<IBookmarkPosition>;
     pagerDisplayPages: number;
     preloadPagesBefore: number;
     preloadPagesAfter: number;
@@ -23,6 +24,7 @@
     textPanelIdentificator: string = "TextPanel";
     searchPanelIdentificator: string = "SearchPanel";
     termsPanelIdentificator: string = "TermsPanel";
+    bookmarksPanelIdentificator: string = "BookmarksPanel";
     settingsPanelIdentificator: string = "SettingsPanel";
     contentPanelIdentificator: string = "ContentPanel";
 
@@ -30,6 +32,7 @@
     imagePanel: ImagePanel;
     textPanel: TextPanel;
     searchPanel: SearchResultPanel;
+    bookmarksPanel: BookmarksPanel;
     settingsPanel: SettingsPanel;
     contentPanel: ContentPanel;
     termsPanel: TermsPanel;
@@ -49,7 +52,7 @@
         this.showLeftSidePanelsButtonList = showLeftSidePanelsButtonList;
         this.showMainPanelsButtonList = showMainPanelsButtonList;
         this.favoriteManager = new FavoriteManager();
-        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, false);
+        this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
     public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
@@ -58,6 +61,7 @@
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<BookPage>();
+        this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
 
@@ -317,7 +321,7 @@
         $(pageInputButton).addClass("btn btn-default page-input-button");
 
         var pageInputButtonSpan = document.createElement("span");
-        $(pageInputButtonSpan).addClass("glyphicon glyphicon-indent-left");
+        $(pageInputButtonSpan).addClass("glyphicon glyphicon-arrow-right");
         $(pageInputButton).append(pageInputButtonSpan);
 
         $(pageInputButton).click((event: Event) => {
@@ -352,8 +356,6 @@
         });
 
         this.activateTypeahead(pageInputText);
-
-        var paginationUlHelper=document.createElement("div");
 
         var paginationUl: HTMLUListElement = document.createElement("ul");
         paginationUl.classList.add("pagination", "pagination-sm");
@@ -471,12 +473,28 @@
         var listingContainer = document.createElement("div");
         listingContainer.classList.add("page-navigation-container-helper");
         listingContainer.appendChild(toLeft);
+        listingContainer.appendChild(paginationUl);
         listingContainer.appendChild(toRight);
-        paginationUlHelper.appendChild(paginationUl);
-        listingContainer.appendChild(paginationUlHelper);
 
         var buttonsDiv: HTMLDivElement = document.createElement("div");
         $(buttonsDiv).addClass("buttons");
+
+        var addBookmarkButton = document.createElement("button");
+        $(addBookmarkButton).addClass("bookmark-button");
+
+        var addBookmarkSpan = document.createElement("span");
+        $(addBookmarkSpan).addClass("glyphicon glyphicon-bookmark");
+        $(addBookmarkButton).append(addBookmarkSpan);
+
+        var addBookmarkSpanText = document.createElement("span");
+        $(addBookmarkSpanText).addClass("button-text");
+        $(addBookmarkSpanText).append("Přidat záložku");
+        $(addBookmarkButton).append(addBookmarkSpanText);
+
+        $(addBookmarkButton).click((event: Event) => {
+            var actualPageName = this.getActualPage().text;
+            this.newFavoriteDialog.show(actualPageName);
+        });
 
         var bookmarkButton = document.createElement("button");
         $(bookmarkButton).addClass("bookmark-button");
@@ -487,15 +505,21 @@
 
         var bookmarkSpanText = document.createElement("span");
         $(bookmarkSpanText).addClass("button-text");
-        $(bookmarkSpanText).append("Záložka");
+        $(bookmarkSpanText).append("Záložky");
         $(bookmarkButton).append(bookmarkSpanText);
 
         $(bookmarkButton).click((event: Event) => {
-            if (!this.removeBookmark()) {
-                this.newFavoriteDialog.show("");
+            var panelId = this.bookmarksPanelIdentificator;
+            if (!this.existSidePanel(panelId)) {
+                var bookmarksPanel: BookmarksPanel = new BookmarksPanel(panelId, this, this.showLeftSidePanelsButtonList);
+                this.loadSidePanel(bookmarksPanel.panelHtml);
+                this.leftSidePanels.push(bookmarksPanel);
+                this.bookmarksPanel = bookmarksPanel;
             }
+            this.changeSidePanelVisibility(this.bookmarksPanelIdentificator, "left");
         });
 
+        buttonsDiv.appendChild(addBookmarkButton);
         buttonsDiv.appendChild(bookmarkButton);
 
         if (this.showPanelList.indexOf(ReaderPanelEnum.SettingsPanel) >= 0) {
@@ -649,10 +673,19 @@
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
             if (actualBookmark.pageXmlId === actualPage.xmlId) {
-                var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.title, actualBookmark.favoriteLabel);
-                $(bookmarkSpan).data("favorite-id", actualBookmark.id);
-                
-                this.showBookmark(bookmarkSpan);
+                var bookmarkPosition = this.bookmarks[pageIndex];
+                if (!bookmarkPosition) {
+                    bookmarkPosition = {
+                        bookmarks: new Array<IBookPageBookmark>(),
+                        bookmarkSpan: null,
+                        pageIndex: pageIndex
+                    };
+                    this.bookmarks[pageIndex] = bookmarkPosition;
+                }
+
+                bookmarkPosition.bookmarks.push(actualBookmark);
+
+                this.recreateAndShowBookmarkSpan(bookmarkPosition);
                 break;
             }
         }
@@ -855,7 +888,7 @@
 
     }
 
-    createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
+    private createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, tooltipTitle: string|(()=>string), favoriteLabel: IFavoriteLabel) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         var $bookmarkSpan = $(bookmarkSpan);
@@ -865,7 +898,7 @@
         $bookmarkSpan.data("page-name", pageName);
         $bookmarkSpan.data("page-xmlId", pageXmlId);
         $bookmarkSpan.data("title", title);
-        
+
         $bookmarkSpan.click(() => {
             this.moveToPage(pageXmlId, true);
         });
@@ -879,12 +912,7 @@
 
         var tooltipOptions: TooltipOptions = {
             placement: "bottom",
-            title: function() {
-                var bookmarkTitle = $(this).data("title");
-                return favoriteLabel
-                    ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
-                    : bookmarkTitle;
-            }
+            title: tooltipTitle
         };
         $bookmarkSpan.tooltip(tooltipOptions);
 
@@ -893,37 +921,93 @@
 
         return bookmarkSpan;
     }
+
+    createSingleBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
+        var tooltipTitle = function() {
+                var bookmarkTitle = $(this).data("title");
+                return favoriteLabel
+                    ? bookmarkTitle + " (Štítek: " + favoriteLabel.name + ")"
+                    : bookmarkTitle;
+        };
+
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageXmlId, title, tooltipTitle, favoriteLabel);
+        return bookmarkSpan;
+    }
+
+    createMultipleBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, labelCount: number): HTMLSpanElement {
+        var favoriteLabel: IFavoriteLabel = {
+            id: 0,
+            name: "",
+            isDefault: false,
+            color: "#000000",
+            lastUseTime: null
+        };
+
+        var tooltipTitle: string;
+        if (labelCount > 4 || labelCount < 1) {
+            tooltipTitle = labelCount + " záložek";
+        } else if (labelCount > 1) {
+            tooltipTitle = labelCount + " záložky";
+        } else {
+            tooltipTitle = "1 záložka";
+        }
+
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageXmlId, "", tooltipTitle, favoriteLabel);
+        var $bookmarkSpan = $(bookmarkSpan);
+        $bookmarkSpan.addClass("bookmark-multiple");
+
+        if (labelCount >= 2 && labelCount < 10) {
+            $bookmarkSpan.addClass("bookmark-content-" + labelCount);
+        } else if (labelCount >= 10) {
+            $bookmarkSpan.addClass("bookmark-content-9plus");
+        }
+        
+        return bookmarkSpan;
+    }
     
     showBookmark(bookmarkHtml: HTMLSpanElement) {
         $(this.readerContainer).find(".slider").append(bookmarkHtml).promise();
     }
 
-    getBookmarks():JQuery {
-        const slider = $(this.readerContainer).find(".slider");
-        const bookmarks = $(slider).find(".bookmark");
+    recreateAndShowBookmarkSpan(bookmarkPosition: IBookmarkPosition) {
+        var pageIndex = bookmarkPosition.pageIndex;
+        var actualPage = this.pages[pageIndex];
 
-        const bookMap = {};
-
-        for (let i = 0; i < bookmarks.length; i++) {
-            const bookmark = bookmarks[i];
-            const $bookmark = $(bookmark);
-            bookMap[$bookmark.data("pageXmlId") + ($bookmark.hasClass("bookmark-local")?"_local":"_online")] = bookmark;
+        $(bookmarkPosition.bookmarkSpan).remove();
+        
+        if (bookmarkPosition.bookmarks.length > 1) {
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, bookmarkPosition.bookmarks.length);
+            $(bookmarkPosition.bookmarkSpan).data("favorite-id", 0);
+        } else if (bookmarkPosition.bookmarks.length === 1) {
+            let actualBookmark = bookmarkPosition.bookmarks[0];
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.title, actualBookmark.favoriteLabel);
+            $(bookmarkPosition.bookmarkSpan).data("favorite-id", actualBookmark.id);
+        } else {
+            bookmarkPosition.bookmarkSpan = null;
         }
 
-        const outputBooks = [];
-        for (let j = 0; j < this.pages.length; j++) {
-            let page = this.pages[j];
-            if (bookMap[page.xmlId + "_local"] !== undefined) {
-                outputBooks.push(bookMap[page.xmlId + "_local"]);
-            }
-            if (bookMap[page.xmlId + "_online"] !== undefined) {
-                outputBooks.push(bookMap[page.xmlId + "_online"]);
-            }
+        if (bookmarkPosition.bookmarkSpan) {
+            this.showBookmark(bookmarkPosition.bookmarkSpan);
         }
-
-        return $(outputBooks);
     }
 
+    getBookmarks(): IBookmarksInfo {
+        var result: IBookmarksInfo = {
+            positions: new Array<IBookmarkPosition>(),
+            totalCount: 0
+        };
+
+        for (var i = 0; i < this.bookmarks.length; i++) {
+            var bookmarkPosition = this.bookmarks[i];
+            if (bookmarkPosition && bookmarkPosition.bookmarks.length > 0) {
+                result.positions.push(bookmarkPosition);
+                result.totalCount += bookmarkPosition.bookmarks.length;
+            }
+            }
+
+        return result;
+    }
+    
     createBookmarks(data: INewFavoriteItemData) {
         if (data.labels.length === 0) {
             // TODO possible create default label
@@ -932,89 +1016,122 @@
 
         var pageIndex: number = this.actualPageIndex;
         var page: BookPage = this.pages[pageIndex];
+        var bookmarkPosition: IBookmarkPosition = this.bookmarks[pageIndex];
 
-        var firstLabel = data.labels[0];
-        var favoriteLabel: IFavoriteLabel = {
-            id: firstLabel.labelId,
-            name: firstLabel.labelName,
-            color: firstLabel.labelColor,
-            isDefault: false,
-            lastUseTime: null
+        if (!bookmarkPosition) {
+            bookmarkPosition = {
+                bookmarks: new Array<IBookPageBookmark>(),
+                bookmarkSpan: null,
+                pageIndex: pageIndex
+            };
+            this.bookmarks[pageIndex] = bookmarkPosition;
         }
-        var bookmarkSpan: HTMLSpanElement = this.createBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, favoriteLabel);
 
+        var newBookmarks = new Array<IBookPageBookmark>();
+        var labelIds = new Array<number>();
+        for (let i = 0; i < data.labels.length; i++) {
+            var labelItem = data.labels[i];
+            var favoriteLabel: IFavoriteLabel = {
+                id: labelItem.labelId,
+                name: labelItem.labelName,
+                color: labelItem.labelColor,
+                isDefault: false,
+                lastUseTime: null
+            }
+            var bookPageBookmark: IBookPageBookmark = {
+                id: 0,
+                favoriteLabel: favoriteLabel,
+                pagePosition: page.position,
+                pageXmlId: page.xmlId,
+                title: data.itemName
+            };
+
+            newBookmarks.push(bookPageBookmark);
+            bookmarkPosition.bookmarks.push(bookPageBookmark);
+            labelIds.push(labelItem.labelId);
+        }
+        
+        $(bookmarkPosition.bookmarkSpan).remove();
+        
+        if (bookmarkPosition.bookmarks.length > 1) {
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, page.text, page.xmlId, bookmarkPosition.bookmarks.length);
+        } else {
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, bookmarkPosition.bookmarks[0].favoriteLabel);
+        }
+        
         const postShowAction = () => {
             const $bookmarksContainer = $(".reader-bookmarks-container");
-            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
-                this.settingsPanel.createBookmarkList(
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
                     $bookmarksContainer.parent().get(0),
-                    this.settingsPanel
+                    this.bookmarksPanel
                 );
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, firstLabel.labelId, (id, error) => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, labelIds, (ids, error) => {
             if (error) {
                 this.newFavoriteDialog.showError("Chyba při vytváření záložky");
                 return;
             }
 
-            $(bookmarkSpan).data("favorite-id", id);
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var bookmark = newBookmarks[i];
+                bookmark.id = id;
+
+            }
             this.newFavoriteDialog.hide();
-            this.showBookmark(bookmarkSpan);
+            this.showBookmark(bookmarkPosition.bookmarkSpan);
             postShowAction();
         });
     }
-    
-    setBookmarkTitle(targetBookmark: HTMLSpanElement, title: string) {
-        var $targetBookmark = $(targetBookmark);
-        var originalTitle = $targetBookmark.data("title");
-        if (originalTitle === title) {
+
+    setBookmarkTitle(bookmarkId: number, pageIndex: number, title: string) {
+        var bookmarkPosition = this.bookmarks[pageIndex];
+        var bookmark: IBookPageBookmark = null;
+        for (let i = 0; i < bookmarkPosition.bookmarks.length; i++) {
+            var bookmarkItem = bookmarkPosition.bookmarks[i];
+            if (bookmarkItem.id === bookmarkId) {
+                bookmark = bookmarkItem;
+                break;
+    }
+        }
+
+        if (!bookmark || bookmark.title === title) {
             return;
         }
 
-        $targetBookmark.data("title", title);
-
-        var favoriteId = Number($targetBookmark.data("favorite-id"));
-        this.favoriteManager.updateFavoriteItem(favoriteId, title, () => {});
-    }
-
-    removeBookmark(): boolean {
-        const bookmarks = this.getBookmarks();
-
-        if (typeof bookmarks === "undefined" || bookmarks == null || bookmarks.length === 0) {
-            return false;
+        bookmark.title = title;
+        if (bookmarkPosition.bookmarks.length === 1) {
+            $(bookmarkPosition.bookmarkSpan).data("title", title);
         }
-
-        var actualPage: BookPage = this.pages[this.actualPageIndex];
-        var targetBookmark:JQuery = $(bookmarks).filter(function (index) {
-            return $(this).data("page-xmlId") === actualPage.xmlId;
-        });
-
-        if (targetBookmark === undefined || targetBookmark == null || targetBookmark.length === 0) {
-            return false;
-        }
-
-        this.persistRemoveBookmark(targetBookmark);
         
-        return true;
+        this.favoriteManager.updateFavoriteItem(bookmarkId, title, () => { });
     }
-
-    public persistRemoveBookmark(targetBookmark: JQuery) {
+    
+    public persistRemoveBookmark(pageIndex: number, bookmarkId: number) {
         const postRemoveAction = () => {
             const $bookmarksContainer = $(".reader-bookmarks-container");
-            if (this.settingsPanel !== undefined && $bookmarksContainer.length > 0) {
-                this.settingsPanel.createBookmarkList(
+            if (this.bookmarksPanel !== undefined && $bookmarksContainer.length > 0) {
+                this.bookmarksPanel.createBookmarkList(
                     $bookmarksContainer.parent().get(0),
-                    this.settingsPanel
+                    this.bookmarksPanel
                 );
             }
         };
 
-        var favoriteItemId = targetBookmark.data("favorite-id");
-        this.favoriteManager.deleteFavoriteItem(favoriteItemId, () => {
-            targetBookmark.remove();
+        this.favoriteManager.deleteFavoriteItem(bookmarkId, () => {
+            var bookmarkPosition = this.bookmarks[pageIndex];
+            var indexToRemove: number;
+            for (indexToRemove = 0; indexToRemove < bookmarkPosition.bookmarks.length; indexToRemove++) {
+                if (bookmarkPosition.bookmarks[indexToRemove].id === bookmarkId) {
+                    bookmarkPosition.bookmarks.splice(indexToRemove, 1);
+                    break;
+                }
+            }
 
+            this.recreateAndShowBookmarkSpan(bookmarkPosition);
             postRemoveAction();
         });
     }
@@ -1509,16 +1626,26 @@ class SettingsPanel extends LeftSidePanel {
         checkboxesDiv.appendChild(showPageOnNewLineDiv);
         checkboxesDiv.appendChild(showCommentCheckboxDiv);
         var innerContent: HTMLDivElement = window.document.createElement("div");
-        var bookmarksHead = document.createElement("h2");
-        bookmarksHead.innerHTML = "Možnosti zobrazení";
-        bookmarksHead.classList.add("reader-view-head");
-        innerContent.appendChild(bookmarksHead);
+        var displaySettingsHead = document.createElement("h2");
+        displaySettingsHead.innerHTML = "Možnosti zobrazení";
+        displaySettingsHead.classList.add("reader-view-head");
+        innerContent.appendChild(displaySettingsHead);
 
         innerContent.appendChild(buttonsDiv);
         innerContent.appendChild(checkboxesDiv);
 
-        this.createBookmarkList(innerContent, rootReference);
+        return innerContent;
+    }
+}
 
+class BookmarksPanel extends LeftSidePanel {
+    constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
+        super(identificator, "Záložky", readerModule, showPanelButtonList);
+    }
+
+    protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
+        var innerContent: HTMLDivElement = window.document.createElement("div");
+        this.createBookmarkList(innerContent, rootReference);
         return innerContent;
     }
 
@@ -1526,7 +1653,7 @@ class SettingsPanel extends LeftSidePanel {
         innerContent: HTMLElement,
         rootReference: SidePanel
     ) {
-        const bookmarksPerPage = 10;
+        const bookmarksPerPage = 20;
         const actualBookmarkPage = 1;
 
         const $bookmarksContainer = $(innerContent).children(".reader-bookmarks-container");
@@ -1546,13 +1673,13 @@ class SettingsPanel extends LeftSidePanel {
         bookmarksHead.innerHTML = "Všechny záložky";
         bookmarksHead.classList.add("reader-bookmarks-head");
         bookmarksContainer.appendChild(bookmarksHead);
-        
+
         var bookmarksContent = document.createElement("div");
         bookmarksContent.classList.add("reader-bookmarks-content");
         bookmarksContainer.appendChild(bookmarksContent);
 
         var bookmarks = rootReference.parentReader.getBookmarks();
-        
+
         var pageInContainer: Array<HTMLUListElement> = [];
         var pagesContainer: HTMLDivElement = document.createElement("div");
         bookmarksContent.appendChild(pagesContainer);
@@ -1561,10 +1688,10 @@ class SettingsPanel extends LeftSidePanel {
         paginationContainer.classList.add("reader-bookmarks-pagination");
         bookmarksContent.appendChild(paginationContainer);
 
-        for (let i = 0; i < Math.ceil(bookmarks.length / bookmarksPerPage); i++) {
+        for (let i = 0; i < Math.ceil(bookmarks.totalCount / bookmarksPerPage); i++) {
             pageInContainer[i] = document.createElement("ul");
             pageInContainer[i].classList.add("reader-bookmarks-content-list");
-            pageInContainer[i].setAttribute("data-page-index", (i+1).toString());
+            pageInContainer[i].setAttribute("data-page-index", (i + 1).toString());
             if (i != actualBookmarkPage) {
                 pageInContainer[i].classList.add("hide");
             }
@@ -1572,27 +1699,25 @@ class SettingsPanel extends LeftSidePanel {
             pagesContainer.appendChild(pageInContainer[i]);
         }
 
-        let j = 0;
-
-        for (let i = 0; i < bookmarks.length; i++) {
-            pageInContainer[Math.floor(j / bookmarksPerPage)].appendChild(
-                this.createBookmark(
-                    bookmarks[i],
-                    rootReference,
-                    $(bookmarks[i]).hasClass("bookmark-local")
-                )
-            );
-
-            j++;
+        var currentIndex = 0;
+        for (let i = 0; i < bookmarks.positions.length; i++) {
+            var bookmarkPosition = bookmarks.positions[i];
+            for (let j = 0; j < bookmarkPosition.bookmarks.length; j++) {
+                var bookmark = bookmarkPosition.bookmarks[j];
+                var bookmarkElement = this.createBookmark(bookmark, rootReference, bookmarkPosition.pageIndex);
+                pageInContainer[Math.floor(currentIndex / bookmarksPerPage)].appendChild(bookmarkElement);
+                currentIndex++;
         }
-
-        const paginator = new Pagination(<any>paginationContainer, 3);
-        paginator.createPagination(bookmarks.length, bookmarksPerPage, (pageNumber: number) => {
-            this.showBookmarkPage(
-                pagesContainer,
-                pageNumber
-            );
-        }, actualBookmarkPage);
+    }
+        
+        const paginator = new Pagination({
+            container: paginationContainer,
+            pageClickCallback: (pageNumber: number) => this.showBookmarkPage(pagesContainer, pageNumber),
+            callPageClickCallbackOnInit: true
+        });
+        paginator.make(bookmarks.totalCount, bookmarksPerPage, actualBookmarkPage);
+        
+        $(".pagination", paginationContainer).addClass("pagination-extra-small");
     }
 
     protected showBookmarkPage(pagesContainer: HTMLDivElement, page: number) {
@@ -1600,11 +1725,10 @@ class SettingsPanel extends LeftSidePanel {
         $(pagesContainer).children(`[data-page-index="${page}"]`).removeClass("hide");
     }
 
-    protected createBookmark(bookmark: HTMLElement, rootReference: SidePanel, local:boolean) {
-        const $bookmark = $(bookmark);
+    protected createBookmark(bookmark: IBookPageBookmark, rootReference: SidePanel, pageIndex: number) {
         const bookmarkItem = document.createElement("li");
-        bookmarkItem.classList.add("reader-bookmarks-content-item", local ? "reader-bookmarks-content-item-local" :"reader-bookmarks-content-item-online");
-        
+        bookmarkItem.classList.add("reader-bookmarks-content-item");
+
         const bookmarkRemoveIco = document.createElement("a");
         bookmarkRemoveIco.href = "#";
         bookmarkRemoveIco.classList.add("glyphicon", "glyphicon-trash", "bookmark-remote-ico");
@@ -1613,22 +1737,25 @@ class SettingsPanel extends LeftSidePanel {
         bookmarkRemoveIco.addEventListener("click", (e) => {
             e.preventDefault();
 
-            rootReference.parentReader.persistRemoveBookmark($(bookmark));
+            rootReference.parentReader.persistRemoveBookmark(pageIndex, bookmark.id);
         });
 
         const bookmarkIco = document.createElement("span");
         bookmarkIco.classList.add("glyphicon", "glyphicon-bookmark", "bookmark-ico");
-        $(bookmarkIco).css("color", $bookmark.data("label-color"));
-        $(bookmarkIco).attr("title", $bookmark.data("label-name"));
+        if (bookmark.favoriteLabel) {
+            $(bookmarkIco).css("color", bookmark.favoriteLabel.color);
+            $(bookmarkIco).attr("title", bookmark.favoriteLabel.name);
+        }
         bookmarkItem.appendChild(bookmarkIco);
 
+        const pageInfo = rootReference.parentReader.getPageByIndex(pageIndex);
         const page = document.createElement("a");
         page.href = "#";
-        page.innerHTML = $bookmark.data("pageName");
+        page.innerHTML = pageInfo.text;
         page.classList.add("reader-bookmarks-content-item-page");
 
         const actionHook = () => {
-            rootReference.parentReader.moveToPage($bookmark.data("page-xmlId"), true);
+            rootReference.parentReader.moveToPage(bookmark.pageXmlId, true);
         };
         bookmarkIco.addEventListener("click", actionHook);
         page.addEventListener("click", actionHook);
@@ -1642,14 +1769,14 @@ class SettingsPanel extends LeftSidePanel {
 
         const titleInput = document.createElement("input");
         titleInput.classList.add("reader-bookmarks-content-item-title-input", "hide");
-        titleInput.value = $bookmark.data("title");
+        titleInput.value = bookmark.title;
         $(titleInput).attr("maxlength", FavoriteManager.maxTitleLength);
         bookmarkItem.appendChild(titleInput);
 
         const title = document.createElement("span");
-        this.setBookmarkTitle(title, bookmark, rootReference, $bookmark.data("title"));
+        this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, bookmark.title);
         title.classList.add("reader-bookmarks-content-item-title");
-        
+
         titleContainer.addEventListener("click", () => {
             titleContainer.classList.add("hide");
             titleInput.classList.remove("hide");
@@ -1657,7 +1784,7 @@ class SettingsPanel extends LeftSidePanel {
             titleInput.focus();
         });
         const updateHook = () => {
-            this.setBookmarkTitle(title, bookmark, rootReference, titleInput.value);
+            this.setBookmarkTitle(title, rootReference, bookmark.id, pageIndex, titleInput.value);
 
             titleInput.classList.add("hide");
             titleContainer.classList.remove("hide");
@@ -1675,12 +1802,12 @@ class SettingsPanel extends LeftSidePanel {
         const titleEdit = document.createElement("span");
         titleEdit.classList.add("glyphicon", "glyphicon-pencil", "edit-button");
         titleContainer.appendChild(titleEdit);
-        
+
         return bookmarkItem;
     }
-
-    protected setBookmarkTitle(titleItem: HTMLElement, bookmark: HTMLElement, rootReference: SidePanel, title: string) {
-        rootReference.parentReader.setBookmarkTitle(bookmark, title);
+    
+    protected setBookmarkTitle(titleItem: HTMLElement, rootReference: SidePanel, bookmarkId: number, pageIndex: number, title: string) {
+        rootReference.parentReader.setBookmarkTitle(bookmarkId, pageIndex, title);
 
         if (!title) {
             title = "&lt;bez názvu&gt;";
@@ -1695,6 +1822,7 @@ class SearchResultPanel extends LeftSidePanel {
     private searchPagingDiv: HTMLDivElement;
 
     private paginator: Pagination;
+    private paginatorOptions: Pagination.Options;
     private resultsOnPage;
     private maxPaginatorVisibleElements;
 
@@ -1724,12 +1852,18 @@ class SearchResultPanel extends LeftSidePanel {
         this.searchResultItemsDiv = searchResultItemsDiv;
 
         var pagingDiv = window.document.createElement("div");
-        $(pagingDiv).addClass("reader-search-result-paging");
+        $(pagingDiv).addClass("reader-search-result-paging pagination-extra-small");
         this.searchPagingDiv = pagingDiv;
 
         this.resultsOnPage = 8;
-        this.maxPaginatorVisibleElements = 5;
-        this.paginator = new Pagination(<any>this.searchPagingDiv, this.maxPaginatorVisibleElements);
+        this.maxPaginatorVisibleElements = 11;
+
+        this.paginatorOptions = {
+            container: this.searchPagingDiv,
+            maxVisibleElements: this.maxPaginatorVisibleElements,
+            callPageClickCallbackOnInit: true
+        };
+        this.paginator = new Pagination(this.paginatorOptions);
 
         innerContent.appendChild(this.searchPagingDiv);
         innerContent.appendChild(searchResultItemsDiv);
@@ -1738,7 +1872,8 @@ class SearchResultPanel extends LeftSidePanel {
     }
 
     createPagination(pageChangedCallback: (pageNumber: number) => void, itemsCount: number) {
-        this.paginator.createPagination(itemsCount, this.resultsOnPage, pageChangedCallback);
+        this.paginatorOptions.pageClickCallback = pageChangedCallback;
+        this.paginator.make(itemsCount, this.resultsOnPage);
     }
 
     getResultsCountOnPage(): number {
@@ -2578,6 +2713,16 @@ class PageDescription {
     PageName: string;
 }
 
+interface IBookmarkPosition {
+    bookmarks: Array<IBookPageBookmark>;
+    bookmarkSpan: HTMLSpanElement;
+    pageIndex: number;
+}
+
+interface IBookmarksInfo {
+    positions: Array<IBookmarkPosition>;
+    totalCount: number;
+}
 
 enum ReaderPanelEnum {
     TextPanel,

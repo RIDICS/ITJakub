@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Transactions;
@@ -9,7 +8,6 @@ using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Entities.SelectResults;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using NHibernate;
@@ -284,22 +282,34 @@ namespace ITJakub.DataEntities.Database.Repositories
         }
 
         [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<FullBookRecording> GetFullBookRecordings(long bookVersionId)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<FullBookRecording>()
+                    .Where(x => x.BookVersion.Id == bookVersionId)
+                    .OrderBy(x => x.AudioType).Asc
+                    .List();
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
         public virtual IList<Track> GetTracksForBookVersion(long bookVersionId)
         {
             using (var session = GetSession())
             {
                 Track trackAlias = null;
+                TrackRecording recordingAlias = null;
 
                 var query = session.QueryOver(() => trackAlias)
+                    .JoinAlias(() => trackAlias.Recordings, () => recordingAlias, JoinType.LeftOuterJoin)
                     .Where(() => trackAlias.BookVersion.Id == bookVersionId)
-                    .Future<Track>();
-
-                session.QueryOver(() => trackAlias)
                     .Fetch(x => x.Recordings).Eager
-                    .Future<Track>();
-
-                var result = query.ToList();
-                return result;
+                    .OrderBy(x => x.Position).Asc
+                    .OrderBy(() => recordingAlias.AudioType).Asc
+                    .TransformUsing(Transformers.DistinctRootEntity);
+                
+                return query.List();
             }
         }
 
@@ -312,11 +322,6 @@ namespace ITJakub.DataEntities.Database.Repositories
                 Book bookAlias = null;
                 BookVersion bookVersionAlias = null;
                 ManuscriptDescription manuscriptDescriptionAlias = null;
-                Responsible responsibleAlias = null;
-                ResponsibleType responsibleTypeAlias = null;
-                LiteraryOriginal literaryOriginalAlias = null;
-                LiteraryKind literaryKindAlias = null;
-                LiteraryGenre genreAlias=null;
                 Author authorAlias = null;
 
                 var query = session.QueryOver(() => bookVersionAlias)
@@ -391,53 +396,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                         .Fetch(x => x.Authors).Eager
                         .Future<BookVersion>();
                 }
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.Keywords).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Fetch(x => x.FullBookRecordings).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
-                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.LiteraryOriginals, () => literaryOriginalAlias)
-                    .Fetch(x => x.LiteraryOriginals).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.LiteraryKinds, () => literaryKindAlias)
-                    .Fetch(x => x.LiteraryKinds).Eager
-                    .Future<BookVersion>();
-
-                session.QueryOver(() => bookVersionAlias)
-                    .JoinAlias(x => x.Book, () => bookAlias)
-                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(x => bookAlias.Guid).IsInG(bookGuidList)
-                    .Left.JoinAlias(() => bookVersionAlias.LiteraryGenres, () => genreAlias)
-                    .Fetch(x => x.LiteraryGenres).Eager
-                    .Future<BookVersion>();
-
+                
                 var result = futureResult.ToList();
                 return result;
             }
@@ -450,6 +409,95 @@ namespace ITJakub.DataEntities.Database.Repositories
             return direction == ListSortDirection.Descending
                 ? queryOrder.Desc
                 : queryOrder.Asc;
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual BookVersion GetBookVersionDetailByBookId(long bookId)
+        {
+            using (var session = GetSession())
+            {
+                Book bookAlias = null;
+                BookVersion bookVersionAlias = null;
+                Responsible responsibleAlias = null;
+                ResponsibleType responsibleTypeAlias = null;
+                LiteraryOriginal literaryOriginalAlias = null;
+                LiteraryKind literaryKindAlias = null;
+                LiteraryGenre genreAlias = null;
+
+                var query = session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId);
+
+                var futureResult = query
+                    .Fetch(x => x.Book).Eager
+                    .Fetch(x => x.Publisher).Eager
+                    .Fetch(x => x.DefaultBookType).Eager
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Fetch(x => x.ManuscriptDescriptions).Eager
+                    .FutureValue<BookVersion>();
+                
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Fetch(x => x.Authors).Eager
+                    .FutureValue<BookVersion>();
+                
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Fetch(x => x.Keywords).Eager
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Fetch(x => x.FullBookRecordings).Eager
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Left.JoinAlias(() => bookVersionAlias.Responsibles, () => responsibleAlias)
+                    .Left.JoinAlias(() => responsibleAlias.ResponsibleType, () => responsibleTypeAlias)
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Left.JoinAlias(() => bookVersionAlias.LiteraryOriginals, () => literaryOriginalAlias)
+                    .Fetch(x => x.LiteraryOriginals).Eager
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Left.JoinAlias(() => bookVersionAlias.LiteraryKinds, () => literaryKindAlias)
+                    .Fetch(x => x.LiteraryKinds).Eager
+                    .FutureValue<BookVersion>();
+
+                session.QueryOver(() => bookVersionAlias)
+                    .JoinAlias(x => x.Book, () => bookAlias)
+                    .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
+                    .And(x => bookAlias.Id == bookId)
+                    .Left.JoinAlias(() => bookVersionAlias.LiteraryGenres, () => genreAlias)
+                    .Fetch(x => x.LiteraryGenres).Eager
+                    .FutureValue<BookVersion>();
+
+                var result = futureResult.Value;
+                return result;
+            }
         }
 
         [Transaction(TransactionScopeOption.Required)]
@@ -587,16 +635,12 @@ namespace ITJakub.DataEntities.Database.Repositories
 
                 var result = query.Select(Projections.Distinct(Projections.ProjectionList()
                     .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
-                    .Add(
-                        Projections.Property(() => bookVersionAlias.VersionId)
-                            .WithAlias(() => resultAlias.BookVersionId))
+                    .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
                     .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
                     .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
-                    .Add(
-                        Projections.Property(() => bookHeadwordAlias.DefaultHeadword)
-                            .WithAlias(() => resultAlias.Headword))
-                    .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId)
-                        .WithAlias(() => resultAlias.XmlEntryId))
+                    .Add(Projections.Property(() => bookVersionAlias.SourceAbbreviation).WithAlias(() => resultAlias.SourceAbbreviation))
+                    .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                    .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
                     .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
                     .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
                     .OrderBy(x => x.SortOrder).Asc
@@ -653,22 +697,13 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(x => x.BookHeadwords, () => bookHeadwordAlias)
                     .Select(Projections.Distinct(Projections.ProjectionList()
                         .Add(Projections.Property(() => bookAlias.Guid).WithAlias(() => resultAlias.BookGuid))
-                        .Add(
-                            Projections.Property(() => bookVersionAlias.VersionId)
-                                .WithAlias(() => resultAlias.BookVersionId))
+                        .Add(Projections.Property(() => bookVersionAlias.VersionId).WithAlias(() => resultAlias.BookVersionId))
                         .Add(Projections.Property(() => bookVersionAlias.Title).WithAlias(() => resultAlias.BookTitle))
-                        .Add(
-                            Projections.Property(() => bookVersionAlias.Acronym)
-                                .WithAlias(() => resultAlias.BookAcronym))
-                        .Add(
-                            Projections.Property(() => bookHeadwordAlias.DefaultHeadword)
-                                .WithAlias(() => resultAlias.Headword))
-                        .Add(
-                            Projections.Property(() => bookHeadwordAlias.SortOrder)
-                                .WithAlias(() => resultAlias.SortOrder))
-                        .Add(
-                            Projections.Property(() => bookHeadwordAlias.XmlEntryId)
-                                .WithAlias(() => resultAlias.XmlEntryId))
+                        .Add(Projections.Property(() => bookVersionAlias.Acronym).WithAlias(() => resultAlias.BookAcronym))
+                        .Add(Projections.Property(() => bookVersionAlias.SourceAbbreviation).WithAlias(() => resultAlias.SourceAbbreviation))
+                        .Add(Projections.Property(() => bookHeadwordAlias.DefaultHeadword).WithAlias(() => resultAlias.Headword))
+                        .Add(Projections.Property(() => bookHeadwordAlias.SortOrder).WithAlias(() => resultAlias.SortOrder))
+                        .Add(Projections.Property(() => bookHeadwordAlias.XmlEntryId).WithAlias(() => resultAlias.XmlEntryId))
                         .Add(Projections.Property(() => bookHeadwordAlias.Image).WithAlias(() => resultAlias.Image))))
                     .WhereRestrictionOn(() => bookAlias.Guid).IsInG(selectedGuidList)
                     .And(creator.GetCondition())

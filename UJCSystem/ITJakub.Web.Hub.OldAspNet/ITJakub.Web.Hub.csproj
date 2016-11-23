@@ -103,10 +103,12 @@
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\Plugins\Keyboard\KeyboardController.cs" />
     <Compile Include="Controllers\TextController.cs" />
+    <Compile Include="Helpers\BreadcrumbsHelper.cs" />
     <Compile Include="Identity\CustomClaimType.cs" />
     <Compile Include="Identity\CustomPasswordHasher.cs" />
     <Compile Include="Identity\CustomRole.cs" />
     <Compile Include="Managers\Favorites.cs" />
+    <Compile Include="Managers\FeedbacksManager.cs" />
     <Compile Include="Managers\StaticTextManager.cs" />
     <Compile Include="Managers\StaticTexts.cs" />
     <Compile Include="Managers\VersionInfo.cs" />
@@ -274,6 +276,27 @@
     <Content Include="wwwroot\Areas\ProfessionalLiterature\css\itjakub.professionalliterature.min.css">
       <DependentUpon>itjakub.professionalliterature.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\favicon_green.png" />
+    <Content Include="Content\Images\Feeds\04.png" />
+    <Content Include="Content\Images\Feeds\07.png" />
+    <Content Include="Content\Images\Feeds\25.png" />
+    <Content Include="Content\Images\Feeds\26.png" />
+    <Content Include="Content\Images\Feeds\49.png" />
+    <Content Include="Content\Images\Feeds\50.png" />
+    <Content Include="Content\Images\Feeds\blue.png" />
+    <Content Include="Content\Images\Feeds\green.png" />
+    <Content Include="Content\Images\Feeds\red.png" />
+    <Content Include="Content\Images\Glyphs\glyphicons_chevron_white.png" />
+    <Content Include="Content\Images\Glyphs\klavesnice.gif" />
+    <Content Include="Content\Images\Logo\logo_av21_white.png" />
+    <Content Include="Content\Images\Logo\logo_fel_white.png" />
+    <Content Include="Content\Images\Logo\logo_msmt_white.png" />
+    <Content Include="Content\Images\Logo\logo_ujc_white.png" />
+    <Content Include="Content\Images\Logo\main_logo.png" />
+    <Content Include="Content\Images\mlceni_blue.jpg" />
+    <Content Include="Content\Images\mlceni_hangman.jpg" />
+    <Content Include="Content\Images\Mlceni_pink.jpg" />
+    <Content Include="Areas\Lemmatization\Content\itjakub.lemmatization.css">
     <Content Include="wwwroot\Areas\ProfessionalLiterature\js\itjakub.professionalliterature.list.bundle.js" />
     <Content Include="wwwroot\css\ITJakub.Dropzone.css">
       <DependentUpon>ITJakub.Dropzone.less</DependentUpon>
@@ -309,11 +332,42 @@
     <Content Include="wwwroot\Areas\Lemmatization\css\itjakub.lemmatization.min.css">
       <DependentUpon>itjakub.lemmatization.css</DependentUpon>
     </Content>
+    <Content Include="Content\Images\news_background2_green.png" />
+    <Content Include="Content\ITJakub.BootstrapStyle.css">
+      <DependentUpon>ITJakub.BootstrapStyle.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.BootstrapStyle.min.css">
+      <DependentUpon>ITJakub.BootstrapStyle.css</DependentUpon>
+    </Content>
     <Content Include="Content\ITJakub.Favorites.css">
       <DependentUpon>ITJakub.Favorites.less</DependentUpon>
     </Content>
     <Content Include="Content\ITJakub.Favorites.min.css">
       <DependentUpon>ITJakub.Favorites.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Feedbacks.css">
+      <DependentUpon>ITJakub.Feedbacks.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Feedbacks.min.css">
+      <DependentUpon>ITJakub.Feedbacks.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Header.css">
+      <DependentUpon>ITJakub.Header.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Header.min.css">
+      <DependentUpon>ITJakub.Header.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Home.css">
+      <DependentUpon>ITJakub.Home.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.Home.min.css">
+      <DependentUpon>ITJakub.Home.css</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.UploadBook.css">
+      <DependentUpon>ITJakub.UploadBook.less</DependentUpon>
+    </Content>
+    <Content Include="Content\ITJakub.UploadBook.min.css">
+      <DependentUpon>ITJakub.UploadBook.css</DependentUpon>
     </Content>
     <Content Include="Content\KeyboardLayouts\cs_quertz.xml" />
     <Content Include="Content\KeyboardLayouts\cyrilic.xml" />
@@ -1248,6 +1302,8 @@
     <Content Include="wwwroot\lib\respond\src\matchmedia.addListener.js" />
     <Content Include="wwwroot\lib\respond\src\matchmedia.polyfill.js" />
     <Content Include="wwwroot\lib\respond\src\respond.js" />
+    <Content Include="wwwroot\lib\s-pagination\dist\pagination.css" />
+    <Content Include="wwwroot\lib\s-pagination\dist\pagination.js" />
     <Content Include="wwwroot\lib\simplemde\dist\simplemde.min.css" />
     <Content Include="wwwroot\lib\simplemde\dist\simplemde.min.js" />
     <Content Include="wwwroot\lib\wheelzoom\daisy.jpg" />
@@ -1383,6 +1439,127 @@
     <Content Include="wwwroot\css\Plugins\ITJakub.Reader.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.DropdownSelect.less" />
     <Content Include="wwwroot\css\Plugins\ITJakub.RegExSearch.less" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Areas\Editions\Views\web.config" />
+    <Content Include="Areas\Dictionaries\Views\web.config" />
+    <Content Include="Areas\Editions\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Dictionaries\Content\itjakub.dictionaries.less" />
+    <Content Include="Content\ITJakub.less" />
+    <Content Include="Areas\Editions\Content\itjakub.editions.less" />
+    <Content Include="Content\ITJakub.PluginMenu.less" />
+    <Content Include="Scripts\itjakub.upload.js" />
+    <Content Include="Content\ITJakub.DefaultTheme.less" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Search.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\List.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Listing.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Search.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Information.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Listing.cshtml" />
+    <Content Include="Content\Plugins\Bibliography\ITJakub.Bibliography.less" />
+    <Content Include="Areas\CardFiles\Views\web.config" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfiles.less" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\List.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Information.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Feedback.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Search.cshtml" />
+    <Content Include="Areas\CardFiles\Views\CardFiles\Listing.cshtml" />
+    <Content Include="Areas\CardFiles\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\CardFiles\Content\itjakub.cardfile.less" />
+    <Content Include="Areas\ProfessionalLiterature\Views\web.config" />
+    <Content Include="Areas\OldGrammar\Views\web.config" />
+    <Content Include="Areas\BohemianTextBank\Views\web.config" />
+    <Content Include="Areas\BohemianTextBank\Content\itjakub.bohemiantextbank.less" />
+    <Content Include="Areas\BohemianTextBank\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Search.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\List.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Information.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Feedback.cshtml" />
+    <Content Include="Areas\OldGrammar\Content\itjakub.oldgrammar.less" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Search.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\List.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Feedback.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Information.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.less" />
+    <Content Include="Areas\ProfessionalLiterature\Content\itjakub.professionalliterature.content.less" />
+    <Content Include="Areas\ProfessionalLiterature\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\List.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Search.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Information.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Feedback.cshtml" />
+    <Content Include="Content\ITJakub.Footer.less" />
+    <Content Include="Areas\Editions\Views\Editions\Feedback.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Feedback.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Information.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\List.cshtml" />
+    <Content Include="Areas\Editions\Content\itjakub.editions.content.less" />
+    <Content Include="Areas\Editions\Views\Editions\EditionPrinciples.cshtml" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Help.cshtml" />
+    <Content Include="Areas\Dictionaries\Views\Dictionaries\Help.cshtml" />
+    <Content Include="Areas\BohemianTextBank\Views\BohemianTextBank\Help.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Help.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\web.config" />
+    <Content Include="Areas\Tools\Views\web.config" />
+    <Content Include="Areas\AudioBooks\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\Feedback.cshtml" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\Information.cshtml" />
+    <Content Include="Areas\AudioBooks\Content\itjakub.audiobooks.less" />
+    <Content Include="Areas\AudioBooks\Views\AudioBooks\List.cshtml" />
+    <Content Include="Areas\Tools\Views\Tools\Feedback.cshtml" />
+    <Content Include="Areas\Tools\Views\Tools\Information.cshtml" />
+    <Content Include="Areas\Tools\Views\Tools\List.cshtml" />
+    <Content Include="Areas\Tools\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\Listing.cshtml" />
+    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\OldGrammar\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\Editions\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\list_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Content\BibliographyPlugin\search_configuration.json" />
+    <Content Include="Areas\ProfessionalLiterature\Views\ProfessionalLiterature\Listing.cshtml" />
+    <Content Include="Areas\Editions\Views\Editions\Help.cshtml" />
+    <Content Include="Areas\OldGrammar\Views\OldGrammar\ListTerms.cshtml" />
+    <Content Include="Areas\Lemmatization\Views\web.config" />
+    <Content Include="Areas\Derivation\Views\web.config" />
+    <Content Include="Areas\Lemmatization\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Derivation\Content\itjakub.derivation.less" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Content\ITJakub.Favorites.less" />
+    <Content Include="Content\ITJakub.Colors.less" />
+    <Content Include="Content\ITJakub.Fonts.less" />
+    <Content Include="Content\ITJakub.FontData.less" />
+    <Content Include="Content\ITJakub.BootstrapStyle.less" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Bold.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-BoldItalic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL-Italic.woff2" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.eot" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.ttf" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff" />
+    <Content Include="Content\fonts\charis-sil\hinted-CharisSIL.woff2" />
+    <Content Include="Content\ITJakub.Header.less" />
+    <Content Include="Content\ITJakub.Home.less" />
+    <Content Include="Content\ITJakub.Feedbacks.less" />
+    <Content Include="Content\ITJakub.BibliographySearch.less" />
+    <None Include="Content\ITJakub.UploadBook.less" />
+    <None Include="Content\Plugins\ITJakub.HorizontalLoader.less" />
+    <None Include="Content\Plugins\ITJakub.NumberedOrderedList.less" />
+    <Content Include="Content\Plugins\Reader\ITJakub.Reader.less" />
+    <Content Include="Content\Plugins\DropdownSelect\ITJakub.DropdownSelect.less" />
+    <Content Include="Content\Plugins\RegExSearch\ITJakub.RegExSearch.less" />
     <Content Include="ITJakub.Web.Hub.Container.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1395,6 +1572,7 @@
     </None>
     <Content Include="project.json" />
     <Content Include="CopyTypeScriptDefinitions.cmd" />
+    <None Include="Content\Plugins\Bibliography\ITJakub.Bibliography.Audio.less" />
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
     <Content Include="Views\Text\TextEditor.cshtml" />
@@ -1413,6 +1591,9 @@
     <Content Include="Views\Favorite\FavoriteManagement.cshtml" />
     <Content Include="Views\Favorite\_FavoriteLabelManagement.cshtml" />
     <Content Include="Views\Favorite\AmbiguousFavoriteRedirect.cshtml" />
+    <Content Include="Views\Shared\_BibliographySearch.cshtml" />
+    <Content Include="Views\Shared\Feedback\FeedbackSuccess.cshtml" />
+    <Content Include="Views\Shared\Feedback\_FeedbackForm.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1499,6 +1680,40 @@
     <TypeScriptCompile Include="wwwroot\js\Plugins\Storage\itjakub.plugins.storage.istorage.ts" />
     <TypeScriptCompile Include="wwwroot\js\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
     <Content Include="wwwroot\lib-custom\typeahead.bundle.js" />
+    <TypeScriptCompile Include="Areas\AudioBooks\Scripts\itjakub.audiobooks.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Areas\BohemianTextBank\Scripts\itjakub.bohemiatextbank.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Areas\ProfessionalLiterature\Scripts\itjakub.professionalliterature.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteBook.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManagement.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteManager.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteQuery.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.favoriteStar.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteDialog.ts" />
+    <TypeScriptCompile Include="Scripts\Favorite\itjakub.newFavoriteNotification.ts" />
+    <TypeScriptCompile Include="Scripts\itjakub.dataContracts.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.eucookiepopup.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.tools.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Lemmatization\itjakub.lemmatization.shared.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\SearchBox\itjakub.plugins.singlesearchbox.ts" />
+    <TypeScriptCompile Include="Scripts\Text\itjakub.text.editor.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\bootstrap.colorpicker.plus_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde-tests_.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.eu.cookie.law.popup_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\jquery.zoom_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\simplemde_.d.ts" />
+    <TypeScriptCompile Include="Scripts\TypingsCustom\wheelzoom_.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\bootstrap\bootstrap.d.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.search.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.list.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\itjakub.modul.inicializator.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Progress\itjakub.plugins.progress.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.localstorage.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.cookiestorage.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.istorage.ts" />
+    <TypeScriptCompile Include="Scripts\Plugins\Storage\itjakub.plugins.storage.manager.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jqueryui\jqueryui.d.ts" />
+    <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
+    <Content Include="Scripts\typeahead.bundle.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1519,7 +1734,7 @@
     <Content Include="Views\Home\Links.cshtml" />
     <Content Include="Views\Home\HowToCite.cshtml" />
     <Content Include="Views\Home\Feedback.cshtml" />
-    <Content Include="Views\Feedback\Feedback.cshtml" />
+    <Content Include="Views\Feedback\FeedbackManagement.cshtml" />
     <Content Include="Views\Permission\UserPermission.cshtml" />
     <Content Include="Views\Permission\GroupPermission.cshtml" />
     <Content Include="Views\News\AddNews.cshtml" />
@@ -1530,6 +1745,7 @@
     <TypeScriptCompile Include="wwwroot\js\typings\jquery\jquery.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\simplemde\simplemde.d.ts" />
     <TypeScriptCompile Include="wwwroot\js\typings\typeahead\typeahead.d.ts" />
+    <TypeScriptCompile Include="wwwroot\lib\s-pagination\dist\pagination.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1668,4 +1884,3 @@
   <Target Name="AfterBuild">
   </Target> -->
 </Project>
-

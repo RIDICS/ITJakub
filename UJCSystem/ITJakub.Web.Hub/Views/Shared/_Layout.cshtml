@@ -1,9 +1,11 @@
-﻿@using ITJakub.Web.Hub.Identity
+﻿@using ITJakub.Web.Hub.Helpers
+@using ITJakub.Web.Hub.Identity
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="~/images/favicon_green.png">
     <title>UJC - @ViewBag.Title</title>
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
     <link href="~/lib/dropzone/downloads/css/dropzone.css" rel="stylesheet" />
@@ -12,483 +14,552 @@
     <link href="~/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
-    <link href="~/css/ITJakub.css" rel="stylesheet" />
+    <link href="~/css/ITJakubStyle.css" rel="stylesheet" />
     <script src="~/lib/modernizr/modernizr.js"></script>
-    
+
     @RenderSection("styles", false)
+    <link href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookPageByXmlId", "Reader",  new {area = ""})">
 
     <div class="component keyboard-component" data-keyboard-id="0" data-keyboard-api-url="@Url.Action("GetLayoutList", "Keyboard",  new {area = ""})"></div>
 
-<div class="container page-body-content">
+    @*top fixed part*@
+    <div class="navbar navbar-inverse navbar-fixed-top header-content">
+        <div class="">
+            <div class="main-navbar-container">
+                <div class="navbar-header-not">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Menu">
+                        <span class="glyphicon glyphicon-menu-hamburger"></span>
+                    </button>
+                    
+                    @Html.Partial("_LoginPartial")
 
-@*top fixed part*@
-<div class="navbar navbar-inverse navbar-fixed-top header-content">
-<div class="">
-    <div class="main-navbar-container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
+                    <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+                        <img src="@Url.Content("~/Content/Images/Logo/main_logo.png")" alt="main_logo" class="main_logo" />
+                        <div class="main_logo_text">
+                            <h1>Vokabulář</h1>
+                            <h2>webový</h2>
+                        </div>
+                    </a>
+                @*</div>*@
 
-            <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-                <img src="@Url.Content("~/images/logo.png")" alt="main_logo" class="main_logo"/> @*TODO make logo small as this size*@
-                <div class="main_logo_text">
-                    <h1>Vokabulář</h1>
-                    <h2>webový</h2>
+                <div class="navbar-collapse collapse">
+                    <div id="main-plugins-menu" class="main-plugins-menu">
+                        <ul>
+                            <li id="dictionaries-menu" class="has-sub">
+                                <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+                                    <span>Slovníky</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Listování</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Nápověda</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="editions-menu" class="has-sub">
+                                <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                                    <span>Edice</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
+                                            <span>Ediční zásady</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
+                                            <span>Nápověda</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="corpus-menu" class="has-sub">
+                                <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                    <span>Korpusy</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Nápověda</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="grammars-menu" class="has-sub">
+                                <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                                    <span>Mluvnice</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Seznam termínů</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Nápověda</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="professional-menu" class="has-sub">
+                                <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                    <span>Odborná literatura</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Help", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                            <span>Nápověda</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="bibliographies-menu" class="has-sub">
+                                <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+                                    <span>Bibliografie</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="cardifiles-menu" class="has-sub">
+                                <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+                                    <span>Kartotéky</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
+                                            <span>Vyhledávání</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
+                                            <span>Listování</span>
+                                        </a> @*TODO delete from menu*@
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="audio-menu" class="has-sub">
+                                <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                                    <span>Audioknihy</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li id="tools-menu" class="has-sub">
+                                <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+                                    <span>Pomůcky</span>
+                                </a>
+                                <ul>
+                                    <li>
+                                        <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
+                                            <span>Informace</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
+                                            <span>Seznam</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
+                                            <span>Připomínky</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li id="admin-menu" class="has-sub last">
+                                    @if (User.IsInRole(CustomRole.CanUploadBooks))
+                                    {
+                                        <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanEditLemmatization))
+                                    {
+                                        <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanReadLemmatization))
+                                    {
+                                        <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+                                    {
+                                        <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanManagePermissions))
+                                    {
+                                        <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanManageFeedbacks))
+                                    {
+                                        <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else if (User.IsInRole(CustomRole.CanAddNews))
+                                    {
+                                        <a href='@Url.Action("Add", "News", new {area = ""})'>
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
+                                            <span>Administrace</span>
+                                        </a>
+                                    }
+                                    <ul>
+                                        @if (User.IsInRole(CustomRole.CanUploadBooks))
+                                        {
+                                            <li>
+                                                <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
+                                                    <span>Nahrání díla</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
+                                                    <span>Lemmatizace</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
+                                                    <span>Lemmatizace - procházení</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
+                                                    <span>Derivace hláskových podob</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @if (User.IsInRole(CustomRole.CanManagePermissions))
+                                        {
+                                            <li>
+                                                <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
+                                                    <span>Správa uživatelů</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href='@Url.Action("GroupPermission", "Permission", new {area = ""})'>
+                                                    <span>Správa skupin</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        @if (User.IsInRole(CustomRole.CanManageFeedbacks))
+                                        {
+                                            <li>
+                                                <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
+                                                    <span>Správa připomínek</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                        <li>
+                                            <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
+                                                <span>Oblíbené položky</span>
+                                            </a>
+                                        </li>
+
+                                        @if (User.IsInRole(CustomRole.CanAddNews))
+                                        {
+                                            <li>
+                                                <a href='@Url.Action("Add", "News", new {area = ""})'>
+                                                    <span>Přidat novinku</span>
+                                                </a>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </div>
                 </div>
-            </a>
-        </div>
-        <div class="navbar-collapse collapse">
-            @Html.Partial("_LoginPartial")
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
-                                                                                                      {@Html.Raw("EditLemmatization")
-                                                                                                      } "></div>
 
-<div id="main-plugins-menu" class="main-plugins-menu">
-<ul>
-<li id="dictionaries-menu" class="has-sub">
-    <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-        <span>Slovníky</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Listing", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Listování</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Help", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Nápověda</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "Dictionaries", new {area = "Dictionaries"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="editions-menu" class="has-sub">
-    <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-        <span>Edice</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "Editions", new {area = "Editions"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "Editions", new {area = "Editions"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "Editions", new {area = "Editions"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("EditionPrinciples", "Editions", new {area = "Editions"})'>
-                <span>Ediční zásady</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Help", "Editions", new {area = "Editions"})'>
-                <span>Nápověda</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "Editions", new {area = "Editions"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="corpus-menu" class="has-sub">
-    <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-        <span>Korpusy</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Help", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                <span>Nápověda</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "BohemianTextBank", new {area = "BohemianTextBank"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="grammars-menu" class="has-sub">
-    <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-        <span>Mluvnice</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("ListTerms", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Seznam termínů</span>
-            </a>
-        </li>
-        <li>
-            <a href='@Url.Action("Help", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Nápověda</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "OldGrammar", new {area = "OldGrammar"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="professional-menu" class="has-sub">
-    <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-        <span>Odborná literatura</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Help", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                <span>Nápověda</span>
-            </a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "ProfessionalLiterature", new {area = "ProfessionalLiterature"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="bibliographies-menu" class="has-sub">
-    <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-        <span>Bibliografie</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "Bibliographies", new {area = "Bibliographies"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "Bibliographies", new {area = "Bibliographies"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "Bibliographies", new {area = "Bibliographies"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="cardifiles-menu" class="has-sub">
-    <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-        <span>Kartotéky</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "CardFiles", new {area = "CardFiles"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "CardFiles", new {area = "CardFiles"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Search", "CardFiles", new {area = "CardFiles"})'>
-                <span>Vyhledávání</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Listing", "CardFiles", new {area = "CardFiles"})'>
-                <span>Listování</span></a> @*TODO delete from menu*@
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "CardFiles", new {area = "CardFiles"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="audio-menu" class="has-sub">
-    <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-        <span>Audioknihy</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "AudioBooks", new {area = "AudioBooks"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "AudioBooks", new {area = "AudioBooks"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "AudioBooks", new {area = "AudioBooks"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-<li id="tools-menu" class="has-sub">
-    <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-        <span>Pomůcky</span></a>
-    <ul>
-        <li>
-            <a href='@Url.Action("Information", "Tools", new {area = "Tools"})'>
-                <span>Informace</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("List", "Tools", new {area = "Tools"})'>
-                <span>Seznam</span></a>
-        </li>
-        <li>
-            <a href='@Url.Action("Feedback", "Tools", new {area = "Tools"})'>
-                <span>Připomínky</span></a>
-        </li>
-    </ul>
-</li>
-@if (User.Identity.IsAuthenticated && User.IsInRole(CustomRole.CanViewAdminModule))
-{
-    <li id="admin-menu" class="has-sub last">
-        @if (User.IsInRole(CustomRole.CanUploadBooks))
-        {
-            <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanEditLemmatization))
-        {
-            <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanReadLemmatization))
-        {
-            <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanDerivateLemmatization))
-        {
-            <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanManagePermissions))
-        {
-            <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanManageFeedbacks))
-        {
-            <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                <span>Administrace</span>
-            </a>
-        }
-        else if (User.IsInRole(CustomRole.CanAddNews))
-        {
-            <a href='@Url.Action("Add", "News", new {area = ""})'>
-                <span>Administrace</span>
-            </a>
-        }
-        else
-        {
-            <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                <span>Administrace</span>
-            </a>
-        }
-        <ul>
-            @if (User.IsInRole(CustomRole.CanUploadBooks))
-            {
-                <li>
-                    <a href='@Url.Action("Upload", "Upload", new {area = ""})'>
-                        <span>Nahrání díla</span>
-                    </a>
-                </li>
-            }
+    <div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
+    <div id="permissions-div" class="hidden" data-is-authenticated="@User.Identity.IsAuthenticated" data-roles="@if (User.IsInRole(CustomRole.CanEditLemmatization))
+                                                                                                    {@Html.Raw("EditLemmatization")
+                                                                                                    } "></div>
 
-            @if (User.IsInRole(CustomRole.CanReadLemmatization) || User.IsInRole(CustomRole.CanEditLemmatization))
-            {
-                <li>
-                    <a href="@Url.Action("Index", "Lemmatization", new {area = "Lemmatization"})">
-                        <span>Lemmatizace</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="@Url.Action("List", "Lemmatization", new {area = "Lemmatization"})">
-                        <span>Lemmatizace - procházení</span>
-                    </a>
-                </li>
-            }
+    <div class="page-body-content">
 
-            @if (User.IsInRole(CustomRole.CanDerivateLemmatization))
-            {
-                <li>
-                    <a href="@Url.Action("Index", "Derivation", new {area = "Derivation"})">
-                        <span>Derivace hláskových podob</span>
-                    </a>
-                </li>
-            }
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="~/lib/respond/dest/respond.min.js"></script>
+        <script src="~/lib-custom/typeahead.bundle.js"></script>
+        <script src="~/lib/dropzone/downloads/dropzone.js"></script>
+        <script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
+        <script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
+        <script src="~/lib/wheelzoom/wheelzoom.js"></script>
+        <script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
+        <script src="~/lib/simplemde/dist/simplemde.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
+        <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
 
-            @if (User.IsInRole(CustomRole.CanManagePermissions))
-            {
-                <li>
-                    <a href='@Url.Action("UserPermission", "Permission", new {area = ""})'>
-                        <span>Správa uživatelů</span>
-                    </a>
-                </li>
-                <li>
-                    <a href='@Url.Action("GroupPermission", "Permission", new {area = ""})'>
-                        <span>Správa skupin</span>
-                    </a>
-                </li>
-            }
+        <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
+        <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
+        <script src="~/js/bundles/itjakub.bundle.js"></script>
+        <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
+        <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
 
-            @if (User.IsInRole(CustomRole.CanManageFeedbacks))
-            {
-                <li>
-                    <a href='@Url.Action("Feedback", "Feedback", new {area = ""})'>
-                        <span>Správa připomínek</span>
-                    </a>
+        @*<script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
+        <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
+        <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
+        <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
+        <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
+        <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>*@
+        @RenderSection("scripts", false)
+
+        @*main page content*@
+        <div class="container-header">
+            <div class="container">
+                @BreadcrumbsHelper.Create(ViewBag.Title)
+            </div>
+        </div>
+        <div class="container module-content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <footer class="footer">
+        <a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
+            <img src="@Url.Content("~/Content/Images/Logo/main_logo.png")" alt="main_logo" /> @*TODO make logo small as this size*@
+        </a>
+
+        <div class="footer-text-area">
+            <ul>
+                <li class="footer-first">
+                    <a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a>
                 </li>
-            }
-            
-            <li>
-                <a href='@Url.Action("Management", "Favorite", new {area = ""})'>
-                    <span>Správa oblíbených položek</span>
+                <li>
+                    <a href='@Url.Action("Copyright", "Home", new {area = ""})'>Copyright</a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Contacts", "Home", new {area = ""})'>Kontakty</a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Links", "Home", new {area = ""})'>Odkazy</a>
+                </li>
+                <li>
+                    <a href='@Url.Action("Support", "Home", new {area = ""})'>Podpora</a>
+                </li>
+                <li>
+                    <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>Jak citovat</a>
+                </li>
+                <li class="footer-last">
+                    <a href='@Url.Action("Feedback", "Home", new {area = ""})'>Připomínky</a>
+                </li>
+            </ul>
+            <div class="footer-text">
+                VOKABULÁŘ WEBOVÝ byl spuštěn před @{
+                    var now = DateTime.Now;
+                    var releaseDate = new DateTime(2015, 1, 1);
+                    var difference = now - releaseDate;
+                    var age = DateTime.MinValue + difference; //Min value is 1.1. 0001
+
+                    var years = age.Year - 1;
+                    var months = age.Month - 1;
+                    var days = age.Day - 1;
+
+                    @: @years lety, @months měsíci a @days dny
+                }
+            </div>
+            <div class="footer-logos">
+                <a href="http://www.ujc.cas.cz/" class="ujc" title="Ústav pro jazyk český">
+                    <img src="@Url.Content("~/Content/Images/Logo/logo_ujc_white.png")" alt="Ústav pro jazyk český" />
                 </a>
-            </li>
-
-            @if (User.IsInRole(CustomRole.CanAddNews))
-            {
-                <li>
-                    <a href='@Url.Action("Add", "News", new {area = ""})'>
-                        <span>Přidat novinku</span>
-                    </a>
-                </li>
-            }
-
-        </ul>
-    </li>
-}
-</ul>
-</div>
-</div>
-<div id="baseUrl" data-path="@Url.Content("~/")" style="display: none"></div>
-
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
-<script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="~/lib/respond/dest/respond.min.js"></script>
-<script src="~/lib-custom/typeahead.bundle.js"></script>
-<script src="~/lib/dropzone/downloads/dropzone.js"></script>
-<script src="~/lib/jquery-appear/src/jquery.appear.js"></script>
-<script src="~/lib/jquery-zoom/jquery.zoom.js"></script>
-<script src="~/lib/wheelzoom/wheelzoom.js"></script>
-<script src="~/lib/jquery-eu-cookie-law-popup/js/jquery-eu-cookie-law-popup.js"></script>
-<script src="~/lib/simplemde/dist/simplemde.min.js"></script>
-<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
-<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-<script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
-<script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
-
-<script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
-<script src="~/js/bundles/itjakub.storage.bundle.js"></script>
-<script src="~/js/bundles/itjakub.bundle.js"></script>
-<script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
-<script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
-
-@*<script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
-<script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
-<script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
-<script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
-<script src="~/js/Favorite/itjakub.favoriteStar.js"></script>*@
-
-@RenderSection("scripts", false)
-
-@*main page content*@
-<div class="container module-content">
-
-    @RenderBody()
-</div>
-
-<footer class="footer">
-    @*<a href='@Url.Action("Index", "Home", new {area = ""})' class="main_logo_href">
-        <img src="@Url.Content("~/images/logo.png")" alt="main_logo"/> TODO make logo small as this size
-    </a>*@
-
-    <div class="footer-text-area" style="width: 100%;">
-        <ul style="padding-left: 0;">
-            <li class="footer-first">
-                <a href='@Url.Action("About", "Home", new {area = ""})'>O Vokabuláři webovém</a>
-            </li>
-            <li>
-                <a href='@Url.Action("Copyright", "Home", new {area = ""})'>Copyright</a>
-            </li>
-            <li>
-                <a href='@Url.Action("Contacts", "Home", new {area = ""})'>Kontakty</a>
-            </li>
-            <li>
-                <a href='@Url.Action("Links", "Home", new {area = ""})'>Odkazy</a>
-            </li>
-            <li>
-                <a href='@Url.Action("Support", "Home", new {area = ""})'>Podpora</a>
-            </li>
-            <li>
-                <a href='@Url.Action("HowToCite", "Home", new {area = ""})'>Jak citovat</a>
-            </li>
-            <li class="footer-last">
-                <a href='@Url.Action("Feedback", "Home", new {area = ""})'>Připomínky</a>
-            </li>
-        </ul>
-        <div class="footer-text">
-            VOKABULÁŘ WEBOVÝ byl spuštěn před @{
-                                                  var now = DateTime.Now;
-                                                  var releaseDate = new DateTime(2015, 1, 1);
-                                                  var difference = now - releaseDate;
-                                                  var age = DateTime.MinValue + difference; //Min value is 1.1. 0001
-
-                                                  var years = age.Year - 1;
-                                                  var months = age.Month - 1;
-                                                  var days = age.Day - 1;
-
-                                                  @: @years lety, @months měsíci a @days dny
-                                              }
+                <a href="https://www.fel.cvut.cz/cz/" class="fel" title="ČVUT Fakulta Elektrotechnická">
+                    <img src="@Url.Content("~/Content/Images/Logo/logo_fel_white.png")" alt="ČVUT Fakulta Elektrotechnická" />
+                </a>
+                <a href="http://av21.avcr.cz/" class="av21" title="AVČR Strategie AV 21">
+                    <img src="@Url.Content("~/Content/Images/Logo/logo_av21_white.png")" alt="AVČR Strategie AV 21" />
+                </a>
+                <a href="http://www.msmt.cz" class="msmt" title="Ministerstvo školství, mládeže a tělovýchovy">
+                    <img src="@Url.Content("~/Content/Images/Logo/logo_msmt_white.png")" alt="Ministerstvo školství, mládeže a tělovýchovy" />
+                </a>
+            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
-</div>
 </body>
 </html>

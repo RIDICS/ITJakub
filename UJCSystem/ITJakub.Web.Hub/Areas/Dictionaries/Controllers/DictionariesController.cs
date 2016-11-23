@@ -22,10 +22,12 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
     public class DictionariesController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public DictionariesController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public DictionariesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Dictionary; } }
@@ -83,29 +85,30 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View(pageStaticText);
         }
 
-        public ActionResult Feedback()
+        public ActionResult Feedback(string bookId, string versionId, string entryId, string headword, string dictionary)
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+            var viewModel = new HeadwordFeedbackViewModel
+            {
+                BookXmlId = bookId,
+                BookVersionXmlId = versionId,
+                EntryXmlId = entryId,
+                Dictionary = dictionary,
+                Headword = headword,
+                PageStaticText = pageStaticText
+            };
 
-            var username = HttpContext.User.Identity.Name;
+            var username = GetUserName();
             if (string.IsNullOrWhiteSpace(username))
             {
-                return View(new HeadwordFeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
+                return View(viewModel);
             }
 
             using (var client = GetEncryptedClient())
             {
                 var user = client.FindUserByUserName(username);
-                var viewModel = new HeadwordFeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
+                viewModel.Name = string.Format("{0} {1}", user.FirstName, user.LastName);
+                viewModel.Email = user.Email;
 
                 return View(viewModel);
             }
@@ -116,8 +119,22 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(HeadwordFeedbackViewModel model)
         {
-            AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
-            return View("Information");
+            if (!ModelState.IsValid)
+            {
+                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+                return View(model);
+            }
+
+            if (model.BookXmlId == null || model.BookVersionXmlId == null || model.EntryXmlId == null)
+            {
+                m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Dictionaries, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            }
+            else
+            {
+                AddHeadwordFeedback(model.Text, model.BookXmlId, model.BookVersionXmlId, model.EntryXmlId, model.Name, model.Email);
+            }
+                
+            return View("Feedback/FeedbackSuccess");
         }
 
         private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
@@ -422,34 +439,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         private void AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
         {
             var username = HttpContext.User.Identity.Name;
-            if (bookXmlId == null || bookVersionXmlId == null || entryXmlId == null)
-            {
-                if (string.IsNullOrWhiteSpace(username))
-                {
                     using (var client = GetMainServiceClient())
                     {
-                        client.CreateAnonymousFeedback(content, name, email, FeedbackCategoryEnumContract.Dictionaries);
-                    }
-                }
-
-                else
-                {
-                    using (var client = GetMainServiceClient())
-                    {
-                        client.CreateFeedback(content, username, FeedbackCategoryEnumContract.Dictionaries);
-                    }
-                }
-
-            }
-            else
-            {
                 if (string.IsNullOrWhiteSpace(username))
-                    using (var client = GetMainServiceClient())
                     {
                         client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
                     }
                 else
-                    using (var client = GetMainServiceClient())
                     {
                         client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
                     }

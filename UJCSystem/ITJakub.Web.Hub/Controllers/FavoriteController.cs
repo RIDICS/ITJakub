@@ -222,8 +222,8 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultId = client.CreatePageBookmark(request.BookXmlId, request.PageXmlId, request.Title, request.LabelId);
-                return Json(resultId);
+                var resultIds = client.CreatePageBookmark(request.BookXmlId, request.PageXmlId, request.Title, request.LabelIds);
+                return Json(resultIds);
             }
         }
 

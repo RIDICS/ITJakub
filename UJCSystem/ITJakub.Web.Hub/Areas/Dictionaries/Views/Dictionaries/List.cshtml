@@ -15,22 +15,4 @@
     });
 </script>
 
-<div class="transparent-content-container">
-    <div class="search-with-saved-word-area">
-        <div id="listHeader">
-            <div id="listSearchDiv" style="float: left; width: 70%"></div>
-            <div style="float: left; margin-left: 50px;">
-                Řadit podle
-                <div id="listResultsHeader" style="display: inline-block"></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="dictionary-selects transparent-content-container">
-        <div id="dropdownSelectDiv"></div>
-    </div>
-
-    <div class="dictionary-result-area transparent-content-container">
-        <div id="listResults" class="loader"></div>
-    </div>
-</div>
+@Html.Partial("_BibliographySearch")

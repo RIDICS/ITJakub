@@ -1,7 +1,5 @@
 using ITJakub.Shared.Contracts;
 using ITJakub.Web.Hub.Managers;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -12,14 +10,5 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         public abstract BookTypeEnumContract AreaBookType { get; }
-
-        protected JsonSerializerSettings GetJsonSerializerSettingsForBiblModule()
-        {
-            return new JsonSerializerSettings
-            {
-                ContractResolver = new DefaultContractResolver(),
-                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
-            };
-        }
     }
 }

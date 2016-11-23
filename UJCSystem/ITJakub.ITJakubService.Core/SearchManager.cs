@@ -246,6 +246,15 @@ namespace ITJakub.ITJakubService.Core
 
             return searchResultFullContext;
         }
+        
+        public SearchResultDetailContract GetBookDetailInfoById(long bookId)
+        {
+            m_authorizationManager.AuthorizeBook(bookId);
+
+            var dbResult = m_bookVersionRepository.GetBookVersionDetailByBookId(bookId);
+            var result = Mapper.Map<SearchResultDetailContract>(dbResult);
+            return result;
+        }
 
         public List<BookContract> GetBooksByBookType(BookTypeContract bookType)
         {
@@ -401,7 +410,7 @@ namespace ITJakub.ITJakubService.Core
                 {
                     dictionaryContract = new DictionaryContract
                     {
-                        BookAcronym = headword.BookAcronym,
+                        BookAcronym = headword.BookAcronym ?? headword.SourceAbbreviation,
                         BookTitle = headword.BookTitle,
                         BookXmlId = headword.BookGuid,
                         BookVersionXmlId = headword.BookVersionId
@@ -872,10 +881,10 @@ namespace ITJakub.ITJakubService.Core
 
             foreach (var bookVersion in resultBookVersions)
             {
-                var tracks = m_bookVersionRepository.GetTracksForBookVersion(bookVersion.Id);
-
+                var fullBookRecordings = m_bookVersionRepository.GetFullBookRecordings(bookVersion.Id);
+                
                 var audioBook = Mapper.Map<AudioBookSearchResultContract>(bookVersion);
-                audioBook.Tracks = Mapper.Map<IList<TrackContract>>(tracks);
+                audioBook.FullBookRecordings = Mapper.Map<IList<RecordingContract>>(fullBookRecordings);
 
                 audibookList.Add(audioBook);
             }
@@ -886,6 +895,18 @@ namespace ITJakub.ITJakubService.Core
             };
 
             return resultList;
+        }
+
+        public AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId)
+        {
+            m_authorizationManager.AuthorizeBook(bookId);
+
+            var dbResult = m_bookVersionRepository.GetBookVersionDetailByBookId(bookId);
+            var tracks = m_bookVersionRepository.GetTracksForBookVersion(dbResult.Id);
+            var resultAudioBook = Mapper.Map<AudioBookSearchResultContract>(dbResult);
+            resultAudioBook.Tracks = Mapper.Map<IList<TrackContract>>(tracks);
+
+            return resultAudioBook;
         }
 
         public int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias)

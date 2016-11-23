@@ -47,7 +47,11 @@ $(document).ready(() => {
     var notFilledMessage = "&lt;Nezadáno&gt;";
 
 
-    paginator = new Pagination("#feedbacks-paginator", feedbacksOnPage);
+    paginator = new Pagination({
+        container: $("#feedbacks-paginator"),
+        pageClickCallback: paginatorClickedCallback,
+        callPageClickCallbackOnInit: true
+    });
 
 
     function deleteFeedback(feedbackId: string) {
@@ -206,7 +210,7 @@ $(document).ready(() => {
             success: response => {
                 var count = response;
                 document.getElementById("feedbacks-count").innerHTML = count;
-                paginator.createPagination(count, feedbacksOnPage, paginatorClickedCallback);
+                paginator.make(count, feedbacksOnPage);
             }
         });
     }

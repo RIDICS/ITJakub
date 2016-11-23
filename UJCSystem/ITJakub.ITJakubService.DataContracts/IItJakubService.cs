@@ -45,6 +45,9 @@ namespace ITJakub.ITJakubService.DataContracts
         BookInfoWithPagesContract GetBookInfoWithPages(string bookGuid);
 
         [OperationContract]
+        SearchResultDetailContract GetBookDetailInfoById(long bookId);
+
+        [OperationContract]
         BookTypeSearchResultContract GetBooksWithCategoriesByBookType(BookTypeEnumContract bookType);
 
         [OperationContract]
@@ -182,6 +185,9 @@ namespace ITJakub.ITJakubService.DataContracts
 
         [OperationContract]
         int GetAudioBooksSearchResultsCount(IEnumerable<SearchCriteriaContract> searchCriterias);
+
+        [OperationContract]
+        AudioBookSearchResultContract GetAudioBookDetailInfoById(long bookId);
 
         #endregion
 
@@ -322,7 +328,7 @@ namespace ITJakub.ITJakubService.DataContracts
         IList<long> CreateFavoriteQuery(BookTypeEnumContract bookType, QueryTypeEnumContract queryType, string query, string title, IList<long> labelIds);
 
         [OperationContract]
-        long CreatePageBookmark(string bookXmlId, string pageXmlId, string title, long? labelId);
+        IList<long> CreatePageBookmark(string bookXmlId, string pageXmlId, string title, IList<long> labelIds);
 
         #endregion
 

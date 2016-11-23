@@ -1,10 +1,14 @@
 ﻿.keyboard-component {
     width: 0;    
     height: 0;
-    /*position: fixed;*/
+    position: absolute;
     top: 0;
     left: 0;
     
+    .ui-draggable-handle {
+        touch-action: auto;
+    }
+
     .keyboard_container {
         position: relative;
         display: none;
@@ -14,12 +18,7 @@
         background-color: white;
         z-index: 999;
     }
-
-    .keyboardHideButton {
-        margin-top: 2px;
-        margin-right: 2px;
-    }
-
+    
     ul.keyboard-tabs {
         margin-bottom: 10px;
     }
@@ -30,11 +29,12 @@
     }
 
     .disabled-cell {
-        background-color: #E0E3DA;
+        background-color: #d8c9bc;
     }
 
     .disabled-cell:hover {
         cursor: not-allowed;
+        background-color: #d8c9bc;
     }
 
     .second-button {
@@ -48,7 +48,7 @@
         font-size: 120%;
         float: left;
         margin-left: 30%;
-        margin-top: 1em;
+        margin-top: 11px;
     }
 
     .pin-button {
@@ -56,7 +56,14 @@
         width: 30px;
         height: 30px;
         top: 8px;
-        right: 5%;
+        right: 10px;
+        color: #000;
+        opacity: .2;
+    }
+    .pin-button:hover, .pin-button:focus {
+        background-color: transparent;
+        /*color: #808080*/
+        opacity: .5;
     }
 
     .tabs {
@@ -67,6 +74,7 @@
             overflow: auto;
             width: 90%;
             margin-top: 0;
+            display: inline;
 
             &>li {
                 &>a {
@@ -77,6 +85,7 @@
 
         .tab-content {
             line-height: normal;
+            padding-top: 0;
         }
     }
 }
@@ -101,7 +110,7 @@
 
     .keyboard-input {
         margin: 0;
-        padding-right: 70px;
+        padding-right: 80px;
     }
     .keyboard-icon-img {
         position: absolute;
@@ -112,7 +121,7 @@
 
 .regex-word-input-textbox {
     .regexsearch-condition-input {
-        margin-right: -59px;
+        margin-right: -60px;
     }
     .keyboard-icon-img {
         position: relative;

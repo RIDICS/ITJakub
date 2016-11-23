@@ -6,6 +6,8 @@ using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -65,6 +67,15 @@ namespace ITJakub.Web.Hub.Controllers
                 throw new ArgumentException("Cannot find communicationToken");
 
             return communicationToken.Value;
+        }
+        
+        protected JsonSerializerSettings GetJsonSerializerSettingsForBiblModule()
+        {
+            return new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver(),
+                DateFormatHandling = DateFormatHandling.MicrosoftDateFormat
+            };
         }
     }
 }

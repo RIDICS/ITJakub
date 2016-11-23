@@ -12,6 +12,7 @@ class FavoriteManagement {
     private activeLabelForEditing: JQuery;
     private labelColorInput: ColorInput;
     private pagination: Pagination;
+    private paginationOptions: Pagination.Options;
     private newFavoriteLabelDialog: FavoriteManagementDialog;
     private removeDialog: FavoriteManagementDialog;
 
@@ -24,7 +25,12 @@ class FavoriteManagement {
         this.activeLabelForEditing = null;
         this.activeLabelId = null;
 
-        this.pagination = new Pagination("#pagination");
+        this.paginationOptions = {
+            container: $("#pagination"),
+            pageClickCallback: this.loadFavoriteItemsPage.bind(this)
+        }
+        this.pagination = new Pagination(this.paginationOptions);
+
         this.newFavoriteLabelDialog = new FavoriteManagementDialog($("#new-favorite-label-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
     }
@@ -184,7 +190,8 @@ class FavoriteManagement {
             $("#no-label").show();
         }
 
-        this.pagination.createPagination(0, FavoriteManagement.pageSize, () => {});
+        this.paginationOptions.callPageClickCallbackOnInit = false;
+        this.pagination.make(0, FavoriteManagement.pageSize);
     }
 
     private showLoader() {
@@ -203,9 +210,11 @@ class FavoriteManagement {
         
         this.showLoader();
 
-        this.pagination.createPagination(0, FavoriteManagement.pageSize, () => {});
+        this.paginationOptions.callPageClickCallbackOnInit = false;
+        this.pagination.make(0, FavoriteManagement.pageSize);
         this.favoriteManager.getFavoritesCount(this.activeLabelId, this.currentTypeFilter, this.currentNameFilter, (itemsCount) => {
-            this.pagination.createPagination(itemsCount, FavoriteManagement.pageSize, this.loadFavoriteItemsPage.bind(this));
+            this.paginationOptions.callPageClickCallbackOnInit = true;
+            this.pagination.make(itemsCount, FavoriteManagement.pageSize);
         });
     }
 

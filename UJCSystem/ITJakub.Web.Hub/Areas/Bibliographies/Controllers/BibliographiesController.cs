@@ -19,15 +19,22 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
     public class BibliographiesController : AreaController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly FeedbacksManager m_feedbacksManager;
 
-        public BibliographiesController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public BibliographiesController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType
         {
             get { return BookTypeEnumContract.BibliographicalItem; }
+        }
+
+        private FeedbackFormIdentification GetFeedbackFormIdentification()
+        {
+            return new FeedbackFormIdentification { Area = "Bibliographies", Controller = "Bibliographies" };
         }
 
         public ActionResult Index()
@@ -48,28 +55,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Feedback()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
-
-            var username = HttpContext.User.Identity.Name;
-            if (string.IsNullOrWhiteSpace(username))
-            {
-                return View(new FeedbackViewModel
-                {
-                    PageStaticText = pageStaticText
-                });
-            }
-            using (var client = GetEncryptedClient())
-            {
-                var user = client.FindUserByUserName(username);
-                var viewModel = new FeedbackViewModel
-                {
-                    Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-                    Email = user.Email,
-                    PageStaticText = pageStaticText
-                };
-
-                return View(viewModel);
-            }
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -77,22 +64,14 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Feedback(FeedbackViewModel model)
         {
-            var username = HttpContext.User.Identity.Name;
-
-            if (string.IsNullOrWhiteSpace(username))
+            if (!ModelState.IsValid)
             {
-                using (var client = GetMainServiceClient())
-                    client.CreateAnonymousFeedback(model.Text, model.Name, model.Email, FeedbackCategoryEnumContract.Bibliographies);
-            }
-            else
-            {
-                using (var client = GetMainServiceClient())
-                {
-                    client.CreateFeedback(model.Text, username, FeedbackCategoryEnumContract.Bibliographies);
-                }
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                return View(model);
             }
 
-            return View("Information");
+            m_feedbacksManager.CreateFeedback(model, FeedbackCategoryEnumContract.Bibliographies, GetMainServiceClient(), IsUserLoggedIn(), GetUserName());
+            return View("Feedback/FeedbackSuccess");
         }
 
         public ActionResult GetTypeaheadAuthor(string query)

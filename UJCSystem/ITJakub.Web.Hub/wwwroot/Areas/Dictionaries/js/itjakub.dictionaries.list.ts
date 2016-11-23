@@ -14,6 +14,7 @@
                 url: {
                     advanced: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryAdvancedSearchPaged",
                     text: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryBasicSearchPaged",
+                    advancedCount: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryAdvancedSearchResultsCount",
                     textCount: getBaseUrl() + "Dictionaries/Dictionaries/DictionaryBasicSearchResultsCount"
                 },
                 favoriteQueries: {

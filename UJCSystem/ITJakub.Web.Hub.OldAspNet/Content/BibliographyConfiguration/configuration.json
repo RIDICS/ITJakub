@@ -156,9 +156,8 @@
       "read-button": {
         "onclick": "listBook(this)"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",
@@ -209,9 +208,8 @@
       "read-button": {
         "url": "Dictionaries\\Dictionaries\\Listing?books=[{BookId}]"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      }
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}"
     }
   },
 
@@ -372,9 +370,8 @@
       "read-button": {
         "url": "Editions\\Editions\\Listing?bookId={BookXmlId}"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",
@@ -489,9 +486,8 @@
       "info-button": {
         "url": "AudioBooks\\AudioBooks\\Listing?bookId={BookXmlId}"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      }
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetAudioBookDetailInfo?bookId={BookId}"
     },
     "bottom-panel": {
       "body": "{$tracksList}",
@@ -703,9 +699,8 @@
       "read-button": {
         "onclick": "listGrammarBook(this)"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",
@@ -873,9 +868,8 @@
       "read-button": {
         "onclick": "listBook(this)"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",
@@ -1043,9 +1037,8 @@
       "read-button": {
         "onclick": "listBook(this)"
       },
-      "favorite-button": {
-        "onclick-callable": "addFavoriteFromBibliography(this)"
-      },
+      "favorite-button": {},
+      "load-detail-url": "Bibliography/GetBookDetailInfo?bookId={BookId}",
       "variables": {
         "$test": {
           "type": "basic",

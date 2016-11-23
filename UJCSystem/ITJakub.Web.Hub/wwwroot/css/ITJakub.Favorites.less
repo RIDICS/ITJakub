@@ -1,4 +1,4 @@
-﻿@import "../ITJakub.DefaultTheme.less";
+﻿@import "ITJakub.Colors.less";
 
 .label-favorite {
     font-size: 90%;
@@ -111,10 +111,10 @@ div.favorite-label-management a:hover {
     background-color: white;
     padding: 10px;
     margin-bottom: 10px;
-    /*margin-right: 182px;*/
 
     .label {
         border: solid 1px black;
+        padding-bottom: 0.2em;
     }
 }
 
@@ -127,13 +127,19 @@ div.favorite-label-management a:hover {
     line-height: 30px;
 }
 
+.favorite-query-header-label {
+    display: block;
+    float: left;
+}
+
 .favorite-query-list {
     min-height: 170px;
     max-height: 300px;
     overflow-y: auto;
 }
 
-.favorite-query-list a:hover, .favorite-query-list a:focus {
+.favorite-query-list a:hover,
+.favorite-query-list a:focus {
     text-decoration: none;
 }
 
@@ -142,12 +148,22 @@ div.favorite-label-management a:hover {
     color: black;
 }
 
-.favorite-query-label, .favorite-query-item {
+.favorite-query-list-left {
+    line-height: 1.6;
+}
+
+.favorite-query-label,
+.favorite-query-item {
     display: block;
 }
 
-.favorite-query-item {
-    margin-bottom: 5px;
+.favorite-query-list hr {
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+.favorite-query-item-header {
+    line-height: 1.6;
 }
 
 .favorite-query-raw {
@@ -169,6 +185,10 @@ div.favorite-label-management a:hover {
     margin-bottom: 2px;
 }
 
+.favorite-query-filter-container {
+    margin-left: 60px;
+}
+
 .favorite-book-select-button {
     background-color: transparent;
     border-style: none;
@@ -185,7 +205,7 @@ div.favorite-label-management a:hover {
 .favorite-dropdown-item-label {
     display: inline-block;
     font-size: 90%;
-    margin-bottom: 1px;
+    margin-bottom: 2px;
     border: solid 1px black;
 }
 
@@ -197,6 +217,10 @@ div.favorite-label-management a:hover {
     }
 }
 
+.favorite-book-select {
+    margin-bottom: 0.7rem;
+}
+
 .favorite-book-select-body {
     padding-left: 20px;
     padding-right: 20px;
@@ -204,14 +228,14 @@ div.favorite-label-management a:hover {
     div {
         display: inline-block;
     }
-}
 
-.favorite-book-select-body > div {
-    margin-right: 3px;
-}
+    > div {
+        margin-right: 3px;
+    }
 
-.favorite-book-select-body > div:hover {
-    background-color: whitesmoke;
+    > div:hover {
+        background-color: whitesmoke;
+    }
 }
 
 .favorite-item {

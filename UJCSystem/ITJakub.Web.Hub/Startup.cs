@@ -48,6 +48,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<CommunicationProvider>();
             services.AddScoped<CommunicationConfigurationProvider>();
             services.AddScoped<StaticTextManager>();
+            services.AddScoped<FeedbacksManager>();
 
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));

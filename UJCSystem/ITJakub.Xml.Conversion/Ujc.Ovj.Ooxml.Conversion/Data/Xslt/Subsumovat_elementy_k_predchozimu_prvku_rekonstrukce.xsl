@@ -4,7 +4,7 @@
 	exclude-result-prefixes="xd"
 	version="1.0">
 	
-	<xsl:template match="body/*/*[2][preceding-sibling::*[1]/self::rekonstrukce][not(self::doplneny_text)]">
+	<xsl:template match="body/*/*[2][preceding-sibling::*[1]/self::rekonstrukce][not(self::doplneny_text)]" priority="15" >
 		<xsl:copy>
 			<xsl:copy-of select="@*"/>
 			<xsl:copy-of select="preceding-sibling::*[1]"/>
@@ -14,7 +14,7 @@
 	
 	<xd:doc>
 		<xd:desc>
-			<xd:p>Vybere pouze prvky třetí úrovně (znakové styly) v rámci odstavce, z nimiž následuje element, který by měl být sloučen.</xd:p>
+			<xd:p>Vybere pouze prvky třetí úrovně (znakové styly) v rámci odstavce, za nimiž následuje element, který by měl být sloučen.</xd:p>
 		</xd:desc>
 	</xd:doc>
 	
@@ -36,9 +36,37 @@
 		</xsl:copy>
 	</xsl:template>
 	
+	<xd:doc>
+		<xd:desc>
+			<xd:pre>
+				<Vers>
+					<rekonstrukce>Kter</rekonstrukce>
+					<text>ýž </text>
+					<poznamka>čitelné pouze „…ýž“ </poznamka>
+					<text>svatební veselí</text>
+				</Vers>
+				</xd:pre>
+		</xd:desc>
+	</xd:doc>
+	
+	<xsl:template match="body/*/*[preceding-sibling::*[1]/self::rekonstrukce][not(self::doplneny_text)][not(self::foliace)][not(self::cislo_verse)][not(preceding-sibling::*[2])][following-sibling::*[1]/self::poznamka]" priority="20">
+		<xsl:copy><xsl:copy-of select="@*"/>
+			<xsl:copy-of select="preceding-sibling::*[1]"/>
+			<xsl:apply-templates />
+			<xsl:choose>
+				<xsl:when test="following-sibling::*[1]/self::poznamka">
+						<xsl:copy-of select="following-sibling::*[1]"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<!--<xsl:copy-of select="following-sibling::*[1]"/>-->		
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:copy>
+	</xsl:template>
+	
 	
 <!--	<xsl:template match="body/*/rekonstrukce[preceding-sibling::*[1]/self::popisek_k_obrazku]" priority="10" />-->
 	<xsl:template match="body/*/rekonstrukce[not(following-sibling::*[1]/self::rekonstrukce)][not(preceding-sibling::*[1]/self::doplneny_text)][not(preceding-sibling::*[1]/self::poznamka)][not(preceding-sibling::*[1]/self::foliace)][not(preceding-sibling::*[1]/self::cislo_verse)]" priority="10" >
-<!--		<xsl:message> vynechaný text: <xsl:value-of select="."/> </xsl:message>-->
+		<xsl:message> vynechaný text: <xsl:value-of select="."/> </xsl:message>
 	</xsl:template>
 </xsl:stylesheet>
