@@ -36,6 +36,11 @@ var sortEnumTranslation = [
     "Datum"
 ];
 
+enum FeedbackTypeEnum {
+    Generic = 0,
+    Headword = 1,
+}
+
 var sortCriteria = FeedbackSortEnum.Date;
 var sortOrderAsc = false;
 var categories = new Array<number>();
@@ -177,13 +182,30 @@ $(document).ready(() => {
                     feedbackHeaderDiv.appendChild(feedbackDeleteButtonDiv);
                     feedbackHeaderDiv.appendChild(feedbackHeaderInfosDiv);
 
+                    var feedbackBodyDiv = document.createElement("div");
+                    $(feedbackBodyDiv).addClass("feedback-text");
+                    
                     var feedbackTextDiv = document.createElement("div");
-                    $(feedbackTextDiv).addClass("feedback-text");
-                    $(feedbackTextDiv).html(actualFeedback.text);
+                    $(feedbackTextDiv).text(actualFeedback.text);
+                    feedbackBodyDiv.appendChild(feedbackTextDiv);
 
+                    if (actualFeedback.feedbackType === FeedbackTypeEnum.Headword) {
+                        var separator = document.createElement("hr");
 
+                        var feedbackHeadwordDiv = document.createElement("div");
+                        $(feedbackHeadwordDiv).text("Slovníkové heslo: " + actualFeedback.headwordInfo.defaultHeadword);
+
+                        var feedbackDictionaryDiv = document.createElement("div");
+                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.headwordInfo.dictionaryName);
+
+                        $(feedbackBodyDiv)
+                            .append(separator)
+                            .append(feedbackHeadwordDiv)
+                            .append(feedbackDictionaryDiv);
+                    }
+                    
                     feedbackDiv.appendChild(feedbackHeaderDiv);
-                    feedbackDiv.appendChild(feedbackTextDiv);
+                    feedbackDiv.appendChild(feedbackBodyDiv);
 
 
                     $(feedbacksContainer).append(feedbackDiv);

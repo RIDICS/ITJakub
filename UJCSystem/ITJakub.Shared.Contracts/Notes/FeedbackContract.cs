@@ -27,5 +27,10 @@ namespace ITJakub.Shared.Contracts.Notes
         [DataMember]
         public FeedbackCategoryEnumContract Category { get; set; }
 
+        [DataMember]
+        public FeedbackTypeEnumContract FeedbackType { get; set; }
+
+        [DataMember]
+        public FeedbackHeadwordInfoContract HeadwordInfo { get; set; }
     }
 }

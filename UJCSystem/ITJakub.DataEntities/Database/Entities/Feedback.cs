@@ -5,6 +5,8 @@ namespace ITJakub.DataEntities.Database.Entities
 {
     public class Feedback : IEquatable<Feedback>
     {
+        public virtual FeedbackType FeedbackType { get { return FeedbackType.Generic; } }
+
         public virtual long Id { get; set; }
 
         public virtual string Text { get; set; }
@@ -40,9 +42,17 @@ namespace ITJakub.DataEntities.Database.Entities
             return Id.GetHashCode();
         }
     }
-
-    public class HeadwordFeedback:Feedback
+    
+    public enum FeedbackType
     {
+        Generic = 0,
+        Headword = 1
+    }
+
+    public class HeadwordFeedback : Feedback
+    {
+        public override FeedbackType FeedbackType { get { return FeedbackType.Headword; } }
+
         public virtual BookHeadword BookHeadword { get; set; }
     }
 }

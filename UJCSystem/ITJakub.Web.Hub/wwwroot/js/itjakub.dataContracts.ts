@@ -6,6 +6,15 @@
     filledName: string;
     filledEmail: string;
     category: FeedbackCategoryEnum;
+    feedbackType: FeedbackTypeEnum;
+    headwordInfo: IFeedbackHeadwordInfo;
+}
+
+interface IFeedbackHeadwordInfo {
+    headwordId: number;
+    headword: string;
+    defaultHeadword: string;
+    dictionaryName: string;
 }
 
 interface IUser {
