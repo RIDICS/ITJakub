@@ -18,7 +18,7 @@
         return $("#uploadMessage").val();
     }
 
- 
+    const acceptedFiles = ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip";
     $("#dropzoneFileForm").dropzone({
     	url: getBaseUrl() + "Upload/UploadFile",
         maxFilesize: 10000, // MB
@@ -27,8 +27,19 @@
         autoProcessQueue: true,
         parallelUploads: 5,
         previewsContainer: "#dropzoneFileFormPreview",
-        acceptedFiles: ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
-        dictInvalidFileType: "Tento format neni podporovany. Vyberte prosim jiny soubor s priponou .doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip",
+        acceptedFiles: acceptedFiles,
+
+        dictInvalidFileType: "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou " + acceptedFiles,
+        dictDefaultMessage: "Pro nahrávání sem přesuňte soubory",
+        dictFallbackMessage: "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
+        dictFallbackText: "Použijte prosím záložní formulář umíštěný níže.",
+        dictFileTooBig: "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
+        dictResponseError: "Server odpověděl se stavovým kódem {{statusCode}}.",
+        dictCancelUpload: "Zrušit nahrávání",
+        dictCancelUploadConfirmation: "Opravdu chcete zrušit nahrávání tohoto souboru?",
+        dictRemoveFile: "Odstranit soubor",
+        dictRemoveFileConfirmation: null,
+        dictMaxFilesExceeded: "Nelze nahrát žádné další soubory.",
 
         init: function() {
             var fileDropzone = this;
@@ -64,6 +75,12 @@
             //});
 
 
+        },
+        error: function(file, message, xhr) {
+            var errorMessage = xhr
+                ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
+                : message;
+            this.defaultOptions.error(file, errorMessage, xhr);
         }
 
     });
