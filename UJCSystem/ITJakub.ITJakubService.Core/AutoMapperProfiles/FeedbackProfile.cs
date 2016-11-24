@@ -15,7 +15,14 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.FilledName, opt => opt.MapFrom(src => src.Name))
                 .ForMember(m => m.FilledEmail, opt => opt.MapFrom(src => src.Email))
                 .ForMember(m => m.CreateDate, opt => opt.MapFrom(src => src.CreateDate))
-                .ForMember(m => m.User, opt => opt.MapFrom(src => src.User));
+                .ForMember(m => m.User, opt => opt.MapFrom(src => src.User))
+                .ForMember(m => m.FeedbackType, opt => opt.MapFrom(src => src.FeedbackType));
+
+            CreateMap<BookHeadword, FeedbackHeadwordInfoContract>()
+                .ForMember(m => m.HeadwordId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(m => m.Headword, opt => opt.MapFrom(src => src.Headword))
+                .ForMember(m => m.DefaultHeadword, opt => opt.MapFrom(src => src.DefaultHeadword))
+                .ForMember(m => m.DictionaryName, opt => opt.MapFrom(src => src.BookVersion.Title));
         }
     }
 }

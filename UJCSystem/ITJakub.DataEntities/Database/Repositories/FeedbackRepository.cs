@@ -5,7 +5,6 @@ using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using NHibernate.Criterion;
 
 namespace ITJakub.DataEntities.Database.Repositories
@@ -71,6 +70,19 @@ namespace ITJakub.DataEntities.Database.Repositories
             {
                 var feedback = session.QueryOver<Feedback>().Where(fb => fb.Id == feedbackId).SingleOrDefault<Feedback>();
                 session.Delete(feedback);
+            }
+        }
+
+        [Transaction(TransactionScopeOption.Required)]
+        public virtual IList<HeadwordFeedback> GetHeadwordFeedbacksById(IEnumerable<long> feedbackIds)
+        {
+            using (var session = GetSession())
+            {
+                return session.QueryOver<HeadwordFeedback>()
+                    .WhereRestrictionOn(x => x.Id).IsInG(feedbackIds)
+                    .Fetch(x => x.BookHeadword).Eager
+                    .Fetch(x => x.BookHeadword.BookVersion).Eager
+                    .List();
             }
         }
     }

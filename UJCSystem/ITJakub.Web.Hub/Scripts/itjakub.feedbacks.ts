@@ -16,6 +16,11 @@ enum FeedbackSortEnum {
     Category = 1,
 }
 
+enum FeedbackTypeEnum {
+    Generic = 0,
+    Headword = 1,
+}
+
 var sortEnumTranslation = [
     "Autor",
     "E-mail",
@@ -164,13 +169,30 @@ $(document).ready(() => {
                     feedbackHeaderDiv.appendChild(feedbackDeleteButtonDiv);
                     feedbackHeaderDiv.appendChild(feedbackHeaderInfosDiv);
 
+                    var feedbackBodyDiv = document.createElement("div");
+                    $(feedbackBodyDiv).addClass("feedback-text");
+                    
                     var feedbackTextDiv = document.createElement("div");
-                    $(feedbackTextDiv).addClass("feedback-text");
-                    $(feedbackTextDiv).html(actualFeedback.Text);
+                    $(feedbackTextDiv).text(actualFeedback.Text);
+                    feedbackBodyDiv.appendChild(feedbackTextDiv);
 
+                    if (actualFeedback.FeedbackType === FeedbackTypeEnum.Headword) {
+                        var separator = document.createElement("hr");
 
+                        var feedbackHeadwordDiv = document.createElement("div");
+                        $(feedbackHeadwordDiv).text("Slovníkové heslo: " + actualFeedback.HeadwordInfo.DefaultHeadword);
+
+                        var feedbackDictionaryDiv = document.createElement("div");
+                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.HeadwordInfo.DictionaryName);
+
+                        $(feedbackBodyDiv)
+                            .append(separator)
+                            .append(feedbackHeadwordDiv)
+                            .append(feedbackDictionaryDiv);
+                    }
+                    
                     feedbackDiv.appendChild(feedbackHeaderDiv);
-                    feedbackDiv.appendChild(feedbackTextDiv);
+                    feedbackDiv.appendChild(feedbackBodyDiv);
 
 
                     $(feedbacksContainer).append(feedbackDiv);

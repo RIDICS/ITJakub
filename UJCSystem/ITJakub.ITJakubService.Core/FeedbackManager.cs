@@ -99,7 +99,21 @@ namespace ITJakub.ITJakubService.Core
             var sortCriteria = feedbackSearchCriteria.SortCriteria;
             var feedbacks = m_feedbackRepository.GetFeedbacks(categories, (FeedbackSortEnum) sortCriteria.SortByField, sortCriteria.SortAsc,
                 feedbackSearchCriteria.Start, feedbackSearchCriteria.Count);
-            return Mapper.Map<List<FeedbackContract>>(feedbacks);
+            var resultFeedbacks = Mapper.Map<List<FeedbackContract>>(feedbacks);
+
+            if (feedbacks.Any(x => x.FeedbackType == FeedbackType.Headword))
+            {
+                var headwordFeedbacks = feedbacks.Where(x => x.FeedbackType == FeedbackType.Headword).Cast<HeadwordFeedback>();
+                var headwordFeedbacksDetail = m_feedbackRepository.GetHeadwordFeedbacksById(headwordFeedbacks.Select(x => x.Id));
+                var headwordFeedbacksDetailDict = headwordFeedbacksDetail.ToDictionary(x => x.Id);
+
+                foreach (var resultFeedback in resultFeedbacks.Where(x => x.FeedbackType == FeedbackTypeEnumContract.Headword))
+                {
+                    resultFeedback.HeadwordInfo = Mapper.Map<FeedbackHeadwordInfoContract>(headwordFeedbacksDetailDict[resultFeedback.Id].BookHeadword);
+                }
+            }
+
+            return resultFeedbacks;
         }
 
         public int GetFeedbacksCount(FeedbackCriteriaContract feedbackSearchCriteria)
