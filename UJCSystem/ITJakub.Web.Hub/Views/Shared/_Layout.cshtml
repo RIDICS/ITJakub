@@ -14,11 +14,10 @@
     <link href="~/lib/simplemde/dist/simplemde.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-colorpicker-plus/dist/css/bootstrap-colorpicker-plus.min.css" rel="stylesheet" />
+    <link href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
     <link href="~/css/ITJakubStyle.css" rel="stylesheet" />
     <script src="~/lib/modernizr/modernizr.js"></script>
-
     @RenderSection("styles", false)
-    <link href="~/lib/s-pagination/dist/pagination.css" rel="stylesheet" />
 </head>
 <body class="eupopup eupopup-fixedtop eupopup-color-inverse" data-has-book-text-url="@Url.Action("HasBookPageByXmlId", "Reader",  new {area = ""})">
 
@@ -476,19 +475,57 @@
         <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker.js"></script>
         <script src="~/lib/bootstrap-colorpicker-plus/dist/js/bootstrap-colorpicker-plus.js"></script>
         <script src="~/lib/s-pagination/dist/pagination.js"></script>
+        
+        <environment names="Staging,Production">
+            <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
+            <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
+        </environment>
+        <environment names="Development">
+            @*Bundle keyboard*@
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboard.js"></script>
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardComponent.js"></script>
+            <script src="~/js/Plugins/Keyboard/itjakub.plugins.keyboardManager.js"></script>
 
-        <script src="~/js/bundles/itjakub.keyboard.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.storage.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.plugins.bundle.js"></script>
-        <script src="~/js/bundles/itjakub.favorite.bundle.js"></script>
+            @*Bundle storage*@
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.manager.js"></script>
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.cookiestorage.js"></script>
+            <script src="~/js/Plugins/Storage/itjakub.plugins.storage.localstorage.js"></script>
 
-        @*<script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
-        <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
-        <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
-        <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>*@
+            @*Bundle itjakub*@
+            <script src="~/js/itjakub.js"></script>
+            <script src="~/js/itjakub.dataContracts.js"></script>
+            <script src="~/js/Plugins/itjakub.tools.js"></script>
+            <script src="~/js/Plugins/itjakub.eucookiepopup.js"></script>
+            
+            @*Bundle plugins*@
+            <script src="~/js/Plugins/Progress/itjakub.plugins.progress.js"></script>
+            <script src="~/js/Plugins/itjakub.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/itjakub.list.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/itjakub.search.modul.inicializator.js"></script>
+            <script src="~/js/Plugins/Reader/itjakub.plugins.reader.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.variableInterpreter.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.factories.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.configuration.js"></script>
+            <script src="~/js/Plugins/Bibliography/itjakub.plugins.bibliography.js"></script>
+            <script src="~/js/Plugins/Sort/itjakub.plugins.sort.js"></script>
+            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect.js"></script>
+            <script src="~/js/Plugins/DropdownSelect/itjakub.plugins.dropdownselect2.js"></script>
+            <script src="~/js/Plugins/RegExSearch/itjakub.plugins.regexsearch.js"></script>
+            <script src="~/js/Plugins/SearchBox/itjakub.plugins.searchbox.js"></script>
+            <script src="~/js/Plugins/SearchBox/itjakub.plugins.singlesearchbox.js"></script>
+
+            @*Bundle favorite*@
+            <script src="~/js/Favorite/itjakub.favoriteBook.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteManager.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteQuery.js"></script>
+            <script src="~/js/Favorite/itjakub.favoriteStar.js"></script>
+            <script src="~/js/Favorite/itjakub.newFavoriteDialog.js"></script>
+            <script src="~/js/Favorite/itjakub.newFavoriteNotification.js"></script>
+        </environment>
+
         @RenderSection("scripts", false)
 
         @*main page content*@
