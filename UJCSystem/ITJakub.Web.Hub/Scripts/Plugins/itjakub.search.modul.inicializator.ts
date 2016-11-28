@@ -24,6 +24,7 @@
         var bibliographyModule = this.getBibliographyModule();
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
+        bibliographyModule.destroyPagination();
 
         $.ajax({
             type: "GET",
@@ -37,6 +38,9 @@
                 updateQueryStringParameter(this.configuration.base.url.searchKey, json);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+            },
+            error: () => {
+                bibliographyModule.showSearchError();
             }
         });
     }

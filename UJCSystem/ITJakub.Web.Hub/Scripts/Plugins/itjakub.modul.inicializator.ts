@@ -187,6 +187,9 @@
                 updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+            },
+            error: () => {
+                bibliographyModule.showPageLoadError();
             }
         });
     }
@@ -217,6 +220,9 @@
                     updateQueryStringParameter(this.configuration.base.url.pageKey, pageNumber);
                     updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                     updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+                },
+                error: () => {
+                    bibliographyModule.showPageLoadError();
                 }
             });
         });
@@ -258,6 +264,7 @@
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
+        bibliographyModule.destroyPagination();
 
         $.ajax({
             type: "GET",
@@ -271,6 +278,9 @@
                 updateQueryStringParameter(this.configuration.base.url.searchKey, json);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+            },
+            error: () => {
+                bibliographyModule.showSearchError();
             }
         });
     }
@@ -284,6 +294,7 @@
 
         bibliographyModule.clearBooks();
         bibliographyModule.showLoading();
+        bibliographyModule.destroyPagination();
 
         $.ajax({
             type: "GET",
@@ -297,6 +308,9 @@
                 updateQueryStringParameter(this.configuration.base.url.searchKey, text);
                 updateQueryStringParameter(this.configuration.base.url.sortAscKey, bibliographyModule.isSortedAsc());
                 updateQueryStringParameter(this.configuration.base.url.sortCriteriaKey, bibliographyModule.getSortCriteria());
+            },
+            error: () => {
+                bibliographyModule.showSearchError();
             }
         });
     }

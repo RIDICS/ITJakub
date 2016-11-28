@@ -184,6 +184,20 @@ class BibliographyModule {
         $(this.booksContainer).addClass("loader");
     }
 
+    public showSearchError() {
+        var errorDiv = BibliographyFactory.makeError("Chyba při vyhledávání.");
+        $(this.booksContainer)
+            .removeClass("loader")
+            .append(errorDiv);
+    }
+
+    public showPageLoadError() {
+        var errorDiv = BibliographyFactory.makeError("Chyba při načítání seznamu děl.");
+        $(this.booksContainer)
+            .removeClass("loader")
+            .append(errorDiv);
+    }
+
     private getBibliographyFactory(bookType: BookTypeEnum): BibliographyFactory {
         if (typeof this.forcedBookType == 'undefined') {
             return this.bibliographyFactoryResolver.getFactoryForType(bookType);
