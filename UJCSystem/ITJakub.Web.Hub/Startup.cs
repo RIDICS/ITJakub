@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Castle.Windsor.MsDependencyInjection;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Options;
 using Microsoft.AspNetCore.Builder;
@@ -41,7 +43,7 @@ namespace ITJakub.Web.Hub
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             ConfigureAuthServices(services);
 
@@ -59,6 +61,8 @@ namespace ITJakub.Web.Hub
             });
 
             services.AddMvc();
+
+            return WindsorRegistrationHelper.CreateServiceProvider(Container.Current, services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,8 +70,6 @@ namespace ITJakub.Web.Hub
         {
             //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //loggerFactory.AddDebug();
-
-            ContainerConfig.InitializeContainers();
 
             if (env.IsDevelopment())
             {
