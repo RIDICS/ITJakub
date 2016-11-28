@@ -5,23 +5,38 @@ using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.DataEntities.Database.Repositories;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
-using MarkdownDeep;
+using Markdig;
 
 namespace ITJakub.Web.Hub.Managers
 {
     public class StaticTextManager
     {
         private readonly StaticTextRepository m_staticTextRepository;
-        private readonly Markdown m_markdownDeep;
 
         public StaticTextManager(StaticTextRepository staticTextRepository)
         {
             m_staticTextRepository = staticTextRepository;
-            m_markdownDeep = new Markdown
-            {
-                ExtraMode = true,
-                SafeMode = false
-            };
+        }
+
+        public string MarkdownToHtml(string markdown)
+        {
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAbbreviations()
+                .UseCitations()
+                .UseCustomContainers()
+                .UseDefinitionLists()
+                .UseEmphasisExtras()
+                .UseFigures()
+                .UseFooters()
+                .UseFootnotes()
+                .UseGridTables()
+                .UseMediaLinks()
+                .UsePipeTables()
+                .UseListExtras()
+                .UseTaskLists()
+                .Build();
+            var result = Markdown.ToHtml(markdown, pipeline);
+            return result;
         }
 
         public StaticTextViewModel GetText(string name)
@@ -57,7 +72,7 @@ namespace ITJakub.Web.Hub.Managers
             switch (staticTextEntity.Format)
             {
                 case StaticTextFormat.Markdown:
-                    viewModel.Text = m_markdownDeep.Transform(staticTextEntity.Text);
+                    viewModel.Text = MarkdownToHtml(staticTextEntity.Text);
                     viewModel.Format = StaticTextFormatType.Html;
                     break;
                 case StaticTextFormat.PlainText:
