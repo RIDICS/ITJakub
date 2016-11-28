@@ -6,7 +6,7 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class FavoriteProfile : Profile
     {
-        protected override void Configure()
+        public FavoriteProfile()
         {
             CreateMap<FavoriteLabelContract, FavoriteLabelViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

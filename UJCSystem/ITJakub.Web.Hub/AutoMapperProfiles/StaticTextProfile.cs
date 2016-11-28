@@ -8,7 +8,7 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class StaticTextProfile : Profile
     {
-        protected override void Configure()
+        public StaticTextProfile()
         {
             CreateMap<StaticTextFormatType, StaticTextFormat>().ReverseMap();
 

@@ -6,14 +6,14 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class WordCriteriaDescriptionProfile : Profile
     {
-        protected override void Configure()
+        public WordCriteriaDescriptionProfile()
         {
             CreateMap<WordCriteriaDescription, WordCriteriaContract>()
                 .ForMember(dest => dest.StartsWith, opt => opt.MapFrom(src => src.StartsWith))
                 .ForMember(dest => dest.Contains, opt => opt.MapFrom(src => src.Contains)) 
                 .ForMember(dest => dest.EndsWith, opt => opt.MapFrom(src => src.EndsWith)) 
                 .ForMember(dest => dest.ExactMatch, opt => opt.MapFrom(src => src.ExactMatch)) 
-                .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
+                .ForAllMembers(opt => opt.Condition(src => src != null));
         }
     }
 }

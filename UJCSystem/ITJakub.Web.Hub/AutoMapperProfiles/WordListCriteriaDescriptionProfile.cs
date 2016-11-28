@@ -7,12 +7,12 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class WordListCriteriaDescriptionProfile : Profile
     {
-        protected override void Configure()
+        public WordListCriteriaDescriptionProfile()
         {
             CreateMap<WordListCriteriaDescription, WordListCriteriaContract>()
                 .ForMember(dest => dest.Disjunctions, opt => opt.MapFrom(src => Mapper.Map<IList<WordCriteriaContract>>(src.Disjunctions)))
-                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => (CriteriaKey) src.SearchType))
-                .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
+                .ForMember(dest => dest.Key, opt => opt.MapFrom(src => (CriteriaKey)src.SearchType))
+                .ForAllMembers(opt => opt.Condition(src => src != null));
         }
     }
 }

@@ -7,12 +7,12 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class DatingListCriteriaDescriptionProfile : Profile
     {
-        protected override void Configure()
+        public DatingListCriteriaDescriptionProfile()
         {
             CreateMap<DatingListCriteriaDescription, DatingListCriteriaContract>()
                 .ForMember(dest => dest.Disjunctions, opt => opt.MapFrom(src => Mapper.Map<IList<DatingCriteriaContract>>(src.Disjunctions)))
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => (CriteriaKey) src.SearchType))
-                .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
+                .ForAllMembers(opt => opt.Condition(src => src != null));
         }
     }
 }

@@ -6,7 +6,8 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class ConditionCriteriaDescriptionProfile : Profile
     {
-        protected override void Configure()
+
+        public ConditionCriteriaDescriptionProfile()
         {
             CreateMap<ConditionCriteriaDescriptionBase, SearchCriteriaContract>()
                 .Include<DatingListCriteriaDescription, DatingListCriteriaContract>()

@@ -7,12 +7,12 @@ namespace ITJakub.Web.Hub.AutoMapperProfiles
 {
     public class TokenDistanceListCriteriaDescriptionProfile : Profile
     {
-        protected override void Configure()
+        public TokenDistanceListCriteriaDescriptionProfile()
         {
             CreateMap<TokenDistanceListCriteriaDescription, TokenDistanceListCriteriaContract>()
                 .ForMember(dest => dest.Disjunctions, opt => opt.MapFrom(src => Mapper.Map<IList<TokenDistanceCriteriaContract>>(src.Disjunctions)))
                 .ForMember(dest => dest.Key, opt => opt.MapFrom(src => (CriteriaKey) src.SearchType))
-                .ForAllMembers(opt => opt.Condition(src => !src.IsSourceValueNull));
+                .ForAllMembers(opt => opt.Condition(src => src != null));
         }
     }
 }
