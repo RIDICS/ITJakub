@@ -307,6 +307,19 @@ class BibliographyFactory {
             .tooltip();
         return label;
     }
+
+    static makeError(text: string): HTMLDivElement {
+        var errorContainer = document.createElement("div");
+        $(errorContainer).addClass("bib-alert");
+
+        var errorAlert = document.createElement("div");
+        $(errorAlert)
+            .addClass("alert alert-danger")
+            .text(text)
+            .appendTo(errorContainer);
+
+        return errorContainer;
+    }
 }
 
 class BasicFactory extends BibliographyFactory {}
