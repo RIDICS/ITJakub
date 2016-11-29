@@ -1,0 +1,99 @@
+﻿@using System.Threading.Tasks
+@using ITJakub.Web.Hub.Managers
+@{
+    ViewBag.Title = "Projekty - Seznam";
+}
+@section scripts {
+    <script src="~/Areas/Admin/js/ridics.project.list.js"></script>
+}
+
+<style>
+    .project-item:hover {
+        background-color: khaki;
+    }
+</style>
+
+<div class="content-container">
+    <div class="row">
+        <div class="col-md-4">
+            <button type="button" class="btn btn-default" id="new-project-button">Založit nové dílo</button>
+        </div>
+    </div>
+    
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-4">
+            <label for="filter">Filtrovat:</label>
+            <select class="form-control" id="filter">
+                <option>Vše</option>
+            </select>
+        </div>
+        <div class="col-md-4 col-md-offset-4">
+            <label for="name-filter">Vyhledat podle názvu:</label>
+            <div class="input-group input-group-sm">
+                <input type="text" class="form-control" id="name-filter" placeholder="Název projektu" title="Vyhledat podle názvu" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" id="name-filter-button"><span class="glyphicon glyphicon-search"></span></button>
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div id="list-container">
+        <div class="project-item row">
+            <div class="col-md-6">
+                <a href="#">
+                    <div>
+                        <strong>Název díla</strong>
+                    </div>
+                    <div>Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.</div>
+                    <div>Praha, Národní knihovna České republiky, konec 14. století</div>
+                    <div>Počet stran: #</div>
+                </a>
+            </div>
+            <div class="col-md-4">
+                Naposledy upraveno: 13.10.2016 uživatelem Jan Novák<br/>
+                Vytvořeno: 13.10.2016 uživatelem Jan Novák
+            </div>
+            <div class="col-md-2">
+                <a href="#">
+                    <div>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </div>
+                </a>
+                <a href="#">
+                    <div>
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="new-project-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nové dílo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="new-project-name" class="col-md-3 control-label">Název díla</label>
+                        <div class="col-md-8">
+                            <input class="form-control" id="new-project-name" type="text" maxlength="@Projects.MaxNameLength">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při ukládání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Vytvořit</button>
+            </div>
+        </div>
+    </div>
+</div>
