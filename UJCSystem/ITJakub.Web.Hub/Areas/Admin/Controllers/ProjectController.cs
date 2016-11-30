@@ -1,6 +1,7 @@
 ﻿using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
@@ -34,6 +35,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 default:
                     return PartialView("_ProjectWork");
             }
+        }
+
+        [HttpPost]
+        public IActionResult UploadResource(UploadFileRequest request)
+        {
+            return Json(new {});
         }
     }
 }

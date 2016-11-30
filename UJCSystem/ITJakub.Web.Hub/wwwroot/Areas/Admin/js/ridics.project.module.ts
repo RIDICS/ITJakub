@@ -5,9 +5,14 @@
 
 class ProjectModule {
     private currentModule: ProjectModuleBase;
+    private addResourceDialog: BootstrapDialogWrapper;
 
     constructor() {
         this.currentModule = null;
+        this.addResourceDialog = new BootstrapDialogWrapper({
+            element: $("#new-resource-dialog"),
+            autoClearInputs: true
+        });
     }
 
     public init() {
@@ -29,8 +34,14 @@ class ProjectModule {
             self.showModule(e.currentTarget.id);
         });
 
-        var projectWorkModule = new ProjectWorkModule();
-        projectWorkModule.init();
+        $("#add-resource-button").click(() => {
+            this.addResourceDialog.show();
+        });
+
+        var dropzoneOptions = DropzoneHelper.getFullConfiguration({
+            //url: getBaseUrl() + "Admin/Project/UploadResource"
+        });
+        $("#new-resource-upload").dropzone(dropzoneOptions);
     }
 
     public showModule(identificator: string) {
