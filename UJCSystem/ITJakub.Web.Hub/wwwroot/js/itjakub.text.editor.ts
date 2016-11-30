@@ -21,9 +21,9 @@ class StaticTextEditor {
         var markdownText = this.textEditor.getValue();
 
         var data: IStaticTextViewModel = {
-            Name: textName,
-            Text: markdownText,
-            Format: "markdown"
+            name: textName,
+            text: markdownText,
+            format: "markdown"
         };
 
         $("#save-error").addClass("hidden");
@@ -46,8 +46,8 @@ class StaticTextEditor {
                 $("#save-button").prop("disabled", false);
                 $("#save-success").delay(3000).fadeOut(2000);
 
-                $("#modification-author").text(modificationUpdate.User ? modificationUpdate.User : "(anonym)");
-                $("#modification-time").text(modificationUpdate.ModificationTime);
+                $("#modification-author").text(modificationUpdate.user ? modificationUpdate.user : "(anonym)");
+                $("#modification-time").text(modificationUpdate.modificationTime);
             },
             error: () => {
                 $("#save-error").removeClass("hidden");
@@ -59,14 +59,14 @@ class StaticTextEditor {
 }
 
 interface IStaticTextViewModel {
-    Name?: string;
-    Text?: string;
-    Format?: string|number;
+    name?: string;
+    text?: string;
+    format?: string|number;
 }
 
 interface IModificationUpdateViewModel {
-    User: string;
-    ModificationTime: string;
+    user: string;
+    modificationTime: string;
 }
 
 class TextEditorWrapper {
@@ -174,7 +174,10 @@ class TextEditorWrapper {
     }
 
     private setCustomImageTool() {
-        this.dialogInsertImage = new BootstrapDialogWrapper($("#editor-insert-image-dialog"), true);
+        this.dialogInsertImage = new BootstrapDialogWrapper({
+            element: $("#editor-insert-image-dialog"),
+            autoClearInputs: true
+        });
 
         TextEditorWrapper.toolImage.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
@@ -189,7 +192,10 @@ class TextEditorWrapper {
     }
 
     private setCustomLinkTool() {
-        this.dialogInsertLink = new BootstrapDialogWrapper($("#editor-insert-link-dialog"), true);
+        this.dialogInsertLink = new BootstrapDialogWrapper({
+            element: $("#editor-insert-link-dialog"),
+            autoClearInputs: true
+        });
 
         TextEditorWrapper.toolLink.action = (editor: SimpleMDE) => {
             var selectedText = editor.codemirror.getSelection();
@@ -409,35 +415,35 @@ class TextEditorWrapper {
     
 }
 
-class BootstrapDialogWrapper {
-    private clearInputElements: boolean;
-    private element: JQuery;
+//class BootstrapDialogWrapper {
+//    private clearInputElements: boolean;
+//    private element: JQuery;
 
-    constructor(dialogElement: JQuery, clearInputElements: boolean) {
-        this.clearInputElements = clearInputElements;
-        this.element = dialogElement;
+//    constructor(dialogElement: JQuery, clearInputElements: boolean) {
+//        this.clearInputElements = clearInputElements;
+//        this.element = dialogElement;
 
-        this.element.on("hidden.bs.modal", () => {
-            this.clear();
-        });
-    }
+//        this.element.on("hidden.bs.modal", () => {
+//            this.clear();
+//        });
+//    }
 
-    public show() {
-        this.element.modal({
-            show: true,
-            backdrop: "static"
-        });
-    }
+//    public show() {
+//        this.element.modal({
+//            show: true,
+//            backdrop: "static"
+//        });
+//    }
 
-    public hide() {
-        this.element.modal("hide");
-    }
+//    public hide() {
+//        this.element.modal("hide");
+//    }
 
-    private clear() {
-        if (this.clearInputElements) {
-            $("input", this.element).val("");
-            $("textarea", this.element).val("");
-            $("select", this.element).val("");
-        }
-    }
-}
+//    private clear() {
+//        if (this.clearInputElements) {
+//            $("input", this.element).val("");
+//            $("textarea", this.element).val("");
+//            $("select", this.element).val("");
+//        }
+//    }
+//}
