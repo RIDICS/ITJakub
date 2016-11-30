@@ -94,6 +94,7 @@ gulp.task("bundle:itjakub", function () {
             paths.webroot + "js/itjakub.js",
             paths.webroot + "js/itjakub.dataContracts.js",
             paths.webroot + "js/Plugins/itjakub.tools.js",
+            paths.webroot + "js/Plugins/itjakub.components.js",
             paths.webroot + "js/Plugins/itjakub.eucookiepopup.js"
         ])
         .pipe(sourcemaps.init())

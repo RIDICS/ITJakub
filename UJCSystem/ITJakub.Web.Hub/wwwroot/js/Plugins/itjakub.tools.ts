@@ -1,4 +1,13 @@
-﻿interface IDictionary<T> {
+﻿enum HttpStatusCode {
+    Success = 200,
+    BadRequest = 400,
+    Unauthorized = 401,
+    Forbidden = 403,
+    NotFound = 404,
+    InternalServerError = 500,
+}
+
+interface IDictionary<T> {
     [key: number]: T;
     [key: string]: T;
 }

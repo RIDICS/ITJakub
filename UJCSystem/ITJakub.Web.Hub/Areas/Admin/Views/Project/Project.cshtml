@@ -2,54 +2,55 @@
     ViewBag.Title = "Projekt - " + ViewBag.Id;
 }
 
+@section styles {
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+}
+@section scripts {
+    <script src="~/Areas/Admin/js/ridics.project.module.js"></script>
+}
+
 <style>
-    .resource-panel button,
-    .resource-panel textarea {
-        width: 100%;
-    }
+    
 </style>
 
 <div class="content-container">
-    <div class="row">
-        <div style="width: 200px; float: left;">
-            <strong>Název díla</strong>
-            <ul class="list-group">
-                <li class="list-group-item">Dílo
-                    <div class="list-group">
-                        <a href="#" class="list-group-item active">Obrazové skeny</a>
-                        <a href="#" class="list-group-item">Texty</a>
-                        <a href="#" class="list-group-item">Audio</a>
-                        <a href="#" class="list-group-item">Video</a>
-                    </div>
-                </li>
-            </ul>
+    <div class="row project-layout">
+        <div class="left-menu" id="left-menu">
+            <div class="project-title">Název díla</div>
+            <div class="list-group list-group-root" id="project-navigation">
+                <a href="#" class="list-group-item active" id="project-navigation-root">Dílo</a>
+                <div class="list-group">
+                    <a href="#" class="list-group-item" id="project-navigation-image">Obrazové skeny</a>
+                    <a href="#" class="list-group-item" id="project-navigation-text">Texty</a>
+                    <a href="#" class="list-group-item" id="project-navigation-audio">Audio</a>
+                    <a href="#" class="list-group-item" id="project-navigation-video">Video</a>
+                </div>
+            </div>
             
-            <hr/>
+            <div class="horizontal-splitter"></div>
             
             <div class="resource-panel">
-                <textarea>
-                    TODO seznam souborů
-                </textarea>
+                <select size="8" class="form-control">
+                    <option>TODO seznam souborů</option>
+                </select>
 
                 <div>
-                    <button type="button">Přidat zdroj</button>
-                    <button type="button">Smazat zdroj</button>
-                    <button type="button">Přejmenovat zdroj</button>
-                    <button type="button">Duplikovat zdroj</button>
-                    <button type="button">Vytvořit novou verzi</button>
+                    <button type="button" class="btn btn-default">Přidat zdroj</button>
+                    <button type="button" class="btn btn-default">Smazat zdroj</button>
+                    <button type="button" class="btn btn-default">Přejmenovat zdroj</button>
+                    <button type="button" class="btn btn-default">Duplikovat zdroj</button>
+                    <button type="button" class="btn btn-default">Vytvořit novou verzi</button>
                 </div>
             </div>
         </div>
-        <div style="float: left;">
-            <button>&lt;</button>
+        
+        <div class="vertical-splitter"></div>
+        
+        <div class="vertical-splitter-control">
+            <button id="splitter-button" class="btn btn-default">&lt;</button>
         </div>
-        <div style="float: left; width: calc(100% - 260px);">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active"><a href="#">Diskuze</a></li>
-                <li role="presentation"><a href="#">Náhled</a></li>
-                <li role="presentation"><a href="#">Metadata</a></li>
-            </ul>
 
+        <div class="content" id="project-layout-content">
         </div>
     </div>
 </div>
