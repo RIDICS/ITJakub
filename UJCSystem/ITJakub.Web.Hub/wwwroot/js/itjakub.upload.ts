@@ -4,36 +4,10 @@
 });
 
 class BookUploader {
-    private acceptedFiles = ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip";
-
-    constructor() {
-        Dropzone.autoDiscover = false; // otherwise will be initialized twice
-    }
-
     public init() {
         var self = this;
-        $("#dropzoneFileForm").dropzone({
+        var dropzoneOptions = DropzoneHelper.getFullConfiguration({
             url: getBaseUrl() + "Upload/UploadFile",
-            maxFilesize: 10000, // size in MB
-            uploadMultiple: true,
-            clickable: "#dropzoneFileFormPreview",
-            autoProcessQueue: true,
-            parallelUploads: 5,
-            previewsContainer: "#dropzoneFileFormPreview",
-            acceptedFiles: this.acceptedFiles,
-
-            dictInvalidFileType: "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou " + this.acceptedFiles,
-            dictDefaultMessage: "Pro nahrávání sem přesuňte soubory",
-            dictFallbackMessage: "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
-            dictFallbackText: "Použijte prosím záložní formulář umíštěný níže.",
-            dictFileTooBig: "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
-            dictResponseError: "Chyba při nahrávání souboru (stavový kód {{statusCode}}).",
-            dictCancelUpload: "Zrušit nahrávání",
-            dictCancelUploadConfirmation: "Opravdu chcete zrušit nahrávání tohoto souboru?",
-            dictRemoveFile: "Odstranit soubor",
-            dictRemoveFileConfirmation: null,
-            dictMaxFilesExceeded: "Nelze nahrát žádné další soubory.",
-
             init: function () {
                 var fileDropzone: Dropzone = this;
 
@@ -75,8 +49,9 @@ class BookUploader {
                     : message;
                 this.defaultOptions.error(file, errorMessage, xhr);
             }
-
         });
+
+        $("#dropzoneFileForm").dropzone(dropzoneOptions);
 
         $("#ProcessUploadedButton").click(() => {
             $("#upload").hide();

@@ -1,4 +1,35 @@
-﻿class BootstrapDialogWrapper {
+﻿class DropzoneHelper {
+    private static acceptedFiles = ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip";
+
+    public static getDefaultConfiguration(): DropzoneOptions {
+        var options: DropzoneOptions = {
+            maxFilesize: 10000, // size in MB
+            uploadMultiple: true,
+            autoProcessQueue: true,
+            parallelUploads: 5,
+            acceptedFiles: this.acceptedFiles,
+
+            dictInvalidFileType: "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou " + this.acceptedFiles,
+            dictDefaultMessage: "Pro nahrávání sem přesuňte soubory",
+            dictFallbackMessage: "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
+            dictFallbackText: "Použijte prosím záložní formulář umíštěný níže.",
+            dictFileTooBig: "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
+            dictResponseError: "Chyba při nahrávání souboru (stavový kód {{statusCode}}).",
+            dictCancelUpload: "Zrušit nahrávání",
+            dictCancelUploadConfirmation: "Opravdu chcete zrušit nahrávání tohoto souboru?",
+            dictRemoveFile: "Odstranit soubor",
+            dictRemoveFileConfirmation: null,
+            dictMaxFilesExceeded: "Nelze nahrát žádné další soubory."
+        };
+        return options;
+    }
+
+    public static getFullConfiguration(options: DropzoneOptions): DropzoneOptions {
+        return $.extend({}, this.getDefaultConfiguration(), options);
+    }
+}
+
+class BootstrapDialogWrapper {
     private options: IBootstrapDialogWrapperOptions;
     private $element: JQuery;
     private defaultOptions: IBootstrapDialogWrapperOptions = {
@@ -72,7 +103,7 @@ interface IBootstrapDialogWrapperOptions {
     element: JQuery | HTMLDivElement;
     autoClearInputs?: boolean;
     submitCallback?: () => void;
-    cancelCallback?: () => void;
+    //cancelCallback?: () => void;
     errorElementSelector?: string;
     progressElementSelector?: string;
     submitElementSelector?: string;

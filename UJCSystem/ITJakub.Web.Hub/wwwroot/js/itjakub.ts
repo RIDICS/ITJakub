@@ -25,6 +25,9 @@ $(document).ready(() => {
         $buttonElement.siblings(".secondary-navbar-toggle").removeClass("hover");
         $buttonElement.toggleClass("hover");
     });
+
+    // Disable Dropzone auto-initializing
+    Dropzone.autoDiscover = false;
 });
 
 function getQueryStringParameterByName(name) {
