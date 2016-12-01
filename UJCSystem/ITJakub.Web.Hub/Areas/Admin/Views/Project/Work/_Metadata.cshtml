@@ -1,1 +1,62 @@
-﻿Metadata
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectWorkMetadataViewModel
+
+<div class="row">
+    <div class="project-layout-box project-layout-box-500">
+        <div class="form-horizontal light-border">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-editor">Editor</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-editor" class="form-control" value="@Model.Editor"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-literary-original">Předloha</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-literary-original" class="form-control" value="@Model.LiteraryOriginal" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-relic-abbreviation">Zkratka památky</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-relic-abbreviation" class="form-control" value="@Model.RelicAbbreviation" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-source-abbreviation">Zkratka pramene</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-source-abbreviation" class="form-control" value="@Model.SourceAbbreviation" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-literary-kind">Literární druh</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-literary-kind" class="form-control" value="@Model.LiteraryKind" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-literary-genre">Literární žánr</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-literary-genre" class="form-control" value="@Model.LiteraryGenre" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-last-modification">Poslední úprava</label>
+                <div class="col-md-7">
+                    <input type="text" id="work-metadata-last-modification" class="form-control" value="@Model.LastModification" />
+                </div>
+            </div>
+            <button class="btn btn-default">Upravit</button>
+        </div>
+    </div>
+    <div class="project-layout-box project-layout-box-200">
+        <div class="light-border">
+            <h4>Kategorie</h4>
+            <div>
+                <label><input type="checkbox" /><span> Staročeský</span></label>
+            </div>
+            <div>
+                <label><input type="checkbox" /><span> Středněčeský</span></label>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,1 +1,33 @@
-﻿<h3>Zveřejněné snapshoty</h3>
+﻿@model IList<ITJakub.Web.Hub.Areas.Admin.Models.SnapshotViewModel>
+
+<h3>Zveřejněné snapshoty</h3>
+
+<table>
+    <tr>
+        <th>Datum</th>
+        <th>Textové zdroje</th>
+        <th>Obrazové zdroje</th>
+        <th>Audio zdroje</th>
+        <th>Video zdroje</th>
+        <th>Autor</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @foreach (var snapshotViewModel in Model)
+    {
+        <tr>
+            <td>@snapshotViewModel.PublishDate</td>
+            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedTextResourceCount, snapshotViewModel.TextResourceCount)</td>
+            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedImageResourceCount, snapshotViewModel.ImageResourceCount)</td>
+            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedAudioResourceCount, snapshotViewModel.AudioResourceCount)</td>
+            <td>@string.Format("{0}/{1}", snapshotViewModel.PublishedVideoResourceCount, snapshotViewModel.VideoResourceCount)</td>
+            <td>@snapshotViewModel.Author</td>
+            <td><a href="#">Editovat</a></td>
+            <td><a href="#">Smazat</a></td>
+        </tr>
+    }
+</table>
+
+<div class="project-bottom-buttons">
+    <button type="button" class="btn btn-default">Vytvořit novou publikaci</button>
+</div>

@@ -1,4 +1,6 @@
-﻿using ITJakub.Web.Hub.Areas.Admin.Models;
+﻿using System;
+using System.Collections.Generic;
+using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
@@ -46,15 +48,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 case ProjectModuleTabType.ResourceDiscussion:
                     return PartialView("Resource/_Discussion");
                 case ProjectModuleTabType.ResourceMetadata:
-                    return PartialView("Resource/_Metadata");
+                    var resourceMetadataViewModel = ProjectMock.GetProjectResourceMetadata();
+                    return PartialView("Resource/_Metadata", resourceMetadataViewModel);
                 case ProjectModuleTabType.WorkPublications:
-                    return PartialView("Work/_Publications");
+                    var publicationsViewModel = new List<SnapshotViewModel>
+                    {
+                        ProjectMock.GetSnapshot(),
+                        ProjectMock.GetSnapshot()
+                    };
+                    return PartialView("Work/_Publications", publicationsViewModel);
                 case ProjectModuleTabType.WorkPageList:
                     return PartialView("Work/_PageList");
                 case ProjectModuleTabType.WorkCooperation:
                     return PartialView("Work/_Cooperation");
                 case ProjectModuleTabType.WorkMetadata:
-                    return PartialView("Work/_Metadata");
+                    var workMetadaViewModel = ProjectMock.GetProjectWorkMetadata();
+                    return PartialView("Work/_Metadata", workMetadaViewModel);
                 case ProjectModuleTabType.WorkHistory:
                     return PartialView("Work/_History");
                 default:
@@ -72,6 +81,50 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         public IActionResult UploadNewResourceVersion(UploadFileRequest request)
         {
             return Json(new { });
+        }
+    }
+
+    public static class ProjectMock
+    {
+        public static SnapshotViewModel GetSnapshot()
+        {
+            return new SnapshotViewModel
+            {
+                Id = 5,
+                PublishDate = DateTime.Now,
+                TextResourceCount = 3,
+                PublishedTextResourceCount = 3,
+                ImageResourceCount = 30,
+                PublishedImageResourceCount = 30,
+                AudioResourceCount = 1,
+                PublishedAudioResourceCount = 1,
+                Author = "Jan Novák"
+            };
+        }
+
+        public static ProjectWorkMetadataViewModel GetProjectWorkMetadata()
+        {
+            return new ProjectWorkMetadataViewModel
+            {
+                Editor = "Jan Novák",
+                LastModification = DateTime.Now,
+                LiteraryGenre = "xxxxxxx",
+                LiteraryKind = "xxxxxxx",
+                LiteraryOriginal = "xxxxxxx",
+                RelicAbbreviation = "xxxxxxx",
+                SourceAbbreviation = "xxxxxxx"
+            };
+        }
+
+        public static ProjectResourceMetadataViewModel GetProjectResourceMetadata()
+        {
+            return new ProjectResourceMetadataViewModel
+            {
+                Editor = "Jan Novák",
+                Editor2 = "Josef Novák",
+                LastModification = DateTime.Now,
+                EditionNote = "xxxxxxx"
+            };
         }
     }
 }

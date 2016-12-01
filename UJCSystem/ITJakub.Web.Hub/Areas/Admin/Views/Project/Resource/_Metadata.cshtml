@@ -1,1 +1,33 @@
-﻿Metadata
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectResourceMetadataViewModel
+
+<div class="row">
+    <div class="project-layout-box project-layout-box-500">
+        <div class="form-horizontal light-border">
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="resource-metadata-editor">Editor</label>
+                <div class="col-md-7">
+                    <input type="text" id="resource-metadata-editor" class="form-control" value="@Model.Editor" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="resource-metadata-editor2">Editor 2</label>
+                <div class="col-md-7">
+                    <input type="text" id="resource-metadata-editor2" class="form-control" value="@Model.Editor2" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="resource-metadata-last-modification">Poslední úprava</label>
+                <div class="col-md-7">
+                    <input type="text" id="resource-metadata-last-modification" class="form-control" value="@Model.LastModification" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="resource-metadata-edition-note">Zkratka památky</label>
+                <div class="col-md-7">
+                    <input type="text" id="resource-metadata-edition-note" class="form-control" value="@Model.EditionNote" />
+                </div>
+            </div>
+            <button class="btn btn-default">Upravit</button>
+        </div>
+    </div>
+</div>
