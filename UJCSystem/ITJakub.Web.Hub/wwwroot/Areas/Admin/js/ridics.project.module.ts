@@ -65,11 +65,15 @@ abstract class ProjectModuleBase {
     public abstract getModuleType(): ProjectModuleType;
     public abstract getTabsId(): string;
     public abstract initModule(): void;
+    public abstract getLoadTabPanelContentUrl(panelSelector: string): string;
 
     protected initTabs() {
+        var self = this;
         $(`#${this.getTabsId()} a`).click(function (e) {
             e.preventDefault();
             $(this).tab('show');
+            var tabPanelSelector = $(this).attr("href");
+            self.loadTabPanel(tabPanelSelector);
         });
     }
 
@@ -93,6 +97,20 @@ abstract class ProjectModuleBase {
                 }
             });
     }
+
+    private loadTabPanel(tabPanelSelector: string) {
+        var $tabPanel = $(tabPanelSelector);
+        var url = this.getLoadTabPanelContentUrl(tabPanelSelector);
+        $tabPanel
+            .html("<div class=\"loader\"></div>")
+            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
+                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                    var errorDiv = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání záložky.")
+                        .buildElement();
+                    $tabPanel.empty().append(errorDiv);
+                }
+            });
+    }
 }
 
 class ProjectWorkModule extends ProjectModuleBase {
@@ -101,6 +119,11 @@ class ProjectWorkModule extends ProjectModuleBase {
 
     initModule(): void {
         $("#resource-panel").hide();
+    }
+
+    getLoadTabPanelContentUrl(panelSelector: string): string {
+        var tabPanelType = <ProjectModuleTabType>$(panelSelector).data("panel-type");
+        return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
     }
 }
 
@@ -132,6 +155,11 @@ class ProjectResourceModule extends ProjectModuleBase {
         this.initMainResourceButtons();
     }
     
+    getLoadTabPanelContentUrl(panelSelector: string): string {
+        var tabPanelType = <ProjectModuleTabType>$(panelSelector).data("panel-type");
+        return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
+    }
+
     private getSelectedResourceName(): string {
         var resourceList = <HTMLSelectElement>document.getElementById("resource-list");
         if (resourceList.selectedIndex < 0) {
@@ -193,4 +221,15 @@ class ProjectResourceModule extends ProjectModuleBase {
 enum ProjectModuleType {
     Work = 0,
     Resource = 1,
+}
+
+enum ProjectModuleTabType {
+    WorkPublications = 0,
+    WorkPageList = 1,
+    WorkCooperation = 2,
+    WorkMetadata = 3,
+    WorkHistory = 4,
+    ResourcePreview = 101,
+    ResourceDiscussion = 102,
+    ResourceMetadata = 103,
 }

@@ -37,6 +37,31 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult ProjectModuleTab(ProjectModuleTabType tabType)
+        {
+            switch (tabType)
+            {
+                case ProjectModuleTabType.ResourcePreview:
+                    return PartialView("Resource/_Preview");
+                case ProjectModuleTabType.ResourceDiscussion:
+                    return PartialView("Resource/_Discussion");
+                case ProjectModuleTabType.ResourceMetadata:
+                    return PartialView("Resource/_Metadata");
+                case ProjectModuleTabType.WorkPublications:
+                    return PartialView("Work/_Publications");
+                case ProjectModuleTabType.WorkPageList:
+                    return PartialView("Work/_PageList");
+                case ProjectModuleTabType.WorkCooperation:
+                    return PartialView("Work/_Cooperation");
+                case ProjectModuleTabType.WorkMetadata:
+                    return PartialView("Work/_Metadata");
+                case ProjectModuleTabType.WorkHistory:
+                    return PartialView("Work/_History");
+                default:
+                    return NotFound();
+            }
+        }
+
         [HttpPost]
         public IActionResult UploadResource(UploadFileRequest request)
         {

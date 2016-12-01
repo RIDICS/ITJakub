@@ -1,4 +1,6 @@
-﻿<div>
+﻿@using System.Threading.Tasks
+@using ITJakub.Web.Hub.Areas.Admin.Models
+<div>
     <ul class="nav nav-tabs" role="tablist" id="project-work-tabs">
         <li role="presentation" class="active"><a href="#project-work-publications" aria-controls="project-work-publications" role="tab">Publikace</a></li>
         <li role="presentation"><a href="#project-work-page-list" aria-controls="project-work-page-list" role="tab">Seznam stránek</a></li>
@@ -8,10 +10,10 @@
     </ul>
     
     <div class="tab-content">
-        <div role="tabpanel" class="tab-pane active" id="project-work-publications">Pub</div>
-        <div role="tabpanel" class="tab-pane" id="project-work-page-list">Page</div>
-        <div role="tabpanel" class="tab-pane" id="project-work-cooperation">Coop</div>
-        <div role="tabpanel" class="tab-pane" id="project-work-metadata">Meta</div>
-        <div role="tabpanel" class="tab-pane" id="project-work-history">History</div>
+        <div role="tabpanel" class="tab-pane active" id="project-work-publications" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkPublications)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-page-list" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkPageList)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-cooperation" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkCooperation)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkMetadata)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-work-history" data-panel-type="@Html.Raw((int)ProjectModuleTabType.WorkHistory)"></div>
     </div>
 </div>
