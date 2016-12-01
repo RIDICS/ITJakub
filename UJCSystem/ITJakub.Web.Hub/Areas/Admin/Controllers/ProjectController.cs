@@ -42,5 +42,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             return Json(new {});
         }
+
+        [HttpPost]
+        public IActionResult UploadNewResourceVersion(UploadFileRequest request)
+        {
+            return Json(new { });
+        }
     }
 }

@@ -31,8 +31,8 @@
             
             <div class="horizontal-splitter"></div>
             
-            <div class="resource-panel">
-                <select size="8" class="form-control">
+            <div class="resource-panel" id="resource-panel">
+                <select size="8" class="form-control" id="resource-list">
                     <option>TODO seznam souborů</option>
                 </select>
 
@@ -71,7 +71,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="session-id" name="sessionId" value="0" />
+                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0" />
                                 </div>
                             </form>
                         </div>
@@ -88,6 +88,111 @@
                 <div class="error">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Hotovo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="rename-resource-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Přejmenovat zdroj</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="rename-resource-original" class="col-md-3 control-label">Původní název</label>
+                        <div class="col-md-8">
+                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="rename-resource-new" class="col-md-3 control-label">Nový název</label>
+                        <div class="col-md-8">
+                            <input type="text" id="rename-resource-new" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při ukládání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="delete-resource-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Smazat zdroj</h4>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat zdroj "<span id="delete-resource-name"></span>"?
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při mazání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Smazat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="duplicate-resource-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Duplikovat zdroj</h4>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete duplikovat zdroj "<span id="duplicate-resource-name"></span>"?
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při duplikování</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Duplikovat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="new-resource-version-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Nová verze zdroje <span id="new-resource-version-original"></span></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <form action="@Url.Action("UploadNewResourceVersion", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-version-upload">
+                                <div class="hidden">
+                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label for="new-resource-comment">Komentář k první verzi</label>
+                            <textarea class="form-control" id="new-resource-version-comment" maxlength="@Projects.MaxResourceCommentLength"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při ukládání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
             </div>
         </div>
     </div>
