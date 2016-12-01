@@ -151,6 +151,19 @@ class ProjectResourceModule extends ProjectModuleBase {
             $selectionDependentButtons.prop("disabled", resourceList.selectedIndex < 0);
         });
 
+        var $iconUp = $("#project-resource-version-icon-up");
+        var $iconDown = $("#project-resource-version-icon-down");
+        $iconDown.hide();
+        $("#project-resource-version-button").click(() => {
+            if ($iconUp.is(":visible")) {
+                $iconUp.hide();
+                $iconDown.show();
+            } else {
+                $iconUp.show();
+                $iconDown.hide();
+            }
+        });
+
         this.initDialogs();
         this.initMainResourceButtons();
     }
