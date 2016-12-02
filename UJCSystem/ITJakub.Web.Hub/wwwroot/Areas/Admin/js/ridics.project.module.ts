@@ -15,10 +15,13 @@ class ProjectModule {
         var $splitterButton = $("#splitter-button");
         $splitterButton.click(() => {
             var $leftMenu = $("#left-menu");
-            $leftMenu.fadeToggle(null, () => {
-                var buttonContent = $leftMenu.is(":visible") ? "<" : ">";
-                $splitterButton.text(buttonContent);
-            });
+            if ($leftMenu.is(":visible")) {
+                $leftMenu.hide("slide", { direction: "left" });
+                $splitterButton.text(">");
+            } else {
+                $leftMenu.show("slide", { direction: "left" });
+                $splitterButton.text("<");
+            }
         });
 
         var $projectNavigationLinks = $("#project-navigation a");
@@ -133,6 +136,12 @@ class ProjectResourceModule extends ProjectModuleBase {
     private deleteResourceDialog: BootstrapDialogWrapper;
     private renameResourceDialog: BootstrapDialogWrapper;
     private duplicateResourceDialog: BootstrapDialogWrapper;
+    private resourceVersionModule: ProjectResourceVersionModule;
+
+    constructor() {
+        super();
+        this.resourceVersionModule = new ProjectResourceVersionModule(0);
+    }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
     getTabsId(): string { return "project-resource-tabs" }
@@ -151,21 +160,9 @@ class ProjectResourceModule extends ProjectModuleBase {
             $selectionDependentButtons.prop("disabled", resourceList.selectedIndex < 0);
         });
 
-        var $iconUp = $("#project-resource-version-icon-up");
-        var $iconDown = $("#project-resource-version-icon-down");
-        $iconDown.hide();
-        $("#project-resource-version-button").click(() => {
-            if ($iconUp.is(":visible")) {
-                $iconUp.hide();
-                $iconDown.show();
-            } else {
-                $iconUp.show();
-                $iconDown.hide();
-            }
-        });
-
         this.initDialogs();
         this.initMainResourceButtons();
+        this.resourceVersionModule.init();
     }
     
     getLoadTabPanelContentUrl(panelSelector: string): string {
@@ -228,6 +225,72 @@ class ProjectResourceModule extends ProjectModuleBase {
             $("#duplicate-resource-name").text(this.getSelectedResourceName());
             this.duplicateResourceDialog.show();
         });
+    }
+}
+
+class ProjectResourceVersionModule {
+    private resourceId: number;
+    private $iconUp: JQuery;
+    private $iconDown: JQuery;
+    private versionPanelHeight: number;
+
+    constructor(resourceId: number) {
+        this.resourceId = resourceId;
+    }
+
+    public init() {
+        this.$iconUp = $("#project-resource-version-icon-up");
+        this.$iconDown = $("#project-resource-version-icon-down");
+        this.$iconDown.hide();
+        $("#project-resource-version-button").click(() => {
+            if (this.$iconUp.is(":visible")) {
+                this.show();
+            } else {
+                this.hide();
+            }
+        });
+
+        var $resourceVersionPanel = $("#resource-version-panel");
+        $resourceVersionPanel.hide();
+        this.versionPanelHeight = $resourceVersionPanel.innerHeight();
+    }
+
+    private show() {
+        var $resourceVersionPanel = $("#resource-version-panel");
+        var $resourceTabContent = $("#resource-tab-content");
+
+        var url = getBaseUrl() + "Admin/Project/ProjectResourceVersion";
+        $resourceVersionPanel
+            .slideToggle()
+            .append("<div class=\"loading\"></div>")
+            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
+                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                    var error = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání seznamu verzí");
+                    $resourceVersionPanel.empty().append(error.buildElement());
+                }
+            });
+        
+        $resourceTabContent.animate({
+            height: "-=" + this.versionPanelHeight + "px"
+        });
+
+
+        this.$iconUp.hide();
+        this.$iconDown.show();
+    }
+
+    private hide() {
+        var $resourceVersionPanel = $("#resource-version-panel");
+        var $resourceTabContent = $("#resource-tab-content");
+        
+        $resourceVersionPanel.slideToggle(null, () => $resourceVersionPanel.empty());
+
+        $resourceTabContent.animate({
+            height: "+=" + this.versionPanelHeight + "px"
+        });
+
+        this.$iconUp.show();
+        this.$iconDown.hide();
     }
 }
 

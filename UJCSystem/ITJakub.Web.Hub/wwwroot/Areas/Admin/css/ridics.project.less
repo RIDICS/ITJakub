@@ -1,4 +1,6 @@
-﻿.project-layout {
+﻿@box-border: 1px solid #ddd;
+
+.project-layout {
     display: table-row;
     height: 640px;
 
@@ -30,10 +32,11 @@
     }
 
     .tab-content {
-        border: 1px solid #ddd;
+        border: @box-border;
         border-top-width: 0;
-        min-height: 640px;
+        height: 640px;
         padding: 1rem 0.5rem 0 0.5rem;
+        overflow-y: auto;
     }
 
     table {
@@ -41,7 +44,7 @@
     }
 
     td, th {
-        border: 1px solid #ddd;
+        border: @box-border;
         text-align: center;
     }
 
@@ -86,4 +89,29 @@
 .resource-version-button-icon {
     margin-top: -6px;
     margin-bottom: -8px;
+}
+
+.resource-version-panel {
+    height: 220px;
+    padding-top: 7px;
+    
+    > div {
+        border: @box-border;
+        padding: 0.5rem;
+        height: 100%;
+    }
+}
+
+.resource-tab-row-fix {
+    margin-right: 0;
+}
+
+.resource-version-table {
+    height: 80%;
+    overflow-y: auto;
+}
+
+.resource-version-control {
+    height: 20%;
+    padding-top: 5px;
 }

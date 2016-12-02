@@ -71,6 +71,29 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult ProjectResourceVersion()
+        {
+            var viewModel = new List<ResourceVersionViewModel>
+            {
+                ProjectMock.GetResourceVersion(1),
+                ProjectMock.GetResourceVersion(2),
+                ProjectMock.GetResourceVersion(3),
+                ProjectMock.GetResourceVersion(4),
+                ProjectMock.GetResourceVersion(5),
+                ProjectMock.GetResourceVersion(6),
+                ProjectMock.GetResourceVersion(7),
+                ProjectMock.GetResourceVersion(8),
+                ProjectMock.GetResourceVersion(9),
+                ProjectMock.GetResourceVersion(10),
+                ProjectMock.GetResourceVersion(11),
+                ProjectMock.GetResourceVersion(12),
+                ProjectMock.GetResourceVersion(13),
+                ProjectMock.GetResourceVersion(14),
+                ProjectMock.GetResourceVersion(15),
+            };
+            return PartialView("_ResourceVersion", viewModel);
+        }
+
         [HttpPost]
         public IActionResult UploadResource(UploadFileRequest request)
         {
@@ -124,6 +147,18 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Editor2 = "Josef Novák",
                 LastModification = DateTime.Now,
                 EditionNote = "xxxxxxx"
+            };
+        }
+
+        public static ResourceVersionViewModel GetResourceVersion(int versionNumber)
+        {
+            return new ResourceVersionViewModel
+            {
+                Id = versionNumber,
+                Author = "Jan Novák",
+                Comment = "První verze dokumentu [název díla]",
+                CreateDate = DateTime.Now,
+                VersionNumber = versionNumber
             };
         }
     }

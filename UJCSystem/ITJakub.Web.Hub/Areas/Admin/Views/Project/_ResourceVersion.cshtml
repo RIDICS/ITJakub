@@ -1,0 +1,29 @@
+﻿@model List<ITJakub.Web.Hub.Areas.Admin.Models.ResourceVersionViewModel>
+
+<div>
+    <div class="resource-version-table">
+        <table>
+            <tr>
+                <th>Číslo verze</th>
+                <th>Komentář</th>
+                <th>Datum vložení</th>
+                <th>Autor</th>
+            </tr>
+            @foreach (var versionViewModel in Model)
+            {
+                <tr>
+                    <td>@versionViewModel.VersionNumber</td>
+                    <td>@versionViewModel.Comment</td>
+                    <td>@versionViewModel.CreateDate</td>
+                    <td>@versionViewModel.Author</td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="resource-version-control">
+        <button type="button" class="btn btn-default">Vytvořit novou verzi</button>
+        <button type="button" class="btn btn-default">Smazat</button>
+        <button type="button" class="btn btn-default">Duplikovat</button>
+    </div>
+</div>

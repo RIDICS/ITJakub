@@ -6,12 +6,14 @@
         <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">Metadata</a></li>
     </ul>
     
-    <div class="tab-content">
+    <div class="tab-content" id="resource-tab-content">
         <div role="tabpanel" class="tab-pane active" id="project-resource-discussion" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourceDiscussion)"></div>
         <div role="tabpanel" class="tab-pane" id="project-resource-preview" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourcePreview)"></div>
         <div role="tabpanel" class="tab-pane" id="project-resource-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourceMetadata)"></div>
     </div>
     
+    <div id="resource-version-panel" class="resource-version-panel"></div>
+
     <div class="text-center">
         <button type="button" class="btn btn-default" id="project-resource-version-button">
             <div class="resource-version-button-icon">
