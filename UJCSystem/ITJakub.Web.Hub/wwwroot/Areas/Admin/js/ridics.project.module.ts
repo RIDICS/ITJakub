@@ -65,10 +65,13 @@ class ProjectModule {
 }
 
 abstract class ProjectModuleBase {
+    protected moduleTab: ProjectModuleTabBase;
+
     public abstract getModuleType(): ProjectModuleType;
     public abstract getTabsId(): string;
     public abstract initModule(): void;
     public abstract getLoadTabPanelContentUrl(panelSelector: string): string;
+    public abstract makeProjectModuleTab(panelSelector: string): ProjectModuleTabBase;
 
     protected initTabs() {
         var self = this;
@@ -111,9 +114,20 @@ abstract class ProjectModuleBase {
                     var errorDiv = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání záložky.")
                         .buildElement();
                     $tabPanel.empty().append(errorDiv);
+                    this.moduleTab = null;
+                    return;
+                }
+
+                this.moduleTab = this.makeProjectModuleTab(tabPanelSelector);
+                if (this.moduleTab != null) {
+                    this.moduleTab.initTab();
                 }
             });
     }
+}
+
+abstract class ProjectModuleTabBase {
+    public abstract initTab();
 }
 
 class ProjectWorkModule extends ProjectModuleBase {
@@ -127,6 +141,15 @@ class ProjectWorkModule extends ProjectModuleBase {
     getLoadTabPanelContentUrl(panelSelector: string): string {
         var tabPanelType = <ProjectModuleTabType>$(panelSelector).data("panel-type");
         return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
+    }
+
+    makeProjectModuleTab(panelSelector: string): ProjectModuleTabBase {
+        switch (panelSelector) {
+            case "#project-work-metadata":
+                return new ProjectWorkMetadataTab();
+            default:
+                return null;
+        }
     }
 }
 
@@ -168,6 +191,13 @@ class ProjectResourceModule extends ProjectModuleBase {
     getLoadTabPanelContentUrl(panelSelector: string): string {
         var tabPanelType = <ProjectModuleTabType>$(panelSelector).data("panel-type");
         return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
+    }
+
+    makeProjectModuleTab(panelSelector: string): ProjectModuleTabBase {
+        switch (panelSelector) {
+            default:
+                return null;
+        }
     }
 
     private getSelectedResourceName(): string {
@@ -291,6 +321,20 @@ class ProjectResourceVersionModule {
 
         this.$iconUp.show();
         this.$iconDown.hide();
+    }
+}
+
+class ProjectWorkMetadataTab extends ProjectModuleTabBase {
+    initTab() {
+        var $panel = $("#project-work-metadata");
+        var $inputs = $("input", $panel);
+        $inputs.addClass("input-as-text")
+            .prop("disabled", true);
+
+        $("#work-metadata-editor-button").click(() => {
+            $inputs.removeClass("input-as-text")
+                .prop("disabled", false);
+        });
     }
 }
 
