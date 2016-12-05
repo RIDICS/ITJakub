@@ -1,4 +1,6 @@
-﻿@box-border: 1px solid #ddd;
+﻿@import "../../../css/ITJakub.Colors.less";
+
+@box-border: 1px solid #ddd;
 
 .project-list {
     hr {
@@ -61,11 +63,11 @@
     }
 
     .vertical-splitter {
-        border: 5px solid gray;
+        border: 2px solid gray;
     }
 
     .horizontal-splitter {
-        border: 4px solid gray;
+        border: 2px solid gray;
         margin-top: 15px;
         margin-bottom: 15px;
     }
@@ -173,4 +175,15 @@
     border: none;
     background: transparent !important;
     box-shadow: none;
+}
+
+.project-history-records {
+    .panel {
+        margin-top: 7px;
+        margin-bottom: 7px;
+    }
+
+    .snapshot-panel {
+        background-color: @breadcrumb-background-color;
+    }
 }
