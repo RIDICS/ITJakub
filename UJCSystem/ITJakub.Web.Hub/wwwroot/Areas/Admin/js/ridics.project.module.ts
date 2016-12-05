@@ -147,6 +147,8 @@ class ProjectWorkModule extends ProjectModuleBase {
         switch (panelSelector) {
             case "#project-work-metadata":
                 return new ProjectWorkMetadataTab();
+            case "#project-work-page-list":
+                return new ProjectWorkPageListTab();
             default:
                 return null;
         }
@@ -400,6 +402,21 @@ class ProjectResourceMetadataTab extends ProjectMetadataTabBase {
 
         $("#resource-metadata-cancel-button, #resource-metadata-save-button").click(() => {
             this.disableEdit();
+        });
+    }
+}
+
+class ProjectWorkPageListTab extends ProjectModuleTabBase {
+    private editDialog: BootstrapDialogWrapper;
+
+    initTab() {
+        this.editDialog = new BootstrapDialogWrapper({
+            element: $("#project-pages-dialog"),
+            autoClearInputs: false
+        });
+
+        $("#project-pages-edit-button").click(() => {
+            this.editDialog.show();
         });
     }
 }
