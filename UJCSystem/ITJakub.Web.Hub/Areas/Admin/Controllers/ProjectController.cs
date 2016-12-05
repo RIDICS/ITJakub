@@ -17,7 +17,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult List()
         {
-            return View();
+            var viewModel = new List<ProjectItemViewModel>
+            {
+                ProjectMock.GetProjectItem(),
+                ProjectMock.GetProjectItem(),
+                ProjectMock.GetProjectItem()
+            };
+            return View(viewModel);
         }
 
         public IActionResult Project(long id)
@@ -109,6 +115,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
     public static class ProjectMock
     {
+        public static ProjectItemViewModel GetProjectItem()
+        {
+            return new ProjectItemViewModel
+            {
+                Id = 45,
+                CreateDate = DateTime.Now.AddDays(-1),
+                CreateUser = "Jan Novák",
+                LastEditDate = DateTime.Now,
+                LastEditUser = "Jan Novák",
+                LiteraryOriginalText = "Praha, Národní knihovna České republiky, konec 14. století",
+                Name = "Andělíku rozkochaný",
+                PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
+                PageCount = 1
+            };
+        }
+
         public static SnapshotViewModel GetSnapshot()
         {
             return new SnapshotViewModel

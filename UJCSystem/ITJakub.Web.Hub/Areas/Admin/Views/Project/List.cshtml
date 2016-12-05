@@ -1,35 +1,35 @@
-﻿@using System.Threading.Tasks
+﻿@model IList<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
+@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Managers
 @{
     ViewBag.Title = "Projekty - Seznam";
+}
+@section styles {
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
 }
 @section scripts {
     <script src="~/Areas/Admin/js/ridics.project.list.js"></script>
 }
 
-<style>
-    .project-item:hover {
-        background-color: khaki;
-    }
-</style>
-
-<div class="content-container">
-    <div class="row">
+<div class="content-container project-list">
+    <div class="row project-list-new">
         <div class="col-md-4">
             <button type="button" class="btn btn-default" id="new-project-button">Založit nové dílo</button>
         </div>
     </div>
     
-    <hr/>
+    @*<hr/>*@
 
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row project-list-header">
+        <div class="col-md-2">
             <label for="filter">Filtrovat:</label>
-            <select class="form-control" id="filter">
+            <select class="form-control input-sm" id="filter">
                 <option>Vše</option>
+                <option>Moje díla</option>
+                <option>Cizí díla</option>
             </select>
         </div>
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-2 col-md-offset-8">
             <label for="name-filter">Vyhledat podle názvu:</label>
             <div class="input-group input-group-sm">
                 <input type="text" class="form-control" id="name-filter" placeholder="Název projektu" title="Vyhledat podle názvu" />
@@ -40,35 +40,47 @@
         </div>
     </div>
     
+    <div class="project-list-subheader">
+        <a href="#">Pokročilé vyhledávání <span class="glyphicon glyphicon-chevron-down"></span></a>
+    </div>
+
+    <hr/>
+    
     <div id="list-container">
-        <div class="project-item row">
-            <div class="col-md-6">
-                <a href="#">
-                    <div>
-                        <strong>Název díla</strong>
-                    </div>
-                    <div>Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.</div>
-                    <div>Praha, Národní knihovna České republiky, konec 14. století</div>
-                    <div>Počet stran: #</div>
-                </a>
+        @foreach (var viewModel in Model)
+        {
+            <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">
+                <div class="col-md-6">
+                    <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
+                        <div>
+                            <strong>@viewModel.Name</strong>
+                        </div>
+                        <div>@viewModel.PublisherText</div>
+                        <div>@viewModel.LiteraryOriginalText</div>
+                        <div>Počet stran: @viewModel.PageCount</div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    Naposledy upraveno: @viewModel.LastEditDate uživatelem @viewModel.LastEditUser<br />
+                    Vytvořeno: @viewModel.CreateDate uživatelem @viewModel.CreateUser
+                </div>
+                <div class="col-md-2 project-item-buttons">
+                    <a href="#" class="delete-button">
+                        <div>
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </div>
+                        <div>Smazat</div>
+                    </a>
+                    <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
+                        <div>
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </div>
+                        <div>Upravit</div>
+                    </a>
+                </div>
             </div>
-            <div class="col-md-4">
-                Naposledy upraveno: 13.10.2016 uživatelem Jan Novák<br/>
-                Vytvořeno: 13.10.2016 uživatelem Jan Novák
-            </div>
-            <div class="col-md-2">
-                <a href="#">
-                    <div>
-                        <span class="glyphicon glyphicon-pencil"></span>
-                    </div>
-                </a>
-                <a href="#">
-                    <div>
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </div>
-                </a>
-            </div>
-        </div>
+            <hr/>
+        }
     </div>
 </div>
 
@@ -93,6 +105,25 @@
                 <div class="error">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Vytvořit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="delete-project-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Smazat dílo</h4>
+            </div>
+            <div class="modal-body">
+                Opravdu chcete smazat dílo "<span id="delete-project-name"></span>"?
+            </div>
+            <div class="modal-footer">
+                <div class="error">Chyba při mazání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Smazat</button>
             </div>
         </div>
     </div>
