@@ -12,7 +12,39 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="work-metadata-literary-original">Předloha</label>
                 <div class="col-md-7">
-                    <input type="text" id="work-metadata-literary-original" class="form-control" value="@Model.LiteraryOriginal" />
+                    <input type="text" id="work-metadata-literary-original" class="form-control" value="@Model.LiteraryOriginalText" />
+                </div>
+            </div>
+            <div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.LiteraryOriginal.Country" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-city">Město</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.LiteraryOriginal.City" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-institution">Instituce</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.LiteraryOriginal.Institution" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-signature">Signatura</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.LiteraryOriginal.Signature" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
+                    <div class="col-md-7">
+                        <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.LiteraryOriginal.Extent" />
+                    </div>
                 </div>
             </div>
             <div class="form-group">
@@ -45,7 +77,15 @@
                     <input type="text" id="work-metadata-last-modification" class="form-control" value="@Model.LastModification" />
                 </div>
             </div>
-            <button class="btn btn-default" id="work-metadata-editor-button">Upravit</button>
+            <div class="project-form-bottom-buttons">
+                <div id="work-metadata-view-button-panel">
+                    <button class="btn btn-default" id="work-metadata-edit-button">Upravit</button>
+                </div>
+                <div id="work-metadata-editor-button-panel">
+                    <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
+                    <button class="btn btn-default" id="work-metadata-save-button">Uložit</button>
+                </div>
+            </div>
         </div>
     </div>
     <div class="project-layout-box project-layout-box-200">

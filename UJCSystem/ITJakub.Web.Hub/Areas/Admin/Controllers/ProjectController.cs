@@ -133,7 +133,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 LastModification = DateTime.Now,
                 LiteraryGenre = "xxxxxxx",
                 LiteraryKind = "xxxxxxx",
-                LiteraryOriginal = "xxxxxxx",
+                LiteraryOriginal = new ProjectWorkLiteraryOriginalViewModel(),
+                LiteraryOriginalText = "xxxxxxx",
                 RelicAbbreviation = "xxxxxxx",
                 SourceAbbreviation = "xxxxxxx"
             };

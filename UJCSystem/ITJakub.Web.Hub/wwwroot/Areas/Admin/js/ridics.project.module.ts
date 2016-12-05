@@ -195,6 +195,8 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     makeProjectModuleTab(panelSelector: string): ProjectModuleTabBase {
         switch (panelSelector) {
+            case "#project-resource-metadata":
+                return new ProjectResourceMetadataTab();
             default:
                 return null;
         }
@@ -324,16 +326,80 @@ class ProjectResourceVersionModule {
     }
 }
 
-class ProjectWorkMetadataTab extends ProjectModuleTabBase {
+interface IProjectMetadataTabConfiguration {
+    $panel: JQuery;
+    $viewButtonPanel: JQuery;
+    $editorButtonPanel: JQuery;
+}
+
+abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
+    public abstract getConfiguration(): IProjectMetadataTabConfiguration;
+
     initTab() {
-        var $panel = $("#project-work-metadata");
-        var $inputs = $("input", $panel);
+        this.disableEdit();
+    }
+
+    protected enabledEdit() {
+        var config = this.getConfiguration();
+        var $inputs = $("input", config.$panel);
+
+        config.$viewButtonPanel.hide();
+        config.$editorButtonPanel.show();
+        $inputs.removeClass("input-as-text")
+            .prop("disabled", false);
+    }
+
+    protected disableEdit() {
+        var config = this.getConfiguration();
+        var $inputs = $("input", config.$panel);
+
+        config.$viewButtonPanel.show();
+        config.$editorButtonPanel.hide();
         $inputs.addClass("input-as-text")
             .prop("disabled", true);
+    }
+}
 
-        $("#work-metadata-editor-button").click(() => {
-            $inputs.removeClass("input-as-text")
-                .prop("disabled", false);
+class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
+    getConfiguration(): IProjectMetadataTabConfiguration {
+        return {
+            $panel: $("#project-work-metadata"),
+            $viewButtonPanel: $("#work-metadata-view-button-panel"),
+            $editorButtonPanel: $("#work-metadata-editor-button-panel")
+        };
+    }
+
+    initTab(): void {
+        super.initTab();
+
+        $("#work-metadata-edit-button").click(() => {
+            this.enabledEdit();
+        });
+
+        $("#work-metadata-cancel-button, #work-metadata-save-button").click(() => {
+            this.disableEdit();
+        });
+    }
+}
+
+class ProjectResourceMetadataTab extends ProjectMetadataTabBase {
+    getConfiguration(): IProjectMetadataTabConfiguration {
+        return {
+            $panel: $("#project-resource-metadata"),
+            $viewButtonPanel: $("#resource-metadata-view-button-panel"),
+            $editorButtonPanel: $("#resource-metadata-editor-button-panel")
+        };
+    }
+
+    initTab(): void {
+        super.initTab();
+
+        $("#resource-metadata-edit-button").click(() => {
+            this.enabledEdit();
+        });
+
+        $("#resource-metadata-cancel-button, #resource-metadata-save-button").click(() => {
+            this.disableEdit();
         });
     }
 }
