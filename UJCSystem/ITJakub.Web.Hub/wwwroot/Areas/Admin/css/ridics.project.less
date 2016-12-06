@@ -224,3 +224,35 @@
         width: 50px;
     }
 }
+
+@page-list-panel-height: 470px;
+
+.project-pages-dialog {
+    .left-panel {
+        height: @page-list-panel-height + 40px;
+
+        select {
+            height: @page-list-panel-height;
+        }
+
+        button {
+            margin-top: 8px;
+        }
+    }
+
+    .right-panel {
+        height: @page-list-panel-height;
+    }
+
+    .control-label {
+        font-weight: normal;
+    }
+
+    .form-group {
+        margin-bottom: 7px;
+    }
+
+    .bottom-buttons button {
+        margin-top: 3px;
+    }
+}
