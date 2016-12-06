@@ -28,8 +28,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult Project(long id)
         {
-            ViewBag.Id = id;
-            return View();
+            var viewModel = ProjectMock.GetProjectInfo(id);
+            return View(viewModel);
         }
 
         public IActionResult ProjectModule(long id, ProjectModuleType moduleType)
@@ -128,6 +128,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Name = "Andělíku rozkochaný",
                 PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
                 PageCount = 1
+            };
+        }
+
+        public static ProjectInfoViewModel GetProjectInfo(long id)
+        {
+            return new ProjectInfoViewModel
+            {
+                Id = id,
+                Name = string.Format("Název projektu {0}", id)
             };
         }
 

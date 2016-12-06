@@ -1,7 +1,8 @@
-﻿@using System.Threading.Tasks
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectInfoViewModel
+@using System.Threading.Tasks
 @using ITJakub.Web.Hub.Managers
 @{
-    ViewBag.Title = "Projekt - " + ViewBag.Id;
+    ViewBag.Title = "Projekt - " + Model.Name;
 }
 
 @section styles {
@@ -9,11 +10,11 @@
 }
 @section scripts {
     <script src="~/Areas/Admin/js/ridics.project.module.js"></script>
+    <script src="~/Areas/Admin/js/ridics.project.work.tabs.js"></script>
+    <script src="~/Areas/Admin/js/ridics.project.resource.tabs.js"></script>
 }
 
-<style>
-    
-</style>
+<div id="project-id" class="hidden">@Model.Id</div>
 
 <div class="content-container">
     <div class="row project-layout">
