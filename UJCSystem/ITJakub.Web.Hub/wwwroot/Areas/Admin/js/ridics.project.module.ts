@@ -45,6 +45,7 @@ class ProjectModule {
     }
     
     public showModule(identificator: string) {
+        $("#resource-panel").hide();
         switch (identificator) {
             case "project-navigation-root":
                 this.currentModule = new ProjectWorkModule(this.projectId);
