@@ -362,3 +362,12 @@ fieldset[disabled] .btn-default.active {
     border-radius: 0;
     background-color: @breadcrumb-background-color;
 }
+
+.list-group-item {
+    &.active,
+    &.active:hover,
+    &.active:focus {
+        background-color: @menu-background-color;
+        border-color: @menu-background-color;
+    }
+}

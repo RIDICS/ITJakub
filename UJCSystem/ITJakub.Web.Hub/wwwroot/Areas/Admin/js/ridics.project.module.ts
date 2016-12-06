@@ -19,10 +19,10 @@ class ProjectModule {
             var $leftMenu = $("#left-menu");
             if ($leftMenu.is(":visible")) {
                 $leftMenu.hide("slide", { direction: "left" });
-                $splitterButton.text(">");
+                $splitterButton.html("<span class=\"glyphicon glyphicon-menu-right\"></span>");
             } else {
                 $leftMenu.show("slide", { direction: "left" });
-                $splitterButton.text("<");
+                $splitterButton.html("<span class=\"glyphicon glyphicon-menu-left\"></span>");
             }
         });
 
@@ -50,16 +50,16 @@ class ProjectModule {
                 this.currentModule = new ProjectWorkModule(this.projectId);
                 break;
             case "project-navigation-image":
-                this.currentModule = new ProjectResourceModule(this.projectId);
+                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Image);
                 break;
             case "project-navigation-text":
-                this.currentModule = new ProjectResourceModule(this.projectId);
+                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Text);
                 break;
             case "project-navigation-audio":
-                this.currentModule = new ProjectResourceModule(this.projectId);
+                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Audio);
                 break;
             case "project-navigation-video":
-                this.currentModule = new ProjectResourceModule(this.projectId);
+                this.currentModule = new ProjectResourceModule(this.projectId, ResourceType.Video);
                 break;
             default:
                 this.currentModule = new ProjectWorkModule(this.projectId);
@@ -169,6 +169,7 @@ class ProjectWorkModule extends ProjectModuleBase {
 }
 
 class ProjectResourceModule extends ProjectModuleBase {
+    private resourceType: ResourceType;
     private projectId: number;
     private currentResourceId: number;
     private addResourceDialog: BootstrapDialogWrapper;
@@ -178,9 +179,10 @@ class ProjectResourceModule extends ProjectModuleBase {
     private duplicateResourceDialog: BootstrapDialogWrapper;
     private resourceVersionModule: ProjectResourceVersionModule;
 
-    constructor(projectId: number) {
+    constructor(projectId: number, resourceType: ResourceType) {
         super();
         this.projectId = projectId;
+        this.resourceType = resourceType;
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
@@ -311,8 +313,35 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     private loadResourceList() {
-       // $("#resource-list").empty().addClass("loading");
-        $("#resource-list").append("<option>A</option><option>B</option>");
+        $("#resource-list").empty().addClass("loading");
+        
+        $.ajax({
+            type: "GET",
+            traditional: true,
+            url: getBaseUrl() + "Admin/Project/GetResourceList",
+            data: {
+                projectId: this.projectId,
+                resourceType: this.resourceType
+            },
+            dataType: "json",
+            contentType: "application/json",
+            success: response => {
+                this.fillResourceList(response);
+            }
+        });
+    }
+
+    private fillResourceList(list: IProjectResource[]) {
+        var $resourceList = $("#resource-list");
+        $resourceList.removeClass("loading");
+        for (let i = 0; i < list.length; i++) {
+            var projectResource = list[i];
+            var optionElement = document.createElement("option");
+            $(optionElement)
+                .val(projectResource.id)
+                .text(projectResource.name)
+                .appendTo($resourceList);
+        }
     }
 }
 
@@ -454,4 +483,9 @@ enum ResourceType {
     Image = 1,
     Audio = 2,
     Video = 3
+}
+
+interface IProjectResource {
+    id: number;
+    name: string;
 }

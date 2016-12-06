@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models;
+using ITJakub.Web.Hub.Areas.Admin.Models.Contract;
+using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
@@ -111,6 +113,17 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             return Json(new { });
         }
+
+        public IActionResult GetResourceList(long projectId, ProjectResourceType resourceType)
+        {
+            var result = new List<ProjectResourceContract>
+            {
+                ProjectMock.GetResource(1),
+                ProjectMock.GetResource(2),
+                ProjectMock.GetResource(3),
+            };
+            return Json(result);
+        }
     }
 
     public static class ProjectMock
@@ -137,6 +150,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 Id = id,
                 Name = string.Format("Název projektu {0}", id)
+            };
+        }
+
+        public static ProjectResourceContract GetResource(long id)
+        {
+            return new ProjectResourceContract
+            {
+                Id = id,
+                Name = string.Format("Název {0}", id)
             };
         }
 

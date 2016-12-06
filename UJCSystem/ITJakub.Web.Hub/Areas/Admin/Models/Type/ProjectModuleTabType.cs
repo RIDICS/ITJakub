@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Web.Hub.Areas.Admin.Models
+﻿namespace ITJakub.Web.Hub.Areas.Admin.Models.Type
 {
     public enum ProjectModuleTabType
     {
