@@ -1,0 +1,38 @@
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@model NewPublicationViewModel
+
+<div class="project-snapshot-new">
+    <div class="project-snapshot-resources">
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Textové zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Obrazové zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Audio zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Video zdroje", Model.ResourceList))
+        
+        <div class="project-bottom-buttons">
+            <button type="button" class="btn btn-default">Uložit</button>
+        </div>
+    </div>
+
+    <div class="project-snapshot-visibility">
+        <div>
+            <h4>Viditelnost</h4>
+            <div>
+                <button type="button" class="btn btn-default form-control">
+                    <span class="glyphicon glyphicon-plus"></span> Přidat skupinu/uživatele
+                </button>
+            </div>
+
+            <ul class="list-group">
+                @foreach (var group in Model.VisibilityForGroups)
+                {
+                    <li class="list-group-item" data-group-id="@group.GroupId">
+                        <div class="controls">
+                            <a href="#"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                        <span>@group.Name</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>

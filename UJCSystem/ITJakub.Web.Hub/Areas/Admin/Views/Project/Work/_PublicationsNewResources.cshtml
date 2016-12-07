@@ -1,0 +1,98 @@
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ResourcesViewModel
+
+<div class="project-dropdown-panel">
+    <div class="dropdown-select-header project-dropdown-header">
+        <div class="project-dropdown-controls">
+            <a href="#">Zařadit vše v nejnovější verzi</a>
+            <a href="#"><span class="glyphicon glyphicon-menu-down"></span></a>
+        </div>
+        <div>@Model.Title</div>
+    </div>
+    <div class="project-dropdown-body">
+        <table>
+            <tr>
+                <th>Zdroj</th>
+                <th>Zahrnout</th>
+                <th>Verze</th>
+                <th></th>
+                <th>Mluvnice</th>
+                <th>Edice</th>
+                <th>Korpusy</th>
+                <th>Slovníky</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" /> Vše
+                        </label>
+                    </div>
+                </th>
+                <th></th>
+                <th></th>
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" /> Vše
+                        </label>
+                    </div>
+                </th>
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" /> Vše
+                        </label>
+                    </div>
+                </th>
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" /> Vše
+                        </label>
+                    </div>
+                </th>
+                <th>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" /> Vše
+                        </label>
+                    </div>
+                </th>
+            </tr>
+
+            @foreach (var resource in Model.ResourceList)
+            {
+                <tr data-id="@resource.Id">
+                    <td>@resource.Name</td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <select>
+                            @foreach (var version in resource.VersionList)
+                            {
+                                <option value="@version.ResourceVersionId">@version.VersionNumber</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <a href="#">Náhled</a>
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                    <td>
+                        <input type="checkbox" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

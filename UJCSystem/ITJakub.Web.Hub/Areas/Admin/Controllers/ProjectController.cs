@@ -102,6 +102,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return PartialView("_ResourceVersion", viewModel);
         }
 
+        public IActionResult NewSnapshot(long projectId)
+        {
+            var viewModel = ProjectMock.GetNewPulication();
+            return PartialView("Work/_PublicationsNew", viewModel);
+        }
+
         [HttpPost]
         public IActionResult UploadResource(UploadFileRequest request)
         {
@@ -213,6 +219,59 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 Comment = "První verze dokumentu [název díla]",
                 CreateDate = DateTime.Now,
                 VersionNumber = versionNumber
+            };
+        }
+
+        public static NewPublicationViewModel GetNewPulication()
+        {
+            return new NewPublicationViewModel
+            {
+                ResourceList = new List<ResourceViewModel>
+                {
+                    GetResourceViewModel(1),
+                    GetResourceViewModel(2),
+                    GetResourceViewModel(3),
+                    GetResourceViewModel(4),
+                    GetResourceViewModel(5)
+                },
+                VisibilityForGroups = new List<GroupInfoViewModel>
+                {
+                    GetVisibilityForGroup(1),
+                    GetVisibilityForGroup(2),
+                    GetVisibilityForGroup(3),
+                }
+            };
+        }
+
+        private static GroupInfoViewModel GetVisibilityForGroup(int id)
+        {
+            return new GroupInfoViewModel
+            {
+                GroupId = id,
+                Name = string.Format("Skupina {0}", id)
+            };
+        }
+
+        private static ResourceViewModel GetResourceViewModel(int id)
+        {
+            return new ResourceViewModel
+            {
+                Id = id,
+                Name = string.Format("Strana {0}", id),
+                VersionList = new List<VersionNumberViewModel>
+                {
+                    GetVersionNumber(1),
+                    GetVersionNumber(2),
+                }
+            };
+        }
+
+        private static VersionNumberViewModel GetVersionNumber(int id)
+        {
+            return new VersionNumberViewModel
+            {
+                ResourceVersionId = id,
+                VersionNumber = id
             };
         }
     }
