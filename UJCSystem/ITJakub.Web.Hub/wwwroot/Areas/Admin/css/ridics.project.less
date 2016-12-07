@@ -86,7 +86,7 @@
         border: @box-border;
         border-top-width: 0;
         height: 640px;
-        padding: 1rem 0.5rem 0 0.5rem;
+        padding: 1rem 0.5rem 1rem 0.5rem;
         overflow-y: auto;
     }
 
@@ -261,4 +261,56 @@
     .bottom-buttons button {
         margin-top: 3px;
     }
+}
+
+.discussion-post {
+    @left-panel-width: 30px;
+    margin-bottom: 10px;
+    
+    .panel-heading {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+
+    .panel-body {
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    .panel-heading-container {
+        padding-left: @left-panel-width;
+    }
+
+    .panel-body-container {
+        display: table;
+        width: 100%;
+    }
+    
+    .panels {
+        display: table-row;
+    }
+
+    .left-panel {
+        width: @left-panel-width;
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    .middle-panel {
+        display: table-cell;
+    }
+
+    .right-panel {
+        width: 55px;
+        display: table-cell;
+        vertical-align: middle;
+
+        > * {
+            margin: 0 5px 0 5px;
+        }
+    }
+}
+
+.discussion-thread .discussion-thread {
+    margin-left: 2%;
 }

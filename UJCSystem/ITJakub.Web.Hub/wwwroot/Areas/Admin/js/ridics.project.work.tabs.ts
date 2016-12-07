@@ -47,3 +47,36 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
         });
     }
 }
+
+class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
+    private projectId: number;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() { }
+}
+
+class ProjectWorkCooperationTab extends ProjectModuleTabBase {
+    private projectId: number;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() { }
+}
+
+class ProjectWorkHistoryTab extends ProjectModuleTabBase {
+    private projectId: number;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() { }
+}

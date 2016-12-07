@@ -26,3 +26,48 @@
         });
     }
 }
+
+class ProjectResourceDiscussionTab extends ProjectModuleTabBase {
+    constructor(resourceId: number) {
+        super();
+    }
+
+    initTab() {
+        var $container = $("#resource-discussion-container");
+        $(".discussion-thread .discussion-thread .discussion-open-thread-link", $container).hide();
+        $(".icon-close", $container).hide();
+
+        $container.children(".discussion-thread").each((index, elem) => {
+            var $directSubcontainer = $(elem).children(".discussion-thread");
+
+            if ($directSubcontainer.length === 0) {
+                $(".discussion-open-thread-link", elem).hide();
+            } else {
+                $directSubcontainer.hide();
+
+                $(".discussion-open-thread-link", elem).click((event) => {
+                    var $openIcon = $(".icon-open", event.currentTarget);
+                    var $closeIcon = $(".icon-close", event.currentTarget);
+
+                    if ($directSubcontainer.is(":visible")) {
+                        $directSubcontainer.hide();
+                        $openIcon.show();
+                        $closeIcon.hide();
+                    } else {
+                        $directSubcontainer.show();
+                        $openIcon.hide();
+                        $closeIcon.show();
+                    }
+                });
+            }
+        });
+    }
+}
+
+class ProjectResourcePreviewTab extends ProjectModuleTabBase {
+    constructor(resourceId: number) {
+        super();
+    }
+
+    initTab() { }
+}

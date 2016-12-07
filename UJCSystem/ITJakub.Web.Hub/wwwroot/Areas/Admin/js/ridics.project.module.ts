@@ -163,6 +163,12 @@ class ProjectWorkModule extends ProjectModuleBase {
                 return new ProjectWorkMetadataTab(this.projectId);
             case ProjectModuleTabType.WorkPageList:
                 return new ProjectWorkPageListTab(this.projectId);
+            case ProjectModuleTabType.WorkPublications:
+                return new ProjectWorkPublicationsTab(this.projectId);
+            case ProjectModuleTabType.WorkCooperation:
+                return new ProjectWorkCooperationTab(this.projectId);
+            case ProjectModuleTabType.WorkHistory:
+                return new ProjectWorkHistoryTab(this.projectId);
             default:
                 return null;
         }
@@ -222,6 +228,10 @@ class ProjectResourceModule extends ProjectModuleBase {
         switch (tabPanelType) {
             case ProjectModuleTabType.ResourceMetadata:
                 return new ProjectResourceMetadataTab(this.currentResourceId);
+            case ProjectModuleTabType.ResourcePreview:
+                return new ProjectResourcePreviewTab(this.currentResourceId);
+            case ProjectModuleTabType.ResourceDiscussion:
+                return new ProjectResourceDiscussionTab(this.currentResourceId);
             default:
                 return null;
         }
