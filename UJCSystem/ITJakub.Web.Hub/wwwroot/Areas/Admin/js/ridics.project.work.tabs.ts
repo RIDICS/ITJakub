@@ -81,7 +81,34 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
                 return;
             }
 
+            this.initNewSnapshotPanel();
+        });
+    }
 
+    private initNewSnapshotPanel() {
+        var textResources = new ProjectWorkPublicationsResource($(".project-dropdown-panel").first());
+        textResources.init();
+    }
+}
+
+class ProjectWorkPublicationsResource {
+    private $container: JQuery;
+
+    constructor(panelElement: JQuery) {
+        this.$container = panelElement;
+    }
+
+    public init() {
+        $(".subheader", this.$container).children().each((index, elem) => {
+            var $checkbox = $("input[type=checkbox]", elem);
+            if ($checkbox.length === 0) return;
+
+            $checkbox.change((event) => {
+                var checkbox = <HTMLInputElement>event.currentTarget;
+                var isChecked = checkbox.checked;
+
+               // $("td:nth-child()")
+            });
         });
     }
 }

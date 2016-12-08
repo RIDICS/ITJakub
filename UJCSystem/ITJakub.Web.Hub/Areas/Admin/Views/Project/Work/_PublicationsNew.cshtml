@@ -1,12 +1,13 @@
 ﻿@using ITJakub.Web.Hub.Areas.Admin.Models
+@using ITJakub.Web.Hub.Areas.Admin.Models.Type
 @model NewPublicationViewModel
 
 <div class="project-snapshot-new">
     <div class="project-snapshot-resources">
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Textové zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Obrazové zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Audio zdroje", Model.ResourceList))
-        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel("Video zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ProjectResourceType.Text, "Textové zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ProjectResourceType.Image, "Obrazové zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ProjectResourceType.Audio, "Audio zdroje", Model.ResourceList))
+        @Html.Partial("Work/_PublicationsNewResources", new ResourcesViewModel(ProjectResourceType.Video, "Video zdroje", Model.ResourceList))
         
         <div class="project-bottom-buttons">
             <button type="button" class="btn btn-default">Uložit</button>
