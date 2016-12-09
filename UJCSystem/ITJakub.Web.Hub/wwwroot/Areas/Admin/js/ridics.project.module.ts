@@ -252,22 +252,27 @@ class ProjectResourceModule extends ProjectModuleBase {
     private initDialogs() {
         this.addResourceDialog = new BootstrapDialogWrapper({
             element: $("#new-resource-dialog"),
+            submitCallback: this.addResource.bind(this),
             autoClearInputs: true
         });
         this.createResourceVersionDialog = new BootstrapDialogWrapper({
             element: $("#new-resource-version-dialog"),
+            submitCallback: this.createResourceVersion.bind(this),
             autoClearInputs: true
         });
         this.renameResourceDialog = new BootstrapDialogWrapper({
             element: $("#rename-resource-dialog"),
+            submitCallback: this.renameResource.bind(this),
             autoClearInputs: true
         });
         this.deleteResourceDialog = new BootstrapDialogWrapper({
             element: $("#delete-resource-dialog"),
+            submitCallback: this.deleteResource.bind(this),
             autoClearInputs: false
         });
         this.duplicateResourceDialog = new BootstrapDialogWrapper({
             element: $("#duplicate-resource-dialog"),
+            submitCallback: this.duplicateResource.bind(this),
             autoClearInputs: false
         });
     }
@@ -276,9 +281,11 @@ class ProjectResourceModule extends ProjectModuleBase {
         $("#resource-panel button").off();
 
         $("#add-resource-button").click(() => {
+            $("#new-resource-session-id").val(Guid.generate());
             this.addResourceDialog.show();
         });
         $("#create-resource-version-button").click(() => {
+            $("#new-resource-version-session-id").val(Guid.generate());
             $("#new-resource-version-original").text(this.getSelectedResourceName());
             this.createResourceVersionDialog.show();
         });
@@ -360,6 +367,46 @@ class ProjectResourceModule extends ProjectModuleBase {
             .prop("disabled", true)
             .text("Chyba při načítání zdrojů")
             .appendTo($resourceList);
+    }
+
+    private addResource() {
+        var sessionId = $("#new-resource-session-id").val();
+        var comment = $("#new-resource-comment").val();
+        this.projectManager.processUploadedResources(sessionId, comment, errorCode => {
+            if (errorCode != null) {
+                this.addResourceDialog.showError();
+                return;
+            }
+
+            this.addResourceDialog.hide();
+            // TODO reload page or add resource directly to list
+        });
+    }
+
+    private createResourceVersion() {
+        var sessionId = $("#new-resource-version-session-id").val();
+        var comment = $("#new-resource-version-comment").val();
+        this.projectManager.processUploadedResourceVersion(this.currentResourceId, sessionId, comment, errorCode => {
+            if (errorCode != null) {
+                this.createResourceVersionDialog.showError();
+                return;
+            }
+
+            this.createResourceVersionDialog.hide();
+            // TODO update ResourceVersionPanel, update displayed resource name
+        });
+    }
+
+    private deleteResource() {
+        //TODO
+    }
+
+    private renameResource() {
+        //TODO
+    }
+
+    private duplicateResource() {
+        //TODO
     }
 }
 
