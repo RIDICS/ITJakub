@@ -107,8 +107,27 @@ class ProjectWorkPublicationsResource {
                 var checkbox = <HTMLInputElement>event.currentTarget;
                 var isChecked = checkbox.checked;
 
-               // $("td:nth-child()")
+                $(`td:nth-child(${index+1}) input[type=checkbox]`, this.$container).each((index, elem) => {
+                    var checkbox2 = <HTMLInputElement>elem;
+                    checkbox2.checked = isChecked;
+                });
             });
+        });
+
+        $("td input[type=checkbox]", this.$container).change((event) => {
+            var $parentTd = $(event.currentTarget).closest("td");
+            var $parentTr = $parentTd.closest("tr");
+            var position = $parentTr.children().index($parentTd) + 1;
+
+            var isAllChecked = true;
+            $(`td:nth-child(${position}) input[type=checkbox]`, this.$container).each((index, elem) => {
+                if (!(<HTMLInputElement>elem).checked) {
+                    isAllChecked = false;
+                }
+            });
+
+            var allCheckBox = <HTMLInputElement>$(`.subheader th:nth-child(${position}) input[type=checkbox]`, this.$container).get(0);
+            allCheckBox.checked = isAllChecked;
         });
     }
 }
