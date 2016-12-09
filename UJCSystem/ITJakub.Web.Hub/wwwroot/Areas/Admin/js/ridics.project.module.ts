@@ -176,6 +176,7 @@ class ProjectWorkModule extends ProjectModuleBase {
 }
 
 class ProjectResourceModule extends ProjectModuleBase {
+    private projectManager: ProjectManager;
     private resourceType: ResourceType;
     private projectId: number;
     private currentResourceId: number;
@@ -190,6 +191,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         super();
         this.projectId = projectId;
         this.resourceType = resourceType;
+        this.projectManager = new ProjectManager();
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
@@ -325,20 +327,14 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private loadResourceList() {
         $("#resource-list").empty().addClass("loading");
-        
-        $.ajax({
-            type: "GET",
-            traditional: true,
-            url: getBaseUrl() + "Admin/Project/GetResourceList",
-            data: {
-                projectId: this.projectId,
-                resourceType: this.resourceType
-            },
-            dataType: "json",
-            contentType: "application/json",
-            success: response => {
-                this.fillResourceList(response);
+
+        this.projectManager.getResourceList(this.projectId, this.resourceType, (list, errorCode) => {
+            if (errorCode != null) {
+                this.showErrorInResourceList();
+                return;
             }
+
+            this.fillResourceList(list);
         });
     }
 
@@ -353,6 +349,17 @@ class ProjectResourceModule extends ProjectModuleBase {
                 .text(projectResource.name)
                 .appendTo($resourceList);
         }
+    }
+
+    private showErrorInResourceList() {
+        var $resourceList = $("#resource-list");
+        $resourceList.removeClass("loading");
+        
+        var optionElement = document.createElement("option");
+        $(optionElement)
+            .prop("disabled", true)
+            .text("Chyba při načítání zdrojů")
+            .appendTo($resourceList);
     }
 }
 

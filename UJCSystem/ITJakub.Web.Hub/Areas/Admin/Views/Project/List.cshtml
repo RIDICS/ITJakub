@@ -9,6 +9,7 @@
 }
 @section scripts {
     <script src="~/Areas/Admin/js/ridics.project.list.js"></script>
+    <script src="~/Areas/Admin/js/ridics.project.manager.js"></script>
 }
 
 <div class="content-container project-list">
@@ -102,7 +103,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Vytvořit</button>
             </div>
@@ -121,7 +122,7 @@
                 Opravdu chcete smazat dílo "<span id="delete-project-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při mazání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při mazání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Smazat</button>
             </div>

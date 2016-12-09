@@ -12,6 +12,7 @@
     <script src="~/Areas/Admin/js/ridics.project.module.js"></script>
     <script src="~/Areas/Admin/js/ridics.project.work.tabs.js"></script>
     <script src="~/Areas/Admin/js/ridics.project.resource.tabs.js"></script>
+    <script src="~/Areas/Admin/js/ridics.project.manager.js"></script>
 }
 
 <div id="project-id" class="hidden">@Model.Id</div>
@@ -86,7 +87,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Hotovo</button>
             </div>
@@ -118,7 +119,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
             </div>
@@ -137,7 +138,7 @@
                 Opravdu chcete smazat zdroj "<span id="delete-resource-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při mazání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při mazání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Smazat</button>
             </div>
@@ -156,7 +157,7 @@
                 Opravdu chcete duplikovat zdroj "<span id="duplicate-resource-name"></span>"?
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při duplikování</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při duplikování</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Duplikovat</button>
             </div>
@@ -191,7 +192,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="error">Chyba při ukládání</div>
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
             </div>

@@ -35,7 +35,7 @@ class BootstrapDialogWrapper {
     private defaultOptions: IBootstrapDialogWrapperOptions = {
         element: null,
         autoClearInputs: true,
-        errorElementSelector: ".error",
+        errorElementSelector: ".dialog-error",
         progressElementSelector: ".saving-icon",
         submitElementSelector: ".save-button"
     }
@@ -91,11 +91,14 @@ class BootstrapDialogWrapper {
         $(this.options.errorElementSelector, this.$element).hide();
     }
 
-    public showError(text: string) {
+    public showError(text: string = null) {
+        var $error = $(this.options.errorElementSelector, this.$element);
+        if (text != null) {
+            $error.text(text);
+        }
+
         $(this.options.progressElementSelector, this.$element).hide();
-        $(this.options.errorElementSelector, this.$element)
-            .text(text)
-            .show();
+        $error.show();
     }
 }
 
