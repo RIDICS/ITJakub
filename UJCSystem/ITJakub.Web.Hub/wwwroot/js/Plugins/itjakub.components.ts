@@ -58,6 +58,7 @@ class BootstrapDialogWrapper {
         });
 
         $(this.options.submitElementSelector, this.$element).click(() => {
+            this.showSaving();
             var callback = this.options.submitCallback;
             if (typeof callback === "function") {
                 callback();
@@ -86,7 +87,7 @@ class BootstrapDialogWrapper {
         }
     }
 
-    public showSaving() {
+    private showSaving() {
         $(this.options.progressElementSelector, this.$element).show();
         $(this.options.errorElementSelector, this.$element).hide();
     }

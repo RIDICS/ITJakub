@@ -332,7 +332,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         }
     }
 
-    private loadResourceList() {
+    private loadResourceList(callback: () => void = null) {
         $("#resource-list").empty().addClass("loading");
 
         this.projectManager.getResourceList(this.projectId, this.resourceType, (list, errorCode) => {
@@ -342,6 +342,10 @@ class ProjectResourceModule extends ProjectModuleBase {
             }
 
             this.fillResourceList(list);
+
+            if (callback != null) {
+                callback();
+            }
         });
     }
 
@@ -369,6 +373,10 @@ class ProjectResourceModule extends ProjectModuleBase {
             .appendTo($resourceList);
     }
 
+    private selectResource(resourceId: number) {
+        $("#resource-list").val(resourceId).trigger("change");
+    }
+
     private addResource() {
         var sessionId = $("#new-resource-session-id").val();
         var comment = $("#new-resource-comment").val();
@@ -378,35 +386,78 @@ class ProjectResourceModule extends ProjectModuleBase {
                 return;
             }
 
+            this.toggleElementsVisibility(false, null);
+            this.loadResourceList();
+
             this.addResourceDialog.hide();
-            // TODO reload page or add resource directly to list
         });
     }
 
     private createResourceVersion() {
+        var resourceId = this.currentResourceId;
         var sessionId = $("#new-resource-version-session-id").val();
         var comment = $("#new-resource-version-comment").val();
-        this.projectManager.processUploadedResourceVersion(this.currentResourceId, sessionId, comment, errorCode => {
+        this.projectManager.processUploadedResourceVersion(resourceId, sessionId, comment, errorCode => {
             if (errorCode != null) {
                 this.createResourceVersionDialog.showError();
                 return;
             }
 
+            this.toggleElementsVisibility(false, null);
+            this.loadResourceList(() => {
+                this.selectResource(resourceId);
+            });
+
             this.createResourceVersionDialog.hide();
-            // TODO update ResourceVersionPanel, update displayed resource name
         });
     }
 
     private deleteResource() {
-        //TODO
+        var resourceId = this.currentResourceId;
+        this.projectManager.deleteResource(resourceId, errorCode => {
+            if (errorCode != null) {
+                this.deleteResourceDialog.showError();
+                return;
+            }
+
+            $(`#resource-list option[value=${resourceId}]`).remove();
+            this.toggleElementsVisibility(false, null);
+            
+            this.deleteResourceDialog.hide();
+        });
     }
 
     private renameResource() {
-        //TODO
+        var resourceId = this.currentResourceId;
+        var newName = $("#rename-resource-new").val();
+        this.projectManager.renameResource(resourceId, newName, errorCode => {
+            if (errorCode != null) {
+                this.renameResourceDialog.showError();
+                return;
+            }
+
+            $(`#resource-list option[value=${resourceId}]`).text(newName);
+
+            this.renameResourceDialog.hide();
+        });
     }
 
     private duplicateResource() {
-        //TODO
+        var resourceId = this.currentResourceId;
+        var resourceName = $("#duplicate-resource-name").text();
+        this.projectManager.duplicateResource(resourceId, (newResourceId, errorCode) => {
+            if (errorCode != null) {
+                this.duplicateResourceDialog.showError();
+                return;
+            }
+
+            this.toggleElementsVisibility(false, null);
+            this.loadResourceList(() => {
+                this.selectResource(resourceId);
+            });
+
+            this.duplicateResourceDialog.hide();
+        });
     }
 }
 
@@ -486,6 +537,7 @@ class ProjectResourceVersionModule {
 
     public directHide() {
         this.hide(false);
+        $("#project-resource-version-button").hide();
     }
 }
 

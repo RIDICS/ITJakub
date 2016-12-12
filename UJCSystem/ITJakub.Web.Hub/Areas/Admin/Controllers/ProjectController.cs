@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Contract;
+using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
@@ -109,13 +110,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadResource(UploadFileRequest request)
+        public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
-            return Json(new {});
+            return Json(55);
         }
 
         [HttpPost]
-        public IActionResult UploadNewResourceVersion(UploadFileRequest request)
+        public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult UploadResource([FromBody] UploadFileRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult UploadNewResourceVersion([FromBody] UploadFileRequest request)
         {
             return Json(new { });
         }
@@ -129,6 +142,36 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 ProjectMock.GetResource(3),
             };
             return Json(result);
+        }
+
+        [HttpPost]
+        public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult RenameResource([FromBody] RenameResourceRequest request)
+        {
+            return Json(new { });
+        }
+
+        [HttpPost]
+        public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
+        {
+            return Json(77);
         }
     }
 
