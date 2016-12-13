@@ -9,39 +9,43 @@ namespace Vokabular.MainService.Controllers
     public class ProjectController : Controller
     {
         [HttpGet]
-        public IEnumerable<ProjectContract> Get()
+        public List<ProjectContract> GetProjectList()
         {
             return new List<ProjectContract>
             {
-                new ProjectContract
-                {
-                    Id = 45,
-                    CreateDate = DateTime.Now.AddDays(-1),
-                    CreateUser = "Jan Novák",
-                    LastEditDate = DateTime.Now,
-                    LastEditUser = "Jan Novák",
-                    LiteraryOriginalText = "Praha, Národní knihovna České republiky, konec 14. století",
-                    Name = "Andělíku rozkochaný",
-                    PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
-                    PageCount = 1
-                },
-                new ProjectContract
-                {
-                    Id = 45,
-                    CreateDate = DateTime.Now.AddDays(-1),
-                    CreateUser = "Jan Novák",
-                    LastEditDate = DateTime.Now,
-                    LastEditUser = "Jan Novák",
-                    LiteraryOriginalText = "Praha, Národní knihovna České republiky, konec 14. století",
-                    Name = "Andělíku rozkochaný",
-                    PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
-                    PageCount = 1
-                }
+                MockDataProject.GetProjectContract(45),
+                MockDataProject.GetProjectContract(46),
+                MockDataProject.GetProjectContract(47)
             };
         }
 
         [HttpGet("{id}")]
-        public ProjectContract Get(int id)
+        public ProjectContract GetProject(int id)
+        {
+            return MockDataProject.GetProjectContract(id);
+        }
+
+        [HttpPost]
+        public long CreateProject([FromBody] ProjectContract project)
+        {
+            return 5;
+        }
+
+        [HttpDelete("{id}")]
+        public void DeleteProject(int id)
+        {
+        }
+
+        [HttpGet("{id}/metadata")]
+        public void GetProjectMetadata(long id)
+        {
+
+        }
+    }
+
+    public class MockDataProject
+    {
+        public static ProjectContract GetProjectContract(int id)
         {
             return new ProjectContract
             {
@@ -55,17 +59,6 @@ namespace Vokabular.MainService.Controllers
                 PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
                 PageCount = 1
             };
-        }
-
-        [HttpPost]
-        public long Create([FromBody]ProjectContract project)
-        {
-            return 5;
-        }
-
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

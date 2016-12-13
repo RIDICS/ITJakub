@@ -139,14 +139,36 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadResource([FromBody] UploadFileRequest request)
+        public IActionResult UploadResource(UploadFileRequest request)
         {
+            for (var i = 0; i < Request.Form.Files.Count; i++)
+            {
+                var file = Request.Form.Files[i];
+                if (file != null && file.Length != 0)
+                {
+                    using (var client = GetServiceClient())
+                    {
+                        client.UploadResource(request.SessionId, file.OpenReadStream());
+                    }
+                }
+            }
             return Json(new { });
         }
 
         [HttpPost]
-        public IActionResult UploadNewResourceVersion([FromBody] UploadFileRequest request)
+        public IActionResult UploadNewResourceVersion(UploadFileRequest request)
         {
+            for (var i = 0; i < Request.Form.Files.Count; i++)
+            {
+                var file = Request.Form.Files[i];
+                if (file != null && file.Length != 0)
+                {
+                    using (var client = GetServiceClient())
+                    {
+                        client.UploadResource(request.SessionId, file.OpenReadStream());
+                    }
+                }
+            }
             return Json(new { });
         }
 

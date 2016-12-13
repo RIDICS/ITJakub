@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -77,6 +78,15 @@ namespace Vokabular.MainService.DataContracts.Clients
         public void DeleteProject(long projectId)
         {
             Delete(string.Format("project/{0}", projectId));
+        }
+
+        public void UploadResource(string sessionId, Stream data)
+        {
+            var uriPath = string.Format("session/{0}/resource", sessionId);
+            var content = new StreamContent(data);
+            var response = m_client.PostAsync(uriPath, content).Result;
+
+            response.EnsureSuccessStatusCode();
         }
 
         public void Dispose()
