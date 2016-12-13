@@ -8,6 +8,7 @@ using ITJakub.Web.Hub.Managers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -18,6 +19,11 @@ namespace ITJakub.Web.Hub.Controllers
         protected BaseController(CommunicationProvider communicationProvider)
         {
             m_communication = communicationProvider;
+        }
+
+        public MainServiceClient GetServiceClient()
+        {
+            return m_communication.GetMainServiceClient();
         }
 
         public ItJakubServiceEncryptedClient GetEncryptedClient()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Contract;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
@@ -20,19 +21,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult List()
         {
-            var viewModel = new List<ProjectItemViewModel>
+            using (var client = GetServiceClient())
             {
-                ProjectMock.GetProjectItem(),
-                ProjectMock.GetProjectItem(),
-                ProjectMock.GetProjectItem()
-            };
-            return View(viewModel);
+                var result = client.GetProjectList();
+                var viewModel = Mapper.Map<List<ProjectItemViewModel>>(result);
+                return View(viewModel);
+            }
         }
 
         public IActionResult Project(long id)
         {
-            var viewModel = ProjectMock.GetProjectInfo(id);
-            return View(viewModel);
+            using (var client = GetServiceClient())
+            {
+                var result = client.GetProject(id);
+                var viewModel = Mapper.Map<ProjectItemViewModel>(result);
+                return View(viewModel);
+            }
         }
 
         public IActionResult ProjectModule(long id, ProjectModuleType moduleType)

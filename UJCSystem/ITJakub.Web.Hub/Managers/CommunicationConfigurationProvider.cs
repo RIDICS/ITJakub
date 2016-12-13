@@ -17,6 +17,12 @@ namespace ITJakub.Web.Hub.Managers
             m_endpointsOptions = endpointOptions.Value.ToDictionary(x => x.Name);
         }
 
+        public Uri GetEndpointUri(string name)
+        {
+            var options = m_endpointsOptions[name];
+            return new Uri(options.Address);
+        }
+
         public EndpointAddress GetEndpointAddress(string name)
         {
             var options = m_endpointsOptions[name];

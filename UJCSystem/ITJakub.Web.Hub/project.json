@@ -34,8 +34,9 @@
     "NHibernate": "4.0.4.4000",
     "simplemde.TypeScript.DefinitelyTyped": "0.0.1",
     "typeahead.TypeScript.DefinitelyTyped": "0.3.5",
-    "System.Runtime.Serialization.Xml": "4.1.1",
-    "System.ServiceModel.Http": "4.1.0"
+    "System.Runtime.Serialization.Xml": "4.3.0",
+    "System.ServiceModel.Http": "4.3.0",
+    "Vokabular.MainService.DataContracts": "1.0.0-*"
   },
 
   "tools": {

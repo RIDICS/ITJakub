@@ -5,6 +5,7 @@ using System.ServiceModel.Description;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
+using Vokabular.MainService.DataContracts.Clients;
 
 namespace ITJakub.Web.Hub.Managers
 {
@@ -12,6 +13,7 @@ namespace ITJakub.Web.Hub.Managers
     {
         private readonly CommunicationConfigurationProvider m_configurationProvider;
 
+        private const string NewMainServiceEndpointName = "MainService";
         private const string EncryptedEndpointName = "ItJakubServiceEncrypted";
         private const string MainServiceEndpointName = "ItJakubService";
         private const string MainServiceEndpointNameAuthenticated = "ItJakubService.Authenticated";
@@ -23,6 +25,12 @@ namespace ITJakub.Web.Hub.Managers
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
         {
             m_configurationProvider = communicationConfigurationProvider;
+        }
+
+        public MainServiceClient GetMainServiceClient()
+        {
+            var uri = m_configurationProvider.GetEndpointUri(NewMainServiceEndpointName);
+            return new MainServiceClient(uri);
         }
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)
