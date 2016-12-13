@@ -20,22 +20,63 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public IList<ProjectContract> GetProjectList()
+        #region Generic methods
+
+        private T GetResponse<T>(HttpResponseMessage response)
         {
-            var response = m_client.GetAsync("project").Result;
             response.EnsureSuccessStatusCode();
 
-            var projectList = response.Content.ReadAsAsync<List<ProjectContract>>().Result;
+            var result = response.Content.ReadAsAsync<T>().Result;
+            return result;
+        }
+
+        private T Get<T>(string uriPath)
+        {
+            var response = m_client.GetAsync(uriPath).Result;
+            return GetResponse<T>(response);
+        }
+
+        private T Post<T>(string uriPath, object data)
+        {
+            var response = m_client.PostAsJsonAsync(uriPath, data).Result;
+            return GetResponse<T>(response);
+        }
+
+        private void Put(string uriPath, object data)
+        {
+            var response = m_client.PutAsJsonAsync(uriPath, data).Result;
+            response.EnsureSuccessStatusCode();
+        }
+
+        private void Delete(string uriPath)
+        {
+            var response = m_client.DeleteAsync(uriPath).Result;
+            response.EnsureSuccessStatusCode();
+        }
+
+        #endregion
+
+        public IList<ProjectContract> GetProjectList()
+        {
+            var projectList = Get<List<ProjectContract>>("project");
             return projectList;
         }
 
         public ProjectContract GetProject(long projectId)
         {
-            var response = m_client.GetAsync(string.Format("project/{0}", projectId)).Result;
-            response.EnsureSuccessStatusCode();
-
-            var project = response.Content.ReadAsAsync<ProjectContract>().Result;
+            var project = Get<ProjectContract>(string.Format("project/{0}", projectId));
             return project;
+        }
+
+        public long CreateProject(ProjectContract project)
+        {
+            var projectId = Post<long>("project", project);
+            return projectId;
+        }
+
+        public void DeleteProject(long projectId)
+        {
+            Delete(string.Format("project/{0}", projectId));
         }
 
         public void Dispose()

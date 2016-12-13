@@ -9,6 +9,7 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -116,13 +117,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
-            return Json(55);
+            using (var client = GetServiceClient())
+            {
+                var newProject = new ProjectContract
+                {
+                    Name = request.Name
+                };
+                var newProjectId = client.CreateProject(newProject);
+                return Json(newProjectId);
+            }
         }
 
         [HttpPost]
         public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
         {
-            return Json(new { });
+            using (var client = GetServiceClient())
+            {
+                client.DeleteProject(request.Id);
+                return Json(new { });
+            }
         }
 
         [HttpPost]

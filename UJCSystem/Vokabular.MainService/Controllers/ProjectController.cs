@@ -57,9 +57,10 @@ namespace Vokabular.MainService.Controllers
             };
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]ProjectContract value)
+        [HttpPost]
+        public long Create([FromBody]ProjectContract project)
         {
+            return 5;
         }
 
         [HttpDelete("{id}")]
