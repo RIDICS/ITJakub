@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
-    public class ResourceController : Controller
+    public class ResourceController : Controller, IResourceMainService
     {
         [HttpPost("session/{sessionId}/resource")]
         public void UploadResource(string sessionId)
@@ -15,26 +17,38 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("project/{projectId}/resource")]
-        public void ProcessUploadedResources(long projectId, [FromBody] NewResourceContract resourceInfo)
+        public long ProcessUploadedResources(long projectId, [FromBody] NewResourceContract resourceInfo)
         {
-            
+            return 22;
         }
 
         [HttpPost("resource/{resourceId}/version")]
-        public void ProcessUploadedResourceVersion(long resourceId, [FromBody] NewResourceContract resourceInfo)
+        public long ProcessUploadedResourceVersion(long resourceId, [FromBody] NewResourceContract resourceInfo)
         {
-            
+            return 231;
         }
 
-        [HttpGet("project/{projectId}/resource")]
-        public List<ResourceContract> GetResourceList(long projectId)
+        [HttpGet("project/{projectId}/resource?type={resourceType}")]
+        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeContract? resourceType)
         {
-            return new List<ResourceContract>
+            var list = new List<ResourceContract>();
+            if (resourceType != null)
             {
-                MockData.GetResourceContract(1),
-                MockData.GetResourceContract(2),
-                MockData.GetResourceContract(3)
-            };
+                for (int i = 5; i >= 0; i--)
+                {
+                    list.Add(MockResourceData.GetResourceContract(i, resourceType.Value));
+                }
+            }
+            else
+            {
+                var random = new Random();
+                for (int i = 11; i >= 0; i--)
+                {
+                    ResourceTypeContract type = (ResourceTypeContract)random.Next(4);
+                    list.Add(MockResourceData.GetResourceContract(i, type));
+                }
+            }
+            return list;
         }
 
         [HttpDelete("resource/{resourceId}")]
@@ -56,19 +70,39 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("resource/{resourceId}/version")]
-        public void GetResourceVersionHistory(long resourceId)
+        public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
-            
+            return new List<ResourceVersionContract>
+            {
+                MockResourceData.GetResourceVersionContract(5),
+                MockResourceData.GetResourceVersionContract(4),
+                MockResourceData.GetResourceVersionContract(3),
+                MockResourceData.GetResourceVersionContract(2),
+                MockResourceData.GetResourceVersionContract(1)
+            };
+        }
+
+        [HttpGet("resource/{resourceId}/metadata")]
+        public ResourceMetadataContract GetResourceMetadata(long resourceId)
+        {
+            return new ResourceMetadataContract
+            {
+                Editor = "Jan Novák",
+                Editor2 = "Josef Novák",
+                LastModification = DateTime.Now,
+                EditionNote = "xxxxxxx"
+            };
         }
     }
 
-    public class MockData
+    public class MockResourceData
     {
-        public static ResourceContract GetResourceContract(int id)
+        public static ResourceContract GetResourceContract(int id, ResourceTypeContract resourceType)
         {
             return new ResourceContract
             {
                 Id = id,
+                ResourceType = resourceType,
                 Name = string.Format("Zdroj {0}", id)
             };
         }

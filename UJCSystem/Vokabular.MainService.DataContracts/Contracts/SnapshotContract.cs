@@ -1,6 +1,21 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿using System;
+using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts.Type;
+
+namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class SnapshotContract
     {
+        public long Id { get; set; }
+        public DateTime PublishDate { get; set; }
+        public List<SnapshotResourcesInfoContract> ResourcesInfo { get; set; }
+        public string Author { get; set; }
+    }
+
+    public class SnapshotResourcesInfoContract
+    {
+        public ResourceTypeContract ResourceType { get; set; }
+        public int TotalCount { get; set; }
+        public int PublishedCount { get; set; }
     }
 }

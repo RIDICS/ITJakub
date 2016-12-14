@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ProjectController : Controller
+    public class ProjectController : Controller, IProjectMainService
     {
         [HttpGet]
         public List<ProjectContract> GetProjectList()
@@ -20,9 +21,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{id}")]
-        public ProjectContract GetProject(int id)
+        public ProjectContract GetProject(long projectId)
         {
-            return MockDataProject.GetProjectContract(id);
+            return MockDataProject.GetProjectContract(projectId);
         }
 
         [HttpPost]
@@ -32,20 +33,20 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void DeleteProject(int id)
+        public void DeleteProject(long projectId)
         {
         }
 
-        [HttpGet("{id}/metadata")]
-        public void GetProjectMetadata(long id)
+        [HttpGet("{projectId}/metadata")]
+        public ProjectMetadataContract GetProjectMetadata(long projectId)
         {
-
+            return MockDataProject.GetProjectMetadata();
         }
     }
 
     public class MockDataProject
     {
-        public static ProjectContract GetProjectContract(int id)
+        public static ProjectContract GetProjectContract(long id)
         {
             return new ProjectContract
             {
@@ -58,6 +59,27 @@ namespace Vokabular.MainService.Controllers
                 Name = "Andělíku rozkochaný",
                 PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
                 PageCount = 1
+            };
+        }
+
+        public static ProjectMetadataContract GetProjectMetadata()
+        {
+            return new ProjectMetadataContract
+            {
+                Editor = "Jan Novák",
+                LastModification = DateTime.Now,
+                LiteraryGenre = "xxxxxxx",
+                LiteraryKind = "xxxxxxx",
+                LiteraryOriginal = new ProjectLiteraryOriginalContract
+                {
+                    City = "Praha",
+                    Country = "Česká republika",
+                    Institution = "Knihovna národního muzea",
+                    Signature = "sign.: III E48",
+                    Extent = "148f"
+                },
+                RelicAbbreviation = "xxxxxxx",
+                SourceAbbreviation = "xxxxxxx"
             };
         }
     }
