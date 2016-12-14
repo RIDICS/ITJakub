@@ -28,8 +28,8 @@ namespace Vokabular.MainService.Controllers
             return 231;
         }
 
-        [HttpGet("project/{projectId}/resource?type={resourceType}")]
-        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeContract? resourceType)
+        [HttpGet("project/{projectId}/resource")]
+        public List<ResourceContract> GetResourceList(long projectId, [FromQuery] ResourceTypeContract? resourceType)
         {
             var list = new List<ResourceContract>();
             if (resourceType != null)
