@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Controllers
             };
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{projectId}")]
         public ProjectContract GetProject(long projectId)
         {
             return MockDataProject.GetProjectContract(projectId);
@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Controllers
             return 5;
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{projectId}")]
         public void DeleteProject(long projectId)
         {
         }

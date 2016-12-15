@@ -154,7 +154,7 @@ class ProjectWorkModule extends ProjectModuleBase {
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
-        return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
+        return getBaseUrl() + "Admin/Project/ProjectWorkModuleTab?tabType=" + tabPanelType + "&projectId=" + this.projectId;
     }
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
@@ -223,7 +223,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     }
 
     getLoadTabPanelContentUrl(tabPanelType: ProjectModuleTabType): string {
-        return getBaseUrl() + "Admin/Project/ProjectModuleTab?tabType=" + tabPanelType;
+        return getBaseUrl() + "Admin/Project/ProjectResourceModuleTab?tabType=" + tabPanelType + "&resourceId=" + this.currentResourceId;
     }
 
     makeProjectModuleTab(tabPanelType: ProjectModuleTabType): ProjectModuleTabBase {
@@ -307,6 +307,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         var $tabs = $("#" + this.getTabsId());
         var $tabPanels = $("#resource-tab-content");
         var $selectionDependentButtons = $("#delete-resource-button, #rename-resource-button, #duplicate-resource-button, #create-resource-version-button, #project-resource-version-button");
+        this.currentResourceId = resourceId;
 
         $selectionDependentButtons.prop("disabled", !isResourceSelected);
 
@@ -323,7 +324,6 @@ class ProjectResourceModule extends ProjectModuleBase {
             this.resourceVersionModule.directHide();
         }
 
-        this.currentResourceId = resourceId;
         if (resourceId != null) {
             this.resourceVersionModule = new ProjectResourceVersionModule(resourceId);
             this.resourceVersionModule.init();
@@ -380,7 +380,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private addResource() {
         var sessionId = $("#new-resource-session-id").val();
         var comment = $("#new-resource-comment").val();
-        this.projectManager.processUploadedResources(sessionId, comment, errorCode => {
+        this.projectManager.processUploadedResources(this.projectId, sessionId, comment, errorCode => {
             if (errorCode != null) {
                 this.addResourceDialog.showError();
                 return;
@@ -496,7 +496,7 @@ class ProjectResourceVersionModule {
         var $resourceVersionPanel = $("#resource-version-panel");
         var $resourceTabContent = $("#resource-tab-content");
 
-        var url = getBaseUrl() + "Admin/Project/ProjectResourceVersion";
+        var url = getBaseUrl() + "Admin/Project/ProjectResourceVersion?resourceId=" + this.resourceId;
         $resourceVersionPanel
             .slideToggle()
             .append("<div class=\"loading\"></div>")

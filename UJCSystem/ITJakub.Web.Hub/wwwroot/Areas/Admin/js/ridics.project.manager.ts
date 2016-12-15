@@ -40,8 +40,9 @@
         this.getAjax("Admin/Project/GetResourceList", data, callback);
     }
 
-    public processUploadedResources(sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
+    public processUploadedResources(projectId: number, sessionId: string, comment: string, callback: (errorCode: HttpStatusCode) => void) {
         var data = {
+            projectId: projectId,
             sessionId: sessionId,
             comment: comment
         };

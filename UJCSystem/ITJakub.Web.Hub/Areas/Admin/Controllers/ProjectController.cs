@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
-using ITJakub.Web.Hub.Areas.Admin.Models.Contract;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
@@ -10,6 +8,7 @@ using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -40,7 +39,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult ProjectModule(long id, ProjectModuleType moduleType)
+        public IActionResult ProjectModule(ProjectModuleType moduleType)
         {
             switch (moduleType)
             {
@@ -53,63 +52,79 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult ProjectModuleTab(ProjectModuleTabType tabType)
+        public IActionResult ProjectWorkModuleTab(ProjectModuleTabType tabType, long? projectId)
         {
-            switch (tabType)
+            if (projectId == null)
             {
-                case ProjectModuleTabType.ResourcePreview:
-                    return PartialView("Resource/_Preview");
-                case ProjectModuleTabType.ResourceDiscussion:
-                    return PartialView("Resource/_Discussion");
-                case ProjectModuleTabType.ResourceMetadata:
-                    var resourceMetadataViewModel = ProjectMock.GetProjectResourceMetadata();
-                    return PartialView("Resource/_Metadata", resourceMetadataViewModel);
-                case ProjectModuleTabType.WorkPublications:
-                    var publicationsViewModel = new List<SnapshotViewModel>
-                    {
-                        ProjectMock.GetSnapshot(),
-                        ProjectMock.GetSnapshot()
-                    };
-                    return PartialView("Work/_Publications", publicationsViewModel);
-                case ProjectModuleTabType.WorkPageList:
-                    return PartialView("Work/_PageList");
-                case ProjectModuleTabType.WorkCooperation:
-                    return PartialView("Work/_Cooperation");
-                case ProjectModuleTabType.WorkMetadata:
-                    var workMetadaViewModel = ProjectMock.GetProjectWorkMetadata();
-                    return PartialView("Work/_Metadata", workMetadaViewModel);
-                case ProjectModuleTabType.WorkHistory:
-                    return PartialView("Work/_History");
-                default:
-                    return NotFound();
+                return BadRequest();
+            }
+
+            using (var client = GetServiceClient())
+            {
+                switch (tabType)
+                {
+                    case ProjectModuleTabType.WorkPublications:
+                        var snapshotList = client.GetSnapshotList(projectId.Value);
+                        var publicationsViewModel = Mapper.Map<List<SnapshotViewModel>>(snapshotList);
+                        return PartialView("Work/_Publications", publicationsViewModel);
+                    case ProjectModuleTabType.WorkPageList:
+                        return PartialView("Work/_PageList");
+                    case ProjectModuleTabType.WorkCooperation:
+                        return PartialView("Work/_Cooperation");
+                    case ProjectModuleTabType.WorkMetadata:
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value);
+                        var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
+                        return PartialView("Work/_Metadata", workMetadaViewModel);
+                    case ProjectModuleTabType.WorkHistory:
+                        return PartialView("Work/_History");
+                    default:
+                        return NotFound();
+                }
             }
         }
 
-        public IActionResult ProjectResourceVersion()
+        public IActionResult ProjectResourceModuleTab(ProjectModuleTabType tabType, long? resourceId)
         {
-            var viewModel = new List<ResourceVersionViewModel>
+            if (resourceId == null)
             {
-                ProjectMock.GetResourceVersion(1),
-                ProjectMock.GetResourceVersion(2),
-                ProjectMock.GetResourceVersion(3),
-                ProjectMock.GetResourceVersion(4),
-                ProjectMock.GetResourceVersion(5),
-                ProjectMock.GetResourceVersion(6),
-                ProjectMock.GetResourceVersion(7),
-                ProjectMock.GetResourceVersion(8),
-                ProjectMock.GetResourceVersion(9),
-                ProjectMock.GetResourceVersion(10),
-                ProjectMock.GetResourceVersion(11),
-                ProjectMock.GetResourceVersion(12),
-                ProjectMock.GetResourceVersion(13),
-                ProjectMock.GetResourceVersion(14),
-                ProjectMock.GetResourceVersion(15),
-            };
-            return PartialView("_ResourceVersion", viewModel);
+                return BadRequest();
+            }
+
+            using (var client = GetServiceClient())
+            {
+                switch (tabType)
+                {
+                    case ProjectModuleTabType.ResourcePreview:
+                        return PartialView("Resource/_Preview");
+                    case ProjectModuleTabType.ResourceDiscussion:
+                        return PartialView("Resource/_Discussion");
+                    case ProjectModuleTabType.ResourceMetadata:
+                        var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
+                        var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);
+                        return PartialView("Resource/_Metadata", resourceMetadataViewModel);
+                    default:
+                        return NotFound();
+                }
+            }
+        }
+
+        public IActionResult ProjectResourceVersion(long resourceId)
+        {
+            using (var client= GetServiceClient())
+            {
+                var resourceVersionList = client.GetResourceVersionHistory(resourceId);
+                var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
+                return PartialView("_ResourceVersion", viewModel);
+            }
         }
 
         public IActionResult NewSnapshot(long projectId)
         {
+            using (var client = GetServiceClient())
+            {
+                var resources = client.GetResourceList(projectId);
+                // TODO
+            }
             var viewModel = ProjectMock.GetNewPulication();
             return PartialView("Work/_PublicationsNew", viewModel);
         }
@@ -172,138 +187,79 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(new { });
         }
 
-        public IActionResult GetResourceList(long projectId, ProjectResourceType resourceType)
+        public IActionResult GetResourceList(long projectId, ResourceTypeContract resourceType)
         {
-            var result = new List<ProjectResourceContract>
+            using (var client = GetServiceClient())
             {
-                ProjectMock.GetResource(1),
-                ProjectMock.GetResource(2),
-                ProjectMock.GetResource(3),
-            };
-            return Json(result);
+                var result = client.GetResourceList(projectId, resourceType);
+                return Json(result);
+            }
         }
 
         [HttpPost]
         public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
         {
-            return Json(new { });
+            using (var client = GetServiceClient())
+            {
+                var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
+                {
+                    SessionId = request.SessionId,
+                    Comment = request.Comment
+                });
+                return Json(resourceId);
+            }
         }
 
         [HttpPost]
         public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
         {
-            return Json(new { });
+            using (var client = GetServiceClient())
+            {
+                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId, new NewResourceContract
+                {
+                    SessionId = request.SessionId,
+                    Comment = request.Comment
+                });
+                return Json(resourceVersionId);
+            }
         }
 
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
-            return Json(new { });
+            using (var client = GetServiceClient())
+            {
+                client.DeleteResource(request.ResourceId);
+                return Json(new { });
+            }
         }
 
         [HttpPost]
         public IActionResult RenameResource([FromBody] RenameResourceRequest request)
         {
-            return Json(new { });
+            using (var client = GetServiceClient())
+            {
+                client.RenameResource(request.ResourceId, new ResourceContract
+                {
+                    Name = request.NewName
+                });
+                return Json(new { });
+            }
         }
 
         [HttpPost]
         public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
         {
-            return Json(77);
+            using (var client = GetServiceClient())
+            {
+                var newResourceId = client.DuplicateResource(request.ResourceId);
+                return Json(newResourceId);
+            }
         }
     }
 
     public static class ProjectMock
     {
-        public static ProjectItemViewModel GetProjectItem()
-        {
-            return new ProjectItemViewModel
-            {
-                Id = 45,
-                CreateDate = DateTime.Now.AddDays(-1),
-                CreateUser = "Jan Novák",
-                LastEditDate = DateTime.Now,
-                LastEditUser = "Jan Novák",
-                LiteraryOriginalText = "Praha, Národní knihovna České republiky, konec 14. století",
-                Name = "Andělíku rozkochaný",
-                PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
-                PageCount = 1
-            };
-        }
-
-        public static ProjectInfoViewModel GetProjectInfo(long id)
-        {
-            return new ProjectInfoViewModel
-            {
-                Id = id,
-                Name = string.Format("Název projektu {0}", id)
-            };
-        }
-
-        public static ProjectResourceContract GetResource(long id)
-        {
-            return new ProjectResourceContract
-            {
-                Id = id,
-                Name = string.Format("Název {0}", id)
-            };
-        }
-
-        public static SnapshotViewModel GetSnapshot()
-        {
-            return new SnapshotViewModel
-            {
-                Id = 5,
-                PublishDate = DateTime.Now,
-                TextResourceCount = 3,
-                PublishedTextResourceCount = 3,
-                ImageResourceCount = 30,
-                PublishedImageResourceCount = 30,
-                AudioResourceCount = 1,
-                PublishedAudioResourceCount = 1,
-                Author = "Jan Novák"
-            };
-        }
-
-        public static ProjectWorkMetadataViewModel GetProjectWorkMetadata()
-        {
-            return new ProjectWorkMetadataViewModel
-            {
-                Editor = "Jan Novák",
-                LastModification = DateTime.Now,
-                LiteraryGenre = "xxxxxxx",
-                LiteraryKind = "xxxxxxx",
-                LiteraryOriginal = new ProjectWorkLiteraryOriginalViewModel(),
-                LiteraryOriginalText = "xxxxxxx",
-                RelicAbbreviation = "xxxxxxx",
-                SourceAbbreviation = "xxxxxxx"
-            };
-        }
-
-        public static ProjectResourceMetadataViewModel GetProjectResourceMetadata()
-        {
-            return new ProjectResourceMetadataViewModel
-            {
-                Editor = "Jan Novák",
-                Editor2 = "Josef Novák",
-                LastModification = DateTime.Now,
-                EditionNote = "xxxxxxx"
-            };
-        }
-
-        public static ResourceVersionViewModel GetResourceVersion(int versionNumber)
-        {
-            return new ResourceVersionViewModel
-            {
-                Id = versionNumber,
-                Author = "Jan Novák",
-                Comment = "První verze dokumentu [název díla]",
-                CreateDate = DateTime.Now,
-                VersionNumber = versionNumber
-            };
-        }
-
         public static NewPublicationViewModel GetNewPulication()
         {
             return new NewPublicationViewModel

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
@@ -30,13 +31,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 
     public class ResourcesViewModel
     {
-        public ResourcesViewModel(ProjectResourceType resourceType, string title, IList<ResourceViewModel> resourceList)
+        public ResourcesViewModel(ResourceTypeContract resourceType, string title, IList<ResourceViewModel> resourceList)
         {
             Title = title;
             ResourceList = resourceList;
         }
 
-        public ProjectResourceType ResourceType { get; set; }
+        public ResourceTypeContract ResourceType { get; set; }
         public string Title { get; set; }
         public IList<ResourceViewModel> ResourceList { get; set; }
     }

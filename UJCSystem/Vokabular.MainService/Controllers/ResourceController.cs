@@ -58,7 +58,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("resource/{resourceId}")]
-        public void RenameResource(long resourceId, ResourceContract resource)
+        public void RenameResource(long resourceId, [FromBody] ResourceContract resource)
         {
             
         }

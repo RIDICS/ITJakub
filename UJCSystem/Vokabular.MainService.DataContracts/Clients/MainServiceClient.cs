@@ -113,7 +113,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             return newResourceId;
         }
 
-        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeContract? resourceType)
+        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeContract? resourceType = null)
         {
             var url = $"project/{projectId}/resource";
             if (resourceType != null)
@@ -139,13 +139,13 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         public long ProcessUploadedResources(long projectId, NewResourceContract resourceInfo)
         {
-            var resourceId = Post<long>($"project/{projectId}/resource", null);
+            var resourceId = Post<long>($"project/{projectId}/resource", resourceInfo);
             return resourceId;
         }
 
         public long ProcessUploadedResourceVersion(long resourceId, NewResourceContract resourceInfo)
         {
-            var resourceVersionId = Post<long>($"resource/{resourceId}/version", null);
+            var resourceVersionId = Post<long>($"resource/{resourceId}/version", resourceInfo);
             return resourceVersionId;
         }
 
