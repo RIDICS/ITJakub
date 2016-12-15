@@ -1,0 +1,12 @@
+﻿{
+  "dependencies": {
+    "log4net": "2.0.5",
+    "NHibernate": "4.0.4.4000"
+  },
+  "frameworks": {
+    "net461": {}
+  },
+  "runtimes": {
+    "win": {}
+  }
+}
