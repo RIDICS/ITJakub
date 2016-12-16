@@ -7,6 +7,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
     {
         ISession CurrentSession { get; }
         void Commit();
+        void Rollback();
     }
 
     public class UnitOfWork : IUnitOfWork
@@ -32,6 +33,14 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
         public void Commit()
         {
             m_transaction.Commit();
+        }
+
+        public void Rollback()
+        {
+            if (m_transaction.IsActive)
+            {
+                m_transaction.Rollback();
+            }
         }
     }
 }

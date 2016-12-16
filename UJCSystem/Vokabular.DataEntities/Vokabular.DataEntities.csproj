@@ -42,7 +42,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\NHibernateInstaller.cs" />
     <Compile Include="Database\Daos\NHibernateDao.cs" />
     <Compile Include="Database\Daos\NHibernateDaoGeneric.cs" />
     <Compile Include="Database\Repositories\ProjectRepository.cs" />

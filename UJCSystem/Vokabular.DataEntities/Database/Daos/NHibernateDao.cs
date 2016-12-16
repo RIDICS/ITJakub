@@ -5,33 +5,29 @@ using System.Data;
 using System.Reflection;
 using log4net;
 using NHibernate;
+using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Daos
 {
     public class NHibernateDao
     {
+        private readonly IUnitOfWork m_unitOfWork;
+
         protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly ISessionFactory m_sessionFactory;
-
-        public NHibernateDao(ISessionFactory sessionFactory)
+        public NHibernateDao(IUnitOfWork unitOfWork)
         {
-            m_sessionFactory = sessionFactory;
+            m_unitOfWork = unitOfWork;
         }
 
-        protected ISessionFactory SessionFactory
+        protected IUnitOfWork UnitOfWork
         {
-            get { return m_sessionFactory; }
+            get { return m_unitOfWork; }
         }
 
         protected ISession GetSession()
         {
-
-            var session = m_sessionFactory.OpenSession();
-            //if (m_log.IsDebugEnabled)
-            //    m_log.DebugFormat("Getting session with flush mode: {0}", session.FlushMode);
-
-            return session;
+            return m_unitOfWork.CurrentSession;
         }
 
         public virtual object FindById(Type type, object id)
