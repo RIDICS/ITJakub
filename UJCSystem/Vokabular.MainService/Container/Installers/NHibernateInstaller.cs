@@ -1,7 +1,3 @@
-using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -9,11 +5,11 @@ using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
-namespace Vokabular.MainService.Installers
+namespace Vokabular.MainService.Container.Installers
 {
-    public class NHibernateInstaller : IWindsorInstaller
+    public class NHibernateInstaller : IContainerInstaller
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(IContainer container)
         {
             var connectionString = "Server=localhost;Database=ITJakubDB;User Id=admin;Password=***REMOVED***;";
             var cfg = new Configuration()
@@ -32,11 +28,11 @@ namespace Vokabular.MainService.Installers
 
             var sessionFactory = cfg.BuildSessionFactory();
             
-            container.Register(Component.For<Configuration>().Instance(cfg));
+            container.AddInstance(cfg);
 
-            container.Register(Component.For<ISessionFactory>().Instance(sessionFactory));
-            
-            container.Register(Component.For<IUnitOfWork>().ImplementedBy<UnitOfWork>().LifestylePerWebRequest());
+            container.AddInstance(sessionFactory);
+
+            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
         }
     }
 }

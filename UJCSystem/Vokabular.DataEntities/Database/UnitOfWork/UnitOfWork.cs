@@ -1,24 +1,15 @@
-﻿using System;
-using NHibernate;
+﻿using NHibernate;
 
 namespace Vokabular.DataEntities.Database.UnitOfWork
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        ISession CurrentSession { get; }
-        void Commit();
-        void Rollback();
-    }
-
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ISessionFactory m_sessionFactory;
         private readonly ITransaction m_transaction;
 
         public UnitOfWork(ISessionFactory sessionFactory)
         {
-            m_sessionFactory = sessionFactory;
-            CurrentSession = m_sessionFactory.OpenSession();
+            CurrentSession = sessionFactory.OpenSession();
+            CurrentSession.FlushMode = FlushMode.Commit;
             m_transaction = CurrentSession.BeginTransaction();
         }
 
@@ -32,14 +23,39 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public void Commit()
         {
-            m_transaction.Commit();
+            try
+            {
+                if (m_transaction.IsActive)
+                {
+                    m_transaction.Commit();
+                }
+            }
+            catch
+            {
+                if (m_transaction.IsActive)
+                {
+                    m_transaction.Rollback();
+                }
+                throw;
+            }
+            finally
+            {
+                CurrentSession.Dispose();
+            }
         }
 
         public void Rollback()
         {
-            if (m_transaction.IsActive)
+            try
             {
-                m_transaction.Rollback();
+                if (m_transaction.IsActive)
+                {
+                    m_transaction.Rollback();
+                }
+            }
+            finally
+            {
+                CurrentSession.Dispose();
             }
         }
     }

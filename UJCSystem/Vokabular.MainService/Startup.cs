@@ -1,10 +1,11 @@
 ﻿using System;
-using Castle.Windsor.MsDependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vokabular.MainService.Container;
+using Vokabular.MainService.Container.Installers;
 
 namespace Vokabular.MainService
 {
@@ -31,7 +32,10 @@ namespace Vokabular.MainService
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen();
 
-            return WindsorRegistrationHelper.CreateServiceProvider(Container.Current, services);
+            var container = new WindsorContainerImplementation(services);
+            new NHibernateInstaller().Install(container);
+
+            return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -3,34 +3,32 @@ using System.IO;
 using System.Reflection;
 using AutoMapper;
 using Castle.Core.Resource;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace Vokabular.MainService
+namespace Vokabular.MainService.Container
 {
     ///<summary>
     ///Container for IOC
     ///</summary>
-    public class Container : WindsorContainer
+    public class WindsorContainerImplementation : WindsorContainer, IContainer
     {
-        private static readonly Lazy<WindsorContainer> m_current = new Lazy<WindsorContainer>(() => new Container());
-
+        private readonly IServiceCollection m_services;
         private const string ConfigSuffix = ".Container.config";
         private const string CodeBasePrefix = "file:///";
 
         private static ILog m_log;
 
-        public static WindsorContainer Current
+        public WindsorContainerImplementation(IServiceCollection services)
         {
-            get { return m_current.Value; }
-        }
+            m_services = services;
 
-
-        private Container()
-        {
             //configure log4net
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
@@ -49,9 +47,6 @@ namespace Vokabular.MainService
         private void InstallComponents()
         {
             Install(FromAssembly.InThisApplication());
-            
-            //var controllerFactory = new WindsorControllerFactory(Kernel);
-            //ControllerBuilder.Current.SetControllerFactory(controllerFactory);
         }
 
         private void ConfigureAutoMapper()
@@ -143,7 +138,54 @@ namespace Vokabular.MainService
         private static Assembly GetAssembly()
         {
             //return System.Reflection.Assembly.GetExecutingAssembly();
-            return typeof(Container).Assembly;
+            return typeof(WindsorContainerImplementation).Assembly;
+        }
+
+        public void AddSingleton<TService>() where TService : class
+        {
+            Register(Component.For<TService>().LifestyleSingleton());
+        }
+
+        public void AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleSingleton());
+        }
+
+        public void AddTransient<TService>() where TService : class
+        {
+            Register(Component.For<TService>().LifestyleTransient());
+        }
+
+        public void AddTransient<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleTransient());
+        }
+
+        public void AddPerWebRequest<TService>() where TService : class
+        {
+            //Register(Component.For<TService>().LifestylePerWebRequest());
+            m_services.AddScoped<TService>();
+        }
+
+        public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            //Register(Component.For<TService>().LifestylePerWebRequest());
+            m_services.AddScoped<TService, TImplementation>();
+        }
+
+        public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
+        {
+            Register(Component.For<TImplementation>().Instance(instance));
+        }
+
+        public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().Instance(instance));
+        }
+
+        public IServiceProvider CreateServiceProvider(IServiceCollection services)
+        {
+            return WindsorRegistrationHelper.CreateServiceProvider(this, services);
         }
     }
 }
