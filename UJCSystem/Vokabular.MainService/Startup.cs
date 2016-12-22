@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,10 +33,28 @@ namespace Vokabular.MainService
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen();
 
+            // IoC
             var container = new WindsorContainerImplementation(services);
             new NHibernateInstaller().Install(container);
+            new AutoMapperInstaller().Install(container);
 
-            return container.CreateServiceProvider(services);
+            var serviceProvider = container.CreateServiceProvider(services);
+            ConfigureAutoMapper(serviceProvider);
+
+            return serviceProvider;
+        }
+
+        private void ConfigureAutoMapper(IServiceProvider serviceProvider)
+        {
+            var profiles = serviceProvider.GetServices<Profile>();
+
+            Mapper.Initialize(cfg =>
+            {
+                foreach (var profile in profiles)
+                {
+                    cfg.AddProfile(profile);
+                }
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

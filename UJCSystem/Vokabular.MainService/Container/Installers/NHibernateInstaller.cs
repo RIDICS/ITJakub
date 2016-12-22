@@ -4,6 +4,7 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Container.Installers
 {

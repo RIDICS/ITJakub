@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Vokabular.MainService.Container
+namespace Vokabular.Shared.Container
 {
     public interface IContainer
     {

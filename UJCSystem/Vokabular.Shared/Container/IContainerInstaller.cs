@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.Container.Installers
+﻿namespace Vokabular.Shared.Container
 {
     public interface IContainerInstaller
     {

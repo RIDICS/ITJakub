@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using AutoMapper;
 using Castle.Core.Resource;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
@@ -11,6 +10,7 @@ using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Container
 {
@@ -38,8 +38,6 @@ namespace Vokabular.MainService.Container
 
             InstallComponents();
             
-            //configure AutoMapper
-            ConfigureAutoMapper();
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("Configuration castle is completed");
         }
@@ -47,19 +45,6 @@ namespace Vokabular.MainService.Container
         private void InstallComponents()
         {
             Install(FromAssembly.InThisApplication());
-        }
-
-        private void ConfigureAutoMapper()
-        {
-            var profiles = ResolveAll<Profile>();
-
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
-            });
         }
         
         private void AddSubresolvers()
