@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Resource" table="[Resource]" >
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" />
+    
+    <property name="ContentType" not-null="true" />
+    
+    <property name="ResourceType" not-null="true" />
+
+    <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />
+    
+    <many-to-one name="LatestVersion" class="ResourceVersion" lazy="proxy" />
+
+    <bag name="ResourceVersions">
+      <key column="Resource" />
+      <one-to-many class="ResourceVersion" />
+    </bag>
+    
+  </class>
+</hibernate-mapping>

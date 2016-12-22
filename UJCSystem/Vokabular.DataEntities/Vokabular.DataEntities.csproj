@@ -44,6 +44,23 @@
   <ItemGroup>
     <Compile Include="Database\Daos\NHibernateDao.cs" />
     <Compile Include="Database\Daos\NHibernateDaoGeneric.cs" />
+    <Compile Include="Database\Entities\Enums\ContentTypeEnum.cs" />
+    <Compile Include="Database\Entities\Enums\ResourceTypeEnum.cs" />
+    <Compile Include="Database\Entities\LiteraryGenre.cs" />
+    <Compile Include="Database\Entities\LiteraryKind.cs" />
+    <Compile Include="Database\Entities\OriginalAuthor.cs" />
+    <Compile Include="Database\Entities\BookType.cs" />
+    <Compile Include="Database\Entities\Category.cs" />
+    <Compile Include="Database\Entities\Enums\AuthenticationProvider.cs" />
+    <Compile Include="Database\Entities\Enums\BookTypeEnum.cs" />
+    <Compile Include="Database\Entities\Enums\ResponsibleTypeEnum.cs" />
+    <Compile Include="Database\Entities\Project.cs" />
+    <Compile Include="Database\Entities\Publisher.cs" />
+    <Compile Include="Database\Entities\Resource.cs" />
+    <Compile Include="Database\Entities\ResourceVersion.cs" />
+    <Compile Include="Database\Entities\ResponsiblePerson.cs" />
+    <Compile Include="Database\Entities\ResponsibleType.cs" />
+    <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\ProjectRepository.cs" />
     <Compile Include="Database\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Database\UnitOfWork\UnitOfWork.cs" />
@@ -51,10 +68,47 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Database\Entities\" />
+    <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\User.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\ResponsibleType.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\ResponsiblePerson.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Publisher.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\OriginalAuthor.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\LiteraryGenre.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\LiteraryKind.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Project.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Resource.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\ResourceVersion.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

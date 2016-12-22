@@ -36,7 +36,7 @@ BEGIN TRAN
 	   [CommunicationTokenCreateTime] datetime NULL,    
 	   [PasswordHash] varchar(255) NULL,
 	   [CreateTime] datetime NOT NULL,
-	   [AvatarUrl] varchar (255) NULL,
+	   [AvatarUrl] varchar(255) NULL,
 	   CONSTRAINT [UQ_User(Email)(AuthProvider)] UNIQUE ([Email],[AuthenticationProvider])
     )
 	
@@ -82,7 +82,7 @@ BEGIN TRAN
 	   [ExternalId] varchar(150) NOT NULL CONSTRAINT [UQ_Category(ExternalId)] UNIQUE,
 	   [Description] varchar(150) NULL,
 	   [Path] varchar(MAX) NOT NULL,
-	   [BookType] int NULL CONSTRAINT [FK_Category(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+	   [BookType] int NOT NULL CONSTRAINT [FK_Category(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
 	
@@ -103,9 +103,12 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Project]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Project(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(MAX) NOT NULL
+	   [Name] varchar(MAX) NOT NULL,
+	   [CreateTime] datetime NOT NULL,
+	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_Project(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
 	   -- TODO possible reference to latest metadata
 	   -- TODO Unique?
+	   -- TODO last modification time?
     )
 
 	CREATE TABLE [dbo].[Resource]
@@ -113,7 +116,7 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Resource(Id)] PRIMARY KEY CLUSTERED,
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Resource(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
 	   [Name] varchar(255) NOT NULL,
-	   [ResourceType] varchar(50) NOT NULL,
+	   [ResourceType] smallint NOT NULL,
 	   [ContentType] smallint NOT NULL
     )
 
@@ -133,13 +136,12 @@ BEGIN TRAN
 
 	CREATE TABLE [dbo].[MetadataResource]
     (
-	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_MetadataResource(Id)] PRIMARY KEY CLUSTERED,
-	   [ResourceVersion] bigint NOT NULL CONSTRAINT [FK_MetadataResource(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Title] varchar(MAX) NULL, -- TODO is versioned?
 	   [SubTitle] varchar(MAX) NULL, -- TODO will be used?
 	   [RelicAbbreviation] varchar(100) NULL,
 	   [SourceAbbreviation] nvarchar(255) NULL,
-	   [Publisher] int NULL CONSTRAINT [FK_BookVersion(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
+	   [Publisher] int NULL CONSTRAINT [FK_MetadataResource(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
 	   [PublishPlace] varchar(100) NULL,
 	   [PublishDate] varchar(50) NULL,
 	   [Copyright] varchar(MAX) NULL,
@@ -160,25 +162,22 @@ BEGIN TRAN
 
     CREATE TABLE [dbo].[PageResource] 
     (
-	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_PageResource(Id)] PRIMARY KEY CLUSTERED,
-	   [ResourceVersion] bigint NOT NULL CONSTRAINT [FK_PageResource(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_PageResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] varchar(50) NOT NULL,
 	   [Position] int NOT NULL
     )
 
 	CREATE TABLE [dbo].[TextResource]
 	(
-	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TextResource(Id)] PRIMARY KEY CLUSTERED,
-	   [ResourceVersion] bigint NOT NULL CONSTRAINT [FK_TextResource(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TextResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [ExternalId] varchar(100) NULL
 	)
 
 	CREATE TABLE [dbo].[ImageResource]
 	(
-	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ImageResource(Id)] PRIMARY KEY CLUSTERED,
-	   [ResourceVersion] bigint NOT NULL CONSTRAINT [FK_ImageResource(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [FileName] varchar(255),
-	   [MimeType] varchar(255),
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ImageResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [FileName] varchar(255) NOT NULL,
+	   [MimeType] varchar(255) NOT NULL,
 	   [Size] bigint NOT NULL
 	)
 

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ResourceVersion" table="[ResourceVersion]" abstract="true">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="VersionNumber" not-null="true" />
+    
+    <property name="Comment" not-null="false" />
+    
+    <property name="CreateTime" not-null="true" />
+
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
+    
+    <many-to-one name="Resource" class="Resource" lazy="proxy" not-null="true" />
+    
+    <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
+
+    <joined-subclass table="PageResource" name="PageResource" >
+      <key column="ResourceVersionId" />
+      
+      <property name="Name" not-null="true" />
+      <property name="Position" not-null="true" />
+    </joined-subclass>
+
+    <joined-subclass table="TextResource" name="TextResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="ExternalId" />
+    </joined-subclass>
+
+    <joined-subclass table="ImageResource" name="ImageResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="FileName" not-null="true" />
+      <property name="MimeType" not-null="true" />
+      <property name="Size" not-null="true" />
+    </joined-subclass>
+
+    <joined-subclass table="MetadataResource" name="MetadataResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="Title" />
+      <property name="SubTitle" />
+      <property name="RelicAbbreviation" />
+      <property name="SourceAbbreviation" />
+      <property name="PublishPlace" />
+      <property name="PublishDate" />
+      <property name="Copyright" />
+      <property name="BiblText" />
+      <property name="OriginDate" />
+      <property name="NotBefore" />
+      <property name="NotAfter" />
+      <property name="ManuscriptIdno" />
+      <property name="ManuscriptSettlement" />
+      <property name="ManuscriptCountry" />
+      <property name="ManuscriptRepository" />
+      <property name="ManuscriptExtent" />
+      <property name="ManuscriptTitle" />
+      <many-to-one name="Publisher" class="Publisher" lazy="proxy" />
+    </joined-subclass>
+    
+  </class>
+</hibernate-mapping>

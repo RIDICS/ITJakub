@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="ResponsiblePerson" table="[ResponsiblePerson]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="FirstName" not-null="true" />
+    
+    <property name="LastName" not-null="true" />
+
+    <bag name="ResponsibleTypes" cascade="save-update" table="ResponsiblePerson_ResponsibleType">
+      <key column="Person" />
+      <many-to-many class="ResponsibleType" column="Type" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

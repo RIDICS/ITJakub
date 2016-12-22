@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="User" table="[User]">
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="UserName" not-null="true" />
+    
+    <property name="FirstName" not-null="true" />
+    
+    <property name="LastName" not-null="true" />
+    
+    <property name="Email" not-null="true" />
+    
+    <property name="AuthenticationProvider" not-null="true" />
+    
+    <property name="CommunicationToken" not-null="true" />
+    
+    <property name="CommunicationTokenCreateTime" not-null="false" />
+    
+    <property name="PasswordHash" not-null="false" />
+    
+    <property name="CreateTime" not-null="true" />
+    
+    <property name="AvatarUrl" not-null="false" />
+    
+    <!--<bag name="FavoriteItems" inverse="true">
+      <key column="[User]" />
+      <one-to-many class="FavoriteBase" />
+    </bag>-->
+
+    <!--<bag name="FavoriteLabels" inverse="true" cascade="save-update">
+      <key column="[User]" />
+      <one-to-many class="FavoriteLabel" />
+    </bag>-->
+
+    <!--<bag name="Groups" table="User_Group" cascade="all">
+      <key column="[User]" />
+      <many-to-many class="Group" column="[Group]" />
+    </bag>-->
+    
+  </class>
+</hibernate-mapping>
