@@ -17,8 +17,7 @@
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "NHibernate": "4.0.4.4000",
     "Swashbuckle": "6.0.0-beta902",
-    "Vokabular.MainService.DataContracts": "1.0.0-*",
-    "Vokabular.Shared": "1.0.0-*"
+    "Vokabular.MainService.DataContracts": "1.0.0-*"
   },
 
   "tools": {
@@ -32,6 +31,9 @@
           "target": "project"
         },
         "Vokabular.MainService.Core": {
+          "target": "project"
+        },
+        "Vokabular.Shared": {
           "target": "project"
         }
       }
