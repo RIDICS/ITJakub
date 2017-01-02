@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "AutoMapper": "5.2.0",
     "Castle.Windsor": "3.3.0",
@@ -16,8 +16,7 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "NHibernate": "4.0.4.4000",
-    "Swashbuckle": "6.0.0-beta902",
-    "Vokabular.MainService.DataContracts": "1.0.0-*"
+    "Swashbuckle": "6.0.0-beta902"
   },
 
   "tools": {
@@ -31,6 +30,9 @@
           "target": "project"
         },
         "Vokabular.MainService.Core": {
+          "target": "project"
+        },
+        "Vokabular.MainService.DataContracts": {
           "target": "project"
         },
         "Vokabular.Shared": {

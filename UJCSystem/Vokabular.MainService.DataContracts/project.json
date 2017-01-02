@@ -1,11 +1,10 @@
-﻿{
-  "version": "1.0.0-*",
-
+{
+  "supports": {},
   "dependencies": {
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
     "NETStandard.Library": "1.6.1",
     "Microsoft.AspNet.WebApi.Client": "5.2.3"
   },
-
   "frameworks": {
     "netstandard1.2": {
       "imports": [ "dnxcore50", "portable-net461+win8" ]

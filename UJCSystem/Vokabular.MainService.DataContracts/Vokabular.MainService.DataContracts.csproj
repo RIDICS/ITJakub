@@ -2,15 +2,20 @@
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6C22DA45-1130-4427-8D2B-A0248E58FF0E}</ProjectGuid>
+    <ProjectGuid>{5527BA9B-AA14-4872-BACF-40ADEBFD966D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Vokabular.MainService.Core</RootNamespace>
-    <AssemblyName>Vokabular.MainService.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>Vokabular.MainService.DataContracts</RootNamespace>
+    <AssemblyName>Vokabular.MainService.DataContracts</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,42 +35,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="MainServiceCoreContainerRegistration.cs" />
-    <Compile Include="Managers\ProjectManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Works\CreateProjectWork.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AutoMapperProfiles\" />
-    <Folder Include="Installers\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="project.json" />
+    <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
-      <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
-      <Name>Vokabular.DataEntities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj">
-      <Project>{5527ba9b-aa14-4872-bacf-40adebfd966d}</Project>
-      <Name>Vokabular.MainService.DataContracts</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
-      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
-      <Name>Vokabular.Shared</Name>
-    </ProjectReference>
+    <Compile Include="Clients\MainServiceClient.cs" />
+    <Compile Include="Contracts\NewResourceContract.cs" />
+    <Compile Include="Contracts\ProjectContract.cs" />
+    <Compile Include="Contracts\ProjectMetadataContract.cs" />
+    <Compile Include="Contracts\ResourceContract.cs" />
+    <Compile Include="Contracts\ResourceMetadataContract.cs" />
+    <Compile Include="Contracts\ResourceVersionContract.cs" />
+    <Compile Include="Contracts\SnapshotContract.cs" />
+    <Compile Include="Contracts\Type\ResourceTypeContract.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceContracts\IProjectMainService.cs" />
+    <Compile Include="ServiceContracts\IResourceMainService.cs" />
+    <Compile Include="ServiceContracts\ISnapshotMainService.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
