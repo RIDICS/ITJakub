@@ -64,7 +64,8 @@
     <Compile Include="Database\Repositories\ProjectRepository.cs" />
     <Compile Include="Database\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Database\UnitOfWork\UnitOfWork.cs" />
-    <Compile Include="Database\UnitOfWork\UnitOfWorkJobBase.cs" />
+    <Compile Include="Database\UnitOfWork\UnitOfWorkBase.cs" />
+    <Compile Include="DataEntitiesContainerRegistration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\ResourceVersion.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
+      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
+      <Name>Vokabular.Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

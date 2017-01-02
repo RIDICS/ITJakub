@@ -35,6 +35,7 @@ namespace Vokabular.MainService
 
             // IoC
             var container = new WindsorContainerImplementation(services);
+            new MainServiceContainerRegistration().Install(container);
             new NHibernateInstaller().Install(container);
             new AutoMapperInstaller().Install(container);
 

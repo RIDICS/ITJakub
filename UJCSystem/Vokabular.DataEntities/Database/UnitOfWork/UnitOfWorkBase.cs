@@ -2,11 +2,11 @@
 
 namespace Vokabular.DataEntities.Database.UnitOfWork
 {
-    public abstract class UnitOfWorkJobBase
+    public abstract class UnitOfWorkBase
     {
         private readonly IUnitOfWork m_unitOfWork;
 
-        protected UnitOfWorkJobBase(IUnitOfWork unitOfWork)
+        protected UnitOfWorkBase(IUnitOfWork unitOfWork)
         {
             m_unitOfWork = unitOfWork;
         }
@@ -15,7 +15,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
         {
             try
             {
-                ExecuteImplementation();
+                ExecuteWorkImplementation();
             }
             catch (Exception)
             {
@@ -26,6 +26,6 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
             m_unitOfWork.Commit();
         }
 
-        protected abstract void ExecuteImplementation();
+        protected abstract void ExecuteWorkImplementation();
     }
 }

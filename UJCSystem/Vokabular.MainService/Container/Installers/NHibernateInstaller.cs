@@ -3,7 +3,6 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Container.Installers
@@ -32,8 +31,6 @@ namespace Vokabular.MainService.Container.Installers
             container.AddInstance(cfg);
 
             container.AddInstance(sessionFactory);
-
-            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
         }
     }
 }

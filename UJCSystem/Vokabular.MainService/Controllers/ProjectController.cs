@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.ServiceContracts;
 
@@ -9,6 +10,13 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class ProjectController : Controller, IProjectMainService
     {
+        private readonly ProjectManager m_projectManager;
+
+        public ProjectController(ProjectManager projectManager)
+        {
+            m_projectManager = projectManager;
+        }
+
         [HttpGet]
         public List<ProjectContract> GetProjectList()
         {

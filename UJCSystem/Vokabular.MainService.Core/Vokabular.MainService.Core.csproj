@@ -39,17 +39,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContainerInstaller.cs" />
+    <Compile Include="MainServiceCoreContainerRegistration.cs" />
+    <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Works\CreateProjectWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AutoMapperProfiles\" />
-    <Folder Include="Managers\" />
+    <Folder Include="Installers\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
+      <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
+      <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>
