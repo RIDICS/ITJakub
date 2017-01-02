@@ -32,35 +32,29 @@ namespace Vokabular.DataEntities.Database.Daos
 
         public virtual T FindById(object id)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    return (T)session.Get(typeof(T), id);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(string.Format("Get by id operation failed for type:{0}", typeof(T).Name), ex);
-                }
+                return (T)GetSession().Get(typeof(T), id);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(string.Format("Get by id operation failed for type:{0}", typeof(T).Name), ex);
             }
         }
 
         public virtual T Load(object id)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    return (T)session.Load(typeof(T), id);
-                }
-                catch (ObjectNotFoundException)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(string.Format("Load by id operation failed for type:{0}", typeof(T).Name), ex);
-                }
+                return (T)GetSession().Load(typeof(T), id);
+            }
+            catch (ObjectNotFoundException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(string.Format("Load by id operation failed for type:{0}", typeof(T).Name), ex);
             }
         }
 
@@ -71,64 +65,52 @@ namespace Vokabular.DataEntities.Database.Daos
         /// <returns></returns>
         public virtual object Create(T instance)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    return session.Save(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(
-                        string.Format("Create operation failed for type:{0}", instance.GetType().Name), ex);
-                }
+                return GetSession().Save(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(
+                    string.Format("Create operation failed for type:{0}", instance.GetType().Name), ex);
             }
         }
 
         public virtual object Create(object instance)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    return session.Save(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(
-                        string.Format("Create operation failed for type:{0}", instance.GetType().Name), ex);
-                }
+                return GetSession().Save(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(
+                    string.Format("Create operation failed for type:{0}", instance.GetType().Name), ex);
             }
         }
 
         public virtual void Delete(T instance)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    session.Delete(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(
-                        string.Format("Delete operation failed for type:{0}", instance.GetType().Name), ex);
-                }
+                GetSession().Delete(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(
+                    string.Format("Delete operation failed for type:{0}", instance.GetType().Name), ex);
             }
         }
 
         public virtual void DeleteAll()
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    session.Delete(String.Format("from {0}", typeof(T).Name));
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(string.Format("Delete operation failed for type:{0}", typeof(T).Name), ex);
-                }
+                GetSession().Delete(string.Format("from {0}", typeof(T).Name));
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(string.Format("Delete operation failed for type:{0}", typeof(T).Name), ex);
             }
         }
 
@@ -139,49 +121,22 @@ namespace Vokabular.DataEntities.Database.Daos
 
         public virtual void Update(object instance)
         {
-            using (ISession session = GetSession())
+            try
             {
-                try
-                {
-                    session.Update(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(
-                        string.Format("Update operation failed for type:{0}", instance.GetType().Name), ex);
-                }
+                GetSession().Update(instance);
+            }
+            catch (Exception ex)
+            {
+                throw new DataException(
+                    string.Format("Update operation failed for type:{0}", instance.GetType().Name), ex);
             }
         }
 
         public virtual void Save(object instance)
         {
-            using (ISession session = GetSession())
-            {
-                try
-                {
-                    session.SaveOrUpdate(instance);
-                }
-                catch (Exception ex)
-                {
-                    throw new DataException(
-                        string.Format("Save or Update operation failed for type:{0} ", instance.GetType().Name), ex);
-                }
-            }
-        }
-
-        public virtual void Save(T instance)
-        {
-            using (ISession session = GetSession())
-            {
-                Save(instance, session);
-            }
-        }
-
-        protected virtual void Save(object instance, ISession session)
-        {
             try
             {
-                session.SaveOrUpdate(instance);
+                GetSession().SaveOrUpdate(instance);
             }
             catch (Exception ex)
             {
@@ -190,25 +145,24 @@ namespace Vokabular.DataEntities.Database.Daos
             }
         }
 
+        public virtual void Save(T instance)
+        {
+            Save((object)instance);
+        }
+        
         public virtual void SaveAll(IEnumerable<T> data)
         {
-            using (ISession session = GetSession())
+            foreach (T o in data)
             {
-                foreach (T o in data)
-                {
-                    Save(o, session);
-                }
+                Save(o);
             }
         }
 
         public virtual void SaveAll(IEnumerable data)
         {
-            using (ISession session = GetSession())
+            foreach (object o in data)
             {
-                foreach (object o in data)
-                {
-                    Save(o, session);
-                }
+                Save(o);
             }
         }
     }

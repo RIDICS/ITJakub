@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
@@ -11,7 +12,7 @@ namespace Vokabular.MainService.Container.Installers
     {
         public void Install(IContainer container)
         {
-            var connectionString = "Server=localhost;Database=ITJakubDB;User Id=admin;Password=***REMOVED***;";
+            var connectionString = Startup.Configuration.GetConnectionString("DefaultConnection");
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>
                 {

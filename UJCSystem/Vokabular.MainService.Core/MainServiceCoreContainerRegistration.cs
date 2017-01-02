@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Core
         public void Install(IContainer container)
         {
             container.AddPerWebRequest<ProjectManager>();
-            //container.AddPerWebRequest<CreateProjectWork>();
+            container.AddPerWebRequest<UserManager>();
         }
     }
 }

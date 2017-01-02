@@ -37,7 +37,7 @@ namespace Vokabular.MainService.Controllers
         [HttpPost]
         public long CreateProject([FromBody] ProjectContract project)
         {
-            return 5;
+            return m_projectManager.CreateProject(project);
         }
 
         [HttpDelete("{projectId}")]

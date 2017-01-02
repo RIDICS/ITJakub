@@ -38,7 +38,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +61,7 @@
     <Compile Include="Database\Entities\ResponsibleType.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\ProjectRepository.cs" />
+    <Compile Include="Database\Repositories\UserRepository.cs" />
     <Compile Include="Database\UnitOfWork\IUnitOfWork.cs" />
     <Compile Include="Database\UnitOfWork\UnitOfWork.cs" />
     <Compile Include="Database\UnitOfWork\UnitOfWorkBase.cs" />

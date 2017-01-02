@@ -17,7 +17,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public void Dispose()
         {
-            CurrentSession.Close();
+            CurrentSession.Dispose();
             CurrentSession = null;
         }
 

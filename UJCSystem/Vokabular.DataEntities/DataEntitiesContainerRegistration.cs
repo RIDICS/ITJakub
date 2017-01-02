@@ -10,6 +10,7 @@ namespace Vokabular.DataEntities
         {
             container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
             container.AddPerWebRequest<ProjectRepository>();
+            container.AddPerWebRequest<UserRepository>();
         }
     }
 }

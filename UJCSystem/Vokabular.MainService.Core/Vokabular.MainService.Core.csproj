@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="MainServiceCoreContainerRegistration.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Works\CreateProjectWork.cs" />
   </ItemGroup>
