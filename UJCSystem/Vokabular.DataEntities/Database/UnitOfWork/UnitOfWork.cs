@@ -4,11 +4,22 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ITransaction m_transaction;
+        private readonly ISessionFactory m_sessionFactory;
+        private ITransaction m_transaction;
 
         public UnitOfWork(ISessionFactory sessionFactory)
         {
-            CurrentSession = sessionFactory.OpenSession();
+            m_sessionFactory = sessionFactory;
+        }
+
+        public void BeginTransaction()
+        {
+            if (m_transaction != null)
+            {
+                return;
+            }
+
+            CurrentSession = m_sessionFactory.OpenSession();
             CurrentSession.FlushMode = FlushMode.Commit;
             m_transaction = CurrentSession.BeginTransaction();
         }
@@ -17,8 +28,11 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public void Dispose()
         {
-            CurrentSession.Dispose();
-            CurrentSession = null;
+            if (CurrentSession != null)
+            {
+                CurrentSession.Dispose();
+                CurrentSession = null;
+            }
         }
 
         public void Commit()

@@ -1,15 +1,13 @@
-﻿using Castle.MicroKernel.Registration;
-using Castle.MicroKernel.SubSystems.Configuration;
-using Castle.Windsor;
-using ITJakub.Web.DataEntities.Database.Repositories;
+﻿using ITJakub.Web.DataEntities.Database.Repositories;
+using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub.Installers
 {
-    public class RepositoryInstaller : IWindsorInstaller
+    public class RepositoryInstaller : IContainerInstaller
     {
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public void Install(IContainer container)
         {
-            container.Register(Component.For<StaticTextRepository>());
+            container.AddPerWebRequest<StaticTextRepository>();
         }
     }
 }

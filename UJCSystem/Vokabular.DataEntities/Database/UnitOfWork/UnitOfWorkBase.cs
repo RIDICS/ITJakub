@@ -15,6 +15,8 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
         {
             try
             {
+                m_unitOfWork.BeginTransaction();
+
                 ExecuteWorkImplementation();
             }
             catch (Exception)
