@@ -20,15 +20,13 @@ namespace Vokabular.MainService.Container
     ///</summary>
     public class WindsorContainerImplementation : WindsorContainer, IContainer
     {
-        private readonly IServiceCollection m_services;
         private const string ConfigSuffix = ".Container.config";
         private const string CodeBasePrefix = "file:///";
 
         private static ILogger m_log;
 
-        public WindsorContainerImplementation(IServiceCollection services)
+        public WindsorContainerImplementation()
         {
-            m_services = services;
             m_log = new Log4NetAdapter(MethodBase.GetCurrentMethod().DeclaringType.FullName);
 
             AddSubresolvers();
@@ -145,14 +143,12 @@ namespace Vokabular.MainService.Container
 
         public void AddPerWebRequest<TService>() where TService : class
         {
-            //Register(Component.For<TService>().LifestylePerWebRequest());
-            m_services.AddScoped<TService>();
+            Register(Component.For<TService>().LifestyleCustom<MsScopedLifestyleManager>());
         }
 
         public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
         {
-            //Register(Component.For<TService>().LifestylePerWebRequest());
-            m_services.AddScoped<TService, TImplementation>();
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleCustom<MsScopedLifestyleManager>());
         }
 
         public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class

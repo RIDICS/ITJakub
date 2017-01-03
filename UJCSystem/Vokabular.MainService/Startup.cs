@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.Container;
+using Vokabular.MainService.Container.Extensions;
 using Vokabular.MainService.Container.Installers;
 using Vokabular.Shared;
 
@@ -40,25 +40,12 @@ namespace Vokabular.MainService
             services.AddSwaggerGen();
 
             // IoC
-            var container = new WindsorContainerImplementation(services);
+            var container = new WindsorContainerImplementation();
             new MainServiceContainerRegistration().Install(container);
             new NHibernateInstaller().Install(container);
             new AutoMapperInstaller().Install(container);
 
             return container.CreateServiceProvider(services);
-        }
-
-        private void ConfigureAutoMapper(IServiceProvider serviceProvider)
-        {
-            var profiles = serviceProvider.GetServices<Profile>();
-
-            Mapper.Initialize(cfg =>
-            {
-                foreach (var profile in profiles)
-                {
-                    cfg.AddProfile(profile);
-                }
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

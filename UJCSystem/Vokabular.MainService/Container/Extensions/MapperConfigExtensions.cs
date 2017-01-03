@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Vokabular.MainService.Container.Installers
+namespace Vokabular.MainService.Container.Extensions
 {
     public static class MapperConfigExtensions
     {
