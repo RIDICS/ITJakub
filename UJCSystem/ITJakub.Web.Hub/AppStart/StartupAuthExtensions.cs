@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace ITJakub.Web.Hub
 {
-    public partial class Startup
+    public static class StartupAuthExtensions
     {
-        public void ConfigureAuthServices(IServiceCollection services)
+        public static void AddCustomAuthServices(this IServiceCollection services)
         {
             services.AddIdentity<ApplicationUser, CustomRole>(options =>
                 {
@@ -38,7 +38,7 @@ namespace ITJakub.Web.Hub
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory>();
         }
 
-        public void ConfigureAuth(IApplicationBuilder app)
+        public static void ConfigureAuth(this IApplicationBuilder app)
         {
             app.UseIdentity();
             

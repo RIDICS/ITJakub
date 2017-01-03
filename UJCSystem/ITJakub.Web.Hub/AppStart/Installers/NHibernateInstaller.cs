@@ -7,6 +7,7 @@ using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Vokabular.Shared;
 
 namespace ITJakub.Web.Hub.Installers
 {
@@ -38,7 +39,7 @@ namespace ITJakub.Web.Hub.Installers
         {
             get
             {
-                var connectionString = Startup.Configuration.GetConnectionString("DefaultConnection");
+                var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {

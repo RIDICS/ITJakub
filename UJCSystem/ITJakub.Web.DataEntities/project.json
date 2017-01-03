@@ -1,0 +1,20 @@
+﻿{
+  "dependencies": {
+    "Castle.Core": "3.3.3",
+    "Castle.Facilities.AutoTx": "3.3.0.08214",
+    "Castle.Facilities.NHibernate": "1.1.0",
+    "Castle.FactorySupportFacility": "3.3.0",
+    "Castle.LoggingFacility": "3.3.0",
+    "Castle.Transactions": "3.3.0.08214",
+    "Castle.Windsor": "3.3.0",
+    "Iesi.Collections": "4.0.1.4000",
+    "log4net": "2.0.6",
+    "NHibernate": "4.0.4.4000"
+  },
+  "frameworks": {
+    "net45": {}
+  },
+  "runtimes": {
+    "win": {}
+  }
+}

@@ -10,6 +10,7 @@
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.0.0",
     "Microsoft.AspNetCore.Authentication.Cookies": "1.0.0",
     "Microsoft.Extensions.Logging.Console": "1.0.0",
+    "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.0.0",
     "Microsoft.Extensions.Configuration.Json": "1.0.0",
     "Microsoft.Extensions.Configuration.UserSecrets": "1.0.0",
@@ -28,7 +29,8 @@
     "Iesi.Collections": "4.0.1.4000",
     "jquery.TypeScript.DefinitelyTyped": "3.1.0",
     "jqueryui.TypeScript.DefinitelyTyped": "1.4.8",
-    "log4net": "2.0.5",
+    "log4net": "2.0.6",
+    "Log4net.Extensions.Logging": "1.0.0-beta11",
     "Markdig": "0.10.2",
     "Newtonsoft.Json": "9.0.1",
     "NHibernate": "4.0.4.4000",
@@ -58,6 +60,9 @@
           "target": "project"
         },
         "Vokabular.MainService.DataContracts": {
+          "target": "project"
+        },
+        "Vokabular.Shared": {
           "target": "project"
         }
       },

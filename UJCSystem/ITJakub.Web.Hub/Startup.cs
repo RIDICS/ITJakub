@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using Castle.Windsor.MsDependencyInjection;
-using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Options;
+using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vokabular.Shared;
 
 namespace ITJakub.Web.Hub
 {
-    public partial class Startup
+    public class Startup
     {
         public Startup(IHostingEnvironment env)
         {
@@ -36,22 +36,22 @@ namespace ITJakub.Web.Hub
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            ApplicationConfig.Configuration = Configuration;
+
+            env.ConfigureLog4Net("log4net.config");
         }
 
         //public IConfigurationRoot Configuration { get; }
-        public static IConfigurationRoot Configuration { get; private set; }
+        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            ConfigureAuthServices(services);
-
-            services.AddScoped<CommunicationProvider>();
-            services.AddScoped<CommunicationConfigurationProvider>();
-            services.AddScoped<StaticTextManager>();
-            services.AddScoped<FeedbacksManager>();
-
+            // Authorization
+            services.AddCustomAuthServices();
+            
+            // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
 
@@ -62,14 +62,21 @@ namespace ITJakub.Web.Hub
 
             services.AddMvc();
 
-            return WindsorRegistrationHelper.CreateServiceProvider(Container.Current, services);
+            // IoC
+            var container = new WindsorContainerImplementation();
+            new WebHubContainerRegistration().Install(container);
+
+            return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
+            // Logging
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+            loggerFactory.AddLog4Net();
+            ApplicationLogging.LoggerFactory = loggerFactory;
 
             if (env.IsDevelopment())
             {
@@ -84,7 +91,9 @@ namespace ITJakub.Web.Hub
 
             app.UseStatusCodePages();
 
-            ConfigureAuth(app);
+            app.ConfigureAuth();
+
+            app.ConfigureAutoMapper();
 
             app.UseStaticFiles();
 
