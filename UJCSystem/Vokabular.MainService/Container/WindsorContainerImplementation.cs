@@ -7,10 +7,11 @@ using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
 using Castle.Windsor.MsDependencyInjection;
-using log4net;
-using log4net.Config;
+using Log4net.Extensions.Logging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.Container
 {
@@ -23,23 +24,19 @@ namespace Vokabular.MainService.Container
         private const string ConfigSuffix = ".Container.config";
         private const string CodeBasePrefix = "file:///";
 
-        private static ILog m_log;
+        private static ILogger m_log;
 
         public WindsorContainerImplementation(IServiceCollection services)
         {
             m_services = services;
+            m_log = new Log4NetAdapter(MethodBase.GetCurrentMethod().DeclaringType.FullName);
 
-            //configure log4net
-            XmlConfigurator.Configure(new FileInfo("log4net.config"));
-            m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-            //Add subresolvers
             AddSubresolvers();
 
             InstallComponents();
             
-            if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Configuration castle is completed");
+            if (m_log.IsDebugEnabled())
+                m_log.LogDebug("Configuration Castle is completed");
         }
 
         private void InstallComponents()
@@ -59,33 +56,33 @@ namespace Vokabular.MainService.Container
             string fileConfigPath = GetFileConfigPath(assembly);
             if (File.Exists(fileConfigPath))
             {
-                if (m_log.IsDebugEnabled)
-                    m_log.DebugFormat("Using assembly location config succeded. Using config at location: {0}", fileConfigPath);
+                if (m_log.IsDebugEnabled())
+                    m_log.LogDebug("Using assembly location config succeded. Using config at location: {0}", fileConfigPath);
 
                 return new FileResource(fileConfigPath);
             }
             else
             {
-                if (m_log.IsDebugEnabled)
-                    m_log.DebugFormat("Using assembly location config failed. Search location was: {0}", fileConfigPath);
+                if (m_log.IsDebugEnabled())
+                    m_log.LogDebug("Using assembly location config failed. Search location was: {0}", fileConfigPath);
             }
 
 
             fileConfigPath = GetCodebasePath(assembly);
             if (File.Exists(fileConfigPath))
             {
-                if (m_log.IsDebugEnabled)
-                    m_log.DebugFormat("Using codeBase location config succeded. Using config at location: {0}", fileConfigPath);
+                if (m_log.IsDebugEnabled())
+                    m_log.LogDebug("Using codeBase location config succeded. Using config at location: {0}", fileConfigPath);
                 return new FileResource(fileConfigPath);
             }
             else
             {
-                if (m_log.IsDebugEnabled)
-                    m_log.DebugFormat("Using codeBase location config failed.  Search location was: {0}", fileConfigPath);
+                if (m_log.IsDebugEnabled())
+                    m_log.LogDebug("Using codeBase location config failed.  Search location was: {0}", fileConfigPath);
             }
 
-            if (m_log.IsWarnEnabled)
-                m_log.WarnFormat("Using embedded resource config");
+            if (m_log.IsWarningEnabled())
+                m_log.LogWarning("Using embedded resource config");
 
             return new AssemblyResource(GetEmbeddedConfigPath(assembly));
         }

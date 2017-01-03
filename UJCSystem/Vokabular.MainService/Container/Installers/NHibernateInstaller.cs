@@ -4,6 +4,7 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
+using Vokabular.Shared;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Container.Installers
@@ -12,7 +13,7 @@ namespace Vokabular.MainService.Container.Installers
     {
         public void Install(IContainer container)
         {
-            var connectionString = Startup.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>
                 {

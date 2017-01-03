@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.Container;
 using Vokabular.MainService.Container.Installers;
+using Vokabular.Shared;
 
 namespace Vokabular.MainService
 {
@@ -19,10 +21,14 @@ namespace Vokabular.MainService
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
+            ApplicationConfig.Configuration = Configuration;
+
+            env.ConfigureLog4Net("log4net.config");
         }
 
-        public static IConfigurationRoot Configuration { get; private set; }
+        public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -39,10 +45,7 @@ namespace Vokabular.MainService
             new NHibernateInstaller().Install(container);
             new AutoMapperInstaller().Install(container);
 
-            var serviceProvider = container.CreateServiceProvider(services);
-            ConfigureAutoMapper(serviceProvider);
-
-            return serviceProvider;
+            return container.CreateServiceProvider(services);
         }
 
         private void ConfigureAutoMapper(IServiceProvider serviceProvider)
@@ -61,8 +64,13 @@ namespace Vokabular.MainService
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            // Configure logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            loggerFactory.AddLog4Net();
+            ApplicationLogging.LoggerFactory = loggerFactory;
+
+            app.ConfigureAutoMapper();
 
             app.UseMvc();
 
