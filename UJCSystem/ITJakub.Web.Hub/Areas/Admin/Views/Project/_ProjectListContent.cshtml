@@ -1,6 +1,6 @@
 ﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
 
-<div class="total-count hidden" data-total-count="@Model.TotalCount"></div>
+<div class="paging-info hidden" data-total-count="@Model.TotalCount" data-page-size="@Model.PageSize" data-start="@Model.Start"></div>
 @foreach (var viewModel in Model.List)
 {
     <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">

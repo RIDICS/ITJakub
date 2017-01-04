@@ -9,6 +9,8 @@ class ProjectList {
     private deleteProjectDialog: BootstrapDialogWrapper;
     private pagination: Pagination;
     private projectIdForDelete: number;
+    private pageSize: number;
+    private totalCount: number;
 
     constructor() {
         this.projectManager = new ProjectManager();
@@ -49,7 +51,11 @@ class ProjectList {
             event.preventDefault();
         });
 
-        this.pagination.make(43, 5); // TODO correct counts
+        var $pagingInfo = $("#list-container .paging-info");
+        this.pageSize = $pagingInfo.data("page-size");
+        this.totalCount = $pagingInfo.data("total-count");
+
+        this.pagination.make(this.totalCount, this.pageSize);
     }
 
     private createNewProject() {
@@ -76,9 +82,23 @@ class ProjectList {
     }
 
     private loadPage(pageNumber: number) {
-        //var url
-        $("#list-container")
-            .html("<div class=\"loader\"></div>");
-            //.load();
+        var parameters = {
+            start: (pageNumber-1) * this.pageSize,
+            count: this.pageSize
+        }
+        var url = getBaseUrl() + "Admin/Project/ProjectListContent?" + $.param(parameters);
+
+        var $listContainer = $("#list-container");
+
+        $listContainer
+            .html("<div class=\"loader\"></div>")
+            .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
+                if (xmlHttpRequest.status !== HttpStatusCode.Success) {
+                    var alert = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání strany se seznamem projektů");
+                    $listContainer
+                        .empty()
+                        .append(alert.buildElement());
+                }
+            });
     }
 }

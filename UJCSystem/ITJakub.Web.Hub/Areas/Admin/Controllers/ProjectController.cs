@@ -9,6 +9,7 @@ using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.Data;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -21,17 +22,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
         }
 
+        private ProjectListViewModel CreateProjectListViewModel(ProjectListData data, int start)
+        {
+            var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(data.List);
+            return new ProjectListViewModel
+            {
+                TotalCount = data.TotalCount,
+                List = listViewModel,
+                PageSize = ProjectListPageSize,
+                Start = start
+            };
+        }
+
         public IActionResult List()
         {
             using (var client = GetServiceClient())
             {
-                var result = client.GetProjectListFull(0, ProjectListPageSize);
-                var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(result.List);
-                var viewModel = new ProjectListViewModel
-                {
-                    TotalCount = result.TotalCount,
-                    List = listViewModel
-                };
+                const int start = 0;
+                var result = client.GetProjectListFull(start, ProjectListPageSize);
+                var viewModel = CreateProjectListViewModel(result, start);
                 return View(viewModel);
             }
         }
@@ -43,6 +52,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 var result = client.GetProject(id);
                 var viewModel = Mapper.Map<ProjectItemViewModel>(result);
                 return View(viewModel);
+            }
+        }
+
+        public IActionResult ProjectListContent(int start, int count)
+        {
+            using (var client = GetServiceClient())
+            {
+                var result = client.GetProjectListFull(start, count);
+                var viewModel = CreateProjectListViewModel(result, start);
+                return PartialView("_ProjectListContent", viewModel);
             }
         }
 
