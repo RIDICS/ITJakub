@@ -11,11 +11,19 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public IList<Project> GetProjectList()
+        public int GetProjectCount()
+        {
+            return GetSession().QueryOver<Project>()
+                .RowCount();
+        }
+
+        public IList<Project> GetProjectList(int start, int count)
         {
             return GetSession().QueryOver<Project>()
                 .Fetch(x => x.CreatedByUser).Eager
                 .OrderBy(x => x.Name).Asc
+                .Skip(start)
+                .Take(count)
                 .List();
         }
 
@@ -26,5 +34,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.CreatedByUser).Eager
                 .SingleOrDefault();
         }
+
     }
 }

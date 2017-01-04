@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Data;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -27,12 +28,16 @@ namespace Vokabular.MainService.Core.Managers
             return work.GetResultId();
         }
 
-        public List<ProjectContract> GetProjectList()
+        public ProjectListData GetProjectList(int start, int count)
         {
-            var work = new GetProjectListWork(m_projectRepository);
+            var work = new GetProjectListWork(m_projectRepository, start, count);
             work.Execute();
 
-            var result = Mapper.Map<List<ProjectContract>>(work.GetResult());
+            var result = new ProjectListData
+            {
+                List = Mapper.Map<List<ProjectContract>>(work.GetResult()),
+                TotalCount = work.GetResultCount()
+            };
             return result;
         }
 

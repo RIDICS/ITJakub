@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.Data;
 using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.DataContracts.Clients
@@ -38,6 +39,14 @@ namespace Vokabular.MainService.DataContracts.Clients
             return result;
         }
 
+        private GetResult<T> GetFull<T>(string uriPath)
+        {
+            var response = m_client.GetAsync(uriPath).Result;
+            var result = GetResponse<T>(response);
+
+            return new GetResult<T>(result, response.Headers);
+        }
+
         private T Get<T>(string uriPath)
         {
             var response = m_client.GetAsync(uriPath).Result;
@@ -61,13 +70,25 @@ namespace Vokabular.MainService.DataContracts.Clients
             var response = m_client.DeleteAsync(uriPath).Result;
             response.EnsureSuccessStatusCode();
         }
-
+        
         #endregion
 
-        public List<ProjectContract> GetProjectList()
+        public List<ProjectContract> GetProjectList(int? start, int? count)
         {
-            var projectList = Get<List<ProjectContract>>("project");
-            return projectList;
+            if (start == null || count == null)
+                throw new ArgumentException("start or count argument is null");
+
+            return GetProjectListFull(start.Value, count.Value).List;
+        }
+
+        public ProjectListData GetProjectListFull(int start, int count)
+        {
+            var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
+            return new ProjectListData
+            {
+                TotalCount = result.GetTotalCountHeader(),
+                List = result.Result
+            };
         }
 
         public ProjectContract GetProject(long projectId)

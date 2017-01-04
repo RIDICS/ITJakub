@@ -7,6 +7,7 @@ class ProjectList {
     private projectManager: ProjectManager;
     private newProjectDialog: BootstrapDialogWrapper;
     private deleteProjectDialog: BootstrapDialogWrapper;
+    private pagination: Pagination;
     private projectIdForDelete: number;
 
     constructor() {
@@ -22,6 +23,11 @@ class ProjectList {
             element: $("#delete-project-dialog"),
             autoClearInputs: false,
             submitCallback: this.deleteProject.bind(this)
+        });
+
+        this.pagination = new Pagination({
+            container: $("#pagination"),
+            pageClickCallback: this.loadPage.bind(this)
         });
     }
 
@@ -42,6 +48,8 @@ class ProjectList {
 
             event.preventDefault();
         });
+
+        this.pagination.make(43, 5); // TODO correct counts
     }
 
     private createNewProject() {
@@ -65,5 +73,12 @@ class ProjectList {
 
             window.location.reload(true);
         });
+    }
+
+    private loadPage(pageNumber: number) {
+        //var url
+        $("#list-container")
+            .html("<div class=\"loader\"></div>");
+            //.load();
     }
 }

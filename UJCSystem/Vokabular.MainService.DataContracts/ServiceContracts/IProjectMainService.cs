@@ -5,7 +5,7 @@ namespace Vokabular.MainService.DataContracts.ServiceContracts
 {
     public interface IProjectMainService
     {
-        List<ProjectContract> GetProjectList();
+        List<ProjectContract> GetProjectList(int? start, int? count);
 
         ProjectContract GetProject(long projectId);
 

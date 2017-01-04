@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Headers;
 using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.Controllers
@@ -10,6 +12,9 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class ProjectController : Controller, IProjectMainService
     {
+        private const int DefaultStartItem = 0;
+        private const int DefaultProjectItemCount = 5;
+
         private readonly ProjectManager m_projectManager;
 
         public ProjectController(ProjectManager projectManager)
@@ -18,9 +23,21 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet]
-        public List<ProjectContract> GetProjectList()
+        public List<ProjectContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count)
         {
-            return m_projectManager.GetProjectList();
+            if (start == null)
+            {
+                start = DefaultStartItem;
+            }
+            if (count == null)
+            {
+                count = DefaultProjectItemCount;
+            }
+
+            var result = m_projectManager.GetProjectList(start.Value, count.Value);
+
+            Response.Headers.Add(CustomHttpHeaders.TotalCount, result.TotalCount.ToString());
+            return result.List;
         }
 
         [HttpGet("{projectId}")]

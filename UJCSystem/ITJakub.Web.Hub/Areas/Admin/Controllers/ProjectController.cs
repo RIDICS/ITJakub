@@ -15,6 +15,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProjectController : BaseController
     {
+        private const int ProjectListPageSize = 5;
+
         public ProjectController(CommunicationProvider communicationProvider) : base(communicationProvider)
         {
         }
@@ -23,8 +25,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetServiceClient())
             {
-                var result = client.GetProjectList();
-                var viewModel = Mapper.Map<List<ProjectItemViewModel>>(result);
+                var result = client.GetProjectListFull(0, ProjectListPageSize);
+                var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(result.List);
+                var viewModel = new ProjectListViewModel
+                {
+                    TotalCount = result.TotalCount,
+                    List = listViewModel
+                };
                 return View(viewModel);
             }
         }

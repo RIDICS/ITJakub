@@ -39,6 +39,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients\GetResult.cs" />
     <Compile Include="Clients\MainServiceClient.cs" />
     <Compile Include="Contracts\NewResourceContract.cs" />
     <Compile Include="Contracts\ProjectContract.cs" />
@@ -49,6 +50,8 @@
     <Compile Include="Contracts\SnapshotContract.cs" />
     <Compile Include="Contracts\Type\ResourceTypeContract.cs" />
     <Compile Include="Contracts\UserContract.cs" />
+    <Compile Include="Headers\CustomHttpHeaders.cs" />
+    <Compile Include="Data\ProjectListData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceContracts\IProjectMainService.cs" />
     <Compile Include="ServiceContracts\IResourceMainService.cs" />

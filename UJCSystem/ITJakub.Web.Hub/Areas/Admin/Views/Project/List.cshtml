@@ -1,4 +1,4 @@
-﻿@model IList<ITJakub.Web.Hub.Areas.Admin.Models.ProjectItemViewModel>
+﻿@model ITJakub.Web.Hub.Areas.Admin.Models.ProjectListViewModel
 @using System.Threading.Tasks
 @using ITJakub.Web.Hub.Managers
 @{
@@ -48,41 +48,10 @@
     <hr/>
     
     <div id="list-container">
-        @foreach (var viewModel in Model)
-        {
-            <div class="project-item row" data-project-id="@viewModel.Id" data-project-name="@viewModel.Name">
-                <div class="col-md-6">
-                    <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
-                        <div>
-                            <strong>@viewModel.Name</strong>
-                        </div>
-                        <div>@viewModel.PublisherText</div>
-                        <div>@viewModel.LiteraryOriginalText</div>
-                        <div>Počet stran: @viewModel.PageCount</div>
-                    </a>
-                </div>
-                <div class="col-md-4">
-                    Naposledy upraveno: @viewModel.LastEditDate uživatelem @viewModel.LastEditUser<br />
-                    Vytvořeno: @viewModel.CreateDate uživatelem @viewModel.CreateUser
-                </div>
-                <div class="col-md-2 project-item-buttons">
-                    <a href="#" class="delete-button">
-                        <div>
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </div>
-                        <div>Smazat</div>
-                    </a>
-                    <a href="@Url.Action("Project", "Project", new {id = viewModel.Id})">
-                        <div>
-                            <span class="glyphicon glyphicon-pencil"></span>
-                        </div>
-                        <div>Upravit</div>
-                    </a>
-                </div>
-            </div>
-            <hr/>
-        }
+        @Html.Partial("_ProjectItemList", Model)
     </div>
+    
+    <div id="pagination" class="text-center"></div>
 </div>
 
 <div class="modal fade" role="dialog" id="new-project-dialog">
