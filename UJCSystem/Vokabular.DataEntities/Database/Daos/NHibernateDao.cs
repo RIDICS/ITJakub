@@ -20,7 +20,7 @@ namespace Vokabular.DataEntities.Database.Daos
             m_unitOfWork = unitOfWork;
         }
 
-        protected IUnitOfWork UnitOfWork
+        public IUnitOfWork UnitOfWork
         {
             get { return m_unitOfWork; }
         }

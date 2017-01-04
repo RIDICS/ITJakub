@@ -23,6 +23,7 @@ namespace ITJakub.Web.Hub.Installers
             container.AddPerWebRequest<Profile, ProjectProfile>();
             container.AddPerWebRequest<Profile, ResourceProfile>();
             container.AddPerWebRequest<Profile, SnapshotProfile>();
+            container.AddPerWebRequest<Profile, UserProfile>();
         }
     }
 }

@@ -43,7 +43,6 @@ namespace Vokabular.MainService
             var container = new WindsorContainerImplementation();
             new MainServiceContainerRegistration().Install(container);
             new NHibernateInstaller().Install(container);
-            new AutoMapperInstaller().Install(container);
 
             return container.CreateServiceProvider(services);
         }

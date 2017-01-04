@@ -14,7 +14,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly UserManager m_userManager;
         private long m_resultId;
 
-        public CreateProjectWork(IUnitOfWork unitOfWork, ProjectRepository projectRepository, ProjectContract newData, UserManager userManager) : base(unitOfWork)
+        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, UserManager userManager) : base(projectRepository.UnitOfWork)
         {
             m_projectRepository = projectRepository;
             m_newData = newData;

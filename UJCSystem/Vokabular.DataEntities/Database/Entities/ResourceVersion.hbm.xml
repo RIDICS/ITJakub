@@ -9,7 +9,7 @@
     
     <property name="Comment" not-null="false" />
     
-    <property name="CreateTime" not-null="true" />
+    <property name="CreateTime" not-null="true" type="UtcDateTime" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     

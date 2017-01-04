@@ -1,4 +1,6 @@
-﻿using Vokabular.MainService.Core.Managers;
+﻿using AutoMapper;
+using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Core
@@ -9,6 +11,9 @@ namespace Vokabular.MainService.Core
         {
             container.AddPerWebRequest<ProjectManager>();
             container.AddPerWebRequest<UserManager>();
+
+            container.AddSingleton<Profile, ProjectProfile>();
+            container.AddSingleton<Profile, UserProfile>();
         }
     }
 }
