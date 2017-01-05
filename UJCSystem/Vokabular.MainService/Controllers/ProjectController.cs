@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
-using Vokabular.MainService.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Headers;
 using Vokabular.MainService.DataContracts.ServiceContracts;

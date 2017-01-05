@@ -98,6 +98,28 @@ BEGIN TRAN
 	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryKind(Name)] UNIQUE
     )
 
+	CREATE TABLE [dbo].[TermCategory]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TermCategory(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_TermCategory(Name)] UNIQUE
+    )
+
+	CREATE TABLE [dbo].[Term]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Term(Id)] PRIMARY KEY CLUSTERED,
+	   [ExternalId] varchar(255) NULL,
+	   [Text] varchar(255) NOT NULL CONSTRAINT [UQ_Term(Text)] UNIQUE,
+	   [Position] bigint NOT NULL,
+	   [TermCategory] int NOT NULL CONSTRAINT [FK_Term(TermCategory)_TermCategory(Id)] FOREIGN KEY REFERENCES [dbo].[TermCategory](Id)
+    )
+
+	CREATE TABLE [dbo].[Keyword] 
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Keyword(Id)] PRIMARY KEY CLUSTERED,
+	   [Text] varchar(255) NOT NULL CONSTRAINT [UQ_Keyword(Text)] UNIQUE
+    )
+
+    
 -- Create project and resource tables
 
     CREATE TABLE [dbo].[Project]
@@ -110,6 +132,14 @@ BEGIN TRAN
 	   -- TODO Unique?
 	   -- TODO last modification time?
     )
+		
+	CREATE TABLE [dbo].[NamedResourceGroup]
+	(
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_NamedResourceGroup(Id)] PRIMARY KEY CLUSTERED,
+	   [Project] bigint NOT NULL CONSTRAINT [FK_NamedResourceGroup(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
+	   [Name] varchar(255) NOT NULL,
+	   [TextType] smallint NOT NULL
+	)
 
 	CREATE TABLE [dbo].[Resource]
     (
@@ -117,7 +147,8 @@ BEGIN TRAN
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Resource(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
 	   [Name] varchar(255) NOT NULL,
 	   [ResourceType] smallint NOT NULL,
-	   [ContentType] smallint NOT NULL
+	   [ContentType] smallint NOT NULL,
+	   [NamedResourceGroup] bigint NOT NULL CONSTRAINT [FK_Resource(NamedResourceGroup)_NamedResourceGroup(Id)] FOREIGN KEY REFERENCES [dbo].[NamedResourceGroup] (Id)
     )
 
 	CREATE TABLE [dbo].[ResourceVersion]
@@ -180,6 +211,120 @@ BEGIN TRAN
 	   [MimeType] varchar(255) NOT NULL,
 	   [Size] bigint NOT NULL
 	)
+
+	CREATE TABLE [dbo].[AudioResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_AudioResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Duration] bigint NULL,		
+	   [FileName] varchar(255) NOT NULL,
+	   [AudioType] tinyint NOT NULL,
+	   [MimeType] varchar(255) NOT NULL
+	)
+
+	CREATE TABLE [dbo].[ChapterResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Name] varchar(MAX) NOT NULL,
+	   [Position] int NOT NULL,
+	   [BeginningPageResource] bigint NULL CONSTRAINT [FK_ChapterResource(BeginningPageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	)
+
+	CREATE TABLE [dbo].[DefaultHeadwordResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_DefaultHeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ExternalId] varchar(100) NOT NULL,
+	   [DefaultHeadword] nvarchar(255) NOT NULL,
+	   [Sorting] nvarchar(255) NOT NULL
+	)
+
+	CREATE TABLE [dbo].[HeadwordResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_HeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Headword] nvarchar(255) NOT NULL,
+	   [HeadwordOriginal] nvarchar(255) NOT NULL,
+	   [PageResource] bigint NULL CONSTRAINT [FK_HeadwordResource(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	)
+
+	CREATE TABLE [dbo].[TermResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TermResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Term] int NOT NULL CONSTRAINT [FK_TermResource(Term)_Term(Id)] FOREIGN KEY REFERENCES [dbo].[Term](Id)
+	   --ParentResource is PageResource
+    )
+
+	CREATE TABLE [dbo].[KeywordResource] 
+    (
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_KeywordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Keyword] int NOT NULL CONSTRAINT [FK_KeywordResource(Keyword)_Keyword(Id)] FOREIGN KEY REFERENCES [dbo].[Keyword](Id)
+    )
+
+
+-- Other tables
+	
+	CREATE TABLE [dbo].[FavoriteLabel]
+	(
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_FavoriteLabel(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar(150) NOT NULL,
+	   [Color] char(7) NOT NULL,
+	   [User] int NOT NULL CONSTRAINT [FK_FavoriteLabel(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+	   --[ParentLabel] bigint NULL CONSTRAINT [FK_FavoriteLabel(ParentLabel)_FavoriteLabel(Id)] FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
+	   [IsDefault] bit NOT NULL,
+	   [LastUseTime] datetime NULL
+	)
+	
+	CREATE TABLE [dbo].[Favorite]
+	(
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Favorite(Id)] PRIMARY KEY CLUSTERED,
+	   [FavoriteType] varchar(255) NOT NULL,
+	   [FavoriteLabel] bigint NOT NULL FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
+	   [Title] varchar(255) NULL,
+	   [Description] varchar(max) NULL, --TODO is required?
+	   [CreateTime] datetime NULL,
+	   [Project] bigint NULL FOREIGN KEY REFERENCES [dbo].[Project] (Id),
+	   [Category] int NULL FOREIGN KEY REFERENCES [dbo].[Category] (Id),
+	   [Resource] bigint NULL FOREIGN KEY REFERENCES [dbo].[Resource](Id),
+	   [ResourceVersion] bigint NULL FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id),
+	   --TODO FavoriteSnapshot
+	   [BookType] int NULL FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+	   [Query] varchar(max) NULL,
+	   [QueryType] smallint NULL
+    )
+
+	CREATE TABLE [dbo].[Feedback]
+	(
+	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_Feedback(Id)] PRIMARY KEY CLUSTERED,
+	   [FeedbackType] varchar(255) NOT NULL,
+	   [Text] nvarchar(2000) NOT NULL,
+	   [CreateTime] datetime NOT NULL,
+	   [AuthorName] varchar(255) NULL,
+	   [AuthorEmail] varchar(255) NULL,
+	   [AuthorUser] int NULL CONSTRAINT [FK_Feedback(AuthorUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+	   [Category] int NULL CONSTRAINT [FK_Feedback(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id),
+	   [Project] bigint NULL CONSTRAINT [FK_Feedback(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
+	   [Resource] bigint NULL CONSTRAINT [FK_Feedback(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	)
+
+	CREATE TABLE [dbo].[NewsSyndicationItem]
+	(
+	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_NewsSyndicationItem(Id)] PRIMARY KEY CLUSTERED,							 
+	   [Title] varchar(255) NOT NULL,
+	   [CreateTime] datetime NOT NULL,
+	   [Text] varchar(2000) NOT NULL,
+	   [Url] varchar(max) NOT NULL,
+	   [ItemType] smallint NOT NULL,
+	   [User] int NULL CONSTRAINT [FK_NewsSyndicationItem(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
+	)
+
+	CREATE TABLE [dbo].[Transformation]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar (100) NOT NULL,
+	   [Description] varchar (MAX) NULL,	    
+	   [OutputFormat] smallint NOT NULL,	    
+	   [BookType] int NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+	   [IsDefaultForBookType] bit NOT NULL,
+	   [ResourceLevel] smallint NOT NULL
+    )
 
 	
 -- Create M:N tables
