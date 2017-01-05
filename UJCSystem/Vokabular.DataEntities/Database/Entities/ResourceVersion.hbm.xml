@@ -60,6 +60,51 @@
       <property name="ManuscriptTitle" />
       <many-to-one name="Publisher" class="Publisher" lazy="proxy" />
     </joined-subclass>
-    
+
+    <joined-subclass table="AudioResource" name="AudioResource" >
+      <key column="ResourceVersionId" />
+      
+      <property name="Duration" not-null="false" />
+      <property name="FileName" not-null="true" />
+      <property name="AudioType" not-null="true" />
+      <property name="MimeType" not-null="true" />
+    </joined-subclass>
+
+    <joined-subclass table="ChapterResource" name="ChapterResource" >
+      <key column="ResourceVersionId" />
+      
+      <property name="Name" not-null="true" />
+      <property name="Position" not-null="true" />
+      <many-to-one name="BeginningPageResource" class="Resource" lazy="proxy" />
+    </joined-subclass>
+
+    <joined-subclass table="DefaultHeadwordResource" name="DefaultHeadwordResource" >
+      <key column="ResourceVersionId" />
+      
+      <property name="ExternalId" not-null="true" />
+      <property name="DefaultHeadword" not-null="true" />
+      <property name="Sorting" not-null="true" />
+    </joined-subclass>
+
+    <joined-subclass table="HeadwordResource" name="HeadwordResource" >
+      <key column="ResourceVersionId" />
+      
+      <property name="Headword" not-null="true" />
+      <property name="HeadwordOriginal" not-null="false" />
+      <many-to-one name="PageResource" class="Resource" lazy="proxy" />
+    </joined-subclass>
+
+    <joined-subclass table="TermResource" name="TermResource" >
+      <key column="ResourceVersionId" />
+      
+      <many-to-one name="Term" class="Term" lazy="proxy" />
+    </joined-subclass>
+
+    <joined-subclass table="KeywordResource" name="KeywordResource" >
+      <key column="ResourceVersionId" />
+      
+      <many-to-one name="Keyword" class="Keyword" lazy="proxy" />
+    </joined-subclass>
+
   </class>
 </hibernate-mapping>

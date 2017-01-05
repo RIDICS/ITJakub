@@ -1,28 +1,26 @@
 using System;
 using System.Collections.Generic;
-using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class Resource : IEquatable<Resource>
+    public class FavoriteLabel : IEquatable<FavoriteLabel>
     {
         public virtual long Id { get; set; }
 
         public virtual string Name { get; set; }
 
-        public virtual ResourceTypeEnum ResourceType { get; set; }
+        public virtual string Color { get; set; }
 
-        public virtual ContentTypeEnum ContentType { get; set; }
+        public virtual bool IsDefault { get; set; }
 
-        public virtual Project Project { get; set; }
+        public virtual DateTime? LastUseTime { get; set; }
 
-        public virtual IList<ResourceVersion> ResourceVersions { get; set; }
+        public virtual User User { get; set; }
 
-        public virtual ResourceVersion LatestVersion { get; set; }
+        public virtual IList<FavoriteBase> FavoriteItems { get; set; }
 
-        public virtual NamedResourceGroup NamedResourceGroup { get; set; }
-        
-        public virtual bool Equals(Resource other)
+
+        public virtual bool Equals(FavoriteLabel other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -34,7 +32,7 @@ namespace Vokabular.DataEntities.Database.Entities
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Resource) obj);
+            return Equals((FavoriteLabel) obj);
         }
 
         public override int GetHashCode()

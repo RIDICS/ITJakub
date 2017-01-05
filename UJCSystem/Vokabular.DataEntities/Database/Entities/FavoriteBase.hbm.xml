@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="FavoriteBase" table="[Favorite]">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <discriminator column="FavoriteType"
+                   not-null="true"
+                   type="System.String" />
+
+    <property name="FavoriteType"
+              column="FavoriteType"
+              update="false"
+              insert="false" />
+    
+    <property name="Title" />
+    
+    <property name="Description" />
+    
+    <property name="CreateTime" />
+    
+    
+    <many-to-one name="FavoriteLabel"
+                 class="FavoriteLabel"
+                 lazy="proxy"
+                 cascade="save-update" />
+
+    <subclass
+      name="FavoritePage"
+      discriminator-value="Page">
+      
+      <many-to-one name="PageResource"
+                   class="Resource"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteCategory"
+      discriminator-value="Category">
+
+      <many-to-one name="Category"
+                   class="Category"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteProject"
+      discriminator-value="Project">
+
+      <many-to-one name="Project"
+                   class="Project"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteSnapshot"
+      discriminator-value="Snapshot">
+
+      <!--<many-to-one name="Snapshot"
+                   class="Snapshot"
+                   lazy="proxy" />-->
+
+    </subclass>
+
+    <subclass
+      name="FavoriteHeadword"
+      discriminator-value="Headword">
+
+      <many-to-one name="DefaultHeadwordResource"
+                   class="Resource"
+                   lazy="proxy" />
+
+    </subclass>
+
+    <subclass
+      name="FavoriteQuery"
+      discriminator-value="Query">
+
+      <many-to-one name="BookType"
+                   class="BookType"
+                   lazy="proxy" />
+      
+      <property name="QueryType" />
+      
+      <property name="Query" />
+
+    </subclass>
+  </class>
+</hibernate-mapping>

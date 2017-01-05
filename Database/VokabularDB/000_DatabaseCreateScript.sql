@@ -14,7 +14,7 @@ BEGIN TRAN
 
 
 -- Create table for storing database version
-	CREATE TABLE [dbo].[DatabaseVersion] 
+	CREATE TABLE [dbo].[DatabaseVersion]
 	(
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DatabaseVersion(Id)] PRIMARY KEY CLUSTERED,
 	   [DatabaseVersion] varchar(50) NOT NULL,
@@ -33,7 +33,7 @@ BEGIN TRAN
 	   [UserName] varchar(50) NOT NULL CONSTRAINT [UQ_User(UserName)] UNIQUE,
 	   [AuthenticationProvider] tinyint NOT NULL,
 	   [CommunicationToken] varchar(255) CONSTRAINT [UQ_User(CommunicationToken)] NOT NULL UNIQUE,
-	   [CommunicationTokenCreateTime] datetime NULL,    
+	   [CommunicationTokenCreateTime] datetime NULL,
 	   [PasswordHash] varchar(255) NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [AvatarUrl] varchar(255) NULL,
@@ -63,7 +63,7 @@ BEGIN TRAN
 	   CONSTRAINT [UQ_ResponsiblePerson(FirstName)(LastName)] UNIQUE ([FirstName],[LastName])
     )
 
-	CREATE TABLE [dbo].[Publisher] 
+	CREATE TABLE [dbo].[Publisher]
     (
 	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Publisher(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] nvarchar(255) NOT NULL CONSTRAINT [UQ_Publisher(Text)] UNIQUE,
@@ -113,7 +113,7 @@ BEGIN TRAN
 	   [TermCategory] int NOT NULL CONSTRAINT [FK_Term(TermCategory)_TermCategory(Id)] FOREIGN KEY REFERENCES [dbo].[TermCategory](Id)
     )
 
-	CREATE TABLE [dbo].[Keyword] 
+	CREATE TABLE [dbo].[Keyword]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Keyword(Id)] PRIMARY KEY CLUSTERED,
 	   [Text] varchar(255) NOT NULL CONSTRAINT [UQ_Keyword(Text)] UNIQUE
@@ -148,7 +148,7 @@ BEGIN TRAN
 	   [Name] varchar(255) NOT NULL,
 	   [ResourceType] smallint NOT NULL,
 	   [ContentType] smallint NOT NULL,
-	   [NamedResourceGroup] bigint NOT NULL CONSTRAINT [FK_Resource(NamedResourceGroup)_NamedResourceGroup(Id)] FOREIGN KEY REFERENCES [dbo].[NamedResourceGroup] (Id)
+	   [NamedResourceGroup] bigint NULL CONSTRAINT [FK_Resource(NamedResourceGroup)_NamedResourceGroup(Id)] FOREIGN KEY REFERENCES [dbo].[NamedResourceGroup] (Id)
     )
 
 	CREATE TABLE [dbo].[ResourceVersion]
@@ -160,7 +160,7 @@ BEGIN TRAN
 	   [CreateTime] datetime NOT NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_ResourceVersion(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
 	   [Comment] varchar(MAX) NULL,
-	   CONSTRAINT [UQ_ResourceVersion(Id)(VersionNumber)] UNIQUE ([Id],[VersionNumber])  
+	   CONSTRAINT [UQ_ResourceVersion(Id)(VersionNumber)] UNIQUE ([Id],[VersionNumber])
 	)
 
 	ALTER TABLE [dbo].[Resource] ADD [LatestVersion] bigint NULL CONSTRAINT [FK_Resource(LatestVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
@@ -191,7 +191,7 @@ BEGIN TRAN
 	   -- TODO handling M:N LiteraryGenre, LiteraryKind
     )
 
-    CREATE TABLE [dbo].[PageResource] 
+    CREATE TABLE [dbo].[PageResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_PageResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] varchar(50) NOT NULL,
@@ -215,7 +215,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[AudioResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_AudioResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Duration] bigint NULL,		
+	   [Duration] bigint NULL,
 	   [FileName] varchar(255) NOT NULL,
 	   [AudioType] tinyint NOT NULL,
 	   [MimeType] varchar(255) NOT NULL
@@ -241,7 +241,7 @@ BEGIN TRAN
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_HeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Headword] nvarchar(255) NOT NULL,
-	   [HeadwordOriginal] nvarchar(255) NOT NULL,
+	   [HeadwordOriginal] nvarchar(255) NULL,
 	   [PageResource] bigint NULL CONSTRAINT [FK_HeadwordResource(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
@@ -252,7 +252,7 @@ BEGIN TRAN
 	   --ParentResource is PageResource
     )
 
-	CREATE TABLE [dbo].[KeywordResource] 
+	CREATE TABLE [dbo].[KeywordResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_KeywordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Keyword] int NOT NULL CONSTRAINT [FK_KeywordResource(Keyword)_Keyword(Id)] FOREIGN KEY REFERENCES [dbo].[Keyword](Id)
@@ -299,14 +299,14 @@ BEGIN TRAN
 	   [AuthorName] varchar(255) NULL,
 	   [AuthorEmail] varchar(255) NULL,
 	   [AuthorUser] int NULL CONSTRAINT [FK_Feedback(AuthorUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-	   [Category] int NULL CONSTRAINT [FK_Feedback(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id),
+	   [FeedbackCategory] smallint NOT NULL,
 	   [Project] bigint NULL CONSTRAINT [FK_Feedback(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 	   [Resource] bigint NULL CONSTRAINT [FK_Feedback(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
 	CREATE TABLE [dbo].[NewsSyndicationItem]
 	(
-	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_NewsSyndicationItem(Id)] PRIMARY KEY CLUSTERED,							 
+	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_NewsSyndicationItem(Id)] PRIMARY KEY CLUSTERED,
 	   [Title] varchar(255) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [Text] varchar(2000) NOT NULL,
@@ -319,8 +319,8 @@ BEGIN TRAN
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar (100) NOT NULL,
-	   [Description] varchar (MAX) NULL,	    
-	   [OutputFormat] smallint NOT NULL,	    
+	   [Description] varchar (MAX) NULL,
+	   [OutputFormat] smallint NOT NULL,
 	   [BookType] int NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
 	   [IsDefaultForBookType] bit NOT NULL,
 	   [ResourceLevel] smallint NOT NULL
