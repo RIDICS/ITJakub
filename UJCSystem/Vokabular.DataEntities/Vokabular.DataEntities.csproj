@@ -47,7 +47,9 @@
     <Compile Include="Database\Entities\Enums\ContentTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\FavoriteTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackCategoryEnum.cs" />
+    <Compile Include="Database\Entities\Enums\OutputFormatEnum.cs" />
     <Compile Include="Database\Entities\Enums\QueryTypeEnum.cs" />
+    <Compile Include="Database\Entities\Enums\ResourceLevelEnum.cs" />
     <Compile Include="Database\Entities\Enums\ResourceTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\TextTypeEnum.cs" />
     <Compile Include="Database\Entities\FavoriteBase.cs" />
@@ -58,6 +60,7 @@
     <Compile Include="Database\Entities\LiteraryGenre.cs" />
     <Compile Include="Database\Entities\LiteraryKind.cs" />
     <Compile Include="Database\Entities\NamedResourceGroup.cs" />
+    <Compile Include="Database\Entities\NewsSyndicationItem.cs" />
     <Compile Include="Database\Entities\OriginalAuthor.cs" />
     <Compile Include="Database\Entities\BookType.cs" />
     <Compile Include="Database\Entities\Category.cs" />
@@ -70,8 +73,10 @@
     <Compile Include="Database\Entities\ResourceVersion.cs" />
     <Compile Include="Database\Entities\ResponsiblePerson.cs" />
     <Compile Include="Database\Entities\ResponsibleType.cs" />
+    <Compile Include="Database\Entities\Enums\SyndicationItemType.cs" />
     <Compile Include="Database\Entities\Term.cs" />
     <Compile Include="Database\Entities\TermCategory.cs" />
+    <Compile Include="Database\Entities\Transformation.cs" />
     <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Repositories\ProjectRepository.cs" />
     <Compile Include="Database\Repositories\UserRepository.cs" />
@@ -152,6 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\NewsSyndicationItem.hbm.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\Transformation.hbm.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

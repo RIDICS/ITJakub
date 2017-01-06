@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="Transformation" table="[Transformation]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="Name" not-null="true" />
+    
+    <property name="Description"  not-null="false" />
+    
+    <property name="OutputFormat" not-null="true" />
+    
+    <property name="ResourceLevel" not-null="true" />
+    
+    <property name="IsDefaultForBookType" not-null="true" />
+
+    <many-to-one name="BookType" class="BookType" not-null="false" />
+    
+  </class>
+</hibernate-mapping>

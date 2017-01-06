@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="NewsSyndicationItem" table="[NewsSyndicationItem]">
+
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>  
+    
+    <property name="Title" />
+    
+    <property name="Text" />
+    
+    <property name="Url" />
+    
+    <property name="ItemType" />
+    
+    <property name="CreateTime" />    
+    
+    <many-to-one name="User"
+                 class="User"
+                 lazy="proxy" />
+  </class>
+</hibernate-mapping>
