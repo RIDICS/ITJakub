@@ -1,9 +1,18 @@
 ﻿class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
     private projectId: number;
+    private addPublisherDialog: BootstrapDialogWrapper;
+    private projectManager: ProjectManager;
 
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
+        this.projectManager = new ProjectManager();
+
+        this.addPublisherDialog = new BootstrapDialogWrapper({
+            element: $("#add-publisher-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.createNewPublisher.bind(this)
+        });
     }
 
     getConfiguration(): IProjectMetadataTabConfiguration {
@@ -23,6 +32,28 @@
 
         $("#work-metadata-cancel-button, #work-metadata-save-button").click(() => {
             this.disableEdit();
+        });
+
+        $("#add-publisher-button").click(() => {
+            this.addPublisherDialog.show();
+        });
+    }
+
+    private createNewPublisher() {
+        var name = $("#add-publisher-name").val();
+        var email = $("#add-publisher-email").val();
+
+        if (!name) {
+            this.addPublisherDialog.showError("Nebyl vyplněn název nakladatele");
+        }
+
+        this.projectManager.createPublisher(name, email, (newPublisherId, errorCode) => {
+            if (errorCode !== HttpStatusCode.Success) {
+                this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
+                return;
+            }
+
+            // TODO select created publisher
         });
     }
 }
