@@ -21,7 +21,7 @@ namespace ITJakub.Web.Hub.Controllers
             m_communication = communicationProvider;
         }
 
-        public MainServiceClient GetServiceClient()
+        public MainServiceRestClient GetRestClient()
         {
             return m_communication.GetMainServiceClient();
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
@@ -36,7 +37,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult List()
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 const int start = 0;
                 var result = client.GetProjectListFull(start, ProjectListPageSize);
@@ -47,7 +48,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult Project(long id)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var result = client.GetProject(id);
                 var viewModel = Mapper.Map<ProjectItemViewModel>(result);
@@ -57,7 +58,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ProjectListContent(int start, int count)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var result = client.GetProjectListFull(start, count);
                 var viewModel = CreateProjectListViewModel(result, start);
@@ -85,7 +86,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 switch (tabType)
                 {
@@ -116,7 +117,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return BadRequest();
             }
 
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 switch (tabType)
                 {
@@ -136,7 +137,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ProjectResourceVersion(long resourceId)
         {
-            using (var client= GetServiceClient())
+            using (var client= GetRestClient())
             {
                 var resourceVersionList = client.GetResourceVersionHistory(resourceId);
                 var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
@@ -146,7 +147,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult NewSnapshot(long projectId)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var resources = client.GetResourceList(projectId);
                 // TODO
@@ -158,7 +159,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult CreateProject([FromBody] CreateProjectRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var newProject = new ProjectContract
                 {
@@ -172,7 +173,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteProject([FromBody] DeleteProjectRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 client.DeleteProject(request.Id);
                 return Json(new { });
@@ -187,7 +188,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 var file = Request.Form.Files[i];
                 if (file != null && file.Length != 0)
                 {
-                    using (var client = GetServiceClient())
+                    using (var client = GetRestClient())
                     {
                         client.UploadResource(request.SessionId, file.OpenReadStream());
                     }
@@ -204,7 +205,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 var file = Request.Form.Files[i];
                 if (file != null && file.Length != 0)
                 {
-                    using (var client = GetServiceClient())
+                    using (var client = GetRestClient())
                     {
                         client.UploadResource(request.SessionId, file.OpenReadStream());
                     }
@@ -215,7 +216,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult GetResourceList(long projectId, ResourceTypeContract resourceType)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var result = client.GetResourceList(projectId, resourceType);
                 return Json(result);
@@ -225,7 +226,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ProcessUploadedResources([FromBody] ProcessResourcesRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var resourceId = client.ProcessUploadedResources(request.ProjectId, new NewResourceContract
                 {
@@ -239,7 +240,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult ProcessUploadResourceVersion([FromBody] ProcessResourceVersionRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId, new NewResourceContract
                 {
@@ -253,7 +254,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DeleteResource([FromBody] DeleteResourceRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 client.DeleteResource(request.ResourceId);
                 return Json(new { });
@@ -263,7 +264,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult RenameResource([FromBody] RenameResourceRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 client.RenameResource(request.ResourceId, new ResourceContract
                 {
@@ -276,10 +277,60 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult DuplicateResource([FromBody] DuplicateResourceRequest request)
         {
-            using (var client = GetServiceClient())
+            using (var client = GetRestClient())
             {
                 var newResourceId = client.DuplicateResource(request.ResourceId);
                 return Json(newResourceId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreatePublisher([FromBody] PublisherContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreatePublisher(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryKind(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateLiteraryGenre([FromBody] LiteraryGenreContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryGenre(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateAuthor([FromBody] OriginalAuthorContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateOriginalAuthor(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateResponsiblePerson(request);
+                return Json(newId);
             }
         }
     }

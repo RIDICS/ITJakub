@@ -27,10 +27,10 @@ namespace ITJakub.Web.Hub.Managers
             m_configurationProvider = communicationConfigurationProvider;
         }
 
-        public MainServiceClient GetMainServiceClient()
+        public MainServiceRestClient GetMainServiceClient()
         {
             var uri = m_configurationProvider.GetEndpointUri(NewMainServiceEndpointName);
-            return new MainServiceClient(uri);
+            return new MainServiceRestClient(uri);
         }
 
         public IItJakubService GetAuthenticatedClient(string username, string commToken)

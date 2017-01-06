@@ -10,6 +10,7 @@ namespace Vokabular.MainService.Core
         public void Install(IContainer container)
         {
             container.AddPerWebRequest<ProjectManager>();
+            container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<UserManager>();
 
             container.AddSingleton<Profile, ProjectProfile>();

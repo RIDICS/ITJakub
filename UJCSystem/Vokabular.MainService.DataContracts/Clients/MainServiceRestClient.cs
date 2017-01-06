@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
@@ -10,68 +9,11 @@ using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceClient : IDisposable, IProjectMainService, IResourceMainService, ISnapshotMainService
+    public class MainServiceRestClient : RestClientBase, IProjectMainService, IResourceMainService, ISnapshotMainService
     {
-        private readonly HttpClient m_client;
-
-        public MainServiceClient(Uri baseAddress)
+        public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
         {
-            m_client = new HttpClient
-            {
-                BaseAddress = baseAddress
-            };
-            m_client.DefaultRequestHeaders.Accept.Clear();
-            m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        public void Dispose()
-        {
-            m_client.Dispose();
-        }
-
-        #region Generic methods
-
-        private T GetResponse<T>(HttpResponseMessage response)
-        {
-            response.EnsureSuccessStatusCode();
-
-            var result = response.Content.ReadAsAsync<T>().Result;
-            return result;
-        }
-
-        private GetResult<T> GetFull<T>(string uriPath)
-        {
-            var response = m_client.GetAsync(uriPath).Result;
-            var result = GetResponse<T>(response);
-
-            return new GetResult<T>(result, response.Headers);
-        }
-
-        private T Get<T>(string uriPath)
-        {
-            var response = m_client.GetAsync(uriPath).Result;
-            return GetResponse<T>(response);
-        }
-
-        private T Post<T>(string uriPath, object data)
-        {
-            var response = m_client.PostAsJsonAsync(uriPath, data).Result;
-            return GetResponse<T>(response);
-        }
-
-        private void Put(string uriPath, object data)
-        {
-            var response = m_client.PutAsJsonAsync(uriPath, data).Result;
-            response.EnsureSuccessStatusCode();
-        }
-
-        private void Delete(string uriPath)
-        {
-            var response = m_client.DeleteAsync(uriPath).Result;
-            response.EnsureSuccessStatusCode();
-        }
-        
-        #endregion
 
         public List<ProjectContract> GetProjectList(int? start, int? count)
         {
@@ -118,7 +60,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             var uriPath = $"session/{sessionId}/resource";
             var content = new StreamContent(data);
-            var response = m_client.PostAsync(uriPath, content).Result;
+            var response = HttpClient.PostAsync(uriPath, content).Result;
 
             response.EnsureSuccessStatusCode();
         }
@@ -190,6 +132,36 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             var result = Get<List<SnapshotContract>>($"project/{projectId}/snapshot");
             return result;
+        }
+
+        public int CreatePublisher(PublisherContract publisher)
+        {
+            var newId = Post<int>("publisher", publisher);
+            return newId;
+        }
+
+        public int CreateLiteraryKind(LiteraryKindContract literaryKind)
+        {
+            var newId = Post<int>("literarykind", literaryKind);
+            return newId;
+        }
+
+        public int CreateLiteraryGenre(LiteraryGenreContract literaryGenre)
+        {
+            var newId = Post<int>("literarygenre", literaryGenre);
+            return newId;
+        }
+
+        public int CreateOriginalAuthor(OriginalAuthorContract author)
+        {
+            var newId = Post<int>("author", author);
+            return newId;
+        }
+
+        public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
+        {
+            var newId = Post<int>("responsibleperson", responsiblePerson);
+            return newId;
         }
     }
 }

@@ -73,4 +73,43 @@
     public duplicateResource(resourceId: number, callback: (newResourceId: number, errorCode: HttpStatusCode) => void) {
         this.postAjax("Admin/Project/DuplicateResource", {resourceId: resourceId}, callback);
     }
+
+    public createPublisher(name: string, email: string, callback: (newPublisherId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            text: name,
+            email: email
+        };
+        this.postAjax("Admin/Project/CreatePublisher", data, callback);
+    }
+
+    public createLiteraryKind(name: string, callback: (newKindId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            name: name
+        };
+        this.postAjax("Admin/Project/CreateLiteraryKind", data, callback);
+    }
+
+    public createLiteraryGenre(name: string, callback: (newGenreId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            name: name
+        };
+        this.postAjax("Admin/Project/CreateLiteraryGenre", data, callback);
+    }
+
+    public createAuthor(firstName: string, lastName: string, callback: (newAuthorId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            firstName: firstName,
+            lastName: lastName
+        };
+        this.postAjax("Admin/Project/CreateAuthor", data, callback);
+    }
+
+    public createResponsiblePerson(firstName: string, lastName: string, responsibleTypeId: number, callback: (newResponsibleId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            firstName: firstName,
+            lastName: lastName,
+            responsibleTypeId: responsibleTypeId
+        }
+        this.postAjax("Admin/Project/CreateAuthor", data, callback);
+    }
 }

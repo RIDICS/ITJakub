@@ -40,15 +40,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clients\GetResult.cs" />
-    <Compile Include="Clients\MainServiceClient.cs" />
+    <Compile Include="Clients\MainServiceRestClient.cs" />
+    <Compile Include="Clients\RestClientBase.cs" />
+    <Compile Include="Contracts\LiteraryGenreContract.cs" />
+    <Compile Include="Contracts\LiteraryKindContract.cs" />
     <Compile Include="Contracts\NewResourceContract.cs" />
+    <Compile Include="Contracts\OriginalAuthorContract.cs" />
     <Compile Include="Contracts\ProjectContract.cs" />
     <Compile Include="Contracts\ProjectMetadataContract.cs" />
+    <Compile Include="Contracts\PublisherContract.cs" />
     <Compile Include="Contracts\ResourceContract.cs" />
     <Compile Include="Contracts\ResourceMetadataContract.cs" />
     <Compile Include="Contracts\ResourceVersionContract.cs" />
+    <Compile Include="Contracts\ResponsiblePersonContract.cs" />
+    <Compile Include="Contracts\ResponsibleTypeContract.cs" />
     <Compile Include="Contracts\SnapshotContract.cs" />
     <Compile Include="Contracts\Type\ResourceTypeContract.cs" />
+    <Compile Include="Contracts\Type\ResponsibleTypeEnumContract.cs" />
     <Compile Include="Contracts\UserContract.cs" />
     <Compile Include="Headers\CustomHttpHeaders.cs" />
     <Compile Include="Data\ProjectListData.cs" />
