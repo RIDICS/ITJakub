@@ -40,7 +40,10 @@
                 <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
                 <div class="col-md-6">
                     <select id="work-metadata-publisher" class="form-control">
-                        <option>Publisher 1</option>
+                        @foreach (var publisher in Model.PublisherList)
+                        {
+                            <option value="@publisher.Id">@publisher.Text</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -125,7 +128,10 @@
                 <label class="col-md-4 control-label" for="work-metadata-literary-kind">Literární druh</label>
                 <div class="col-md-6">
                     <select id="work-metadata-literary-kind" class="form-control">
-                        <option>Kind 1</option>
+                        @foreach (var kind in Model.LiteraryKindList)
+                        {
+                            <option value="@kind.Id">@kind.Name</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-2">
@@ -136,7 +142,10 @@
                 <label class="col-md-4 control-label" for="work-metadata-literary-genre">Literární žánr</label>
                 <div class="col-md-6">
                     <select id="work-metadata-literary-genre" class="form-control">
-                        <option>Genre 1</option>
+                        @foreach (var genre in Model.LiteraryGenreList)
+                        {
+                            <option value="@genre.Id">@genre.Name</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-2">

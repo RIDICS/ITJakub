@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -19,6 +20,13 @@ namespace Vokabular.MainService.Controllers
         {
             var resultId = m_projectMetadataManager.CreateLiteraryKind(literaryKind.Name);
             return resultId;
+        }
+
+        [HttpGet("")]
+        public List<LiteraryKindContract> GetLiteraryKindList()
+        {
+            var result = m_projectMetadataManager.GetLiteraryKindList();
+            return result;
         }
     }
 }

@@ -5,12 +5,12 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class CreateLiteraryGenreWork : UnitOfWorkBase<int>
     {
-        private readonly ProjectRepository m_projectRepository;
+        private readonly MetadataRepository m_metadataRepository;
         private readonly string m_name;
 
-        public CreateLiteraryGenreWork(ProjectRepository projectRepository, string name) : base(projectRepository.UnitOfWork)
+        public CreateLiteraryGenreWork(MetadataRepository metadataRepository, string name) : base(metadataRepository.UnitOfWork)
         {
-            m_projectRepository = projectRepository;
+            m_metadataRepository = metadataRepository;
             m_name = name;
         }
 
@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             {
                 Name = m_name
             };
-            return (int) m_projectRepository.Create(literaryGenre);
+            return (int) m_metadataRepository.Create(literaryGenre);
         }
     }
 }

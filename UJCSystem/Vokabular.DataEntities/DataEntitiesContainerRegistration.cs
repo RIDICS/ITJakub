@@ -9,6 +9,7 @@ namespace Vokabular.DataEntities
         public void Install(IContainer container)
         {
             container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
+            container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<ProjectRepository>();
             container.AddPerWebRequest<UserRepository>();
         }

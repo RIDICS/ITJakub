@@ -163,5 +163,23 @@ namespace Vokabular.MainService.DataContracts.Clients
             var newId = Post<int>("responsibleperson", responsiblePerson);
             return newId;
         }
+
+        public List<PublisherContract> GetPublisherList()
+        {
+            var result = Get<List<PublisherContract>>("publisher");
+            return result;
+        }
+
+        public List<LiteraryKindContract> GetLiteraryKindList()
+        {
+            var result = Get<List<LiteraryKindContract>>("literarykind");
+            return result;
+        }
+
+        public List<LiteraryGenreContract> GetLitararyGenreList()
+        {
+            var result = Get<List<LiteraryGenreContract>>("literarygenre");
+            return result;
+        }
     }
 }

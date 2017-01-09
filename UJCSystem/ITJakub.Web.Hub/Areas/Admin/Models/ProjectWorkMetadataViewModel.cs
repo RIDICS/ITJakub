@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {
@@ -9,9 +11,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public string LiteraryOriginalText { get; set; }
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
-        public string LiteraryKind { get; set; }
-        public string LiteraryGenre { get; set; }
         public DateTime LastModification { get; set; }
+
+        public List<PublisherContract> PublisherList { get; set; }
+        public List<LiteraryKindContract> LiteraryKindList { get; set; }
+        public List<LiteraryGenreContract> LiteraryGenreList { get; set; }
     }
 
     public class ProjectWorkLiteraryOriginalViewModel

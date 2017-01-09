@@ -13,7 +13,10 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<UserManager>();
 
+            container.AddSingleton<Profile, LiteraryGenreProfile>();
+            container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
+            container.AddSingleton<Profile, PublisherProfile>();
             container.AddSingleton<Profile, UserProfile>();
         }
     }

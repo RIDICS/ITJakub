@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
@@ -99,8 +98,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     case ProjectModuleTabType.WorkCooperation:
                         return PartialView("Work/_Cooperation");
                     case ProjectModuleTabType.WorkMetadata:
+                        var publishers = client.GetPublisherList();
+                        var literaryKinds = client.GetLiteraryKindList();
+                        var literaryGenres = client.GetLitararyGenreList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
+                        workMetadaViewModel.PublisherList = publishers;
+                        workMetadaViewModel.LiteraryKindList = literaryKinds;
+                        workMetadaViewModel.LiteraryGenreList = literaryGenres;
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");

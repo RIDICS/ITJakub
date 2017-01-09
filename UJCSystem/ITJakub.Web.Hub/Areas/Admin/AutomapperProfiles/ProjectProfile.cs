@@ -22,8 +22,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
             CreateMap<ProjectMetadataContract, ProjectWorkMetadataViewModel>()
                 .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
                 .ForMember(dest => dest.LastModification, opt => opt.MapFrom(src => src.LastModification.ToLocalTime()))
-                .ForMember(dest => dest.LiteraryGenre, opt => opt.MapFrom(src => src.LiteraryGenre))
-                .ForMember(dest => dest.LiteraryKind, opt => opt.MapFrom(src => src.LiteraryKind))
                 .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))
                 .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.SourceAbbreviation))
                 .ForMember(dest => dest.LiteraryOriginal, opt => opt.MapFrom(src => src.LiteraryOriginal));
