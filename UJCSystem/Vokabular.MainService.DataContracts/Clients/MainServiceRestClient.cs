@@ -158,7 +158,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             return newId;
         }
 
-        public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
+        public int CreateResponsiblePerson(NewResponsiblePersonContract responsiblePerson)
         {
             var newId = Post<int>("responsibleperson", responsiblePerson);
             return newId;
@@ -179,6 +179,30 @@ namespace Vokabular.MainService.DataContracts.Clients
         public List<LiteraryGenreContract> GetLitararyGenreList()
         {
             var result = Get<List<LiteraryGenreContract>>("literarygenre");
+            return result;
+        }
+
+        public int CreateCategory(CategoryContract category)
+        {
+            var resultId = Post<int>("category", category);
+            return resultId;
+        }
+
+        public List<CategoryContract> GetCategoryList()
+        {
+            var result = Get<List<CategoryContract>>("category");
+            return result;
+        }
+        
+        public int CreateResponsibleType(ResponsibleTypeContract responsibleType)
+        {
+            var resultId = Post<int>("responsibleperson/type", responsibleType);
+            return resultId;
+        }
+
+        public List<ResponsibleTypeContract> GetResponsibleTypeList()
+        {
+            var result = Get<List<ResponsibleTypeContract>>("responsibleperson/type");
             return result;
         }
     }

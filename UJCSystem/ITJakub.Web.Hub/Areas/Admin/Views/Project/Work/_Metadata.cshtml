@@ -40,7 +40,7 @@
                 <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
                 <div class="col-md-6">
                     <select id="work-metadata-publisher" class="form-control">
-                        @foreach (var publisher in Model.PublisherList)
+                        @foreach (var publisher in Model.AllPublisherList)
                         {
                             <option value="@publisher.Id">@publisher.Text</option>
                         }
@@ -82,19 +82,19 @@
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-city">Město</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.LiteraryOriginal.City" />
+                        <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.LiteraryOriginal.Settlement" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-institution">Instituce</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.LiteraryOriginal.Institution" />
+                        <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.LiteraryOriginal.Repository" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-signature">Signatura</label>
                     <div class="col-md-7">
-                        <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.LiteraryOriginal.Signature" />
+                        <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.LiteraryOriginal.Idno" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -125,28 +125,32 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="work-metadata-literary-kind">Literární druh</label>
-                <div class="col-md-6">
-                    <select id="work-metadata-literary-kind" class="form-control">
-                        @foreach (var kind in Model.LiteraryKindList)
-                        {
-                            <option value="@kind.Id">@kind.Name</option>
-                        }
-                    </select>
+                <label class="col-md-4 control-label">Literární druh</label>
+                <div class="col-md-6" id="work-metadata-literary-kind">
+                    @foreach (var kind in Model.AllLiteraryKindList)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="@kind.Id" /> @kind.Name
+                            </label>
+                        </div>
+                    }
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-default" id="add-literary-kind-button">+</button>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="work-metadata-literary-genre">Literární žánr</label>
-                <div class="col-md-6">
-                    <select id="work-metadata-literary-genre" class="form-control">
-                        @foreach (var genre in Model.LiteraryGenreList)
-                        {
-                            <option value="@genre.Id">@genre.Name</option>
-                        }
-                    </select>
+                <label class="col-md-4 control-label">Literární žánr</label>
+                <div class="col-md-6" id="work-metadata-literary-genre">
+                    @foreach (var genre in Model.AllLiteraryGenreList)
+                    {
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="@genre.Id" /> @genre.Name
+                            </label>
+                        </div>
+                    }
                 </div>
                 <div class="col-md-2">
                     <button class="btn btn-default" id="add-literary-genre-button">+</button>
@@ -155,15 +159,47 @@
             
             Osoby
             <div class="form-group">
-                <label class="col-md-4 control-label" for="work-metadata-author">Autor</label>
-                <div class="col-md-7">
+                <label class="col-md-4 control-label" for="work-metadata-author">Autoři</label>
+                <div class="col-md-6">
                     <input type="text" id="work-metadata-author" class="form-control" value="@Model.Editor" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-md-4 control-label" for="work-metadata-editor">Editor</label>
-                <div class="col-md-7">
+                <div class="col-md-offset-4 col-md-6">
+                    <input type="text" class="form-control" value="@Model.Editor" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-7">
+                    <button class="btn btn-default" id="add-author-button">Přidat</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="work-metadata-editor">Editoři</label>
+                <div class="col-md-6">
                     <input type="text" id="work-metadata-editor" class="form-control" value="@Model.Editor" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-6">
+                    <input type="text" class="form-control" value="@Model.Editor" />
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-7">
+                    <button class="btn btn-default" id="add-editor-button">Přidat</button>
                 </div>
             </div>
             Toto musí být komplexnější, protože dílo může mít více autorů i editorů
@@ -274,6 +310,92 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade project-pages-dialog" role="dialog" id="add-author-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Přidat nového autora</h4>
+            </div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab-select-existing-author" data-toggle="tab">Výběr existujícího</a>
+                    </li>
+                    <li>
+                        <a href="#tab-create-new-author" data-toggle="tab">Vytvoření nového</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="tab-select-existing-author" class="tab-pane active">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="add-author-search" class="col-md-3 control-label">Vyhledat autora</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" id="add-author-search" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Jméno</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" id="add-author-first-name-preview" type="text" disabled="disabled">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Příjmení</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" id="add-author-last-name-preview" type="text" disabled="disabled">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="tab-create-new-author" class="tab-pane">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label for="add-author-first-name" class="col-md-3 control-label">Jméno</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" id="add-author-first-name" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="add-author-last-name" class="col-md-3 control-label">Příjmení</label>
+                                <div class="col-md-7">
+                                    <input class="form-control" id="add-author-last-name" type="text">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-inline"></span>Uložit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade project-pages-dialog" role="dialog" id="add-editor-dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Přidat nového editora</h4>
+            </div>
+            <div class="modal-body">
+                TODO
             </div>
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>

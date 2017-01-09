@@ -27,11 +27,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.LiteraryOriginal, opt => opt.MapFrom(src => src.LiteraryOriginal));
 
             CreateMap<ProjectLiteraryOriginalContract, ProjectWorkLiteraryOriginalViewModel>()
-                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+                .ForMember(dest => dest.Settlement, opt => opt.MapFrom(src => src.City))
                 .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
                 .ForMember(dest => dest.Extent, opt => opt.MapFrom(src => src.Extent))
-                .ForMember(dest => dest.Institution, opt => opt.MapFrom(src => src.Institution))
-                .ForMember(dest => dest.Signature, opt => opt.MapFrom(src => src.Signature));
+                .ForMember(dest => dest.Repository, opt => opt.MapFrom(src => src.Institution))
+                .ForMember(dest => dest.Idno, opt => opt.MapFrom(src => src.Signature));
         }
     }
 }

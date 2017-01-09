@@ -184,4 +184,24 @@ class UiHelper {
         var selectElement = <HTMLSelectElement>$selectElement.get(0);
         selectElement.selectedIndex = $selectElement.children().length - 1;
     }
+
+    public static addCheckboxAndSetChecked($container: JQuery, title: string, value: string|number) {
+        var div = document.createElement("div");
+        var label = document.createElement("label");
+        var checkbox = document.createElement("input");
+        var span = document.createElement("span");
+
+        $(div)
+            .addClass("checkbox")
+            .append(label);
+        $(label)
+            .append(checkbox)
+            .append(span);
+        $(checkbox)
+            .attr("type", "checkbox")
+            .attr("value", value);
+        $(span).text(title);
+
+        $container.append(div);
+    }
 }

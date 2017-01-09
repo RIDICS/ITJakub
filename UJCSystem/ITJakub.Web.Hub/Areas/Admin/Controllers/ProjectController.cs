@@ -103,9 +103,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryGenres = client.GetLitararyGenreList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
-                        workMetadaViewModel.PublisherList = publishers;
-                        workMetadaViewModel.LiteraryKindList = literaryKinds;
-                        workMetadaViewModel.LiteraryGenreList = literaryGenres;
+                        workMetadaViewModel.AllPublisherList = publishers;
+                        workMetadaViewModel.AllLiteraryKindList = literaryKinds;
+                        workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
@@ -330,12 +330,50 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
+        public IActionResult CreateResponsiblePerson([FromBody] NewResponsiblePersonContract request)
         {
             using (var client = GetRestClient())
             {
                 var newId = client.CreateResponsiblePerson(request);
                 return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateResponsibleType(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateCategory(CategoryContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateCategory(request);
+                return Json(newId);
+            }
+        }
+
+        public IActionResult GetCategoryList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetCategoryList();
+                return Json(result);
+            }
+        }
+
+        public IActionResult GetResponsibleTypeList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetResponsibleTypeList();
+                return Json(result);
             }
         }
     }

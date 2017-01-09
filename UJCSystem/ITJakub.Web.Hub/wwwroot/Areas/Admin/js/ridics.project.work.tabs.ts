@@ -3,6 +3,8 @@
     private addPublisherDialog: BootstrapDialogWrapper;
     private addLiteraryKindDialog: BootstrapDialogWrapper;
     private addLiteraryGenreDialog: BootstrapDialogWrapper;
+    private addAuthorDialog: BootstrapDialogWrapper;
+    private addEditorDialog: BootstrapDialogWrapper;
     private projectManager: ProjectManager;
 
     constructor(projectId: number) {
@@ -26,6 +28,18 @@
             element: $("#add-literary-genre-dialog"),
             autoClearInputs: true,
             submitCallback: this.createNewLiteraryGenre.bind(this)
+        });
+
+        this.addAuthorDialog = new BootstrapDialogWrapper({
+            element: $("#add-author-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.addAuthor.bind(this)
+        });
+
+        this.addEditorDialog = new BootstrapDialogWrapper({
+            element: $("#add-editor-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.addEditor.bind(this)
         });
     }
 
@@ -58,6 +72,14 @@
 
         $("#add-literary-genre-button").click(() => {
             this.addLiteraryGenreDialog.show();
+        });
+
+        $("#add-author-button").click(() => {
+            this.addAuthorDialog.show();
+        });
+
+        $("#add-editor-button").click(() => {
+            this.addEditorDialog.show();
         });
     }
 
@@ -93,7 +115,7 @@
                 return;
             }
 
-            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-literary-kind"), name, newId);
+            UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-kind"), name, newId);
             this.addLiteraryKindDialog.hide();
         });
     }
@@ -111,9 +133,17 @@
                 return;
             }
 
-            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-literary-genre"), name, newId);
+            UiHelper.addCheckboxAndSetChecked($("#work-metadata-literary-genre"), name, newId);
             this.addLiteraryGenreDialog.hide();
         });
+    }
+
+    private addAuthor() {
+        throw Error("Not implemented");
+    }
+
+    private addEditor() {
+        throw Error("Not implemented");
     }
 }
 
