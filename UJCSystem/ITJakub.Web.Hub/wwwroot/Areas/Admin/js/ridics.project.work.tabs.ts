@@ -1,6 +1,8 @@
 ﻿class ProjectWorkMetadataTab extends ProjectMetadataTabBase {
     private projectId: number;
     private addPublisherDialog: BootstrapDialogWrapper;
+    private addLiteraryKindDialog: BootstrapDialogWrapper;
+    private addLiteraryGenreDialog: BootstrapDialogWrapper;
     private projectManager: ProjectManager;
 
     constructor(projectId: number) {
@@ -12,6 +14,18 @@
             element: $("#add-publisher-dialog"),
             autoClearInputs: true,
             submitCallback: this.createNewPublisher.bind(this)
+        });
+
+        this.addLiteraryKindDialog = new BootstrapDialogWrapper({
+            element: $("#add-literary-kind-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.createNewLiteraryKind.bind(this)
+        });
+
+        this.addLiteraryGenreDialog = new BootstrapDialogWrapper({
+            element: $("#add-literary-genre-dialog"),
+            autoClearInputs: true,
+            submitCallback: this.createNewLiteraryGenre.bind(this)
         });
     }
 
@@ -37,6 +51,14 @@
         $("#add-publisher-button").click(() => {
             this.addPublisherDialog.show();
         });
+
+        $("#add-literary-kind-button").click(() => {
+            this.addLiteraryKindDialog.show();
+        });
+
+        $("#add-literary-genre-button").click(() => {
+            this.addLiteraryGenreDialog.show();
+        });
     }
 
     private createNewPublisher() {
@@ -48,12 +70,49 @@
         }
 
         this.projectManager.createPublisher(name, email, (newPublisherId, errorCode) => {
-            if (errorCode !== HttpStatusCode.Success) {
+            if (errorCode !== null) {
                 this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
                 return;
             }
 
-            // TODO select created publisher
+            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-publisher"), name, newPublisherId);
+            this.addPublisherDialog.hide();
+        });
+    }
+
+    private createNewLiteraryKind() {
+        var name = $("#add-literary-kind-name").val();
+
+        if (!name) {
+            this.addLiteraryKindDialog.showError("Nebyl vyplněn název");
+        }
+
+        this.projectManager.createLiteraryKind(name, (newId, errorCode) => {
+            if (errorCode !== null) {
+                this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
+                return;
+            }
+
+            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-literary-kind"), name, newId);
+            this.addLiteraryKindDialog.hide();
+        });
+    }
+
+    private createNewLiteraryGenre() {
+        var name = $("#add-literary-genre-name").val();
+
+        if (!name) {
+            this.addLiteraryGenreDialog.showError("Nebyl vyplněn název");
+        }
+
+        this.projectManager.createLiteraryGenre(name, (newId, errorCode) => {
+            if (errorCode !== null) {
+                this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
+                return;
+            }
+
+            UiHelper.addSelectOptionAndSetDefault($("#work-metadata-literary-genre"), name, newId);
+            this.addLiteraryGenreDialog.hide();
         });
     }
 }

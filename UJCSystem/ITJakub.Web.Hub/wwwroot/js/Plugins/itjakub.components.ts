@@ -172,3 +172,16 @@ enum AlertType {
     Warning,
     Error
 }
+
+class UiHelper {
+    public static addSelectOptionAndSetDefault($selectElement: JQuery, optionName: string, optionValue: string | number) {
+        var newOption = document.createElement("option");
+        $(newOption)
+            .text(optionName)
+            .attr("value", optionValue)
+            .appendTo($selectElement);
+
+        var selectElement = <HTMLSelectElement>$selectElement.get(0);
+        selectElement.selectedIndex = $selectElement.children().length - 1;
+    }
+}
