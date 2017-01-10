@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
@@ -16,6 +17,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public List<PublisherContract> AllPublisherList { get; set; }
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
+        public List<ResponsibleTypeContract> AllResponsibleTypeList { get; set; }
         // TODO add property IsSelected to PublisherViewModel, Kind, Genre
 
         public string PublishPlace { get; set; }
@@ -36,6 +38,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
                 return $"{LiteraryOriginal.Country}, {LiteraryOriginal.Settlement}, {LiteraryOriginal.Repository}, {LiteraryOriginal.Idno}, {LiteraryOriginal.Extent}";
             }
         }
+
+        public ResponsibleTypeEnumViewModel ResponsibleTypeEmpty { get; set; }
     }
 
     public class ProjectWorkLiteraryOriginalViewModel

@@ -88,6 +88,18 @@ interface IBookPageBookmark {
     favoriteLabel: IFavoriteLabel;
 }
 
+interface IOriginalAuthor {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
+interface IResponsiblePerson {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
 enum FavoriteType {
     Unknown = 0,
     Book = 1,

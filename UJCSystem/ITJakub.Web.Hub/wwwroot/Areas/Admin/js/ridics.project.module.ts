@@ -176,7 +176,7 @@ class ProjectWorkModule extends ProjectModuleBase {
 }
 
 class ProjectResourceModule extends ProjectModuleBase {
-    private projectManager: ProjectManager;
+    private projectClient: ProjectClient;
     private resourceType: ResourceType;
     private projectId: number;
     private currentResourceId: number;
@@ -191,7 +191,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         super();
         this.projectId = projectId;
         this.resourceType = resourceType;
-        this.projectManager = new ProjectManager();
+        this.projectClient = new ProjectClient();
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
@@ -335,7 +335,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private loadResourceList(callback: () => void = null) {
         $("#resource-list").empty().addClass("loading");
 
-        this.projectManager.getResourceList(this.projectId, this.resourceType, (list, errorCode) => {
+        this.projectClient.getResourceList(this.projectId, this.resourceType, (list, errorCode) => {
             if (errorCode != null) {
                 this.showErrorInResourceList();
                 return;
@@ -380,7 +380,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private addResource() {
         var sessionId = $("#new-resource-session-id").val();
         var comment = $("#new-resource-comment").val();
-        this.projectManager.processUploadedResources(this.projectId, sessionId, comment, errorCode => {
+        this.projectClient.processUploadedResources(this.projectId, sessionId, comment, errorCode => {
             if (errorCode != null) {
                 this.addResourceDialog.showError();
                 return;
@@ -397,7 +397,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         var resourceId = this.currentResourceId;
         var sessionId = $("#new-resource-version-session-id").val();
         var comment = $("#new-resource-version-comment").val();
-        this.projectManager.processUploadedResourceVersion(resourceId, sessionId, comment, errorCode => {
+        this.projectClient.processUploadedResourceVersion(resourceId, sessionId, comment, errorCode => {
             if (errorCode != null) {
                 this.createResourceVersionDialog.showError();
                 return;
@@ -414,7 +414,7 @@ class ProjectResourceModule extends ProjectModuleBase {
 
     private deleteResource() {
         var resourceId = this.currentResourceId;
-        this.projectManager.deleteResource(resourceId, errorCode => {
+        this.projectClient.deleteResource(resourceId, errorCode => {
             if (errorCode != null) {
                 this.deleteResourceDialog.showError();
                 return;
@@ -430,7 +430,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private renameResource() {
         var resourceId = this.currentResourceId;
         var newName = $("#rename-resource-new").val();
-        this.projectManager.renameResource(resourceId, newName, errorCode => {
+        this.projectClient.renameResource(resourceId, newName, errorCode => {
             if (errorCode != null) {
                 this.renameResourceDialog.showError();
                 return;
@@ -445,7 +445,7 @@ class ProjectResourceModule extends ProjectModuleBase {
     private duplicateResource() {
         var resourceId = this.currentResourceId;
         var resourceName = $("#duplicate-resource-name").text();
-        this.projectManager.duplicateResource(resourceId, (newResourceId, errorCode) => {
+        this.projectClient.duplicateResource(resourceId, (newResourceId, errorCode) => {
             if (errorCode != null) {
                 this.duplicateResourceDialog.showError();
                 return;
@@ -555,7 +555,7 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     public abstract getConfiguration(): IProjectMetadataTabConfiguration;
 
     initTab() {
-        this.disableEdit();
+        //this.disableEdit();
     }
 
     protected enabledEdit() {

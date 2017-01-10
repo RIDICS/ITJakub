@@ -5,12 +5,16 @@
     private addLiteraryGenreDialog: BootstrapDialogWrapper;
     private addAuthorDialog: BootstrapDialogWrapper;
     private addEditorDialog: BootstrapDialogWrapper;
-    private projectManager: ProjectManager;
+    private projectClient: ProjectClient;
+    private authorTypeahead: SingleSetTypeaheadSearchBox<IOriginalAuthor>;
+    private editorTypeahead: SingleSetTypeaheadSearchBox<IResponsiblePerson>;
+    private selectedAuthorId: number;
+    private selectedResponsiblePersonId: number;
 
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
-        this.projectManager = new ProjectManager();
+        this.projectClient = new ProjectClient();
 
         this.addPublisherDialog = new BootstrapDialogWrapper({
             element: $("#add-publisher-dialog"),
@@ -41,6 +45,12 @@
             autoClearInputs: true,
             submitCallback: this.addEditor.bind(this)
         });
+
+        this.authorTypeahead = new SingleSetTypeaheadSearchBox<IOriginalAuthor>("#add-author-search", "Admin/Project", x => `${x.lastName} ${x.firstName}`, null);
+        this.authorTypeahead.setDataSet("OriginalAuthor");
+
+        this.editorTypeahead = new SingleSetTypeaheadSearchBox<IResponsiblePerson>("#add-editor-search", "Admin/Project", x => `${x.lastName} ${x.firstName}`, null);
+        this.editorTypeahead.setDataSet("ResponsiblePerson");
     }
 
     getConfiguration(): IProjectMetadataTabConfiguration {
@@ -81,6 +91,36 @@
         $("#add-editor-button").click(() => {
             this.addEditorDialog.show();
         });
+
+        this.authorTypeahead.create((selectedExists, selectConfirmed) => {
+            var $firstName = $("#add-author-first-name-preview");
+            var $lastName = $("#add-author-last-name-preview");
+            if (selectedExists) {
+                var author = this.authorTypeahead.getValue();
+                $firstName.val(author.firstName);
+                $lastName.val(author.lastName);
+                this.selectedAuthorId = author.id;
+            } else {
+                $firstName.val("");
+                $lastName.val("");
+                this.selectedAuthorId = null;
+            }
+        });
+
+        this.editorTypeahead.create((selectedExists, selectConfirmed) => {
+            var $firstName = $("#add-editor-first-name-preview");
+            var $lastName = $("#add-editor-last-name-preview");
+            if (selectedExists) {
+                var editor = this.editorTypeahead.getValue();
+                $firstName.val(editor.firstName);
+                $lastName.val(editor.lastName);
+                this.selectedResponsiblePersonId = editor.id;
+            } else {
+                $firstName.val("");
+                $lastName.val("");
+                this.selectedResponsiblePersonId = null;
+            }
+        });
     }
 
     private createNewPublisher() {
@@ -91,7 +131,7 @@
             this.addPublisherDialog.showError("Nebyl vyplněn název nakladatele");
         }
 
-        this.projectManager.createPublisher(name, email, (newPublisherId, errorCode) => {
+        this.projectClient.createPublisher(name, email, (newPublisherId, errorCode) => {
             if (errorCode !== null) {
                 this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
                 return;
@@ -109,7 +149,7 @@
             this.addLiteraryKindDialog.showError("Nebyl vyplněn název");
         }
 
-        this.projectManager.createLiteraryKind(name, (newId, errorCode) => {
+        this.projectClient.createLiteraryKind(name, (newId, errorCode) => {
             if (errorCode !== null) {
                 this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
                 return;
@@ -127,7 +167,7 @@
             this.addLiteraryGenreDialog.showError("Nebyl vyplněn název");
         }
 
-        this.projectManager.createLiteraryGenre(name, (newId, errorCode) => {
+        this.projectClient.createLiteraryGenre(name, (newId, errorCode) => {
             if (errorCode !== null) {
                 this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
                 return;
@@ -139,6 +179,12 @@
     }
 
     private addAuthor() {
+        if ($("#tab-select-existing-author").hasClass("active")) {
+            //TODO assign author
+        } else {
+            //TODO create and assign author
+        }
+
         throw Error("Not implemented");
     }
 

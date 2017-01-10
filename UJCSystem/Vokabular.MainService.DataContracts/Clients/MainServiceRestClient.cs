@@ -205,5 +205,17 @@ namespace Vokabular.MainService.DataContracts.Clients
             var result = Get<List<ResponsibleTypeContract>>("responsibleperson/type");
             return result;
         }
+
+        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query)
+        {
+            var result = Get<List<OriginalAuthorContract>>($"author/autocomplete?query={query}");
+            return result;
+        }
+
+        public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
+        {
+            var result = Get<List<ResponsiblePersonContract>>($"responsibleperson/autocomplete?query={query}");
+            return result;
+        }
     }
 }

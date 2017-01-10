@@ -24,6 +24,7 @@ namespace ITJakub.Web.Hub.Installers
             container.AddPerWebRequest<Profile, ResourceProfile>();
             container.AddPerWebRequest<Profile, SnapshotProfile>();
             container.AddPerWebRequest<Profile, UserProfile>();
+            container.AddPerWebRequest<Profile, ResponsibleTypeProfile>();
         }
     }
 }

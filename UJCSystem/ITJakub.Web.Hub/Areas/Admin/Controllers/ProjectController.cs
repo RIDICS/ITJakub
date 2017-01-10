@@ -101,11 +101,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var publishers = client.GetPublisherList();
                         var literaryKinds = client.GetLiteraryKindList();
                         var literaryGenres = client.GetLitararyGenreList();
+                        var responsibleTypes = client.GetResponsibleTypeList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllPublisherList = publishers;
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
+                        workMetadaViewModel.AllResponsibleTypeList = responsibleTypes;
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
@@ -376,6 +378,28 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(result);
             }
         }
+
+        #region Typeahead
+
+        public IActionResult GetTypeaheadOriginalAuthor(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetOriginalAuthorAutocomplete(query);
+                return Json(result);
+            }
+        }
+
+        public IActionResult GetTypeaheadResponsiblePerson(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetResponsiblePersonAutocomplete(query);
+                return Json(result);
+            }
+        }
+
+        #endregion
     }
 
     public static class ProjectMock

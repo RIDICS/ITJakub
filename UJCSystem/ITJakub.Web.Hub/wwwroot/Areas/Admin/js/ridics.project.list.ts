@@ -4,7 +4,7 @@
 });
 
 class ProjectList {
-    private projectManager: ProjectManager;
+    private projectClient: ProjectClient;
     private newProjectDialog: BootstrapDialogWrapper;
     private deleteProjectDialog: BootstrapDialogWrapper;
     private pagination: Pagination;
@@ -13,7 +13,7 @@ class ProjectList {
     private totalCount: number;
 
     constructor() {
-        this.projectManager = new ProjectManager();
+        this.projectClient = new ProjectClient();
 
         this.newProjectDialog = new BootstrapDialogWrapper({
             element: $("#new-project-dialog"),
@@ -60,7 +60,7 @@ class ProjectList {
 
     private createNewProject() {
         var projectName = $("#new-project-name").val();
-        this.projectManager.createProject(projectName, (newId, error) => {
+        this.projectClient.createProject(projectName, (newId, error) => {
             if (error != null) {
                 this.newProjectDialog.showError();
                 return;
@@ -71,7 +71,7 @@ class ProjectList {
     }
 
     private deleteProject() {
-        this.projectManager.deleteProject(this.projectIdForDelete, error => {
+        this.projectClient.deleteProject(this.projectIdForDelete, error => {
             if (error != null) {
                 this.deleteProjectDialog.showError();
                 return;

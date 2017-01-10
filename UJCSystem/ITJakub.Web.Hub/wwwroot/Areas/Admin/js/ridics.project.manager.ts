@@ -1,4 +1,4 @@
-﻿class ProjectManager {
+﻿class ProjectClient {
     private ajax(type: string, urlPath: string, data: Object|string, success: (response: any) => void, error: (status: HttpStatusCode) => void) {
         $.ajax({
             type: type,
