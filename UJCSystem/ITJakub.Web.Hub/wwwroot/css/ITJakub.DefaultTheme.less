@@ -54,15 +54,28 @@
     background: @loading-gif-path no-repeat center;
 }
 
-.loading-small-inline {
-    background: @loading-small-gif-path no-repeat center;
+.loading-small-inline,
+.loading-small-button,
+.loading-small-menu {
     width: 20px;
     display: inline-block;
+
+    &::before {
+        content: "";
+        display: inline-block;
+    }
 }
 
-.loading-small-inline::before {
-    content: "";
-    display: inline-block;
+.loading-small-inline {
+    background: @loading-small-gif-path no-repeat center;
+}
+
+.loading-small-button {
+    background: @loading-small-button-gif-path no-repeat center;
+}
+
+.loading-small-menu {
+    background: @loading-small-menu-gif-path no-repeat center;
 }
 
 .version-info {
