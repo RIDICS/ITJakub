@@ -58,6 +58,8 @@
     <Compile Include="Works\Person\CreateResponsiblePersonWork.cs" />
     <Compile Include="Works\Person\CreateResponsibleTypeWork.cs" />
     <Compile Include="Works\Category\GetCategoryListWork.cs" />
+    <Compile Include="Works\Person\GetAuthorAutocompleteWork.cs" />
+    <Compile Include="Works\Person\GetResponsiblePersonAutocompleteWork.cs" />
     <Compile Include="Works\Person\GetResponsibleTypeListWork.cs" />
     <Compile Include="Works\CreateProjectWork.cs" />
     <Compile Include="Works\GetProjectListWork.cs" />

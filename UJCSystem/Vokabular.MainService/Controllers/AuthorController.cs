@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -18,6 +19,12 @@ namespace Vokabular.MainService.Controllers
         public int CreateOriginalAuthor([FromBody] OriginalAuthorContract author)
         {
             return m_personManager.CreateOriginalAuthor(author);
+        }
+
+        [HttpGet("autocomplete")]
+        public List<OriginalAuthorContract> GetAutocomplete([FromQuery] string query)
+        {
+            return m_personManager.GetAuthorAutocomplete(query);
         }
     }
 }

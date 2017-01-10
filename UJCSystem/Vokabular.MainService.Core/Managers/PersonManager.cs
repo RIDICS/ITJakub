@@ -8,6 +8,7 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class PersonManager
     {
+        private const int AutocompleteMaxCount = 5;
         private readonly PersonRepository m_personRepository;
 
         public PersonManager(PersonRepository personRepository)
@@ -37,6 +38,18 @@ namespace Vokabular.MainService.Core.Managers
         {
             var result = new GetResponsibleTypeListWork(m_personRepository).Execute();
             return Mapper.Map<List<ResponsibleTypeContract>>(result);
+        }
+
+        public List<OriginalAuthorContract> GetAuthorAutocomplete(string query)
+        {
+            var result = new GetAuthorAutocompleteWork(m_personRepository, query, AutocompleteMaxCount).Execute();
+            return Mapper.Map<List<OriginalAuthorContract>>(result);
+        }
+
+        public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
+        {
+            var result = new GetResponsiblePersonAutocompleteWork(m_personRepository, query, AutocompleteMaxCount).Execute();
+            return Mapper.Map<List<ResponsiblePersonContract>>(result);
         }
     }
 }

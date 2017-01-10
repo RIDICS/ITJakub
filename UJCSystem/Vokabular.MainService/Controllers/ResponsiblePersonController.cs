@@ -32,5 +32,11 @@ namespace Vokabular.MainService.Controllers
         {
             return m_personManager.GetResponsibleTypeList();
         }
+
+        [HttpGet("autocomplete")]
+        public List<ResponsiblePersonContract> GetAutocomplete([FromQuery] string query)
+        {
+            return m_personManager.GetResponsiblePersonAutocomplete(query);
+        }
     }
 }
