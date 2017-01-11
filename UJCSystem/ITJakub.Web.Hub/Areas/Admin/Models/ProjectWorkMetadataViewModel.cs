@@ -17,7 +17,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public List<PublisherContract> AllPublisherList { get; set; }
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
-        public List<ResponsibleTypeContract> AllResponsibleTypeList { get; set; }
+        public List<ResponsibleTypeViewModel> AllResponsibleTypeList { get; set; }
         // TODO add property IsSelected to PublisherViewModel, Kind, Genre
 
         public string PublishPlace { get; set; }
@@ -39,7 +39,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
             }
         }
 
-        public ResponsibleTypeEnumViewModel ResponsibleTypeEmpty { get; set; }
+        public ResponsibleTypeEnumViewModel ResponsibleTypeEnumEmpty { get; set; }
     }
 
     public class ProjectWorkLiteraryOriginalViewModel

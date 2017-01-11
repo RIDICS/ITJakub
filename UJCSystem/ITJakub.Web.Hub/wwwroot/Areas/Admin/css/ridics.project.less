@@ -90,6 +90,13 @@
         overflow-y: auto;
     }
 
+    .modal .tab-content {
+        height: auto;
+        overflow: initial;
+        border-width: 0;
+        padding: 1rem 0;
+    }
+
     table {
         width: 100%;
     }
@@ -129,6 +136,7 @@
 
 .project-layout-box {
     padding: 0.2rem 1rem 0.5rem 1rem;
+    margin-left: 0.5rem;
     float: left;
     width: 500px;
 
@@ -381,5 +389,19 @@ table {
     .checkbox {
         margin-top: 0;
         margin-bottom: 0;
+    }
+}
+
+.editor-item,
+.author-item {
+    button {
+        float: right;
+    }
+
+    &::after {
+        display: block;
+        clear: both;
+        content: '';
+        margin-bottom: 2px;
     }
 }

@@ -55,7 +55,7 @@
 
     getConfiguration(): IProjectMetadataTabConfiguration {
         return {
-            $panel: $("#project-work-metadata"),
+            $panel: $("#work-metadata-container"),
             $viewButtonPanel: $("#work-metadata-view-button-panel"),
             $editorButtonPanel: $("#work-metadata-editor-button-panel")
         };
@@ -63,6 +63,9 @@
 
     initTab(): void {
         super.initTab();
+
+        var $addResponsibleTypeButton = $("#add-responsible-type-button");
+        var $addResponsibleTypeContainer = $("#add-responsible-type-container");
 
         $("#work-metadata-edit-button").click(() => {
             this.enabledEdit();
@@ -89,6 +92,8 @@
         });
 
         $("#add-editor-button").click(() => {
+            $addResponsibleTypeButton.prop("disabled", false);
+            $addResponsibleTypeContainer.hide();
             this.addEditorDialog.show();
         });
 
@@ -120,6 +125,11 @@
                 $lastName.val("");
                 this.selectedResponsiblePersonId = null;
             }
+        });
+
+        $addResponsibleTypeButton.click(() => {
+            $addResponsibleTypeButton.prop("disabled", true);
+            $addResponsibleTypeContainer.show();
         });
     }
 
@@ -318,4 +328,31 @@ class ProjectWorkHistoryTab extends ProjectModuleTabBase {
     }
 
     initTab() { }
+}
+
+class MetadataUiHelper {
+    public static addPerson($container: JQuery, label: string, idValue: string | number): HTMLDivElement {
+        var rootElement = document.createElement("div");
+        var deleteButton = document.createElement("button");
+        var deleteGlyphSpan = document.createElement("span");
+        var labelSpan = document.createElement("span");
+
+        $(deleteButton)
+            .addClass("btn")
+            .addClass("btn-default")
+            .attr("data-id", idValue)
+            .append(deleteGlyphSpan);
+        $(deleteGlyphSpan)
+            .addClass("glyphicon")
+            .addClass("glyphicon-remove");
+        $(labelSpan)
+            .addClass("text-as-form-control")
+            .text(label);
+        $(rootElement)
+            .append(deleteButton)
+            .append(labelSpan)
+            .appendTo($container);
+
+        return rootElement;
+    }
 }

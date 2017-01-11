@@ -555,27 +555,31 @@ abstract class ProjectMetadataTabBase extends ProjectModuleTabBase {
     public abstract getConfiguration(): IProjectMetadataTabConfiguration;
 
     initTab() {
-        //this.disableEdit();
+        this.disableEdit();
     }
 
     protected enabledEdit() {
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
+        var $selects = $("select", config.$panel);
+        var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.hide();
         config.$editorButtonPanel.show();
-        $inputs.removeClass("input-as-text")
-            .prop("disabled", false);
+        $inputs.add($selects).prop("disabled", false);
+        $buttons.show();
     }
 
     protected disableEdit() {
         var config = this.getConfiguration();
         var $inputs = $("input", config.$panel);
+        var $selects = $("select", config.$panel);
+        var $buttons = $("button", config.$panel);
 
         config.$viewButtonPanel.show();
         config.$editorButtonPanel.hide();
-        $inputs.addClass("input-as-text")
-            .prop("disabled", true);
+        $inputs.add($selects).prop("disabled", true);
+        $buttons.hide();
     }
 }
 

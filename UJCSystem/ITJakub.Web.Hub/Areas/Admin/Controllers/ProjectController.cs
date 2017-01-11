@@ -107,7 +107,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         workMetadaViewModel.AllPublisherList = publishers;
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
-                        workMetadaViewModel.AllResponsibleTypeList = responsibleTypes;
+                        workMetadaViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
