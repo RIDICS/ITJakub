@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
@@ -50,7 +51,12 @@ namespace Vokabular.MainService.Core.Managers
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId)
         {
-            throw new System.NotImplementedException();
+            var result = new GetLatestProjectMetadataWork(m_metadataRepository, projectId).Execute();
+            var resultContract = result != null
+                ? Mapper.Map<ProjectMetadataResultContract>(result)
+                : new ProjectMetadataResultContract {Publisher = new PublisherContract()};
+
+            return resultContract;
         }
 
         public long CreateNewProjectMetadataVersion()

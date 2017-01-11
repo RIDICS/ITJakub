@@ -14,8 +14,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Copyright { get; set; }
         public string BiblText { get; set; }
         public string OriginDate { get; set; }
-        public DateTime NotBefore { get; set; }
-        public DateTime NotAfter { get; set; }
+        public DateTime? NotBefore { get; set; }
+        public DateTime? NotAfter { get; set; }
 
         public string ManuscriptIdno { get; set; }
         public string ManuscriptSettlement { get; set; }
@@ -23,7 +23,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
 
-        public DateTime LastModification { get; set; }
+        public DateTime? LastModification { get; set; }
     }
 
     public class ProjectMetadataResultContract : ProjectMetadataContract

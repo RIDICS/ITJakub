@@ -42,6 +42,7 @@
     <Compile Include="AutoMapperProfiles\CategoryProfile.cs" />
     <Compile Include="AutoMapperProfiles\LiteraryGenreProfile.cs" />
     <Compile Include="AutoMapperProfiles\LiteraryKindProfile.cs" />
+    <Compile Include="AutoMapperProfiles\MetadataProfile.cs" />
     <Compile Include="AutoMapperProfiles\OriginalAuthorProfile.cs" />
     <Compile Include="AutoMapperProfiles\ProjectProfile.cs" />
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Works\ProjectMetadata\CreateLiteraryGenreWork.cs" />
     <Compile Include="Works\ProjectMetadata\CreateLiteraryKindWork.cs" />
     <Compile Include="Works\ProjectMetadata\CreatePublisherWork.cs" />
+    <Compile Include="Works\ProjectMetadata\GetLatestProjectMetadataWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetLiteraryGenreListWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetLiteraryKindListWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetPublisherListWork.cs" />

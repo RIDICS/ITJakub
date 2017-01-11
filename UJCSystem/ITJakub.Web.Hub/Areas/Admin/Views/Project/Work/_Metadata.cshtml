@@ -55,6 +55,7 @@
                             <label class="col-md-4 control-label" for="work-metadata-publisher">Nakladatel</label>
                             <div class="col-md-6">
                                 <select id="work-metadata-publisher" class="form-control">
+                                    <option disabled selected value="" class="hidden"></option>
                                     @foreach (var publisher in Model.AllPublisherList)
                                     {
                                         <option value="@publisher.Id" @(publisher.Id == Model.PublisherId ? "selected" : null)>@publisher.Text</option>
