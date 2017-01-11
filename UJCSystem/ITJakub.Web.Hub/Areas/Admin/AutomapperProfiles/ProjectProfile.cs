@@ -20,18 +20,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
                 .ForMember(dest => dest.PublisherText, opt => opt.MapFrom(src => src.PublisherText));
 
             CreateMap<ProjectMetadataContract, ProjectWorkMetadataViewModel>()
-                .ForMember(dest => dest.Editor, opt => opt.MapFrom(src => src.Editor))
                 .ForMember(dest => dest.LastModification, opt => opt.MapFrom(src => src.LastModification.ToLocalTime()))
                 .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))
                 .ForMember(dest => dest.SourceAbbreviation, opt => opt.MapFrom(src => src.SourceAbbreviation))
-                .ForMember(dest => dest.LiteraryOriginal, opt => opt.MapFrom(src => src.LiteraryOriginal));
-
-            CreateMap<ProjectLiteraryOriginalContract, ProjectWorkLiteraryOriginalViewModel>()
-                .ForMember(dest => dest.Settlement, opt => opt.MapFrom(src => src.City))
-                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
-                .ForMember(dest => dest.Extent, opt => opt.MapFrom(src => src.Extent))
-                .ForMember(dest => dest.Repository, opt => opt.MapFrom(src => src.Institution))
-                .ForMember(dest => dest.Idno, opt => opt.MapFrom(src => src.Signature));
+                .ForMember(dest => dest.ManuscriptSettlement, opt => opt.MapFrom(src => src.ManuscriptSettlement))
+                .ForMember(dest => dest.ManuscriptCountry, opt => opt.MapFrom(src => src.ManuscriptCountry))
+                .ForMember(dest => dest.ManuscriptExtent, opt => opt.MapFrom(src => src.ManuscriptExtent))
+                .ForMember(dest => dest.ManuscriptRepository, opt => opt.MapFrom(src => src.ManuscriptRepository))
+                .ForMember(dest => dest.ManuscriptIdno, opt => opt.MapFrom(src => src.ManuscriptIdno));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -15,10 +14,12 @@ namespace Vokabular.MainService.Controllers
         private const int DefaultProjectItemCount = 5;
 
         private readonly ProjectManager m_projectManager;
+        private readonly ProjectMetadataManager m_projectMetadataManager;
 
-        public ProjectController(ProjectManager projectManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager)
         {
             m_projectManager = projectManager;
+            m_projectMetadataManager = projectMetadataManager;
         }
 
         [HttpGet]
@@ -54,52 +55,19 @@ namespace Vokabular.MainService.Controllers
         [HttpDelete("{projectId}")]
         public void DeleteProject(long projectId)
         {
+            throw new System.NotImplementedException();
         }
 
         [HttpGet("{projectId}/metadata")]
-        public ProjectMetadataContract GetProjectMetadata(long projectId)
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId)
         {
-            return MockDataProject.GetProjectMetadata();
+            return m_projectMetadataManager.GetProjectMetadata(projectId);
         }
-    }
 
-    public class MockDataProject
-    {
-        //public static ProjectContract GetProjectContract(long id)
-        //{
-        //    return new ProjectContract
-        //    {
-        //        Id = id,
-        //        CreateDate = DateTime.Now.AddDays(-1),
-        //        CreateUser = "Jan Novák",
-        //        LastEditDate = DateTime.Now,
-        //        LastEditUser = "Jan Novák",
-        //        LiteraryOriginalText = "Praha, Národní knihovna České republiky, konec 14. století",
-        //        Name = "Andělíku rozkochaný",
-        //        PublisherText = "Praha, 2009–2015, oddělení vývoje jazyka Ústavu pro jazyk český AV ČR, v. v. i.",
-        //        PageCount = 1
-        //    };
-        //}
-
-        public static ProjectMetadataContract GetProjectMetadata()
+        [HttpPost("{projectId}/metadata")]
+        public long CreateNewProjectMetadataVersion(long projectId, [FromBody] ProjectMetadataContract metadata)
         {
-            return new ProjectMetadataContract
-            {
-                Editor = "Jan Novák",
-                LastModification = DateTime.Now,
-                LiteraryGenre = "xxxxxxx",
-                LiteraryKind = "xxxxxxx",
-                LiteraryOriginal = new ProjectLiteraryOriginalContract
-                {
-                    City = "Praha",
-                    Country = "Česká republika",
-                    Institution = "Knihovna národního muzea",
-                    Signature = "sign.: III E48",
-                    Extent = "148f"
-                },
-                RelicAbbreviation = "xxxxxxx",
-                SourceAbbreviation = "xxxxxxx"
-            };
+            return m_projectMetadataManager.CreateNewProjectMetadataVersion();
         }
     }
 }

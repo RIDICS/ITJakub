@@ -4,21 +4,30 @@ namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class ProjectMetadataContract
     {
-        public string Editor { get; set; }
-        public ProjectLiteraryOriginalContract LiteraryOriginal { get; set; }
+        public string Title { get; set; }
+        public string SubTitle { get; set; }
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
-        public string LiteraryKind { get; set; }
-        public string LiteraryGenre { get; set; }
+        public int PublisherId { get; set; }
+        public string PublishPlace { get; set; }
+        public string PublishDate { get; set; }
+        public string Copyright { get; set; }
+        public string BiblText { get; set; }
+        public string OriginDate { get; set; }
+        public DateTime NotBefore { get; set; }
+        public DateTime NotAfter { get; set; }
+
+        public string ManuscriptIdno { get; set; }
+        public string ManuscriptSettlement { get; set; }
+        public string ManuscriptCountry { get; set; }
+        public string ManuscriptRepository { get; set; }
+        public string ManuscriptExtent { get; set; }
+
         public DateTime LastModification { get; set; }
     }
 
-    public class ProjectLiteraryOriginalContract
+    public class ProjectMetadataResultContract : ProjectMetadataContract
     {
-        public string Country { get; set; }
-        public string City { get; set; }
-        public string Institution { get; set; }
-        public string Signature { get; set; }
-        public string Extent { get; set; }
+        public PublisherContract Publisher { get; set; }
     }
 }

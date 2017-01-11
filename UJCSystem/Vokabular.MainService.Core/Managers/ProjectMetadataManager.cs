@@ -46,6 +46,16 @@ namespace Vokabular.MainService.Core.Managers
         {
             var result = new GetLiteraryGenreListWork(m_metadataRepository).Execute();
             return Mapper.Map<List<LiteraryGenreContract>>(result);
-        }        
+        }
+
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public long CreateNewProjectMetadataVersion()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

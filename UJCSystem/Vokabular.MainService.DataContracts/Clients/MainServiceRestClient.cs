@@ -50,10 +50,16 @@ namespace Vokabular.MainService.DataContracts.Clients
             Delete($"project/{projectId}");
         }
 
-        public ProjectMetadataContract GetProjectMetadata(long projectId)
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId)
         {
-            var metadata = Get<ProjectMetadataContract>($"project/{projectId}/metadata");
+            var metadata = Get<ProjectMetadataResultContract>($"project/{projectId}/metadata");
             return metadata;
+        }
+
+        public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract metadata)
+        {
+            var newResourceVersion = Post<long>($"project/{projectId}/metadata", metadata);
+            return newResourceVersion;
         }
 
         public void UploadResource(string sessionId, Stream data)

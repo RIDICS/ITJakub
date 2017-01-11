@@ -14,19 +14,19 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-name">Název projektu</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-name" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-name" class="form-control" value="NULL" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-title">Titul</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-title" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-title" class="form-control" value="@Model.Title" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-subtitle">Podtitul</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-subtitle" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-subtitle" class="form-control" value="@Model.Subtitle" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -57,7 +57,7 @@
                                 <select id="work-metadata-publisher" class="form-control">
                                     @foreach (var publisher in Model.AllPublisherList)
                                     {
-                                        <option value="@publisher.Id">@publisher.Text</option>
+                                        <option value="@publisher.Id" @(publisher.Id == Model.PublisherId ? "selected" : null)>@publisher.Text</option>
                                     }
                                 </select>
                             </div>
@@ -68,15 +68,27 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-4 control-label" for="work-metadata-publish-place">Místo publikace</label>
+                            <div class="col-md-7">
+                                <input type="text" id="work-metadata-publish-place" class="form-control" value="@Model.PublishPlace" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="work-metadata-publish-date">Rok/roky publikace</label>
+                            <div class="col-md-7">
+                                <input type="text" id="work-metadata-publish-date" class="form-control" value="@Model.PublishDate" />
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-bibl-text">Bibliografie</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-bibl-text" class="form-control" value="@Model.BiblText" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-copyright">Copyright</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-copyright" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-copyright" class="form-control" value="@Model.Copyright" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -85,11 +97,11 @@
                                 <div id="work-metadata-editors">
                                     <div class="editor-item">
                                         <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">@Model.Editor</span>
+                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
                                     </div>
                                     <div class="editor-item">
                                         <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">@Model.Editor</span>
+                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
                                     </div>
                                 </div>
                                 
@@ -116,31 +128,31 @@
                             <div class="form-group">
                                 <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-country">Země</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.LiteraryOriginal.Country" />
+                                    <input type="text" id="work-metadata-original-country" class="form-control" value="@Model.ManuscriptCountry" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-city">Město</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.LiteraryOriginal.Settlement" />
+                                    <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.ManuscriptSettlement" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-institution">Instituce</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.LiteraryOriginal.Repository" />
+                                    <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.ManuscriptRepository" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-signature">Signatura</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.LiteraryOriginal.Idno" />
+                                    <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.ManuscriptIdno" />
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-extent">Rozsah</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.LiteraryOriginal.Extent" />
+                                    <input type="text" id="work-metadata-original-extent" class="form-control" value="@Model.ManuscriptExtent" />
                                 </div>
                             </div>
                         </div>
@@ -150,28 +162,34 @@
                                 <div id="work-metadata-authors">
                                     <div class="author-item">
                                         <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">@Model.Editor</span>
+                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
                                     </div>
                                     <div class="author-item">
                                         <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">@Model.Editor</span>
+                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
                                     </div>
                                 </div>
 
                                 <button class="btn btn-default" id="add-author-button">Přidat</button>
                             </div>
                         </div>
-
+                        
+                        <div class="form-group">
+                            <label class="col-md-4 control-label" for="work-metadata-origin-date">Vydáno (slovní popis)</label>
+                            <div class="col-md-7">
+                                <input type="text" id="work-metadata-origin-date" class="form-control" value="@Model.OriginDate" />
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-not-before">Nevydáno před rokem</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-not-before" class="form-control" value="@Model.NotBefore" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-not-after">Nevydáno po roce</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-not-after" class="form-control" value="@Model.NotAfter" />
                             </div>
                         </div>
                     </div>
@@ -187,7 +205,7 @@
                         <div class="form-group">
                             <label class="col-md-4 control-label" for="work-metadata-category">Kategorie</label>
                             <div class="col-md-7">
-                                <input type="text" id="work-metadata-category" class="form-control" value="@Model.Editor" />
+                                <input type="text" id="work-metadata-category" class="form-control" value="TODO kategorie" />
                             </div>
                         </div>
                         <div class="form-group">
