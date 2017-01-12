@@ -14,5 +14,10 @@
       <many-to-many class="ResponsibleType" column="Type" />
     </bag>
 
+    <bag name="Projects" table="Project_ResponsiblePerson" inverse="true" lazy="true">
+      <key column="Responsible" />
+      <many-to-many class="Project" column="Project" />
+    </bag>
+    
   </class>
 </hibernate-mapping>

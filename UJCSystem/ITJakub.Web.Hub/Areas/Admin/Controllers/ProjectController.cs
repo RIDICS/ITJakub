@@ -106,7 +106,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         var literaryKinds = client.GetLiteraryKindList();
                         var literaryGenres = client.GetLitararyGenreList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value);
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllPublisherList = publishers;
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;

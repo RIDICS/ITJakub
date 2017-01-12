@@ -15,6 +15,16 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<Resource> Resources { get; set; }
 
+        public virtual IList<OriginalAuthor> Authors { get; set; }
+
+        public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
+
+        public virtual IList<LiteraryKind> LiteraryKinds { get; set; }
+
+        public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
+
+        public virtual IList<Category> Categories { get; set; }
+
         public virtual bool Equals(Project other)
         {
             if (ReferenceEquals(null, other)) return false;

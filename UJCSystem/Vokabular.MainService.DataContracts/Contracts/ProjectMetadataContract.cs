@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
@@ -29,5 +30,9 @@ namespace Vokabular.MainService.DataContracts.Contracts
     public class ProjectMetadataResultContract : ProjectMetadataContract
     {
         public PublisherContract Publisher { get; set; }
+        public IList<LiteraryGenreContract> LiteraryGenreList { get; set; }
+        public IList<LiteraryKindContract> LiteraryKindList { get; set; }
+        public IList<OriginalAuthorContract> AuthorList { get; set; }
+        public IList<ResponsiblePersonContract> ResponsiblePersonList { get; set; }
     }
 }

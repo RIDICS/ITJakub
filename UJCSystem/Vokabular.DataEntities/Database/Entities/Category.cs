@@ -19,6 +19,8 @@ namespace Vokabular.DataEntities.Database.Entities {
 
         public virtual IList<Category> Categories { get; set; }
 
+        public virtual IList<Project> Projects { get; set; }
+
         //public virtual IList<FavoriteCategory> FavoriteItems { get; set; }
 
         public virtual bool Equals(Category other)

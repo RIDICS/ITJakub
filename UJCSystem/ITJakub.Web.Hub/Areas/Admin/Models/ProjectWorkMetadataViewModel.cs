@@ -17,7 +17,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
         public List<ResponsibleTypeViewModel> AllResponsibleTypeList { get; set; }
-        // TODO add property IsSelected to PublisherViewModel, Kind, Genre
+        
+        public HashSet<int> SelectedLiteraryKindIds { get; set; }
+        public HashSet<int> SelectedLiteraryGenreIds { get; set; }
+        public List<OriginalAuthorContract> Authors { get; set; }
+        public List<ResponsiblePersonContract> ResponsiblePersons { get; set; }
 
         public int PublisherId { get; set; }
         public string PublishPlace { get; set; }

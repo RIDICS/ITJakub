@@ -54,6 +54,7 @@
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\ProjectMetadataManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Parameter\GetProjectMetadataParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Works\Person\CreateOriginalAuthorWork.cs" />
     <Compile Include="Works\Person\CreateResponsiblePersonWork.cs" />

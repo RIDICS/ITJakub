@@ -13,6 +13,6 @@ namespace Vokabular.MainService.DataContracts.ServiceContracts
 
         void DeleteProject(long projectId);
 
-        ProjectMetadataResultContract GetProjectMetadata(long projectId);
+        ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor, bool includeResponsiblePerson, bool includeKind, bool includeGenre);
     }
 }

@@ -50,9 +50,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             Delete($"project/{projectId}");
         }
 
-        public ProjectMetadataResultContract GetProjectMetadata(long projectId)
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor, bool includeResponsiblePerson, bool includeKind, bool includeGenre)
         {
-            var metadata = Get<ProjectMetadataResultContract>($"project/{projectId}/metadata");
+            var metadata =
+                Get<ProjectMetadataResultContract>(
+                    $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}");
             return metadata;
         }
 

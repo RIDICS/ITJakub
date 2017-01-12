@@ -8,6 +8,11 @@
     <property name="FirstName" not-null="true" />
     
     <property name="LastName" not-null="true" />
-    
+
+    <bag name="Projects" table="Project_OriginalAuthor" inverse="true" lazy="true">
+      <key column="Author" />
+      <many-to-many class="Project" column="Project" />
+    </bag>
+
   </class>
 </hibernate-mapping>

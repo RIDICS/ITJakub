@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Headers;
 using Vokabular.MainService.DataContracts.ServiceContracts;
@@ -59,9 +60,17 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}/metadata")]
-        public ProjectMetadataResultContract GetProjectMetadata(long projectId)
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
+            [FromQuery] bool includeKind, [FromQuery] bool includeGenre)
         {
-            return m_projectMetadataManager.GetProjectMetadata(projectId);
+            var parameters = new GetProjectMetadataParameter
+            {
+                IncludeKind = includeKind,
+                IncludeGenre = includeGenre,
+                IncludeResponsiblePerson = includeResponsiblePerson,
+                IncludeAuthor = includeAuthor
+            };
+            return m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
         }
 
         [HttpPost("{projectId}/metadata")]

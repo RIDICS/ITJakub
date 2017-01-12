@@ -21,6 +21,11 @@
       <one-to-many class="Category" />
     </bag>
 
+    <bag name="Projects" table="Project_Category" inverse="true" lazy="true">
+      <key column="Category" />
+      <many-to-many class="Project" column="Project" />
+    </bag>
+
     <!--<bag name="FavoriteItems" inverse="true" cascade="none" lazy="true">
       <key column="Category" />
       <one-to-many class="FavoriteCategory" />
