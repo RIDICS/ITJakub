@@ -10,10 +10,12 @@ namespace Vokabular.MainService.Core.Managers
     public class ProjectMetadataManager
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly UserManager m_userManager;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository)
+        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager)
         {
             m_metadataRepository = metadataRepository;
+            m_userManager = userManager;
         }
 
         public int CreatePublisher(PublisherContract data)
@@ -59,9 +61,10 @@ namespace Vokabular.MainService.Core.Managers
             return resultContract;
         }
 
-        public long CreateNewProjectMetadataVersion()
+        public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract data)
         {
-            throw new System.NotImplementedException();
+            var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_userManager.GetCurrentUserId()).Execute();
+            return resultId;
         }
     }
 }

@@ -133,21 +133,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-city">Město</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-settlement">Město</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-city" class="form-control" value="@Model.ManuscriptSettlement" />
+                                    <input type="text" id="work-metadata-original-settlement" class="form-control" value="@Model.ManuscriptSettlement" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-institution">Instituce</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-repository">Instituce</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-institution" class="form-control" value="@Model.ManuscriptRepository" />
+                                    <input type="text" id="work-metadata-original-repository" class="form-control" value="@Model.ManuscriptRepository" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-signature">Signatura</label>
+                                <label class="col-md-offset-1 col-md-3 control-label" for="work-metadata-original-idno">Signatura</label>
                                 <div class="col-md-7">
-                                    <input type="text" id="work-metadata-original-signature" class="form-control" value="@Model.ManuscriptIdno" />
+                                    <input type="text" id="work-metadata-original-idno" class="form-control" value="@Model.ManuscriptIdno" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -269,8 +269,10 @@
                 <button class="btn btn-default" id="work-metadata-edit-button">Upravit</button>
             </div>
             <div id="work-metadata-editor-button-panel">
+                <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
+                <div class="alert alert-danger" id="work-metadata-save-error">Chyba při ukládání metadat</div>
                 <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
-                <button class="btn btn-default" id="work-metadata-save-button">Uložit</button>
+                <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
             </div>
         </div>
     </div>

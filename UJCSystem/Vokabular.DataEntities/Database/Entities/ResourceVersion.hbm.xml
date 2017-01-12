@@ -13,7 +13,7 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
-    <many-to-one name="Resource" class="Resource" lazy="proxy" not-null="true" />
+    <many-to-one name="Resource" class="Resource" lazy="proxy" not-null="true" cascade="save-update" />
     
     <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
 
@@ -50,8 +50,8 @@
       <property name="Copyright" />
       <property name="BiblText" />
       <property name="OriginDate" />
-      <property name="NotBefore" />
-      <property name="NotAfter" />
+      <property name="NotBefore" type="DateTime2" />
+      <property name="NotAfter" type="DateTime2" />
       <property name="ManuscriptIdno" />
       <property name="ManuscriptSettlement" />
       <property name="ManuscriptCountry" />

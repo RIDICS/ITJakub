@@ -67,7 +67,7 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("{projectId}/metadata")]
         public long CreateNewProjectMetadataVersion(long projectId, [FromBody] ProjectMetadataContract metadata)
         {
-            return m_projectMetadataManager.CreateNewProjectMetadataVersion();
+            return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
     }
 }

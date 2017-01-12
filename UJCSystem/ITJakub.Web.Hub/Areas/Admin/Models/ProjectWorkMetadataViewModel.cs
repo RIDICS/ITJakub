@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+using ITJakub.Web.Hub.Helpers;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
@@ -39,7 +40,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
         {
             get
             {
-                return $"{ManuscriptCountry}, {ManuscriptSettlement}, {ManuscriptRepository}, {ManuscriptIdno}, {ManuscriptExtent}";
+                return LiteraryOriginalTextConverter.GetLiteraryOriginalText(ManuscriptCountry, ManuscriptSettlement, ManuscriptRepository, ManuscriptIdno,
+                    ManuscriptExtent);
             }
         }
 

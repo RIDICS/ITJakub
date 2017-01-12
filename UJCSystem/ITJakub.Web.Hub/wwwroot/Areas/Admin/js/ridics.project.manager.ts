@@ -112,4 +112,8 @@
         }
         this.postAjax("Admin/Project/CreateAuthor", data, callback);
     }
+
+    public saveMetadata(projectId: number, data: IMetadataResource, callback: (resultData: IMetadataSaveResult, errorCode: HttpStatusCode) => void) {
+        this.postAjax(`Admin/Project/SaveMetadata?projectId=${projectId}`, data, callback);
+    }
 }

@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
 {
-    public class ProjectMetadataContract
+    public class SaveMetadataRequest
     {
         public string Title { get; set; }
         public string SubTitle { get; set; }
@@ -14,20 +12,13 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string Copyright { get; set; }
         public string BiblText { get; set; }
         public string OriginDate { get; set; }
-        public DateTime? NotBefore { get; set; }
-        public DateTime? NotAfter { get; set; }
+        public int? NotBefore { get; set; }
+        public int? NotAfter { get; set; }
 
         public string ManuscriptIdno { get; set; }
         public string ManuscriptSettlement { get; set; }
         public string ManuscriptCountry { get; set; }
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
-
-        public DateTime? LastModification { get; set; }
-    }
-
-    public class ProjectMetadataResultContract : ProjectMetadataContract
-    {
-        public PublisherContract Publisher { get; set; }
     }
 }

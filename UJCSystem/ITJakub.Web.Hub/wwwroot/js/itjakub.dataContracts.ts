@@ -100,6 +100,33 @@ interface IResponsiblePerson {
     lastName: string;
 }
 
+interface IMetadataResource {
+    title: string;
+    subTitle: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    publisherId: number;
+    publishPlace: string;
+    publishDate: string;
+    copyright: string;
+    biblText: string;
+    originDate: string;
+    notBefore: string;
+    notAfter: string;
+    manuscriptIdno: string;
+    manuscriptSettlement: string;
+    manuscriptCountry: string;
+    manuscriptRepository: string;
+    manuscriptExtent: string;
+    lastModification?: string;
+}
+
+interface IMetadataSaveResult {
+    newResourceVersionId: number;
+    literaryOriginalText: string;
+    lastModificationText: string;
+}
+
 enum FavoriteType {
     Unknown = 0,
     Book = 1,

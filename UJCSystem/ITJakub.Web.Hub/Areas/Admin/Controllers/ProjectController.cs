@@ -1,9 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
+using ITJakub.Web.Hub.Areas.Admin.Models.Response;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
+using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -376,6 +380,50 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var result = client.GetResponsibleTypeList();
                 return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SaveMetadata([FromQuery] long projectId, [FromBody] SaveMetadataRequest request)
+        {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+
+            using (var client = GetRestClient())
+            {
+                var contract = new ProjectMetadataContract
+                {
+                    BiblText = request.BiblText,
+                    Copyright = request.Copyright,
+                    ManuscriptCountry = request.ManuscriptCountry,
+                    ManuscriptExtent = request.ManuscriptExtent,
+                    ManuscriptIdno = request.ManuscriptIdno,
+                    ManuscriptRepository = request.ManuscriptRepository,
+                    ManuscriptSettlement = request.ManuscriptSettlement,
+                    NotAfter = request.NotAfter != null ? (DateTime?)new DateTime(request.NotAfter.Value, 1, 1) : null,
+                    NotBefore = request.NotBefore != null ? (DateTime?)new DateTime(request.NotBefore.Value, 1, 1) : null,
+                    OriginDate = request.OriginDate,
+                    PublishDate = request.PublishDate,
+                    PublishPlace = request.PublishPlace,
+                    PublisherId = request.PublisherId,
+                    RelicAbbreviation = request.RelicAbbreviation,
+                    SourceAbbreviation = request.SourceAbbreviation,
+                    SubTitle = request.SubTitle,
+                    Title = request.Title
+                };
+                var newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
+
+                var response = new SaveMetadataResponse
+                {
+                    NewResourceVersionId = newResourceVersionId,
+                    LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
+                    LiteraryOriginalText =
+                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry, request.ManuscriptSettlement,
+                            request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent)
+                };
+                return Json(response);
             }
         }
 

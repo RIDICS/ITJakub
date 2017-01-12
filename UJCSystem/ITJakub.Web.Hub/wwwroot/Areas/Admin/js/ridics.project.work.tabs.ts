@@ -71,7 +71,7 @@
             this.enabledEdit();
         });
 
-        $("#work-metadata-cancel-button, #work-metadata-save-button").click(() => {
+        $("#work-metadata-cancel-button").click(() => {
             this.disableEdit();
         });
 
@@ -131,6 +131,14 @@
             $addResponsibleTypeButton.prop("disabled", true);
             $addResponsibleTypeContainer.show();
         });
+
+        var $saveButton = $("#work-metadata-save-button");
+        $saveButton.click(() => {
+            this.saveMetadata();
+        });
+        $(".saving-icon", $saveButton).hide();
+
+        $("#work-metadata-save-error, #work-metadata-save-success").hide();
     }
 
     private createNewPublisher() {
@@ -200,6 +208,53 @@
 
     private addEditor() {
         throw Error("Not implemented");
+    }
+
+    private saveMetadata() {
+        //TODO save M:N entities (and check if were changed)
+
+        var data: IMetadataResource = {
+            biblText: $("#work-metadata-bibl-text").val(),
+            copyright: $("#work-metadata-copyright").val(),
+            manuscriptCountry: $("#work-metadata-original-country").val(),
+            manuscriptExtent: $("#work-metadata-original-extent").val(),
+            manuscriptIdno: $("#work-metadata-original-idno").val(),
+            manuscriptRepository: $("#work-metadata-original-repository").val(),
+            manuscriptSettlement: $("#work-metadata-original-settlement").val(),
+            notAfter: $("#work-metadata-not-after").val(),
+            notBefore: $("#work-metadata-not-before").val(),
+            originDate: $("#work-metadata-origin-date").val(),
+            publishDate: $("#work-metadata-publish-date").val(),
+            publishPlace: $("#work-metadata-publish-place").val(),
+            publisherId: $("#work-metadata-publisher").val(),
+            relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
+            sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
+            subTitle: $("#work-metadata-subtitle").val(),
+            title: $("#work-metadata-title").val()
+        };
+
+        var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
+        var $buttons = $("#work-metadata-editor-button-panel button");
+        var $successAlert = $("#work-metadata-save-success");
+        var $errorAlert = $("#work-metadata-save-error");
+        $loadingGlyph.show();
+        $buttons.prop("disabled", true);
+        $successAlert.finish().hide();
+        $errorAlert.hide();
+
+        this.projectClient.saveMetadata(this.projectId, data, (resultData, errorCode) => {
+            $loadingGlyph.hide();
+            $buttons.prop("disabled", false);
+
+            if (errorCode != null) {
+                $errorAlert.show();
+                return;
+            }
+
+            $successAlert.show().delay(3000).fadeOut(2000);
+            $("#work-metadata-last-modification").text(resultData.lastModificationText);
+            $("#work-metadata-literary-original").text(resultData.literaryOriginalText);
+        });
     }
 }
 

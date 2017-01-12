@@ -52,8 +52,8 @@ namespace Vokabular.DataEntities.Database.Entities
 	   public virtual string Copyright { get; set; }
 	   public virtual string BiblText { get; set; }
 	   public virtual string OriginDate { get; set; }
-	   public virtual DateTime NotBefore { get; set; }
-       public virtual DateTime NotAfter { get; set; }
+	   public virtual DateTime? NotBefore { get; set; }
+       public virtual DateTime? NotAfter { get; set; }
        public virtual string ManuscriptIdno { get; set; }
 	   public virtual string ManuscriptSettlement { get; set; }
 	   public virtual string ManuscriptCountry { get; set; }

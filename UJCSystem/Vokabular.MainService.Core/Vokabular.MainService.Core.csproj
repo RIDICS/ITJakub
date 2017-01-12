@@ -68,6 +68,7 @@
     <Compile Include="Works\Category\CreateCategoryWork.cs" />
     <Compile Include="Works\ProjectMetadata\CreateLiteraryGenreWork.cs" />
     <Compile Include="Works\ProjectMetadata\CreateLiteraryKindWork.cs" />
+    <Compile Include="Works\ProjectMetadata\CreateNewMetadataVersionWork.cs" />
     <Compile Include="Works\ProjectMetadata\CreatePublisherWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetLatestProjectMetadataWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetLiteraryGenreListWork.cs" />
