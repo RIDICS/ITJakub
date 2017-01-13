@@ -26,7 +26,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         {
             var now = DateTime.UtcNow;
 
-            var latestMetadataResource = m_metadataRepository.GetLatestMetadataResource(m_projectId);
+            var latestMetadataResource = m_metadataRepository.GetLatestMetadataResource(m_projectId, false);
             var userEntity = m_metadataRepository.Load<User>(m_userId);
             var publisherEntity = m_data.PublisherId != null ? m_metadataRepository.Load<Publisher>(m_data.PublisherId) : null;
             Resource resource;

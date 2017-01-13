@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Net.Http;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
@@ -10,6 +11,7 @@ using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Helpers;
 using ITJakub.Web.Hub.Managers;
 using ITJakub.Web.Hub.Models.Requests;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -346,7 +348,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
+        public IActionResult CreateResponsibleType([FromBody] ResponsibleTypeContract request)
         {
             using (var client = GetRestClient())
             {
@@ -356,7 +358,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCategory(CategoryContract request)
+        public IActionResult CreateCategory([FromBody] CategoryContract request)
         {
             using (var client = GetRestClient())
             {
@@ -413,7 +415,58 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     SubTitle = request.SubTitle,
                     Title = request.Title
                 };
-                var newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
+                long newResourceVersionId = -1;
+                int unsuccessRequestCount = 0;
+
+                try
+                {
+                    newResourceVersionId = client.CreateNewProjectMetadataVersion(projectId, contract);
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
+                    client.SetProjectAuthors(projectId, new IntegerIdListContract {IdList = request.AuthorIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
+                    client.SetProjectResponsiblePersons(projectId, new IntegerIdListContract {IdList = request.ResponsiblePersonIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
+                    client.SetProjectLiteraryKinds(projectId, new IntegerIdListContract {IdList = request.LiteraryKindIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                try
+                {
+                    client.SetProjectLiteraryGenres(projectId, new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+                }
+                catch (HttpRequestException)
+                {
+                    unsuccessRequestCount++;
+                }
+
+                if (unsuccessRequestCount > 0)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
 
                 var response = new SaveMetadataResponse
                 {
@@ -421,7 +474,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
                     LiteraryOriginalText =
                         LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry, request.ManuscriptSettlement,
-                            request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent)
+                            request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
                 };
                 return Json(response);
             }

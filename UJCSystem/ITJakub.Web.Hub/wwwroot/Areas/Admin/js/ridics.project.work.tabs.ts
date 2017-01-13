@@ -100,14 +100,17 @@
         this.authorTypeahead.create((selectedExists, selectConfirmed) => {
             var $firstName = $("#add-author-first-name-preview");
             var $lastName = $("#add-author-last-name-preview");
+            var $authorId = $("#add-author-id-preview");
             if (selectedExists) {
                 var author = this.authorTypeahead.getValue();
                 $firstName.val(author.firstName);
                 $lastName.val(author.lastName);
+                $authorId.val(author.id);
                 this.selectedAuthorId = author.id;
             } else {
                 $firstName.val("");
                 $lastName.val("");
+                $authorId.val("");
                 this.selectedAuthorId = null;
             }
         });
@@ -115,14 +118,17 @@
         this.editorTypeahead.create((selectedExists, selectConfirmed) => {
             var $firstName = $("#add-editor-first-name-preview");
             var $lastName = $("#add-editor-last-name-preview");
+            var $editorId = $("#add-editor-id-preview");
             if (selectedExists) {
                 var editor = this.editorTypeahead.getValue();
                 $firstName.val(editor.firstName);
                 $lastName.val(editor.lastName);
+                $editorId.val(editor.id);
                 this.selectedResponsiblePersonId = editor.id;
             } else {
                 $firstName.val("");
                 $lastName.val("");
+                $editorId.val("");
                 this.selectedResponsiblePersonId = null;
             }
         });
@@ -130,7 +136,12 @@
         $addResponsibleTypeButton.click(() => {
             $addResponsibleTypeButton.prop("disabled", true);
             $addResponsibleTypeContainer.show();
+            $("#add-responsible-type-saving-icon").hide();
         });
+
+        $("#add-responsible-type-save").click(this.createResponsibleType.bind(this));
+
+        this.addRemovePersonEvent($("#work-metadata-authors .remove-button, #work-metadata-editors .remove-button"));
 
         var $saveButton = $("#work-metadata-save-button");
         $saveButton.click(() => {
@@ -197,23 +208,131 @@
     }
 
     private addAuthor() {
-        if ($("#tab-select-existing-author").hasClass("active")) {
-            //TODO assign author
-        } else {
-            //TODO create and assign author
-        }
+        var id: number;
+        var firstName: string;
+        var lastName: string;
 
-        throw Error("Not implemented");
+        var finishAddingAuthor = () => {
+            var element = MetadataUiHelper.addPerson($("#work-metadata-authors"), firstName + " " + lastName, id);
+            $(element).addClass("author-item");
+            this.addRemovePersonEvent($(".remove-button", element));
+
+            this.addAuthorDialog.hide();
+        };
+
+        if ($("#tab-select-existing-author").hasClass("active")) {
+            id = $("#add-author-id-preview").val();
+            firstName = $("#add-author-first-name-preview").val();
+            lastName = $("#add-author-last-name-preview").val();
+
+            finishAddingAuthor();
+        } else {
+            firstName = $("#add-author-first-name").val();
+            lastName = $("#add-author-last-name").val();
+
+            this.projectClient.createAuthor(firstName, lastName, (newAuthorId, errorCode) => {
+                if (errorCode != null) {
+                    this.addAuthorDialog.showError();
+                    return;
+                }
+
+                id = newAuthorId;
+                finishAddingAuthor();
+            });
+        }
+    }
+
+    private createResponsibleType() {
+        var text = $("#add-responsible-type-text").val();
+        var type = $("#add-responsible-type-type").val();
+        var typeLabel = $("#add-responsible-type-type option:selected").text();
+
+        var $savingIcon = $("#add-responsible-type-saving-icon");
+        $savingIcon.show();
+
+        this.projectClient.createResponsibleType(type, text, (newResponsibleTypeId, errorCode) => {
+            if (errorCode != null) {
+                $savingIcon.hide();
+                return;
+                //TODO handle error
+            }
+
+            $savingIcon.hide();
+
+            $("#add-responsible-type-container").hide();
+            $("#add-responsible-type-button").prop("disabled", false);
+            $("#add-responsible-type-type").val(0);
+            $("#add-responsible-type-text").val("");
+
+            var optionName = `${text} (${typeLabel})`;
+            UiHelper.addSelectOptionAndSetDefault($("#add-editor-type"), optionName, newResponsibleTypeId);
+        });
     }
 
     private addEditor() {
-        throw Error("Not implemented");
+        var id: number;
+        var firstName: string;
+        var lastName: string;
+
+        var finishAddingEditor = () => {
+            var element = MetadataUiHelper.addPerson($("#work-metadata-editors"), firstName + " " + lastName, id);
+            $(element).addClass("editor-item");
+            this.addRemovePersonEvent($(".remove-button", element));
+
+            this.addEditorDialog.hide();
+        };
+
+        if ($("#tab-select-existing-editor").hasClass("active")) {
+            id = $("#add-editor-id-preview").val();
+            firstName = $("#add-editor-first-name-preview").val();
+            lastName = $("#add-editor-last-name-preview").val();
+
+            finishAddingEditor();
+        } else {
+            firstName = $("#add-editor-first-name").val();
+            lastName = $("#add-editor-last-name").val();
+            var responsibleTypeId = $("#add-editor-type").val();
+
+            this.projectClient.createResponsiblePerson(firstName, lastName, responsibleTypeId, (newResponsiblePersonId, errorCode) => {
+                if (errorCode != null) {
+                    this.addEditorDialog.showError();
+                    return;
+                }
+
+                id = newResponsiblePersonId;
+                finishAddingEditor();
+            });
+        }
+    }
+
+    private addRemovePersonEvent($removeButton: JQuery) {
+        $removeButton.click((event) => {
+            $(event.currentTarget).closest(".author-item, .editor-item").remove();
+        });
     }
 
     private saveMetadata() {
-        //TODO save M:N entities (and check if were changed)
+        //TODO check if data changed
 
-        var data: IMetadataResource = {
+        var selectedAuthorIds = new Array<number>();
+        var selectedResponsibleIds = new Array<number>();
+        var selectedKindIds = new Array<number>();
+        var selectedGenreIds = new Array<number>();
+
+        $("#work-metadata-authors .author-item").each((index, elem) => {
+            selectedAuthorIds.push($(elem).data("id"));
+        });
+        $("#work-metadata-editors .editor-item").each((index, elem) => {
+            selectedResponsibleIds.push($(elem).data("id"));
+        });
+        $("#work-metadata-literary-kind input:checked").each((index, elem) => {
+            selectedKindIds.push($(elem).val());
+        });
+        $("#work-metadata-literary-genre input:checked").each((index, elem) => {
+            selectedGenreIds.push($(elem).val());
+        });
+
+        var data: ISaveMetadataResource = {
             biblText: $("#work-metadata-bibl-text").val(),
             copyright: $("#work-metadata-copyright").val(),
             manuscriptCountry: $("#work-metadata-original-country").val(),
@@ -230,7 +349,11 @@
             relicAbbreviation: $("#work-metadata-relic-abbreviation").val(),
             sourceAbbreviation: $("#work-metadata-source-abbreviation").val(),
             subTitle: $("#work-metadata-subtitle").val(),
-            title: $("#work-metadata-title").val()
+            title: $("#work-metadata-title").val(),
+            authorIdList: selectedAuthorIds,
+            literaryGenreIdList: selectedGenreIds,
+            literaryKindIdList: selectedKindIds,
+            responsiblePersonIdList: selectedResponsibleIds
         };
 
         var $loadingGlyph = $("#work-metadata-save-button .saving-icon");
@@ -395,7 +518,7 @@ class MetadataUiHelper {
         $(deleteButton)
             .addClass("btn")
             .addClass("btn-default")
-            .attr("data-id", idValue)
+            .addClass("remove-button")
             .append(deleteGlyphSpan);
         $(deleteGlyphSpan)
             .addClass("glyphicon")
@@ -404,6 +527,7 @@ class MetadataUiHelper {
             .addClass("text-as-form-control")
             .text(label);
         $(rootElement)
+            .attr("data-id", idValue)
             .append(deleteButton)
             .append(labelSpan)
             .appendTo($container);

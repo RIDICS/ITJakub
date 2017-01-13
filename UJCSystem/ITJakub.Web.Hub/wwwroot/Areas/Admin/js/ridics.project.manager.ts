@@ -108,12 +108,20 @@
         var data = {
             firstName: firstName,
             lastName: lastName,
-            responsibleTypeId: responsibleTypeId
+            responsibleTypeIdList: [responsibleTypeId]
         }
-        this.postAjax("Admin/Project/CreateAuthor", data, callback);
+        this.postAjax("Admin/Project/CreateResponsiblePerson", data, callback);
     }
 
-    public saveMetadata(projectId: number, data: IMetadataResource, callback: (resultData: IMetadataSaveResult, errorCode: HttpStatusCode) => void) {
+    public createResponsibleType(type: ResponsibleTypeEnum, text: string, callback: (newResponsibleTypeId: number, errorCode: HttpStatusCode) => void) {
+        var data = {
+            type: type,
+            text: text
+        };
+        this.postAjax("Admin/Project/CreateResponsibleType", data, callback);
+    }
+
+    public saveMetadata(projectId: number, data: ISaveMetadataResource, callback: (resultData: IMetadataSaveResult, errorCode: HttpStatusCode) => void) {
         this.postAjax(`Admin/Project/SaveMetadata?projectId=${projectId}`, data, callback);
     }
 }

@@ -78,5 +78,29 @@ namespace Vokabular.MainService.Controllers
         {
             return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
+
+        [HttpPut("{projectId}/literarykind")]
+        public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract request)
+        {
+            
+        }
+
+        [HttpPut("{projectId}/literarygenre")]
+        public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract request)
+        {
+
+        }
+
+        [HttpPut("{projectId}/author")]
+        public void SetAuthors(long projectId, [FromBody] IntegerIdListContract request)
+        {
+
+        }
+
+        [HttpPut("{projectId}/responsibleperson")]
+        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract request)
+        {
+
+        }
     }
 }

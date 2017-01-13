@@ -1,4 +1,6 @@
-﻿namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
+﻿using System.Collections.Generic;
+
+namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
 {
     public class SaveMetadataRequest
     {
@@ -20,5 +22,10 @@
         public string ManuscriptCountry { get; set; }
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
+
+        public IList<int> LiteraryKindIdList { get; set; }
+        public IList<int> LiteraryGenreIdList { get; set; }
+        public IList<int> AuthorIdList { get; set; }
+        public IList<int> ResponsiblePersonIdList { get; set; }
     }
 }

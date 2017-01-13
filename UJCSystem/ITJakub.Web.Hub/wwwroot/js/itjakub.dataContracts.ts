@@ -100,6 +100,12 @@ interface IResponsiblePerson {
     lastName: string;
 }
 
+interface IResponsibleType {
+    id: number;
+    text: string;
+    type: ResponsibleTypeEnum;
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
@@ -119,6 +125,13 @@ interface IMetadataResource {
     manuscriptRepository: string;
     manuscriptExtent: string;
     lastModification?: string;
+}
+
+interface ISaveMetadataResource extends IMetadataResource {
+    literaryKindIdList: Array<number>;
+    literaryGenreIdList: Array<number>;
+    authorIdList: Array<number>;
+    responsiblePersonIdList: Array<number>;
 }
 
 interface IMetadataSaveResult {
@@ -142,4 +155,10 @@ enum QueryTypeEnum
     Search = 0,
     List = 1,
     Reader = 2,
+}
+
+enum ResponsibleTypeEnum {
+    Unknown = 0,
+    Editor = 1,
+    Kolace = 2,
 }

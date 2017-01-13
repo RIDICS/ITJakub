@@ -44,6 +44,7 @@
     <Compile Include="Clients\RestClientBase.cs" />
     <Compile Include="Contracts\BookTypeContract.cs" />
     <Compile Include="Contracts\CategoryContract.cs" />
+    <Compile Include="Contracts\IntegerIdListContract.cs" />
     <Compile Include="Contracts\Type\BookTypeEnumContract.cs" />
     <Compile Include="Contracts\LiteraryGenreContract.cs" />
     <Compile Include="Contracts\LiteraryKindContract.cs" />

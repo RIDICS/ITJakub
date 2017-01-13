@@ -63,6 +63,26 @@ namespace Vokabular.MainService.DataContracts.Clients
             var newResourceVersion = Post<long>($"project/{projectId}/metadata", metadata);
             return newResourceVersion;
         }
+        
+        public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
+        {
+            Put($"project/{projectId}/literarykind", request);
+        }
+        
+        public void SetProjectLiteraryGenres(long projectId, IntegerIdListContract request)
+        {
+            Put($"project/{projectId}/literarygenre", request);
+        }
+        
+        public void SetProjectAuthors(long projectId, IntegerIdListContract request)
+        {
+            Put($"project/{projectId}/author", request);
+        }
+
+        public void SetProjectResponsiblePersons(long projectId, IntegerIdListContract request)
+        {
+            Put($"project/{projectId}/responsibleperson", request);
+        }
 
         public void UploadResource(string sessionId, Stream data)
         {

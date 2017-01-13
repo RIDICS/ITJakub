@@ -33,15 +33,21 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public MetadataResource GetLatestMetadataResource(long projectId)
+        public MetadataResource GetLatestMetadataResource(long projectId, bool includePublisher)
         {
             Resource resourceAlias = null;
 
-            return GetSession().QueryOver<MetadataResource>()
+            var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
-                .Fetch(x => x.Resource).Eager
-                .SingleOrDefault();
+                .Fetch(x => x.Resource).Eager;
+
+            if (includePublisher)
+            {
+                query = query.Fetch(x => x.Publisher).Eager;
+            }
+
+            return query.SingleOrDefault();
         }
 
         public Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre)

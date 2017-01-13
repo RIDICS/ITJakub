@@ -96,14 +96,13 @@
                             <label class="col-md-4 control-label">Editoři</label>
                             <div class="col-md-7">
                                 <div id="work-metadata-editors">
-                                    <div class="editor-item">
-                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
-                                    </div>
-                                    <div class="editor-item">
-                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
-                                    </div>
+                                    @foreach (var editor in Model.ResponsiblePersons)
+                                    {
+                                        <div class="editor-item" data-id="@editor.Id">
+                                            <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                            <span class="text-as-form-control">@editor.FirstName @editor.LastName</span>
+                                        </div>
+                                    }
                                 </div>
                                 
                                 <button class="btn btn-default" id="add-editor-button">Přidat</button>
@@ -161,14 +160,13 @@
                             <label class="col-md-4 control-label">Autoři</label>
                             <div class="col-md-7">
                                 <div id="work-metadata-authors">
-                                    <div class="author-item">
-                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
-                                    </div>
-                                    <div class="author-item">
-                                        <button class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></button>
-                                        <span class="text-as-form-control">TODO Jméno Příjmení</span>
-                                    </div>
+                                    @foreach (var author in Model.Authors)
+                                    {
+                                        <div class="author-item" data-id="@author.Id">
+                                            <button class="btn btn-default remove-button"><span class="glyphicon glyphicon-remove"></span></button>
+                                            <span class="text-as-form-control">@author.FirstName @author.LastName</span>
+                                        </div>
+                                    }
                                 </div>
 
                                 <button class="btn btn-default" id="add-author-button">Přidat</button>
@@ -270,7 +268,7 @@
             </div>
             <div id="work-metadata-editor-button-panel">
                 <div class="alert alert-success" id="work-metadata-save-success">Metadata uložena</div>
-                <div class="alert alert-danger" id="work-metadata-save-error">Chyba při ukládání metadat</div>
+                <div class="alert alert-danger" id="work-metadata-save-error">Některá metadata se nepodařilo uložit</div>
                 <button class="btn btn-default" id="work-metadata-cancel-button">Zrušit</button>
                 <button class="btn btn-default" id="work-metadata-save-button"><span class="saving-icon loading-small-button"></span> Uložit</button>
             </div>
@@ -411,6 +409,7 @@
                                     <input class="form-control" id="add-author-last-name-preview" type="text" disabled="disabled">
                                 </div>
                             </div>
+                            <input type="hidden" id="add-author-id-preview" />
                         </div>
                     </div>
                     <div id="tab-create-new-author" class="tab-pane">
@@ -434,7 +433,7 @@
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Přidat</button>
             </div>
         </div>
     </div>
@@ -478,6 +477,7 @@
                                     <input class="form-control" id="add-editor-last-name-preview" type="text" disabled="disabled">
                                 </div>
                             </div>
+                            <input type="hidden" id="add-editor-id-preview" />
                         </div>
                     </div>
                     <div id="tab-create-new-editor" class="tab-pane">
@@ -512,13 +512,13 @@
                             </div>
                             <div class="form-group" id="add-responsible-type-container">
                                 <div class="col-md-3">
-                                    @Html.DropDownListFor(x => x.ResponsibleTypeEnumEmpty, Html.GetEnumSelectList<ResponsibleTypeEnumViewModel>(), htmlAttributes: new { @class = "form-control" })
+                                    @Html.DropDownListFor(x => x.ResponsibleTypeEnumEmpty, Html.GetEnumSelectList<ResponsibleTypeEnumViewModel>(), htmlAttributes: new { @class = "form-control", id = "add-responsible-type-type" })
                                 </div>
                                 <div class="col-md-4">
                                     <input class="form-control" id="add-responsible-type-text" type="text" placeholder="Nový typ"/>
                                 </div>
                                 <div class="col-md-3">
-                                    <button class="btn btn-default" id="add-responsible-type-save">Vytvořit</button>
+                                    <button class="btn btn-default" id="add-responsible-type-save"><span id="add-responsible-type-saving-icon" class="loading-small-button"></span>Vytvořit</button>
                                 </div>
                             </div>
                         </div>
@@ -528,7 +528,7 @@
             <div class="modal-footer">
                 <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
-                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Uložit</button>
+                <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Přidat</button>
             </div>
         </div>
     </div>
