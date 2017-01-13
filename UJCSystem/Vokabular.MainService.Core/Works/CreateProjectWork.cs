@@ -2,29 +2,27 @@
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Works
 {
-    public class CreateProjectWork : UnitOfWorkBase
+    public class CreateProjectWork : UnitOfWorkBase<long>
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly ProjectContract m_newData;
-        private readonly UserManager m_userManager;
-        private long m_resultId;
+        private readonly long m_userId;
 
-        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, UserManager userManager) : base(projectRepository.UnitOfWork)
+        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, long userId) : base(projectRepository.UnitOfWork)
         {
             m_projectRepository = projectRepository;
             m_newData = newData;
-            m_userManager = userManager;
+            m_userId = userId;
         }
 
-        protected override void ExecuteWorkImplementation()
+        protected override long ExecuteWorkImplementation()
         {
             var now = DateTime.UtcNow;
-            var currentUser = m_userManager.GetCurrentUser();
+            var currentUser = m_projectRepository.Load<User>(m_userId);
 
             var project = new Project
             {
@@ -33,12 +31,7 @@ namespace Vokabular.MainService.Core.Works
                 CreatedByUser = currentUser
             };
 
-            m_resultId = (long) m_projectRepository.Create(project);
-        }
-
-        public long GetResultId()
-        {
-            return m_resultId;
+            return (long) m_projectRepository.Create(project);
         }
     }
 }

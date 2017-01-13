@@ -89,5 +89,25 @@ namespace Vokabular.MainService.Core.Managers
             var resultId = new CreateNewMetadataVersionWork(m_metadataRepository, projectId, data, m_userManager.GetCurrentUserId()).Execute();
             return resultId;
         }
+
+        public void SetLiteraryKinds(long projectId, IntegerIdListContract kindIdList)
+        {
+            new SetLiteraryKindWork(m_metadataRepository, projectId, kindIdList.IdList).Execute();
+        }
+
+        public void SetLiteraryGenres(long projectId, IntegerIdListContract genreIdList)
+        {
+            new SetLiteraryGenreWork(m_metadataRepository, projectId, genreIdList.IdList).Execute();
+        }
+
+        public void SetAuthors(long projectId, IntegerIdListContract authorIdList)
+        {
+            new SetAuthorsWork(m_metadataRepository, projectId, authorIdList.IdList).Execute();
+        }
+
+        public void SetResponsiblePersons(long projectId, IntegerIdListContract responsiblePersonIdList)
+        {
+            new SetResponsiblePersonsWork(m_metadataRepository, projectId, responsiblePersonIdList.IdList).Execute();
+        }
     }
 }

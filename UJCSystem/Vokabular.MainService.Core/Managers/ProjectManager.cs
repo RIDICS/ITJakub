@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Data;
@@ -10,32 +9,32 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectManager
     {
-        private readonly IUnitOfWork m_unitOfWork;
         private readonly ProjectRepository m_projectRepository;
         private readonly UserManager m_userManager;
 
-        public ProjectManager(IUnitOfWork unitOfWork, ProjectRepository projectRepository, UserManager userManager)
+        public ProjectManager(ProjectRepository projectRepository, UserManager userManager)
         {
-            m_unitOfWork = unitOfWork;
             m_projectRepository = projectRepository;
             m_userManager = userManager;
         }
 
         public long CreateProject(ProjectContract projectData)
         {
-            var work = new CreateProjectWork(m_projectRepository, projectData, m_userManager);
-            work.Execute();
-            return work.GetResultId();
+            var currentUserId = m_userManager.GetCurrentUserId();
+            var work = new CreateProjectWork(m_projectRepository, projectData, currentUserId);
+
+            var resultId = work.Execute();
+            return resultId;
         }
 
         public ProjectListData GetProjectList(int start, int count)
         {
             var work = new GetProjectListWork(m_projectRepository, start, count);
-            work.Execute();
+            var resultEntities = work.Execute();
 
             var result = new ProjectListData
             {
-                List = Mapper.Map<List<ProjectContract>>(work.GetResult()),
+                List = Mapper.Map<List<ProjectContract>>(resultEntities),
                 TotalCount = work.GetResultCount()
             };
             return result;
@@ -44,9 +43,9 @@ namespace Vokabular.MainService.Core.Managers
         public ProjectContract GetProject(long projectId)
         {
             var work = new GetProjectWork(m_projectRepository, projectId);
-            work.Execute();
+            var resultEntity = work.Execute();
 
-            var result = Mapper.Map<ProjectContract>(work.GetResult());
+            var result = Mapper.Map<ProjectContract>(resultEntity);
             return result;
         }
     }

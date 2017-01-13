@@ -80,27 +80,27 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{projectId}/literarykind")]
-        public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract request)
+        public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract kindIdList)
         {
-            
+            m_projectMetadataManager.SetLiteraryKinds(projectId, kindIdList);
         }
 
         [HttpPut("{projectId}/literarygenre")]
-        public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract request)
+        public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract genreIdList)
         {
-
+            m_projectMetadataManager.SetLiteraryGenres(projectId, genreIdList);
         }
 
         [HttpPut("{projectId}/author")]
-        public void SetAuthors(long projectId, [FromBody] IntegerIdListContract request)
+        public void SetAuthors(long projectId, [FromBody] IntegerIdListContract authorIdList)
         {
-
+            m_projectMetadataManager.SetAuthors(projectId, authorIdList);
         }
 
         [HttpPut("{projectId}/responsibleperson")]
-        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract request)
+        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract responsiblePersonIdList)
         {
-
+            m_projectMetadataManager.SetResponsiblePersons(projectId, responsiblePersonIdList);
         }
     }
 }

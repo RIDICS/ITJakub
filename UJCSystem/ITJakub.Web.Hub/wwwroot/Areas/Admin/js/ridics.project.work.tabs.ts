@@ -312,8 +312,6 @@
     }
 
     private saveMetadata() {
-        //TODO check if data changed
-
         var selectedAuthorIds = new Array<number>();
         var selectedResponsibleIds = new Array<number>();
         var selectedKindIds = new Array<number>();

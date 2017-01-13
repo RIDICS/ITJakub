@@ -215,7 +215,7 @@
                                     {
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" value="@kind.Id" /> @kind.Name
+                                                <input type="checkbox" value="@kind.Id" @(Model.SelectedLiteraryKindIds.Contains(kind.Id) ? "checked" : null) /> @kind.Name
                                             </label>
                                         </div>
                                     }
@@ -234,7 +234,7 @@
                                     {
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" value="@genre.Id" /> @genre.Name
+                                                <input type="checkbox" value="@genre.Id" @(Model.SelectedLiteraryGenreIds.Contains(genre.Id) ? "checked" : null) /> @genre.Name
                                             </label>
                                         </div>
                                     }

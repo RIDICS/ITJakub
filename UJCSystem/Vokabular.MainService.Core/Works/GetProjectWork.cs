@@ -4,11 +4,10 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works
 {
-    public class GetProjectWork : UnitOfWorkBase
+    public class GetProjectWork : UnitOfWorkBase<Project>
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
-        private Project m_result;
 
         public GetProjectWork(ProjectRepository projectRepository, long projectId) : base(projectRepository.UnitOfWork)
         {
@@ -16,14 +15,9 @@ namespace Vokabular.MainService.Core.Works
             m_projectId = projectId;
         }
 
-        protected override void ExecuteWorkImplementation()
+        protected override Project ExecuteWorkImplementation()
         {
-            m_result = m_projectRepository.GetProject(m_projectId);
-        }
-
-        public Project GetResult()
-        {
-            return m_result;
+            return m_projectRepository.GetProject(m_projectId);
         }
     }
 }

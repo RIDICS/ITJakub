@@ -75,6 +75,10 @@
     <Compile Include="Works\ProjectMetadata\GetLiteraryGenreListWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetLiteraryKindListWork.cs" />
     <Compile Include="Works\ProjectMetadata\GetPublisherListWork.cs" />
+    <Compile Include="Works\ProjectMetadata\SetAuthorsWork.cs" />
+    <Compile Include="Works\ProjectMetadata\SetLiteraryGenreWork.cs" />
+    <Compile Include="Works\ProjectMetadata\SetLiteraryKindWork.cs" />
+    <Compile Include="Works\ProjectMetadata\SetResponsiblePersonsWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Installers\" />
