@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
@@ -21,10 +22,15 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<OriginalAuthor> GetAuthorAutocomplete(string query, int count)
         {
-            return GetSession().QueryOver<OriginalAuthor>()
+            OriginalAuthor authorAlias = null;
+
+            query = query.Replace(" ", $"{WildcardAny} ");
+            
+            return GetSession().QueryOver(() => authorAlias)
                 .Where(Restrictions.Or(
-                    Restrictions.On<OriginalAuthor>(x => x.FirstName).IsLike(query, MatchMode.Start),
-                    Restrictions.On<OriginalAuthor>(x => x.LastName).IsLike(query, MatchMode.Start)
+                    Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property(() => authorAlias.LastName),
+                        Projections.Constant(" "), Projections.Property(() => authorAlias.FirstName)), query, MatchMode.Start),
+                    Restrictions.Like(Projections.Property(() => authorAlias.FirstName), query, MatchMode.Start)
                 ))
                 .OrderBy(x => x.LastName).Asc
                 .ThenBy(x => x.FirstName).Asc
@@ -34,10 +40,15 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<ResponsiblePerson> GetResponsiblePersonAutocomplete(string query, int count)
         {
-            return GetSession().QueryOver<ResponsiblePerson>()
+            ResponsiblePerson responsibleAlias = null;
+
+            query = query.Replace(" ", $"{WildcardAny} ");
+
+            return GetSession().QueryOver(() => responsibleAlias)
                 .Where(Restrictions.Or(
-                    Restrictions.On<ResponsiblePerson>(x => x.FirstName).IsLike(query, MatchMode.Start),
-                    Restrictions.On<ResponsiblePerson>(x => x.LastName).IsLike(query, MatchMode.Start)
+                    Restrictions.Like(Projections.SqlFunction("concat", NHibernateUtil.String, Projections.Property(() => responsibleAlias.LastName),
+                        Projections.Constant(" "), Projections.Property(() => responsibleAlias.FirstName)), query, MatchMode.Start),
+                    Restrictions.Like(Projections.Property(() => responsibleAlias.FirstName), query, MatchMode.Start)
                 ))
                 .OrderBy(x => x.LastName).Asc
                 .ThenBy(x => x.FirstName).Asc

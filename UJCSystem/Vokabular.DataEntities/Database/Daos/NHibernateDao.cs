@@ -11,6 +11,9 @@ namespace Vokabular.DataEntities.Database.Daos
 {
     public class NHibernateDao
     {
+        protected const string WildcardAny = "%";
+        protected const string WildcardSingle = "_";
+
         private readonly IUnitOfWork m_unitOfWork;
 
         protected static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
