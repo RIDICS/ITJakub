@@ -333,6 +333,7 @@ BEGIN TRAN
     (
 	   [Author] int NOT NULL CONSTRAINT [FK_Project_OriginalAuthor(Author)_OriginalAuthor(Id)] FOREIGN KEY REFERENCES [dbo].[OriginalAuthor] (Id),
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_OriginalAuthor(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
+	   [Sequence] int NOT NULL,
 	   CONSTRAINT [PK_Project_OriginalAuthor(Author)_Project_OriginalAuthor(Project)] PRIMARY KEY ([Author], [Project])
     )
 	

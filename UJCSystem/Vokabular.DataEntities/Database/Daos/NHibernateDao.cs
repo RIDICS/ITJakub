@@ -154,6 +154,14 @@ namespace Vokabular.DataEntities.Database.Daos
             }
         }
 
+        public virtual void DeleteAll(IEnumerable data)
+        {
+            foreach (var o in data)
+            {
+                Delete(o);
+            }
+        }
+
         protected virtual void Save(object instance)
         {
             try

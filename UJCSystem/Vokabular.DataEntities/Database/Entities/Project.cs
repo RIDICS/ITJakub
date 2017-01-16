@@ -15,7 +15,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<Resource> Resources { get; set; }
 
-        public virtual IList<OriginalAuthor> Authors { get; set; }
+        public virtual IList<ProjectOriginalAuthor> Authors { get; set; }
 
         public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
 

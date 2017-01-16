@@ -9,9 +9,9 @@
     
     <property name="LastName" not-null="true" />
 
-    <bag name="Projects" table="Project_OriginalAuthor" inverse="true" lazy="true">
+    <bag name="Projects" table="Project_OriginalAuthor" lazy="true">
       <key column="Author" />
-      <many-to-many class="Project" column="Project" />
+      <one-to-many class="ProjectOriginalAuthor" />
     </bag>
 
   </class>

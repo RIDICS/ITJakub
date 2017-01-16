@@ -16,9 +16,9 @@
       <one-to-many class="Resource" />
     </bag>
 
-    <bag name="Authors" table="Project_OriginalAuthor" cascade="save-update" lazy="true">
+    <bag name="Authors" table="Project_OriginalAuthor" cascade="all-delete-orphan" lazy="true">
       <key column="Project" />
-      <many-to-many class="OriginalAuthor" column="Author" />
+      <one-to-many class="ProjectOriginalAuthor" />
     </bag>
 
     <bag name="ResponsiblePersons" table="Project_ResponsiblePerson" cascade="save-update" lazy="true">

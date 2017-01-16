@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate.SqlCommand;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -56,8 +57,14 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             if (includeAuthors)
             {
+                ProjectOriginalAuthor projectAuthorAlias = null;
+                OriginalAuthor authorAlias = null;
+
                 session.QueryOver<Project>()
+                    .JoinAlias(x => x.Authors, () => projectAuthorAlias, JoinType.LeftOuterJoin)
+                    .JoinAlias(() => projectAuthorAlias.OriginalAuthor, () => authorAlias, JoinType.LeftOuterJoin)
                     .Where(x => x.Id == projectId)
+                    .OrderBy(() => projectAuthorAlias.Sequence).Asc
                     .Fetch(x => x.Authors).Eager
                     .FutureValue();
             }
@@ -86,6 +93,13 @@ namespace Vokabular.DataEntities.Database.Repositories
             return session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .FutureValue().Value;
+        }
+
+        public IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId)
+        {
+            return GetSession().QueryOver<ProjectOriginalAuthor>()
+                .Where(x => x.Project.Id == projectId)
+                .List();
         }
     }
 }
