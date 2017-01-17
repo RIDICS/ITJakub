@@ -4,12 +4,11 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Headers;
-using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ProjectController : Controller, IProjectMainService
+    public class ProjectController : Controller
     {
         private const int DefaultStartItem = 0;
         private const int DefaultProjectItemCount = 5;

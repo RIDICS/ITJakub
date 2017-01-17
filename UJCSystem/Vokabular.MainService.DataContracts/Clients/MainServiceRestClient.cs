@@ -5,25 +5,16 @@ using System.Net.Http;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
-using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceRestClient : RestClientBase, IProjectMainService, IResourceMainService, ISnapshotMainService
+    public class MainServiceRestClient : RestClientBase
     {
         public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
         {
         }
-
-        public List<ProjectContract> GetProjectList(int? start, int? count)
-        {
-            if (start == null || count == null)
-                throw new ArgumentException("start or count argument is null");
-
-            return GetProjectListFull(start.Value, count.Value).List;
-        }
-
-        public ProjectListData GetProjectListFull(int start, int count)
+        
+        public ProjectListData GetProjectList(int start, int count)
         {
             var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
             return new ProjectListData
@@ -144,12 +135,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             Put($"resource/{resourceId}", resource);
         }
-
-        public void UploadResource(string sessionId)
-        {
-            throw new NotSupportedException("Method without Stream parameter is not supported");
-        }
-
+        
         public long CreateSnapshot(long projectId)
         {
             var snapshotId = Post<long>($"project/{projectId}/snapshot", null);

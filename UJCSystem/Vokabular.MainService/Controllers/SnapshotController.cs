@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.ServiceContracts;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api")]
-    public class SnapshotController : Controller, ISnapshotMainService
+    public class SnapshotController : Controller
     {
         [HttpPost("project/{projectId}/snapshot")]
         public long CreateSnapshot(long projectId)
