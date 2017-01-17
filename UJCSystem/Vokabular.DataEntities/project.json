@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
-    "log4net": "2.0.6",
-    "NHibernate": "4.0.4.4000"
+    "log4net": "2.0.7",
+    "NHibernate": "4.1.0.4000"
   },
   "frameworks": {
     "net461": {}
