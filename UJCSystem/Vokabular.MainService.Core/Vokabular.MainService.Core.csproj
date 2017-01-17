@@ -48,11 +48,14 @@
     <Compile Include="AutoMapperProfiles\PublisherProfile.cs" />
     <Compile Include="AutoMapperProfiles\ResponsiblePersonProfile.cs" />
     <Compile Include="AutoMapperProfiles\UserProfile.cs" />
+    <Compile Include="Communication\CommunicationConfigurationProvider.cs" />
+    <Compile Include="Communication\CommunicationProvider.cs" />
     <Compile Include="MainServiceCoreContainerRegistration.cs" />
     <Compile Include="Managers\CategoryManager.cs" />
     <Compile Include="Managers\PersonManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\ProjectMetadataManager.cs" />
+    <Compile Include="Managers\ProjectResourceManager.cs" />
     <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Parameter\GetProjectMetadataParameter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +90,14 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
+      <Project>{56512cdc-6912-49b3-8ac4-ce96a0340165}</Project>
+      <Name>ITJakub.FileProcessing.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
+      <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
+      <Name>ITJakub.Shared.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>

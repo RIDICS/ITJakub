@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Vokabular.MainService.Core.AutoMapperProfiles;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.Shared.Container;
 
@@ -13,7 +14,11 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectManager>();
             container.AddPerWebRequest<ProjectMetadataManager>();
+            container.AddPerWebRequest<ProjectResourceManager>();
             container.AddPerWebRequest<UserManager>();
+
+            container.AddPerWebRequest<CommunicationConfigurationProvider>();
+            container.AddPerWebRequest<CommunicationProvider>();
 
             container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();

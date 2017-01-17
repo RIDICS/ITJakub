@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
@@ -9,10 +10,17 @@ namespace Vokabular.MainService.Controllers
     [Route("api")]
     public class ResourceController : Controller
     {
-        [HttpPost("session/{sessionId}/resource")]
-        public void UploadResource(string sessionId)
+        private readonly ProjectResourceManager m_resourceManager;
+
+        public ResourceController(ProjectResourceManager resourceManager)
         {
-            // TODO Request.Body;
+            m_resourceManager = resourceManager;
+        }
+
+        [HttpPost("session/{sessionId}/resource")]
+        public void UploadResource(string sessionId, [FromQuery] string fileName)
+        {
+            m_resourceManager.UploadResource(sessionId, Request.Body, fileName);
         }
 
         [HttpPost("project/{projectId}/resource")]

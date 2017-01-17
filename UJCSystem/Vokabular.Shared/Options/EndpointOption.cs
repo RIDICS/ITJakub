@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Web.Hub.Models.Options
+﻿namespace Vokabular.Shared.Options
 {
     public class EndpointOption
     {

@@ -27,6 +27,9 @@
   "frameworks": {
     "net461": {
       "dependencies": {
+        "ITJakub.FileProcessing.DataContracts": {
+          "target": "project"
+        },
         "Vokabular.DataEntities": {
           "target": "project"
         },

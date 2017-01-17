@@ -1,32 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
 using System.Xml;
-using ITJakub.Web.Hub.Models.Options;
 using Microsoft.Extensions.Options;
+using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub.Managers
 {
-    public class CommunicationConfigurationProvider
+    public class CommunicationConfigurationProvider : CommunicationConfigurationProviderBase
     {
-        private readonly Dictionary<string, EndpointOption> m_endpointsOptions;
-
-        public CommunicationConfigurationProvider(IOptions<List<EndpointOption>> endpointOptions)
+        public CommunicationConfigurationProvider(IOptions<List<EndpointOption>> endpointOptions) : base(endpointOptions)
         {
-            m_endpointsOptions = endpointOptions.Value.ToDictionary(x => x.Name);
-        }
-
-        public Uri GetEndpointUri(string name)
-        {
-            var options = m_endpointsOptions[name];
-            return new Uri(options.Address);
-        }
-
-        public EndpointAddress GetEndpointAddress(string name)
-        {
-            var options = m_endpointsOptions[name];
-            return new EndpointAddress(options.Address);
         }
 
         public BasicHttpBinding GetBasicHttpBinding()

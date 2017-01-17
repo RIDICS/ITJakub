@@ -37,7 +37,8 @@
     "simplemde.TypeScript.DefinitelyTyped": "0.0.1",
     "typeahead.TypeScript.DefinitelyTyped": "0.3.5",
     "System.Runtime.Serialization.Xml": "4.3.0",
-    "System.ServiceModel.Http": "4.3.0"
+    "System.ServiceModel.Http": "4.3.0",
+    "System.ServiceModel.Primitives": "4.3.0"
   },
 
   "tools": {

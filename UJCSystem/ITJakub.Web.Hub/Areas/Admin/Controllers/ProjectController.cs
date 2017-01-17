@@ -203,7 +203,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 {
                     using (var client = GetRestClient())
                     {
-                        client.UploadResource(request.SessionId, file.OpenReadStream());
+                        client.UploadResource(request.SessionId, file.OpenReadStream(), file.FileName);
                     }
                 }
             }
@@ -220,7 +220,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 {
                     using (var client = GetRestClient())
                     {
-                        client.UploadResource(request.SessionId, file.OpenReadStream());
+                        client.UploadResource(request.SessionId, file.OpenReadStream(), file.FileName);
                     }
                 }
             }

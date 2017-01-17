@@ -1,12 +1,20 @@
 ﻿using System;
 using System.ServiceModel;
-using ITJakub.FileProcessing.DataContracts;
+using System.ServiceModel.Channels;
 using ITJakub.Shared.Contracts.Resources;
 
-namespace ITJakub.ITJakubService.Core.Resources
+namespace ITJakub.FileProcessing.DataContracts
 {
     public class FileProcessingServiceClient : ClientBase<IFileProcessingService>, IFileProcessingService
     {
+        public FileProcessingServiceClient()
+        {
+        }
+
+        public FileProcessingServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
+        {
+        }
+
         public void AddResource(UploadResourceContract resourceInfoSkeleton)
         {
             try

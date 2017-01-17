@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +10,7 @@ using Vokabular.MainService.Container;
 using Vokabular.MainService.Container.Extensions;
 using Vokabular.MainService.Container.Installers;
 using Vokabular.Shared;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
 {
@@ -33,6 +35,10 @@ namespace Vokabular.MainService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            // Configuration options
+            services.AddOptions();
+            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+
             // Add framework services.
             services.AddMvc();
 

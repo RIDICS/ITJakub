@@ -44,6 +44,8 @@
     <Compile Include="Container\IContainer.cs" />
     <Compile Include="Container\IContainerInstaller.cs" />
     <Compile Include="Extensions\LoggingExtensions.cs" />
+    <Compile Include="Options\CommunicationConfigurationProviderBase.cs" />
+    <Compile Include="Options\EndpointOption.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

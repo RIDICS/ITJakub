@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITJakub.Web.Hub.Models.Options;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vokabular.Shared;
+using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub
 {

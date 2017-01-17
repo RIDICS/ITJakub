@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Reflection;
-using Castle.MicroKernel;
 using ITJakub.Core.PathResolvers;
 using ITJakub.Core.Resources;
 using ITJakub.Shared.Contracts.Resources;
@@ -17,11 +15,11 @@ namespace ITJakub.Core
         private readonly Dictionary<ResourceType, IResourceTypePathResolver> m_resourceTypePathResolvers;
         private readonly string m_rootFolderPath;
 
-        public FileSystemManager(IKernel container, string rootFolder)
+        public FileSystemManager(IList<IResourceTypePathResolver> resourceTypePathResolvers, string rootFolder)
         {
             m_rootFolderPath = rootFolder;
             m_resourceTypePathResolvers = new Dictionary<ResourceType, IResourceTypePathResolver>();
-            foreach (var pathResolver in container.ResolveAll<IResourceTypePathResolver>())
+            foreach (var pathResolver in resourceTypePathResolvers)
             {
                 m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
             }

@@ -1,4 +1,5 @@
-﻿using ITJakub.Shared.Contracts.Resources;
+﻿using ITJakub.FileProcessing.DataContracts;
+using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.ITJakubService.Core.Resources
 {

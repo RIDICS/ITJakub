@@ -75,9 +75,9 @@ namespace Vokabular.MainService.DataContracts.Clients
             Put($"project/{projectId}/responsibleperson", request);
         }
 
-        public void UploadResource(string sessionId, Stream data)
+        public void UploadResource(string sessionId, Stream data, string fileName)
         {
-            var uriPath = $"session/{sessionId}/resource";
+            var uriPath = $"session/{sessionId}/resource?fileName={fileName}";
             var content = new StreamContent(data);
             var response = HttpClient.PostAsync(uriPath, content).Result;
 
