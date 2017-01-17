@@ -28,7 +28,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("project/{projectId}/resource")]
-        public List<ResourceContract> GetResourceList(long projectId, [FromQuery] ResourceTypeContract? resourceType)
+        public List<ResourceContract> GetResourceList(long projectId, [FromQuery] ResourceTypeEnumContract? resourceType)
         {
             var list = new List<ResourceContract>();
             if (resourceType != null)
@@ -43,7 +43,7 @@ namespace Vokabular.MainService.Controllers
                 var random = new Random();
                 for (int i = 11; i >= 0; i--)
                 {
-                    ResourceTypeContract type = (ResourceTypeContract)random.Next(4);
+                    ResourceTypeEnumContract type = (ResourceTypeEnumContract)random.Next(4);
                     list.Add(MockResourceData.GetResourceContract(i, type));
                 }
             }
@@ -96,7 +96,7 @@ namespace Vokabular.MainService.Controllers
 
     public class MockResourceData
     {
-        public static ResourceContract GetResourceContract(int id, ResourceTypeContract resourceType)
+        public static ResourceContract GetResourceContract(int id, ResourceTypeEnumContract resourceType)
         {
             return new ResourceContract
             {

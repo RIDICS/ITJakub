@@ -38,15 +38,15 @@ namespace Vokabular.MainService.Controllers
                 Author = "Jan Novák",
                 ResourcesInfo = new List<SnapshotResourcesInfoContract>
                 {
-                    GetSnapshotResourcesInfo(ResourceTypeContract.Text, 3, 3),
-                    GetSnapshotResourcesInfo(ResourceTypeContract.Image, 30, 30),
-                    GetSnapshotResourcesInfo(ResourceTypeContract.Audio, 1, 1),
-                    GetSnapshotResourcesInfo(ResourceTypeContract.Video, 0, 0)
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Text, 3, 3),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Image, 30, 30),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Audio, 1, 1),
+                    GetSnapshotResourcesInfo(ResourceTypeEnumContract.Video, 0, 0)
                 }
             };
         }
 
-        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeContract resourceType, int publishedCount, int totalCount)
+        private static SnapshotResourcesInfoContract GetSnapshotResourcesInfo(ResourceTypeEnumContract resourceType, int publishedCount, int totalCount)
         {
             return new SnapshotResourcesInfoContract
             {

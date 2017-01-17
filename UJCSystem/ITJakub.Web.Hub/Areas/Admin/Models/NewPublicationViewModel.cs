@@ -31,13 +31,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 
     public class ResourcesViewModel
     {
-        public ResourcesViewModel(ResourceTypeContract resourceType, string title, IList<ResourceViewModel> resourceList)
+        public ResourcesViewModel(ResourceTypeEnumContract resourceType, string title, IList<ResourceViewModel> resourceList)
         {
             Title = title;
             ResourceList = resourceList;
         }
 
-        public ResourceTypeContract ResourceType { get; set; }
+        public ResourceTypeEnumContract ResourceType { get; set; }
         public string Title { get; set; }
         public IList<ResourceViewModel> ResourceList { get; set; }
     }

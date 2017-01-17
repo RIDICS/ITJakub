@@ -95,7 +95,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             return newResourceId;
         }
 
-        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeContract? resourceType = null)
+        public List<ResourceContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceType = null)
         {
             var url = $"project/{projectId}/resource";
             if (resourceType != null)

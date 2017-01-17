@@ -6,6 +6,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public ResourceTypeContract ResourceType { get; set; }
+        public ResourceTypeEnumContract ResourceType { get; set; }
     }
 }

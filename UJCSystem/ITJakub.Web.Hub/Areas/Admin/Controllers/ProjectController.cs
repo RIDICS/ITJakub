@@ -227,7 +227,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(new { });
         }
 
-        public IActionResult GetResourceList(long projectId, ResourceTypeContract resourceType)
+        public IActionResult GetResourceList(long projectId, ResourceTypeEnumContract resourceType)
         {
             using (var client = GetRestClient())
             {

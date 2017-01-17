@@ -59,7 +59,7 @@
     <Compile Include="Contracts\ResponsiblePersonContract.cs" />
     <Compile Include="Contracts\ResponsibleTypeContract.cs" />
     <Compile Include="Contracts\SnapshotContract.cs" />
-    <Compile Include="Contracts\Type\ResourceTypeContract.cs" />
+    <Compile Include="Contracts\Type\ResourceTypeEnumContract.cs" />
     <Compile Include="Contracts\Type\ResponsibleTypeEnumContract.cs" />
     <Compile Include="Contracts\UserContract.cs" />
     <Compile Include="Headers\CustomHttpHeaders.cs" />

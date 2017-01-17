@@ -599,13 +599,6 @@ enum ProjectModuleTabType {
     ResourceMetadata = 103,
 }
 
-enum ResourceType {
-    Text = 0,
-    Image = 1,
-    Audio = 2,
-    Video = 3
-}
-
 interface IProjectResource {
     id: number;
     name: string;

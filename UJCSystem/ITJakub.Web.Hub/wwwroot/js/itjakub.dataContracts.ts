@@ -157,6 +157,19 @@ enum QueryTypeEnum
     Reader = 2,
 }
 
+enum ResourceType {
+    None = 0,
+    ResourceGroup = 1,
+    ProjectMetadata = 2,
+    Chapter = 3,
+    Page = 4,
+    Headword = 5,
+    Text = 6,
+    Image = 7,
+    Audio = 8,
+    Video = 9,
+}
+
 enum ResponsibleTypeEnum {
     Unknown = 0,
     Editor = 1,
