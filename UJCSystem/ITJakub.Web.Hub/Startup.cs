@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Vokabular.Shared;
+using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub
@@ -41,8 +42,8 @@ namespace ITJakub.Web.Hub
             env.ConfigureLog4Net("log4net.config");
         }
 
-        //public IConfigurationRoot Configuration { get; }
-        public IConfigurationRoot Configuration { get; }
+        private IConfigurationRoot Configuration { get; }
+        private IContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit http://go.microsoft.com/fwlink/?LinkID=398940
@@ -63,14 +64,15 @@ namespace ITJakub.Web.Hub
             services.AddMvc();
 
             // IoC
-            var container = new WindsorContainerImplementation();
-            new WebHubContainerRegistration().Install(container);
+            IContainer container = new WindsorContainerImplementation();
+            container.Install<WebHubContainerRegistration>();
+            Container = container;
 
             return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             // Logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -118,6 +120,13 @@ namespace ITJakub.Web.Hub
                     .MapAreaRoute("audioBooksDefault", "AudioBooks", "{controller=AudioBooks}/{action=Index}")
                     .MapAreaRoute("toolsDefault", "Tools", "{controller=Tools}/{action=Index}");
             });
+            
+            applicationLifetime.ApplicationStopped.Register(OnShutdown);
+        }
+
+        private void OnShutdown()
+        {
+            Container.Dispose();
         }
     }
 }

@@ -161,6 +161,20 @@ namespace Vokabular.MainService.Container
             Register(Component.For<TService>().Instance(instance));
         }
 
+        public void Install<T>() where T : IContainerInstaller
+        {
+            var installer = Activator.CreateInstance<T>();
+            installer.Install(this);
+        }
+
+        public void Install(params IContainerInstaller[] installers)
+        {
+            foreach (var installer in installers)
+            {
+                installer.Install(this);
+            }
+        }
+
         public IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
             return WindsorRegistrationHelper.CreateServiceProvider(this, services);

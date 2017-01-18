@@ -10,6 +10,7 @@ using Vokabular.MainService.Container;
 using Vokabular.MainService.Container.Extensions;
 using Vokabular.MainService.Container.Installers;
 using Vokabular.Shared;
+using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService
@@ -30,7 +31,8 @@ namespace Vokabular.MainService
             env.ConfigureLog4Net("log4net.config");
         }
 
-        public IConfigurationRoot Configuration { get; }
+        private IConfigurationRoot Configuration { get; }
+        private IContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -46,15 +48,16 @@ namespace Vokabular.MainService
             services.AddSwaggerGen();
 
             // IoC
-            var container = new WindsorContainerImplementation();
-            new MainServiceContainerRegistration().Install(container);
-            new NHibernateInstaller().Install(container);
+            IContainer container = new WindsorContainerImplementation();
+            container.Install<MainServiceContainerRegistration>();
+            container.Install<NHibernateInstaller>();
+            Container = container;
 
             return container.CreateServiceProvider(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IApplicationLifetime applicationLifetime)
         {
             // Configure logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -71,6 +74,13 @@ namespace Vokabular.MainService
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUi();
+
+            applicationLifetime.ApplicationStopped.Register(OnShutdown);
+        }
+
+        private void OnShutdown()
+        {
+            Container.Dispose();
         }
     }
 }
