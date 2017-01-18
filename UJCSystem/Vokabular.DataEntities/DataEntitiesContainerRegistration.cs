@@ -6,7 +6,7 @@ namespace Vokabular.DataEntities
 {
     public class DataEntitiesContainerRegistration : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
 

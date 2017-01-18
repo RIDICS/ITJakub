@@ -18,7 +18,7 @@ namespace ITJakub.Web.Hub
     ///<summary>
     ///Container for IOC
     ///</summary>
-    public class WindsorContainerImplementation : WindsorContainer, IContainer
+    public class WindsorContainerImplementation : WindsorContainer, IIocContainer
     {
         private const string ConfigSuffix = ".Container.config";
         private const string CodeBasePrefix = "file:///";

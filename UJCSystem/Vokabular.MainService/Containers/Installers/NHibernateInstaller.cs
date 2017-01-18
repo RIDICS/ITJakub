@@ -7,11 +7,11 @@ using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 
-namespace Vokabular.MainService.Container.Installers
+namespace Vokabular.MainService.Containers.Installers
 {
     public class NHibernateInstaller : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
             var cfg = new Configuration()

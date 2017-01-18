@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="ApplicationConfig.cs" />
     <Compile Include="ApplicationLogging.cs" />
-    <Compile Include="Container\IContainer.cs" />
+    <Compile Include="Container\IIocContainer.cs" />
     <Compile Include="Container\IContainerInstaller.cs" />
     <Compile Include="Extensions\LoggingExtensions.cs" />
     <Compile Include="Options\CommunicationConfigurationProviderBase.cs" />

@@ -13,12 +13,12 @@ using Microsoft.Extensions.Logging;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Extensions;
 
-namespace Vokabular.MainService.Container
+namespace Vokabular.MainService.Containers
 {
     ///<summary>
     ///Container for IOC
     ///</summary>
-    public class WindsorContainerImplementation : WindsorContainer, IContainer
+    public class WindsorContainerImplementation : WindsorContainer, IIocContainer
     {
         private const string ConfigSuffix = ".Container.config";
         private const string CodeBasePrefix = "file:///";

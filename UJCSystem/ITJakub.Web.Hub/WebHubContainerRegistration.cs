@@ -6,7 +6,7 @@ namespace ITJakub.Web.Hub
 {
     public class WebHubContainerRegistration : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<CommunicationProvider>();
             container.AddPerWebRequest<CommunicationConfigurationProvider>();

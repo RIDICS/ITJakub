@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Vokabular.MainService.Container;
-using Vokabular.MainService.Container.Extensions;
-using Vokabular.MainService.Container.Installers;
+using Vokabular.MainService.Containers.Extensions;
+using Vokabular.MainService.Containers;
+using Vokabular.MainService.Containers.Installers;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -32,7 +32,7 @@ namespace Vokabular.MainService
         }
 
         private IConfigurationRoot Configuration { get; }
-        private IContainer Container { get; set; }
+        private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -48,7 +48,7 @@ namespace Vokabular.MainService
             services.AddSwaggerGen();
 
             // IoC
-            IContainer container = new WindsorContainerImplementation();
+            IIocContainer container = new DryIocContainer();
             container.Install<MainServiceContainerRegistration>();
             container.Install<NHibernateInstaller>();
             Container = container;

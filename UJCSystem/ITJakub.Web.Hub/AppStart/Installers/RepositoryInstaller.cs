@@ -5,7 +5,7 @@ namespace ITJakub.Web.Hub.Installers
 {
     public class RepositoryInstaller : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<StaticTextRepository>();
         }

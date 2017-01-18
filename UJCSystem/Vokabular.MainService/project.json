@@ -3,6 +3,8 @@
     "AutoMapper": "5.2.0",
     "Castle.Windsor": "3.3.0",
     "Castle.Windsor.MsDependencyInjection": "1.3.0",
+    "DryIoc.dll": "2.9.7",
+    "DryIoc.Microsoft.DependencyInjection": "1.1.0",
     "log4net": "2.0.7",
     "Log4net.Extensions.Logging": "1.0.0-beta11",
     "Microsoft.AspNetCore.Mvc": "1.0.1",

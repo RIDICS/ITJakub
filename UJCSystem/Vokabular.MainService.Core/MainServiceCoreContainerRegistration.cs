@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Core
 {
     public class MainServiceCoreContainerRegistration : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<PersonManager>();

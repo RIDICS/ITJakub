@@ -6,7 +6,7 @@ namespace Vokabular.MainService
 {
     public class MainServiceContainerRegistration : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             new MainServiceCoreContainerRegistration().Install(container);
             new DataEntitiesContainerRegistration().Install(container);

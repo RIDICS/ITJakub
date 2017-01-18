@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Vokabular.Shared.Container
 {
-    public interface IContainer : IDisposable
+    public interface IIocContainer : IDisposable
     {
         void AddSingleton<TService>() where TService : class;
         void AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService;

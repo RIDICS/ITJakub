@@ -2,6 +2,6 @@
 {
     public interface IContainerInstaller
     {
-        void Install(IContainer container);
+        void Install(IIocContainer container);
     }
 }

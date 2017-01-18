@@ -7,7 +7,7 @@ namespace ITJakub.Web.Hub.Installers
 {
     public class AutoMapperInstaller : IContainerInstaller
     {
-        public void Install(IContainer container)
+        public void Install(IIocContainer container)
         {
             container.AddSingleton<Profile, ConditionCriteriaDescriptionProfile>();
             container.AddSingleton<Profile, DatingCriteriaDescriptionProfile>();
