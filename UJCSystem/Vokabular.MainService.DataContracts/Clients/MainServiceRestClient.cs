@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using Vokabular.MainService.DataContracts.Clients.Extensions;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
@@ -222,13 +223,13 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query)
         {
-            var result = Get<List<OriginalAuthorContract>>($"author/autocomplete?query={query}");
+            var result = Get<List<OriginalAuthorContract>>("author/autocomplete".AddQueryString("query", query));
             return result;
         }
 
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
         {
-            var result = Get<List<ResponsiblePersonContract>>($"responsibleperson/autocomplete?query={query}");
+            var result = Get<List<ResponsiblePersonContract>>("responsibleperson/autocomplete".AddQueryString("query", query));
             return result;
         }
     }

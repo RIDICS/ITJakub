@@ -37,6 +37,7 @@ class ProjectModule {
         
         var dropzoneOptions = DropzoneHelper.getFullConfiguration({
             //url: getBaseUrl() + "Admin/Project/UploadResource"
+            error: DropzoneHelper.getErrorFunction()
         });
         $("#new-resource-upload").dropzone(dropzoneOptions);
         $("#new-resource-version-upload").dropzone(dropzoneOptions);

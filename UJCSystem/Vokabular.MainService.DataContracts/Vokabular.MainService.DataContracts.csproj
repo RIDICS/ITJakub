@@ -39,6 +39,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clients\Extensions\HttpExtensions.cs" />
     <Compile Include="Clients\GetResult.cs" />
     <Compile Include="Clients\MainServiceRestClient.cs" />
     <Compile Include="Clients\RestClientBase.cs" />

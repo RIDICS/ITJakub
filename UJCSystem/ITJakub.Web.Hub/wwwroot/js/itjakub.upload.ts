@@ -43,12 +43,7 @@ class BookUploader {
 
 
             },
-            error: function (file, message, xhr) {
-                var errorMessage = xhr
-                    ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
-                    : message;
-                this.defaultOptions.error(file, errorMessage, xhr);
-            }
+            error: DropzoneHelper.getErrorFunction()
         });
 
         $("#dropzoneFileForm").dropzone(dropzoneOptions);

@@ -24,6 +24,15 @@
         return options;
     }
 
+    public static getErrorFunction(): (file: DropzoneFile, message: string|Error, xhr: XMLHttpRequest) => void {
+        return function (file, message, xhr) {
+            var errorMessage = xhr
+                ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
+                : message;
+            this.defaultOptions.error(file, errorMessage, xhr);
+        }
+    }
+
     public static getFullConfiguration(options: DropzoneOptions): DropzoneOptions {
         return $.extend({}, this.getDefaultConfiguration(), options);
     }
