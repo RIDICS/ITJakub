@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.Web.Hub.Extensions
 {
     public static class MapperConfigExtensions
     {

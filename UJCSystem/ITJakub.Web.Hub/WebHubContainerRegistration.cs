@@ -1,5 +1,7 @@
-﻿using ITJakub.Web.Hub.Installers;
+﻿using ITJakub.Web.DataEntities;
+using ITJakub.Web.Hub.Installers;
 using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Managers.Markdown;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub
@@ -13,8 +15,9 @@ namespace ITJakub.Web.Hub
             container.AddPerWebRequest<StaticTextManager>();
             container.AddPerWebRequest<FeedbacksManager>();
 
-            new AutoMapperInstaller().Install(container);
-            new RepositoryInstaller().Install(container);
+            container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+
+            container.Install(new AutoMapperInstaller(), new NHibernateInstaller(), new WebDataEntitiesContainerRegistration());
         }
     }
 }

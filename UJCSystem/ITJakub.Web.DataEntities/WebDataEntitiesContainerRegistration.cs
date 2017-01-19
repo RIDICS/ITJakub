@@ -1,12 +1,15 @@
 ﻿using ITJakub.Web.DataEntities.Database.Repositories;
+using ITJakub.Web.DataEntities.Database.UnitOfWork;
 using Vokabular.Shared.Container;
 
-namespace ITJakub.Web.Hub.Installers
+namespace ITJakub.Web.DataEntities
 {
-    public class RepositoryInstaller : IContainerInstaller
+    public class WebDataEntitiesContainerRegistration : IContainerInstaller
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
+
             container.AddPerWebRequest<StaticTextRepository>();
         }
     }

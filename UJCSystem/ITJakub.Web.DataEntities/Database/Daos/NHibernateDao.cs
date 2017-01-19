@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
+using ITJakub.Web.DataEntities.Database.UnitOfWork;
 using log4net;
 using NHibernate;
-using Vokabular.DataEntities.Database.UnitOfWork;
 
-namespace Vokabular.DataEntities.Database.Daos
+namespace ITJakub.Web.DataEntities.Database.Daos
 {
     public class NHibernateDao
     {

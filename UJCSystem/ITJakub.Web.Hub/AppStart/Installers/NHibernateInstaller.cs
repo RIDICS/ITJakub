@@ -1,82 +1,38 @@
-using Castle.Facilities.NHibernate;
-using Castle.Transactions;
 using ITJakub.Web.DataEntities.Database.Daos;
 using Microsoft.Extensions.Configuration;
-using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.Shared;
+using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub.Installers
 {
-    public class NHibernateInstaller : INHibernateInstaller
+    public class NHibernateInstaller : IContainerInstaller
     {
-        private readonly IConfigurationPersister m_persister;
-
-        public NHibernateInstaller(IConfigurationPersister persister)
+        public void Install(IIocContainer container)
         {
-            m_persister = persister;
-        }
+            var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
+            var cfg = new Configuration()
+                .DataBaseIntegration(db =>
+                {
+                    db.ConnectionString = connectionString;
+                    db.Dialect<MsSql2008Dialect>();
+                    db.Driver<SqlClientDriver>();
+                    db.ConnectionProvider<DriverConnectionProvider>();
+                    db.BatchSize = 5000;
+                    db.Timeout = byte.MaxValue;
+                    //db.LogFormattedSql = true;
+                    //db.LogSqlInConsole = true;                     
+                })
+                .AddAssembly(typeof(NHibernateDao).Assembly);
 
-        public bool IsDefault
-        {
-            get { return true; }
-        }
+            var sessionFactory = cfg.BuildSessionFactory();
+            
+            container.AddInstance(cfg);
 
-        public string SessionFactoryKey
-        {
-            get { return "nhibernate.default"; }
-        }
-
-        public Maybe<IInterceptor> Interceptor
-        {
-            get { return Maybe.None<IInterceptor>(); }
-        }
-
-        public Configuration Config
-        {
-            get
-            {
-                var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
-                var cfg = new Configuration()
-                    .DataBaseIntegration(db =>
-                    {
-                        db.ConnectionString = connectionString;
-                        db.Dialect<MsSql2008Dialect>();
-                        db.Driver<SqlClientDriver>();
-                        db.ConnectionProvider<DriverConnectionProvider>();
-                        db.BatchSize = 5000;
-                        db.Timeout = byte.MaxValue;
-                        //db.LogFormattedSql = true;
-                        //db.LogSqlInConsole = true;                     
-                    })
-                    .AddAssembly(typeof(NHibernateTransactionalDao).Assembly);
-                return cfg;
-            }
-        }
-
-        public void Registered(ISessionFactory factory)
-        {
-        }
-
-        public Configuration Deserialize()
-        {
-            //if (File.Exists("serialized.dat"))
-            //{
-            //    return m_persister.ReadConfiguration("serialized.dat");
-            //}
-            return null;
-        }
-
-        public void Serialize(Configuration configuration)
-        {
-            //m_persister.WriteConfiguration("serialized.dat", configuration);
-        }
-
-        public void AfterDeserialize(Configuration configuration)
-        {
+            container.AddInstance(sessionFactory);
         }
     }
 }

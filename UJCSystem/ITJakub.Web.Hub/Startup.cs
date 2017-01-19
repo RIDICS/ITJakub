@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ITJakub.Web.Hub.Extensions;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

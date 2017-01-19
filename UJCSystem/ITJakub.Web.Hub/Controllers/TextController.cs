@@ -1,9 +1,9 @@
 ﻿using ITJakub.Web.Hub.Identity;
 using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Managers.Markdown;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using ITJakub.Web.Hub.Models.Type;
-using Markdig;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +12,12 @@ namespace ITJakub.Web.Hub.Controllers
     public class TextController : BaseController
     {
         private readonly StaticTextManager m_staticTextManager;
+        private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public TextController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        public TextController(StaticTextManager staticTextManager, CommunicationProvider communicationProvider, IMarkdownToHtmlConverter markdownToHtmlConverter) : base(communicationProvider)
         {
             m_staticTextManager = staticTextManager;
+            m_markdownToHtmlConverter = markdownToHtmlConverter;
         }
 
         [Authorize(Roles = CustomRole.CanEditStaticText)]
@@ -40,7 +42,7 @@ namespace ITJakub.Web.Hub.Controllers
             switch (request.InputTextFormat)
             {
                 case StaticTextFormatType.Markdown:
-                    result = m_staticTextManager.MarkdownToHtml(request.Text);
+                    result = m_markdownToHtmlConverter.ConvertToHtml(request.Text);
                     break;
                 default:
                     result = request.Text;

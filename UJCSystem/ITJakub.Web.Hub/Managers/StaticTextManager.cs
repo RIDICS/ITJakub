@@ -1,47 +1,27 @@
-﻿using System;
-using AutoMapper;
-using ITJakub.Web.DataEntities.Database.Entities;
+﻿using AutoMapper;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.DataEntities.Database.Repositories;
+using ITJakub.Web.Hub.Managers.Markdown;
+using ITJakub.Web.Hub.Managers.Work;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
-using Markdig;
 
 namespace ITJakub.Web.Hub.Managers
 {
     public class StaticTextManager
     {
         private readonly StaticTextRepository m_staticTextRepository;
+        private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 
-        public StaticTextManager(StaticTextRepository staticTextRepository)
+        public StaticTextManager(StaticTextRepository staticTextRepository, IMarkdownToHtmlConverter markdownToHtmlConverter)
         {
             m_staticTextRepository = staticTextRepository;
+            m_markdownToHtmlConverter = markdownToHtmlConverter;
         }
-
-        public string MarkdownToHtml(string markdown)
-        {
-            var pipeline = new MarkdownPipelineBuilder()
-                .UseAbbreviations()
-                .UseCitations()
-                .UseCustomContainers()
-                .UseDefinitionLists()
-                .UseEmphasisExtras()
-                .UseFigures()
-                .UseFooters()
-                .UseFootnotes()
-                .UseGridTables()
-                .UseMediaLinks()
-                .UsePipeTables()
-                .UseListExtras()
-                .UseTaskLists()
-                .Build();
-            var result = Markdown.ToHtml(markdown, pipeline);
-            return result;
-        }
-
+        
         public StaticTextViewModel GetText(string name)
         {
-            var staticText = m_staticTextRepository.GetStaticText(name);
+            var staticText = new GetStaticTextWork(m_staticTextRepository, name).Execute();
             if (staticText == null)
             {
                 return new StaticTextViewModel
@@ -57,7 +37,7 @@ namespace ITJakub.Web.Hub.Managers
 
         public StaticTextViewModel GetRenderedHtmlText(string name)
         {
-            var staticTextEntity = m_staticTextRepository.GetStaticText(name);
+            var staticTextEntity = new GetStaticTextWork(m_staticTextRepository, name).Execute();
             if (staticTextEntity == null)
             {
                 return new StaticTextViewModel
@@ -72,7 +52,7 @@ namespace ITJakub.Web.Hub.Managers
             switch (staticTextEntity.Format)
             {
                 case StaticTextFormat.Markdown:
-                    viewModel.Text = MarkdownToHtml(staticTextEntity.Text);
+                    viewModel.Text = m_markdownToHtmlConverter.ConvertToHtml(staticTextEntity.Text);
                     viewModel.Format = StaticTextFormatType.Html;
                     break;
                 case StaticTextFormat.PlainText:
@@ -85,24 +65,9 @@ namespace ITJakub.Web.Hub.Managers
 
         public ModificationUpdateViewModel SaveText(string name, string text, StaticTextFormatType format, string username)
         {
-            var now = DateTime.UtcNow;
-            var staticTextEntity = m_staticTextRepository.GetStaticText(name);
-            if (staticTextEntity == null)
-            {
-                staticTextEntity = new StaticText
-                {
-                    Name = name
-                };
-            }
-
-            staticTextEntity.Text = text;
-            staticTextEntity.Format = Mapper.Map<StaticTextFormat>(format);
-            staticTextEntity.ModificationUser = username;
-            staticTextEntity.ModificationTime = now;
-
-            m_staticTextRepository.Save(staticTextEntity);
-
-            return Mapper.Map<ModificationUpdateViewModel>(staticTextEntity);
+            var formatType = Mapper.Map<StaticTextFormat>(format);
+            var result = new SaveStaticTextWork(m_staticTextRepository, name, text, formatType, username).Execute();
+            return result;
         }
     }
 }
