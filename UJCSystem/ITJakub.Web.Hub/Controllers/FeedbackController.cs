@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Web.Hub.Identity;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

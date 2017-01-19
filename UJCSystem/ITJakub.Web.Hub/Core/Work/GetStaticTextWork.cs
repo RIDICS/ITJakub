@@ -2,7 +2,7 @@
 using ITJakub.Web.DataEntities.Database.Repositories;
 using ITJakub.Web.DataEntities.Database.UnitOfWork;
 
-namespace ITJakub.Web.Hub.Managers.Work
+namespace ITJakub.Web.Hub.Core.Work
 {
     public class GetStaticTextWork : UnitOfWorkBase<StaticText>
     {

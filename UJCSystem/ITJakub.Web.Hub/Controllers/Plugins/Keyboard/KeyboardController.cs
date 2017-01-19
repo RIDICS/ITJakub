@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Plugins.Keyboard;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

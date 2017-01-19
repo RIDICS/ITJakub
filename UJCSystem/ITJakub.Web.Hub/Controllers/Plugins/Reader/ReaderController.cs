@@ -3,7 +3,7 @@ using AutoMapper;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

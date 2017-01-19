@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace ITJakub.Web.Hub.Identity
+namespace ITJakub.Web.Hub.Core.Identity
 {
     public class CustomPasswordHasher: IPasswordHasher<ApplicationUser>
     {

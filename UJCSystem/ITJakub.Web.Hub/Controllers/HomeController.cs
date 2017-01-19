@@ -1,5 +1,7 @@
 ﻿using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core;
+using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

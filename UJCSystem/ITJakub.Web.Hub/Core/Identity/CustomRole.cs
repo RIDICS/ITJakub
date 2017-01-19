@@ -1,4 +1,4 @@
-namespace ITJakub.Web.Hub.Identity
+namespace ITJakub.Web.Hub.Core.Identity
 {
     public class CustomRole
     {

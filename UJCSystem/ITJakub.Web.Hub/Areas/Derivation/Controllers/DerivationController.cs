@@ -1,7 +1,7 @@
 ﻿using ITJakub.Lemmatization.Shared.Contracts;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Identity;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ServiceModel.Syndication;
 using ITJakub.Shared.Contracts.News;
-using ITJakub.Web.Hub.Identity;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;

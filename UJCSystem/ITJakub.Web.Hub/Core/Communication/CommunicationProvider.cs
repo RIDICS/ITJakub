@@ -7,7 +7,7 @@ using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Lemmatization.Shared.Contracts;
 using Vokabular.MainService.DataContracts.Clients;
 
-namespace ITJakub.Web.Hub.Managers
+namespace ITJakub.Web.Hub.Core.Communication
 {
     public class CommunicationProvider
     {

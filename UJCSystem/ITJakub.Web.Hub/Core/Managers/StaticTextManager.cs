@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using ITJakub.Web.DataEntities.Database.Entities.Enums;
 using ITJakub.Web.DataEntities.Database.Repositories;
-using ITJakub.Web.Hub.Managers.Markdown;
-using ITJakub.Web.Hub.Managers.Work;
+using ITJakub.Web.Hub.Core.Markdown;
+using ITJakub.Web.Hub.Core.Work;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Type;
 
-namespace ITJakub.Web.Hub.Managers
+namespace ITJakub.Web.Hub.Core.Managers
 {
     public class StaticTextManager
     {

@@ -1,9 +1,9 @@
-﻿using ITJakub.ITJakubService.DataContracts;
+using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Models;
 
-namespace ITJakub.Web.Hub.Managers
+namespace ITJakub.Web.Hub.Core.Managers
 {
     public class FeedbacksManager
     {

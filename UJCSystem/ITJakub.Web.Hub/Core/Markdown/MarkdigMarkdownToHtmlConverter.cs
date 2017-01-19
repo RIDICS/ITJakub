@@ -1,6 +1,6 @@
 ﻿using Markdig;
 
-namespace ITJakub.Web.Hub.Managers.Markdown
+namespace ITJakub.Web.Hub.Core.Markdown
 {
     public class MarkdigMarkdownToHtmlConverter : IMarkdownToHtmlConverter
     {

@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Extensions;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.Web.Hub.Containers
 {
     ///<summary>
     ///Container for IOC

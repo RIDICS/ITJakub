@@ -5,7 +5,7 @@ using System.Xml;
 using Microsoft.Extensions.Options;
 using Vokabular.Shared.Options;
 
-namespace ITJakub.Web.Hub.Managers
+namespace ITJakub.Web.Hub.Core.Communication
 {
     public class CommunicationConfigurationProvider : CommunicationConfigurationProviderBase
     {

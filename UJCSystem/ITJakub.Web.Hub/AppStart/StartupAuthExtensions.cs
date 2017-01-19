@@ -1,5 +1,5 @@
 ﻿using System;
-using ITJakub.Web.Hub.Identity;
+using ITJakub.Web.Hub.Core.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;

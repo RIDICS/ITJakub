@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ITJakub.Web.Hub.Managers
+namespace ITJakub.Web.Hub.Core
 {
     public static class VersionInfo
     {

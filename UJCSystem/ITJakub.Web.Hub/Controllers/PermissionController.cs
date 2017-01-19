@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using ITJakub.Web.Hub.Identity;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
+using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models.Requests.Permission;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

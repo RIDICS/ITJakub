@@ -6,7 +6,7 @@ using ITJakub.Web.DataEntities.Database.Repositories;
 using ITJakub.Web.DataEntities.Database.UnitOfWork;
 using ITJakub.Web.Hub.Models;
 
-namespace ITJakub.Web.Hub.Managers.Work
+namespace ITJakub.Web.Hub.Core.Work
 {
     public class SaveStaticTextWork : UnitOfWorkBase<ModificationUpdateViewModel>
     {

@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Web.Hub.Managers.Markdown
+﻿namespace ITJakub.Web.Hub.Core.Markdown
 {
     public interface IMarkdownToHtmlConverter
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using ITJakub.Shared.Contracts;
 
-namespace ITJakub.Web.Hub.Identity
+namespace ITJakub.Web.Hub.Core.Identity
 {
     public class ApplicationUser
     {

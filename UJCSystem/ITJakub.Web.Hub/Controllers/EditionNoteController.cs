@@ -1,5 +1,5 @@
 ﻿using ITJakub.Shared.Contracts;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITJakub.Web.Hub.Controllers

@@ -3,12 +3,12 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ITJakub.Shared.Contracts;
-using ITJakub.Web.Hub.Managers;
+using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace ITJakub.Web.Hub.Identity
+namespace ITJakub.Web.Hub.Core.Identity
 {
     public class ApplicationUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<ApplicationUser, CustomRole>
     {
