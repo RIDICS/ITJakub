@@ -10,9 +10,9 @@ namespace Vokabular.MainService.Core.Works
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly ProjectContract m_newData;
-        private readonly long m_userId;
+        private readonly int m_userId;
 
-        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, long userId) : base(projectRepository.UnitOfWork)
+        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, int userId) : base(projectRepository.UnitOfWork)
         {
             m_projectRepository = projectRepository;
             m_newData = newData;

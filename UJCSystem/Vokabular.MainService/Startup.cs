@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
+using Vokabular.MainService.Containers.Loggers;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -62,7 +63,7 @@ namespace Vokabular.MainService
             // Configure logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            loggerFactory.AddLog4Net();
+            loggerFactory.AddProvider(new CustomLog4NetProvider());
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             app.ConfigureAutoMapper();

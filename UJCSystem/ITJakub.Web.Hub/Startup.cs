@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITJakub.Web.Hub.Containers;
+using ITJakub.Web.Hub.AppStart.Containers;
+using ITJakub.Web.Hub.AppStart.Loggers;
 using ITJakub.Web.Hub.Extensions;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
@@ -66,10 +67,10 @@ namespace ITJakub.Web.Hub
             services.AddMvc();
 
             // IoC
-            IIocContainer container = new WindsorContainerImplementation();
+            IIocContainer container = new DryIocContainer();
             container.Install<WebHubContainerRegistration>();
             Container = container;
-
+            
             return container.CreateServiceProvider(services);
         }
 
@@ -79,7 +80,7 @@ namespace ITJakub.Web.Hub
             // Logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            loggerFactory.AddLog4Net();
+            loggerFactory.AddProvider(new CustomLog4NetProvider());
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             if (env.IsDevelopment())

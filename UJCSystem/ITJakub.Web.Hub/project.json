@@ -31,7 +31,10 @@
     "typeahead.TypeScript.DefinitelyTyped": "0.3.5",
     "System.Runtime.Serialization.Xml": "4.3.0",
     "System.ServiceModel.Http": "4.3.0",
-    "System.ServiceModel.Primitives": "4.3.0"  },
+    "System.ServiceModel.Primitives": "4.3.0",
+    "DryIoc.dll": "2.9.7",
+    "DryIoc.Microsoft.DependencyInjection": "1.1.0"
+  },
 
   "tools": {
     "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
