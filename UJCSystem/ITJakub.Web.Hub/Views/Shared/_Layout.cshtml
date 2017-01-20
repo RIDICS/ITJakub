@@ -570,18 +570,7 @@
                 </li>
             </ul>
             <div class="footer-text">
-                VOKABULÁŘ WEBOVÝ byl spuštěn před @{
-                    var now = DateTime.Now;
-                    var releaseDate = new DateTime(2015, 1, 1);
-                    var difference = now - releaseDate;
-                    var age = DateTime.MinValue + difference; //Min value is 1.1. 0001
-
-                    var years = age.Year - 1;
-                    var months = age.Month - 1;
-                    var days = age.Day - 1;
-
-                    @: @years lety, @months měsíci a @days dny
-                }
+                VOKABULÁŘ WEBOVÝ byl spuštěn před @FooterHelper.VokabularStarted(new DateTime(2015, 1, 1))
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="Ústav pro jazyk český">
