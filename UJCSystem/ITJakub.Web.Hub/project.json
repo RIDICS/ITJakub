@@ -33,7 +33,8 @@
     "System.ServiceModel.Http": "4.3.0",
     "System.ServiceModel.Primitives": "4.3.0",
     "DryIoc.dll": "2.9.7",
-    "DryIoc.Microsoft.DependencyInjection": "1.1.0"
+    "DryIoc.Microsoft.DependencyInjection": "1.1.0",
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0"
   },
 
   "tools": {
