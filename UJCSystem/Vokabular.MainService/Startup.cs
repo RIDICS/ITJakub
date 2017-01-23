@@ -20,10 +20,17 @@ namespace Vokabular.MainService
     {
         public Startup(IHostingEnvironment env)
         {
+            var globalbuilder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("globalsettings.json");
+            var globalConfiguration = globalbuilder.Build();
+
+            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
