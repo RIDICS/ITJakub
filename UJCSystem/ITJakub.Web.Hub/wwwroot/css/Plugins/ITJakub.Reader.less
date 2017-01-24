@@ -948,12 +948,15 @@ a.no-click-href {
 
 @media print {
     body {
-        padding-top: 0;
+        padding-top: 0 !important;
     }
     .header-content {
         min-height: 0;
         height: 0;
         overflow: hidden;
+    }
+    .container-header {
+        display: none;
     }
     .container.module-content {
         margin-top: 0;

@@ -548,6 +548,8 @@ class DictionaryViewer {
         doc.write(pageHtml);
         doc.write("</div>");
         doc.close();
+
+        $(".pagination-input input", doc).val(this.pagination.getCurrentPage());
         
         $("link, style").each((index, element) => {
             $(doc.head).append($(element).clone());
@@ -555,7 +557,8 @@ class DictionaryViewer {
 
         var css = "body { background-color: white; padding: 0 10px; }"
             + ".dictionary-result-headword-favorite { display: none; }"
-            + ".dictionary-result-book-list { margin-left: 16px; }";
+            + ".dictionary-result-book-list { margin-left: 16px; }"
+            + "ul { list-style: none; padding-left: 0; }";
         var style = doc.createElement("style");
         style.type = "text/css";
         style.appendChild(document.createTextNode(css));
