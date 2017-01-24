@@ -57,7 +57,9 @@
     "include": [
       "wwwroot",
       "**/*.cshtml",
-      "appsettings.json",
+      "appsettings*.json",
+      "globalsettings.json",
+      "log4net.config",
       "web.config"
     ]
   },

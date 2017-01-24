@@ -80,6 +80,7 @@
       "Content",
       "appsettings*.json",
       "globalsettings.json",
+      "log4net.config",
       "web.config"
     ]
   },

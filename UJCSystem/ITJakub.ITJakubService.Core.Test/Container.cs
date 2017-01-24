@@ -37,18 +37,14 @@ namespace ITJakub.ITJakubService.Core.Test
             XmlConfigurator.Configure(new FileInfo("log4net.config"));
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-            //Add subresolvers
             AddSubresolvers();
 
             InstallComponents();
-
-            ////Configure Nhibernate
-            //InstallFacilities();
-
-            //configure AutoMapper
+            
             ConfigureAutoMapper();
+
             if (m_log.IsDebugEnabled)
-                m_log.DebugFormat("Configuration castle is completed");
+                m_log.DebugFormat("Configuration Castle Windsor is completed");
         }
 
         private void InstallComponents()
