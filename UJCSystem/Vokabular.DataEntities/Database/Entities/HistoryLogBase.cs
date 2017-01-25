@@ -14,5 +14,6 @@ namespace Vokabular.DataEntities.Database.Entities
     public class FullProjectImportLog : HistoryLogBase
     {
         public virtual string AdditionalDescription { get; set; }
+        public virtual string ExternalId { get; set; }
     }
 }

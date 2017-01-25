@@ -12,7 +12,7 @@
     
     <property name="IsDefault" />
     
-    <property name="LastUseTime" />
+    <property name="LastUseTime" type="UtcDateTime" />
     
     <many-to-one name="User"
                  column="[User]"

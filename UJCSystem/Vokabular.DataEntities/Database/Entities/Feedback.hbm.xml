@@ -19,7 +19,7 @@
     
     <property name="AuthorEmail" />
     
-    <property name="CreateTime" />
+    <property name="CreateTime" type="UtcDateTime" />
 
     <property name="FeedbackCategory" />
     

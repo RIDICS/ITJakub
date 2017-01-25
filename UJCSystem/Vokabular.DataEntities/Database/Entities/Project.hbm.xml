@@ -8,6 +8,8 @@
     <property name="Name" not-null="true" />
 
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
+    
+    <property name="ExternalId" not-null="true" />
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     

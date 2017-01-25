@@ -12,7 +12,7 @@
     
     <property name="Text" />
     
-    <property name="CreateTime" />
+    <property name="CreateTime" type="UtcDateTime" />
     
     <many-to-one name="Project"
                  class="Project"
@@ -27,6 +27,8 @@
       discriminator-value="FullProjectImport">
 
       <property name="AdditionalDescription" />
+      
+      <property name="ExternalId" />
 
     </subclass>
 

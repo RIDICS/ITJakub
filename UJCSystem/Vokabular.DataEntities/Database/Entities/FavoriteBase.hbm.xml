@@ -19,7 +19,7 @@
     
     <property name="Description" />
     
-    <property name="CreateTime" />
+    <property name="CreateTime" type="UtcDateTime" />
     
     
     <many-to-one name="FavoriteLabel"

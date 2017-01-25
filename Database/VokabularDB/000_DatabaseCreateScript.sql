@@ -127,6 +127,7 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Project(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar(2000) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
+	   [ExternalId] varchar(255) NOT NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_Project(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
 	   -- TODO possible reference to latest metadata
 	   -- TODO Unique?
@@ -328,6 +329,7 @@ BEGIN TRAN
 		[LogType] varchar(255) NOT NULL,
 		[Text] nvarchar(2000) NOT NULL,
 		[AdditionalDescription] nvarchar(2000) NULL,
+		[ExternalId] varchar(255) NULL,
 		--[DiscussionPost] bigint NULL CONSTRAINT [FK_HistoryLog(DiscussionPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
 		--[Snapshot] bigint NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
 		[ResourceVersion] bigint NULL CONSTRAINT [FK_HistoryLog(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
