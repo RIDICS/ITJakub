@@ -125,7 +125,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Project]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Project(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(MAX) NOT NULL,
+	   [Name] varchar(2000) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_Project(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
 	   -- TODO possible reference to latest metadata
@@ -159,7 +159,7 @@ BEGIN TRAN
 	   [VersionNumber] int NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_ResourceVersion(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
-	   [Comment] varchar(MAX) NULL,
+	   [Comment] nvarchar(2000) NULL,
 	   CONSTRAINT [UQ_ResourceVersion(Id)(VersionNumber)] UNIQUE ([Id],[VersionNumber])
 	)
 
@@ -168,15 +168,15 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[MetadataResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Title] varchar(MAX) NULL, -- TODO is versioned?
-	   [SubTitle] varchar(MAX) NULL, -- TODO will be used?
+	   [Title] varchar(2000) NULL,
+	   [SubTitle] varchar(2000) NULL,
 	   [RelicAbbreviation] varchar(100) NULL,
-	   [SourceAbbreviation] nvarchar(255) NULL,
+	   [SourceAbbreviation] varchar(255) NULL,
 	   [Publisher] int NULL CONSTRAINT [FK_MetadataResource(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
 	   [PublishPlace] varchar(100) NULL,
 	   [PublishDate] varchar(50) NULL,
-	   [Copyright] varchar(MAX) NULL,
-	   [BiblText] varchar(MAX) NULL,
+	   [Copyright] nvarchar(MAX) NULL,
+	   [BiblText] nvarchar(MAX) NULL,
 	   [OriginDate] varchar(50) NULL,
 	   [NotBefore] date NULL,
 	   [NotAfter] date NULL,
@@ -185,10 +185,9 @@ BEGIN TRAN
 	   [ManuscriptCountry] varchar (100) NULL,
 	   [ManuscriptRepository] varchar (100) NULL,
 	   [ManuscriptExtent] varchar(50) NULL, -- TODO unkown value type
-	   [ManuscriptTitle] varchar(MAX) NULL -- TODO is different from Title?
+	   [ManuscriptTitle] varchar(2000) NULL -- TODO is different from Title?
 	   
 	   -- TODO !!! Is possible have multiple different manuscripts?
-	   -- TODO handling M:N LiteraryGenre, LiteraryKind
     )
 
     CREATE TABLE [dbo].[PageResource]
@@ -224,7 +223,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[ChapterResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Name] varchar(MAX) NOT NULL,
+	   [Name] varchar(1000) NOT NULL,
 	   [Position] int NOT NULL,
 	   [BeginningPageResource] bigint NULL CONSTRAINT [FK_ChapterResource(BeginningPageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
@@ -245,20 +244,14 @@ BEGIN TRAN
 	   [PageResource] bigint NULL CONSTRAINT [FK_HeadwordResource(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
-	CREATE TABLE [dbo].[TermResource]
+	CREATE TABLE [dbo].[BinaryResource]
 	(
-	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TermResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Term] int NOT NULL CONSTRAINT [FK_TermResource(Term)_Term(Id)] FOREIGN KEY REFERENCES [dbo].[Term](Id)
-	   --ParentResource is PageResource
-    )
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_BinaryResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Name] varchar(255) NOT NULL,
+	   [FileName] varchar(255) NULL
+	)
 
-	CREATE TABLE [dbo].[KeywordResource]
-    (
-	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_KeywordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Keyword] int NOT NULL CONSTRAINT [FK_KeywordResource(Keyword)_Keyword(Id)] FOREIGN KEY REFERENCES [dbo].[Keyword](Id)
-    )
-
-
+	
 -- Other tables
 	
 	CREATE TABLE [dbo].[FavoriteLabel]
@@ -278,7 +271,7 @@ BEGIN TRAN
 	   [FavoriteType] varchar(255) NOT NULL,
 	   [FavoriteLabel] bigint NOT NULL FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
 	   [Title] varchar(255) NULL,
-	   [Description] varchar(max) NULL, --TODO is required?
+	   [Description] nvarchar(2000) NULL, --TODO is required?
 	   [CreateTime] datetime NULL,
 	   [Project] bigint NULL FOREIGN KEY REFERENCES [dbo].[Project] (Id),
 	   [Category] int NULL FOREIGN KEY REFERENCES [dbo].[Category] (Id),
@@ -309,7 +302,7 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_NewsSyndicationItem(Id)] PRIMARY KEY CLUSTERED,
 	   [Title] varchar(255) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
-	   [Text] varchar(2000) NOT NULL,
+	   [Text] nvarchar(2000) NOT NULL,
 	   [Url] varchar(max) NOT NULL,
 	   [ItemType] smallint NOT NULL,
 	   [User] int NULL CONSTRAINT [FK_NewsSyndicationItem(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id)
@@ -319,7 +312,7 @@ BEGIN TRAN
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Transformation(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar (100) NOT NULL,
-	   [Description] varchar (MAX) NULL,
+	   [Description] nvarchar (2000) NULL,
 	   [OutputFormat] smallint NOT NULL,
 	   [BookType] int NULL CONSTRAINT [FK_Transformation(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
 	   [IsDefaultForBookType] bit NOT NULL,
@@ -331,45 +324,53 @@ BEGIN TRAN
 	
 	CREATE TABLE [dbo].[Project_OriginalAuthor]
     (
-	   [Author] int NOT NULL CONSTRAINT [FK_Project_OriginalAuthor(Author)_OriginalAuthor(Id)] FOREIGN KEY REFERENCES [dbo].[OriginalAuthor] (Id),
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_OriginalAuthor(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
+	   [Author] int NOT NULL CONSTRAINT [FK_Project_OriginalAuthor(Author)_OriginalAuthor(Id)] FOREIGN KEY REFERENCES [dbo].[OriginalAuthor] (Id),
 	   [Sequence] int NOT NULL,
-	   CONSTRAINT [PK_Project_OriginalAuthor(Author)_Project_OriginalAuthor(Project)] PRIMARY KEY ([Author], [Project])
+	   CONSTRAINT [PK_Project_OriginalAuthor(Project)_Project_OriginalAuthor(Author)] PRIMARY KEY ([Project], [Author])
     )
 	
 	CREATE TABLE [dbo].[Project_ResponsiblePerson]
     (
-	   [Responsible] int NOT NULL CONSTRAINT [FK_Project_ResponsiblePerson(Responsible)_ResponsiblePerson(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsiblePerson] (Id),
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_ResponsiblePerson(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
-	   CONSTRAINT [PK_Project_ResponsiblePerson(Responsible)_Project_ResponsiblePerson(Project)] PRIMARY KEY ([Responsible], [Project])
+	   [Responsible] int NOT NULL CONSTRAINT [FK_Project_ResponsiblePerson(Responsible)_ResponsiblePerson(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsiblePerson] (Id),
+	   [ResponsibleType] int NOT NULL CONSTRAINT [FK_Project_ResponsiblePerson(ResponsibleType)_ResponsibleType(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsibleType] (Id),
+	   CONSTRAINT [PK_Project_ResponsiblePerson(Project)_Project_ResponsiblePerson(Responsible)_Project_ResponsiblePerson(ResponsibleType)] PRIMARY KEY ([Project], [Responsible], [ResponsibleType])
     )
     
 	CREATE TABLE [dbo].[Project_Category]
     (
+	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_Category(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
 	   [Category] int NOT NULL CONSTRAINT [FK_Project_Category(Category)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category] (Id),
-	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_Category(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-	   CONSTRAINT [PK_Project_Category(Category)_Project_Category(Project)] PRIMARY KEY ([Category], [Project])
+	   CONSTRAINT [PK_Project_Category(Project)_Project_Category(Category)] PRIMARY KEY ([Project], [Category])
     )
 	
-	CREATE TABLE [dbo].[ResponsiblePerson_ResponsibleType]
-    (
-	   [Person] int NOT NULL CONSTRAINT [FK_ResponsiblePerson_ResponsibleType(Person)_ResponsiblePerson(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsiblePerson] (Id),
-	   [Type] int NOT NULL CONSTRAINT [FK_ResponsiblePerson_ResponsibleType(Type)_ResponsibleType(Id)] FOREIGN KEY REFERENCES [dbo].[ResponsibleType](Id),
-	   CONSTRAINT [PK_ResponsiblePerson_ResponsibleType(Person)_ResponsiblePerson_ResponsibleType(Type)] PRIMARY KEY ([Person], [Type])
-    )
-
 	CREATE TABLE [dbo].[Project_LiteraryGenre]
     (
-	   [LiteraryGenre] int NOT NULL CONSTRAINT [FK_Project_LiteraryGenre(LiteraryGenre)_LiteraryGenre(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryGenre] (Id),
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_LiteraryGenre(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-	   CONSTRAINT [PK_Project_LiteraryGenre(LiteraryGenre)_Project_LiteraryGenre(Project)] PRIMARY KEY ([LiteraryGenre], [Project])
+	   [LiteraryGenre] int NOT NULL CONSTRAINT [FK_Project_LiteraryGenre(LiteraryGenre)_LiteraryGenre(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryGenre] (Id),
+	   CONSTRAINT [PK_Project_LiteraryGenre(Project)_Project_LiteraryGenre(LiteraryGenre)] PRIMARY KEY ([Project], [LiteraryGenre])
     )
 
 	CREATE TABLE [dbo].[Project_LiteraryKind]
     (
-	   [LiteraryKind] int NOT NULL CONSTRAINT [FK_Project_LiteraryKind(LiteraryKind)_LiteraryKind(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryKind] (Id),
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_LiteraryKind(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-	   CONSTRAINT [PK_Project_LiteraryKind(LiteraryKind)_Project_LiteraryKind(Project)] PRIMARY KEY ([LiteraryKind], [Project])
+	   [LiteraryKind] int NOT NULL CONSTRAINT [FK_Project_LiteraryKind(LiteraryKind)_LiteraryKind(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryKind] (Id),
+	   CONSTRAINT [PK_Project_LiteraryKind(Project)_Project_LiteraryKind(LiteraryKind)] PRIMARY KEY ([Project], [LiteraryKind])
+    )
+
+	CREATE TABLE [dbo].[Project_Keyword]
+    (
+	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_Keyword(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
+	   [Keyword] int NOT NULL CONSTRAINT [FK_Project_Keyword(Keyword)_Keyword(Id)] FOREIGN KEY REFERENCES [dbo].[Keyword](Id),
+	   CONSTRAINT [PK_Project_Keyword(Project)_Project_Keyword(Keyword)] PRIMARY KEY ([Project], [Keyword])
+    )
+
+	CREATE TABLE [dbo].[PageResource_Term]
+	(
+	   [PageResource] bigint NOT NULL CONSTRAINT [FK_PageResource_Term(PageResource)_PageResource(Id)] FOREIGN KEY REFERENCES [dbo].[PageResource](ResourceVersionId),
+	   [Term] int NOT NULL CONSTRAINT [FK_PageResource_Term(Term)_Term(Id)] FOREIGN KEY REFERENCES [dbo].[Term](Id),
+	   CONSTRAINT [PK_PageResource_Term(PageResource)_PageResource_Term(Term)] PRIMARY KEY ([PageResource], [Term])
     )
 
 	
