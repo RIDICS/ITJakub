@@ -22,6 +22,11 @@
       
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
+
+      <bag name="Terms" table="PageResource_Term" cascade="save-update" lazy="true">
+        <key column="PageResource" />
+        <many-to-many class="Term" column="Term" />
+      </bag>
     </joined-subclass>
 
     <joined-subclass table="TextResource" name="TextResource" >
@@ -94,16 +99,11 @@
       <many-to-one name="PageResource" class="Resource" lazy="proxy" />
     </joined-subclass>
 
-    <joined-subclass table="TermResource" name="TermResource" >
+    <joined-subclass table="BinaryResource" name="BinaryResource" >
       <key column="ResourceVersionId" />
-      
-      <many-to-one name="Term" class="Term" lazy="proxy" />
-    </joined-subclass>
 
-    <joined-subclass table="KeywordResource" name="KeywordResource" >
-      <key column="ResourceVersionId" />
-      
-      <many-to-one name="Keyword" class="Keyword" lazy="proxy" />
+      <property name="Name" not-null="true" />
+      <property name="FileName" not-null="true" />
     </joined-subclass>
 
   </class>

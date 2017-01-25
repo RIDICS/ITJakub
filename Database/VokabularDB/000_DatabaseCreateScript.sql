@@ -248,7 +248,7 @@ BEGIN TRAN
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_BinaryResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] varchar(255) NOT NULL,
-	   [FileName] varchar(255) NULL
+	   [FileName] varchar(255) NOT NULL
 	)
 
 	

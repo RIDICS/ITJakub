@@ -9,7 +9,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual int Id { get; set; }
         public virtual string Text { get; set; }
         public virtual ResponsibleTypeEnum Type { get; set; }
-        public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
+        public virtual IList<ProjectResponsiblePerson> ResponsiblePersons { get; set; }
 
         public virtual bool Equals(ResponsibleType other)
         {

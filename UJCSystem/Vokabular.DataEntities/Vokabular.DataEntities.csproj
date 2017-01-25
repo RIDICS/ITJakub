@@ -69,6 +69,7 @@
     <Compile Include="Database\Entities\Enums\ResponsibleTypeEnum.cs" />
     <Compile Include="Database\Entities\Project.cs" />
     <Compile Include="Database\Entities\ProjectOriginalAuthor.cs" />
+    <Compile Include="Database\Entities\ProjectResponsiblePerson.cs" />
     <Compile Include="Database\Entities\Publisher.cs" />
     <Compile Include="Database\Entities\Resource.cs" />
     <Compile Include="Database\Entities\ResourceVersion.cs" />
@@ -170,6 +171,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\ProjectOriginalAuthor.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\ProjectResponsiblePerson.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

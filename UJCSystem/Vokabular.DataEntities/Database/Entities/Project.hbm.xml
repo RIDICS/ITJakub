@@ -21,9 +21,9 @@
       <one-to-many class="ProjectOriginalAuthor" />
     </bag>
 
-    <bag name="ResponsiblePersons" table="Project_ResponsiblePerson" cascade="save-update" lazy="true">
+    <bag name="ResponsiblePersons" table="Project_ResponsiblePerson" cascade="all-delete-orphan" lazy="true">
       <key column="Project" />
-      <many-to-many class="ResponsiblePerson" column="Responsible" />
+      <one-to-many class="ProjectResponsiblePerson" />
     </bag>
 
     <bag name="LiteraryKinds" table="Project_LiteraryKind" cascade="save-update" lazy="true">
@@ -39,6 +39,11 @@
     <bag name="Categories" table="Project_Category" cascade="save-update" lazy="true">
       <key column="Project" />
       <many-to-many class="Category" column="Category" />
+    </bag>
+
+    <bag name="Keywords" table="Project_Keyword" cascade="save-update" lazy="true">
+      <key column="Project" />
+      <many-to-many class="Keyword" column="Keyword" />
     </bag>
     
   </class>

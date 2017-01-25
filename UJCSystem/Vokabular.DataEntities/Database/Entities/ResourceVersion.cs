@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace Vokabular.DataEntities.Database.Entities
@@ -66,6 +67,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string Name { get; set; }
         public virtual int Position { get; set; }
+        public virtual IList<Term> Terms { get; set; }
     }
 
     public class TextResource : ResourceVersion
@@ -109,13 +111,9 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual Resource PageResource { get; set; }
     }
 
-    public class TermResource : ResourceVersion
+    public class BinaryResource : ResourceVersion
     {
-        public virtual Term Term { get; set; }
-    }
-
-    public class KeywordResource : ResourceVersion
-    {
-        public virtual Keyword Keyword { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string FileName { get; set; }
     }
 }

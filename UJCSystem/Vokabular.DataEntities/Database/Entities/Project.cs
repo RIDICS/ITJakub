@@ -17,13 +17,15 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<ProjectOriginalAuthor> Authors { get; set; }
 
-        public virtual IList<ResponsiblePerson> ResponsiblePersons { get; set; }
+        public virtual IList<ProjectResponsiblePerson> ResponsiblePersons { get; set; }
 
         public virtual IList<LiteraryKind> LiteraryKinds { get; set; }
 
         public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
 
         public virtual IList<Category> Categories { get; set; }
+
+        public virtual IList<Keyword> Keywords { get; set; }
 
         public virtual bool Equals(Project other)
         {

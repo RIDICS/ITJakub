@@ -19,6 +19,7 @@ namespace Vokabular.MainService.Core.Works.Person
 
         protected override int ExecuteWorkImplementation()
         {
+            throw new System.InvalidOperationException("Database model was changed. UI and logic update is required");
             var responsibleTypes = new List<ResponsibleType>();
             foreach (var responsibleTypeId in m_data.ResponsibleTypeIdList)
             {
@@ -30,7 +31,7 @@ namespace Vokabular.MainService.Core.Works.Person
             {
                 FirstName = m_data.FirstName,
                 LastName = m_data.LastName,
-                ResponsibleTypes = responsibleTypes
+                //ResponsibleTypes = responsibleTypes
             };
             return (int) m_personRepository.Create(responsiblePerson);
         }

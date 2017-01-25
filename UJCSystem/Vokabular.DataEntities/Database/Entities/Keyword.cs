@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
@@ -6,7 +7,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual int Id { get; set; }
         public virtual string Text { get; set; }
-        //public virtual IList<ResourceVersion> ProjectKeywords { get; set; }
+        public virtual IList<Project> Projects { get; set; }
 
         public virtual bool Equals(Keyword other)
         {

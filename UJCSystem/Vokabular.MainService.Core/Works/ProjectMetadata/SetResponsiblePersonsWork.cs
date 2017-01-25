@@ -20,6 +20,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 
         protected override void ExecuteWorkImplementation()
         {
+            throw new System.InvalidOperationException("Database model was changed. UI and logic update is required");
             var responsiblePersonList = new List<ResponsiblePerson>();
             foreach (var id in m_responsiblePersonIdList)
             {
@@ -28,7 +29,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             }
 
             var project = m_metadataRepository.Load<Project>(m_projectId);
-            project.ResponsiblePersons = responsiblePersonList;
+            //project.ResponsiblePersons = responsiblePersonList;
 
             m_metadataRepository.Update(project);
         }

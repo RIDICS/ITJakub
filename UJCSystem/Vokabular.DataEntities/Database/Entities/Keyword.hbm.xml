@@ -6,6 +6,11 @@
     </id>
     
     <property name="Text" not-null="true" />
-    
+
+    <bag name="Projects" table="Project_Keyword" inverse="true" lazy="true">
+      <key column="Keyword" />
+      <many-to-many class="Project" column="Project" />
+    </bag>
+
   </class>
 </hibernate-mapping>
