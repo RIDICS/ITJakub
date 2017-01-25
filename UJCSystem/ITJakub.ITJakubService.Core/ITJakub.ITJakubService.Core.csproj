@@ -133,10 +133,6 @@
       <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.FileProcessing.Core\ITJakub.FileProcessing.Core.csproj">
-      <Project>{5CEF4267-5E27-4ACB-B832-74852BE6CE1E}</Project>
-      <Name>ITJakub.FileProcessing.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj">
       <Project>{56512CDC-6912-49B3-8AC4-CE96A0340165}</Project>
       <Name>ITJakub.FileProcessing.DataContracts</Name>

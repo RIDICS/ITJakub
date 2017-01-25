@@ -34,20 +34,7 @@ BEGIN TRAN
 		[Comment] nvarchar(2000)
 	)
 
-	CREATE TABLE [dbo].[HistoryLog]
-	(
-		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_HistoryLog(Id)] PRIMARY KEY CLUSTERED,
-		[Project] bigint NOT NULL CONSTRAINT [FK_HistoryLog(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-		[User] int NOT NULL CONSTRAINT [FK_HistoryLog(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[CreateTime] datetime NOT NULL,
-		[LogType] smallint NOT NULL,
-		[Text] nvarchar(2000),
-		[DiscussionPost] bigint NOT NULL CONSTRAINT [FK_HistoryLog(DiscussionPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
-		[Snapshot] bigint NOT NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
-		[ResourceVersion] bigint NOT NULL CONSTRAINT [FK_HistoryLog(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
-	)
-
-
+	
 	CREATE TABLE [dbo].[Snapshot_ResourceVersion]
     (
 		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_ResourceVersion(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),

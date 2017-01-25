@@ -319,6 +319,20 @@ BEGIN TRAN
 	   [ResourceLevel] smallint NOT NULL
     )
 
+	CREATE TABLE [dbo].[HistoryLog]
+	(
+		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_HistoryLog(Id)] PRIMARY KEY CLUSTERED,
+		[Project] bigint NULL CONSTRAINT [FK_HistoryLog(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
+		[User] int NULL CONSTRAINT [FK_HistoryLog(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[CreateTime] datetime NOT NULL,
+		[LogType] varchar(255) NOT NULL,
+		[Text] nvarchar(2000) NOT NULL,
+		[AdditionalDescription] nvarchar(2000) NULL,
+		--[DiscussionPost] bigint NULL CONSTRAINT [FK_HistoryLog(DiscussionPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
+		--[Snapshot] bigint NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
+		[ResourceVersion] bigint NULL CONSTRAINT [FK_HistoryLog(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
+	)
+
 	
 -- Create M:N tables
 	
