@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Xml;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing
@@ -14,9 +14,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing
             m_documentProcessor = documentProcessor;
         }
 
-        public BookVersion GetXmlMetadata(Stream xlmData)
+        public BookData GetXmlMetadata(Stream xlmData)
         {
-            var bookVersion = new BookVersion();
+            var bookData = new BookData();
             using (var xmlReader = new XmlTextReader(xlmData) { WhitespaceHandling = WhitespaceHandling.None })
             {
                 while (xmlReader.Read())
@@ -24,11 +24,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing
                     if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                         xmlReader.LocalName.Equals(m_documentProcessor.XmlRootName))
                     {
-                        m_documentProcessor.Process(bookVersion, xmlReader);
+                        m_documentProcessor.Process(bookData, xmlReader);
                     }
                 }
             }
-            return bookVersion;
+            return bookData;
         }
     }
 }

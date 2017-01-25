@@ -1,11 +1,11 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class CountryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescription>
+    public class CountryProcessor : ConcreteInstanceListProcessorBase<ManuscriptDescriptionData>
     {
         public CountryProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,7 +17,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "country"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, ManuscriptDescription msDesc, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, ManuscriptDescriptionData msDesc, XmlReader xmlReader)
         {
             msDesc.Country = GetInnerContentAsString(xmlReader);
         }

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class MsDescProcessor : ConcreteInstanceProcessorBase<ManuscriptDescription>
+    public class MsDescProcessor : ConcreteInstanceProcessorBase<ManuscriptDescriptionData>
     {
         public MsDescProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -17,29 +17,29 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "msDesc"; }
         }
 
-        protected override void PreprocessSetup(BookVersion bookVersion)
+        protected override void PreprocessSetup(BookData bookData)
         {
-            if (bookVersion.ManuscriptDescriptions == null)
+            if (bookData.ManuscriptDescriptions == null)
             {
-                bookVersion.ManuscriptDescriptions = new List<ManuscriptDescription>();
+                bookData.ManuscriptDescriptions = new List<ManuscriptDescriptionData>();
             }   
         }
 
-        protected override ManuscriptDescription LoadInstance(BookVersion bookVersion)
+        protected override ManuscriptDescriptionData LoadInstance(BookData bookData)
         {
-            return new ManuscriptDescription();
+            return new ManuscriptDescriptionData();
         }
 
-        protected override void SaveInstance(ManuscriptDescription instance, BookVersion bookVersion)
+        protected override void SaveInstance(ManuscriptDescriptionData instance, BookData bookData)
         {
-            bookVersion.ManuscriptDescriptions.Add(instance);
+            bookData.ManuscriptDescriptions.Add(instance);
         }
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescription>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<ManuscriptDescriptionData>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ConcreteInstanceProcessorBase<ManuscriptDescription>>
+                return new List<ConcreteInstanceProcessorBase<ManuscriptDescriptionData>>
                 {
                     Container.Resolve<MsIdentifierProcessor>(),
                     Container.Resolve<MsContentsProcessor>(),

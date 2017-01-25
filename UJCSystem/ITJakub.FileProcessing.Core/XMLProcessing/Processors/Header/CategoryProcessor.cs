@@ -1,14 +1,12 @@
-using System;
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class CategoryProcessor : ConcreteInstanceProcessorBase<Category>
+    public class CategoryProcessor : ConcreteInstanceProcessorBase<CategoryData>
     {
         private readonly CategoryRepository m_categoryRepository;
         private readonly PermissionRepository m_permissionRepository;
@@ -27,11 +25,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         }
 
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<Category>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<CategoryData>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ConcreteInstanceProcessorBase<Category>>
+                return new List<ConcreteInstanceProcessorBase<CategoryData>>
                 {
                     Container.Resolve<CategoryProcessor>(),
                     Container.Resolve<CategoryDescriptionProcessor>(),
@@ -39,12 +37,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, Category parentCategory, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, CategoryData parentCategory, XmlReader xmlReader)
         {
             string xmlId = xmlReader.GetAttribute("xml:id");
             var category = m_categoryRepository.FindByXmlId(xmlId);
             if (category == null) { 
-                category = new Category
+                category = new CategoryData
                 {
                     XmlId = xmlId,
                     ParentCategory = parentCategory
@@ -70,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 m_permissionRepository.CreateSpecialPermission(newAutoimportPermission);
             }
 
-            base.ProcessElement(bookVersion, category, xmlReader);
+            base.ProcessElement(bookData, category, xmlReader);
             m_categoryRepository.SaveOrUpdate(category);
         }
     }

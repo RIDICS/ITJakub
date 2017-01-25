@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Accessories;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks;
 using ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent;
@@ -16,13 +15,9 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
 {
     public class DocumentProcessor : ProcessorBase
     {
-        private readonly BookRepository m_bookRepository;
-
-        public DocumentProcessor(BookRepository bookRepository, XsltTransformationManager xsltTransformationManager,
-            IKernel container)
+        public DocumentProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
-            m_bookRepository = bookRepository;
         }
 
         protected override string NodeName
@@ -53,22 +48,20 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors
             }
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
             string bookGuid = xmlReader.GetAttribute("n");
-            Book book = m_bookRepository.FindBookByGuid(bookGuid) ?? new Book {Guid = bookGuid};
-
+            bookData.BookXmlId = bookGuid;
+            
             //string docType = xmlReader.GetAttribute("doctype");
             //BookTypeEnum bookTypeEnum;
             //Enum.TryParse(docType, true, out bookTypeEnum);
             //var bookType = m_bookRepository.FindBookType(bookTypeEnum) ?? new BookType {Type = bookTypeEnum};
 
             //book.BookType = bookType;
-            bookVersion.Book = book;
-            book.LastVersion = bookVersion;
-
+            
             string versionId = xmlReader.GetAttribute("versionId");
-            bookVersion.VersionId = versionId;
+            bookData.VersionXmlId = versionId;
         }
     }
 }

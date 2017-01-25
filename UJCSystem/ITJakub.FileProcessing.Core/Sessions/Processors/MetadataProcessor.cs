@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting.Messaging;
-using System.Xml;
-using System.Xml.Linq;
 using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -21,14 +15,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        private readonly CategoryRepository m_categoryRepository;
         private readonly XmlMetadataProcessingManager m_xmlMetadataProcessingManager;
 
-        public MetadataProcessor(XmlMetadataProcessingManager xmlMetadataProcessingManager,
-            CategoryRepository categoryRepository)
+        public MetadataProcessor(XmlMetadataProcessingManager xmlMetadataProcessingManager)
         {
             m_xmlMetadataProcessingManager = xmlMetadataProcessingManager;
-            m_categoryRepository = categoryRepository;
         }
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
@@ -37,25 +28,25 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
             var xmlFileStream = File.Open(metaData.FullPath, FileMode.Open);
 
-            BookVersion bookVersion = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
+            BookData bookData = m_xmlMetadataProcessingManager.GetXmlMetadata(xmlFileStream);
 
-            bookVersion.Description = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
-            bookVersion.CreateTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
+            bookData.VersionDescription = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
+            bookData.CreateTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 
-            resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookVersionEntity, bookVersion);
-            resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookId, bookVersion.Book.Guid);
-            resourceSessionDirector.SetSessionInfoValue(SessionInfo.VersionId, bookVersion.VersionId);
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookData, bookData);
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.BookXmlId, bookData.BookXmlId);
+            resourceSessionDirector.SetSessionInfoValue(SessionInfo.VersionXmlId, bookData.VersionXmlId);
 
-            AddBookAccessories(resourceSessionDirector, bookVersion);
-            AddBookPages(resourceSessionDirector, bookVersion);
+            AddBookAccessories(resourceSessionDirector, bookData);
+            AddBookPages(resourceSessionDirector, bookData);
             
         }
 
-        private void AddBookAccessories(ResourceSessionDirector resourceSessionDirector, BookVersion bookVersion)
+        private void AddBookAccessories(ResourceSessionDirector resourceSessionDirector, BookData bookData)
         {
-            if (bookVersion.Accessories != null)
+            if (bookData.Accessories != null)
             {
-                foreach (var file in bookVersion.Accessories)
+                foreach (var file in bookData.Accessories)
                 {
                     if (!string.IsNullOrWhiteSpace(file.FileName))
                     {
@@ -77,7 +68,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private ResourceType GetResourceTypeByBookAccessory(BookAccessory file)
+        private ResourceType GetResourceTypeByBookAccessory(BookAccessoryData file)
         {
             switch (file.Type)
             {
@@ -95,11 +86,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private static void AddBookPages(ResourceSessionDirector resourceSessionDirector, BookVersion bookVersion)
+        private static void AddBookPages(ResourceSessionDirector resourceSessionDirector, BookData bookData)
         {
-            if (bookVersion.BookPages != null)
+            if (bookData.Pages != null)
             {
-                foreach (var page in bookVersion.BookPages)
+                foreach (var page in bookData.Pages)
                 {
                     if (!string.IsNullOrWhiteSpace(page.XmlResource))
                     {

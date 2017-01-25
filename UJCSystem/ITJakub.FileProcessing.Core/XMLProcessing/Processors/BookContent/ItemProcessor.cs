@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
 {
-    public class ItemProcessor : ConcreteInstanceProcessorBase<BookContentItem>
+    public class ItemProcessor : ConcreteInstanceProcessorBase<BookContentItemData>
     {
         public ItemProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -19,11 +18,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             get { return "item"; }
         }
 
-        protected override IEnumerable<ConcreteInstanceProcessorBase<BookContentItem>> ConcreteSubProcessors
+        protected override IEnumerable<ConcreteInstanceProcessorBase<BookContentItemData>> ConcreteSubProcessors
         {
             get
             {
-                return new List<ConcreteInstanceProcessorBase<BookContentItem>>
+                return new List<ConcreteInstanceProcessorBase<BookContentItemData>>
                 {
                     Container.Resolve<HeadProcessor>(),
                     Container.Resolve<RefProcessor>(),
@@ -32,23 +31,22 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, BookContentItem parentBookContentItem, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, BookContentItemData parentBookContentItem, XmlReader xmlReader)
         {
-            if (bookVersion.BookContentItems == null)
+            if (bookData.BookContentItems == null)
             {
-                bookVersion.BookContentItems = new List<BookContentItem>();
+                bookData.BookContentItems = new List<BookContentItemData>();
             }
 
-            var concreteBookItem = new BookContentItem
+            var concreteBookItem = new BookContentItemData
             {
                 ParentBookContentItem = parentBookContentItem,
-                BookVersion = bookVersion,
-                ItemOrder = bookVersion.BookContentItems.Count
+                ItemOrder = bookData.BookContentItems.Count
             };
 
-            bookVersion.BookContentItems.Add(concreteBookItem);
+            bookData.BookContentItems.Add(concreteBookItem);
 
-            base.ProcessElement(bookVersion, concreteBookItem, xmlReader);
+            base.ProcessElement(bookData, concreteBookItem, xmlReader);
         }
     }
 }

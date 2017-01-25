@@ -1,7 +1,6 @@
 ﻿using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
@@ -17,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             get { return "headword"; }
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
             var entryId = xmlReader.GetAttribute("entryId");
             var defaultHw = xmlReader.GetAttribute("defaultHw");
@@ -28,9 +27,8 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             var visibilityEnum = ParseEnum<VisibilityEnum>(visibility);
             var image = xmlReader.GetAttribute("facs");
 
-            var bookHeadword = new BookHeadword
+            var bookHeadword = new BookHeadwordData
             {
-                BookVersion = bookVersion,
                 XmlEntryId = entryId,
                 DefaultHeadword = defaultHw,
                 Headword = hw,
@@ -40,7 +38,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
                 Image = image
             };
 
-            bookVersion.BookHeadwords.Add(bookHeadword);
+            bookData.BookHeadwords.Add(bookHeadword);
         }
     }
 }

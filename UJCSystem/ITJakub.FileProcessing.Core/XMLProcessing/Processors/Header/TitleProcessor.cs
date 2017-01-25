@@ -1,6 +1,6 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
@@ -17,16 +17,16 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "title"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
             string titleType = xmlReader.GetAttribute("type");
             if (string.IsNullOrEmpty(titleType) || titleType.Equals("main"))
             {
-                bookVersion.Title = GetInnerContentAsString(xmlReader);
+                bookData.Title = GetInnerContentAsString(xmlReader);
             }
             else if (titleType.Equals("sub"))
             {
-                bookVersion.SubTitle = GetInnerContentAsString(xmlReader);
+                bookData.SubTitle = GetInnerContentAsString(xmlReader);
             } 
         }
     }

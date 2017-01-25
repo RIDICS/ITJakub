@@ -1,8 +1,7 @@
 ﻿using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
 
@@ -25,7 +24,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
             get { return "term"; }
         }
 
-        protected override void ProcessAttributes(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessAttributes(BookData bookData, XmlReader xmlReader)
         {
             var termXmlId = xmlReader.GetAttribute("id");
             var position = xmlReader.GetAttribute("n");
@@ -34,15 +33,15 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
             string text = GetInnerContentAsString(xmlReader);
 
 
-            TermCategory termCategory = null;
+            TermCategoryData termCategory = null;
             if (!string.IsNullOrWhiteSpace(termCategoryName))
             {
-                termCategory = m_termRepository.GetTermCategoryByName(termCategoryName) ?? new TermCategory {Name = termCategoryName};
+                termCategory = m_termRepository.GetTermCategoryByName(termCategoryName) ?? new TermCategoryData {Name = termCategoryName};
             }
                 
             
 
-            var term = new Term
+            var term = new TermData
             {
                 XmlId = termXmlId,
                 Position = long.Parse(position),

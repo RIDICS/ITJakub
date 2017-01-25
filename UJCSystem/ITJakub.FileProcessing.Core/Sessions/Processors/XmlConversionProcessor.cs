@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Resources;
 using Ujc.Ovj.Ooxml.Conversion;
+using Vokabular.DataEntities.Database.Repositories;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class XmlConversionProcessor : IResourceProcessor
     {
-        private readonly BookRepository m_bookRepository;
         private readonly string m_conversionMetadataPath;
         private readonly string m_dataDirectoryPath;
+        private readonly ProjectRepository m_projectRepository;
         private readonly VersionIdGenerator m_versionIdGenerator;
 
         public XmlConversionProcessor(string conversionMetadataPath, string dataDirectoryPath,
-            BookRepository bookRepository, VersionIdGenerator versionIdGenerator)
+            ProjectRepository projectRepository, VersionIdGenerator versionIdGenerator)
         {
             m_conversionMetadataPath = conversionMetadataPath;
-            m_bookRepository = bookRepository;
-            m_versionIdGenerator = versionIdGenerator;
             m_dataDirectoryPath = dataDirectoryPath;
+            m_projectRepository = projectRepository;
+            m_versionIdGenerator = versionIdGenerator;
         }
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
@@ -56,7 +56,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var message = resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.Message);
             var createTime = resourceSessionDirector.GetSessionInfoValue<DateTime>(SessionInfo.CreateTime);
 
-            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_bookRepository, m_versionIdGenerator);
+            var versionProviderHelper = new VersionProviderHelper(message, createTime, m_projectRepository, m_versionIdGenerator);
 
             var settings = new DocxToTeiConverterSettings
             {
@@ -69,7 +69,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 OutputDirectoryPath = resourceSessionDirector.SessionPath,
                 OutputMetadataFilePath = metaDataResource.FullPath,
                 TempDirectoryPath = tmpDirPath,
-                GetVersionList = versionProviderHelper.GetVersionsByBookId,
+                GetVersionList = versionProviderHelper.GetVersionsByBookXmlId,
                 SplitDocumentByPageBreaks = true,
                 DataDirectoryPath = m_dataDirectoryPath
             };
@@ -103,24 +103,24 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
     public class VersionProviderHelper
     {
-        private readonly BookRepository m_bookRepository;
         private readonly DateTime m_createTime;
+        private readonly ProjectRepository m_projectRepository;
         private readonly string m_message;
         private readonly VersionIdGenerator m_versionIdGenerator;
 
-        public VersionProviderHelper(string message, DateTime createTime, BookRepository bookRepository,
+        public VersionProviderHelper(string message, DateTime createTime, ProjectRepository projectRepository,
             VersionIdGenerator versionIdGenerator)
         {
             m_message = message;
             m_createTime = createTime;
-            m_bookRepository = bookRepository;
+            m_projectRepository = projectRepository;
             m_versionIdGenerator = versionIdGenerator;
         }
 
-        public List<VersionInfoSkeleton> GetVersionsByBookId(string bookId)
+        public List<VersionInfoSkeleton> GetVersionsByBookXmlId(string bookXmlId)
         {
-            var versions = m_bookRepository.GetAllVersionsByBookXmlId(bookId);
-            var vers = versions.Select(x => new VersionInfoSkeleton(x.Description, x.CreateTime)).ToList();
+            var importLogs = m_projectRepository.GetAllImportLogByExternalId(bookXmlId);
+            var vers = importLogs.Select(x => new VersionInfoSkeleton(x.AdditionalDescription, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;
         }

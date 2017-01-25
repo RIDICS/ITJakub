@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Database\Daos\NHibernateDao.cs" />
     <Compile Include="Database\Daos\NHibernateDaoGeneric.cs" />
+    <Compile Include="Database\Entities\Enums\AccessoryType.cs" />
     <Compile Include="Database\Entities\Enums\AudioTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\ContentTypeEnum.cs" />
     <Compile Include="Database\Entities\Enums\FavoriteTypeEnum.cs" />

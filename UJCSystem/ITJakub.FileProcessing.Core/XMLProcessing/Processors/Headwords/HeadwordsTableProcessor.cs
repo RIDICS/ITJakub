@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
@@ -27,11 +27,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             }
         }
 
-        protected override void PreprocessSetup(BookVersion bookVersion)
+        protected override void PreprocessSetup(BookData bookData)
         {
-            if (bookVersion.BookHeadwords == null)
+            if (bookData.BookHeadwords == null)
             {
-                bookVersion.BookHeadwords = new List<BookHeadword>();
+                bookData.BookHeadwords = new List<BookHeadwordData>();
             }
         }
     }

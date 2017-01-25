@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 using log4net;
 
@@ -12,13 +11,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
     public class TermProcessor : ListProcessorBase
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        private readonly KeywordRepository m_keywordRepository;
-
-        public TermProcessor(KeywordRepository keywordRepository, XsltTransformationManager xsltTransformationManager, IKernel container)
+        
+        public TermProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
         {
-            m_keywordRepository = keywordRepository;
         }
 
         protected override string NodeName
@@ -26,7 +22,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "term"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, XmlReader xmlReader)
         {
             var termType = xmlReader.GetAttribute("type");
             var term = GetInnerContentAsString(xmlReader);
@@ -34,38 +30,38 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             switch (termType)
             {
                 case "literary-original":
-                    var literaryOriginal = m_keywordRepository.FindLiteraryOriginalByName(term) ?? new LiteraryOriginal { Name = term };
+                    var literaryOriginal = new LiteraryOriginalData { Name = term };
 
-                    if (bookVersion.LiteraryOriginals == null)
+                    if (bookData.LiteraryOriginals == null)
                     {
-                        bookVersion.LiteraryOriginals = new List<LiteraryOriginal>();
+                        bookData.LiteraryOriginals = new List<LiteraryOriginalData>();
                     }
 
-                    bookVersion.LiteraryOriginals.Add(literaryOriginal);
+                    bookData.LiteraryOriginals.Add(literaryOriginal);
 
                     break;
 
                 case "literary-form":
-                    var literaryKind = m_keywordRepository.FindLiteraryKindByName(term) ?? new LiteraryKind { Name = term };
+                    var literaryKind = new LiteraryKindData { Name = term };
 
-                    if (bookVersion.LiteraryKinds == null)
+                    if (bookData.LiteraryKinds == null)
                     {
-                        bookVersion.LiteraryKinds = new List<LiteraryKind>();
+                        bookData.LiteraryKinds = new List<LiteraryKindData>();
                     }
 
-                    bookVersion.LiteraryKinds.Add(literaryKind);
+                    bookData.LiteraryKinds.Add(literaryKind);
 
                     break;
 
                 case "literary-genre":
-                    var literaryGenre = m_keywordRepository.FindLiteraryGenreByName(term) ?? new LiteraryGenre { Name = term };
+                    var literaryGenre = new LiteraryGenreData { Name = term };
 
-                    if (bookVersion.LiteraryGenres == null)
+                    if (bookData.LiteraryGenres == null)
                     {
-                        bookVersion.LiteraryGenres = new List<LiteraryGenre>();
+                        bookData.LiteraryGenres = new List<LiteraryGenreData>();
                     }
 
-                    bookVersion.LiteraryGenres.Add(literaryGenre);
+                    bookData.LiteraryGenres.Add(literaryGenre);
 
                     break;
 
@@ -76,7 +72,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     break;
             }
 
-            bookVersion.Keywords.Add(new Keyword() { Text = term });
+            bookData.Keywords.Add(new KeywordData { Text = term });
         }
     }
 }

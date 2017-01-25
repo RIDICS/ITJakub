@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
 {
-    public class RecordingProcessor : ConcreteInstanceListProcessorBase<Track>
+    public class RecordingProcessor : ConcreteInstanceListProcessorBase<TrackData>
     {
         public RecordingProcessor(XsltTransformationManager xsltTransformationManager, IKernel container)
             : base(xsltTransformationManager, container)
@@ -20,17 +21,16 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
             get { return "recording"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, Track track, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, TrackData track, XmlReader xmlReader)
         {
             if (track.Recordings == null)
-                track.Recordings = new List<TrackRecording>();
+                track.Recordings = new List<TrackRecordingData>();
 
 
             var fileName = xmlReader.GetAttribute("url");
             track.Recordings.Add(
-                new TrackRecording
+                new TrackRecordingData
                 {
-                    Track = track,
                     FileName = fileName,
                     AudioType = ParseAudioType(fileName),
                     MimeType = xmlReader.GetAttribute("mimeType"),
@@ -38,24 +38,24 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Audiobooks
                 });
         }
 
-        private AudioType ParseAudioType(string fileName)
+        private AudioTypeEnum ParseAudioType(string fileName)
         {
             var extension = Path.GetExtension(fileName);
             if (string.IsNullOrWhiteSpace(extension))
-                return AudioType.Unknown;
+                return AudioTypeEnum.Unknown;
 
             extension = extension.ToLowerInvariant();
 
             switch (extension)
             {
                 case ".mp3":
-                    return AudioType.Mp3;
+                    return AudioTypeEnum.Mp3;
                 case ".ogg":
-                    return AudioType.Ogg;
+                    return AudioTypeEnum.Ogg;
                 case ".wav":
-                    return AudioType.Wav;
+                    return AudioTypeEnum.Wav;
                 default:
-                    return AudioType.Unknown;
+                    return AudioTypeEnum.Unknown;
             }
         }
     }

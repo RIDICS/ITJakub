@@ -35,5 +35,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<FullProjectImportLog>()
+                .JoinAlias(x => x.Project, () => projectAlias)
+                .Where(x => projectAlias.ExternalId == projectExternalId)
+                .List();
+        }
     }
 }

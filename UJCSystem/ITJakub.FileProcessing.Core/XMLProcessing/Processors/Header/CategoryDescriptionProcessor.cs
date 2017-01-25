@@ -1,11 +1,11 @@
 using System.Xml;
 using Castle.MicroKernel;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.XMLProcessing.XSLT;
 
 namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
 {
-    public class CategoryDescriptionProcessor : ConcreteInstanceListProcessorBase<Category>
+    public class CategoryDescriptionProcessor : ConcreteInstanceListProcessorBase<CategoryData>
     {
         public CategoryDescriptionProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
         {
@@ -16,7 +16,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             get { return "catDesc"; }
         }
 
-        protected override void ProcessElement(BookVersion bookVersion, Category category, XmlReader xmlReader)
+        protected override void ProcessElement(BookData bookData, CategoryData category, XmlReader xmlReader)
         {
             category.Description = GetInnerContentAsString(xmlReader);
         }
