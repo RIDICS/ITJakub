@@ -156,9 +156,10 @@ namespace ITJakub.FileProcessing.Core.Sessions
     {
         CreateTime = 0,
         Message = 1,
-        VersionId = 2,
-        BookId = 3,
-        BookVersionEntity = 4
+        ProjectId = 2,
+        BookXmlId = 3,
+        VersionXmlId = 4,
+        BookData = 5,
 
     }
 }

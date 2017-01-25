@@ -104,9 +104,9 @@ namespace ITJakub.ITJakubService.Services
             return m_bookManager.GetBookContent(bookGuid);
         }
 
-        public bool ProcessSession(string resourceSessionId, string uploadMessage)
+        public bool ProcessSession(string resourceSessionId, long projectId, string uploadMessage)
         {
-            return m_resourceManager.ProcessSession(resourceSessionId, uploadMessage);
+            return m_resourceManager.ProcessSession(resourceSessionId, projectId, uploadMessage);
         }
 
         public IList<SearchResultContract> Search(string term)

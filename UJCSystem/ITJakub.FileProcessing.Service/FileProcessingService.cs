@@ -14,9 +14,9 @@ namespace ITJakub.FileProcessing.Service
 
         }
 
-        public bool ProcessSession(string sessionId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long projectId, string uploadMessage)
         {
-            return m_sessionManager.ProcessSession(sessionId, uploadMessage);
+            return m_sessionManager.ProcessSession(sessionId, projectId, uploadMessage);
         }
     }
 }

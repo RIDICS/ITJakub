@@ -202,11 +202,11 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         }
 
 
-        public bool ProcessSession(string sessionId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long projectId, string uploadMessage)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, uploadMessage);
+                return Channel.ProcessSession(sessionId, projectId, uploadMessage);
             }
             catch (CommunicationException ex)
             {

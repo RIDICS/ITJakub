@@ -92,7 +92,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
             {
                 try
                 {
-                    client.ProcessSession(session, DefaultUploadMessage);
+                    client.ProcessSession(session, TODO, DefaultUploadMessage);
                     file.CurrentState = FileStateType.Done;
                 }
                 catch (FaultException ex)

@@ -20,10 +20,10 @@ namespace ITJakub.ITJakubService.Core.Resources
             m_resourceClient.AddResource(resourceInfoSkeleton);
         }
 
-        public bool ProcessSession(string resourceSessionId, string uploadMessage)
+        public bool ProcessSession(string resourceSessionId, long projectId, string uploadMessage)
         {
             m_authorizationManager.CheckUserCanUploadBook();
-            return m_resourceClient.ProcessSession(resourceSessionId, uploadMessage);
+            return m_resourceClient.ProcessSession(resourceSessionId, projectId, uploadMessage);
         }
     }
 }

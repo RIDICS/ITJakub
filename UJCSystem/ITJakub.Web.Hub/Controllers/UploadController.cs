@@ -51,7 +51,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var success = client.ProcessSession(request.SessionId, request.UploadMessage);
+                var success = client.ProcessSession(request.SessionId, request.ProjectId, request.UploadMessage);
                 return Json(new {success});
             }
         }
