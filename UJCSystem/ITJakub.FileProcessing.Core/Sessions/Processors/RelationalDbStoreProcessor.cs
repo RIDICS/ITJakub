@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
 
@@ -10,15 +11,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly ProjectRepository m_projectRepository;
+        private readonly MetadataRepository m_metadataRepository;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository)
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository)
         {
             m_projectRepository = projectRepository;
+            m_metadataRepository = metadataRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, resourceDirector);
+            saveNewBookDataWork.Execute();
 
             // TODO save all new project data to database
 

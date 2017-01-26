@@ -1,6 +1,6 @@
 ﻿namespace ITJakub.FileProcessing.Core.Data
 {
-    public enum AvailabilityStatus : short
+    public enum AvailabilityStatusEnum : short
     {
         Unknown = 0,
         Free = 1,

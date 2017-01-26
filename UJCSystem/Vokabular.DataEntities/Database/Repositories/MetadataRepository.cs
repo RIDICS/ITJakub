@@ -95,11 +95,24 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .FutureValue().Value;
         }
 
-        public IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId)
+        public IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
-            return GetSession().QueryOver<ProjectOriginalAuthor>()
-                .Where(x => x.Project.Id == projectId)
-                .List();
+            var query = GetSession().QueryOver<ProjectOriginalAuthor>()
+                .Where(x => x.Project.Id == projectId);
+
+            if (includeAuthors)
+            {
+                query.Fetch(x => x.OriginalAuthor);
+            }
+
+            return query.List();
+        }
+
+        public OriginalAuthor GetAuthorByName(string firstName, string lastName)
+        {
+            return GetSession().QueryOver<OriginalAuthor>()
+                .Where(x => x.FirstName == firstName && x.LastName == lastName)
+                .SingleOrDefault();
         }
     }
 }

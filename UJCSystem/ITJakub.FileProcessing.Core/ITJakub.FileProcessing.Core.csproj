@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\AuthorData.cs" />
-    <Compile Include="Data\AvailabilityStatus.cs" />
+    <Compile Include="Data\AvailabilityStatusEnum.cs" />
     <Compile Include="Data\BookAccessoryData.cs" />
     <Compile Include="Data\BookContentItemData.cs" />
     <Compile Include="Data\BookData.cs" />
@@ -105,6 +105,9 @@
     <Compile Include="Sessions\ResourceTypeResolvers\TransformationTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ThumbDbTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\UnknownXmlTypeResolver.cs" />
+    <Compile Include="Sessions\Works\Helpers\AuthorNameEqualityComparer.cs" />
+    <Compile Include="Sessions\Works\Helpers\AuthorHelper.cs" />
+    <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />
