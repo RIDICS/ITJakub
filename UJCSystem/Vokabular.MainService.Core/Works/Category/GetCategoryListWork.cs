@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Core.Works.Category
     {
         private readonly CategoryRepository m_categoryRepository;
 
-        public GetCategoryListWork(CategoryRepository categoryRepository) : base(categoryRepository.UnitOfWork)
+        public GetCategoryListWork(CategoryRepository categoryRepository) : base(categoryRepository)
         {
             m_categoryRepository = categoryRepository;
         }

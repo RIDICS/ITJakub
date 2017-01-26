@@ -10,7 +10,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly MetadataRepository m_metadataRepository;
         private readonly PublisherContract m_data;
 
-        public CreatePublisherWork(MetadataRepository metadataRepository, PublisherContract data) : base(metadataRepository.UnitOfWork)
+        public CreatePublisherWork(MetadataRepository metadataRepository, PublisherContract data) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_data = data;

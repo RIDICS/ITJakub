@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly long m_projectId;
         private readonly IList<int> m_kindIdList;
 
-        public SetLiteraryKindWork(MetadataRepository metadataRepository, long projectId, IList<int> kindIdList) : base(metadataRepository.UnitOfWork)
+        public SetLiteraryKindWork(MetadataRepository metadataRepository, long projectId, IList<int> kindIdList) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;

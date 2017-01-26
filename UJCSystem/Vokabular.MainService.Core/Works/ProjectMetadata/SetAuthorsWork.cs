@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly long m_projectId;
         private readonly IList<int> m_authorIdList;
 
-        public SetAuthorsWork(MetadataRepository metadataRepository, long projectId, IList<int> authorIdList) : base(metadataRepository.UnitOfWork)
+        public SetAuthorsWork(MetadataRepository metadataRepository, long projectId, IList<int> authorIdList) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;

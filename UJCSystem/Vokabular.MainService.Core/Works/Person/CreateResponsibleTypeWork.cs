@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Works.Person
         private readonly PersonRepository m_personRepository;
         private readonly ResponsibleTypeContract m_data;
 
-        public CreateResponsibleTypeWork(PersonRepository personRepository, ResponsibleTypeContract data) : base(personRepository.UnitOfWork)
+        public CreateResponsibleTypeWork(PersonRepository personRepository, ResponsibleTypeContract data) : base(personRepository)
         {
             m_personRepository = personRepository;
             m_data = data;

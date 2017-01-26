@@ -1,31 +1,19 @@
-﻿using System;
+﻿using Vokabular.DataEntities.Database.Daos;
 
 namespace Vokabular.DataEntities.Database.UnitOfWork
 {
     public abstract class UnitOfWorkBase
     {
-        private readonly IUnitOfWork m_unitOfWork;
+        private readonly IDao m_dao;
 
-        protected UnitOfWorkBase(IUnitOfWork unitOfWork)
+        protected UnitOfWorkBase(IDao dao)
         {
-            m_unitOfWork = unitOfWork;
+            m_dao = dao;
         }
 
         public void Execute()
         {
-            try
-            {
-                m_unitOfWork.BeginTransaction();
-
-                ExecuteWorkImplementation();
-            }
-            catch (Exception)
-            {
-                m_unitOfWork.Rollback();
-                throw;
-            }
-
-            m_unitOfWork.Commit();
+            m_dao.InvokeUnitOfWork(ExecuteWorkImplementation);
         }
 
         protected abstract void ExecuteWorkImplementation();
@@ -33,30 +21,16 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
     public abstract class UnitOfWorkBase<T>
     {
-        private readonly IUnitOfWork m_unitOfWork;
+        private readonly IDao m_dao;
 
-        protected UnitOfWorkBase(IUnitOfWork unitOfWork)
+        protected UnitOfWorkBase(IDao dao)
         {
-            m_unitOfWork = unitOfWork;
+            m_dao = dao;
         }
 
         public T Execute()
         {
-            T result;
-            try
-            {
-                m_unitOfWork.BeginTransaction();
-
-                result = ExecuteWorkImplementation();
-            }
-            catch (Exception)
-            {
-                m_unitOfWork.Rollback();
-                throw;
-            }
-
-            m_unitOfWork.Commit();
-            return result;
+            return m_dao.InvokeUnitOfWork(ExecuteWorkImplementation);
         }
 
         protected abstract T ExecuteWorkImplementation();

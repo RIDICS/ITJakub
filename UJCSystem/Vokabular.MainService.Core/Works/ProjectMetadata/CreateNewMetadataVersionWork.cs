@@ -14,7 +14,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly ProjectMetadataContract m_data;
         private readonly int m_userId;
 
-        public CreateNewMetadataVersionWork(MetadataRepository metadataRepository, long projectId, ProjectMetadataContract data, int userId) : base(metadataRepository.UnitOfWork)
+        public CreateNewMetadataVersionWork(MetadataRepository metadataRepository, long projectId, ProjectMetadataContract data, int userId) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;

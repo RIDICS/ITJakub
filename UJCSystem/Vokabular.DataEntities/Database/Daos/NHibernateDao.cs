@@ -9,7 +9,7 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Daos
 {
-    public class NHibernateDao
+    public class NHibernateDao : IDao
     {
         protected const string WildcardAny = "%";
         protected const string WildcardSingle = "_";

@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly int m_count;
         private int m_resultCount;
 
-        public GetProjectListWork(ProjectRepository projectRepository, int start, int count) : base(projectRepository.UnitOfWork)
+        public GetProjectListWork(ProjectRepository projectRepository, int start, int count) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_start = start;

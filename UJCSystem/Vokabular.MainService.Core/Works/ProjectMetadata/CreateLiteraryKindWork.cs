@@ -8,7 +8,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly MetadataRepository m_metadataRepository;
         private readonly string m_name;
 
-        public CreateLiteraryKindWork(MetadataRepository metadataRepository, string name) : base(metadataRepository.UnitOfWork)
+        public CreateLiteraryKindWork(MetadataRepository metadataRepository, string name) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_name = name;

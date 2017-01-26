@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly long m_projectId;
         private readonly IList<int> m_responsiblePersonIdList;
 
-        public SetResponsiblePersonsWork(MetadataRepository metadataRepository, long projectId, IList<int> responsiblePersonIdList) : base(metadataRepository.UnitOfWork)
+        public SetResponsiblePersonsWork(MetadataRepository metadataRepository, long projectId, IList<int> responsiblePersonIdList) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;

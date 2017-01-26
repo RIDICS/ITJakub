@@ -5,7 +5,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 {
     public static class RepositoryExtensions
     {
-        public static T InvokeUnitOfWork<T>(this NHibernateDao dao, Func<T> repositoryMethod)
+        public static T InvokeUnitOfWork<T>(this IDao dao, Func<T> repositoryMethod)
         {
             T result;
             var unitOfWork = dao.UnitOfWork;
@@ -24,6 +24,16 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
             unitOfWork.Commit();
             return result;
+        }
+
+        public static void InvokeUnitOfWork(this IDao dao, Action repositoryMethod)
+        {
+            Func<object> functionWrapper = () =>
+            {
+                repositoryMethod.Invoke();
+                return null;
+            };
+            dao.InvokeUnitOfWork(functionWrapper);
         }
     }
 }

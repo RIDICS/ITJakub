@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
         private readonly long m_projectId;
         private readonly GetProjectMetadataParameter m_parameters;
 
-        public GetLatestProjectMetadataWork(MetadataRepository metadataRepository, long projectId, GetProjectMetadataParameter parameters) : base(metadataRepository.UnitOfWork)
+        public GetLatestProjectMetadataWork(MetadataRepository metadataRepository, long projectId, GetProjectMetadataParameter parameters) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectId = projectId;

@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly ProjectContract m_newData;
         private readonly int m_userId;
 
-        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, int userId) : base(projectRepository.UnitOfWork)
+        public CreateProjectWork(ProjectRepository projectRepository, ProjectContract newData, int userId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_newData = newData;

@@ -9,7 +9,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
     {
         private readonly MetadataRepository m_metadataRepository;
 
-        public GetPublisherListWork(MetadataRepository metadataRepository) : base(metadataRepository.UnitOfWork)
+        public GetPublisherListWork(MetadataRepository metadataRepository) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
         }

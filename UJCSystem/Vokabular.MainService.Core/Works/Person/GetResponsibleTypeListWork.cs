@@ -9,7 +9,7 @@ namespace Vokabular.MainService.Core.Works.Person
     {
         private readonly PersonRepository m_personRepository;
 
-        public GetResponsibleTypeListWork(PersonRepository personRepository) : base(personRepository.UnitOfWork)
+        public GetResponsibleTypeListWork(PersonRepository personRepository) : base(personRepository)
         {
             m_personRepository = personRepository;
         }

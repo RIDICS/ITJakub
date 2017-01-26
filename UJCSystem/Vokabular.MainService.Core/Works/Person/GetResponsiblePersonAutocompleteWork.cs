@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Works.Person
         private readonly string m_query;
         private readonly int m_count;
 
-        public GetResponsiblePersonAutocompleteWork(PersonRepository personRepository, string query, int count) : base(personRepository.UnitOfWork)
+        public GetResponsiblePersonAutocompleteWork(PersonRepository personRepository, string query, int count) : base(personRepository)
         {
             m_personRepository = personRepository;
             m_query = query;

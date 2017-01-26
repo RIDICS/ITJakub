@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\Daos\IDao.cs" />
     <Compile Include="Database\Daos\NHibernateDao.cs" />
     <Compile Include="Database\Daos\NHibernateDaoGeneric.cs" />
     <Compile Include="Database\Entities\Enums\AccessoryType.cs" />

@@ -12,7 +12,7 @@ namespace Vokabular.MainService.Core.Works.Category
         private readonly CategoryRepository m_categoryRepository;
         private readonly CategoryContract m_data;
 
-        public CreateCategoryWork(CategoryRepository categoryRepository, CategoryContract data) : base(categoryRepository.UnitOfWork)
+        public CreateCategoryWork(CategoryRepository categoryRepository, CategoryContract data) : base(categoryRepository)
         {
             m_categoryRepository = categoryRepository;
             m_data = data;

@@ -11,7 +11,7 @@ namespace Vokabular.MainService.Core.Works.Person
         private readonly PersonRepository m_personRepository;
         private readonly NewResponsiblePersonContract m_data;
 
-        public CreateResponsiblePersonWork(PersonRepository personRepository, NewResponsiblePersonContract data) : base(personRepository.UnitOfWork)
+        public CreateResponsiblePersonWork(PersonRepository personRepository, NewResponsiblePersonContract data) : base(personRepository)
         {
             m_personRepository = personRepository;
             m_data = data;

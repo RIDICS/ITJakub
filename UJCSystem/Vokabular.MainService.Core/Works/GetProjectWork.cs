@@ -9,7 +9,7 @@ namespace Vokabular.MainService.Core.Works
         private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
 
-        public GetProjectWork(ProjectRepository projectRepository, long projectId) : base(projectRepository.UnitOfWork)
+        public GetProjectWork(ProjectRepository projectRepository, long projectId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_projectId = projectId;
