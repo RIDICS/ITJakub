@@ -3,9 +3,10 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Entities;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.DataEntities.Database.Entities.Enums;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -16,30 +17,30 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var bookVersionEntity = resourceSessionDirector.GetSessionInfoValue<BookVersion>(SessionInfo.BookVersionEntity);
+            var bookData = resourceSessionDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
 
-            if (bookVersionEntity.Tracks == null)
+            if (bookData.Tracks == null)
                 return;
 
             //DISCOVER all entites
-            var recordings = ExtractAudioRecordingsInfo(bookVersionEntity);
+            var recordings = ExtractAudioRecordingsInfo(bookData);
 
             //GENERATE audioArchive
-            PackAllBookAudioArchives(resourceSessionDirector, recordings, bookVersionEntity);
+            PackAllBookAudioArchives(resourceSessionDirector, recordings, bookData);
         }
 
-        private static Dictionary<AudioType, List<TrackRecording>> ExtractAudioRecordingsInfo(BookVersion bookVersionEntity)
+        private static Dictionary<AudioTypeEnum, List<TrackRecordingData>> ExtractAudioRecordingsInfo(BookData bookData)
         {
-            var recordings = new Dictionary<AudioType, List<TrackRecording>>();
-            foreach (var track in bookVersionEntity.Tracks)
+            var recordings = new Dictionary<AudioTypeEnum, List<TrackRecordingData>>();
+            foreach (var track in bookData.Tracks)
             {
                 foreach (var recording in track.Recordings)
                 {
-                    List<TrackRecording> recordingList;
+                    List<TrackRecordingData> recordingList;
 
                     if (!recordings.TryGetValue(recording.AudioType, out recordingList))
                     {
-                        recordingList = new List<TrackRecording>();
+                        recordingList = new List<TrackRecordingData>();
                         recordings.Add(recording.AudioType, recordingList);
                     }
 
@@ -49,30 +50,29 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             return recordings;
         }
 
-        private void PackAllBookAudioArchives(ResourceSessionDirector resourceSessionDirector, Dictionary<AudioType, List<TrackRecording>> recordings, BookVersion bookVersionEntity)
+        private void PackAllBookAudioArchives(ResourceSessionDirector resourceSessionDirector, Dictionary<AudioTypeEnum, List<TrackRecordingData>> recordings, BookData bookData)
         {
-            bookVersionEntity.FullBookRecordings = new List<FullBookRecording>();
+            bookData.FullBookRecordings = new List<FullBookRecordingData>();
 
             foreach (var audioType in recordings.Keys)
             {
-                var allBookArchive = GenerateFullBookArchive(recordings[audioType], bookVersionEntity, audioType, resourceSessionDirector);
+                var allBookArchive = GenerateFullBookArchive(recordings[audioType], bookData, audioType, resourceSessionDirector);
                 resourceSessionDirector.Resources.Add(allBookArchive);
-                var entity = new FullBookRecording
+                var entity = new FullBookRecordingData
                 {
-                    BookVersion = bookVersionEntity,
                     AudioType = audioType,
                     FileName = allBookArchive.FileName,
                     MimeType = MimeType                    
                 };
 
-                bookVersionEntity.FullBookRecordings.Add(entity);
+                bookData.FullBookRecordings.Add(entity);
             }
         }
 
-        private Resource GenerateFullBookArchive(List<TrackRecording> recordings, BookVersion bookVersion, AudioType audioType,
+        private Resource GenerateFullBookArchive(List<TrackRecordingData> recordings, BookData bookData, AudioTypeEnum audioType,
             ResourceSessionDirector resourceSessionDirector)
         {
-            var archiveName = GetArchiveName(bookVersion, audioType);
+            var archiveName = GetArchiveName(bookData, audioType);
             var fullPath = Path.Combine(resourceSessionDirector.SessionPath, archiveName);
 
             using (var fs = new FileStream(fullPath, FileMode.Create))
@@ -104,9 +104,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             };
         }
 
-        private string GetArchiveName(BookVersion bookVersion, AudioType audioType)
+        private string GetArchiveName(BookData bookData, AudioTypeEnum audioType)
         {
-            return string.Format("{0}_{1}.zip", bookVersion.VersionId, audioType);
+            return string.Format("{0}_{1}.zip", bookData.VersionXmlId, audioType);
         }
     }
 }

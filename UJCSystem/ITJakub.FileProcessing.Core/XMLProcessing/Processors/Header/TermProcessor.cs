@@ -30,11 +30,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             switch (termType)
             {
                 case "literary-original":
-                    var literaryOriginal = new LiteraryOriginalData { Name = term };
+                    var literaryOriginal = term;
 
                     if (bookData.LiteraryOriginals == null)
                     {
-                        bookData.LiteraryOriginals = new List<LiteraryOriginalData>();
+                        bookData.LiteraryOriginals = new List<string>();
                     }
 
                     bookData.LiteraryOriginals.Add(literaryOriginal);
@@ -42,11 +42,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     break;
 
                 case "literary-form":
-                    var literaryKind = new LiteraryKindData { Name = term };
+                    var literaryKind = term;
 
                     if (bookData.LiteraryKinds == null)
                     {
-                        bookData.LiteraryKinds = new List<LiteraryKindData>();
+                        bookData.LiteraryKinds = new List<string>();
                     }
 
                     bookData.LiteraryKinds.Add(literaryKind);
@@ -54,11 +54,11 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     break;
 
                 case "literary-genre":
-                    var literaryGenre = new LiteraryGenreData { Name = term };
+                    var literaryGenre = term;
 
                     if (bookData.LiteraryGenres == null)
                     {
-                        bookData.LiteraryGenres = new List<LiteraryGenreData>();
+                        bookData.LiteraryGenres = new List<string>();
                     }
 
                     bookData.LiteraryGenres.Add(literaryGenre);
@@ -72,7 +72,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     break;
             }
 
-            bookData.Keywords.Add(new KeywordData { Text = term });
+            bookData.Keywords.Add(term);
         }
     }
 }

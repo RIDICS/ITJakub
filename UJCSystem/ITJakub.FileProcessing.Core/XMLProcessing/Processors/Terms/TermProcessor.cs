@@ -9,14 +9,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
 {
     public class TermProcessor : ListProcessorBase
     {
-        private readonly TermRepository m_termRepository;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public TermProcessor(TermRepository termsRepository, 
-            XsltTransformationManager xsltTransformationManager, 
-            IKernel container) : base(xsltTransformationManager, container)
+        public TermProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
         {
-            m_termRepository = termsRepository;
         }
 
         protected override string NodeName
@@ -31,26 +27,16 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Terms
             string termCategoryName = xmlReader.GetAttribute("subtype");
 
             string text = GetInnerContentAsString(xmlReader);
-
-
-            TermCategoryData termCategory = null;
-            if (!string.IsNullOrWhiteSpace(termCategoryName))
-            {
-                termCategory = m_termRepository.GetTermCategoryByName(termCategoryName) ?? new TermCategoryData {Name = termCategoryName};
-            }
-                
             
-
             var term = new TermData
             {
                 XmlId = termXmlId,
                 Position = long.Parse(position),
                 Text = text,
-                TermCategory = termCategory,
+                TermCategoryName = termCategoryName
             };
 
-            m_termRepository.SaveOrUpdate(term);
-
+            bookData.Terms.Add(term);
         }
     }
 }

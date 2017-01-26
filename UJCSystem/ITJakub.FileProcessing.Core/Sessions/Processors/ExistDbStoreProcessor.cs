@@ -93,8 +93,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         {
             return new VersionResourceUploadContract
             {
-                BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
-                BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionId),
+                BookId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.BookXmlId),
+                BookVersionId = resourceDirector.GetSessionInfoValue<string>(SessionInfo.VersionXmlId),
                 FileName = resource.FileName,
                 ResourceType = resource.ResourceType,
                 DataStream = dataStream

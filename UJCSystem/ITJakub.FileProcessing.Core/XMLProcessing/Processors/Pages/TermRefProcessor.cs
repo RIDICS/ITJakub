@@ -10,12 +10,10 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 {
     public class TermRefProcessor : ConcreteInstanceListProcessorBase<BookPageData>
     {
-        private readonly TermRepository m_termRepository;
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
-        public TermRefProcessor(TermRepository termRepository, XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
+        public TermRefProcessor(XsltTransformationManager xsltTransformationManager, IKernel container) : base(xsltTransformationManager, container)
         {
-            m_termRepository = termRepository;
         }
 
         protected override string NodeName
@@ -25,13 +23,12 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
 
         protected override void ProcessElement(BookData bookData, BookPageData page, XmlReader xmlReader)
         {
-            if (page.Terms == null)
-                page.Terms = new List<TermData>();
+            if (page.TermXmlIds == null)
+                page.TermXmlIds = new List<string>();
 
             var refTermXmlId = xmlReader.GetAttribute("n");
-            var term = m_termRepository.FindByXmlId(refTermXmlId);
-
-            page.Terms.Add(term);
+            
+            page.TermXmlIds.Add(refTermXmlId);
         }
     }
 }

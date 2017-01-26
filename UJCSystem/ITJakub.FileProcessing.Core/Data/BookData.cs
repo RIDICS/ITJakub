@@ -19,7 +19,7 @@ namespace ITJakub.FileProcessing.Core.Data
         public string BiblText { get; set; }
         public string RelicAbbreviation { get; set; }
         public string SourceAbbreviation { get; set; }
-        public List<KeywordData> Keywords { get; set; }
+        public List<string> Keywords { get; set; }
         public List<ManuscriptDescriptionData> ManuscriptDescriptions { get; set; }
         public PublisherData Publisher { get; set; }
         public string Title { get; set; }
@@ -27,9 +27,14 @@ namespace ITJakub.FileProcessing.Core.Data
         public string PublishDate { get; set; }
         public string PublishPlace { get; set; }
         public List<ResponsibleData> Responsibles { get; set; }
-        public List<LiteraryGenreData> LiteraryGenres { get; set; }
-        public List<LiteraryKindData> LiteraryKinds { get; set; }
-        public List<LiteraryOriginalData> LiteraryOriginals { get; set; }
+        public List<string> LiteraryGenres { get; set; }
+        public List<string> LiteraryKinds { get; set; }
+        public List<string> LiteraryOriginals { get; set; }
         public List<BookHeadwordData> BookHeadwords { get; set; }
+        public List<TermData> Terms { get; set; }
+        public List<CategoryData> AllCategoriesHierarchy { get; set; }
+        public List<string> CategoryXmlIds { get; set; }
+        public List<TransformationData> Transformations { get; set; }
+        public List<FullBookRecordingData> FullBookRecordings { get; set; }
     }
 }

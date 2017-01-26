@@ -16,8 +16,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             foreach (var resource in resourceSessionDirector.Resources)
             {
                 m_fileSystemManager.SaveResource(
-                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.BookId),
-                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.VersionId), resource);
+                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.BookXmlId),
+                    resourceSessionDirector.GetSessionInfoValue<string>(SessionInfo.VersionXmlId), resource);
             }
         }
     }

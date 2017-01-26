@@ -21,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
         {
             if (bookData.Keywords == null)
             {
-                bookData.Keywords = new List<KeywordData>();
+                bookData.Keywords = new List<string>();
             }
         }
 

@@ -5,45 +5,37 @@ using System.Linq;
 using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
-using ITJakub.Core.Resources;
-using ITJakub.DataEntities.Database.Entities;
-using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.DataEntities.Database.Repositories;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.DataEntities.Database.Entities.Enums;
+using Resource = ITJakub.Core.Resources.Resource;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
     public class TransformationsProcessor : IResourceProcessor {
 
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-        private readonly CategoryRepository m_categoryRepository;
-
-        public TransformationsProcessor(CategoryRepository categoryRepository)
-        {
-            m_categoryRepository = categoryRepository;
-        }
-
 
         public void Process(ResourceSessionDirector resourceSessionDirector)
         {
-            var bookVersion = resourceSessionDirector.GetSessionInfoValue<BookVersion>(SessionInfo.BookVersionEntity);
+            var bookData = resourceSessionDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
 
             var trans = resourceSessionDirector.Resources.Where(x => x.ResourceType == ResourceType.Transformation);
-            if (bookVersion.Transformations == null)
+            if (bookData.Transformations == null)
             {
-                bookVersion.Transformations = new List<Transformation>();
+                bookData.Transformations = new List<TransformationData>();
             }
 
             foreach (var transResource in trans)
             {
                 var transformation = GetTransformationObject(transResource);
-                bookVersion.Transformations.Add(transformation);
+                bookData.Transformations.Add(transformation);
             }
 
         }
 
-        private Transformation GetTransformationObject(Resource resource)
+        private TransformationData GetTransformationObject(Resource resource)
         {
             const string logFormat = "{0} processing instruction in XSLT document not found.";
             const string logValidValueFormat =
@@ -52,13 +44,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             const string itjBookType = "itj-book-type";
             const string itjOutputFormat = "itj-output-format";
 
-            var transformation = new Transformation
+            var transformation = new TransformationData
             {
                 IsDefaultForBookType = false,
                 Description = string.Empty,
                 Name = resource.FileName,
-                OutputFormat = OutputFormat.Html,
-                ResourceLevel = ResourceLevel.Book //TODO add support for version?
+                OutputFormat = OutputFormatEnum.Html,
+                ResourceLevel = ResourceLevelEnum.Book //TODO add support for version?
             };
 
             var document = XDocument.Load(resource.FullPath);
@@ -86,10 +78,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             return transformation;
         }
 
-        private static OutputFormat GetTransformationOutputFormat(XProcessingInstruction outputFormat, string logFormat,
+        private static OutputFormatEnum GetTransformationOutputFormat(XProcessingInstruction outputFormat, string logFormat,
             string logValidValueFormat)
         {
-            var transformationOutputFormat = OutputFormat.Unknown;
+            var transformationOutputFormat = OutputFormatEnum.Unknown;
             const string outputformatName = "OutputFormat";
             const string invalidXsltTransformation = "Xslt tranformation without output format processing instruction.";
 
@@ -99,7 +91,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     m_log.ErrorFormat(logFormat, outputformatName);
                 throw new InvalidXsltTransformationException(invalidXsltTransformation);
             }
-            OutputFormat value;
+            OutputFormatEnum value;
             if (Enum.TryParse(outputFormat.Data.Trim(), true, out value))
             {
                 transformationOutputFormat = value;
@@ -113,10 +105,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             return transformationOutputFormat;
         }
 
-        private BookType GetTransformationBookType(XProcessingInstruction bookType, string logFormat,
+        private BookTypeEnum GetTransformationBookType(XProcessingInstruction bookType, string logFormat,
             string logValidValueFormat)
         {
-            BookType transformationBookType = null;
             const string bookTypeName = "BookType";
             const string invalidXsltTransformation = "Xslt tranformation without book type processing instruction.";
             if (bookType == null)
@@ -126,10 +117,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
                 throw new InvalidXsltTransformationException(invalidXsltTransformation);
             }
+
             BookTypeEnum value;
             if (Enum.TryParse(bookType.Data.Trim(), true, out value))
             {
-                transformationBookType = m_categoryRepository.FindBookTypeByType(value);
+                return value;
             }
             else
             {
@@ -137,7 +129,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     m_log.ErrorFormat(logValidValueFormat, bookTypeName, bookType.Data);
                 throw new InvalidEnumArgumentException();
             }
-            return transformationBookType;
         }
     }
 }

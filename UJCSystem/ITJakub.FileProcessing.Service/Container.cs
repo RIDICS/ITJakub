@@ -3,18 +3,23 @@ using System.IO;
 using System.Reflection;
 using AutoMapper;
 using Castle.Core.Resource;
+using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
+using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
+using Microsoft.Extensions.DependencyInjection;
+using Vokabular.DataEntities;
+using Vokabular.Shared.Container;
 
 namespace ITJakub.FileProcessing.Service
 {
     ///<summary>
     ///Container for IOC
     ///</summary>
-    public class Container : WindsorContainer
+    public class Container : WindsorContainer, IIocContainer
     {
         private static readonly Lazy<WindsorContainer> m_current = new Lazy<WindsorContainer>(() => new Container());
 
@@ -50,6 +55,8 @@ namespace ITJakub.FileProcessing.Service
             Install(FromAssembly.InThisApplication());
             Install(Configuration.FromAppConfig());
             //Install(Configuration.FromXml(GetConfigResource()));
+
+            Install<DataEntitiesContainerRegistration>();
         }
 
         private void ConfigureAutoMapper()
@@ -139,6 +146,65 @@ namespace ITJakub.FileProcessing.Service
         {
             //return System.Reflection.Assembly.GetExecutingAssembly();
             return typeof(Container).Assembly;
+        }
+
+        public void AddSingleton<TService>() where TService : class
+        {
+            Register(Component.For<TService>().LifestyleSingleton());
+        }
+
+        public void AddSingleton<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleSingleton());
+        }
+
+        public void AddTransient<TService>() where TService : class
+        {
+            Register(Component.For<TService>().LifestyleTransient());
+        }
+
+        public void AddTransient<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleTransient());
+        }
+
+        public void AddPerWebRequest<TService>() where TService : class
+        {
+            Register(Component.For<TService>().LifestyleCustom<MsScopedLifestyleManager>());
+        }
+
+        public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleCustom<MsScopedLifestyleManager>());
+        }
+
+        public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
+        {
+            Register(Component.For<TImplementation>().Instance(instance));
+        }
+
+        public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
+        {
+            Register(Component.For<TService>().Instance(instance));
+        }
+
+        public void Install<T>() where T : IContainerInstaller
+        {
+            var installer = Activator.CreateInstance<T>();
+            installer.Install(this);
+        }
+
+        public void Install(params IContainerInstaller[] installers)
+        {
+            foreach (var installer in installers)
+            {
+                installer.Install(this);
+            }
+        }
+
+        public IServiceProvider CreateServiceProvider(IServiceCollection services)
+        {
+            return WindsorRegistrationHelper.CreateServiceProvider(this, services);
         }
     }
 }

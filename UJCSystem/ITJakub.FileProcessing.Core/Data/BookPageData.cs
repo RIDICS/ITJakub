@@ -9,6 +9,6 @@ namespace ITJakub.FileProcessing.Core.Data
         public string XmlResource { get; set; }
         public string Image { get; set; }
         public int Position { get; set; }
-        public List<TermData> Terms { get; set; }
+        public List<string> TermXmlIds { get; set; }
     }
 }

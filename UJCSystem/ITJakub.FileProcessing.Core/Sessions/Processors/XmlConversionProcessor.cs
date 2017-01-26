@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ITJakub.Core.Resources;
 using ITJakub.Shared.Contracts.Resources;
 using Ujc.Ovj.Ooxml.Conversion;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
+using Resource = ITJakub.Core.Resources.Resource;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -119,7 +120,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public List<VersionInfoSkeleton> GetVersionsByBookXmlId(string bookXmlId)
         {
-            var importLogs = m_projectRepository.GetAllImportLogByExternalId(bookXmlId);
+            var importLogs = m_projectRepository.InvokeUnitOfWork(() => m_projectRepository.GetAllImportLogByExternalId(bookXmlId));
             var vers = importLogs.Select(x => new VersionInfoSkeleton(x.AdditionalDescription, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;

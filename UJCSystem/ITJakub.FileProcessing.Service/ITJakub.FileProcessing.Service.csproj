@@ -80,6 +80,10 @@
       <HintPath>..\packages\Castle.Windsor.3.3.0\lib\net45\Castle.Windsor.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Castle.Windsor.MsDependencyInjection, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.MsDependencyInjection.1.1.0\lib\net461\Castle.Windsor.MsDependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
       <Private>True</Private>
@@ -89,6 +93,14 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.1.0.0\lib\netstandard1.1\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.4.1.0.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
@@ -174,6 +186,10 @@
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
+      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
+      <Name>Vokabular.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

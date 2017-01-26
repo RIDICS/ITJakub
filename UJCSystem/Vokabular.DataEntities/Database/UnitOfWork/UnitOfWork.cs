@@ -14,7 +14,7 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public void BeginTransaction()
         {
-            if (m_transaction != null)
+            if (m_transaction != null && m_transaction.IsActive)
             {
                 return;
             }

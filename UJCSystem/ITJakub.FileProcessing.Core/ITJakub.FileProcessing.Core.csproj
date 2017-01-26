@@ -74,18 +74,15 @@
     <Compile Include="Data\BookHeadwordData.cs" />
     <Compile Include="Data\BookPageData.cs" />
     <Compile Include="Data\CategoryData.cs" />
-    <Compile Include="Data\KeywordData.cs" />
-    <Compile Include="Data\LiteraryGenreData.cs" />
-    <Compile Include="Data\LiteraryKindData.cs" />
-    <Compile Include="Data\LiteraryOriginalData.cs" />
+    <Compile Include="Data\FullBookRecordingData.cs" />
     <Compile Include="Data\ManuscriptDescriptionData.cs" />
     <Compile Include="Data\PublisherData.cs" />
     <Compile Include="Data\ResponsibleData.cs" />
     <Compile Include="Data\ResponsibleTypeData.cs" />
-    <Compile Include="Data\TermCategoryData.cs" />
     <Compile Include="Data\TermData.cs" />
     <Compile Include="Data\TrackData.cs" />
     <Compile Include="Data\TrackRecordingData.cs" />
+    <Compile Include="Data\TransformationData.cs" />
     <Compile Include="Data\VisibilityEnum.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ExtractableArchiveTypeResolver.cs" />
@@ -204,6 +201,7 @@
   <ItemGroup>
     <EmbeddedResource Include="XMLProcessing\XSLT\CommonTEI.xsl" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
