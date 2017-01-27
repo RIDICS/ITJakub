@@ -4,7 +4,7 @@
     {
         public string SessionId { get; set; }
 
-        public long ProjectId { get; set; }
+        public long? ProjectId { get; set; }
 
         public string UploadMessage { get; set; }
     }

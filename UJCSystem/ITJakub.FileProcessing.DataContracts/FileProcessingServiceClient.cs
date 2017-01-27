@@ -35,11 +35,11 @@ namespace ITJakub.FileProcessing.DataContracts
             }
         }
 
-        public bool ProcessSession(string sessionId, long projectId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, int userId, string uploadMessage)
         {
             try
             {
-                return Channel.ProcessSession(sessionId, projectId, uploadMessage);
+                return Channel.ProcessSession(sessionId, projectId, userId, uploadMessage);
             }
             catch (TimeoutException ex)
             {

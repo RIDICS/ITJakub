@@ -114,5 +114,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.FirstName == firstName && x.LastName == lastName)
                 .SingleOrDefault();
         }
+
+        public Publisher GetPublisher(string publisherText, string email)
+        {
+            return GetSession().QueryOver<Publisher>()
+                .Where(x => x.Text == publisherText && x.Email == email)
+                .SingleOrDefault();
+        }
     }
 }

@@ -85,6 +85,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             response.EnsureSuccessStatusCode();
         }
 
+        public void ProcessSessionAsImport(string sessionId, NewBookImportContract request)
+        {
+            Post($"session/{sessionId}", request);
+        }
+
         public void DeleteResource(long resourceId)
         {
             Delete($"resource/{resourceId}");

@@ -6,7 +6,6 @@ using System.ServiceModel;
 using System.Threading.Tasks;
 using ITJakub.BatchImport.Client.BusinessLogic.Communication;
 using ITJakub.BatchImport.Client.ViewModel;
-using ITJakub.ITJakubService.DataContracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
 
 namespace ITJakub.BatchImport.Client.BusinessLogic
@@ -92,7 +91,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
             {
                 try
                 {
-                    client.ProcessSession(session, TODO, DefaultUploadMessage);
+                    client.ProcessSession(session, null, DefaultUploadMessage);
                     file.CurrentState = FileStateType.Done;
                 }
                 catch (FaultException ex)

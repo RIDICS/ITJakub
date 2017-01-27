@@ -1,11 +1,11 @@
 ﻿using System;
-using ITJakub.Shared.Contracts.Resources;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Identity;
 using ITJakub.Web.Hub.Models;
 using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -30,16 +30,9 @@ namespace ITJakub.Web.Hub.Controllers
                 var file = Request.Form.Files[i];
                 if (file != null && file.Length != 0)
                 {
-                    using (var client = GetStreamingClient())
+                    using (var client = GetRestClient())
                     {
-                        client.AddResource(
-                            new UploadResourceContract
-                            {
-                                SessionId = request.SessionId,
-                                FileName = file.FileName,
-                                Data = file.OpenReadStream()
-                            }
-                        );
+                        client.UploadResource(request.SessionId, file.OpenReadStream(), file.FileName);
                     }
                 }
             }
@@ -49,10 +42,14 @@ namespace ITJakub.Web.Hub.Controllers
         [HttpPost]
         public ActionResult ProcessUploadedFiles([FromBody] ProcessUploadedFilesRequest request)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var success = client.ProcessSession(request.SessionId, request.ProjectId, request.UploadMessage);
-                return Json(new {success});
+                client.ProcessSessionAsImport(request.SessionId, new NewBookImportContract
+                {
+                    Comment = request.UploadMessage,
+                    ProjectId = request.ProjectId
+                });
+                return Json(new {success = true});
             }
         }
     }

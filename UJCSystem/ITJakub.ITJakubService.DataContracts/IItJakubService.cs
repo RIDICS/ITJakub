@@ -37,7 +37,7 @@ namespace ITJakub.ITJakubService.DataContracts
         #region Resource Import     
 
         [OperationContract]
-        bool ProcessSession(string resourceSessionId, long projectId, string uploadMessage);
+        bool ProcessSession(string resourceSessionId, long? projectId, string uploadMessage);
 
         #endregion
 

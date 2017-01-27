@@ -84,6 +84,7 @@
     <Compile Include="Data\TrackRecordingData.cs" />
     <Compile Include="Data\TransformationData.cs" />
     <Compile Include="Data\VisibilityEnum.cs" />
+    <Compile Include="Sessions\ActiveSessionManager.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ExtractableArchiveTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ImageTypeResolver.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="XMLProcessing\Processors\Header\EditionProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\EditionStmtProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\EncodingDescProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\ExtentProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\HistoryProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\IdnoProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\KeywordsProcessor.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="XMLProcessing\Processors\Header\MsTitleProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\OrigDateProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\OriginProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\PhysDescProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PublisherProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\PubPlaceProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\RepositoryProcessor.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="XMLProcessing\Processors\Header\FileDescProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\ProfileDescProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\DocumentProcessor.cs" />
+    <Compile Include="XMLProcessing\Processors\Header\SupportDescProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TaxonomyProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TermProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Header\TextClassProcessor.cs" />

@@ -202,7 +202,7 @@ namespace ITJakub.ITJakubService.DataContracts.Clients
         }
 
 
-        public bool ProcessSession(string sessionId, long projectId, string uploadMessage)
+        public bool ProcessSession(string sessionId, long? projectId, string uploadMessage)
         {
             try
             {

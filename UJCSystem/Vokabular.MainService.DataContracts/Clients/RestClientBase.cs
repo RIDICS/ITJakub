@@ -50,15 +50,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             return GetResponse<T>(response);
         }
 
-        protected T Post<T>(string uriPath, object data)
+        protected T Post<T>(string uriPath, object jsonData)
         {
-            var response = m_client.PostAsJsonAsync(uriPath, data).Result;
+            var response = m_client.PostAsJsonAsync(uriPath, jsonData).Result;
             return GetResponse<T>(response);
         }
 
-        protected void Put(string uriPath, object data)
+        protected void Post(string uriPath, object jsonData)
         {
-            var response = m_client.PutAsJsonAsync(uriPath, data).Result;
+            var response = m_client.PostAsJsonAsync(uriPath, jsonData).Result;
+            response.EnsureSuccessStatusCode();
+        }
+
+        protected void Put(string uriPath, object jsonData)
+        {
+            var response = m_client.PutAsJsonAsync(uriPath, jsonData).Result;
             response.EnsureSuccessStatusCode();
         }
 

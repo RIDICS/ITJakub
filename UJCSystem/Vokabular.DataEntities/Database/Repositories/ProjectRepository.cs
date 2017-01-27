@@ -44,5 +44,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => projectAlias.ExternalId == projectExternalId)
                 .List();
         }
+
+        public Project GetProjectByExternalId(string externalId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.ExternalId == externalId)
+                .SingleOrDefault();
+        }
     }
 }

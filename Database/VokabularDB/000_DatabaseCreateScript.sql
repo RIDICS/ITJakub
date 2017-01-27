@@ -185,7 +185,7 @@ BEGIN TRAN
 	   [ManuscriptSettlement] varchar (100) NULL,
 	   [ManuscriptCountry] varchar (100) NULL,
 	   [ManuscriptRepository] varchar (100) NULL,
-	   [ManuscriptExtent] varchar(50) NULL, -- TODO unkown value type
+	   [ManuscriptExtent] varchar(255) NULL, -- TODO unkown value max size
 	   [ManuscriptTitle] varchar(2000) NULL -- TODO is different from Title?
 	   
 	   -- TODO !!! Is possible have multiple different manuscripts?

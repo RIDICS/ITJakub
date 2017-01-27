@@ -23,6 +23,12 @@ namespace Vokabular.MainService.Controllers
             m_resourceManager.UploadResource(sessionId, Request.Body, fileName);
         }
 
+        [HttpPost("session/{sessionId}")]
+        public void ProcessSessionAsImport(string sessionId, [FromBody] NewBookImportContract info)
+        {
+            m_resourceManager.ProcessSessionAsImport(sessionId, info.ProjectId, info.Comment);
+        }
+
         [HttpPost("project/{projectId}/resource")]
         public long ProcessUploadedResources(long projectId, [FromBody] NewResourceContract resourceInfo)
         {

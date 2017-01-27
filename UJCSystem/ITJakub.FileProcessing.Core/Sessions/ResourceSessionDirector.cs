@@ -160,6 +160,6 @@ namespace ITJakub.FileProcessing.Core.Sessions
         BookXmlId = 3,
         VersionXmlId = 4,
         BookData = 5,
-
+        UserId = 6,
     }
 }

@@ -12,5 +12,6 @@ namespace ITJakub.FileProcessing.Core.Data
         public string OriginDate { get; set; }
         public string Settlement { get; set; }
         public string Repository { get; set; }
+        public string Extent { get; set; }
     }
 }

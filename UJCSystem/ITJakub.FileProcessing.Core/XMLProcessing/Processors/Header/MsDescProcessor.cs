@@ -43,6 +43,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                 {
                     Container.Resolve<MsIdentifierProcessor>(),
                     Container.Resolve<MsContentsProcessor>(),
+                    Container.Resolve<PhysDescProcessor>(),
                     Container.Resolve<HistoryProcessor>(),
                 };
             }
