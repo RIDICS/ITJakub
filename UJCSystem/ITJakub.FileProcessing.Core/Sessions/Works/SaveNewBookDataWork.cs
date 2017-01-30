@@ -10,6 +10,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly CategoryRepository m_categoryRepository;
         private readonly ResourceSessionDirector m_resourceDirector;
         private readonly BookData m_bookData;
         private readonly long? m_nullableProjectId;
@@ -17,10 +18,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly int m_userId;
         private long m_projectId;
         
-        public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
+        public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
+            m_categoryRepository = categoryRepository;
             m_resourceDirector = resourceDirector;
             m_nullableProjectId = resourceDirector.GetSessionInfoValue<long?>(SessionInfo.ProjectId);
             m_bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
@@ -36,13 +38,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             //TODO 2) Page list & chapters 3) Headwords 4) Tracks 5) keywords 6) terms 7) transformations
 
             new UpdateAuthorsSubtask(m_metadataRepository).UpdateAuthors(m_projectId, m_bookData);
+            //TODO editors
             new UpdateMetadataSubtask(m_metadataRepository).UpdateMetadata(m_projectId, m_userId, m_message, m_bookData);
+            //new UpdateCategoriesSubtask(m_categoryRepository).UpdateCategoryList(m_projectId, m_bookData); TODO update database and mapping
+            new UpdateLiteraryKindsSubtask(m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
+            new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
+            new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
 
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);
 
             throw new NotImplementedException();
         }
-
-        
     }
 }

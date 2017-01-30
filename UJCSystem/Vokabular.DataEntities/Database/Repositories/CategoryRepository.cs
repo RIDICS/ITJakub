@@ -12,19 +12,27 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public BookType GetBookTypeByEnum(BookTypeEnum bookType)
+        public virtual BookType GetBookTypeByEnum(BookTypeEnum bookType)
         {
             return GetSession().QueryOver<BookType>()
                 .Where(x => x.Type == bookType)
                 .SingleOrDefault();
         }
 
-        public IList<Category> GetCategoryList()
+        public virtual IList<Category> GetCategoryList()
         {
             return GetSession().QueryOver<Category>()
                 .OrderBy(x => x.Description).Asc
                 .Fetch(x => x.BookType).Eager
                 .List();
+        }
+
+        public virtual Project GetProjectWithCategories(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.Categories).Eager
+                .SingleOrDefault();
         }
     }
 }

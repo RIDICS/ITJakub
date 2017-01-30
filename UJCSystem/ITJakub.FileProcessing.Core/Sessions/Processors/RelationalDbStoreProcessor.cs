@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
@@ -12,16 +11,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
+        private readonly CategoryRepository m_categoryRepository;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository)
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
+            m_categoryRepository = categoryRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, resourceDirector);
+            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_categoryRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
             // TODO save all new project data to database

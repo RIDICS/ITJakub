@@ -95,6 +95,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .FutureValue().Value;
         }
 
+        public virtual Project GetProjectWithKeywords(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.Keywords).Eager
+                .SingleOrDefault();
+        }
+
         public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
             var query = GetSession().QueryOver<ProjectOriginalAuthor>()
@@ -119,6 +127,13 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Publisher>()
                 .Where(x => x.Text == publisherText && x.Email == email)
+                .SingleOrDefault();
+        }
+
+        public virtual Keyword GetKeywordByName(string name)
+        {
+            return GetSession().QueryOver<Keyword>()
+                .Where(x => x.Text == name)
                 .SingleOrDefault();
         }
     }

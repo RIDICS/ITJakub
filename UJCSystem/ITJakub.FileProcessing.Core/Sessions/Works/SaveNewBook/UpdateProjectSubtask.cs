@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Data;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
@@ -44,8 +45,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreateTime = DateTime.UtcNow,
                         CreatedByUser = m_projectRepository.Load<User>(userId),
                         ExternalId = bookData.BookXmlId,
+                        Categories = new List<Category>(),
+                        Keywords = new List<Keyword>(),
+                        LiteraryGenres = new List<LiteraryGenre>(),
+                        LiteraryKinds = new List<LiteraryKind>()
                     };
-                    projectIdValue = (int)m_projectRepository.Create(newProject);
+                    projectIdValue = (long)m_projectRepository.Create(newProject);
                 }
             }
             return projectIdValue;

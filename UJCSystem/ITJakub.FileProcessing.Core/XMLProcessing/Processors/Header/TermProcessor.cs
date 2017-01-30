@@ -31,36 +31,18 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             {
                 case "literary-original":
                     var literaryOriginal = term;
-
-                    if (bookData.LiteraryOriginals == null)
-                    {
-                        bookData.LiteraryOriginals = new List<string>();
-                    }
-
                     bookData.LiteraryOriginals.Add(literaryOriginal);
 
                     break;
 
                 case "literary-form":
                     var literaryKind = term;
-
-                    if (bookData.LiteraryKinds == null)
-                    {
-                        bookData.LiteraryKinds = new List<string>();
-                    }
-
                     bookData.LiteraryKinds.Add(literaryKind);
 
                     break;
 
                 case "literary-genre":
                     var literaryGenre = term;
-
-                    if (bookData.LiteraryGenres == null)
-                    {
-                        bookData.LiteraryGenres = new List<string>();
-                    }
-
                     bookData.LiteraryGenres.Add(literaryGenre);
 
                     break;

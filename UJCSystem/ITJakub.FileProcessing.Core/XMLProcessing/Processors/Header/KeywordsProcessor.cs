@@ -23,6 +23,21 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
             {
                 bookData.Keywords = new List<string>();
             }
+
+            if (bookData.LiteraryOriginals == null)
+            {
+                bookData.LiteraryOriginals = new List<string>();
+            }
+
+            if (bookData.LiteraryKinds == null)
+            {
+                bookData.LiteraryKinds = new List<string>();
+            }
+
+            if (bookData.LiteraryGenres == null)
+            {
+                bookData.LiteraryGenres = new List<string>();
+            }
         }
 
         protected override IEnumerable<ProcessorBase> SubProcessors

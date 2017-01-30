@@ -67,7 +67,14 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public override object Create(object instance)
         {
             CreatedObjects.Add(instance);
-            return 555;
+
+            switch (instance.GetType().Name)
+            {
+                case "Project":
+                    return 555L;
+                default:
+                    return 555;
+            }
         }
 
         public override IList<object> CreateAll(IEnumerable data)
