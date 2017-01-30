@@ -11,8 +11,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.Helpers
             {
                 return new OriginalAuthor
                 {
-                    FirstName = tokens[1],
-                    LastName = tokens[0]
+                    FirstName = tokens[1].Trim(),
+                    LastName = tokens[0].Trim()
                 };
             }
 
@@ -21,8 +21,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.Helpers
             {
                 return new OriginalAuthor
                 {
-                    FirstName = tokens[1],
-                    LastName = tokens[0]
+                    FirstName = tokens[0],
+                    LastName = tokens[1]
                 };
             }
 

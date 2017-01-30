@@ -109,6 +109,10 @@
     <Compile Include="Sessions\Works\Helpers\AuthorNameEqualityComparer.cs" />
     <Compile Include="Sessions\Works\Helpers\AuthorHelper.cs" />
     <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateAuthorsSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateHistoryLogSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateMetadataSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateProjectSubtask.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />

@@ -14,7 +14,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.Helpers
 
         public int GetHashCode(OriginalAuthor obj)
         {
-            return obj.GetHashCode();
+            return ((obj.FirstName != null ? obj.FirstName.GetHashCode() : 0) * 397) ^ (obj.LastName != null ? obj.LastName.GetHashCode() : 0);
         }
     }
 }

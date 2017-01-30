@@ -13,28 +13,28 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public IList<Publisher> GetPublisherList()
+        public virtual IList<Publisher> GetPublisherList()
         {
             return GetSession().QueryOver<Publisher>()
                 .OrderBy(x => x.Text).Asc
                 .List();
         }
 
-        public IList<LiteraryKind> GetLiteraryKindList()
+        public virtual IList<LiteraryKind> GetLiteraryKindList()
         {
             return GetSession().QueryOver<LiteraryKind>()
                 .OrderBy(x => x.Name).Asc
                 .List();
         }
 
-        public IList<LiteraryGenre> GetLiteraryGenreList()
+        public virtual IList<LiteraryGenre> GetLiteraryGenreList()
         {
             return GetSession().QueryOver<LiteraryGenre>()
                 .OrderBy(x => x.Name).Asc
                 .List();
         }
 
-        public MetadataResource GetLatestMetadataResource(long projectId, bool includePublisher)
+        public virtual MetadataResource GetLatestMetadataResource(long projectId, bool includePublisher)
         {
             Resource resourceAlias = null;
 
@@ -51,7 +51,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
 
-        public Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre)
+        public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre)
         {
             var session = GetSession();
 
@@ -95,7 +95,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .FutureValue().Value;
         }
 
-        public IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
+        public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
         {
             var query = GetSession().QueryOver<ProjectOriginalAuthor>()
                 .Where(x => x.Project.Id == projectId);
@@ -108,14 +108,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.List();
         }
 
-        public OriginalAuthor GetAuthorByName(string firstName, string lastName)
+        public virtual OriginalAuthor GetAuthorByName(string firstName, string lastName)
         {
             return GetSession().QueryOver<OriginalAuthor>()
                 .Where(x => x.FirstName == firstName && x.LastName == lastName)
                 .SingleOrDefault();
         }
 
-        public Publisher GetPublisher(string publisherText, string email)
+        public virtual Publisher GetPublisher(string publisherText, string email)
         {
             return GetSession().QueryOver<Publisher>()
                 .Where(x => x.Text == publisherText && x.Email == email)

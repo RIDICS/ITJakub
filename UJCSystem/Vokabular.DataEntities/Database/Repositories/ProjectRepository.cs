@@ -11,13 +11,13 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public int GetProjectCount()
+        public virtual int GetProjectCount()
         {
             return GetSession().QueryOver<Project>()
                 .RowCount();
         }
 
-        public IList<Project> GetProjectList(int start, int count)
+        public virtual IList<Project> GetProjectList(int start, int count)
         {
             return GetSession().QueryOver<Project>()
                 .Fetch(x => x.CreatedByUser).Eager
@@ -27,7 +27,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public Project GetProject(long projectId)
+        public virtual Project GetProject(long projectId)
         {
             return GetSession().QueryOver<Project>()
                 .Where(x => x.Id == projectId)
@@ -35,7 +35,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
-        public IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
+        public virtual IList<FullProjectImportLog> GetAllImportLogByExternalId(string projectExternalId)
         {
             Project projectAlias = null;
 
@@ -45,7 +45,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public Project GetProjectByExternalId(string externalId)
+        public virtual Project GetProjectByExternalId(string externalId)
         {
             return GetSession().QueryOver<Project>()
                 .Where(x => x.ExternalId == externalId)
