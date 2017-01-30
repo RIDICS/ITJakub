@@ -7,7 +7,6 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers.SpecializedResolvers;
 using Castle.Windsor;
 using Castle.Windsor.Installer;
-using Castle.Windsor.MsDependencyInjection;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
@@ -170,12 +169,12 @@ namespace ITJakub.FileProcessing.Service
 
         public void AddPerWebRequest<TService>() where TService : class
         {
-            Register(Component.For<TService>().LifestyleCustom<MsScopedLifestyleManager>());
+            Register(Component.For<TService>().LifestylePerWebRequest());
         }
 
         public void AddPerWebRequest<TService, TImplementation>() where TService : class where TImplementation : class, TService
         {
-            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestyleCustom<MsScopedLifestyleManager>());
+            Register(Component.For<TService>().ImplementedBy<TImplementation>().LifestylePerWebRequest());
         }
 
         public void AddInstance<TImplementation>(TImplementation instance) where TImplementation : class
@@ -204,7 +203,7 @@ namespace ITJakub.FileProcessing.Service
 
         public IServiceProvider CreateServiceProvider(IServiceCollection services)
         {
-            return WindsorRegistrationHelper.CreateServiceProvider(this, services);
+            throw new NotSupportedException();
         }
     }
 }
