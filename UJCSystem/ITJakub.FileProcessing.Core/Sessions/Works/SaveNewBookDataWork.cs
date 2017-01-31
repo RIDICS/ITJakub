@@ -38,12 +38,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             //TODO 2) Page list & chapters 3) Headwords 4) Tracks 5) keywords 6) terms 7) transformations
 
             new UpdateAuthorsSubtask(m_metadataRepository).UpdateAuthors(m_projectId, m_bookData);
-            //TODO editors
+            new UpdateResponsiblePersonSubtask(m_metadataRepository).UpdateResponsiblePersonList(m_projectId, m_bookData);
             new UpdateMetadataSubtask(m_metadataRepository).UpdateMetadata(m_projectId, m_userId, m_message, m_bookData);
             //new UpdateCategoriesSubtask(m_categoryRepository).UpdateCategoryList(m_projectId, m_bookData); TODO update database and mapping
             new UpdateLiteraryKindsSubtask(m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
             new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
             new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
+
+
 
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);
 

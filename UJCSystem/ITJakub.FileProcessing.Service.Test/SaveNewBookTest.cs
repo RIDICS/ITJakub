@@ -68,9 +68,9 @@ namespace ITJakub.FileProcessing.Service.Test
             var authorName2 = "Bbb, Aaa";
             var authorName3 = "Aaa Bbb Ccc";
 
-            var author1 = AuthorHelper.ConvertToEntity(authorName1);
-            var author2 = AuthorHelper.ConvertToEntity(authorName2);
-            var author3 = AuthorHelper.ConvertToEntity(authorName3);
+            var author1 = PersonHelper.ConvertToEntity(authorName1);
+            var author2 = PersonHelper.ConvertToEntity(authorName2);
+            var author3 = PersonHelper.ConvertToEntity(authorName3);
 
             Assert.AreEqual("Bbb", author1.LastName);
             Assert.AreEqual("Aaa", author1.FirstName);

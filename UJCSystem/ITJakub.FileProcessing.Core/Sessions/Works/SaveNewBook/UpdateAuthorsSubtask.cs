@@ -19,7 +19,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         {
             var dbProjectAuthors = m_metadataRepository.GetProjectOriginalAuthorList(projectId, true);
             var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
-            var newAuthors = bookData.Authors.Select(x => AuthorHelper.ConvertToEntity(x.Name)).ToList();
+            var newAuthors = bookData.Authors.Select(x => PersonHelper.ConvertToOriginalAuthor(x.Name)).ToList();
 
             var comparer = new AuthorNameEqualityComparer();
             var authorsToAdd = newAuthors.Except(dbAuthors, comparer).ToList();

@@ -136,5 +136,28 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Text == name)
                 .SingleOrDefault();
         }
+
+        public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
+        {
+            return GetSession().QueryOver<ProjectResponsiblePerson>()
+                .Where(x => x.Project.Id == projectId)
+                .Fetch(x => x.ResponsiblePerson).Eager
+                .Fetch(x => x.ResponsibleType).Eager
+                .List();
+        }
+
+        public virtual ResponsiblePerson GetResponsiblePersonByName(string firstName, string lastName)
+        {
+            return GetSession().QueryOver<ResponsiblePerson>()
+                .Where(x => x.FirstName == firstName && x.LastName == lastName)
+                .SingleOrDefault();
+        }
+
+        public virtual ResponsibleType GetResponsibleTypeByName(string text)
+        {
+            return GetSession().QueryOver<ResponsibleType>()
+                .Where(x => x.Text == text)
+                .SingleOrDefault();
+        }
     }
 }

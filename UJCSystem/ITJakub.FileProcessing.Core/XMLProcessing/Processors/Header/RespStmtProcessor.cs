@@ -36,19 +36,15 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Header
                     xmlReader.Read(); //read text value
                     var responsibleTypeText = xmlReader.Value;
                     var responsibleTypeType = ParseEnum<ResponsibleTypeEnum>(responsibleTypeText);
-                    var tmpResponsibleType = new ResponsibleTypeData
-                    {
-                        Text = responsibleTypeText,
-                        Type = responsibleTypeType
-                    };
 
-                    responsible.ResponsibleType = tmpResponsibleType;
+                    responsible.TypeText = responsibleTypeText;
+                    responsible.TypeEnum = responsibleTypeType;
                 }
 
                 if (xmlReader.NodeType == XmlNodeType.Element && xmlReader.IsStartElement() &&
                     xmlReader.LocalName.Equals("name"))
                 {
-                    responsible.Text = GetInnerContentAsString(xmlReader);
+                    responsible.NameText = GetInnerContentAsString(xmlReader);
                 }
             }
 

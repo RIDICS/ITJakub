@@ -1,8 +1,11 @@
-﻿namespace ITJakub.FileProcessing.Core.Data
+﻿using Vokabular.DataEntities.Database.Entities.Enums;
+
+namespace ITJakub.FileProcessing.Core.Data
 {
     public class ResponsibleData
     {
-        public string Text { get; set; }
-        public ResponsibleTypeData ResponsibleType { get; set; }
+        public string NameText { get; set; }
+        public string TypeText { get; set; }
+        public ResponsibleTypeEnum TypeEnum { get; set; }
     }
 }
