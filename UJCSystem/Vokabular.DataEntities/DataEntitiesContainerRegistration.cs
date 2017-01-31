@@ -14,6 +14,7 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<PersonRepository>();
             container.AddPerWebRequest<ProjectRepository>();
+            container.AddPerWebRequest<ResourceRepository>();
             container.AddPerWebRequest<UserRepository>();
         }
     }

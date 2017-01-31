@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
@@ -177,6 +178,86 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(bookData.Title, createdMetadata.Title);
             Assert.AreEqual(bookData.SourceAbbreviation, createdMetadata.SourceAbbreviation);
             Assert.AreEqual(bookData.PublishPlace, createdMetadata.PublishPlace);
+        }
+
+        [TestMethod]
+        public void TestUpdatePages()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                Pages = new List<BookPageData>
+                {
+                    new BookPageData
+                    {
+                        Text = "39v"
+                    },
+                    new BookPageData
+                    {
+                        Text = "40r"
+                    }
+                }
+            };
+            
+            var subtask = new UpdatePagesSubtask(resourceRepository);
+            subtask.UpdatePages(40, 1, "comment", bookData);
+
+            Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
+            Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
+
+            var firstPage = resourceRepository.CreatedObjects.Cast<PageResource>().First();
+            var secondPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40r");
+            var removedPage = resourceRepository.UpdatedObjects.Cast<PageResource>().First(x => x.Name == "40v");
+
+            Assert.AreEqual(1, firstPage.Position);
+            Assert.AreEqual(2, secondPage.Position);
+            Assert.AreEqual(0, removedPage.Position);
+        }
+
+        [TestMethod]
+        public void TestUpdatePageTexts()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                Pages = new List<BookPageData>
+                {
+                    new BookPageData
+                    {
+                        Text = "39v",
+                        XmlId = "new-xml-39-v"
+                    },
+                    new BookPageData
+                    {
+                        Text = "40r",
+                        XmlId = "new-xml-40-r"
+                    }
+                }
+            };
+
+            var subtask = new UpdatePagesSubtask(resourceRepository);
+            subtask.UpdatePages(40, 1, "comment", bookData);
+
+            var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
+            var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
+
+            Assert.AreEqual(2, createdTexts.Count);
+            Assert.AreEqual(0, updatedTexts.Count);
+
+            var firstText = createdTexts.First(x => x.ExternalId == "new-xml-39-v");
+            var secondText = createdTexts.First(x => x.ExternalId == "new-xml-40-r");
+
+            Assert.AreEqual(1, firstText.VersionNumber);
+            Assert.AreEqual(2, secondText.VersionNumber);
+            Assert.AreEqual(900, secondText.Resource.Id);
+        }
+
+        [TestMethod]
+        public void TestUpdatePageImages()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Mock\MockMetadataRepository.cs" />
     <Compile Include="Mock\MockProjectRepository.cs" />
+    <Compile Include="Mock\MockResourceRepository.cs" />
     <Compile Include="Mock\MockUnitOfWork.cs" />
     <Compile Include="SaveNewBookTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

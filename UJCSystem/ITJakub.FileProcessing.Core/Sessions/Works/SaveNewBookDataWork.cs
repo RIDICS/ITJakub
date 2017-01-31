@@ -11,18 +11,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly ResourceRepository m_resourceRepository;
         private readonly ResourceSessionDirector m_resourceDirector;
         private readonly BookData m_bookData;
         private readonly long? m_nullableProjectId;
         private readonly string m_message;
         private readonly int m_userId;
         private long m_projectId;
-        
-        public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
+
+        public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
+            ResourceRepository resourceRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_categoryRepository = categoryRepository;
+            m_resourceRepository = resourceRepository;
             m_resourceDirector = resourceDirector;
             m_nullableProjectId = resourceDirector.GetSessionInfoValue<long?>(SessionInfo.ProjectId);
             m_bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
@@ -45,7 +48,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
             new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
 
-
+            new UpdatePagesSubtask(m_resourceRepository).UpdatePages(m_projectId, m_userId, m_message, m_bookData);
 
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);
 

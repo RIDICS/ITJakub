@@ -59,6 +59,7 @@
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -116,6 +117,7 @@
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryGenresSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryKindsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateMetadataSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdatePagesSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateProjectSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateResponsiblePersonSubtask.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />

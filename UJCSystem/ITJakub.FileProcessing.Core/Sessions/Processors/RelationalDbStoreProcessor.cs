@@ -12,17 +12,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private readonly ResourceRepository m_resourceRepository;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository)
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
+            ResourceRepository resourceRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_categoryRepository = categoryRepository;
+            m_resourceRepository = resourceRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_categoryRepository, resourceDirector);
+            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_categoryRepository, m_resourceRepository,
+                resourceDirector);
             saveNewBookDataWork.Execute();
 
             // TODO save all new project data to database

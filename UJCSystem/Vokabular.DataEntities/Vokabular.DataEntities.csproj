@@ -83,6 +83,7 @@
     <Compile Include="Database\Entities\TermCategory.cs" />
     <Compile Include="Database\Entities\Transformation.cs" />
     <Compile Include="Database\Entities\User.cs" />
+    <Compile Include="Database\Repositories\ResourceRepository.cs" />
     <Compile Include="Database\UnitOfWork\RepositoryExtensions.cs" />
     <Compile Include="Database\Repositories\CategoryRepository.cs" />
     <Compile Include="Database\Repositories\MetadataRepository.cs" />
