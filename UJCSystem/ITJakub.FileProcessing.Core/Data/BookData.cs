@@ -36,5 +36,6 @@ namespace ITJakub.FileProcessing.Core.Data
         public List<TermData> Terms { get; set; }
         public List<BookAccessoryData> Accessories { get; set; }
         public List<TransformationData> Transformations { get; set; }
+        public int BookContentItemsCount { get; set; }
     }
 }

@@ -68,6 +68,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     if (dbPageResource.Position != position)
                     {
                         dbPageResource.Position = position;
+                        dbPageResource.CreateTime = now;
+                        dbPageResource.CreatedByUser = user;
                         m_resourceRepository.Update(dbPageResource);
                     }
                 }

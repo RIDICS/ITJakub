@@ -55,5 +55,18 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Project.Id == projectId && x.TextType == textType && x.Name == name)
                 .SingleOrDefault();
         }
+
+        public virtual IList<ChapterResource> GetProjectChapters(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<ChapterResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(() => resourceAlias.Project.Id == projectId)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .OrderBy(x => x.Position).Asc
+                .List();
+        }
     }
 }

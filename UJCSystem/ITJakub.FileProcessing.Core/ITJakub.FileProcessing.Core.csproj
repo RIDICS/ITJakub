@@ -112,6 +112,7 @@
     <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateAuthorsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateCategoriesSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateChaptersSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateHistoryLogSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateKeywordsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryGenresSubtask.cs" />

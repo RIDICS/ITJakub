@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
@@ -291,6 +290,68 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, firstImage.VersionNumber);
             Assert.AreEqual(2, secondImage.VersionNumber);
             Assert.AreEqual(900, secondImage.Resource.Id);
+        }
+
+        [TestMethod]
+        public void TestUpdateChapters()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+
+            var contentItem1 = new BookContentItemData
+            {
+                Text = "Chapter 40",
+                ItemOrder = 2,
+                Page = new BookPageData
+                {
+                    Text = "40r",
+                    XmlId = "new-xml-40-r"
+                },
+                SubContentItems = new List<BookContentItemData>()
+            };
+            var contentItem2 = new BookContentItemData
+            {
+                Text = "Chapter 41",
+                ItemOrder = 1,
+                Page = new BookPageData
+                {
+                    Text = "40v",
+                    XmlId = "new-xml-40-v"
+                },
+                SubContentItems = new List<BookContentItemData>()
+            };
+
+            contentItem2.SubContentItems.Add(contentItem1);
+            var bookData = new BookData
+            {
+                BookContentItems = new List<BookContentItemData>
+                {
+                    contentItem2
+                }
+            };
+
+            var subtask = new UpdateChaptersSubtask(resourceRepository);
+            subtask.UpdateChapters(41, 2, "upload", bookData);
+
+            var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();
+            var updatedChapters = resourceRepository.UpdatedObjects.OfType<ChapterResource>().ToList();
+
+            Assert.AreEqual(1, createdChapters.Count);
+            Assert.AreEqual(2, updatedChapters.Count);
+
+            var firstChapter = updatedChapters.First(x => x.Name == "Chapter 40");
+            var secondChapter = createdChapters.First();
+            var deletedChapter = updatedChapters.First(x => x.Name != "Chapter 40");
+
+            Assert.AreEqual(2, firstChapter.Position);
+            Assert.AreEqual(1, secondChapter.Position);
+            Assert.AreEqual(0, deletedChapter.Position);
+
+            Assert.IsNotNull(firstChapter.ParentResource);
+            Assert.IsNull(secondChapter.ParentResource);
+
+            Assert.AreEqual(90, firstChapter.BeginningPageResource.Id);
+            Assert.AreEqual(80, secondChapter.BeginningPageResource.Id);
         }
     }
 }

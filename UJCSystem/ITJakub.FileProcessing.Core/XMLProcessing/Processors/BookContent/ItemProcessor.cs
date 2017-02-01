@@ -36,16 +36,25 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.BookContent
             if (bookData.BookContentItems == null)
             {
                 bookData.BookContentItems = new List<BookContentItemData>();
+                bookData.BookContentItemsCount = 0;
             }
 
+            bookData.BookContentItemsCount++;
             var concreteBookItem = new BookContentItemData
             {
-                ParentBookContentItem = parentBookContentItem,
-                ItemOrder = bookData.BookContentItems.Count
+                SubContentItems = new List<BookContentItemData>(),
+                ItemOrder = bookData.BookContentItemsCount
             };
 
-            bookData.BookContentItems.Add(concreteBookItem);
-
+            if (parentBookContentItem == null)
+            {
+                bookData.BookContentItems.Add(concreteBookItem);
+            }
+            else
+            {
+                parentBookContentItem.SubContentItems.Add(concreteBookItem);
+            }
+            
             base.ProcessElement(bookData, concreteBookItem, xmlReader);
         }
     }
