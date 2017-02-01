@@ -144,7 +144,8 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ResourceType = ResourceTypeEnum.Text
                     },
                     ParentResource = new Resource {Id = 90},
-                    ExternalId = "xml-40-r"
+                    ExternalId = "xml-40-r",
+                    VersionNumber = 1
                 },
                 new TextResource
                 {
@@ -155,14 +156,41 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ResourceType = ResourceTypeEnum.Text
                     },
                     ParentResource = new Resource {Id = 80},
-                    ExternalId = "xml-40-v"
+                    ExternalId = "xml-40-v",
+                    VersionNumber = 1
                 }
             };
         }
 
         public override IList<ImageResource> GetProjectImages(long projectId, long namedResourceGroupId)
         {
-            throw new NotImplementedException();
+            return new List<ImageResource>
+            {
+                new ImageResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 900,
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Text
+                    },
+                    ParentResource = new Resource {Id = 90},
+                    FileName = "image_40r.jpg",
+                    VersionNumber = 1
+                },
+                new ImageResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 800,
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Text
+                    },
+                    ParentResource = new Resource {Id = 80},
+                    FileName = "image_40v.jpg",
+                    VersionNumber = 1
+                }
+            };
         }
 
         public override NamedResourceGroup GetNamedResourceGroup(long projectId, string name, TextTypeEnum textType)

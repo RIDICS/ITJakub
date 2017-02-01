@@ -257,7 +257,40 @@ namespace ITJakub.FileProcessing.Service.Test
         [TestMethod]
         public void TestUpdatePageImages()
         {
-            throw new NotImplementedException();
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                Pages = new List<BookPageData>
+                {
+                    new BookPageData
+                    {
+                        Text = "39v",
+                        Image = "image_39v.jpg"
+                    },
+                    new BookPageData
+                    {
+                        Text = "40r",
+                        Image = "image_40r.jpg"
+                    }
+                }
+            };
+
+            var subtask = new UpdatePagesSubtask(resourceRepository);
+            subtask.UpdatePages(41, 2, "upload comment", bookData);
+
+            var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
+            var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
+
+            Assert.AreEqual(2, createdImages.Count);
+            Assert.AreEqual(0, updatedImages.Count);
+
+            var firstImage = createdImages.First(x => x.FileName == "image_39v.jpg");
+            var secondImage = createdImages.First(x => x.FileName == "image_40r.jpg");
+
+            Assert.AreEqual(1, firstImage.VersionNumber);
+            Assert.AreEqual(2, secondImage.VersionNumber);
+            Assert.AreEqual(900, secondImage.Resource.Id);
         }
     }
 }
