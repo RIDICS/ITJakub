@@ -82,7 +82,6 @@ BEGIN TRAN
 	   [ExternalId] varchar(150) NOT NULL CONSTRAINT [UQ_Category(ExternalId)] UNIQUE,
 	   [Description] varchar(150) NULL,
 	   [Path] varchar(MAX) NOT NULL,
-	   [BookType] int NOT NULL CONSTRAINT [FK_Category(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
 	
@@ -226,23 +225,24 @@ BEGIN TRAN
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] varchar(1000) NOT NULL,
 	   [Position] int NOT NULL,
-	   [BeginningPageResource] bigint NULL CONSTRAINT [FK_ChapterResource(BeginningPageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
-	)
-
-	CREATE TABLE [dbo].[DefaultHeadwordResource]
-	(
-	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_DefaultHeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [ExternalId] varchar(100) NOT NULL,
-	   [DefaultHeadword] nvarchar(255) NOT NULL,
-	   [Sorting] nvarchar(255) NOT NULL
+	   [ResourceBeginningPage] bigint NULL CONSTRAINT [FK_ChapterResource(ResourceBeginningPage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
 	CREATE TABLE [dbo].[HeadwordResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_HeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ExternalId] varchar(100) NOT NULL,
+	   [DefaultHeadword] nvarchar(255) NOT NULL,
+	   [Sorting] nvarchar(255) NOT NULL
+	)
+
+	CREATE TABLE [dbo].[HeadwordItem]
+	(
+	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_HeadwordItem(Id)] PRIMARY KEY CLUSTERED,
+	   [HeadwordResource] bigint NOT NULL CONSTRAINT [FK_HeadwordItem(HeadwordResource)_HeadwordResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[HeadwordResource](ResourceVersionId),
 	   [Headword] nvarchar(255) NOT NULL,
 	   [HeadwordOriginal] nvarchar(255) NULL,
-	   [PageResource] bigint NULL CONSTRAINT [FK_HeadwordResource(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	   [ResourcePage] bigint NULL CONSTRAINT [FK_HeadwordItem(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
 	CREATE TABLE [dbo].[BinaryResource]

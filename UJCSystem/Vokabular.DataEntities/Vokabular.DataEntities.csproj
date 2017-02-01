@@ -58,6 +58,7 @@
     <Compile Include="Database\Entities\FavoriteLabel.cs" />
     <Compile Include="Database\Entities\Feedback.cs" />
     <Compile Include="Database\Entities\Enums\FeedbackType.cs" />
+    <Compile Include="Database\Entities\HeadwordItem.cs" />
     <Compile Include="Database\Entities\HistoryLogBase.cs" />
     <Compile Include="Database\Entities\Keyword.cs" />
     <Compile Include="Database\Entities\LiteraryGenre.cs" />
@@ -187,7 +188,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\HistoryLogBase.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Database\Entities\HeadwordItem.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

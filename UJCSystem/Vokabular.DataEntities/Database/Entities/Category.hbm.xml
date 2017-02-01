@@ -12,8 +12,6 @@
 
     <property name="Path" not-null="true" />
     
-    <many-to-one name="BookType" class="BookType" lazy="proxy" not-null="true" />
-
     <many-to-one name="ParentCategory" class="Category" lazy="proxy" />
 
     <bag name="Categories" inverse="true" cascade="none">

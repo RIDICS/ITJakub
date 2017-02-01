@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="HeadwordItem" table="[HeadwordItem]">
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+
+    <property name="Headword" not-null="true" />
+    
+    <property name="HeadwordOriginal" not-null="false" />
+    
+    <many-to-one name="ResourcePage" class="Resource" lazy="proxy" />
+
+    <many-to-one name="HeadwordResource" class="Resource" lazy="proxy" />
+
+  </class>
+</hibernate-mapping>

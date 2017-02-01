@@ -80,23 +80,15 @@
       
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
-      <many-to-one name="BeginningPageResource" class="Resource" lazy="proxy" />
-    </joined-subclass>
-
-    <joined-subclass table="DefaultHeadwordResource" name="DefaultHeadwordResource" >
-      <key column="ResourceVersionId" />
-      
-      <property name="ExternalId" not-null="true" />
-      <property name="DefaultHeadword" not-null="true" />
-      <property name="Sorting" not-null="true" />
+      <many-to-one name="ResourceBeginningPage" class="Resource" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="HeadwordResource" name="HeadwordResource" >
       <key column="ResourceVersionId" />
       
-      <property name="Headword" not-null="true" />
-      <property name="HeadwordOriginal" not-null="false" />
-      <many-to-one name="PageResource" class="Resource" lazy="proxy" />
+      <property name="ExternalId" not-null="true" />
+      <property name="DefaultHeadword" not-null="true" />
+      <property name="Sorting" not-null="true" />
     </joined-subclass>
 
     <joined-subclass table="BinaryResource" name="BinaryResource" >

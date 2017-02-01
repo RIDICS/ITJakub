@@ -15,8 +15,6 @@ namespace Vokabular.DataEntities.Database.Entities {
 
         public virtual string Path { get; set; }
 
-        public virtual BookType BookType { get; set; }
-
         public virtual IList<Category> Categories { get; set; }
 
         public virtual IList<Project> Projects { get; set; }

@@ -23,7 +23,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             return GetSession().QueryOver<Category>()
                 .OrderBy(x => x.Description).Asc
-                .Fetch(x => x.BookType).Eager
                 .List();
         }
 

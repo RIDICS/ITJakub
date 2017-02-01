@@ -94,21 +94,14 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string Name { get; set; }
         public virtual int Position { get; set; }
-        public virtual Resource BeginningPageResource { get; set; }
-    }
-
-    public class DefaultHeadwordResource : ResourceVersion
-    {
-        public virtual string ExternalId { get; set; }
-        public virtual string DefaultHeadword { get; set; }
-        public virtual string Sorting { get; set; }
+        public virtual Resource ResourceBeginningPage { get; set; }
     }
 
     public class HeadwordResource : ResourceVersion
     {
-        public virtual string Headword { get; set; }
-        public virtual string HeadwordOriginal { get; set; }
-        public virtual Resource PageResource { get; set; }
+        public virtual string ExternalId { get; set; }
+        public virtual string DefaultHeadword { get; set; }
+        public virtual string Sorting { get; set; }
     }
 
     public class BinaryResource : ResourceVersion
