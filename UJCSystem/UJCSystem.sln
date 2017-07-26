@@ -1,16 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.CardFile.Core", "ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj", "{F00801BF-D6B2-4F6C-B808-68BABF177055}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.SearchService", "ITJakub.SearchService\ITJakub.SearchService.csproj", "{A12068E9-19A4-45E4-924B-C9D509C6B950}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService", "ITJakub.ITJakubService\ITJakub.ITJakubService.csproj", "{AF3E2B33-A604-4A22-BA84-68FF447E266C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.Service", "ITJakub.Lemmatization.Service\ITJakub.Lemmatization.Service.csproj", "{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MainService", "ITJakub.MainService", "{5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}"
 EndProject
@@ -20,6 +12,32 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Clients", "ITJakub.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.SearchService", "ITJakub.SearchService", "{03208FD7-4079-4AE7-8BC9-643C06A89967}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MobileApps", "ITJakub.MobileApps", "{600F24BC-C549-4154-852C-20426F962E25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.FileProcessing", "ITJakub.FileProcessing", "{20AD4F4B-31EB-419D-A116-9AD3B206D874}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Xml.Conversion", "ITJakub.Xml.Conversion", "{AF61ADAD-8F76-4A0E-AB27-F8D83392D370}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies_Readme.txt = Dependencies_Readme.txt
+		Deploy_readme.txt = Deploy_readme.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionaries", "Dictionaries", "{9D10652F-D0B7-44EA-9AB1-7488B28B93D6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{2A83D63B-A058-4542-9B67-A3EA03CFC9D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.BatchImport", "ITJakub.BatchImport", "{F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.CardFile.Core", "ITJakub.CardFile.Core\ITJakub.CardFile.Core.csproj", "{F00801BF-D6B2-4F6C-B808-68BABF177055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.SearchService", "ITJakub.SearchService\ITJakub.SearchService.csproj", "{A12068E9-19A4-45E4-924B-C9D509C6B950}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService", "ITJakub.ITJakubService\ITJakub.ITJakubService.csproj", "{AF3E2B33-A604-4A22-BA84-68FF447E266C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Lemmatization.Service", "ITJakub.Lemmatization.Service\ITJakub.Lemmatization.Service.csproj", "{6DF4DC1A-0BB9-4586-B427-651BD0BEF709}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Shared.Contracts", "ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj", "{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jewelery", "Jewelery\Jewelery.csproj", "{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}"
@@ -28,13 +46,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Xml", "ITJakub.Xml\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.DataEntities", "ITJakub.DataEntities\ITJakub.DataEntities.csproj", "{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.MobileApps", "ITJakub.MobileApps", "{600F24BC-C549-4154-852C-20426F962E25}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService.DataContracts", "ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj", "{8DDD85A2-4124-4470-9DA5-E18BCFE3D573}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService.Core", "ITJakub.ITJakubService.Core\ITJakub.ITJakubService.Core.csproj", "{904E449B-6F51-46C7-A730-4F4C992BDDC8}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.FileProcessing", "ITJakub.FileProcessing", "{20AD4F4B-31EB-419D-A116-9AD3B206D874}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.Service", "ITJakub.FileProcessing.Service\ITJakub.FileProcessing.Service.csproj", "{1F8CBB1C-5613-4E99-AD5D-F3469631363B}"
 EndProject
@@ -45,8 +59,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.DataContracts", "ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj", "{56512CDC-6912-49B3-8AC4-CE96A0340165}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Core", "ITJakub.Core\ITJakub.Core.csproj", "{92E907E3-ACE0-4FC6-8919-040031E5192E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.Xml.Conversion", "ITJakub.Xml.Conversion", "{AF61ADAD-8F76-4A0E-AB27-F8D83392D370}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Ooxml.Conversion", "ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj", "{C1753D1A-9D38-4A6F-AA01-BDADECB2EAC8}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -70,12 +82,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Tei.Splitting",
 	ProjectSection(ProjectDependencies) = postProject
 		{457FEF12-BD22-4498-924F-941B31DCCD6B} = {457FEF12-BD22-4498-924F-941B31DCCD6B}
 		{2F50F763-2AEF-4647-918A-87B65AF2A6C9} = {2F50F763-2AEF-4647-918A-87B65AF2A6C9}
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B4C7DB29-66AC-41BE-AFA5-AFDBA0B249E1}"
-	ProjectSection(SolutionItems) = preProject
-		Dependencies_Readme.txt = Dependencies_Readme.txt
-		Deploy_readme.txt = Deploy_readme.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.MobileApps.MobileContracts", "ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj", "{67B4DDA0-4340-4D05-9A22-831DA43E70F8}"
@@ -141,11 +147,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.Xml.Info", "ITJakub
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.SlovnikovyModul", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.SlovnikovyModul\Daliboris.Texty.Export.SlovnikovyModul.csproj", "{6C5853B2-9D04-417D-8B24-CE1B696216A0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dictionaries", "Dictionaries", "{9D10652F-D0B7-44EA-9AB1-7488B28B93D6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Slovniky.ESSC", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.Slovniky.ESSC\Daliboris.Texty.Export.Slovniky.ESSC.csproj", "{2FCB6B55-EE90-4664-BF98-2249B9BC94D3}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{2A83D63B-A058-4542-9B67-A3EA03CFC9D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Slovniky.Heslar", "ITJakub.Xml.Conversion\Daliboris.Slovniky.Heslar\Daliboris.Slovniky.Heslar.csproj", "{1DAEA4E2-3283-4924-90F3-EA09A0780ACB}"
 EndProject
@@ -175,8 +177,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.BatchImport.Client"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.ModulMluvnic", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.ModulMluvnic\Daliboris.Texty.Export.ModulMluvnic.csproj", "{3F9E4F36-8033-48EB-B362-8BC46678EBA9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.BatchImport", "ITJakub.BatchImport", "{F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Pomucky.Xml.WordBreaker", "ITJakub.Xml.Conversion\Daliboris.Pomucky.Xml.WordBreaker\Daliboris.Pomucky.Xml.WordBreaker.csproj", "{24155839-32EF-4BBB-8311-A04502E61864}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.ITJakubService.Core.Test", "ITJakub.ITJakubService.Core.Test\ITJakub.ITJakubService.Core.Test.csproj", "{429EB11C-6C7F-4290-B1C1-0F3395B1DF94}"
@@ -199,9 +199,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Mluv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Web.DataEntities", "ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj", "{F7D65278-04A4-41F3-B410-AC07EC8754E9}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ITJakub.Web.Hub", "ITJakub.Web.Hub\ITJakub.Web.Hub.xproj", "{74DCF8CE-0797-4C41-8DE1-9779B8FC576E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Web.Hub", "ITJakub.Web.Hub\ITJakub.Web.Hub.csproj", "{74DCF8CE-0797-4C41-8DE1-9779B8FC576E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vokabular.MainService", "Vokabular.MainService\Vokabular.MainService.xproj", "{6C611C94-6A7A-47C8-819D-C3CF44DAD01A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService", "Vokabular.MainService\Vokabular.MainService.csproj", "{6C611C94-6A7A-47C8-819D-C3CF44DAD01A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.DataEntities", "Vokabular.DataEntities\Vokabular.DataEntities.csproj", "{7FF7FB5D-4EFF-46DD-9682-21DD476ABCB0}"
 EndProject
@@ -2211,6 +2211,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{9D10652F-D0B7-44EA-9AB1-7488B28B93D6} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{2A83D63B-A058-4542-9B67-A3EA03CFC9D9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
+		{F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{F00801BF-D6B2-4F6C-B808-68BABF177055} = {E9E91BD8-38D8-4A14-8CC2-002292F7C355}
 		{A12068E9-19A4-45E4-924B-C9D509C6B950} = {03208FD7-4079-4AE7-8BC9-643C06A89967}
 		{AF3E2B33-A604-4A22-BA84-68FF447E266C} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
@@ -2247,9 +2250,7 @@ Global
 		{5F08050C-C6DD-4ACC-B472-A7C7CD1F2BB1} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{2F50F763-2AEF-4647-918A-87B65AF2A6C9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{6C5853B2-9D04-417D-8B24-CE1B696216A0} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
-		{9D10652F-D0B7-44EA-9AB1-7488B28B93D6} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{2FCB6B55-EE90-4664-BF98-2249B9BC94D3} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}
-		{2A83D63B-A058-4542-9B67-A3EA03CFC9D9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
 		{1DAEA4E2-3283-4924-90F3-EA09A0780ACB} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}
 		{BA3F1BC4-31F5-4991-9470-D9417F4C0DE9} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}
 		{56B8BC06-0BE8-4045-94DF-6844AA49E523} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}
@@ -2263,7 +2264,6 @@ Global
 		{ADCE48CE-05C9-494A-A848-1C681DAD5FD9} = {1E2AFC91-8173-47AC-B7D4-799C5BF555F6}
 		{7B8B2A02-E27F-4B97-9E2B-8A18D8E5DE06} = {F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8}
 		{3F9E4F36-8033-48EB-B362-8BC46678EBA9} = {AF61ADAD-8F76-4A0E-AB27-F8D83392D370}
-		{F6CE455E-FED5-47FE-8B17-C2CC7FF4A6F8} = {53A1BA5E-DF69-4655-AB7B-3BBF58B426FD}
 		{24155839-32EF-4BBB-8311-A04502E61864} = {2A83D63B-A058-4542-9B67-A3EA03CFC9D9}
 		{429EB11C-6C7F-4290-B1C1-0F3395B1DF94} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{52D3D792-3904-4B0C-8BF7-C278C763A801} = {9D10652F-D0B7-44EA-9AB1-7488B28B93D6}

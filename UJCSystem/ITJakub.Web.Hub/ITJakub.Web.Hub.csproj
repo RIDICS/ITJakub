@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <AssemblyName>ITJakub.Web.Hub</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>ITJakub.Web.Hub</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot/lib\s-pagination\tsconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="wwwroot/lib\s-pagination\tsconfig.json" />
+    <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <ProjectReference Include="..\ITJakub.ITJakubService.DataContracts\ITJakub.ITJakubService.DataContracts.csproj" />
+    <ProjectReference Include="..\ITJakub.Lemmatization.Shared.Contracts\ITJakub.Lemmatization.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
+    <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
+    <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.IISIntegration" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
+    <PackageReference Include="AutoMapper" Version="5.2.0" />
+    <PackageReference Include="bootstrap.TypeScript.DefinitelyTyped" Version="0.9.2" />
+    <PackageReference Include="Castle.Windsor" Version="3.3.0" />
+    <PackageReference Include="Castle.Windsor.MsDependencyInjection" Version="1.3.0" />
+    <PackageReference Include="dropzone.TypeScript.DefinitelyTyped" Version="1.3.4" />
+    <PackageReference Include="jquery.TypeScript.DefinitelyTyped" Version="3.1.0" />
+    <PackageReference Include="jqueryui.TypeScript.DefinitelyTyped" Version="1.4.8" />
+    <PackageReference Include="log4net" Version="2.0.7" />
+    <PackageReference Include="Log4net.Extensions.Logging" Version="1.0.0-beta11" />
+    <PackageReference Include="Markdig" Version="0.10.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="NHibernate" Version="4.1.0.4000" />
+    <PackageReference Include="simplemde.TypeScript.DefinitelyTyped" Version="0.0.1" />
+    <PackageReference Include="typeahead.TypeScript.DefinitelyTyped" Version="0.3.5" />
+    <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.3.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="4.3.0" />
+    <PackageReference Include="DryIoc.dll" Version="2.9.7" />
+    <PackageReference Include="DryIoc.Microsoft.DependencyInjection" Version="1.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+
+  <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
+    <Exec Command="npm install" />
+    <Exec Command="bower install" />
+    <Exec Command="gulp clean" />
+    <Exec Command="gulp build:ts" />
+    <Exec Command="gulp default" />
+  </Target>
+
+</Project>
