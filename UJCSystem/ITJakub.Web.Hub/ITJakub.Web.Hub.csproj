@@ -9,12 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot/lib\s-pagination\tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="App.config" />
-    <None Include="wwwroot/lib\s-pagination\tsconfig.json" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
