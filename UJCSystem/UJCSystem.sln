@@ -197,19 +197,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ujc.Ovj.ChangeEngine.Object
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Daliboris.Texty.Export.Mluvnice.Transformace", "ITJakub.Xml.Conversion\Daliboris.Texty.Export.Mluvnice.Transformace\Daliboris.Texty.Export.Mluvnice.Transformace.csproj", "{E64E41B9-D4D5-40E2-B396-496CD7C68AD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.Web.DataEntities", "ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj", "{F7D65278-04A4-41F3-B410-AC07EC8754E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Web.DataEntities", "ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj", "{F7D65278-04A4-41F3-B410-AC07EC8754E9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITJakub.Web.Hub", "ITJakub.Web.Hub\ITJakub.Web.Hub.csproj", "{74DCF8CE-0797-4C41-8DE1-9779B8FC576E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService", "Vokabular.MainService\Vokabular.MainService.csproj", "{6C611C94-6A7A-47C8-819D-C3CF44DAD01A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.DataEntities", "Vokabular.DataEntities\Vokabular.DataEntities.csproj", "{7FF7FB5D-4EFF-46DD-9682-21DD476ABCB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.DataEntities", "Vokabular.DataEntities\Vokabular.DataEntities.csproj", "{7FF7FB5D-4EFF-46DD-9682-21DD476ABCB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.MainService.Core", "Vokabular.MainService.Core\Vokabular.MainService.Core.csproj", "{6C22DA45-1130-4427-8D2B-A0248E58FF0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService.Core", "Vokabular.MainService.Core\Vokabular.MainService.Core.csproj", "{6C22DA45-1130-4427-8D2B-A0248E58FF0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.Shared", "Vokabular.Shared\Vokabular.Shared.csproj", "{130F3C52-E563-4B9B-A70F-E7E5BBAB4296}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.Shared", "Vokabular.Shared\Vokabular.Shared.csproj", "{130F3C52-E563-4B9B-A70F-E7E5BBAB4296}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.MainService.DataContracts", "Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj", "{5527BA9B-AA14-4872-BACF-40ADEBFD966D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService.DataContracts", "Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj", "{5527BA9B-AA14-4872-BACF-40ADEBFD966D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2006,16 +2006,16 @@ Global
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Debug|x64.Build.0 = Debug|Any CPU
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Debug|x86.Build.0 = Debug|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Any CPU.ActiveCfg = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Any CPU.Build.0 = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|ARM.ActiveCfg = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|ARM.Build.0 = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Mixed Platforms.ActiveCfg = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Mixed Platforms.Build.0 = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x64.ActiveCfg = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x64.Build.0 = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x86.ActiveCfg = Development|Any CPU
-		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x86.Build.0 = Development|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|ARM.ActiveCfg = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|ARM.Build.0 = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x64.ActiveCfg = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x64.Build.0 = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x86.ActiveCfg = Debug|Any CPU
+		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Development|x86.Build.0 = Debug|Any CPU
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F7D65278-04A4-41F3-B410-AC07EC8754E9}.Release|ARM.ActiveCfg = Release|Any CPU
