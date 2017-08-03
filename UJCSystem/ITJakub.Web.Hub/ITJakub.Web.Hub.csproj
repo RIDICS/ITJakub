@@ -6,6 +6,7 @@
     <AssemblyName>ITJakub.Web.Hub</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>ITJakub.Web.Hub</PackageId>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
