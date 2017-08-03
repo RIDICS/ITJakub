@@ -68,7 +68,7 @@
     <Exec Command="npm install" />
     <Exec Command="bower install" />
     <Exec Command="gulp clean" />
-    <Exec Command="gulp build:ts" />
+    <!--<Exec Command="gulp build:ts" />-->
     <Exec Command="gulp default" />
   </Target>
 
