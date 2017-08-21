@@ -7,6 +7,8 @@
     <OutputType>Exe</OutputType>
     <PackageId>ITJakub.Web.Hub</PackageId>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
     <GeneratedItemPatterns>wwwroot/css/**/*.css;wwwroot/js/**/*.js;wwwroot/Areas/**/*.css;wwwroot/Areas/**/*.js</GeneratedItemPatterns>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(GeneratedItemPatterns)</DefaultItemExcludes>
   </PropertyGroup>
