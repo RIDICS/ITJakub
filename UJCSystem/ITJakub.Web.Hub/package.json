@@ -1,18 +1,24 @@
 {
-	"version": "1.0.0",
-	"name": "asp.net",
-	"private": true,
+  "version": "1.0.0",
+  "name": "asp.net",
+  "private": true,
   "devDependencies": {
+    "@types/bootstrap": "^3.3.35",
+    "@types/dropzone": "^4.3.6",
+    "@types/jquery": "2.0.43",
+    "@types/jqueryui": "^1.11.35",
+    "@types/simplemde": "^1.11.7",
+    "@types/typeahead": "^0.11.30",
     "bower": "1.7.9",
     "gulp": "3.9.1",
     "gulp-concat": "2.6.0",
     "gulp-cssmin": "0.1.7",
     "gulp-less": "3.1.0",
-    "gulp-watch": "4.3.11",
     "gulp-sourcemaps": "1.6.0",
-    "gulp-uglify": "1.5.4",
     "gulp-typescript": "3.0.2",
+    "gulp-uglify": "1.5.4",
+    "gulp-watch": "4.3.11",
     "rimraf": "2.5.4",
-    "typescript": "2.0.3"
+    "typescript": "2.4.2"
   }
 }
