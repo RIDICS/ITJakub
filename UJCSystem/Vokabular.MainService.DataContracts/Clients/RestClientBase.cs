@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Clients.Errors;
+using Vokabular.MainService.DataContracts.Clients.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
@@ -18,6 +26,10 @@ namespace Vokabular.MainService.DataContracts.Clients
             m_client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        protected abstract void FillRequestMessage(HttpRequestMessage requestMessage);
+
+        protected abstract void ProcessResponse(HttpResponseMessage response);
+
         public void Dispose()
         {
             m_client.Dispose();
@@ -28,44 +40,248 @@ namespace Vokabular.MainService.DataContracts.Clients
             get { return m_client; }
         }
 
-        private T GetResponse<T>(HttpResponseMessage response)
+        private HttpRequestMessage CreateRequestMessage(HttpMethod method, string requestUri, IEnumerable<Tuple<string, string>> headers = null)
         {
-            response.EnsureSuccessStatusCode();
+            var requestMessage = new HttpRequestMessage(method, requestUri);
 
-            var result = response.Content.ReadAsAsync<T>().Result;
-            return result;
+            if (headers != null)
+            {
+                foreach (var headerValuepair in headers)
+                    requestMessage.Headers.Add(headerValuepair.Item1, headerValuepair.Item2);
+            }
+
+            FillRequestMessage(requestMessage);
+
+            return requestMessage;
         }
 
-        protected GetResult<T> GetFull<T>(string uriPath)
+        private void ProcessResponseInternal(HttpResponseMessage response)
         {
-            var response = m_client.GetAsync(uriPath).Result;
-            var result = GetResponse<T>(response);
-
-            return new GetResult<T>(result, response.Headers);
+            EnsureSuccessStatusCode(response);
+            
+            ProcessResponse(response);
         }
 
-        protected T Get<T>(string uriPath)
+        private T GetResponseBody<T>(HttpResponseMessage response)
         {
-            var response = m_client.GetAsync(uriPath).Result;
-            return GetResponse<T>(response);
+            try
+            {
+                var result = response.Content.ReadAsAsync<T>().GetAwaiter().GetResult();
+                return result;
+            }
+            catch (JsonSerializationException exception)
+            {
+                throw new HttpErrorCodeException("Invalid response JSON format", exception, HttpStatusCode.BadGateway);
+            }
+            catch (JsonReaderException exception)
+            {
+                throw new HttpErrorCodeException("Invalid response JSON format", exception, HttpStatusCode.BadGateway);
+            }
         }
 
-        protected T Post<T>(string uriPath, object data)
+        protected Task<GetResult<T>> GetFullAsync<T>(string uriPath)
         {
-            var response = m_client.PostAsJsonAsync(uriPath, data).Result;
-            return GetResponse<T>(response);
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    var result = GetResponseBody<T>(response);
+
+                    return new GetResult<T>(result, response.Headers);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
         }
 
-        protected void Put(string uriPath, object data)
+        protected Task<T> GetAsync<T>(string uriPath)
         {
-            var response = m_client.PutAsJsonAsync(uriPath, data).Result;
-            response.EnsureSuccessStatusCode();
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
         }
 
-        protected void Delete(string uriPath)
+        protected Task<Stream> GetStreamAsync(string uriPath)
         {
-            var response = m_client.DeleteAsync(uriPath).Result;
-            response.EnsureSuccessStatusCode();
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    return await response.Content.ReadAsStreamAsync();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task HeadAsync(string uriPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Head, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<T> PostAsync<T>(string uriPath, object data)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Post, uriPath);
+                    var response = await m_client.SendAsJsonAsync(request, data);
+
+                    ProcessResponseInternal(response);
+
+                    return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<T> PostStreamAsFormAsync<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Add(new StreamContent(data), "file");
+
+                    var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
+                    request.Content = content;
+
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<T> PostStreamAsync<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var content = new StreamContent(data);
+
+                    var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
+                    request.Content = content;
+
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<T> PutAsync<T>(string uriPath, object data)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Put, uriPath);
+                    var response = await m_client.SendAsJsonAsync(request, data);
+
+                    ProcessResponseInternal(response);
+                    return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task DeleteAsync(string uriPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Delete, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        private void EnsureSuccessStatusCode(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpErrorCodeException(GetExceptionMessageFromResponse(response), response.StatusCode);
+            }
+        }
+
+        private string GetExceptionMessageFromResponse(HttpResponseMessage response)
+        {
+            return string.Format("{0} ({1})", response.ReasonPhrase, (int)response.StatusCode);
+        }
+
+        protected string GetCurrentMethod([CallerMemberName] string methodName = null)
+        {
+            return methodName;
+        }
+
+        protected HttpStatusCode GetErrorCode(HttpRequestException exception)
+        {
+            var exceptionWithCode = exception as HttpErrorCodeException;
+            return exceptionWithCode != null ? exceptionWithCode.StatusCode : 0;
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using ITJakub.Web.DataEntities;
+using ITJakub.Web.Hub.AppStart.Installers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Core.Markdown;
-using ITJakub.Web.Hub.Installers;
 using Vokabular.Shared.Container;
 
 namespace ITJakub.Web.Hub

@@ -53,7 +53,10 @@ namespace Vokabular.MainService
             services.AddMvc();
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.DescribeAllEnumsAsStrings();
+            });
 
             // IoC
             IIocContainer container = new DryIocContainer();

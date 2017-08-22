@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace Vokabular.MainService.DataContracts.Clients.Extensions
 {
-    internal static class HttpExtensions
+    internal static class UrlExtensions
     {
         public static string AddQueryString(this string url, string name, string value)
         {

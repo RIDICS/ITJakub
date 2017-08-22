@@ -9,12 +9,20 @@ using Vokabular.MainService.DataContracts.Data;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceRestClient : RestClientBase
+    public class MainServiceRestClient : FullRestClientBase
     {
         public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
         {
         }
-        
+
+        protected override void FillRequestMessage(HttpRequestMessage requestMessage)
+        {
+        }
+
+        protected override void ProcessResponse(HttpResponseMessage response)
+        {
+        }
+
         public ProjectListData GetProjectList(int start, int count)
         {
             var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
@@ -58,31 +66,28 @@ namespace Vokabular.MainService.DataContracts.Clients
         
         public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/literarykind", request);
+            Put<object>($"project/{projectId}/literarykind", request);
         }
         
         public void SetProjectLiteraryGenres(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/literarygenre", request);
+            Put<object>($"project/{projectId}/literarygenre", request);
         }
         
         public void SetProjectAuthors(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/author", request);
+            Put<object>($"project/{projectId}/author", request);
         }
 
         public void SetProjectResponsiblePersons(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/responsibleperson", request);
+            Put<object>($"project/{projectId}/responsibleperson", request);
         }
 
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
             var uriPath = $"session/{sessionId}/resource?fileName={fileName}";
-            var content = new StreamContent(data);
-            var response = HttpClient.PostAsync(uriPath, content).Result;
-
-            response.EnsureSuccessStatusCode();
+            PostStream<object>(uriPath, data);
         }
 
         public void DeleteResource(long resourceId)
@@ -134,7 +139,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         public void RenameResource(long resourceId, ResourceContract resource)
         {
-            Put($"resource/{resourceId}", resource);
+            Put<object>($"resource/{resourceId}", resource);
         }
         
         public long CreateSnapshot(long projectId)

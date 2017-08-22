@@ -7,7 +7,7 @@ using NHibernate.Driver;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 
-namespace ITJakub.Web.Hub.Installers
+namespace ITJakub.Web.Hub.AppStart.Installers
 {
     public class NHibernateInstaller : IContainerInstaller
     {

@@ -175,3 +175,23 @@ enum ResponsibleTypeEnum {
     Editor = 1,
     Kolace = 2,
 }
+
+//TODO Switch TypeScript to version 2.4 and use enums with String values
+//enum ResourceType {
+//    None = "None",
+//    ResourceGroup = "ResourceGroup",
+//    ProjectMetadata = "ProjectMetadata",
+//    Chapter = "Chapter",
+//    Page = "Page",
+//    Headword = "Headword",
+//    Text = "Text",
+//    Image = "Image",
+//    Audio = "Audio",
+//    Video = "Video",
+//}
+
+//enum ResponsibleTypeEnum {
+//    Unknown = "Unknown",
+//    Editor = "Editor",
+//    Kolace = "Kolace",
+//}
