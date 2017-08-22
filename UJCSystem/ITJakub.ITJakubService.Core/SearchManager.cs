@@ -525,7 +525,6 @@ namespace ITJakub.ITJakubService.Core
 
             m_authorizationManager.FilterBookIdList(ref bookIds); //TODO HACK when all filtered, statement below returns all
 
-            query = string.Format("{0}%", query);
             query = EscapeQuery(query);
 
             var bookHeadword = m_bookVersionRepository.FindFirstHeadword(bookIds, query);
