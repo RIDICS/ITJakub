@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using DryIoc;
 using DryIoc.Microsoft.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,34 @@ namespace Vokabular.MainService.Containers
         public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
         {
             m_container.UseInstance(typeof(TService), instance);
+        }
+
+        public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            var serviceType = typeof(TService);
+            m_container.RegisterMany(new[] { assembly }, (registrator, types, type) =>
+            {
+                if (serviceType.IsAssignableFrom(type))
+                {
+                    registrator.RegisterMany(new[] { type, serviceType }, type, Reuse.Singleton);
+                }
+            });
+        }
+
+        public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            //m_container.RegisterMany(new[] { typeof(App).Assembly },
+            //    serviceTypeCondition: type => type.IsSubclassOf(typeof(TService)),
+            //    reuse: Reuse.Transient);
+
+            var serviceType = typeof(TService);
+            m_container.RegisterMany(new[] { assembly }, (registrator, types, type) =>
+            {
+                if (serviceType.IsAssignableFrom(type))
+                {
+                    registrator.RegisterMany(new[] { type, serviceType }, type, Reuse.Transient);
+                }
+            });
         }
 
         public void Install<T>() where T : IContainerInstaller

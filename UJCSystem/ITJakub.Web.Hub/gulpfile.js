@@ -55,7 +55,7 @@ gulp.task("clean:jsmap_areas", function (cb) {
     rimraf(paths.areaJsMap, cb);
 });
 
-gulp.task("clean", ["clean:css", "clean:css_areas", "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"]);
+gulp.task("clean", ["clean:css", "clean:css_areas"/*, "clean:js", "clean:js_areas", "clean:jsmap", "clean:jsmap_areas"*/]);
 
 
 // Less build
@@ -94,7 +94,7 @@ gulp.task("build:ts", function () {
     var tsResult = tsProject.src()
         .pipe(tsProject());
 
-    return tsResult.js.pipe(gulp.dest(""));
+    return tsResult.js.pipe(gulp.dest(paths.webroot));
 });
 
 

@@ -3,7 +3,7 @@ using ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles;
 using ITJakub.Web.Hub.AutoMapperProfiles;
 using Vokabular.Shared.Container;
 
-namespace ITJakub.Web.Hub.Installers
+namespace ITJakub.Web.Hub.AppStart.Installers
 {
     public class AutoMapperInstaller : IContainerInstaller
     {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -96,15 +97,17 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("resource/{resourceId}/metadata")]
-        public ResourceMetadataContract GetResourceMetadata(long resourceId)
+        [ProducesResponseType(typeof(ResourceMetadataContract), StatusCodes.Status200OK)]
+        public IActionResult GetResourceMetadata(long resourceId)
         {
-            return new ResourceMetadataContract
+            var resultData = new ResourceMetadataContract
             {
                 Editor = "Jan Novák",
                 Editor2 = "Josef Novák",
                 LastModification = DateTime.Now,
                 EditionNote = "xxxxxxx"
             };
+            return Ok(resultData);
         }
     }
 

@@ -402,5 +402,5 @@ BEGIN TRAN
 		-- DatabaseVersion - varchar
 
 
-	ROLLBACK
---COMMIT
+	--ROLLBACK
+COMMIT

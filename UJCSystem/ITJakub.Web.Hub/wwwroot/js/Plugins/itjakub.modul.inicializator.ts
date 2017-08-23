@@ -58,7 +58,7 @@
         const typeOfConfig = typeof config;
 
         switch (typeOf) {
-            case "array":
+            //case "array": // Arrays always returns type object
             case "object":
                 if (config === undefined) {
                     config = defaultConfiguration;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
@@ -41,9 +42,14 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}")]
-        public ProjectContract GetProject(long projectId)
+        [ProducesResponseType(typeof(ProjectContract), StatusCodes.Status200OK)]
+        public IActionResult GetProject(long projectId)
         {
-            return m_projectManager.GetProject(projectId);
+            var projectData = m_projectManager.GetProject(projectId);
+            if (projectData == null)
+                return NotFound();
+
+            return Ok(projectData);
         }
 
         [HttpPost]
@@ -59,7 +65,8 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}/metadata")]
-        public ProjectMetadataResultContract GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
+        [ProducesResponseType(typeof(ProjectMetadataResultContract), StatusCodes.Status200OK)]
+        public IActionResult GetProjectMetadata(long projectId, [FromQuery] bool includeAuthor, [FromQuery] bool includeResponsiblePerson,
             [FromQuery] bool includeKind, [FromQuery] bool includeGenre)
         {
             var parameters = new GetProjectMetadataParameter
@@ -69,7 +76,12 @@ namespace Vokabular.MainService.Controllers
                 IncludeResponsiblePerson = includeResponsiblePerson,
                 IncludeAuthor = includeAuthor
             };
-            return m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
+            var resultData = m_projectMetadataManager.GetProjectMetadata(projectId, parameters);
+
+            if (resultData == null)
+                return NotFound();
+
+            return Ok(resultData);
         }
 
         [HttpPost("{projectId}/metadata")]

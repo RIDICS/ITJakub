@@ -187,6 +187,16 @@ namespace ITJakub.FileProcessing.Service
             Register(Component.For<TService>().Instance(instance));
         }
 
+        public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            throw new NotImplementedException();
+        }
+
         public void Install<T>() where T : IContainerInstaller
         {
             var installer = Activator.CreateInstance<T>();

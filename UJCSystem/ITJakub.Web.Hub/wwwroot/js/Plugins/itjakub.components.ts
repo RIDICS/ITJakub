@@ -1,8 +1,8 @@
 ﻿class DropzoneHelper {
     private static acceptedFiles = ".doc, .docx, .jpg, .jpeg, .png, .bmp, .gif, .xsl, .xslt, .xmd, .xml, .mp3, .ogg, .wav, .zip";
 
-    public static getDefaultConfiguration(): DropzoneOptions {
-        var options: DropzoneOptions = {
+    public static getDefaultConfiguration(): Dropzone.DropzoneOptions {
+        var options: Dropzone.DropzoneOptions = {
             maxFilesize: 10000, // size in MB
             uploadMultiple: true,
             autoProcessQueue: true,
@@ -24,16 +24,17 @@
         return options;
     }
 
-    public static getErrorFunction(): (file: DropzoneFile, message: string|Error, xhr: XMLHttpRequest) => void {
-        return function (file, message, xhr) {
+    public static getErrorFunction(): (file: Dropzone.DropzoneFile, message: string|Error, xhr: XMLHttpRequest) => void {
+        var resultFunction = function (file, message, xhr) {
             var errorMessage = xhr
                 ? this.options.dictResponseError.replace("{{statusCode}}", xhr.status.toString())
                 : message;
             this.defaultOptions.error(file, errorMessage, xhr);
         }
+        return (resultFunction) as any; //HACK ohterwise ReSharper shows type error
     }
 
-    public static getFullConfiguration(options: DropzoneOptions): DropzoneOptions {
+    public static getFullConfiguration(options: Dropzone.DropzoneOptions): Dropzone.DropzoneOptions {
         return $.extend({}, this.getDefaultConfiguration(), options);
     }
 }

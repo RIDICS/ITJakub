@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
-using Vokabular.MainService.Containers.Loggers;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -53,7 +52,10 @@ namespace Vokabular.MainService
             services.AddMvc();
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.DescribeAllEnumsAsStrings();
+            });
 
             // IoC
             IIocContainer container = new DryIocContainer();
@@ -70,7 +72,7 @@ namespace Vokabular.MainService
             // Configure logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            loggerFactory.AddProvider(new CustomLog4NetProvider());
+            loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             app.ConfigureAutoMapper();

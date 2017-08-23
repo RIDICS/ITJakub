@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ITJakub.Web.Hub
+namespace ITJakub.Web.Hub.AppStart
 {
     public static class StartupAuthExtensions
     {

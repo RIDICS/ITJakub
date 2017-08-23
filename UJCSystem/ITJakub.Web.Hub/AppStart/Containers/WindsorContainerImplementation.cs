@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Extensions;
 
-namespace ITJakub.Web.Hub.Containers
+namespace ITJakub.Web.Hub.AppStart.Containers
 {
     ///<summary>
     ///Container for IOC
@@ -159,6 +159,16 @@ namespace ITJakub.Web.Hub.Containers
         public void AddInstance<TService, TImplementation>(TImplementation instance) where TService : class where TImplementation : class, TService
         {
             Register(Component.For<TService>().Instance(instance));
+        }
+
+        public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
+        {
+            throw new NotImplementedException();
         }
 
         public void Install<T>() where T : IContainerInstaller

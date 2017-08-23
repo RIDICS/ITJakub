@@ -2,240 +2,610 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Clients.Extensions;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
+using Vokabular.Shared;
+using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients
 {
-    public class MainServiceRestClient : RestClientBase
+    public class MainServiceRestClient : FullRestClientBase
     {
+        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<MainServiceRestClient>();
+
         public MainServiceRestClient(Uri baseAddress) : base(baseAddress)
         {
         }
-        
+
+        protected override void FillRequestMessage(HttpRequestMessage requestMessage)
+        {
+        }
+
+        protected override void ProcessResponse(HttpResponseMessage response)
+        {
+        }
+
         public ProjectListData GetProjectList(int start, int count)
         {
-            var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
-            return new ProjectListData
+            try
             {
-                TotalCount = result.GetTotalCountHeader(),
-                List = result.Result
-            };
+                var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
+                return new ProjectListData
+                {
+                    TotalCount = result.GetTotalCountHeader(),
+                    List = result.Result
+                };
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public ProjectContract GetProject(long projectId)
         {
-            var project = Get<ProjectContract>($"project/{projectId}");
-            return project;
+            try
+            {
+                var project = Get<ProjectContract>($"project/{projectId}");
+                return project;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public long CreateProject(ProjectContract project)
         {
-            var projectId = Post<long>("project", project);
-            return projectId;
+            try
+            {
+                var projectId = Post<long>("project", project);
+                return projectId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public void DeleteProject(long projectId)
         {
-            Delete($"project/{projectId}");
+            try
+            {
+                Delete($"project/{projectId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor, bool includeResponsiblePerson, bool includeKind, bool includeGenre)
         {
-            var metadata =
-                Get<ProjectMetadataResultContract>(
-                    $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}");
-            return metadata;
+            try
+            {
+                var metadata =
+                    Get<ProjectMetadataResultContract>(
+                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}");
+                return metadata;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public long CreateNewProjectMetadataVersion(long projectId, ProjectMetadataContract metadata)
         {
-            var newResourceVersion = Post<long>($"project/{projectId}/metadata", metadata);
-            return newResourceVersion;
+            try
+            {
+                var newResourceVersion = Post<long>($"project/{projectId}/metadata", metadata);
+                return newResourceVersion;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
         
         public void SetProjectLiteraryKinds(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/literarykind", request);
+            try
+            {
+                Put<object>($"project/{projectId}/literarykind", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
         
         public void SetProjectLiteraryGenres(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/literarygenre", request);
+            try
+            {
+                Put<object>($"project/{projectId}/literarygenre", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
         
         public void SetProjectAuthors(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/author", request);
+            try
+            {
+                Put<object>($"project/{projectId}/author", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public void SetProjectResponsiblePersons(long projectId, IntegerIdListContract request)
         {
-            Put($"project/{projectId}/responsibleperson", request);
+            try
+            {
+                Put<object>($"project/{projectId}/responsibleperson", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public void UploadResource(string sessionId, Stream data, string fileName)
         {
-            var uriPath = $"session/{sessionId}/resource?fileName={fileName}";
-            var content = new StreamContent(data);
-            var response = HttpClient.PostAsync(uriPath, content).Result;
+            try
+            {
+                var uriPath = $"session/{sessionId}/resource".AddQueryString("fileName", fileName);
+                PostStream<object>(uriPath, data);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 
-            response.EnsureSuccessStatusCode();
+                throw;
+            }
         }
 
         public void ProcessSessionAsImport(string sessionId, NewBookImportContract request)
         {
-            Post($"session/{sessionId}", request);
+            try
+            {
+                Post<object>($"session/{sessionId}", request);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public void DeleteResource(long resourceId)
         {
-            Delete($"resource/{resourceId}");
+            try
+            {
+                Delete($"resource/{resourceId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public long DuplicateResource(long resourceId)
         {
-            var newResourceId = Post<long>($"resource/{resourceId}/duplicate", null);
-            return newResourceId;
+            try
+            {
+                var newResourceId = Post<long>($"resource/{resourceId}/duplicate", null);
+                return newResourceId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<ResourceContract> GetResourceList(long projectId, ResourceTypeEnumContract? resourceType = null)
         {
-            var url = $"project/{projectId}/resource";
-            if (resourceType != null)
+            try
             {
-                url = $"{url}?resourceType={resourceType}";
-            }
+                var url = $"project/{projectId}/resource";
+                if (resourceType != null)
+                {
+                    url.AddQueryString("resourceType", resourceType.ToString());
+                }
 
-            var result = Get<List<ResourceContract>>(url);
-            return result;
+                var result = Get<List<ResourceContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<ResourceVersionContract> GetResourceVersionHistory(long resourceId)
         {
-            var result = Get<List<ResourceVersionContract>>($"resource/{resourceId}/version");
-            return result;
+            try
+            {
+                var result = Get<List<ResourceVersionContract>>($"resource/{resourceId}/version");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public ResourceMetadataContract GetResourceMetadata(long resourceId)
         {
-            var result = Get<ResourceMetadataContract>($"resource/{resourceId}/metadata");
-            return result;
+            try
+            {
+                var result = Get<ResourceMetadataContract>($"resource/{resourceId}/metadata");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public long ProcessUploadedResources(long projectId, NewResourceContract resourceInfo)
         {
-            var resourceId = Post<long>($"project/{projectId}/resource", resourceInfo);
-            return resourceId;
+            try
+            {
+                var resourceId = Post<long>($"project/{projectId}/resource", resourceInfo);
+                return resourceId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public long ProcessUploadedResourceVersion(long resourceId, NewResourceContract resourceInfo)
         {
-            var resourceVersionId = Post<long>($"resource/{resourceId}/version", resourceInfo);
-            return resourceVersionId;
+            try
+            {
+                var resourceVersionId = Post<long>($"resource/{resourceId}/version", resourceInfo);
+                return resourceVersionId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public void RenameResource(long resourceId, ResourceContract resource)
         {
-            Put($"resource/{resourceId}", resource);
+            try
+            {
+                Put<object>($"resource/{resourceId}", resource);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
         
         public long CreateSnapshot(long projectId)
         {
-            var snapshotId = Post<long>($"project/{projectId}/snapshot", null);
-            return snapshotId;
+            try
+            {
+                var snapshotId = Post<long>($"project/{projectId}/snapshot", null);
+                return snapshotId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<SnapshotContract> GetSnapshotList(long projectId)
         {
-            var result = Get<List<SnapshotContract>>($"project/{projectId}/snapshot");
-            return result;
+            try
+            {
+                var result = Get<List<SnapshotContract>>($"project/{projectId}/snapshot");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreatePublisher(PublisherContract publisher)
         {
-            var newId = Post<int>("publisher", publisher);
-            return newId;
+            try
+            {
+                var newId = Post<int>("publisher", publisher);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreateLiteraryKind(LiteraryKindContract literaryKind)
         {
-            var newId = Post<int>("literarykind", literaryKind);
-            return newId;
+            try
+            {
+                var newId = Post<int>("literarykind", literaryKind);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreateLiteraryGenre(LiteraryGenreContract literaryGenre)
         {
-            var newId = Post<int>("literarygenre", literaryGenre);
-            return newId;
+            try
+            {
+                var newId = Post<int>("literarygenre", literaryGenre);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreateOriginalAuthor(OriginalAuthorContract author)
         {
-            var newId = Post<int>("author", author);
-            return newId;
+            try
+            {
+                var newId = Post<int>("author", author);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreateResponsiblePerson(NewResponsiblePersonContract responsiblePerson)
         {
-            var newId = Post<int>("responsibleperson", responsiblePerson);
-            return newId;
+            try
+            {
+                var newId = Post<int>("responsibleperson", responsiblePerson);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<PublisherContract> GetPublisherList()
         {
-            var result = Get<List<PublisherContract>>("publisher");
-            return result;
+            try
+            {
+                var result = Get<List<PublisherContract>>("publisher");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<LiteraryKindContract> GetLiteraryKindList()
         {
-            var result = Get<List<LiteraryKindContract>>("literarykind");
-            return result;
+            try
+            {
+                var result = Get<List<LiteraryKindContract>>("literarykind");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<LiteraryGenreContract> GetLitararyGenreList()
         {
-            var result = Get<List<LiteraryGenreContract>>("literarygenre");
-            return result;
+            try
+            {
+                var result = Get<List<LiteraryGenreContract>>("literarygenre");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public int CreateCategory(CategoryContract category)
         {
-            var resultId = Post<int>("category", category);
-            return resultId;
+            try
+            {
+                var resultId = Post<int>("category", category);
+                return resultId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<CategoryContract> GetCategoryList()
         {
-            var result = Get<List<CategoryContract>>("category");
-            return result;
+            try
+            {
+                var result = Get<List<CategoryContract>>("category");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
         
         public int CreateResponsibleType(ResponsibleTypeContract responsibleType)
         {
-            var resultId = Post<int>("responsibleperson/type", responsibleType);
-            return resultId;
+            try
+            {
+                var resultId = Post<int>("responsibleperson/type", responsibleType);
+                return resultId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<ResponsibleTypeContract> GetResponsibleTypeList()
         {
-            var result = Get<List<ResponsibleTypeContract>>("responsibleperson/type");
-            return result;
+            try
+            {
+                var result = Get<List<ResponsibleTypeContract>>("responsibleperson/type");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query)
         {
-            var result = Get<List<OriginalAuthorContract>>("author/autocomplete".AddQueryString("query", query));
-            return result;
+            try
+            {
+                var result = Get<List<OriginalAuthorContract>>("author/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
 
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
         {
-            var result = Get<List<ResponsiblePersonContract>>("responsibleperson/autocomplete".AddQueryString("query", query));
-            return result;
+            try
+            {
+                var result = Get<List<ResponsiblePersonContract>>("responsibleperson/autocomplete".AddQueryString("query", query));
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
         }
     }
 }

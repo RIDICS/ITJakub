@@ -730,7 +730,7 @@ namespace ITJakub.DataEntities.Database.Repositories
                     .JoinQueryOver(() => bookHeadwordAlias.BookVersion, () => bookVersionAlias)
                     .JoinQueryOver(() => bookVersionAlias.Book, () => bookAlias)
                     .Where(() => bookAlias.LastVersion.Id == bookVersionAlias.Id)
-                    .AndRestrictionOn(() => bookHeadwordAlias.Headword).IsLike(headwordQuery);
+                    .AndRestrictionOn(() => bookHeadwordAlias.SortOrder).IsLike(headwordQuery, MatchMode.Start);
 
                 if (selectedBookIds != null)
                     query.AndRestrictionOn(() => bookAlias.Id).IsInG(selectedBookIds);
