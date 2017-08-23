@@ -189,12 +189,20 @@ namespace ITJakub.FileProcessing.Service
 
         public void AddAllSingletonBasedOn<TService>(Assembly assembly) where TService : class
         {
-            throw new NotImplementedException();
+            Register(Classes.FromAssembly(assembly)
+                .BasedOn<TService>()
+                .LifestyleSingleton()
+                .WithServiceSelf()
+                .WithServiceBase());
         }
 
         public void AddAllTransientBasedOn<TService>(Assembly assembly) where TService : class
         {
-            throw new NotImplementedException();
+            Register(Classes.FromAssembly(assembly)
+                .BasedOn<TService>()
+                .LifestyleTransient()
+                .WithServiceSelf()
+                .WithServiceBase());
         }
 
         public void Install<T>() where T : IContainerInstaller
