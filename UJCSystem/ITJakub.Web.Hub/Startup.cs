@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
-using ITJakub.Web.Hub.AppStart.Loggers;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -81,7 +80,7 @@ namespace ITJakub.Web.Hub
             // Logging
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            loggerFactory.AddProvider(new CustomLog4NetProvider());
+            loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
 
             if (env.IsDevelopment())

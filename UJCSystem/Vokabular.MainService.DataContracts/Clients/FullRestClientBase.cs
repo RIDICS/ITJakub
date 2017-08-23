@@ -12,17 +12,17 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected GetResult<T> GetFull<T>(string uriPath)
         {
-            return GetFullAsync<T>(uriPath).Result;
+            return GetFullAsync<T>(uriPath).GetAwaiter().GetResult();
         }
 
         protected T Get<T>(string uriPath)
         {
-            return GetAsync<T>(uriPath).Result;
+            return GetAsync<T>(uriPath).GetAwaiter().GetResult();
         }
 
         protected Stream GetStream(string uriPath)
         {
-            return GetStreamAsync(uriPath).Result;
+            return GetStreamAsync(uriPath).GetAwaiter().GetResult();
         }
 
         protected void Head(string uriPath)
@@ -32,22 +32,22 @@ namespace Vokabular.MainService.DataContracts.Clients
 
         protected T Post<T>(string uriPath, object data)
         {
-            return PostAsync<T>(uriPath, data).Result;
+            return PostAsync<T>(uriPath, data).GetAwaiter().GetResult();
         }
 
         protected T PostStreamAsForm<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
         {
-            return PostStreamAsFormAsync<T>(uriPath, data, headers).Result;
+            return PostStreamAsFormAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
         }
 
         protected T PostStream<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
         {
-            return PostStreamAsync<T>(uriPath, data, headers).Result;
+            return PostStreamAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
         }
 
         protected T Put<T>(string uriPath, object data)
         {
-            return PutAsync<T>(uriPath, data).Result;
+            return PutAsync<T>(uriPath, data).GetAwaiter().GetResult();
         }
 
         protected void Delete(string uriPath)
