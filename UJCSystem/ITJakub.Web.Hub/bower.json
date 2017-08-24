@@ -7,7 +7,7 @@
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "bootstrap": "3.3.7",
-    "modernizr": "3.5.0",
+    "modernizr": "2.8.3",
     "respond": "1.4.2",
     "dropzone": "3.12.0",
     "jquery-appear": "0.2.6",
