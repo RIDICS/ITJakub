@@ -80,7 +80,7 @@
       
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
-      <many-to-one name="ResourceBeginningPage" class="Resource" lazy="proxy" />
+      <many-to-one name="BeginningPageResource" class="Resource" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="HeadwordResource" name="HeadwordResource" >

@@ -94,7 +94,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string Name { get; set; }
         public virtual int Position { get; set; }
-        public virtual Resource ResourceBeginningPage { get; set; }
+        public virtual Resource BeginningPageResource { get; set; }
     }
 
     public class HeadwordResource : ResourceVersion
