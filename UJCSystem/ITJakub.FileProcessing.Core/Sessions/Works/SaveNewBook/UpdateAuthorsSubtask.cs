@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using Vokabular.DataEntities.Database.Entities;
@@ -19,7 +20,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         {
             var dbProjectAuthors = m_metadataRepository.GetProjectOriginalAuthorList(projectId, true);
             var dbAuthors = dbProjectAuthors.Select(x => x.OriginalAuthor).ToList();
-            var newAuthors = bookData.Authors.Select(x => PersonHelper.ConvertToOriginalAuthor(x.Name)).ToList();
+            var newAuthors = bookData.Authors?.Select(x => PersonHelper.ConvertToOriginalAuthor(x.Name)).ToList() ?? new List<OriginalAuthor>();
 
             var comparer = new AuthorNameEqualityComparer();
             var authorsToAdd = newAuthors.Except(dbAuthors, comparer).ToList();

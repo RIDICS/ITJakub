@@ -19,11 +19,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_resourceRepository = resourceRepository;
         }
 
+        public List<PageResource> ResultPageResourceList { get; private set; }
+
         public void UpdatePages(long projectId, int userId, string comment, BookData bookData)
         {
             var newPageNames = new HashSet<string>();
             var newPageTextResources = new List<TextResource>();
             var newPageImageResources = new List<ImageResource>();
+            var resultPageResourceList = new List<PageResource>();
 
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
@@ -106,7 +109,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     };
                     newPageImageResources.Add(newImageResource);
                 }
+
+                resultPageResourceList.Add(dbPageResource);
             }
+
+            ResultPageResourceList = resultPageResourceList;
 
             // Update positions to unused pages
             var unusedDbPages = dbPages.Where(x => !newPageNames.Contains(x.Name));

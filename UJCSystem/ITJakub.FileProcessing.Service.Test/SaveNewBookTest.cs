@@ -331,7 +331,8 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateChaptersSubtask(resourceRepository);
-            subtask.UpdateChapters(41, 2, "upload", bookData);
+            var pageResources = resourceRepository.GetProjectPages(0).ToList();
+            subtask.UpdateChapters(41, 2, "upload", bookData, pageResources);
 
             var createdChapters = resourceRepository.CreatedObjects.OfType<ChapterResource>().ToList();
             var updatedChapters = resourceRepository.UpdatedObjects.OfType<ChapterResource>().ToList();
@@ -350,8 +351,8 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.IsNotNull(firstChapter.ParentResource);
             Assert.IsNull(secondChapter.ParentResource);
 
-            Assert.AreEqual(90, firstChapter.BeginningPageResource.Id);
-            Assert.AreEqual(80, secondChapter.BeginningPageResource.Id);
+            Assert.AreEqual(90, firstChapter.ResourceBeginningPage.Id);
+            Assert.AreEqual(80, secondChapter.ResourceBeginningPage.Id);
         }
     }
 }

@@ -48,8 +48,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
             new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
 
-            new UpdatePagesSubtask(m_resourceRepository).UpdatePages(m_projectId, m_userId, m_message, m_bookData);
-            new UpdateChaptersSubtask(m_resourceRepository).UpdateChapters(m_projectId, m_userId, m_message, m_bookData);
+            var updatePagesSubtask = new UpdatePagesSubtask(m_resourceRepository);
+            updatePagesSubtask.UpdatePages(m_projectId, m_userId, m_message, m_bookData);
+            new UpdateChaptersSubtask(m_resourceRepository).UpdateChapters(m_projectId, m_userId, m_message, m_bookData, updatePagesSubtask.ResultPageResourceList);
 
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);
 

@@ -215,7 +215,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Chapter,
                         ResourceType = ResourceTypeEnum.Chapter
                     },
-                    BeginningPageResource = new Resource {Id = 90},
+                    ResourceBeginningPage = new Resource {Id = 90},
                     Name = "Chapter 40",
                     Position = 1,
                     VersionNumber = 1
@@ -228,7 +228,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Chapter,
                         ResourceType = ResourceTypeEnum.Chapter
                     },
-                    BeginningPageResource = new Resource {Id = 80},
+                    ResourceBeginningPage = new Resource {Id = 80},
                     Name = "Chapter 45",
                     Position = 2,
                     VersionNumber = 1
