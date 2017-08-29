@@ -22,6 +22,8 @@
     <None Remove="Database\Entities\FavoriteBase.hbm.xml" />
     <None Remove="Database\Entities\FavoriteLabel.hbm.xml" />
     <None Remove="Database\Entities\Feedback.hbm.xml" />
+    <None Remove="Database\Entities\HeadwordItem.hbm.xml" />
+    <None Remove="Database\Entities\HistoryLogBase.hbm.xml" />
     <None Remove="Database\Entities\Keyword.hbm.xml" />
     <None Remove="Database\Entities\LiteraryGenre.hbm.xml" />
     <None Remove="Database\Entities\LiteraryKind.hbm.xml" />
@@ -30,6 +32,7 @@
     <None Remove="Database\Entities\OriginalAuthor.hbm.xml" />
     <None Remove="Database\Entities\Project.hbm.xml" />
     <None Remove="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
+    <None Remove="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <None Remove="Database\Entities\Publisher.hbm.xml" />
     <None Remove="Database\Entities\Resource.hbm.xml" />
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
@@ -47,6 +50,8 @@
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteLabel.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Feedback.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\HeadwordItem.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\HistoryLogBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Keyword.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryGenre.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryKind.hbm.xml" />
@@ -55,6 +60,7 @@
     <EmbeddedResource Include="Database\Entities\OriginalAuthor.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Project.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Publisher.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Resource.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ResourceVersion.hbm.xml" />
