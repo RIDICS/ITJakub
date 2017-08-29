@@ -11,6 +11,7 @@
     <VersionSuffix></VersionSuffix>
     <GeneratedItemPatterns>wwwroot/css/**/*.css;wwwroot/js/**/*.js;wwwroot/Areas/**/*.css;wwwroot/Areas/**/*.js</GeneratedItemPatterns>
     <DefaultItemExcludes>$(DefaultItemExcludes);$(GeneratedItemPatterns)</DefaultItemExcludes>
+    <TypeScriptToolsVersion>2.4</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +41,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="1.0.2" />
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="Castle.Windsor" Version="3.3.0" />
@@ -48,7 +48,6 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Markdig" Version="0.13.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="NHibernate" Version="4.1.0.4000" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.3.0" />

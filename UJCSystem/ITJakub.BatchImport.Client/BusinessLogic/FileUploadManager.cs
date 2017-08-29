@@ -100,7 +100,7 @@ namespace ITJakub.BatchImport.Client.BusinessLogic
                     file.CurrentState = FileStateType.Error;
                     return;
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     file.CurrentState = FileStateType.Error;
                     return;

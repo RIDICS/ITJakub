@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.2</TargetFramework>
+    <TargetFramework>netstandard1.3</TargetFramework>
     <AssemblyName>Vokabular.Shared</AssemblyName>
     <PackageId>Vokabular.Shared</PackageId>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
@@ -22,7 +22,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="1.0.2" />
-    <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.3.0" />
   </ItemGroup>
 

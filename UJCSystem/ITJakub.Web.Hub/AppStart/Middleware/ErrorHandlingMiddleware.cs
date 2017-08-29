@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.ServiceModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Vokabular.MainService.DataContracts.Clients.Errors;
 
@@ -26,6 +27,10 @@ namespace ITJakub.Web.Hub.AppStart.Middleware
                     context.Response.StatusCode = statusCode;
 
                 //throw; // Otherwise other middleware can change result status code
+            }
+            catch (CommunicationException)
+            {
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             }
         }
     }
