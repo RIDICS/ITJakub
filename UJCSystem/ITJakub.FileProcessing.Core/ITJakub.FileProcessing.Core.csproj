@@ -119,6 +119,8 @@
     <Compile Include="Sessions\Works\SaveNewBook\UpdatePagesSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateProjectSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateResponsiblePersonSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateTermsSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateHeadwordsSubtask.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />

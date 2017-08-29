@@ -102,6 +102,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string ExternalId { get; set; }
         public virtual string DefaultHeadword { get; set; }
         public virtual string Sorting { get; set; }
+        public virtual IList<HeadwordItem> HeadwordItems { get; set; }
     }
 
     public class BinaryResource : ResourceVersion

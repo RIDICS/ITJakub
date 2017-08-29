@@ -21,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<PageResource> ResultPageResourceList { get; private set; }
 
-        public void UpdatePages(long projectId, int userId, string comment, BookData bookData)
+        public void UpdatePages(long projectId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
             var newPageNames = new HashSet<string>();
             var newPageTextResources = new List<TextResource>();
@@ -59,7 +59,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreateTime = now,
                         CreatedByUser = user,
                         Position = position,
-                        VersionNumber = 1
+                        VersionNumber = 1,
+                        Terms = PrepareTermList(page.TermXmlIds, dbTermCache),
                     };
                     newResource.LatestVersion = newPageResource;
 
@@ -73,6 +74,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbPageResource.Position = position;
                         dbPageResource.CreateTime = now;
                         dbPageResource.CreatedByUser = user;
+                        dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         m_resourceRepository.Update(dbPageResource);
                     }
                 }
@@ -126,6 +128,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             UpdateTextResources(project, newPageTextResources);
 
             UpdateImageResources(project, newPageImageResources);
+        }
+
+        private IList<Term> PrepareTermList(List<string> pageTermXmlIds, Dictionary<string, Term> dbTermCache)
+        {
+            return pageTermXmlIds?.Select(termXmlId => dbTermCache[termXmlId]).ToList();
         }
 
         private void UpdateTextResources(Project project, IList<TextResource> newPageTextResources)

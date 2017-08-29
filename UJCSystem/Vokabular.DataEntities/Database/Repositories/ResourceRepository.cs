@@ -68,5 +68,34 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.Position).Asc
                 .List();
         }
+
+        public virtual Term GetTermByExternalId(string externalId)
+        {
+            return GetSession().QueryOver<Term>()
+                .Where(x => x.ExternalId == externalId)
+                .SingleOrDefault();
+        }
+
+        public virtual TermCategory GetTermCategoryByName(string termCategoryName)
+        {
+            return GetSession().QueryOver<TermCategory>()
+                .Where(x => x.Name == termCategoryName)
+                .SingleOrDefault();
+        }
+
+        public virtual HeadwordResource GetLatestHeadword(long projectId, string externalId)
+        {
+            Resource resourceAlias = null;
+            HeadwordItem headwordItemAlias = null;
+
+            return GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .And(x => x.ExternalId == externalId)
+                .Fetch(x => x.HeadwordItems).Eager
+                .OrderBy(() => headwordItemAlias.Headword).Asc
+                .SingleOrDefault();
+        }
     }
 }

@@ -179,6 +179,11 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(bookData.PublishPlace, createdMetadata.PublishPlace);
         }
 
+        private Dictionary<string, Term> GetTestTermCache()
+        {
+            return new Dictionary<string, Term>();
+        }
+
         [TestMethod]
         public void TestUpdatePages()
         {
@@ -200,7 +205,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
             
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 1, "comment", bookData);
+            subtask.UpdatePages(40, 1, "comment", bookData, GetTestTermCache());
 
             Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
             Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
@@ -212,6 +217,8 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, firstPage.Position);
             Assert.AreEqual(2, secondPage.Position);
             Assert.AreEqual(0, removedPage.Position);
+
+            // TODO add test for testing Term inserting/updating
         }
 
         [TestMethod]
@@ -237,7 +244,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 1, "comment", bookData);
+            subtask.UpdatePages(40, 1, "comment", bookData, GetTestTermCache());
 
             var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
             var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
@@ -276,7 +283,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(41, 2, "upload comment", bookData);
+            subtask.UpdatePages(41, 2, "upload comment", bookData, GetTestTermCache());
 
             var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
             var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
@@ -354,5 +361,7 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(90, firstChapter.ResourceBeginningPage.Id);
             Assert.AreEqual(80, secondChapter.ResourceBeginningPage.Id);
         }
+
+        // TODO add test for testing updating Terms
     }
 }

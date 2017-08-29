@@ -89,6 +89,11 @@
       <property name="ExternalId" not-null="true" />
       <property name="DefaultHeadword" not-null="true" />
       <property name="Sorting" not-null="true" />
+
+      <bag name="HeadwordItems">
+        <key column="HeadwordResource" />
+        <one-to-many class="HeadwordItem" />
+      </bag>
     </joined-subclass>
 
     <joined-subclass table="BinaryResource" name="BinaryResource" >
