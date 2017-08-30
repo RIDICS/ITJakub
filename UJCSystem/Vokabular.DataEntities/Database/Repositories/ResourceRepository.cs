@@ -97,5 +97,26 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(() => headwordItemAlias.Headword).Asc
                 .SingleOrDefault();
         }
+
+        public virtual IList<TrackResource> GetProjectTracks(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<TrackResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .OrderBy(x => x.Position).Asc
+                .List();
+        }
+
+        public virtual IList<AudioResource> GetProjectAudioResources(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .List();
+        }
     }
 }

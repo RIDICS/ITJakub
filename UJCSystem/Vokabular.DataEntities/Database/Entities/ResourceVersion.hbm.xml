@@ -75,6 +75,16 @@
       <property name="MimeType" not-null="true" />
     </joined-subclass>
 
+    <joined-subclass table="TrackResource" name="TrackResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="Name" not-null="true" />
+      <property name="Text" not-null="false" />
+      <property name="Position" not-null="true" />
+      <many-to-one name="ResourceChapter" class="Resource" lazy="proxy" />
+      <many-to-one name="ResourcePage" class="Resource" lazy="proxy" />
+    </joined-subclass>
+
     <joined-subclass table="ChapterResource" name="ChapterResource" >
       <key column="ResourceVersionId" />
       

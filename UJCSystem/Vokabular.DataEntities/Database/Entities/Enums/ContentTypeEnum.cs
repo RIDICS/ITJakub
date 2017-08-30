@@ -6,6 +6,7 @@ namespace Vokabular.DataEntities.Database.Entities.Enums
         FullLiteraryWork = 1,
         Chapter = 2,
         Page = 3,
-        Headword = 4
+        Headword = 4,
+        AudioTrack = 5,
     }
 }

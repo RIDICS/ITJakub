@@ -220,6 +220,16 @@ BEGIN TRAN
 	   [MimeType] varchar(255) NOT NULL
 	)
 
+	CREATE TABLE [dbo].[TrackResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TrackResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Name] varchar(255) NOT NULL,
+	   [Text] varchar(MAX) NULL,
+	   [Position] SMALLINT NOT NULL,
+	   [ResourceChapter] bigint NULL CONSTRAINT [FK_Track(ResourceChapter)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
+	   [ResourcePage] bigint NULL CONSTRAINT [FK_Track(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	);
+
 	CREATE TABLE [dbo].[ChapterResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),

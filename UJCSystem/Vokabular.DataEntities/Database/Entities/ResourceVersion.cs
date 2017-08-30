@@ -90,6 +90,15 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string MimeType { get; set; }
     }
 
+    public class TrackResource : ResourceVersion
+    {
+        public virtual string Name { get; set; }
+        public virtual string Text { get; set; }
+        public virtual int Position { get; set; }
+        public virtual Resource ResourceChapter { get; set; }
+        public virtual Resource ResourcePage { get; set; }
+    }
+
     public class ChapterResource : ResourceVersion
     {
         public virtual string Name { get; set; }
