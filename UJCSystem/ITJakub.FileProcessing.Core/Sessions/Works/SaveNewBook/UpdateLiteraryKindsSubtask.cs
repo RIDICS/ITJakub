@@ -16,6 +16,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateLiteraryKinds(long projectId, BookData bookData)
         {
+            if (bookData.LiteraryKinds == null)
+                return;
+
             var dbKindList = m_metadataRepository.GetLiteraryKindList();
             var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, true, false);
 

@@ -235,5 +235,62 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 }
             };
         }
+
+        public override Term GetTermByExternalId(string externalId)
+        {
+            if (externalId == "null")
+                return null;
+
+            return new Term
+            {
+                ExternalId = externalId,
+                Text = "term",
+                Position = 0,
+                TermCategory = new TermCategory
+                {
+                    Name = "category"
+                }
+            };
+        }
+
+        public override TermCategory GetTermCategoryByName(string termCategoryName)
+        {
+            if (termCategoryName == "null")
+                return null;
+
+            return new TermCategory
+            {
+                Name = termCategoryName
+            };
+        }
+
+        public override HeadwordResource GetLatestHeadword(long projectId, string externalId)
+        {
+            if (externalId == "null")
+                return null;
+
+            return new HeadwordResource
+            {
+                HeadwordItems = new List<HeadwordItem>
+                {
+                    new HeadwordItem
+                    {
+                        Headword = "aaa",
+                        HeadwordOriginal = "aaa-o"
+                    },
+                    new HeadwordItem
+                    {
+                        Headword = "bbb",
+                        HeadwordOriginal = "bbb-o"
+                    }
+                },
+                DefaultHeadword = externalId == "id-1" ? "aaa" : "ccc",
+                ExternalId = externalId,
+                Resource = new Resource(),
+                Sorting = externalId == "id-1" ? "aaa-s" : "ccc-s",
+                VersionNumber = 1,
+                Id = 100,
+            };
+        }
     }
 }

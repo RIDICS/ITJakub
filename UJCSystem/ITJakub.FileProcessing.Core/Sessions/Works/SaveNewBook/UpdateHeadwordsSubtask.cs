@@ -19,6 +19,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateHeadwords(long projectId, int userId, string message, BookData bookData)
         {
+            if (bookData.BookHeadwords == null)
+                return;
+
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
@@ -26,8 +29,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var groupedHeadwordData in bookData.BookHeadwords.GroupBy(x => x.XmlEntryId))
             {
                 var headwordDataList = groupedHeadwordData.OrderBy(x => x.Headword).ToList();
-                var firstHeadwordData = headwordDataList.First();
-
+                
                 var dbHeadword = m_resourceRepository.GetLatestHeadword(projectId, groupedHeadwordData.Key); // TODO check order of HeadwordItems
 
                 if (dbHeadword == null)
@@ -35,34 +37,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newResource = new Resource
                     {
                         Project = project,
-                        Name = null,
+                        Name = string.Empty,
                         ContentType = ContentTypeEnum.Headword,
                         ResourceType = ResourceTypeEnum.Headword,
                     };
-                    var newDbHeadword = new HeadwordResource
-                    {
-                        Resource = newResource,
-                        Comment = null,
-                        CreateTime = now,
-                        CreatedByUser = user,
-                        VersionNumber = 1,
-                        HeadwordItems = null, //TODO specify
-                        ExternalId = firstHeadwordData.XmlEntryId,
-                        DefaultHeadword = firstHeadwordData.DefaultHeadword,
-                        Sorting = firstHeadwordData.SortOrder,
-                    };
-                    newResource.LatestVersion = newDbHeadword;
-
-                    m_resourceRepository.Create(newDbHeadword);
-                    //dbPageResource = newPageResource;
-                    
-                    // TODO create HeadwordItems!
+                    CreateHeadwordResource(1, newResource, headwordDataList, user, now);
                 }
                 else if (IsHeadwordChanged(dbHeadword, headwordDataList))
                 {
-                    // TODO create new HeadwordItemVersion
+                    CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now);
                 }
-                throw new NotImplementedException();
             }
         }
 
@@ -89,6 +73,39 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
 
             return false;
+        }
+
+        private void CreateHeadwordResource(int version, Resource resource, List<BookHeadwordData> headwordDataList, User user, DateTime now)
+        {
+            var firstHeadwordData = headwordDataList.First();
+
+            var newDbHeadword = new HeadwordResource
+            {
+                Resource = resource,
+                Comment = null,
+                CreateTime = now,
+                CreatedByUser = user,
+                VersionNumber = version,
+                HeadwordItems = null, // Headword Items are create in following for-each
+                ExternalId = firstHeadwordData.XmlEntryId,
+                DefaultHeadword = firstHeadwordData.DefaultHeadword,
+                Sorting = firstHeadwordData.SortOrder,
+            };
+            resource.LatestVersion = newDbHeadword;
+
+            m_resourceRepository.Create(newDbHeadword);
+
+            foreach (var bookHeadwordData in headwordDataList)
+            {
+                var newDbHeadwordItem = new HeadwordItem
+                {
+                    HeadwordResource = newDbHeadword,
+                    Headword = bookHeadwordData.Headword,
+                    HeadwordOriginal = null,
+                    ResourcePage = null //TODO relation to Page
+                };
+                m_resourceRepository.Create(newDbHeadwordItem);
+            }
         }
     }
 }

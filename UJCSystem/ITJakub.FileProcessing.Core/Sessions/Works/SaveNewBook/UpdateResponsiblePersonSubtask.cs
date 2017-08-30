@@ -20,6 +20,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateResponsiblePersonList(long projectId, BookData bookData)
         {
+            if (bookData.Responsibles == null)
+                return;
+
             var itemsToCreate = new List<ProjectResponsiblePerson>();
             var project = m_metadataRepository.Load<Project>(projectId);
             var dbResponsibles = m_metadataRepository.GetProjectResponsibleList(projectId);

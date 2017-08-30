@@ -16,6 +16,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateLiteraryGenres(long projectId, BookData bookData)
         {
+            if (bookData.LiteraryGenres == null)
+                return;
+
             var dbGenreList = m_metadataRepository.GetLiteraryGenreList();
             var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, true);
 

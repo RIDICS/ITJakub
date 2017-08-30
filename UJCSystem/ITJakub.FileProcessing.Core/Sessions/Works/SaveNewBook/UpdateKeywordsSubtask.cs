@@ -16,6 +16,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateKeywords(long projectId, BookData bookData)
         {
+            if (bookData.Keywords == null)
+                return;
+
             var project = m_metadataRepository.GetProjectWithKeywords(projectId);
 
             foreach (var newKeywordName in bookData.Keywords)

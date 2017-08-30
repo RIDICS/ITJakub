@@ -181,7 +181,19 @@ namespace ITJakub.FileProcessing.Service.Test
 
         private Dictionary<string, Term> GetTestTermCache()
         {
-            return new Dictionary<string, Term>();
+            return new List<Term>
+            {
+                new Term
+                {
+                    ExternalId = "id-1",
+                    Text = "term-1"
+                },
+                new Term
+                {
+                    ExternalId = "id-2",
+                    Text = "term-2"
+                }
+            }.ToDictionary(x => x.ExternalId);
         }
 
         [TestMethod]
@@ -199,7 +211,12 @@ namespace ITJakub.FileProcessing.Service.Test
                     },
                     new BookPageData
                     {
-                        Text = "40r"
+                        Text = "40r",
+                        TermXmlIds = new List<string>
+                        {
+                            "id-2",
+                            "id-1"
+                        }
                     }
                 }
             };
@@ -218,7 +235,9 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(2, secondPage.Position);
             Assert.AreEqual(0, removedPage.Position);
 
-            // TODO add test for testing Term inserting/updating
+            // Test term assignment
+            Assert.IsNull(firstPage.Terms);
+            Assert.AreEqual(2, secondPage.Terms.Count);
         }
 
         [TestMethod]
@@ -362,6 +381,125 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(80, secondChapter.ResourceBeginningPage.Id);
         }
 
-        // TODO add test for testing updating Terms
+        [TestMethod]
+        public void TestUpdateHeadwords()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+
+            var headwordDataList = new List<BookHeadwordData>
+            {
+                new BookHeadwordData // not exists in DB
+                {
+                    XmlEntryId = "null",
+                    DefaultHeadword = "aaa",
+                    SortOrder = "aaa-s",
+                    Headword = "aaa"
+                },
+                new BookHeadwordData // same data in DB
+                {
+                    XmlEntryId = "id-1",
+                    DefaultHeadword = "aaa",
+                    SortOrder = "aaa-s",
+                    Headword = "aaa"
+                },
+                new BookHeadwordData
+                {
+                    XmlEntryId = "id-1",
+                    DefaultHeadword = "aaa",
+                    SortOrder = "aaa-s",
+                    Headword = "bbb"
+                },
+                new BookHeadwordData // HeadwordItem is different
+                {
+                    XmlEntryId = "id-2",
+                    DefaultHeadword = "ccc",
+                    SortOrder = "ccc-s",
+                    Headword = "aaa"
+                },
+                new BookHeadwordData
+                {
+                    XmlEntryId = "id-2",
+                    DefaultHeadword = "ccc",
+                    SortOrder = "ccc-s",
+                    Headword = "bbb-different"
+                },
+            };
+            
+            var bookData = new BookData
+            {
+                BookHeadwords = headwordDataList
+            };
+
+            var subtask = new UpdateHeadwordsSubtask(resourceRepository);
+            subtask.UpdateHeadwords(41, 2, "upload", bookData);
+            
+            var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
+            var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
+            
+            Assert.AreEqual(0, resourceRepository.UpdatedObjects.Count); // No updates
+            Assert.AreEqual(2, createdHeadwordResources.Count);
+            Assert.AreEqual(3, createdHeadwordItems.Count);
+
+            var newHeadword = createdHeadwordResources.First(x => x.ExternalId == "null");
+            var updatedHeadword = createdHeadwordResources.First(x => x.ExternalId == "id-2");
+
+            Assert.AreEqual(1, newHeadword.VersionNumber);
+            Assert.AreEqual(2, updatedHeadword.VersionNumber);
+        }
+
+        [TestMethod]
+        public void TestUpdateTerms()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+
+            var termList = new List<TermData>
+            {
+                new TermData // create term and assign category
+                {
+                    XmlId = "null",
+                    Position = 0,
+                    Text = "new-term",
+                    TermCategoryName = "category"
+                },
+                new TermData // update term and create category
+                {
+                    XmlId = "id-1",
+                    Position = 0,
+                    Text = "updated-term",
+                    TermCategoryName = "null"
+                },
+                new TermData // term and category already exists
+                {
+                    XmlId = "id-2",
+                    Position = 0,
+                    Text = "term",
+                    TermCategoryName = "category"
+                }
+            };
+
+            var bookData = new BookData
+            {
+                Terms = termList
+            };
+
+            var subtask = new UpdateTermsSubtask(resourceRepository);
+            subtask.UpdateTerms(41, bookData);
+
+            var createdTerms = resourceRepository.CreatedObjects.OfType<Term>().ToList();
+            var createdCategories = resourceRepository.CreatedObjects.OfType<TermCategory>().ToList();
+            var updatedTerms = resourceRepository.UpdatedObjects.OfType<Term>().ToList();
+            var updatedCategories = resourceRepository.UpdatedObjects.OfType<TermCategory>().ToList();
+
+            Assert.AreEqual(0, updatedCategories.Count);
+            Assert.AreEqual(1, createdCategories.Count);
+            Assert.AreEqual(1, updatedTerms.Count);
+            Assert.AreEqual(1, createdTerms.Count);
+
+            Assert.AreEqual("null", createdCategories.First().Name);
+            Assert.AreEqual("new-term", createdTerms.First().Text);
+            Assert.AreEqual("updated-term", updatedTerms.First().Text);
+        }
     }
 }

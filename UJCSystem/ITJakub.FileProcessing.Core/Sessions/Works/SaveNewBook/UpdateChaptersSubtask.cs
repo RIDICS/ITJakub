@@ -19,6 +19,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateChapters(long projectId, int userId, string comment, BookData bookData, List<PageResource> dbPageResources)
         {
+            if (bookData.BookContentItems == null)
+                return;
+
             var now = DateTime.UtcNow;
             var newChapterNames = new HashSet<string>();
             var user = m_resourceRepository.Load<User>(userId);
@@ -27,7 +30,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var dbChapters = m_resourceRepository.GetProjectChapters(projectId);
             var dbChaptersByName = dbChapters.ToDictionary(x => x.Name);
             //var dbPages = m_resourceRepository.GetProjectPages(projectId);
-            var dbPagesByName = dbPageResources.ToDictionary(x => x.Name);
+            var dbPagesByName = dbPageResources?.ToDictionary(x => x.Name);
 
             var chapterRecursionData = new ChapterRecursionData
             {
@@ -50,6 +53,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
         }
 
+        //TODO dbPagesByName can be null
         private void UpdateChapterList(IList<BookContentItemData> bookContentItems, ChapterResource parentChapter, ChapterRecursionData data)
         {
             var parentChapterResourceResource = parentChapter?.Resource;

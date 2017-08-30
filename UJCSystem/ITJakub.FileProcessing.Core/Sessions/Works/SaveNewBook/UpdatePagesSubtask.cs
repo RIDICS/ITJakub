@@ -23,6 +23,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdatePages(long projectId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
+            if (bookData.Pages == null)
+                return;
+
             var newPageNames = new HashSet<string>();
             var newPageTextResources = new List<TextResource>();
             var newPageImageResources = new List<ImageResource>();

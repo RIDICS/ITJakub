@@ -20,7 +20,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         {
             var now = DateTime.UtcNow;
             var lastMetadata = m_metadataRepository.GetLatestMetadataResource(projectId, true);
-            var firstManuscript = bookData.ManuscriptDescriptions.FirstOrDefault();
+            var firstManuscript = bookData.ManuscriptDescriptions?.FirstOrDefault();
 
             var publisher = GetOrCreatePublisher(bookData.Publisher.Text, bookData.Publisher.Email);
             var metadata = new MetadataResource

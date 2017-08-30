@@ -37,6 +37,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var dbTerm = m_resourceRepository.GetTermByExternalId(data.XmlId);
             if (dbTerm != null)
             {
+                if (IsTermUpdated(dbTerm, data))
+                {
+                    dbTerm.Position = data.Position;
+                    dbTerm.Text = data.Text;
+                    dbTerm.TermCategory = GetOrCreateTermCategory(data.TermCategoryName);
+
+                    m_resourceRepository.Update(dbTerm);
+                }
+
                 return dbTerm;
             }
 
@@ -51,6 +60,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             newDbTerm = m_resourceRepository.Load<Term>(newDbTerm.Id);
 
             return newDbTerm;
+        }
+
+        private bool IsTermUpdated(Term dbTerm, TermData termData)
+        {
+            return dbTerm.Text != termData.Text ||
+                   dbTerm.Position != termData.Position ||
+                   dbTerm.TermCategory.Name != termData.TermCategoryName;
         }
 
         private TermCategory GetOrCreateTermCategory(string termCategoryName)
