@@ -58,7 +58,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             new UpdateHeadwordsSubtask(m_resourceRepository).UpdateHeadwords(m_projectId, m_userId, m_message, m_bookData);
 
-            new UpdateTracksSubtask(m_resourceRepository).UpdateTracks(m_projectId, m_userId, m_message, m_bookData);
+            var updateTracksSubtask = new UpdateTracksSubtask(m_resourceRepository);
+            updateTracksSubtask.UpdateTracks(m_projectId, m_userId, m_message, m_bookData);
+            updateTracksSubtask.UpdateFullBookTracks(m_projectId, m_userId, m_message, m_bookData);
             
             //TODO Transformation
 

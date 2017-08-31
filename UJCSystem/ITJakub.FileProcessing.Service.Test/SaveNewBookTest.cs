@@ -501,5 +501,104 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual("new-term", createdTerms.First().Text);
             Assert.AreEqual("updated-term", updatedTerms.First().Text);
         }
+
+        [TestMethod]
+        public void TestUpdateTracks()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                Tracks = new List<TrackData>
+                {
+                    new TrackData // update on position 1
+                    {
+                        Name = "track-8",
+                        Position = 1,
+                        Recordings = new List<TrackRecordingData>
+                        {
+                            new TrackRecordingData // update resource to new version
+                            {
+                                FileName = "file-1.mp3"
+                            }
+                        }
+                    },
+                    new TrackData // no update on position 2
+                    {
+                        Name = "track-2",
+                        Position = 2,
+                        Recordings = null // update 2 recordings to have no parent
+                    },
+                    new TrackData // create on position 3
+                    {
+                        Name = "track-3",
+                        Position = 3,
+                        Recordings = new List<TrackRecordingData>
+                        {
+                            new TrackRecordingData // create new recording
+                            {
+                                FileName = "file-3.mp3"
+                            }
+                        }
+                    }
+                }
+            };
+
+            var subtask = new UpdateTracksSubtask(resourceRepository);
+            subtask.UpdateTracks(40, 1, "comment", bookData);
+
+            var createdTracks = resourceRepository.CreatedObjects.OfType<TrackResource>().ToList();
+            var updatedTracks = resourceRepository.UpdatedObjects.OfType<TrackResource>().ToList();
+            var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
+            var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+
+            Assert.AreEqual(1, createdTracks.Count);
+            Assert.AreEqual(1, updatedTracks.Count);
+
+            Assert.AreEqual(0, updatedRecordings.Count);
+            Assert.AreEqual(2, createdRecordings.Count);
+
+            var recording1 = createdRecordings.FirstOrDefault(x => x.FileName == "file-1.mp3");
+            var recording3 = createdRecordings.FirstOrDefault(x => x.FileName == "file-3.mp3");
+
+            Assert.AreEqual(2, recording1?.VersionNumber);
+            Assert.AreEqual(1, recording3?.VersionNumber);
+        }
+
+        [TestMethod]
+        public void TestUpdateFullBookAudio()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                FullBookRecordings = new List<FullBookRecordingData>
+                {
+                    new FullBookRecordingData // update
+                    {
+                        FileName = "file-2.mp3"
+                    },
+                    new FullBookRecordingData // new
+                    {
+                        FileName = "file-8.mp3"
+                    }
+                }
+            };
+
+            var subtask = new UpdateTracksSubtask(resourceRepository);
+            subtask.UpdateFullBookTracks(40, 1, "comment", bookData);
+
+            var createdRecordings = resourceRepository.CreatedObjects.OfType<AudioResource>().ToList();
+            var updatedRecordings = resourceRepository.UpdatedObjects.OfType<AudioResource>().ToList();
+
+            Assert.AreEqual(0, updatedRecordings.Count);
+            Assert.AreEqual(2, createdRecordings.Count);
+
+            var recording2 = createdRecordings.FirstOrDefault(x => x.FileName == "file-2.mp3");
+            var recording8 = createdRecordings.FirstOrDefault(x => x.FileName == "file-8.mp3");
+
+            Assert.AreEqual(2, recording2?.VersionNumber);
+            Assert.AreEqual(1, recording8?.VersionNumber);
+        }
     }
 }

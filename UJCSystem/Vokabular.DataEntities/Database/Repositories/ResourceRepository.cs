@@ -118,5 +118,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
                 .List();
         }
+
+        public virtual IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .And(x => resourceAlias.ContentType == ContentTypeEnum.FullLiteraryWork)
+                .List();
+        }
     }
 }

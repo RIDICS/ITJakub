@@ -292,5 +292,121 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 Id = 100,
             };
         }
+
+        public override IList<TrackResource> GetProjectTracks(long projectId)
+        {
+            if (projectId == 0)
+                return null;
+
+            return new List<TrackResource>
+            {
+                new TrackResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 1
+                    },
+                    Position = 1,
+                    VersionNumber = 1,
+                    Name = "track-1"
+                },
+                new TrackResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 2
+                    },
+                    Position = 2,
+                    VersionNumber = 1,
+                    Name = "track-2"
+                }
+            };
+        }
+
+        public override IList<AudioResource> GetProjectAudioResources(long projectId)
+        {
+            if (projectId == 0)
+                return null;
+
+            return new List<AudioResource>
+            {
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-1.mp3",
+                    VersionNumber = 1,
+                    ParentResource = new Resource
+                    {
+                        Id = 1
+                    }
+                },
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-2.mp3",
+                    VersionNumber = 1,
+                    ParentResource = new Resource
+                    {
+                        Id = 2
+                    }
+                },
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-2.wav",
+                    VersionNumber = 1,
+                    ParentResource = new Resource
+                    {
+                        Id = 2
+                    }
+                },
+            };
+        }
+
+        public override IList<AudioResource> GetProjectFullAudioResources(long projectId)
+        {
+            if (projectId == 0)
+                return null;
+
+            return new List<AudioResource>
+            {
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-1.mp3",
+                    VersionNumber = 1
+                },
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-2.mp3",
+                    VersionNumber = 1
+                },
+                new AudioResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 3,
+                    },
+                    FileName = "file-2.wav",
+                    VersionNumber = 1
+                },
+            };
+        }
     }
 }

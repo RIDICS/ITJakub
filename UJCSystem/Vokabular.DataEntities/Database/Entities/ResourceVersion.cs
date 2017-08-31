@@ -84,7 +84,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
     public class AudioResource : ResourceVersion
     {
-        public virtual long Duration { get; set; }
+        public virtual TimeSpan? Duration { get; set; }
         public virtual string FileName { get; set; }
         public virtual AudioTypeEnum AudioType { get; set; }
         public virtual string MimeType { get; set; }
