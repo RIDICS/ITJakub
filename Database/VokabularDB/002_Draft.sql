@@ -46,7 +46,7 @@ BEGIN TRAN
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES
-		( '001' )
+		( '002' )
 		-- DatabaseVersion - varchar
 
 --TODO remove this user insert (used only for development)

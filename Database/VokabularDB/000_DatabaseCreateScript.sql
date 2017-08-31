@@ -62,13 +62,6 @@ BEGIN TRAN
 	   [LastName] varchar(50) NOT NULL,
 	   CONSTRAINT [UQ_ResponsiblePerson(FirstName)(LastName)] UNIQUE ([FirstName],[LastName])
     )
-
-	CREATE TABLE [dbo].[Publisher]
-    (
-	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_Publisher(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] nvarchar(255) NOT NULL CONSTRAINT [UQ_Publisher(Text)] UNIQUE,
-	   [Email] varchar(255) NULL
-    )
 	
     CREATE TABLE [dbo].[BookType]
     (
@@ -168,13 +161,15 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[MetadataResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [Authors] varchar(2000) NULL,
 	   [Title] varchar(2000) NULL,
 	   [SubTitle] varchar(2000) NULL,
 	   [RelicAbbreviation] varchar(100) NULL,
 	   [SourceAbbreviation] varchar(255) NULL,
-	   [Publisher] int NULL CONSTRAINT [FK_MetadataResource(Publisher)_Publisher(Id)] FOREIGN KEY REFERENCES [dbo].[Publisher](Id),
 	   [PublishPlace] varchar(100) NULL,
 	   [PublishDate] varchar(50) NULL,
+	   [PublisherText] varchar(2000) NULL,
+	   [PublisherEmail] varchar(255) NULL,
 	   [Copyright] nvarchar(MAX) NULL,
 	   [BiblText] nvarchar(MAX) NULL,
 	   [OriginDate] varchar(50) NULL,
@@ -185,7 +180,7 @@ BEGIN TRAN
 	   [ManuscriptCountry] varchar (100) NULL,
 	   [ManuscriptRepository] varchar (100) NULL,
 	   [ManuscriptExtent] varchar(255) NULL, -- TODO unkown value max size
-	   [ManuscriptTitle] varchar(2000) NULL -- TODO is different from Title?
+	   [ManuscriptTitle] varchar(2000) NULL
 	   
 	   -- TODO !!! Is possible have multiple different manuscripts?
     )

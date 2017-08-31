@@ -13,13 +13,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual IList<Publisher> GetPublisherList()
-        {
-            return GetSession().QueryOver<Publisher>()
-                .OrderBy(x => x.Text).Asc
-                .List();
-        }
-
         public virtual IList<LiteraryKind> GetLiteraryKindList()
         {
             return GetSession().QueryOver<LiteraryKind>()
@@ -34,7 +27,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual MetadataResource GetLatestMetadataResource(long projectId, bool includePublisher)
+        public virtual MetadataResource GetLatestMetadataResource(long projectId)
         {
             Resource resourceAlias = null;
 
@@ -42,11 +35,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.ResourceType == ResourceTypeEnum.ProjectMetadata && resourceAlias.LatestVersion.Id == x.Id)
                 .Fetch(x => x.Resource).Eager;
-
-            if (includePublisher)
-            {
-                query = query.Fetch(x => x.Publisher).Eager;
-            }
 
             return query.SingleOrDefault();
         }
@@ -122,14 +110,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.FirstName == firstName && x.LastName == lastName)
                 .SingleOrDefault();
         }
-
-        public virtual Publisher GetPublisher(string publisherText, string email)
-        {
-            return GetSession().QueryOver<Publisher>()
-                .Where(x => x.Text == publisherText && x.Email == email)
-                .SingleOrDefault();
-        }
-
+        
         public virtual Keyword GetKeywordByName(string name)
         {
             return GetSession().QueryOver<Keyword>()

@@ -125,7 +125,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             return null;
         }
 
-        public override MetadataResource GetLatestMetadataResource(long projectId, bool includePublisher)
+        public override MetadataResource GetLatestMetadataResource(long projectId)
         {
             if (CanGetLatestMetadata)
             {
@@ -145,16 +145,6 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             }
 
             return null;
-        }
-
-        public override Publisher GetPublisher(string publisherText, string email)
-        {
-            return new Publisher
-            {
-                Id = 87,
-                Email = email,
-                Text = publisherText
-            };
         }
     }
 }

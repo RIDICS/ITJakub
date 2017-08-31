@@ -20,7 +20,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 
         protected override MetadataResource ExecuteWorkImplementation()
         {
-            var result = m_metadataRepository.GetLatestMetadataResource(m_projectId, true);
+            var result = m_metadataRepository.GetLatestMetadataResource(m_projectId);
 
             if (m_parameters.IsAnyAdditionalParameter())
             {

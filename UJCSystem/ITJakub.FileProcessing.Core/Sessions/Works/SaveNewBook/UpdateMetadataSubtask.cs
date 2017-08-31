@@ -19,18 +19,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         public void UpdateMetadata(long projectId, int userId, string comment, BookData bookData)
         {
             var now = DateTime.UtcNow;
-            var lastMetadata = m_metadataRepository.GetLatestMetadataResource(projectId, true);
+            var lastMetadata = m_metadataRepository.GetLatestMetadataResource(projectId);
             var firstManuscript = bookData.ManuscriptDescriptions?.FirstOrDefault();
 
-            var publisher = GetOrCreatePublisher(bookData.Publisher.Text, bookData.Publisher.Email);
+            var authorsString = bookData.Authors != null
+                ? string.Join(", ", bookData.Authors.Select(x => x.Name))
+                : null;
             var metadata = new MetadataResource
             {
+                Authors = authorsString,
                 BiblText = bookData.BiblText,
                 Comment = comment,
                 Copyright = bookData.Copyright,
                 CreatedByUser = m_metadataRepository.Load<User>(userId),
                 CreateTime = now,
-                Publisher = publisher,
+                PublisherText = bookData.Publisher?.Text,
+                PublisherEmail = bookData.Publisher?.Email,
                 PublishDate = bookData.PublishDate,
                 PublishPlace = bookData.PublishPlace,
                 SourceAbbreviation = bookData.SourceAbbreviation,
@@ -74,22 +78,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
 
             m_metadataRepository.Create(metadata);
-        }
-
-        private Publisher GetOrCreatePublisher(string publisherText, string email)
-        {
-            var publisher = m_metadataRepository.GetPublisher(publisherText, email);
-            if (publisher == null)
-            {
-                publisher = new Publisher
-                {
-                    Text = publisherText,
-                    Email = email
-                };
-                m_metadataRepository.Create(publisher);
-                publisher = m_metadataRepository.Load<Publisher>(publisher.Id);
-            }
-            return publisher;
         }
     }
 }

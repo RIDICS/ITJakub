@@ -18,11 +18,6 @@ namespace Vokabular.MainService.Core.Managers
             m_userManager = userManager;
         }
 
-        public int CreatePublisher(PublisherContract data)
-        {
-            return new CreatePublisherWork(m_metadataRepository, data).Execute();
-        }
-
         public int CreateLiteraryKind(string name)
         {
             return new CreateLiteraryKindWork(m_metadataRepository, name).Execute();
@@ -31,12 +26,6 @@ namespace Vokabular.MainService.Core.Managers
         public int CreateLiteraryGenre(string name)
         {
             return new CreateLiteraryGenreWork(m_metadataRepository, name).Execute();
-        }
-
-        public List<PublisherContract> GetPublisherList()
-        {
-            var result = new GetPublisherListWork(m_metadataRepository).Execute();
-            return Mapper.Map<List<PublisherContract>>(result);
         }
 
         public List<LiteraryKindContract> GetLiteraryKindList()
@@ -57,7 +46,7 @@ namespace Vokabular.MainService.Core.Managers
             var result = work.Execute();
             var resultContract = result != null
                 ? Mapper.Map<ProjectMetadataResultContract>(result)
-                : new ProjectMetadataResultContract {Publisher = new PublisherContract()};
+                : new ProjectMetadataResultContract();
 
             if (result != null && parameters.IsAnyAdditionalParameter())
             {

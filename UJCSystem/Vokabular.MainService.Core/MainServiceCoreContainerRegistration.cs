@@ -26,7 +26,6 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, MetadataProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
-            container.AddSingleton<Profile, PublisherProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
             container.AddSingleton<Profile, UserProfile>();
         }

@@ -384,22 +384,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreatePublisher(PublisherContract publisher)
-        {
-            try
-            {
-                var newId = Post<int>("publisher", publisher);
-                return newId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public int CreateLiteraryKind(LiteraryKindContract literaryKind)
         {
             try
@@ -463,23 +447,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-
-        public List<PublisherContract> GetPublisherList()
-        {
-            try
-            {
-                var result = Get<List<PublisherContract>>("publisher");
-                return result;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
+        
         public List<LiteraryKindContract> GetLiteraryKindList()
         {
             try

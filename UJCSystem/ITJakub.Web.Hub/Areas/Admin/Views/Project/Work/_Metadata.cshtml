@@ -56,10 +56,7 @@
                             <div class="col-md-6">
                                 <select id="work-metadata-publisher" class="form-control">
                                     <option disabled selected value="" class="hidden"></option>
-                                    @foreach (var publisher in Model.AllPublisherList)
-                                    {
-                                        <option value="@publisher.Id" @(publisher.Id == Model.PublisherId ? "selected" : null)>@publisher.Text</option>
-                                    }
+                                    <option>TODO change to text field with autocomplete</option>
                                 </select>
                             </div>
                             <div class="col-md-2">

@@ -48,10 +48,13 @@
 
       <property name="Title" />
       <property name="SubTitle" />
+      <property name="Authors" />
       <property name="RelicAbbreviation" />
       <property name="SourceAbbreviation" />
       <property name="PublishPlace" />
       <property name="PublishDate" />
+      <property name="PublisherText" />
+      <property name="PublisherEmail" />
       <property name="Copyright" />
       <property name="BiblText" />
       <property name="OriginDate" />
@@ -63,7 +66,6 @@
       <property name="ManuscriptRepository" />
       <property name="ManuscriptExtent" />
       <property name="ManuscriptTitle" />
-      <many-to-one name="Publisher" class="Publisher" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="AudioResource" name="AudioResource" >

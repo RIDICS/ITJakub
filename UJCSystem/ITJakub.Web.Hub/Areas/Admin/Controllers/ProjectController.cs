@@ -104,13 +104,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     case ProjectModuleTabType.WorkCooperation:
                         return PartialView("Work/_Cooperation");
                     case ProjectModuleTabType.WorkMetadata:
-                        var publishers = client.GetPublisherList();
                         var literaryKinds = client.GetLiteraryKindList();
                         var literaryGenres = client.GetLitararyGenreList();
                         var responsibleTypes = client.GetResponsibleTypeList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
-                        workMetadaViewModel.AllPublisherList = publishers;
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
@@ -296,17 +294,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(newResourceId);
             }
         }
-
-        [HttpPost]
-        public IActionResult CreatePublisher([FromBody] PublisherContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreatePublisher(request);
-                return Json(newId);
-            }
-        }
-
+        
         [HttpPost]
         public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
         {
@@ -397,6 +385,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var contract = new ProjectMetadataContract
                 {
+                    Authors = request.Authors,
                     BiblText = request.BiblText,
                     Copyright = request.Copyright,
                     ManuscriptCountry = request.ManuscriptCountry,
@@ -409,7 +398,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     OriginDate = request.OriginDate,
                     PublishDate = request.PublishDate,
                     PublishPlace = request.PublishPlace,
-                    PublisherId = request.PublisherId,
+                    PublisherText = request.PublisherText,
+                    PublisherEmail = request.PublisherEmail,
                     RelicAbbreviation = request.RelicAbbreviation,
                     SourceAbbreviation = request.SourceAbbreviation,
                     SubTitle = request.SubTitle,

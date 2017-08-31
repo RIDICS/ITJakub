@@ -33,7 +33,6 @@
     <None Remove="Database\Entities\Project.hbm.xml" />
     <None Remove="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
     <None Remove="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
-    <None Remove="Database\Entities\Publisher.hbm.xml" />
     <None Remove="Database\Entities\Resource.hbm.xml" />
     <None Remove="Database\Entities\ResourceVersion.hbm.xml" />
     <None Remove="Database\Entities\ResponsiblePerson.hbm.xml" />
@@ -61,7 +60,6 @@
     <EmbeddedResource Include="Database\Entities\Project.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectResponsiblePerson.hbm.xml" />
-    <EmbeddedResource Include="Database\Entities\Publisher.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Resource.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ResourceVersion.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ResponsiblePerson.hbm.xml" />

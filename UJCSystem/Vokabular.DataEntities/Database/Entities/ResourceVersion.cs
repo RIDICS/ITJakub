@@ -43,24 +43,26 @@ namespace Vokabular.DataEntities.Database.Entities
 
     public class MetadataResource : ResourceVersion
     {
-       public virtual string Title { get; set; }
-       public virtual string SubTitle { get; set; }
-       public virtual string RelicAbbreviation { get; set; }
-	   public virtual string SourceAbbreviation { get; set; }
-	   public virtual Publisher Publisher { get; set; }
-	   public virtual string PublishPlace { get; set; }
-	   public virtual string PublishDate { get; set; }
-	   public virtual string Copyright { get; set; }
-	   public virtual string BiblText { get; set; }
-	   public virtual string OriginDate { get; set; }
-	   public virtual DateTime? NotBefore { get; set; }
-       public virtual DateTime? NotAfter { get; set; }
-       public virtual string ManuscriptIdno { get; set; }
-	   public virtual string ManuscriptSettlement { get; set; }
-	   public virtual string ManuscriptCountry { get; set; }
-	   public virtual string ManuscriptRepository { get; set; }
-	   public virtual string ManuscriptExtent { get; set; }
-       public virtual string ManuscriptTitle { get; set; }
+        public virtual string Title { get; set; }
+        public virtual string SubTitle { get; set; }
+        public virtual string Authors { get; set; }
+        public virtual string RelicAbbreviation { get; set; }
+	    public virtual string SourceAbbreviation { get; set; }
+	    public virtual string PublishPlace { get; set; }
+	    public virtual string PublishDate { get; set; }
+        public virtual string PublisherText { get; set; }
+        public virtual string PublisherEmail { get; set; }
+	    public virtual string Copyright { get; set; }
+	    public virtual string BiblText { get; set; }
+	    public virtual string OriginDate { get; set; }
+	    public virtual DateTime? NotBefore { get; set; }
+        public virtual DateTime? NotAfter { get; set; }
+        public virtual string ManuscriptIdno { get; set; }
+	    public virtual string ManuscriptSettlement { get; set; }
+	    public virtual string ManuscriptCountry { get; set; }
+	    public virtual string ManuscriptRepository { get; set; }
+	    public virtual string ManuscriptExtent { get; set; }
+        public virtual string ManuscriptTitle { get; set; }
     }
 
     public class PageResource : ResourceVersion
