@@ -77,6 +77,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbPageResource.Position = position;
                         dbPageResource.CreateTime = now;
                         dbPageResource.CreatedByUser = user;
+                        dbPageResource.Comment = comment;
                         dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         m_resourceRepository.Update(dbPageResource);
                     }

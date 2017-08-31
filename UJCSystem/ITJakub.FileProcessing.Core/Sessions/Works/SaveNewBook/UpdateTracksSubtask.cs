@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
 using Vokabular.DataEntities.Database.Entities;
@@ -16,7 +17,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_resourceRepository = resourceRepository;
         }
 
-        public void UpdateTracks(long projectId, int userId, string message, BookData bookData)
+        public void UpdateTracks(long projectId, int userId, string comment, BookData bookData)
         {
             if (bookData.Tracks == null)
                 return;
@@ -27,12 +28,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var dbTracks = m_resourceRepository.GetProjectTracks(projectId);
             var dbAudioList = m_resourceRepository.GetProjectAudioResources(projectId);
-            var dbAudioGroups = dbAudioList.GroupBy(x => x.Resource.Id);
+            var dbAudioGroups = dbAudioList.GroupBy(x => x.Resource.Id).ToDictionary(x => x.Key, x => x.ToList());
             foreach (var track in bookData.Tracks)
             {
                 var dbTrack = dbTracks.FirstOrDefault(x => x.Position == track.Position);
                 if (dbTrack == null)
                 {
+                    // TODO only create
                     var newResource = new Resource
                     {
                         Project = project,
@@ -40,16 +42,66 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         ContentType = ContentTypeEnum.AudioTrack,
                         ResourceType = ResourceTypeEnum.AudioTrack,
                     };
-                    CreateTrackResource(1, newResource, track, user, now);
+                    var newDbTrack = new TrackResource
+                    {
+                        VersionNumber = 1,
+                        Resource = newResource,
+                        Comment = comment,
+                        CreatedByUser = user,
+                        CreateTime = now,
+                        Name = track.Name,
+                        Text = track.Text,
+                        Position = track.Position
+                    };
+
+                    m_resourceRepository.Create(newDbTrack);
+                    dbTrack = newDbTrack;
                 }
                 else if (IsTrackUpdated(dbTrack, track))
                 {
-                    //TODO
+                    dbTrack.Name = track.Name;
+                    dbTrack.Text = track.Text;
+                    dbTrack.Position = track.Position;
+                    dbTrack.Comment = comment;
+                    dbTrack.CreateTime = now;
+                    dbTrack.CreatedByUser = user;
+
+                    m_resourceRepository.Update(dbTrack);
                 }
 
                 foreach (var trackRecordingData in track.Recordings)
                 {
-                    // TODO
+                    List<AudioResource> dbAudioResources;
+                    if (!dbAudioGroups.TryGetValue(dbTrack.Resource.Id, out dbAudioResources))
+                    {
+                        dbAudioResources = new List<AudioResource>();
+                    }
+                    
+                    var dbAudioResource = dbAudioResources.FirstOrDefault(x => x.FileName == trackRecordingData.FileName);
+                    if (dbAudioResource == null)
+                    {
+                        // TODO create new resource
+                        var newDbResource = new Resource
+                        {
+                            Name = string.Empty,
+                            ContentType = ContentTypeEnum.AudioTrack,
+                            ResourceType = ResourceTypeEnum.Audio,
+                            Project = project,
+                        };
+                        var newDbAudio = new AudioResource
+                        {
+                            Resource = newDbResource,
+                            //AudioType =  
+                            //TODO ...
+                        };
+                    }
+                    else
+                    {
+                        // TODO always create new version (new file exists)
+                    }
+
+                    // TODO check correct LatestVersion updating
+                    // TODO remove references in unused recordings
                 }
             }
 
@@ -59,11 +111,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         private bool IsTrackUpdated(TrackResource dbTrack, TrackData trackData)
         {
             return dbTrack.Name != trackData.Name || dbTrack.Text != trackData.Text;
-        }
-
-        private void CreateTrackResource(int version, Resource resource, TrackData trackData, User user, DateTime now)
-        {
-            throw new NotImplementedException();
         }
     }
 }
