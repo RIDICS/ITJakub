@@ -119,7 +119,7 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Project(Id)] PRIMARY KEY CLUSTERED,
 	   [Name] varchar(2000) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
-	   [ExternalId] varchar(255) NOT NULL,
+	   [ExternalId] varchar(255) NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_Project(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
 	   -- TODO possible reference to latest metadata
 	   -- TODO Unique?
@@ -158,6 +158,12 @@ BEGIN TRAN
 
 	ALTER TABLE [dbo].[Resource] ADD [LatestVersion] bigint NULL CONSTRAINT [FK_Resource(LatestVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
 
+	CREATE TABLE [dbo].[BookVersionResource]
+	(
+	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_BookVersionResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
+	   [ExternalId] varchar(255) NULL
+	)
+
 	CREATE TABLE [dbo].[MetadataResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
@@ -195,7 +201,8 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[TextResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TextResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [ExternalId] varchar(100) NULL
+	   [ExternalId] varchar(100) NULL,
+	   [BookVersion] bigint NULL CONSTRAINT [FK_TextResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
 	CREATE TABLE [dbo].[ImageResource]
@@ -221,8 +228,8 @@ BEGIN TRAN
 	   [Name] varchar(255) NOT NULL,
 	   [Text] varchar(MAX) NULL,
 	   [Position] SMALLINT NOT NULL,
-	   [ResourceChapter] bigint NULL CONSTRAINT [FK_Track(ResourceChapter)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
-	   [ResourcePage] bigint NULL CONSTRAINT [FK_Track(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	   [ResourceChapter] bigint NULL CONSTRAINT [FK_TrackResource(ResourceChapter)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
+	   [ResourcePage] bigint NULL CONSTRAINT [FK_TrackResource(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	);
 
 	CREATE TABLE [dbo].[ChapterResource]
@@ -238,7 +245,8 @@ BEGIN TRAN
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_HeadwordResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [ExternalId] varchar(100) NOT NULL,
 	   [DefaultHeadword] nvarchar(255) NOT NULL,
-	   [Sorting] nvarchar(255) NOT NULL
+	   [Sorting] nvarchar(255) NOT NULL,
+	   [BookVersion] bigint NULL CONSTRAINT [FK_HeadwordResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
 	CREATE TABLE [dbo].[HeadwordItem]

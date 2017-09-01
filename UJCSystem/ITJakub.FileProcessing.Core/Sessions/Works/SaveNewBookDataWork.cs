@@ -1,5 +1,4 @@
-﻿using System;
-using ITJakub.FileProcessing.Core.Data;
+﻿using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -18,6 +17,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly string m_message;
         private readonly int m_userId;
         private long m_projectId;
+        private long m_bookVersionId;
 
         public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             ResourceRepository resourceRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
@@ -36,6 +36,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         protected override void ExecuteWorkImplementation()
         {
             m_projectId = new UpdateProjectSubtask(m_projectRepository).UpdateProject(m_nullableProjectId, m_userId, m_bookData);
+            m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_message, m_bookData);
             
             //TODO update: 1) metadata, authors, editors, category, kind, genre
             //TODO 2) Page list & chapters 3) Headwords 4) Tracks 5) keywords 6) terms 7) transformations
@@ -52,11 +53,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             updateTermsSubtask.UpdateTerms(m_projectId, m_bookData);
 
             var updatePagesSubtask = new UpdatePagesSubtask(m_resourceRepository);
-            updatePagesSubtask.UpdatePages(m_projectId, m_userId, m_message, m_bookData, updateTermsSubtask.ResultTermCache);
+            updatePagesSubtask.UpdatePages(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData, updateTermsSubtask.ResultTermCache);
 
             new UpdateChaptersSubtask(m_resourceRepository).UpdateChapters(m_projectId, m_userId, m_message, m_bookData, updatePagesSubtask.ResultPageResourceList);
 
-            new UpdateHeadwordsSubtask(m_resourceRepository).UpdateHeadwords(m_projectId, m_userId, m_message, m_bookData);
+            new UpdateHeadwordsSubtask(m_resourceRepository).UpdateHeadwords(m_projectId, m_bookVersionId, m_userId, m_message, m_bookData);
 
             var updateTracksSubtask = new UpdateTracksSubtask(m_resourceRepository);
             updateTracksSubtask.UpdateTracks(m_projectId, m_userId, m_message, m_bookData);
@@ -66,7 +67,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             new UpdateHistoryLogSubtask(m_projectRepository).UpdateHistoryLog(m_projectId, m_userId, m_message, m_bookData);
 
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }

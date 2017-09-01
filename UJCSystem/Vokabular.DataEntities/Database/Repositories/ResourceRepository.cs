@@ -11,6 +11,16 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ResourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
+        
+        public virtual BookVersionResource GetLatestBookVersion(long projectId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<BookVersionResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .SingleOrDefault();
+        }
 
         public virtual IList<PageResource> GetProjectPages(long projectId)
         {

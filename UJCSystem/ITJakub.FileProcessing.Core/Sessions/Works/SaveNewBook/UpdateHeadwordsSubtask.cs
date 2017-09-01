@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_resourceRepository = resourceRepository;
         }
 
-        public void UpdateHeadwords(long projectId, int userId, string message, BookData bookData)
+        public void UpdateHeadwords(long projectId, long bookVersionId, int userId, string message, BookData bookData)
         {
             if (bookData.BookHeadwords == null)
                 return;
@@ -26,6 +26,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
+            var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
 
             var dbHeadwords = new Dictionary<string, HeadwordResource>();
             IList<HeadwordResource> tempDbHeadwords;
@@ -54,11 +55,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         ContentType = ContentTypeEnum.Headword,
                         ResourceType = ResourceTypeEnum.Headword,
                     };
-                    CreateHeadwordResource(1, newResource, headwordDataList, user, now);
+                    CreateHeadwordResource(1, newResource, headwordDataList, user, now, bookVersion);
                 }
                 else if (IsHeadwordChanged(dbHeadword, headwordDataList))
                 {
-                    CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now);
+                    CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion);
                 }
             }
         }
@@ -88,13 +89,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             return false;
         }
 
-        private void CreateHeadwordResource(int version, Resource resource, List<BookHeadwordData> headwordDataList, User user, DateTime now)
+        private void CreateHeadwordResource(int version, Resource resource, List<BookHeadwordData> headwordDataList, User user, DateTime now, BookVersionResource bookVersion)
         {
             var firstHeadwordData = headwordDataList.First();
 
             var newDbHeadword = new HeadwordResource
             {
                 Resource = resource,
+                BookVersion = bookVersion,
                 Comment = null,
                 CreateTime = now,
                 CreatedByUser = user,

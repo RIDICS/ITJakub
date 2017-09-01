@@ -122,6 +122,7 @@
     <Compile Include="Sessions\Works\SaveNewBook\UpdateTermsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateHeadwordsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateTracksSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateBookVersionSubtask.cs" />
     <Compile Include="XMLProcessing\Processors\Accessories\FileProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\RecordingProcessor.cs" />
     <Compile Include="XMLProcessing\Processors\Audiobooks\TrackProcessor.cs" />

@@ -100,6 +100,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         VersionNumber = 1,
                         ParentResource = parentChapterResourceResource
                     };
+                    newResource.LatestVersion = dbChapter;
                     m_resourceRepository.Create(dbChapter);
                 }
                 else

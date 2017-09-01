@@ -56,7 +56,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public override object Create(object instance)
         {
             CreatedObjects.Add(instance);
-            return 446;
+            return 446L;
         }
 
         public override IList<object> CreateAll(IEnumerable data)
@@ -92,6 +92,26 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
         public override void SaveAll(IEnumerable data)
         {
             throw new NotSupportedException();
+        }
+
+        public override BookVersionResource GetLatestBookVersion(long projectId)
+        {
+            if (projectId == 0)
+                return null;
+
+            return new BookVersionResource
+            {
+                ExternalId = "id-1",
+                VersionNumber = 1,
+                Resource = new Resource
+                {
+                    Id = 1,
+                    Project = new Project
+                    {
+                        Id = projectId
+                    }
+                }
+            };
         }
 
         public override IList<PageResource> GetProjectPages(long projectId)

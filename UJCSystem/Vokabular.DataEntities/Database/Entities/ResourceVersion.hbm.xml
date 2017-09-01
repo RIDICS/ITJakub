@@ -33,6 +33,7 @@
       <key column="ResourceVersionId" />
 
       <property name="ExternalId" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
     </joined-subclass>
 
     <joined-subclass table="ImageResource" name="ImageResource" >
@@ -101,6 +102,7 @@
       <property name="ExternalId" not-null="true" />
       <property name="DefaultHeadword" not-null="true" />
       <property name="Sorting" not-null="true" />
+      <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
 
       <bag name="HeadwordItems">
         <key column="HeadwordResource" />
@@ -113,6 +115,12 @@
 
       <property name="Name" not-null="true" />
       <property name="FileName" not-null="true" />
+    </joined-subclass>
+
+    <joined-subclass table="BookVersionResource" name="BookVersionResource" >
+      <key column="ResourceVersionId" />
+
+      <property name="ExternalId" />
     </joined-subclass>
 
   </class>

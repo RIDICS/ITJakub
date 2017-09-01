@@ -222,7 +222,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
             
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 1, "comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(40, 3, 1, "comment", bookData, GetTestTermCache());
 
             Assert.AreEqual(1, resourceRepository.CreatedObjects.Count);
             Assert.AreEqual(2, resourceRepository.UpdatedObjects.Count);
@@ -263,7 +263,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(40, 1, "comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(40, 3, 1, "comment", bookData, GetTestTermCache());
 
             var createdTexts = resourceRepository.CreatedObjects.OfType<TextResource>().ToList();
             var updatedTexts = resourceRepository.UpdatedObjects.OfType<TextResource>().ToList();
@@ -302,7 +302,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdatePagesSubtask(resourceRepository);
-            subtask.UpdatePages(41, 2, "upload comment", bookData, GetTestTermCache());
+            subtask.UpdatePages(41, 3, 2, "upload comment", bookData, GetTestTermCache());
 
             var createdImages = resourceRepository.CreatedObjects.OfType<ImageResource>().ToList();
             var updatedImages = resourceRepository.UpdatedObjects.OfType<ImageResource>().ToList();
@@ -432,7 +432,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateHeadwordsSubtask(resourceRepository);
-            subtask.UpdateHeadwords(41, 2, "upload", bookData);
+            subtask.UpdateHeadwords(41, 3, 2, "upload", bookData);
             
             var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
@@ -599,6 +599,33 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.AreEqual(2, recording2?.VersionNumber);
             Assert.AreEqual(1, recording8?.VersionNumber);
+        }
+
+        [TestMethod]
+        public void TestUpdateBookVersion()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+            var bookData = new BookData
+            {
+                VersionXmlId = ""
+            };
+
+            var subtask = new UpdateBookVersionSubtask(resourceRepository);
+            subtask.UpdateBookVersion(0, 1, "comment", bookData);
+            subtask.UpdateBookVersion(40, 1, "comment", bookData);
+
+            var createdBookVersions = resourceRepository.CreatedObjects.OfType<BookVersionResource>().ToList();
+            var updatedBookVersions = resourceRepository.UpdatedObjects.OfType<BookVersionResource>().ToList();
+
+            Assert.AreEqual(0, updatedBookVersions.Count);
+            Assert.AreEqual(2, createdBookVersions.Count);
+
+            var bookVersion1 = createdBookVersions.First(x => x.Resource.Project.Id == 0);
+            var bookVersion2 = createdBookVersions.First(x => x.Resource.Project.Id == 40);
+
+            Assert.AreEqual(1, bookVersion1?.VersionNumber);
+            Assert.AreEqual(2, bookVersion2?.VersionNumber);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<PageResource> ResultPageResourceList { get; private set; }
 
-        public void UpdatePages(long projectId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
+        public void UpdatePages(long projectId, long bookVersionId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
             if (bookData.Pages == null)
                 return;
@@ -34,6 +34,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
+            var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
             var dbPages = m_resourceRepository.GetProjectPages(projectId);
             var dbPagesDict = dbPages.ToDictionary(x => x.Name);
 
@@ -93,6 +94,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreatedByUser = user,
                         ExternalId = page.XmlId,
                         ParentResource = dbPageResource.Resource,
+                        BookVersion = bookVersion,
                         VersionNumber = 0
                     };
                     newPageTextResources.Add(newTextResource);
