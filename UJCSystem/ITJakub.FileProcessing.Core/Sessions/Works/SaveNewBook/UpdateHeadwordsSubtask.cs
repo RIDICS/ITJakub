@@ -10,6 +10,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateHeadwordsSubtask
     {
+        private const int BatchSize = 1000;
         private readonly ResourceRepository m_resourceRepository;
 
         public UpdateHeadwordsSubtask(ResourceRepository resourceRepository)
@@ -26,13 +27,25 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
 
+            var dbHeadwords = new Dictionary<string, HeadwordResource>();
+            IList<HeadwordResource> tempDbHeadwords;
+            var page = 0;
+            do
+            {
+                tempDbHeadwords = m_resourceRepository.GetProjectLatestHeadwordPage(projectId, page * BatchSize, BatchSize); // TODO check order of HeadwordItems
+                foreach (var tempDbHeadword in tempDbHeadwords)
+                {
+                    dbHeadwords.Add(tempDbHeadword.ExternalId, tempDbHeadword);
+                }
+                page++;
+            } while (tempDbHeadwords.Count > 0);
+
             foreach (var groupedHeadwordData in bookData.BookHeadwords.GroupBy(x => x.XmlEntryId))
             {
                 var headwordDataList = groupedHeadwordData.OrderBy(x => x.Headword).ToList();
                 
-                var dbHeadword = m_resourceRepository.GetLatestHeadword(projectId, groupedHeadwordData.Key); // TODO check order of HeadwordItems
-
-                if (dbHeadword == null)
+                HeadwordResource dbHeadword;
+                if (!dbHeadwords.TryGetValue(groupedHeadwordData.Key, out dbHeadword))
                 {
                     var newResource = new Resource
                     {
@@ -86,7 +99,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 CreateTime = now,
                 CreatedByUser = user,
                 VersionNumber = version,
-                HeadwordItems = null, // Headword Items are create in following for-each
+                HeadwordItems = null, // Headword Items are created in following for-each
                 ExternalId = firstHeadwordData.XmlEntryId,
                 DefaultHeadword = firstHeadwordData.DefaultHeadword,
                 Sorting = firstHeadwordData.SortOrder,

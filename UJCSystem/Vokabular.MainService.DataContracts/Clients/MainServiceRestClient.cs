@@ -209,6 +209,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
+                HttpClient.Timeout = new TimeSpan(0, 10, 0); // Import is long running operation
                 Post<object>($"session/{sessionId}", request);
             }
             catch (HttpRequestException e)

@@ -293,6 +293,60 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
+        public override IList<HeadwordResource> GetProjectLatestHeadwordPage(long projectId, int start, int count)
+        {
+            if (start > 0)
+                return new List<HeadwordResource>();
+
+            return new List<HeadwordResource>
+            {
+                new HeadwordResource
+                {
+                    HeadwordItems = new List<HeadwordItem>
+                    {
+                        new HeadwordItem
+                        {
+                            Headword = "aaa",
+                            HeadwordOriginal = "aaa-o"
+                        },
+                        new HeadwordItem
+                        {
+                            Headword = "bbb",
+                            HeadwordOriginal = "bbb-o"
+                        }
+                    },
+                    DefaultHeadword = "aaa",
+                    ExternalId = "id-1",
+                    Resource = new Resource(),
+                    Sorting = "aaa-s",
+                    VersionNumber = 1,
+                    Id = 100,
+                },
+                new HeadwordResource
+                {
+                    HeadwordItems = new List<HeadwordItem>
+                    {
+                        new HeadwordItem
+                        {
+                            Headword = "aaa",
+                            HeadwordOriginal = "aaa-o"
+                        },
+                        new HeadwordItem
+                        {
+                            Headword = "bbb",
+                            HeadwordOriginal = "bbb-o"
+                        }
+                    },
+                    DefaultHeadword = "ccc",
+                    ExternalId = "id-2",
+                    Resource = new Resource(),
+                    Sorting = "ccc-s",
+                    VersionNumber = 1,
+                    Id = 102,
+                },
+            };
+        }
+
         public override IList<TrackResource> GetProjectTracks(long projectId)
         {
             if (projectId == 0)

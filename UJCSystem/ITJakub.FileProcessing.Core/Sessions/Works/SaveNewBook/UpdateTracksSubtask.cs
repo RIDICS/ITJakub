@@ -148,6 +148,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateFullBookTracks(long projectId, int userId, string comment, BookData bookData)
         {
+            if (bookData.FullBookRecordings == null)
+                return;
+
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);

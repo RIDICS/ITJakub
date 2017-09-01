@@ -98,6 +98,23 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SingleOrDefault();
         }
 
+        public virtual IList<HeadwordResource> GetProjectLatestHeadwordPage(long projectId, int start, int count)
+        {
+            Resource resourceAlias = null;
+            HeadwordItem headwordItemAlias = null;
+
+            return GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
+                .Fetch(x => x.HeadwordItems).Eager
+                .OrderBy(x => x.ExternalId).Asc
+                .OrderBy(() => headwordItemAlias.Headword).Asc
+                .Take(count)
+                .Skip(start)
+                .List();
+        }
+
         public virtual IList<TrackResource> GetProjectTracks(long projectId)
         {
             Resource resourceAlias = null;
