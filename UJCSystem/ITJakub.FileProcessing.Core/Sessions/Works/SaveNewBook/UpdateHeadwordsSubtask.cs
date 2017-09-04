@@ -30,20 +30,25 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var dbHeadwords = new Dictionary<string, HeadwordResource>();
             IList<HeadwordResource> tempDbHeadwords;
+            string lastExternalId = null;
             var page = 0;
             do
             {
                 tempDbHeadwords = m_resourceRepository.GetProjectLatestHeadwordPage(projectId, page * BatchSize, BatchSize); // TODO check order of HeadwordItems
                 foreach (var tempDbHeadword in tempDbHeadwords)
                 {
-                    dbHeadwords.Add(tempDbHeadword.ExternalId, tempDbHeadword);
+                    if (tempDbHeadword.ExternalId != lastExternalId)
+                    {
+                        dbHeadwords.Add(tempDbHeadword.ExternalId, tempDbHeadword);
+                        lastExternalId = tempDbHeadword.ExternalId;
+                    }
                 }
                 page++;
             } while (tempDbHeadwords.Count > 0);
 
             foreach (var groupedHeadwordData in bookData.BookHeadwords.GroupBy(x => x.XmlEntryId))
             {
-                var headwordDataList = groupedHeadwordData.OrderBy(x => x.Headword).ToList();
+                var headwordDataList = groupedHeadwordData.OrderBy(x => x.HeadwordOriginal).ToList();
                 
                 HeadwordResource dbHeadword;
                 if (!dbHeadwords.TryGetValue(groupedHeadwordData.Key, out dbHeadword))
@@ -80,7 +85,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 var headword1 = dbHeadword.HeadwordItems[i];
                 var headword2 = headwordDataList[i];
 
-                if (headword1.Headword != headword2.Headword)
+                if (headword1.Headword != headword2.Headword ||
+                    headword1.HeadwordOriginal != headword2.HeadwordOriginal)
                 {
                     return true;
                 }
@@ -116,7 +122,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 {
                     HeadwordResource = newDbHeadword,
                     Headword = bookHeadwordData.Headword,
-                    HeadwordOriginal = null,
+                    HeadwordOriginal = bookHeadwordData.HeadwordOriginal,
                     ResourcePage = null //TODO relation to Page
                 };
                 m_resourceRepository.Create(newDbHeadwordItem);

@@ -119,7 +119,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
                 .Fetch(x => x.HeadwordItems).Eager
                 .OrderBy(x => x.ExternalId).Asc
-                .OrderBy(() => headwordItemAlias.Headword).Asc
+                .OrderBy(() => headwordItemAlias.HeadwordOriginal).Asc
                 .Take(count)
                 .Skip(start)
                 .List();

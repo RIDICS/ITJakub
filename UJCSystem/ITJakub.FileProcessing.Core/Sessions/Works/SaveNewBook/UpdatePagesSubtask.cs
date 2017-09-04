@@ -27,7 +27,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var newPageNames = new HashSet<string>();
-            var newPageTextResources = new List<TextResource>();
+            var newPageTextResources = new List<NewPageTextData>();
             var newPageImageResources = new List<ImageResource>();
             var resultPageResourceList = new List<PageResource>();
 
@@ -97,7 +97,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         BookVersion = bookVersion,
                         VersionNumber = 0
                     };
-                    newPageTextResources.Add(newTextResource);
+                    newPageTextResources.Add(new NewPageTextData
+                    {
+                        NewTextResource = newTextResource,
+                        BookPageData = page,
+                    });
                 }
 
                 if (!string.IsNullOrEmpty(page.Image))
@@ -141,7 +145,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             return pageTermXmlIds?.Select(termXmlId => dbTermCache[termXmlId]).ToList();
         }
 
-        private void UpdateTextResources(Project project, IList<TextResource> newPageTextResources)
+        private void UpdateTextResources(Project project, IList<NewPageTextData> newPageTextResources)
         {
             if (newPageTextResources.Count == 0)
             {
@@ -153,8 +157,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id);
             var dbTextsByPageResId = dbTexts.ToDictionary(x => x.ParentResource.Id);
 
-            foreach (var newTextResource in newPageTextResources)
+            foreach (var pageTextData in newPageTextResources)
             {
+                var newTextResource = pageTextData.NewTextResource;
                 var pageResourceId = newTextResource.ParentResource.Id;
                 TextResource originDbText;
                 if (!dbTextsByPageResId.TryGetValue(pageResourceId, out originDbText))
@@ -162,7 +167,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newResource = new Resource
                     {
                         Project = project,
-                        Name = string.Empty, //TODO xml file name
+                        Name = pageTextData.BookPageData.XmlResource,
                         ContentType = ContentTypeEnum.Page,
                         NamedResourceGroup = resourceGroup,
                         ResourceType = ResourceTypeEnum.Text
@@ -240,6 +245,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             m_resourceRepository.Create(resourceGroup);
             return resourceGroup;
+        }
+
+        private class NewPageTextData
+        {
+            public BookPageData BookPageData { get; set; }
+            public TextResource NewTextResource { get; set; }
         }
     }
 }

@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             {
                 var newDbResource = new Resource
                 {
-                    Name = string.Empty,
+                    Name = "BookVersion",
                     ContentType = ContentTypeEnum.FullLiteraryWork,
                     ResourceType = ResourceTypeEnum.BookVersion,
                     Project = project,

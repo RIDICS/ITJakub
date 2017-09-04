@@ -99,7 +99,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string Text { get; set; }
         public virtual int Position { get; set; }
         public virtual Resource ResourceChapter { get; set; }
-        public virtual Resource ResourcePage { get; set; }
+        public virtual Resource ResourceBeginningPage { get; set; }
     }
 
     public class ChapterResource : ResourceVersion

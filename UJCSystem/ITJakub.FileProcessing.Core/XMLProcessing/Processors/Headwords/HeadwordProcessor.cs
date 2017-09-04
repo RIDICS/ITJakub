@@ -22,6 +22,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
             var defaultHw = xmlReader.GetAttribute("defaultHw");
             var defaultHwSorting = xmlReader.GetAttribute("defaultHw-sorting");
             var hw = xmlReader.GetAttribute("hw");
+            var hwOriginal = xmlReader.GetAttribute("hw-original");
             var transliterated = xmlReader.GetAttribute("hw-transliterated");
             var visibility = xmlReader.GetAttribute("visibility");
             var visibilityEnum = ParseEnum<VisibilityEnum>(visibility);
@@ -32,6 +33,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Headwords
                 XmlEntryId = entryId,
                 DefaultHeadword = defaultHw,
                 Headword = hw,
+                HeadwordOriginal = hwOriginal,
                 Transliterated = transliterated,
                 Visibility = visibilityEnum,
                 SortOrder = defaultHwSorting,

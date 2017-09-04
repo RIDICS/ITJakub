@@ -168,8 +168,8 @@ BEGIN TRAN
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Authors] varchar(2000) NULL,
-	   [Title] varchar(2000) NULL,
-	   [SubTitle] varchar(2000) NULL,
+	   [Title] nvarchar(2000) NULL,
+	   [SubTitle] nvarchar(2000) NULL,
 	   [RelicAbbreviation] varchar(100) NULL,
 	   [SourceAbbreviation] varchar(255) NULL,
 	   [PublishPlace] varchar(100) NULL,
@@ -186,7 +186,7 @@ BEGIN TRAN
 	   [ManuscriptCountry] varchar (100) NULL,
 	   [ManuscriptRepository] varchar (100) NULL,
 	   [ManuscriptExtent] varchar(255) NULL, -- TODO unkown value max size
-	   [ManuscriptTitle] varchar(2000) NULL
+	   [ManuscriptTitle] nvarchar(2000) NULL
 	   
 	   -- TODO !!! Is possible have multiple different manuscripts?
     )
@@ -194,7 +194,7 @@ BEGIN TRAN
     CREATE TABLE [dbo].[PageResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_PageResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Name] varchar(50) NOT NULL,
+	   [Name] nvarchar(50) NOT NULL,
 	   [Position] int NOT NULL
     )
 
@@ -225,17 +225,17 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[TrackResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TrackResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Name] varchar(255) NOT NULL,
-	   [Text] varchar(MAX) NULL,
+	   [Name] nvarchar(255) NOT NULL,
+	   [Text] nvarchar(MAX) NULL,
 	   [Position] SMALLINT NOT NULL,
 	   [ResourceChapter] bigint NULL CONSTRAINT [FK_TrackResource(ResourceChapter)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
-	   [ResourcePage] bigint NULL CONSTRAINT [FK_TrackResource(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
-	);
+	   [ResourceBeginningPage] bigint NULL CONSTRAINT [FK_TrackResource(ResourceBeginningPage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+	)
 
 	CREATE TABLE [dbo].[ChapterResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Name] varchar(1000) NOT NULL,
+	   [Name] nvarchar(1000) NOT NULL,
 	   [Position] int NOT NULL,
 	   [ResourceBeginningPage] bigint NULL CONSTRAINT [FK_ChapterResource(ResourceBeginningPage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
