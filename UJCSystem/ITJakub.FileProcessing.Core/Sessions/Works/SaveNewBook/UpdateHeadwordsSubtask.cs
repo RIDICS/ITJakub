@@ -34,7 +34,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var page = 0;
             do
             {
-                tempDbHeadwords = m_resourceRepository.GetProjectLatestHeadwordPage(projectId, page * BatchSize, BatchSize); // TODO check order of HeadwordItems
+                tempDbHeadwords = m_resourceRepository.GetProjectLatestHeadwordPage(projectId, page * BatchSize, BatchSize); // returns HeadwordResource list without fetched HeadwordItem
                 foreach (var tempDbHeadword in tempDbHeadwords)
                 {
                     if (tempDbHeadword.ExternalId != lastExternalId)
@@ -62,27 +62,29 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     };
                     CreateHeadwordResource(1, newResource, headwordDataList, user, now, bookVersion);
                 }
-                else if (IsHeadwordChanged(dbHeadword, headwordDataList))
+                else if (IsHeadwordChanged(dbHeadword, headwordDataList, bookVersionId))
                 {
                     CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion);
                 }
             }
         }
 
-        private bool IsHeadwordChanged(HeadwordResource dbHeadword, IList<BookHeadwordData> headwordDataList)
+        private bool IsHeadwordChanged(HeadwordResource dbHeadword, IList<BookHeadwordData> headwordDataList, long bookVersionId)
         {
             var headwordData = headwordDataList.First();
 
             if (dbHeadword.DefaultHeadword != headwordData.DefaultHeadword ||
                 dbHeadword.Sorting != headwordData.SortOrder ||
-                dbHeadword.HeadwordItems.Count != headwordDataList.Count)
+                dbHeadword.BookVersion.Id != bookVersionId ||
+                dbHeadword.HeadwordItems.Count != headwordDataList.Count) // lazy fetching collection
             {
                 return true;
             }
 
+            var dbHeadwordItems = dbHeadword.HeadwordItems.OrderBy(x => x.HeadwordOriginal).ToArray();
             for (int i = 0; i < headwordDataList.Count; i++)
             {
-                var headword1 = dbHeadword.HeadwordItems[i];
+                var headword1 = dbHeadwordItems[i];
                 var headword2 = headwordDataList[i];
 
                 if (headword1.Headword != headword2.Headword ||
