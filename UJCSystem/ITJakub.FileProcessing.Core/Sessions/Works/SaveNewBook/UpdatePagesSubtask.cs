@@ -39,10 +39,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var dbPagesDict = dbPages.ToDictionary(x => x.Name);
 
             // Update page list
-            int position = 0;
             foreach (var page in bookData.Pages)
             {
-                position++;
                 PageResource dbPageResource;
                 newPageNames.Add(page.Text);
 
@@ -62,7 +60,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         Comment = comment,
                         CreateTime = now,
                         CreatedByUser = user,
-                        Position = position,
+                        Position = page.Position,
                         VersionNumber = 1,
                         Terms = PrepareTermList(page.TermXmlIds, dbTermCache),
                     };
@@ -73,15 +71,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 }
                 else
                 {
-                    if (dbPageResource.Position != position)
-                    {
-                        dbPageResource.Position = position;
+                    //if (IsPageUpdated(dbPageResource, page))
+                    //{
+                    // Always update page data
+                        dbPageResource.Position = page.Position;
                         dbPageResource.CreateTime = now;
                         dbPageResource.CreatedByUser = user;
                         dbPageResource.Comment = comment;
                         dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         m_resourceRepository.Update(dbPageResource);
-                    }
+                    //}
                 }
 
                 if (!string.IsNullOrEmpty(page.XmlId))
@@ -139,7 +138,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             UpdateImageResources(project, newPageImageResources);
         }
-
+        
         private IList<Term> PrepareTermList(List<string> pageTermXmlIds, Dictionary<string, Term> dbTermCache)
         {
             return pageTermXmlIds?.Select(termXmlId => dbTermCache[termXmlId]).ToList();

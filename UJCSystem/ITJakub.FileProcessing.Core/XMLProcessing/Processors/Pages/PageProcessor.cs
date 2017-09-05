@@ -27,7 +27,7 @@ namespace ITJakub.FileProcessing.Core.XMLProcessing.Processors.Pages
             var position = bookData.Pages.Count + 1;
             var facsValue = xmlReader.GetAttribute("facs");
             var pageNameValue = xmlReader.GetAttribute("n") ?? Convert.ToString(position);
-            var pageIdValue = xmlReader.GetAttribute("id", XmlNamespace.NamespaceName) ?? Convert.ToString(Guid.NewGuid());
+            var pageIdValue = xmlReader.GetAttribute("id", XmlNamespace.NamespaceName);
             var xmlResourceValue = xmlReader.GetAttribute("resource");
 
             if (string.IsNullOrEmpty(xmlResourceValue) && m_log.IsFatalEnabled)
