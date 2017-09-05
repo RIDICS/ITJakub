@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http;
+using System.Threading.Tasks;
 using AutoMapper;
 using ITJakub.Web.Hub.Areas.Admin.Models;
 using ITJakub.Web.Hub.Areas.Admin.Models.Request;
@@ -10,9 +11,10 @@ using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Helpers;
-using ITJakub.Web.Hub.Models.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
@@ -192,36 +194,78 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult UploadResource(UploadFileRequest request)
+        public async Task<IActionResult> UploadResource()
         {
-            for (var i = 0; i < Request.Form.Files.Count; i++)
+            var boundary = UploadHelper.GetBoundary(Request.ContentType);
+            var reader = new MultipartReader(boundary, Request.Body, UploadHelper.MultipartReaderBufferSize);
+
+            var valuesByKey = new Dictionary<string, string>();
+            MultipartSection section;
+
+            while ((section = await reader.ReadNextSectionAsync()) != null)
             {
-                var file = Request.Form.Files[i];
-                if (file != null && file.Length != 0)
+                var contentDispo = section.GetContentDispositionHeader();
+
+                if (contentDispo.IsFileDisposition())
                 {
+                    if (!valuesByKey.TryGetValue("sessionId", out var sessionId))
+                    {
+                        return BadRequest();
+                    }
+
+                    var fileSection = section.AsFileSection();
+
                     using (var client = GetRestClient())
                     {
-                        client.UploadResource(request.SessionId, file.OpenReadStream(), file.FileName);
+                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                     }
                 }
+                else if (contentDispo.IsFormDisposition())
+                {
+                    var formSection = section.AsFormDataSection();
+                    var value = await formSection.GetValueAsync();
+                    valuesByKey.Add(formSection.Name, value);
+                }
             }
+
             return Json(new { });
         }
 
         [HttpPost]
-        public IActionResult UploadNewResourceVersion(UploadFileRequest request)
+        public async Task<IActionResult> UploadNewResourceVersion()
         {
-            for (var i = 0; i < Request.Form.Files.Count; i++)
+            var boundary = UploadHelper.GetBoundary(Request.ContentType);
+            var reader = new MultipartReader(boundary, Request.Body, UploadHelper.MultipartReaderBufferSize);
+
+            var valuesByKey = new Dictionary<string, string>();
+            MultipartSection section;
+
+            while ((section = await reader.ReadNextSectionAsync()) != null)
             {
-                var file = Request.Form.Files[i];
-                if (file != null && file.Length != 0)
+                var contentDispo = section.GetContentDispositionHeader();
+
+                if (contentDispo.IsFileDisposition())
                 {
+                    if (!valuesByKey.TryGetValue("sessionId", out var sessionId))
+                    {
+                        return BadRequest();
+                    }
+
+                    var fileSection = section.AsFileSection();
+
                     using (var client = GetRestClient())
                     {
-                        client.UploadResource(request.SessionId, file.OpenReadStream(), file.FileName);
+                        client.UploadResource(sessionId, fileSection.FileStream, fileSection.FileName);
                     }
                 }
+                else if (contentDispo.IsFormDisposition())
+                {
+                    var formSection = section.AsFormDataSection();
+                    var value = await formSection.GetValueAsync();
+                    valuesByKey.Add(formSection.Name, value);
+                }
             }
+
             return Json(new { });
         }
 

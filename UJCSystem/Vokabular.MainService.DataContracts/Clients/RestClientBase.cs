@@ -14,6 +14,7 @@ namespace Vokabular.MainService.DataContracts.Clients
 {
     public abstract class RestClientBase : IDisposable
     {
+        private const int StreamBufferSize = 64 * 1024;
         private readonly HttpClient m_client;
 
         public RestClientBase(Uri baseAddress)
@@ -183,7 +184,7 @@ namespace Vokabular.MainService.DataContracts.Clients
                 try
                 {
                     var content = new MultipartFormDataContent();
-                    content.Add(new StreamContent(data), "file");
+                    content.Add(new StreamContent(data, StreamBufferSize), "file");
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
@@ -206,7 +207,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 try
                 {
-                    var content = new StreamContent(data);
+                    var content = new StreamContent(data, StreamBufferSize);
 
                     var request = CreateRequestMessage(HttpMethod.Post, uriPath, headers);
                     request.Content = content;
