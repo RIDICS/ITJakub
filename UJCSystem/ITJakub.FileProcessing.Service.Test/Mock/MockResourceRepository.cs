@@ -10,6 +10,8 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
 {
     public class MockResourceRepository : ResourceRepository
     {
+        public const long HeadwordBookVersionId = 3;
+
         public MockResourceRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
             CreatedObjects = new List<object>();
@@ -310,6 +312,10 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 Sorting = externalId == "id-1" ? "aaa-s" : "ccc-s",
                 VersionNumber = 1,
                 Id = 100,
+                BookVersion = new BookVersionResource
+                {
+                    Id = HeadwordBookVersionId
+                }
             };
         }
 
@@ -341,6 +347,10 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     Sorting = "aaa-s",
                     VersionNumber = 1,
                     Id = 100,
+                    BookVersion = new BookVersionResource
+                    {
+                        Id = HeadwordBookVersionId
+                    }
                 },
                 new HeadwordResource
                 {
@@ -363,6 +373,10 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     Sorting = "ccc-s",
                     VersionNumber = 1,
                     Id = 102,
+                    BookVersion = new BookVersionResource
+                    {
+                        Id = HeadwordBookVersionId
+                    }
                 },
             };
         }

@@ -18,7 +18,28 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             m_resourceRepository = resourceRepository;
         }
 
-        public void UpdateHeadwords(long projectId, long bookVersionId, int userId, string message, BookData bookData)
+        private Dictionary<string, PageResource> CreateImageToPageResourceDictionary(BookData bookData, List<PageResource> dbPageResources)
+        {
+            if (dbPageResources == null || bookData.Pages == null)
+                return new Dictionary<string, PageResource>();
+
+            var dbPagesByPosition = new PageResource[dbPageResources.Count + 1];
+            foreach (var dbPage in dbPageResources)
+            {
+                dbPagesByPosition[dbPage.Position] = dbPage;
+            }
+
+            var dbPagesByImage = new Dictionary<string, PageResource>();
+            foreach (var pageWithImageData in bookData.Pages.Where(x => x.Image != null))
+            {
+                var dbPage = dbPagesByPosition[pageWithImageData.Position];
+                dbPagesByImage.Add(pageWithImageData.Image, dbPage);
+            }
+
+            return dbPagesByImage;
+        }
+
+        public void UpdateHeadwords(long projectId, long bookVersionId, int userId, string message, BookData bookData, List<PageResource> dbPageResources)
         {
             if (bookData.BookHeadwords == null)
                 return;
@@ -28,6 +49,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
 
+            // Load all project headwords from database
+            var dbPagesByImage = CreateImageToPageResourceDictionary(bookData, dbPageResources);
             var dbHeadwords = new Dictionary<string, HeadwordResource>();
             IList<HeadwordResource> tempDbHeadwords;
             string lastExternalId = null;
@@ -46,6 +69,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 page++;
             } while (tempDbHeadwords.Count > 0);
 
+            // Create new Headword with ResourceVersion
             foreach (var groupedHeadwordData in bookData.BookHeadwords.GroupBy(x => x.XmlEntryId))
             {
                 var headwordDataList = groupedHeadwordData.OrderBy(x => x.HeadwordOriginal).ToList();
@@ -60,11 +84,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         ContentType = ContentTypeEnum.Headword,
                         ResourceType = ResourceTypeEnum.Headword,
                     };
-                    CreateHeadwordResource(1, newResource, headwordDataList, user, now, bookVersion);
+                    CreateHeadwordResource(1, newResource, headwordDataList, user, now, bookVersion, dbPagesByImage);
                 }
                 else if (IsHeadwordChanged(dbHeadword, headwordDataList, bookVersionId))
                 {
-                    CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion);
+                    CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion, dbPagesByImage);
                 }
             }
         }
@@ -75,7 +99,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             if (dbHeadword.DefaultHeadword != headwordData.DefaultHeadword ||
                 dbHeadword.Sorting != headwordData.SortOrder ||
-                dbHeadword.BookVersion.Id != bookVersionId ||
+                dbHeadword.BookVersion?.Id != bookVersionId ||
                 dbHeadword.HeadwordItems.Count != headwordDataList.Count) // lazy fetching collection
             {
                 return true;
@@ -97,7 +121,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             return false;
         }
 
-        private void CreateHeadwordResource(int version, Resource resource, List<BookHeadwordData> headwordDataList, User user, DateTime now, BookVersionResource bookVersion)
+        private void CreateHeadwordResource(int version, Resource resource, List<BookHeadwordData> headwordDataList, User user, DateTime now, BookVersionResource bookVersion, Dictionary<string, PageResource> dbPagesByImage)
         {
             var firstHeadwordData = headwordDataList.First();
 
@@ -120,15 +144,25 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             foreach (var bookHeadwordData in headwordDataList)
             {
+                var dbPage = GetPageResourceByImage(dbPagesByImage, bookHeadwordData.Image);
                 var newDbHeadwordItem = new HeadwordItem
                 {
                     HeadwordResource = newDbHeadword,
                     Headword = bookHeadwordData.Headword,
                     HeadwordOriginal = bookHeadwordData.HeadwordOriginal,
-                    ResourcePage = null //TODO relation to Page
+                    ResourcePage = dbPage?.Resource
                 };
                 m_resourceRepository.Create(newDbHeadwordItem);
             }
+        }
+
+        private PageResource GetPageResourceByImage(Dictionary<string, PageResource> dbPagesByImage, string image)
+        {
+            if (image == null)
+                return null;
+
+            dbPagesByImage.TryGetValue(image, out var dbPage);
+            return dbPage;
         }
     }
 }

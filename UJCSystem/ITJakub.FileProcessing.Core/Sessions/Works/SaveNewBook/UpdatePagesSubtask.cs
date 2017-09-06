@@ -166,7 +166,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     var newResource = new Resource
                     {
                         Project = project,
-                        Name = pageTextData.BookPageData.XmlResource,
+                        Name = pageTextData.BookPageData.XmlResource ?? string.Empty, // Name is required
                         ContentType = ContentTypeEnum.Page,
                         NamedResourceGroup = resourceGroup,
                         ResourceType = ResourceTypeEnum.Text
@@ -180,6 +180,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newTextResource.Resource = originDbText.Resource;
                     newTextResource.VersionNumber = originDbText.VersionNumber + 1;
                     newTextResource.Resource.LatestVersion = newTextResource;
+                    newTextResource.Resource.Name = pageTextData.BookPageData.XmlResource ?? string.Empty; // Name is required
                 }
                 m_resourceRepository.Create(newTextResource);
             }

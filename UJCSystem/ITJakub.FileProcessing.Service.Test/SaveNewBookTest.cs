@@ -207,10 +207,12 @@ namespace ITJakub.FileProcessing.Service.Test
                 {
                     new BookPageData
                     {
-                        Text = "39v"
+                        Position = 1,
+                        Text = "39v",
                     },
                     new BookPageData
                     {
+                        Position = 2,
                         Text = "40r",
                         TermXmlIds = new List<string>
                         {
@@ -394,35 +396,40 @@ namespace ITJakub.FileProcessing.Service.Test
                     XmlEntryId = "null",
                     DefaultHeadword = "aaa",
                     SortOrder = "aaa-s",
-                    Headword = "aaa"
+                    Headword = "aaa",
+                    HeadwordOriginal = "aaa-o"
                 },
                 new BookHeadwordData // same data in DB
                 {
                     XmlEntryId = "id-1",
                     DefaultHeadword = "aaa",
                     SortOrder = "aaa-s",
-                    Headword = "aaa"
+                    Headword = "aaa",
+                    HeadwordOriginal = "aaa-o"
                 },
                 new BookHeadwordData
                 {
                     XmlEntryId = "id-1",
                     DefaultHeadword = "aaa",
                     SortOrder = "aaa-s",
-                    Headword = "bbb"
+                    Headword = "bbb",
+                    HeadwordOriginal = "bbb-o"
                 },
                 new BookHeadwordData // HeadwordItem is different
                 {
                     XmlEntryId = "id-2",
                     DefaultHeadword = "ccc",
                     SortOrder = "ccc-s",
-                    Headword = "aaa"
+                    Headword = "aaa",
+                    HeadwordOriginal = "aaa-o"
                 },
                 new BookHeadwordData
                 {
                     XmlEntryId = "id-2",
                     DefaultHeadword = "ccc",
                     SortOrder = "ccc-s",
-                    Headword = "bbb-different"
+                    Headword = "bbb-different",
+                    HeadwordOriginal = "bbb-o"
                 },
             };
             
@@ -432,7 +439,7 @@ namespace ITJakub.FileProcessing.Service.Test
             };
 
             var subtask = new UpdateHeadwordsSubtask(resourceRepository);
-            subtask.UpdateHeadwords(41, 3, 2, "upload", bookData);
+            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, "upload", bookData, null);
             
             var createdHeadwordResources = resourceRepository.CreatedObjects.OfType<HeadwordResource>().ToList();
             var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
@@ -446,6 +453,90 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.AreEqual(1, newHeadword.VersionNumber);
             Assert.AreEqual(2, updatedHeadword.VersionNumber);
+        }
+
+        [TestMethod]
+        public void TestUpdateHeadwordsWithImages()
+        {
+            var unitOfWork = new MockUnitOfWork();
+            var resourceRepository = new MockResourceRepository(unitOfWork);
+
+            var headwordDataList = new List<BookHeadwordData>
+            {
+                new BookHeadwordData
+                {
+                    XmlEntryId = "null",
+                    DefaultHeadword = "aaa",
+                    SortOrder = "aaa-s",
+                    Headword = "aaa1",
+                    Image = "img1.jpg"
+                },
+                new BookHeadwordData
+                {
+                    XmlEntryId = "null",
+                    DefaultHeadword = "aaa",
+                    SortOrder = "aaa-s",
+                    Headword = "aaa2",
+                    Image = "img2.jpg"
+                },
+            };
+            var pageDataList = new List<BookPageData>
+            {
+                new BookPageData
+                {
+                    Position = 1,
+                    Text = "page1",
+                    XmlId = "id-1"
+                },
+                new BookPageData
+                {
+                    Position = 2,
+                    Text = "page2",
+                    XmlId = "id-2",
+                    Image = "img1.jpg"
+                },
+                new BookPageData
+                {
+                    Position = 3,
+                    Text = "page3",
+                    XmlId = "id-3",
+                    Image = "img2.jpg"
+                },
+                new BookPageData
+                {
+                    Position = 4,
+                    Text = "page4",
+                    XmlId = "id-4",
+                    Image = "img3.jpg"
+                },
+            };
+
+            var bookData = new BookData
+            {
+                BookHeadwords = headwordDataList,
+                Pages = pageDataList
+            };
+
+            var dbPages = pageDataList.Select(x => new PageResource
+            {
+                Name = x.Text,
+                Position = x.Position,
+                Resource = new Resource
+                {
+                    Name = x.Text
+                }
+            }).ToList();
+
+            var subtask = new UpdateHeadwordsSubtask(resourceRepository);
+            subtask.UpdateHeadwords(41, MockResourceRepository.HeadwordBookVersionId, 2, "upload", bookData, dbPages);
+
+            var createdHeadwordItems = resourceRepository.CreatedObjects.OfType<HeadwordItem>().ToList();
+            Assert.AreEqual(2, createdHeadwordItems.Count);
+
+            var hw1 = createdHeadwordItems.First(x => x.Headword == "aaa1");
+            var hw2 = createdHeadwordItems.First(x => x.Headword == "aaa2");
+            Assert.AreEqual("page2", hw1.ResourcePage.Name);
+            Assert.AreEqual("page3", hw2.ResourcePage.Name);
         }
 
         [TestMethod]
