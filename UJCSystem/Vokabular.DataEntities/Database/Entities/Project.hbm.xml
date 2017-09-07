@@ -13,6 +13,11 @@
 
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
+    <bag name="Snapshots">
+      <key column="Project" />
+      <one-to-many class="Snapshot" />
+    </bag>
+
     <bag name="Resources">
       <key column="Project" />
       <one-to-many class="Resource" />
@@ -47,6 +52,6 @@
       <key column="Project" />
       <many-to-many class="Keyword" column="Keyword" />
     </bag>
-    
+
   </class>
 </hibernate-mapping>

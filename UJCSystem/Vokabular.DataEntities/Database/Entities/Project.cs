@@ -29,6 +29,9 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<Keyword> Keywords { get; set; }
 
+        public virtual IList<Snapshot> Snapshots { get; set; }
+
+
         public virtual bool Equals(Project other)
         {
             if (ReferenceEquals(null, other)) return false;

@@ -20,6 +20,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual User CreatedByUser { get; set; }
 
+        public virtual List<Snapshot> Snapshots { get; set; }
+
         public virtual bool Equals(ResourceVersion other)
         {
             if (ReferenceEquals(null, other)) return false;

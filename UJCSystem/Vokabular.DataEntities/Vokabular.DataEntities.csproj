@@ -57,6 +57,7 @@
     <EmbeddedResource Include="Database\Entities\NamedResourceGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\NewsSyndicationItem.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\OriginalAuthor.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\Snapshot.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Project.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectOriginalAuthor.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\ProjectResponsiblePerson.hbm.xml" />

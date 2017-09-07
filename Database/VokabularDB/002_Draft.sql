@@ -42,6 +42,13 @@ BEGIN TRAN
 		CONSTRAINT [PK_Snapshot_ResourceVersion(Snapshot)_Snapshot_ResourceVersion(ResourceVersion)] PRIMARY KEY ([Snapshot], [ResourceVersion])
     )
 
+	CREATE TABLE [dbo].[Snapshot_BookType]
+    (
+		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_BookType(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
+		[BookType] int NOT NULL CONSTRAINT [FK_Snapshot_BookType(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+		CONSTRAINT [PK_Snapshot_BookType(Snapshot)_Snapshot_BookType(BookType)] PRIMARY KEY ([Snapshot], [BookType])
+    )
+
 	
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

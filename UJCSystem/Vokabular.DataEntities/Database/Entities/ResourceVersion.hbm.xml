@@ -17,6 +17,12 @@
     
     <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
 
+    <bag name="Snapshots" table="Snapshot_ResourceVersion" inverse="true" lazy="true">
+      <key column="Snapshot" />
+      <many-to-many class="ResourceVersion" column="ResourceVersion" />
+    </bag>
+    
+
     <joined-subclass table="PageResource" name="PageResource" >
       <key column="ResourceVersionId" />
       
