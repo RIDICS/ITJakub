@@ -111,6 +111,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbChapter.Position = bookContentItem.ItemOrder;
                         dbChapter.ResourceBeginningPage = dbPage.Resource;
                         dbChapter.ParentResource = parentChapterResourceResource;
+                        // Update resource name is not required (ChapterResources are distinguish by name)
 
                         m_resourceRepository.Update(dbChapter);
                     }

@@ -141,6 +141,7 @@ BEGIN TRAN
 	   [Name] varchar(255) NOT NULL,
 	   [ResourceType] smallint NOT NULL,
 	   [ContentType] smallint NOT NULL,
+	   [IsRemoved] bit NOT NULL,
 	   [NamedResourceGroup] bigint NULL CONSTRAINT [FK_Resource(NamedResourceGroup)_NamedResourceGroup(Id)] FOREIGN KEY REFERENCES [dbo].[NamedResourceGroup] (Id)
     )
 

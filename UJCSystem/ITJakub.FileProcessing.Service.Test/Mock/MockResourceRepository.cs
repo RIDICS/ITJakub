@@ -180,6 +180,18 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     ParentResource = new Resource {Id = 80},
                     ExternalId = "xml-40-v",
                     VersionNumber = 1
+                },
+                new TextResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 700,
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Text
+                    },
+                    ParentResource = new Resource {Id = 90},
+                    ExternalId = "xml-copy",
+                    VersionNumber = 1
                 }
             };
         }
@@ -194,7 +206,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     {
                         Id = 900,
                         ContentType = ContentTypeEnum.Page,
-                        ResourceType = ResourceTypeEnum.Text
+                        ResourceType = ResourceTypeEnum.Image
                     },
                     ParentResource = new Resource {Id = 90},
                     FileName = "image_40r.jpg",
@@ -206,10 +218,22 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     {
                         Id = 800,
                         ContentType = ContentTypeEnum.Page,
-                        ResourceType = ResourceTypeEnum.Text
+                        ResourceType = ResourceTypeEnum.Image
                     },
                     ParentResource = new Resource {Id = 80},
                     FileName = "image_40v.jpg",
+                    VersionNumber = 1
+                },
+                new ImageResource
+                {
+                    Resource = new Resource
+                    {
+                        Id = 700,
+                        ContentType = ContentTypeEnum.Page,
+                        ResourceType = ResourceTypeEnum.Image
+                    },
+                    ParentResource = new Resource {Id = 90},
+                    FileName = "image_copy.jpg",
                     VersionNumber = 1
                 }
             };
@@ -394,9 +418,9 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     {
                         Id = 1
                     },
-                    Position = 1,
+                    Position = 88,
                     VersionNumber = 1,
-                    Name = "track-1"
+                    Name = "track-8"
                 },
                 new TrackResource
                 {

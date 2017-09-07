@@ -7,6 +7,8 @@
     
     <property name="Name" not-null="true" />
     
+    <property name="IsRemoved" not-null="true" />
+    
     <property name="ContentType" not-null="true" />
     
     <property name="ResourceType" not-null="true" />

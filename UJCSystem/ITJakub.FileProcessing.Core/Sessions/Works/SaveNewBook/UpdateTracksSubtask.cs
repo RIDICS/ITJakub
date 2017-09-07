@@ -33,13 +33,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 .ToDictionary(x => x.Key, x => x.ToList());
             foreach (var track in bookData.Tracks)
             {
-                var dbTrack = dbTracks.FirstOrDefault(x => x.Position == track.Position);
+                var dbTrack = dbTracks.FirstOrDefault(x => x.Name == track.Name);
                 if (dbTrack == null)
                 {
                     var newResource = new Resource
                     {
                         Project = project,
-                        Name = string.Empty,
+                        Name = track.Name,
                         ContentType = ContentTypeEnum.AudioTrack,
                         ResourceType = ResourceTypeEnum.AudioTrack,
                     };
@@ -67,6 +67,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     dbTrack.Comment = comment;
                     dbTrack.CreateTime = now;
                     dbTrack.CreatedByUser = user;
+                    // Update resource name is not required (TrackResources are distinguish by name)
 
                     m_resourceRepository.Update(dbTrack);
                 }
@@ -77,7 +78,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         
         private bool IsTrackUpdated(TrackResource dbTrack, TrackData trackData)
         {
-            return dbTrack.Name != trackData.Name || dbTrack.Text != trackData.Text;
+            return dbTrack.Name != trackData.Name ||
+                   dbTrack.Text != trackData.Text ||
+                   dbTrack.Position != trackData.Position;
         }
 
         private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, string comment, User user, DateTime now)
@@ -99,7 +102,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         var newDbResource = new Resource
                         {
-                            Name = string.Empty,
+                            Name = trackRecordingData.FileName,
                             ContentType = ContentTypeEnum.AudioTrack,
                             ResourceType = ResourceTypeEnum.Audio,
                             Project = project,
@@ -143,6 +146,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 ParentResource = resourceTrack
             };
             resource.LatestVersion = newDbAudio;
+            resource.Name = data.FileName;
             m_resourceRepository.Create(newDbAudio);
         }
 

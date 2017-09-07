@@ -254,12 +254,12 @@ namespace ITJakub.FileProcessing.Service.Test
                     new BookPageData
                     {
                         Text = "39v",
-                        XmlId = "new-xml-39-v"
+                        XmlId = "xml-39-v"
                     },
                     new BookPageData
                     {
                         Text = "40r",
-                        XmlId = "new-xml-40-r"
+                        XmlId = "xml-40-r"
                     }
                 }
             };
@@ -273,8 +273,8 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(2, createdTexts.Count);
             Assert.AreEqual(0, updatedTexts.Count);
 
-            var firstText = createdTexts.First(x => x.ExternalId == "new-xml-39-v");
-            var secondText = createdTexts.First(x => x.ExternalId == "new-xml-40-r");
+            var firstText = createdTexts.First(x => x.ExternalId == "xml-39-v");
+            var secondText = createdTexts.First(x => x.ExternalId == "xml-40-r");
 
             Assert.AreEqual(1, firstText.VersionNumber);
             Assert.AreEqual(2, secondText.VersionNumber);
