@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.Pages == null)
                 return;
 
-            var newPageNames = new HashSet<string>();
+            var importedPageResourceIds = new HashSet<long>();
             var newPageTextResources = new List<NewPageTextData>();
             var newPageImageResources = new List<ImageResource>();
             var resultPageResourceList = new List<PageResource>();
@@ -42,8 +42,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var page in bookData.Pages)
             {
                 PageResource dbPageResource;
-                newPageNames.Add(page.Text);
-
+                
                 if (!dbPagesDict.TryGetValue(page.Text, out dbPageResource))
                 {
                     var newResource = new Resource
@@ -80,7 +79,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         dbPageResource.Comment = comment;
                         dbPageResource.Terms = PrepareTermList(page.TermXmlIds, dbTermCache);
                         // Update resource name is not required (PageResources are distinguish by name)
+
                         m_resourceRepository.Update(dbPageResource);
+                        importedPageResourceIds.Add(dbPageResource.Id);
                     //}
                 }
 
@@ -128,7 +129,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             ResultPageResourceList = resultPageResourceList;
 
             // Update positions to unused pages
-            var unusedDbPages = dbPages.Where(x => !newPageNames.Contains(x.Name));
+            var unusedDbPages = dbPages.Where(x => !importedPageResourceIds.Contains(x.Id));
             foreach (var unusedDbPage in unusedDbPages)
             {
                 unusedDbPage.Position = 0;

@@ -23,18 +23,19 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var now = DateTime.UtcNow;
-            var newChapterNames = new HashSet<string>();
+            var importedChapterResourceIds = new HashSet<long>();
             var user = m_resourceRepository.Load<User>(userId);
             var project = m_resourceRepository.Load<Project>(projectId);
 
             var dbChapters = m_resourceRepository.GetProjectChapters(projectId);
             var dbChaptersByName = dbChapters.ToDictionary(x => x.Name);
-            //var dbPages = m_resourceRepository.GetProjectPages(projectId);
-            var dbPagesByName = dbPageResources?.ToDictionary(x => x.Name);
+            var dbPagesByName = dbPageResources != null
+                ? dbPageResources.ToDictionary(x => x.Name)
+                : new Dictionary<string, PageResource>();
 
             var chapterRecursionData = new ChapterRecursionData
             {
-                NewChapterNames = newChapterNames,
+                ImportedChapterResourceIds = importedChapterResourceIds,
                 DbChaptersByName = dbChaptersByName,
                 DbPagesByName = dbPagesByName,
                 Project = project,
@@ -45,7 +46,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             UpdateChapterList(bookData.BookContentItems, null, chapterRecursionData);
             
-            var unusedDbChapters = dbChapters.Where(x => !newChapterNames.Contains(x.Name));
+            var unusedDbChapters = dbChapters.Where(x => !importedChapterResourceIds.Contains(x.Id));
             foreach (var unusedDbChapter in unusedDbChapters)
             {
                 unusedDbChapter.Position = 0;
@@ -53,13 +54,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
         }
 
-        //TODO dbPagesByName can be null
         private void UpdateChapterList(IList<BookContentItemData> bookContentItems, ChapterResource parentChapter, ChapterRecursionData data)
         {
             var parentChapterResourceResource = parentChapter?.Resource;
             var parentChapterResourceResourceId = parentChapterResourceResource?.Id;
 
-            var newChapterNames = data.NewChapterNames;
+            var importedChapterResourceIds = data.ImportedChapterResourceIds;
             var dbPagesByName = data.DbPagesByName;
             var dbChaptersByName = data.DbChaptersByName;
             var project = data.Project;
@@ -69,8 +69,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             foreach (var bookContentItem in bookContentItems)
             {
-                newChapterNames.Add(bookContentItem.Text);
-
                 PageResource dbPage;
                 if (!dbPagesByName.TryGetValue(bookContentItem.Page.Text, out dbPage))
                 {
@@ -115,6 +113,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
                         m_resourceRepository.Update(dbChapter);
                     }
+                    importedChapterResourceIds.Add(dbChapter.Id);
                 }
 
                 UpdateChapterList(bookContentItem.SubContentItems, dbChapter, data);
@@ -131,7 +130,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         private class ChapterRecursionData
         {
-            public HashSet<string> NewChapterNames { get; set; }
+            public HashSet<long> ImportedChapterResourceIds { get; set; }
             public Dictionary<string, ChapterResource> DbChaptersByName { get; set; }
             public Dictionary<string, PageResource> DbPagesByName { get; set; }
             public Project Project { get; set; }

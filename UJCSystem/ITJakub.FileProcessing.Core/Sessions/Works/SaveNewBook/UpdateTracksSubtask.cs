@@ -22,6 +22,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.Tracks == null)
                 return;
 
+            var importedTrackResourceIds = new List<long>();
             var now = DateTime.UtcNow;
             var project = m_resourceRepository.Load<Project>(projectId);
             var user = m_resourceRepository.Load<User>(userId);
@@ -70,9 +71,22 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     // Update resource name is not required (TrackResources are distinguish by name)
 
                     m_resourceRepository.Update(dbTrack);
+                    importedTrackResourceIds.Add(dbTrack.Id);
+                }
+                else
+                {
+                    importedTrackResourceIds.Add(dbTrack.Id);
                 }
 
                 UpdateAudioResources(track.Recordings, dbAudioGroups, dbTrack, project, comment, user, now);
+            }
+
+            // Update positions of unused tracks
+            var unusedDbTracks = dbTracks.Where(x => !importedTrackResourceIds.Contains(x.Id));
+            foreach (var unusedDbTrack in unusedDbTracks)
+            {
+                unusedDbTrack.Position = 0;
+                m_resourceRepository.Update(unusedDbTrack);
             }
         }
         
@@ -85,8 +99,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, string comment, User user, DateTime now)
         {
-            var updatedResourceIds = new List<long>();
-
             List<AudioResource> dbAudioResources;
             if (!dbAudioGroups.TryGetValue(dbTrack.Resource.Id, out dbAudioResources))
             {
@@ -113,21 +125,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     else
                     {
                         CreateAudioResource(dbAudioResource.Resource, dbTrack.Resource, dbAudioResource.VersionNumber + 1, trackRecordingData, comment, user, now);
-                        updatedResourceIds.Add(dbAudioResource.Resource.Id);
                     }
                 }
             }
-            
-            // Unassign remaining audio resources from Track
-            //foreach (var dbAudioResource in dbAudioResources)
-            //{
-            //    if (!updatedResourceIds.Contains(dbAudioResource.Resource.Id))
-            //    {
-            //        dbAudioResource.ParentResource = null;
-            //        m_resourceRepository.Update(dbAudioResource);
-            //    }
-            //}
-            // TODO for removing parentResource is required create new ResourceVersion!
         }
 
         private void CreateAudioResource(Resource resource, Resource resourceTrack, int version, TrackRecordingData data, string comment, User user, DateTime now)

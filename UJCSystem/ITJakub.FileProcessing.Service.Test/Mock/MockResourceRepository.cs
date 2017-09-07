@@ -126,6 +126,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new PageResource
                 {
+                    Id = 901,
                     Resource = new Resource
                     {
                         Project = project,
@@ -139,6 +140,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new PageResource
                 {
+                    Id = 902,
                     Resource = new Resource
                     {
                         Project = project,
@@ -255,6 +257,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new ChapterResource
                 {
+                    Id = 1051,
                     Resource = new Resource
                     {
                         Id = 900,
@@ -268,6 +271,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new ChapterResource
                 {
+                    Id = 1052,
                     Resource = new Resource
                     {
                         Id = 800,
@@ -414,6 +418,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             {
                 new TrackResource
                 {
+                    Id = 1005,
                     Resource = new Resource
                     {
                         Id = 1
@@ -424,6 +429,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                 },
                 new TrackResource
                 {
+                    Id = 1006,
                     Resource = new Resource
                     {
                         Id = 2
