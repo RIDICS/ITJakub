@@ -104,6 +104,7 @@
     <Compile Include="Sessions\ResourceTypeResolvers\TransformationTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ThumbDbTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\UnknownXmlTypeResolver.cs" />
+    <Compile Include="Sessions\Works\CreateSnapshotForImportedDataWork.cs" />
     <Compile Include="Sessions\Works\Helpers\AuthorNameEqualityComparer.cs" />
     <Compile Include="Sessions\Works\Helpers\PersonHelper.cs" />
     <Compile Include="Sessions\Works\Helpers\ProjectResponsibleNameEqualityComparer.cs" />

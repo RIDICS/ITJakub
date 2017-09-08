@@ -29,10 +29,13 @@ BEGIN TRAN
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Snapshot(Id)] PRIMARY KEY CLUSTERED,
 		[VersionNumber] int NOT NULL,
 		[CreateTime] datetime NOT NULL,
+		[PublishTime] datetime NULL,
 		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 		[User] int NOT NULL CONSTRAINT [FK_Snapshot(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[Comment] nvarchar(2000)
 	)
+
+	ALTER TABLE [dbo].[Project] ADD [LatestPublishedSnapshot] bigint NULL CONSTRAINT [FK_Project(LatestPublishedSnapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id)
 
 	
 	CREATE TABLE [dbo].[Snapshot_ResourceVersion]

@@ -51,5 +51,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.ExternalId == externalId)
                 .SingleOrDefault();
         }
+
+        public virtual Project GetProjectWithLatestPublishedSnapshot(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.LatestPublishedSnapshot).Eager
+                .SingleOrDefault();
+        }
     }
 }

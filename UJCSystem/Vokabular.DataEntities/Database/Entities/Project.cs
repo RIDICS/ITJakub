@@ -15,6 +15,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual User CreatedByUser { get; set; }
 
+        public virtual Snapshot LatestPublishedSnapshot { get; set; }
+
         public virtual IList<Resource> Resources { get; set; }
 
         public virtual IList<ProjectOriginalAuthor> Authors { get; set; }

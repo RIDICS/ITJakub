@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
@@ -30,6 +31,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             saveNewBookDataWork.Execute();
 
             // TODO save all new project data to database
+
+            // TODO determine if Snapshot should be created
+            var projectId = saveNewBookDataWork.ProjectId;
+            var userId = saveNewBookDataWork.UserId;
+            var message = saveNewBookDataWork.Message;
+            var resourceVersionIds = new List<long>(); // TODO specify correct IDs from saveNewBookDataWork
+
+            var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, message);
+            createNewSnapshot.Execute();
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);
             //var bookVersion = m_bookVersionRepository.FindById<BookVersion>(bookVersionId);

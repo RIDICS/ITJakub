@@ -9,6 +9,8 @@
 
     <property name="CreateTime" not-null="true" type="UtcDateTime" />
     
+    <property name="PublishTime" not-null="false" type="UtcDateTime" />
+    
     <property name="Comment" not-null="false" />
 
     <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />

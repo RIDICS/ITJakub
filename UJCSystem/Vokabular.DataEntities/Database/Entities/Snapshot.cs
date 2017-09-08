@@ -8,6 +8,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual long Id { get; set; }
         public virtual int VersionNumber { get; set; }
         public virtual DateTime CreateTime { get; set; }
+        public virtual DateTime PublishTime { get; set; }
         public virtual string Comment { get; set; }
         public virtual Project Project { get; set; }
         public virtual User User { get; set; }

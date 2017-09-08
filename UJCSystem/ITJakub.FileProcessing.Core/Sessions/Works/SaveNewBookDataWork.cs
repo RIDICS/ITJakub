@@ -43,7 +43,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             new UpdateAuthorsSubtask(m_metadataRepository).UpdateAuthors(m_projectId, m_bookData);
             new UpdateResponsiblePersonSubtask(m_metadataRepository).UpdateResponsiblePersonList(m_projectId, m_bookData);
-            new UpdateMetadataSubtask(m_metadataRepository).UpdateMetadata(m_projectId, m_userId, m_message, m_bookData);
+
+            var updateMetadataSubtask = new UpdateMetadataSubtask(m_metadataRepository);
+            updateMetadataSubtask.UpdateMetadata(m_projectId, m_userId, m_message, m_bookData);
+
             //new UpdateCategoriesSubtask(m_categoryRepository).UpdateCategoryList(m_projectId, m_bookData); TODO update database and mapping
             new UpdateLiteraryKindsSubtask(m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
             new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
@@ -69,5 +72,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             //throw new NotImplementedException();
         }
+
+        public string Message => m_message;
+
+        public int UserId => m_userId;
+
+        public long ProjectId => m_projectId;
     }
 }
