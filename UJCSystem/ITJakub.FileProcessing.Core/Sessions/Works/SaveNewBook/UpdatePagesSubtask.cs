@@ -13,6 +13,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
     {
         private readonly string DefaultImportResourceGroupName = "IMPORT";
         private readonly ResourceRepository m_resourceRepository;
+        private List<long> m_allImportedResourceVersionIds;
 
         public UpdatePagesSubtask(ResourceRepository resourceRepository)
         {
@@ -21,8 +22,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public List<PageResource> ResultPageResourceList { get; private set; }
 
+        public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
+
         public void UpdatePages(long projectId, long bookVersionId, int userId, string comment, BookData bookData, Dictionary<string, Term> dbTermCache)
         {
+            m_allImportedResourceVersionIds = new List<long>();
             if (bookData.Pages == null)
                 return;
 
@@ -84,7 +88,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         importedPageResourceIds.Add(dbPageResource.Id);
                     //}
                 }
-
+                
                 if (!string.IsNullOrEmpty(page.XmlId))
                 {
                     var newTextResource = new TextResource
@@ -123,6 +127,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newPageImageResources.Add(newImageResource);
                 }
 
+                m_allImportedResourceVersionIds.Add(dbPageResource.Id);
                 resultPageResourceList.Add(dbPageResource);
             }
 
@@ -194,6 +199,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newTextResource.Resource.Name = pageTextData.BookPageData.XmlResource ?? string.Empty; // Name is required
                 }
                 m_resourceRepository.Create(newTextResource);
+                m_allImportedResourceVersionIds.Add(newTextResource.Id);
             }
         }
 
@@ -243,6 +249,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     newImageResource.Resource.Name = newImageResource.FileName;
                 }
                 m_resourceRepository.Create(newImageResource);
+                m_allImportedResourceVersionIds.Add(newImageResource.Id);
             }
         }
 

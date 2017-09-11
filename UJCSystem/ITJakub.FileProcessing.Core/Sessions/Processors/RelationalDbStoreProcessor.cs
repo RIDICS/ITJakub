@@ -26,19 +26,17 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
-            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_categoryRepository, m_resourceRepository,
-                resourceDirector);
+            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
-
-            // TODO save all new project data to database
 
             // TODO determine if Snapshot should be created
             var projectId = saveNewBookDataWork.ProjectId;
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
-            var resourceVersionIds = new List<long>(); // TODO specify correct IDs from saveNewBookDataWork
+            var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
+            var bookData = saveNewBookDataWork.BookData;
 
-            var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, message);
+            var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message);
             createNewSnapshot.Execute();
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);

@@ -11,14 +11,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
     public class UpdateTracksSubtask
     {
         private readonly ResourceRepository m_resourceRepository;
-
+        private List<long> m_allImportedResourceVersionIds;
+        
         public UpdateTracksSubtask(ResourceRepository resourceRepository)
         {
             m_resourceRepository = resourceRepository;
         }
 
+        public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
+
         public void UpdateTracks(long projectId, int userId, string comment, BookData bookData)
         {
+            m_allImportedResourceVersionIds = new List<long>();
             if (bookData.Tracks == null)
                 return;
 
@@ -78,6 +82,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     importedTrackResourceIds.Add(dbTrack.Id);
                 }
 
+                m_allImportedResourceVersionIds.Add(dbTrack.Id);
                 UpdateAudioResources(track.Recordings, dbAudioGroups, dbTrack, project, comment, user, now);
             }
 
@@ -148,6 +153,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             resource.LatestVersion = newDbAudio;
             resource.Name = data.FileName;
             m_resourceRepository.Create(newDbAudio);
+            m_allImportedResourceVersionIds.Add(newDbAudio.Id);
         }
 
         public void UpdateFullBookTracks(long projectId, int userId, string comment, BookData bookData)

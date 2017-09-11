@@ -11,14 +11,18 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
     public class UpdateChaptersSubtask
     {
         private readonly ResourceRepository m_resourceRepository;
+        private List<long> m_allImportedResourceVersionIds;
 
         public UpdateChaptersSubtask(ResourceRepository resourceRepository)
         {
             m_resourceRepository = resourceRepository;
         }
 
+        public List<long> ImportedResourceVersionIds => m_allImportedResourceVersionIds;
+
         public void UpdateChapters(long projectId, int userId, string comment, BookData bookData, List<PageResource> dbPageResources)
         {
+            m_allImportedResourceVersionIds = new List<long>();
             if (bookData.BookContentItems == null)
                 return;
 
@@ -116,6 +120,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     importedChapterResourceIds.Add(dbChapter.Id);
                 }
 
+                m_allImportedResourceVersionIds.Add(dbChapter.Id);
                 UpdateChapterList(bookContentItem.SubContentItems, dbChapter, data);
             }
         }

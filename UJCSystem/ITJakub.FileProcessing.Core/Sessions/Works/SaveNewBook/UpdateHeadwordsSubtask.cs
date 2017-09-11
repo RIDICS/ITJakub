@@ -12,11 +12,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
     {
         private const int BatchSize = 1000;
         private readonly ResourceRepository m_resourceRepository;
+        private List<long> m_importedResourceVersionIds;
 
         public UpdateHeadwordsSubtask(ResourceRepository resourceRepository)
         {
             m_resourceRepository = resourceRepository;
         }
+
+        public List<long> ImportedResourceVersionIds => m_importedResourceVersionIds;
 
         private Dictionary<string, PageResource> CreateImageToPageResourceDictionary(BookData bookData, List<PageResource> dbPageResources)
         {
@@ -41,6 +44,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
         public void UpdateHeadwords(long projectId, long bookVersionId, int userId, string message, BookData bookData, List<PageResource> dbPageResources)
         {
+            m_importedResourceVersionIds = new List<long>();
             if (bookData.BookHeadwords == null)
                 return;
 
@@ -89,6 +93,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 else if (IsHeadwordChanged(dbHeadword, headwordDataList, bookVersionId))
                 {
                     CreateHeadwordResource(dbHeadword.VersionNumber + 1, dbHeadword.Resource, headwordDataList, user, now, bookVersion, dbPagesByImage);
+                }
+                else
+                {
+                    m_importedResourceVersionIds.Add(dbHeadword.Id); // no new ResourceVersion, but imported
                 }
             }
         }
@@ -141,6 +149,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             resource.LatestVersion = newDbHeadword;
 
             m_resourceRepository.Create(newDbHeadword);
+            m_importedResourceVersionIds.Add(newDbHeadword.Id);
 
             foreach (var bookHeadwordData in headwordDataList)
             {
