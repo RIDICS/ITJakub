@@ -370,7 +370,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateResponsiblePerson([FromBody] NewResponsiblePersonContract request)
+        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
         {
             using (var client = GetRestClient())
             {

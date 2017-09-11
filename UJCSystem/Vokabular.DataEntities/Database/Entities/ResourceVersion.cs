@@ -20,7 +20,7 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual User CreatedByUser { get; set; }
 
-        public virtual List<Snapshot> Snapshots { get; set; }
+        public virtual IList<Snapshot> Snapshots { get; set; }
 
         public virtual bool Equals(ResourceVersion other)
         {

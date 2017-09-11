@@ -58,7 +58,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
                 if (parameters.IncludeResponsiblePerson)
                 {
-                    resultContract.ResponsiblePersonList = Mapper.Map<List<ResponsiblePersonContract>>(project.ResponsiblePersons);
+                    resultContract.ResponsiblePersonList = Mapper.Map<List<ProjectResponsiblePersonContract>>(project.ResponsiblePersons);
                 }
                 if (parameters.IncludeKind)
                 {

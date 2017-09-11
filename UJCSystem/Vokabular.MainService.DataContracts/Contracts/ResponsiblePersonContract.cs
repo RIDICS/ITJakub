@@ -9,8 +9,8 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string LastName { get; set; }
     }
 
-    public class NewResponsiblePersonContract : ResponsiblePersonContract
+    public class ProjectResponsiblePersonContract : ResponsiblePersonContract
     {
-        public IList<int> ResponsibleTypeIdList { get; set; }
+        public ResponsibleTypeContract ResponsibleType { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Vokabular.DataEntities.Database.Daos;
+﻿using System;
+using Vokabular.DataEntities.Database.Daos;
 
 namespace Vokabular.DataEntities.Database.UnitOfWork
 {
@@ -13,7 +14,20 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public void Execute()
         {
-            m_dao.InvokeUnitOfWork(ExecuteWorkImplementation);
+            var unitOfWork = m_dao.UnitOfWork;
+            try
+            {
+                unitOfWork.BeginTransaction();
+
+                ExecuteWorkImplementation();
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
+
+            unitOfWork.Commit();
         }
 
         protected abstract void ExecuteWorkImplementation();
@@ -30,7 +44,22 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 
         public T Execute()
         {
-            return m_dao.InvokeUnitOfWork(ExecuteWorkImplementation);
+            T result;
+            var unitOfWork = m_dao.UnitOfWork;
+            try
+            {
+                unitOfWork.BeginTransaction();
+
+                result = ExecuteWorkImplementation();
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                throw;
+            }
+
+            unitOfWork.Commit();
+            return result;
         }
 
         protected abstract T ExecuteWorkImplementation();

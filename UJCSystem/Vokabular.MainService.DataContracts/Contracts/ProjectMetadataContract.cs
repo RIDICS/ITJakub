@@ -34,6 +34,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public IList<LiteraryGenreContract> LiteraryGenreList { get; set; }
         public IList<LiteraryKindContract> LiteraryKindList { get; set; }
         public IList<OriginalAuthorContract> AuthorList { get; set; }
-        public IList<ResponsiblePersonContract> ResponsiblePersonList { get; set; }
+        public IList<ProjectResponsiblePersonContract> ResponsiblePersonList { get; set; }
     }
 }

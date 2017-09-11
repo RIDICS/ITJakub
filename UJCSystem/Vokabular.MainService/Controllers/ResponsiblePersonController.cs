@@ -16,7 +16,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("")]
-        public int CreateResponsiblePerson([FromBody] NewResponsiblePersonContract responsiblePerson)
+        public int CreateResponsiblePerson([FromBody] ResponsiblePersonContract responsiblePerson)
         {
             return m_personManager.CreateResponsiblePerson(responsiblePerson);
         }

@@ -22,7 +22,7 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
-        public int CreateResponsiblePerson(NewResponsiblePersonContract responsiblePerson)
+        public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
         {
             var resultId = new CreateResponsiblePersonWork(m_personRepository, responsiblePerson).Execute();
             return resultId;

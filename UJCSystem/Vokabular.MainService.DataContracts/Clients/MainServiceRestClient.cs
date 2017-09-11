@@ -433,7 +433,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateResponsiblePerson(NewResponsiblePersonContract responsiblePerson)
+        public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
         {
             try
             {
