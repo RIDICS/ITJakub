@@ -15,6 +15,10 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<MetadataResource, BookContract>()
                 .IncludeBase<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
+
+            CreateMap<MetadataResource, BookWithCategoriesContract>()
+                .IncludeBase<MetadataResource, BookContract>()
+                .ForMember(dest => dest.CategoryList, opt => opt.MapFrom(src => src.Resource.Project.Categories));
         }
     }
 }

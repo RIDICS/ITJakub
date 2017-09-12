@@ -577,11 +577,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
+        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
         {
             try
             {
-                var result = Get<List<BookContract>>($"book/{bookTypeEnum}");
+                var result = Get<List<BookWithCategoriesContract>>($"book/{bookTypeEnum}");
                 return result;
             }
             catch (HttpRequestException e)

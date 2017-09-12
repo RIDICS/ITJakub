@@ -1,6 +1,4 @@
-﻿using Vokabular.MainService.DataContracts.Contracts.Type;
-
-namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class CategoryContract
     {
@@ -11,7 +9,5 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string ExternalId { get; set; }
 
         public string Description { get; set; }
-
-        public BookTypeEnumContract BookType { get; set; }
     }
 }

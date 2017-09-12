@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -170,22 +169,13 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult GetEditionsWithCategories()
         {
-            //using (var client = GetRestClient())
+            var result = GetBooksAndCategories();
+            return Json(result);
+            //using (var client = GetMainServiceClient())
             //{
-            //    var books = client.GetBooksByType(AreaBookType);
-            //    var result = new BookTypeSearchResultContract
-            //    {
-            //        BookType = OldAreaBookType,
-            //        Categories = new List<CategoryContract>(), // TODO currently no Category exists, fill correct data
-            //        Books = null
-            //    };
+            //    var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
+            //    return Json(grammarsWithCategories);
             //}
-
-            using (var client = GetMainServiceClient())
-            {
-                var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
-                return Json(grammarsWithCategories);
-            }
         }
 
 

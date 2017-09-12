@@ -155,6 +155,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
                 .OrderBy(x => x.Title).Asc
+                .Fetch(x => x.Resource.Project.Categories).Eager
                 .List();
         }
     }

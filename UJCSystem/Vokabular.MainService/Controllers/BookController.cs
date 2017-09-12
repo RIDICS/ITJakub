@@ -19,7 +19,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{bookType}")]
-        [ProducesResponseType(typeof(List<BookContract>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<BookWithCategoriesContract>), StatusCodes.Status200OK)]
         public IActionResult GetBooksByType(BookTypeEnumContract? bookType)
         {
             if (bookType == null)

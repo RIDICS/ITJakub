@@ -7,8 +7,6 @@ namespace Vokabular.DataEntities.Database.Entities {
 
         public virtual int Id { get; set; }
 
-        public virtual BookType BookType { get; set; }
-
         public virtual Category ParentCategory { get; set; }
 
         public virtual string ExternalId { get; set; }

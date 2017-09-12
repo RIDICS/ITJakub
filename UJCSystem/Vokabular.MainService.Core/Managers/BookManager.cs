@@ -17,11 +17,11 @@ namespace Vokabular.MainService.Core.Managers
             m_metadataRepository = metadataRepository;
         }
 
-        public List<BookContract> GetBooksByType(BookTypeEnumContract bookType)
+        public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum));
-            var resultList = Mapper.Map<List<BookContract>>(dbMetadataList);
+            var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
         }
     }

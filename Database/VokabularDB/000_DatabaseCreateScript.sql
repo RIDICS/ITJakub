@@ -72,7 +72,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[Category]
     (
        [Id] int IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
-	   [ExternalId] varchar(150) NOT NULL CONSTRAINT [UQ_Category(ExternalId)] UNIQUE,
+	   [ExternalId] varchar(150) NULL,
 	   [Description] varchar(150) NULL,
 	   [Path] varchar(MAX) NOT NULL,
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
