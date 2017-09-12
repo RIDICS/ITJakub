@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.AudioBooks;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
@@ -15,6 +14,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
@@ -29,10 +29,9 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType
-        {
-            get { return BookTypeEnumContract.AudioBook; }
-        }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
+
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.AudioBook;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -104,7 +103,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -113,7 +112,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
@@ -122,7 +121,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
+                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
                 return Json(audiosWithCategories);
             }
         }

@@ -5,16 +5,16 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
 {
     public static class RepositoryExtensions
     {
-        public static T InvokeUnitOfWork<T>(this IDao dao, Func<T> repositoryMethod)
+        public static TResult InvokeUnitOfWork<TResult, TDao>(this TDao dao, Func<TDao, TResult> repositoryMethod) where TDao : IDao
         {
-            T result;
+            TResult result;
             var unitOfWork = dao.UnitOfWork;
 
             try
             {
                 unitOfWork.BeginTransaction();
 
-                result = repositoryMethod.Invoke();
+                result = repositoryMethod.Invoke(dao);
             }
             catch (Exception)
             {
@@ -26,11 +26,11 @@ namespace Vokabular.DataEntities.Database.UnitOfWork
             return result;
         }
 
-        public static void InvokeUnitOfWork(this IDao dao, Action repositoryMethod)
+        public static void InvokeUnitOfWork<TDao>(this TDao dao, Action<TDao> repositoryMethod) where TDao : IDao
         {
-            Func<object> functionWrapper = () =>
+            Func<TDao, object> functionWrapper = (x) =>
             {
-                repositoryMethod.Invoke();
+                repositoryMethod.Invoke(dao);
                 return null;
             };
             dao.InvokeUnitOfWork(functionWrapper);

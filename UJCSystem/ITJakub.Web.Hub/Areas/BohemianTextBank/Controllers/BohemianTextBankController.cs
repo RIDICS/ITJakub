@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
@@ -16,6 +15,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 {
@@ -31,7 +31,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.TextBank; } }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.TextBank;
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.TextBank;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -90,7 +91,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
 
                 return Json(booksWithCategories);
             }
@@ -404,7 +405,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -413,7 +414,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
+                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, null, null);
                 return Json(result);
             }
         }

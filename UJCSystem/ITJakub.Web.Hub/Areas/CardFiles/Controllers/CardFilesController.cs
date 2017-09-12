@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net;
 using ITJakub.ITJakubService.DataContracts.Contracts;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
@@ -12,6 +11,7 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
 {
@@ -27,10 +27,8 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType
-        {
-            get { return BookTypeEnumContract.CardFile; }
-        }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.CardFile;
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.CardFile;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -74,7 +72,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
                             Title = cardFile.Name,
                             BookXmlId = cardFile.Id,
                             SubTitle = cardFile.Description,
-                            BookType = AreaBookType
+                            BookType = OldAreaBookType
                         });
                     }
                 }

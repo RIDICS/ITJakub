@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
@@ -17,6 +16,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
 {
@@ -32,7 +32,8 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Grammar; } }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Grammar;
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.Grammar;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -135,7 +136,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTermsByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
@@ -144,7 +145,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -153,7 +154,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
@@ -162,7 +163,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var editionsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
+                var editionsWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
                 return Json(editionsWithCategories);
             }
         }

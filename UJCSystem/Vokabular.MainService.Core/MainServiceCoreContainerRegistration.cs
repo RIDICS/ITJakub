@@ -10,6 +10,7 @@ namespace Vokabular.MainService.Core
     {
         public void Install(IIocContainer container)
         {
+            container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectManager>();
@@ -20,6 +21,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
 
+            container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();

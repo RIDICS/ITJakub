@@ -120,7 +120,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public List<VersionInfoSkeleton> GetVersionsByBookXmlId(string bookXmlId)
         {
-            var importLogs = m_projectRepository.InvokeUnitOfWork(() => m_projectRepository.GetAllImportLogByExternalId(bookXmlId));
+            var importLogs = m_projectRepository.InvokeUnitOfWork(x => x.GetAllImportLogByExternalId(bookXmlId));
             var vers = importLogs.Select(x => new VersionInfoSkeleton(x.AdditionalDescription, x.CreateTime)).ToList();
             vers.Add(new VersionInfoSkeleton(m_message, m_createTime, m_versionIdGenerator.Generate(m_createTime)));
             return vers;

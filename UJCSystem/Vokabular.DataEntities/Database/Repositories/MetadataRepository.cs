@@ -140,5 +140,22 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Text == text)
                 .SingleOrDefault();
         }
+
+        public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && bookTypeAlias.Type == bookTypeEnum)
+                .OrderBy(x => x.Title).Asc
+                .List();
+        }
     }
 }

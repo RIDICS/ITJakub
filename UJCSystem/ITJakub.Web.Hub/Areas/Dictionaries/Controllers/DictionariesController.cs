@@ -17,6 +17,7 @@ using ITJakub.Web.Hub.Models.Requests.Dictionary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using BookTypeEnumContract = Vokabular.MainService.DataContracts.Contracts.Type.BookTypeEnumContract;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -32,7 +33,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType { get { return BookTypeEnumContract.Dictionary; } }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Dictionary;
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.Dictionary;
 
         public ActionResult Index()
         {
@@ -75,7 +77,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
+                var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
 
                 return Json(dictionariesAndCategories);
             }
@@ -315,7 +317,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, AreaBookType);
+                var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -337,7 +339,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
-                    AreaBookType);
+                    OldAreaBookType);
                 return Json(result);
             }
         }
@@ -346,7 +348,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var resultCount = client.GetHeadwordCount(selectedCategoryIds, selectedBookIds, AreaBookType);
+                var resultCount = client.GetHeadwordCount(selectedCategoryIds, selectedBookIds, OldAreaBookType);
                 return Json(resultCount);
             }
         }
@@ -356,7 +358,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             using (var client = GetMainServiceClient())
             {
                 var start = (page - 1)*pageSize;
-                HeadwordListContract result = client.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize, AreaBookType);
+                HeadwordListContract result = client.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -365,7 +367,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var rowNumber = client.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, AreaBookType);
+                var rowNumber = client.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, OldAreaBookType);
 
                 var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
@@ -378,7 +380,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, AreaBookType);
+                var rowNumber = client.GetHeadwordRowNumberById(selectedCategoryIds, selectedBookIds, headwordBookId, headwordEntryXmlId, OldAreaBookType);
                 var resultPageNumber = (rowNumber - 1)/pageSize + 1;
                 return Json(resultPageNumber);
             }
@@ -388,7 +390,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, AreaBookType);
+                var result = client.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -397,7 +399,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }

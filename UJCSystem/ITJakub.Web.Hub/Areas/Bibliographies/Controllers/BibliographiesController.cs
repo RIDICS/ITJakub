@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using AutoMapper;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Controllers;
@@ -14,6 +13,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 {
@@ -29,10 +29,9 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType
-        {
-            get { return BookTypeEnumContract.BibliographicalItem; }
-        }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.BibliographicalItem;
+
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.BibliographicalItem;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {

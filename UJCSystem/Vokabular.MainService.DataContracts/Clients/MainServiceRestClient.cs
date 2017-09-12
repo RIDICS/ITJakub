@@ -576,5 +576,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public List<BookContract> GetBooksByType(BookTypeEnumContract bookTypeEnum)
+        {
+            try
+            {
+                var result = Get<List<BookContract>>($"book/{bookTypeEnum}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

@@ -17,6 +17,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using BookTypeEnumContract = Vokabular.MainService.DataContracts.Contracts.Type.BookTypeEnumContract;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -32,10 +33,9 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType
-        {
-            get { return BookTypeEnumContract.Edition; }
-        }
+        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
+
+        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.Edition;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -154,7 +154,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
                 return Json(result);
             }
         }
@@ -163,16 +163,27 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
 
         public ActionResult GetEditionsWithCategories()
         {
+            //using (var client = GetRestClient())
+            //{
+            //    var books = client.GetBooksByType(AreaBookType);
+            //    var result = new BookTypeSearchResultContract
+            //    {
+            //        BookType = OldAreaBookType,
+            //        Categories = new List<CategoryContract>(), // TODO currently no Category exists, fill correct data
+            //        Books = null
+            //    };
+            //}
+
             using (var client = GetMainServiceClient())
             {
-                var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
+                var grammarsWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
                 return Json(grammarsWithCategories);
             }
         }

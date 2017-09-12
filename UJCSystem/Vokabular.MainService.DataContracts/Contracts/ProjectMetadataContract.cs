@@ -25,6 +25,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string ManuscriptCountry { get; set; }
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
+        public string ManuscriptTitle { get; set; }
 
         public DateTime? LastModification { get; set; }
     }

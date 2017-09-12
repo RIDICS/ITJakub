@@ -1,5 +1,5 @@
-using ITJakub.Shared.Contracts;
 using ITJakub.Web.Hub.Core.Communication;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -10,5 +10,6 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         public abstract BookTypeEnumContract AreaBookType { get; }
+        public abstract Shared.Contracts.BookTypeEnumContract OldAreaBookType { get; }
     }
 }
