@@ -11,7 +11,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual DateTime PublishTime { get; set; }
         public virtual string Comment { get; set; }
         public virtual Project Project { get; set; }
-        public virtual User User { get; set; }
+        public virtual User CreatedByUser { get; set; }
         
         public virtual IList<ResourceVersion> ResourceVersions { get; set; }
         public virtual IList<BookType> BookTypes { get; set; }

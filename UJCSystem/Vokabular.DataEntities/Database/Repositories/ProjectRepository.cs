@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -51,12 +52,21 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.ExternalId == externalId)
                 .SingleOrDefault();
         }
-
-        public virtual Project GetProjectWithLatestPublishedSnapshot(long projectId)
+        
+        public virtual BookType GetBookTypeByEnum(BookTypeEnum bookTypeEnum)
         {
-            return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
-                .Fetch(x => x.LatestPublishedSnapshot).Eager
+            return GetSession().QueryOver<BookType>()
+                .Where(x => x.Type == bookTypeEnum)
+                .SingleOrDefault();
+        }
+
+        public virtual Snapshot GetLatestSnapshot(long projectId)
+        {
+            return GetSession().QueryOver<Snapshot>()
+                .Where(x => x.Project.Id == projectId)
+                .Fetch(x => x.Project).Eager
+                .OrderBy(x => x.VersionNumber).Desc
+                .Take(1)
                 .SingleOrDefault();
         }
     }

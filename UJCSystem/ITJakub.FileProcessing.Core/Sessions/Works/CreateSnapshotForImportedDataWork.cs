@@ -13,12 +13,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
-        private readonly long m_userId;
+        private readonly int m_userId;
         private readonly IList<long> m_resourceVersionIds;
         private readonly BookData m_bookData;
         private readonly string m_comment;
 
-        public CreateSnapshotForImportedDataWork(ProjectRepository projectRepository, long projectId, long userId, IList<long> resourceVersionIds, BookData bookData, string comment) : base(projectRepository)
+        public CreateSnapshotForImportedDataWork(ProjectRepository projectRepository, long projectId, int userId, IList<long> resourceVersionIds, BookData bookData, string comment) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_projectId = projectId;
@@ -32,38 +32,66 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         {
             var now = DateTime.UtcNow;
             var user = m_projectRepository.Load<User>(m_userId);
-            var project = m_projectRepository.GetProjectWithLatestPublishedSnapshot(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
+            var latestSnapshot = m_projectRepository.GetLatestSnapshot(m_projectId);
 
             var resourceVersions =
                 m_resourceVersionIds.Select(x => m_projectRepository.Load<ResourceVersion>(x)).ToList();
 
+            var bookTypes = CreateBookTypes();
+            var versionNumber = latestSnapshot != null ? latestSnapshot.VersionNumber : 0;
             var newDbSnapshot = new Snapshot
             {
                 Project = project,
-                BookTypes = null, // TODO need specify book types
+                BookTypes = bookTypes,
                 Comment = m_comment,
                 CreateTime = now,
-                PublishTime = now, // TODO determine if truly publish now
-                User = user,
-                VersionNumber = project.LatestPublishedSnapshot.VersionNumber + 1,
+                PublishTime = now,
+                CreatedByUser = user,
+                VersionNumber = versionNumber + 1,
                 ResourceVersions = resourceVersions
             };
 
             m_projectRepository.Create(newDbSnapshot);
+
+            project.LatestPublishedSnapshot = newDbSnapshot;
+            m_projectRepository.Update(project);
         }
 
-        private List<BookType> CreateBookType()
+        private List<BookType> CreateBookTypes()
         {
             var xmlIdToBookType = new Dictionary<string, BookTypeEnum>();
-            FillSubCategories(xmlIdToBookType, m_bookData.AllCategoriesHierarchy);
+            FillCategories(xmlIdToBookType, m_bookData.AllCategoriesHierarchy);
 
-            // TODO iterate over assigned category Xml Ids
-            throw new NotImplementedException();
+            var bookTypes = new List<BookTypeEnum>();
+            var resultList = new List<BookType>();
+            foreach (var categoryXmlId in m_bookData.CategoryXmlIds)
+            {
+                if (!xmlIdToBookType.TryGetValue(categoryXmlId, out var bookTypeEnum))
+                    continue;
 
-            return null;
+                if (bookTypes.Contains(bookTypeEnum))
+                    continue;
+
+                bookTypes.Add(bookTypeEnum);
+
+                var dbBookType = m_projectRepository.GetBookTypeByEnum(bookTypeEnum);
+                if (dbBookType == null)
+                {
+                    dbBookType = new BookType
+                    {
+                        Type = bookTypeEnum
+                    };
+                    m_projectRepository.Create(dbBookType);
+                }
+
+                resultList.Add(dbBookType);
+            }
+            
+            return resultList;
         }
 
-        private void FillSubCategories(Dictionary<string, BookTypeEnum> xmlIdToBookType, List<CategoryData> categoryDataList)
+        private void FillCategories(Dictionary<string, BookTypeEnum> xmlIdToBookType, List<CategoryData> categoryDataList)
         {
             foreach (var categoryData in categoryDataList)
             {
@@ -72,7 +100,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
                 if (categoryData.SubCategories != null)
                 {
-                    FillSubCategories(xmlIdToBookType, categoryData.SubCategories);
+                    FillSubcategories(bookType, xmlIdToBookType, categoryData.SubCategories);
+                }
+            }
+        }
+
+        private void FillSubcategories(BookTypeEnum bookType, Dictionary<string, BookTypeEnum> xmlIdToBookType,
+            List<CategoryData> categoryDataList)
+        {
+            foreach (var categoryData in categoryDataList)
+            {
+                xmlIdToBookType.Add(categoryData.XmlId, bookType);
+
+                if (categoryData.SubCategories != null)
+                {
+                    FillCategories(xmlIdToBookType, categoryData.SubCategories);
                 }
             }
         }

@@ -7,7 +7,7 @@ BEGIN TRAN
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_DiscussionPost(Id)] PRIMARY KEY CLUSTERED,
 		[Text] nvarchar(2000) NOT NULL,
 		[CreateTime] datetime NOT NULL,
-		[User] int NOT NULL CONSTRAINT [FK_DiscussionPost(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_DiscussionPost(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[ParentPost] bigint NULL CONSTRAINT [FK_DiscussionPost(ParentPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
 		[Resource] bigint NOT NULL CONSTRAINT [FK_DiscussionPost(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id),
 		[EditCount] int NULL,
@@ -19,7 +19,7 @@ BEGIN TRAN
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TextComment(Id)] PRIMARY KEY CLUSTERED,
 		[Text] nvarchar(2000) NOT NULL,
 		[CreateTime] datetime NOT NULL,
-		[User] int NOT NULL CONSTRAINT [FK_TextComment(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_TextComment(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[ParentComment] bigint NULL CONSTRAINT [FK_TextComment(ParentComment)_TextComment(Id)] FOREIGN KEY REFERENCES [dbo].[TextComment](Id),
 		[PageResource] bigint NOT NULL CONSTRAINT [FK_TextComment(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
@@ -31,7 +31,7 @@ BEGIN TRAN
 		[CreateTime] datetime NOT NULL,
 		[PublishTime] datetime NULL,
 		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-		[User] int NOT NULL CONSTRAINT [FK_Snapshot(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_Snapshot(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[Comment] nvarchar(2000)
 	)
 

@@ -15,7 +15,7 @@
 
     <many-to-one name="Project" class="Project" lazy="proxy" not-null="true" />
     
-    <many-to-one name="User" class="User" lazy="proxy" not-null="true" />
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
     <bag name="ResourceVersions" table="Snapshot_ResourceVersion" cascade="save-update" lazy="true">
       <key column="Snapshot" />
