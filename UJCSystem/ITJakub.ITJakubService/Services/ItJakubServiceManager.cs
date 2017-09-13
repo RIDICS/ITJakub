@@ -12,6 +12,7 @@ using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.Services
 {

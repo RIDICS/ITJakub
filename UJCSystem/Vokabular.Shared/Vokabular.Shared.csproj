@@ -25,4 +25,8 @@
     <PackageReference Include="System.ServiceModel.Http" Version="4.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataContracts\" />
+  </ItemGroup>
+
 </Project>

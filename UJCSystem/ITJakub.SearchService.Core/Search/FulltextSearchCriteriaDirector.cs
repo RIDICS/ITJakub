@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.SearchService.Core.Search
 {

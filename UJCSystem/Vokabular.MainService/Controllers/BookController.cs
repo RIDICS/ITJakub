@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -30,7 +31,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("search")]
-        public List<ProjectContract> SearchProject()
+        public List<ProjectContract> SearchProject([FromBody] SearchRequestContract request)
         {
             // TODO specify and test incomming data
             throw new NotImplementedException();

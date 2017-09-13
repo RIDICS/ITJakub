@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ITJakub.DataEntities.Database.Entities.Enums;
-using ITJakub.Shared.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {

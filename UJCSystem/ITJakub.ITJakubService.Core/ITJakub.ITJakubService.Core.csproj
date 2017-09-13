@@ -151,6 +151,10 @@
       <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
       <Name>Jewelery</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

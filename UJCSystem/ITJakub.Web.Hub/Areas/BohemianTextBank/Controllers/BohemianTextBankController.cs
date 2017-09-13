@@ -15,7 +15,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 {
@@ -32,7 +32,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         }
 
         public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.TextBank;
-        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.TextBank;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -91,7 +90,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
+                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
 
                 return Json(booksWithCategories);
             }
@@ -405,7 +404,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result);
             }
         }
@@ -414,7 +413,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, null, null);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
                 return Json(result);
             }
         }

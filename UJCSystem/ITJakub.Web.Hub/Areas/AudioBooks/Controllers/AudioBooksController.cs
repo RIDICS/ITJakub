@@ -14,7 +14,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
 {
@@ -24,14 +24,13 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         private readonly StaticTextManager m_staticTextManager;
         private readonly FeedbacksManager m_feedbacksManager;
 
-        public AudioBooksController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)        {
+        public AudioBooksController(StaticTextManager staticTextManager, FeedbacksManager feedbacksManager, CommunicationProvider communicationProvider) : base(communicationProvider)
+        {
             m_staticTextManager = staticTextManager;
             m_feedbacksManager = feedbacksManager;
         }
 
         public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
-
-        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.AudioBook;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -103,7 +102,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result);
             }
         }
@@ -112,7 +111,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
@@ -121,7 +120,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(OldAreaBookType);
+                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
                 return Json(audiosWithCategories);
             }
         }

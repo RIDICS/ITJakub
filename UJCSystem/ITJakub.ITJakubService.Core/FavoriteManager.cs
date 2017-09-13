@@ -11,6 +11,7 @@ using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
 using log4net;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.Core
 {

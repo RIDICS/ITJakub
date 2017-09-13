@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 

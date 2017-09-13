@@ -14,6 +14,7 @@ using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
 namespace ITJakub.ITJakubService.Core

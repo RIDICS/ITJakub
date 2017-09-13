@@ -24,6 +24,7 @@
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\ITJakub.Web.DataEntities\ITJakub.Web.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 

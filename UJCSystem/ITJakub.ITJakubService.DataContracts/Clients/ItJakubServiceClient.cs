@@ -14,6 +14,7 @@ using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.DataContracts.Clients
 {

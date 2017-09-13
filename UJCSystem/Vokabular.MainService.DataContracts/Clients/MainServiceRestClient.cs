@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 
 namespace Vokabular.MainService.DataContracts.Clients

@@ -97,6 +97,10 @@
       <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
       <Name>Jewelery</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exist\DAOs\" />

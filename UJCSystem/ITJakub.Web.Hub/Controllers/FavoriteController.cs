@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Favorite;
 using ITJakub.Web.Hub.Models.Requests.Favorite;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {

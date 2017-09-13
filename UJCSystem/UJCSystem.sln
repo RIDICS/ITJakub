@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -212,6 +212,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.MainService.DataContracts", "Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj", "{5527BA9B-AA14-4872-BACF-40ADEBFD966D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITJakub.FileProcessing.Service.Test", "ITJakub.FileProcessing.Service.Test\ITJakub.FileProcessing.Service.Test.csproj", "{526379A5-23C0-4144-BEA3-EB0140EC8039}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.Shared.DataContracts", "Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj", "{D172F949-AE59-4029-BF5C-40B633362034}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2238,6 +2240,36 @@ Global
 		{526379A5-23C0-4144-BEA3-EB0140EC8039}.Release|x64.Build.0 = Release|Any CPU
 		{526379A5-23C0-4144-BEA3-EB0140EC8039}.Release|x86.ActiveCfg = Release|Any CPU
 		{526379A5-23C0-4144-BEA3-EB0140EC8039}.Release|x86.Build.0 = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|ARM.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|x64.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Debug|x86.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|Any CPU.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|Any CPU.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|ARM.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|ARM.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|x64.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|x64.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|x86.ActiveCfg = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Development|x86.Build.0 = Debug|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|ARM.ActiveCfg = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|ARM.Build.0 = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|x64.ActiveCfg = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|x64.Build.0 = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|x86.ActiveCfg = Release|Any CPU
+		{D172F949-AE59-4029-BF5C-40B633362034}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2312,6 +2344,9 @@ Global
 		{6C22DA45-1130-4427-8D2B-A0248E58FF0E} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{5527BA9B-AA14-4872-BACF-40ADEBFD966D} = {5BB6E00C-DF4C-46DE-A1AA-D4433FD824BF}
 		{526379A5-23C0-4144-BEA3-EB0140EC8039} = {20AD4F4B-31EB-419D-A116-9AD3B206D874}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {214F8215-5125-4376-A074-1F7A35690484}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = UJCSystem.vsmdi

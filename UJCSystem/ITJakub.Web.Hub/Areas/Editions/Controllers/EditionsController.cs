@@ -16,7 +16,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using BookTypeEnumContract = Vokabular.MainService.DataContracts.Contracts.Type.BookTypeEnumContract;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -33,9 +33,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         }
 
         public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
-
-        public override Shared.Contracts.BookTypeEnumContract OldAreaBookType => Shared.Contracts.BookTypeEnumContract.Edition;
-
+        
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
             return new FeedbackFormIdentification { Area = "Editions", Controller = "Editions" };
@@ -153,7 +151,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, OldAreaBookType);
+                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
                 return Json(result);
             }
         }
@@ -162,7 +160,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         {
             using (var client = GetMainServiceClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, OldAreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }

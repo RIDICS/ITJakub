@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -11,6 +11,7 @@
     <AssemblyName>ITJakub.Shared.Contracts</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +39,9 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -55,7 +59,6 @@
     <Compile Include="BookContract.cs" />
     <Compile Include="BookContentItemContract.cs" />
     <Compile Include="BookPageContract.cs" />
-    <Compile Include="BookTypeEnumContract.cs" />
     <Compile Include="BookTypeSearchResultContract.cs" />
     <Compile Include="CategoryContentContract.cs" />
     <Compile Include="Favorites\FavoriteSortContract.cs" />
@@ -91,7 +94,6 @@
     <Compile Include="ISearchService.cs" />
     <Compile Include="Resources\ResourceType.cs" />
     <Compile Include="Resources\UploadResourceContract.cs" />
-    <Compile Include="Searching\Criteria\CriteriaKey.cs" />
     <Compile Include="Searching\Criteria\DatingCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DatingListCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
@@ -120,6 +122,12 @@
     <Compile Include="SpecialPermissionContract.cs" />
     <Compile Include="UserContract.cs" />
     <Compile Include="UserDetailContract.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

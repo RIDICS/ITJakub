@@ -3,7 +3,7 @@ using System.Linq;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -14,7 +14,6 @@ namespace ITJakub.Web.Hub.Controllers
         }
 
         public abstract BookTypeEnumContract AreaBookType { get; }
-        public abstract Shared.Contracts.BookTypeEnumContract OldAreaBookType { get; }
 
         protected BooksAndCategoriesContract GetBooksAndCategories()
         {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.DataContracts
 {
