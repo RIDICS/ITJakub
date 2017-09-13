@@ -35,6 +35,7 @@ namespace ITJakub.Web.Hub.Core.Managers
             return viewModel;
         }
 
+        //TODO #Localization
         public StaticTextViewModel GetRenderedHtmlText(string name)
         {
             var staticTextEntity = new GetStaticTextWork(m_staticTextRepository, name).Execute();

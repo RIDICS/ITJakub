@@ -1,0 +1,18 @@
+{
+	"culture":"en",
+	"scope":"account",
+	"dictionary": {
+		"UseExternalLoginService": "Use another service for login",
+		"UseExternalLoginService-placeholder": "You should be able to register using another accounts here",
+		"Login": "Login",
+		"Login-text": "Log in using your account",
+		"Login-submit": "Log in",
+		
+		"RegisterAccount": "Register as new user",
+		"Registration": "Registration",
+		
+		"MakeNewAccount": "New account creation",
+		"Registration-submit": "Register"
+		}
+	}
+}

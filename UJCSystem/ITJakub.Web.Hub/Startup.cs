@@ -79,7 +79,18 @@ namespace ITJakub.Web.Hub
             services.AddLocalizationService();
 
 
-            services.AddMvc();
+            services.AddMvc()
+                .AddRazorOptions(options =>
+                {
+                    var previous = options.CompilationCallback;
+                    options.CompilationCallback = context =>
+                    {
+                        previous?.Invoke(context);
+
+                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.AspNetCore.Service.ILocalization).Assembly.Location));
+                        context.Compilation = context.Compilation.AddReferences(Microsoft.CodeAnalysis.MetadataReference.CreateFromFile(typeof(Localization.CoreLibrary.Localization).Assembly.Location));
+                    };
+                });
 
             // IoC
             IIocContainer container = new DryIocContainer();

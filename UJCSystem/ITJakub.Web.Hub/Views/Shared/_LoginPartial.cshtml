@@ -1,21 +1,23 @@
 ﻿@using Microsoft.AspNetCore.Http.Extensions
 
+@inject ILocalization Localizer
+
 @{
     var requestUrl = Context.Request.GetDisplayUrl();
     var pathAndQuery = new Uri(requestUrl).PathAndQuery;
 }
 
-@*<div class="secondary-navbar-toggle language" title="Jazyk">
+<div class="secondary-navbar-toggle language" title="Jazyk">
     <span class="glyphicon glyphicon-text-background"></span>
     <ul class="navbar-language">
-        <li>
-            <a href="#">CZ - Česky</a>
-        </li>
-        <li>
-            <a href="#">EN - English</a>
-        </li>
+        @foreach (var x in Localizer.SupportedCultures())
+        {
+            <li>
+                @Html.ActionLink(x.NativeName, "SetLanguage", "Localization", new { area = "", culture = x.Name, returnUrl = pathAndQuery })
+            </li>
+        }
     </ul>
-</div>*@
+</div>
 
 <div class="secondary-navbar-toggle login" title="Uživatelský účet">
     <span class="glyphicon glyphicon-user"></span>
@@ -26,7 +28,7 @@
 
             <ul class="navbar-login">
                 <li><a href="#">@Html.Raw(User.Identity.Name)</a></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">Odhlásit</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut")</a></li>
             </ul>
         }
     }
