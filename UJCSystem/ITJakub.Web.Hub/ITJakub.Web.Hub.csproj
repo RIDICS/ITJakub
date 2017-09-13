@@ -30,6 +30,8 @@
   <ItemGroup>
     <PackageReference Include="Log4net.Extensions.Logging" Version="1.0.0-beta11" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="1.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.TagHelpers" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.0.2" />
@@ -37,6 +39,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="1.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="1.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.0.2" />
@@ -48,6 +54,7 @@
     <PackageReference Include="log4net" Version="2.0.8" />
     <PackageReference Include="Markdig" Version="0.13.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.0" />
     <PackageReference Include="System.Runtime.Serialization.Xml" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.3.0" />
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.3.0" />
@@ -61,6 +68,25 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Localization.AspNetCore.Service">
+      <HintPath>..\..\..\localization-ridics\Solution\Localization.AspNetCore.Service\bin\Debug\netstandard1.4\Localization.AspNetCore.Service.dll</HintPath>
+    </Reference>
+    <Reference Include="Localization.CoreLibrary">
+      <HintPath>..\..\..\localization-ridics\Solution\Localization.CoreLibrary\bin\Debug\netstandard1.4\Localization.CoreLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Localization.Database.Abstractions">
+      <HintPath>..\..\..\localization-ridics\Solution\Localization.Database\bin\Debug\netstandard1.4\Localization.Database.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Localization.Database.EFCore">
+      <HintPath>..\..\..\localization-ridics\Solution\Localization.Database.EFCore\bin\Debug\netstandard1.4\Localization.Database.EFCore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Localization\" />
+  </ItemGroup>
+
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
     <Exec Command="npm install" />
     <Exec Command="bower install" />
@@ -72,6 +98,14 @@
       <_GeneratedFiles Include="$(GeneratedItemPatterns)" />
       <ContentWithTargetPath Include="@(_GeneratedFiles->'%(FullPath)')" RelativePath="%(_GeneratedFiles.Identity)" TargetPath="%(_GeneratedFiles.Identity)" CopyToPublishDirectory="PreserveNewest" />
     </ItemGroup>
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="RD /S /Q &quot;$(TargetDir)Localization\&quot;" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="XCOPY &quot;$(ProjectDir)Localization&quot; &quot;$(TargetDir)Localization\&quot; /S /Y" />
   </Target>
 
 </Project>

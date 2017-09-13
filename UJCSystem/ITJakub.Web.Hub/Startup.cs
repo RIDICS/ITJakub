@@ -4,10 +4,16 @@ using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
 using ITJakub.Web.Hub.AppStart.Middleware;
+using Localization.AspNetCore.Service.Extensions;
+using Localization.CoreLibrary.Dictionary.Factory;
+using Localization.Database.EFCore.Data.Impl;
+using Localization.Database.EFCore.Factory;
 using Log4net.Extensions.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -65,6 +71,14 @@ namespace ITJakub.Web.Hub
                 options.MultipartBodyLengthLimit = 1048576000;
             });
 
+            // Localization
+            services.AddDbContext<StaticTextsContext>(options => options
+                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddLocalizationService();
+
+
             services.AddMvc();
 
             // IoC
@@ -83,6 +97,13 @@ namespace ITJakub.Web.Hub
             loggerFactory.AddDebug();
             loggerFactory.AddLog4Net();
             ApplicationLogging.LoggerFactory = loggerFactory;
+
+            // Localization
+            Localization.CoreLibrary.Localization.Init(
+                @"localizationsettings.json",
+                new DatabaseServiceFactory(Container.Resolve<StaticTextsContext>()),
+                new JsonDictionaryFactory());
+            Localization.CoreLibrary.Localization.AttachLogger(loggerFactory);
 
             if (env.IsDevelopment())
             {
