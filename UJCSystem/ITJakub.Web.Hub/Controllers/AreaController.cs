@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
+using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -19,18 +21,42 @@ namespace ITJakub.Web.Hub.Controllers
             using (var client = GetRestClient())
             {
                 var categories = client.GetCategoryList();
-                // TODO add root category
-
                 var books = client.GetBooksByType(AreaBookType);
-                var booksResult = books.Select(x => new BookWithCategoryIdsContract
+
+                // Modify data for DropDownSelect usage
+
+                const int rootCategoryId = 0;
+                var rootBookTypeCategory = new CategoryContract
                 {
-                    Id = x.Id,
-                    Title = x.Title,
-                    SubTitle = x.SubTitle,
-                    Guid = null,
-                    CategoryIds = x.CategoryList.Select(c => c.Id).ToList()
-                }).ToList();
-                // TODO assign books without category to root category
+                    Id = rootCategoryId,
+                    Description = GetCategoryName(),
+                    ParentCategoryId = null,
+                };
+
+                foreach (var category in categories)
+                {
+                    if (category.ParentCategoryId == null)
+                        category.ParentCategoryId = rootCategoryId;
+                }
+                categories.Add(rootBookTypeCategory);
+
+
+                var booksResult = new List<BookWithCategoryIdsContract>();
+                foreach (var book in books)
+                {
+                    var categoryIds = book.CategoryList.Select(x => x.Id).ToList();
+                    if (categoryIds.Count == 0)
+                        categoryIds.Add(rootCategoryId);
+
+                    booksResult.Add(new BookWithCategoryIdsContract
+                    {
+                        Id = book.Id,
+                        Title = book.Title,
+                        SubTitle = book.SubTitle,
+                        Guid = null,
+                        CategoryIds = categoryIds
+                    });
+                }
 
                 var result = new BooksAndCategoriesContract
                 {
