@@ -4,6 +4,7 @@ using System.Text;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.Core.Search

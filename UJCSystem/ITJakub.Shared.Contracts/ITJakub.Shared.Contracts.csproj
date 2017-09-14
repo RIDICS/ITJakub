@@ -94,7 +94,6 @@
     <Compile Include="ISearchService.cs" />
     <Compile Include="Resources\ResourceType.cs" />
     <Compile Include="Resources\UploadResourceContract.cs" />
-    <Compile Include="Searching\Criteria\DatingCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DatingListCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
     <Compile Include="Searching\Criteria\HitSettingsContract.cs" />
@@ -105,9 +104,7 @@
     <Compile Include="Searching\Criteria\ResultRestrictionCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\SelectedCategoryCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\SortEnum.cs" />
-    <Compile Include="Searching\Criteria\TokenDistanceCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\TokenDistanceListCriteriaContract.cs" />
-    <Compile Include="Searching\Criteria\WordCriteriaContract.cs" />
     <Compile Include="Searching\Criteria\WordListCriteriaContract.cs" />
     <Compile Include="Searching\Results\KwicStructure.cs" />
     <Compile Include="Searching\Criteria\SearchCriteriaContract.cs" />

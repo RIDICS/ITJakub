@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
@@ -13,7 +14,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public TermsSettingsContract TermsSettingsContract { get; set; }
         public SortTypeEnumContract? Sort { get; set; }
         public SortDirectionEnumContract? SortDirection { get; set; }
-        public List<object> ConditionConjunction { get; set; } // TODO specify Types
+        public List<SearchCriteriaContract> ConditionConjunction { get; set; } // TODO specify Types
     }
 
     public class HitSettingsContract
@@ -30,9 +31,14 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         // count and start ommited because missing use case. This contract is used as request for loading terms.
     }
 
+    [KnownType(typeof(WordListCriteriaContract))]
     public abstract class SearchCriteriaContract
     {
-        [DataMember]
         public virtual CriteriaKey Key { get; set; }
+    }
+
+    public class WordListCriteriaContract : SearchCriteriaContract
+    {
+        public IList<WordCriteriaContract> Disjunctions { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts.Searching.Criteria
+namespace Vokabular.Shared.DataContracts.Search.CriteriaItem
 {
     [DataContract]
     public class TokenDistanceCriteriaContract

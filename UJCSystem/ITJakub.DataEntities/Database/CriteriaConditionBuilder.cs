@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Text;
-using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
 namespace ITJakub.DataEntities.Database
 {
