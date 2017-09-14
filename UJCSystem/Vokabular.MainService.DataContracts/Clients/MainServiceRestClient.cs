@@ -5,6 +5,7 @@ using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Clients.Extensions;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
 using Vokabular.Shared;
@@ -583,6 +584,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<List<BookWithCategoriesContract>>($"book/{bookTypeEnum}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<BookContract> SearchBook(SearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<BookContract>>("book/search", request);
                 return result;
             }
             catch (HttpRequestException e)

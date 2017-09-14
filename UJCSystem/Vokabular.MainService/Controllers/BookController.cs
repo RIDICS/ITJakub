@@ -31,9 +31,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("search")]
-        public List<ProjectContract> SearchProject([FromBody] SearchRequestContract request)
+        public List<BookContract> SearchBook([FromBody] SearchRequestContract request)
         {
             // TODO specify and test incomming data
+            // TODO resolve paging
             throw new NotImplementedException();
         }
     }

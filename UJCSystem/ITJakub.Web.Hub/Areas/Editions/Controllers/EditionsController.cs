@@ -13,10 +13,13 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
+using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -261,6 +264,20 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
+            }
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = 0,
+                    Count = 1,
+                    Sort = SortTypeEnumContract.Title,
+                    SortDirection = SortDirectionEnumContract.Asc,
+                };
+                var result = client.SearchBook(request);
+                // TODO this method call is currently only for testing communication
             }
             using (var client = GetMainServiceClient())
             {
