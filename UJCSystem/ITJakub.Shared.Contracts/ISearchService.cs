@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.Shared.Contracts
 {

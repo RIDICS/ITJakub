@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using ITJakub.Core.SearchService;
 using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Entities;
 using ITJakub.DataEntities.Database.Entities.Enums;
@@ -12,8 +11,10 @@ using ITJakub.ITJakubService.Core.Search;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Clients;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 

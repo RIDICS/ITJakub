@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.Serialization;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.SearchService.Core.Search.DataContract
 {

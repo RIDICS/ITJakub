@@ -8,6 +8,7 @@ using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using log4net;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.ITJakubService.Core
 {

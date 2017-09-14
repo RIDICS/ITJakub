@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using ITJakub.Core.Resources;
-using ITJakub.Core.SearchService;
 using ITJakub.Shared.Contracts;
+using ITJakub.Shared.Contracts.Clients;
 using ITJakub.Shared.Contracts.Resources;
 using log4net;
 

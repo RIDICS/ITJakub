@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
 namespace ITJakub.SearchService.Core.Search

@@ -3,6 +3,8 @@ using System.IO;
 using System.Runtime.Serialization;
 using ITJakub.Shared.Contracts.Searching;
 using ITJakub.Shared.Contracts.Searching.Criteria;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
 namespace ITJakub.SearchService.Core.Search.DataContract
 {

@@ -4,12 +4,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
-using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
-namespace ITJakub.Core.SearchService
+namespace ITJakub.Shared.Contracts.Clients
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {

@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts.Searching.Criteria
+namespace Vokabular.Shared.DataContracts.Search.OldCriteriaItem
 {
     [DataContract]
     public class TermsSettingsContract

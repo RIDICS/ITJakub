@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Shared.Contracts.Searching.Criteria
+namespace Vokabular.Shared.DataContracts.Search.Criteria
 {
     [DataContract]
     public class AuthorizationCriteriaContract : SearchCriteriaContract

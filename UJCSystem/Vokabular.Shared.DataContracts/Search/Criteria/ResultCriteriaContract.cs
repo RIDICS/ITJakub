@@ -1,8 +1,8 @@
-using System.ComponentModel;
 using System.Runtime.Serialization;
+using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Shared.Contracts.Searching.Criteria
+namespace Vokabular.Shared.DataContracts.Search.Criteria
 {
     [DataContract]
     public class ResultCriteriaContract : SearchCriteriaContract

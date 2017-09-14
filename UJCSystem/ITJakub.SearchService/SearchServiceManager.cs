@@ -2,8 +2,8 @@
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Exist;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.SearchService
 {
