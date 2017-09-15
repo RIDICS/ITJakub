@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.Utils;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
@@ -7,13 +9,18 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
     public class SearchRequestContract
     {
         public int? Start { get; set; }
+
         public int? Count { get; set; }
+
         public HitSettingsContract HitSettingsContract { get; set; }
+
         public TermsSettingsContract TermsSettingsContract { get; set; }
+
         public SortTypeEnumContract? Sort { get; set; }
+
         public SortDirectionEnumContract? SortDirection { get; set; }
-        
-        // TODO add attribute for specialized deserialization
+
+        [JsonConverter(typeof(SearchCriteriaJsonConverter))]
         public List<SearchCriteriaContract> ConditionConjunction { get; set; }
     }
 

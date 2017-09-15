@@ -1,8 +1,11 @@
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Vokabular.Shared.DataContracts.Types
 {
     [DataContract]
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum CriteriaKey
     {
         [EnumMember] Author = 0,
