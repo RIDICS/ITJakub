@@ -105,8 +105,6 @@
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="CardFileManager.cs" />
     <Compile Include="SearchManager.cs" />
-    <Compile Include="Search\ICriteriaImplementationBase.cs" />
-    <Compile Include="Search\MetadataSearchCriteriaDirector.cs" />
     <Compile Include="UserManager.cs" />
     <Compile Include="AuthorManager.cs" />
     <Compile Include="AutoMapperProfiles\AuthorProfile.cs" />
@@ -151,6 +149,10 @@
       <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
       <Name>Jewelery</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
+      <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
+      <Name>Vokabular.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
       <Name>Vokabular.Shared.DataContracts</Name>
@@ -159,6 +161,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Search\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

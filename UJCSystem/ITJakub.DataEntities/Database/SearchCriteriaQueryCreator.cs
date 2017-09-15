@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using NHibernate;
+using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 
 namespace ITJakub.DataEntities.Database
 {

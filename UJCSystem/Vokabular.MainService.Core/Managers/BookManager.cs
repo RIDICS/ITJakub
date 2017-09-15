@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
@@ -23,6 +24,11 @@ namespace Vokabular.MainService.Core.Managers
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
+        }
+
+        public void SearchBook(SearchRequestContract request)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

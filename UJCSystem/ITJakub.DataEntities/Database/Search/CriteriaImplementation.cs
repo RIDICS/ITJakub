@@ -1,21 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using ITJakub.DataEntities.Database;
 using ITJakub.DataEntities.Database.Repositories;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.ITJakubService.Core.Search
+namespace ITJakub.DataEntities.Database.Search
 {
-    public interface ICriteriaImplementationBase
-    {
-        CriteriaKey CriteriaKey { get; }
-        SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters);
-    }
-
     public class AuthorCriteriaImplementation : ICriteriaImplementationBase
     {
         public CriteriaKey CriteriaKey

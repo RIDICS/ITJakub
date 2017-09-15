@@ -33,8 +33,13 @@ namespace Vokabular.MainService.Controllers
         [HttpPost("search")]
         public List<BookContract> SearchBook([FromBody] SearchRequestContract request)
         {
-            // TODO specify and test incomming data
-            // TODO resolve paging
+            m_bookManager.SearchBook(request);
+            throw new NotImplementedException();
+        }
+
+        [HttpPost("search-count")]
+        public int SearchBookResultCount([FromBody] SearchRequestContract request)
+        {
             throw new NotImplementedException();
         }
     }

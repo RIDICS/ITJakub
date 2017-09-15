@@ -1,4 +1,4 @@
-namespace ITJakub.DataEntities.Database
+namespace Vokabular.Shared.DataContracts.Search.QueryBuilder
 {
     public class SearchCriteriaQuery
     {

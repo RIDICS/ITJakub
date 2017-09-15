@@ -86,4 +86,8 @@
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\SearchCriteria\" />
+  </ItemGroup>
+
 </Project>

@@ -1,21 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.MicroKernel;
-using ITJakub.DataEntities.Database;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.ITJakubService.Core.Search
+namespace Vokabular.Core.Search
 {
     public class MetadataSearchCriteriaDirector
     {
         private readonly Dictionary<CriteriaKey, ICriteriaImplementationBase> m_criteriaImplementations;
 
-        public MetadataSearchCriteriaDirector(IKernel container)
+        public MetadataSearchCriteriaDirector(IList<ICriteriaImplementationBase> criteria)
         {
-            var criteria = container.ResolveAll<ICriteriaImplementationBase>();
             m_criteriaImplementations = criteria.ToDictionary(x => x.CriteriaKey);
         }
 

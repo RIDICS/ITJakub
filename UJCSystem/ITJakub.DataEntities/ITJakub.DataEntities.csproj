@@ -118,7 +118,6 @@
     <Compile Include="Database\Repositories\NewsRepository.cs" />
     <Compile Include="Database\Repositories\TermRepository.cs" />
     <Compile Include="Database\Repositories\FeedbackRepository.cs" />
-    <Compile Include="Database\SearchCriteriaQuery.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDao.cs" />
     <Compile Include="Database\Daos\NHibernateTransactionalDaoGeneric.cs" />
     <Compile Include="Database\Entities\Author.cs" />
@@ -152,6 +151,7 @@
     <Compile Include="Database\Repositories\BookVersionRepository.cs" />
     <Compile Include="Database\Repositories\BookRepository.cs" />
     <Compile Include="Database\SearchCriteriaQueryCreator.cs" />
+    <Compile Include="Database\Search\CriteriaImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
