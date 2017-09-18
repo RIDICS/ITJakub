@@ -185,7 +185,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
@@ -194,6 +194,20 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
+            }
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = 0,
+                    Count = 1,
+                    Sort = SortTypeEnumContract.Title,
+                    SortDirection = SortDirectionEnumContract.Asc,
+                };
+                var result = client.SearchBook(request);
+                // TODO this method call is currently only for testing communication
             }
             using (var client = GetMainServiceClient())
             {

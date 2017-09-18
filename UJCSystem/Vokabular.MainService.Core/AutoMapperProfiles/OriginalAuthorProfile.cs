@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Metadata;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {

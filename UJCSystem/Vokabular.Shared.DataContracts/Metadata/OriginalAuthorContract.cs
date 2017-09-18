@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace Vokabular.Shared.DataContracts.Metadata
 {
     public class OriginalAuthorContract
     {

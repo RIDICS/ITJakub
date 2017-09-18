@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Helpers;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Metadata;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models
 {

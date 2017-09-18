@@ -3,6 +3,7 @@ using NHibernate.SqlCommand;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -157,6 +158,18 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.Title).Asc
                 .Fetch(x => x.Resource.Project.Categories).Eager
                 .List();
+        }
+
+        public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        {
+            using (var session = GetSession())
+            {
+                var query = session.CreateQuery(creator.GetQueryString());
+                creator.SetParameters(query);
+                var result = query
+                    .List<MetadataResource>();
+                return result;
+            }
         }
     }
 }

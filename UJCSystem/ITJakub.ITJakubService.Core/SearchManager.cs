@@ -13,6 +13,7 @@ using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Clients;
 using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Core.Data;
 using Vokabular.Core.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
@@ -920,15 +921,6 @@ namespace ITJakub.ITJakubService.Core
             var creator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
             var databaseSearchResult = m_bookVersionRepository.SearchByCriteriaQuery(creator);
             return databaseSearchResult.Count;
-        }
-
-        private class FilteredCriterias
-        {
-            public List<SearchCriteriaQuery> ConjunctionQuery { get; set; }
-            public List<SearchCriteriaContract> NonMetadataCriterias { get; set; }
-            public List<SearchCriteriaContract> MetadataCriterias { get; set; }
-            public Dictionary<string, object> MetadataParameters { get; set; }
-            public ResultCriteriaContract ResultCriteria { get; set; }
         }
     }
 }

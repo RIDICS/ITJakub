@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
@@ -30,6 +31,8 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
             container.AddSingleton<Profile, UserProfile>();
+
+            container.Install<CoreContainerRegistration>();
         }
     }
 }

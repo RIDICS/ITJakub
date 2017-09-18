@@ -2,7 +2,7 @@ using System.Linq;
 using System.Text;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 
-namespace ITJakub.DataEntities.Database
+namespace Vokabular.DataEntities.Database.Search
 {
     public static class CriteriaConditionBuilder
     {

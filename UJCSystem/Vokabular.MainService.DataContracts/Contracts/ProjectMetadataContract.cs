@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vokabular.Shared.DataContracts.Metadata;
 
 namespace Vokabular.MainService.DataContracts.Contracts
 {
