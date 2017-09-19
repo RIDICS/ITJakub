@@ -22,8 +22,8 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, DatingCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, EditorCriteriaImplementation>();
+            container.AddPerWebRequest<ICriteriaImplementationBase, DatingCriteriaImplementation>();
+            container.AddPerWebRequest<ICriteriaImplementationBase, EditorCriteriaImplementation>();
             //container.AddPerWebRequest<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
             //container.AddPerWebRequest<ICriteriaImplementationBase, TermCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, TitleCriteriaImplementation>();

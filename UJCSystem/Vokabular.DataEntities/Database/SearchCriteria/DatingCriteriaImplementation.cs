@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -10,15 +9,12 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 {
     public class DatingCriteriaImplementation : ICriteriaImplementationBase
     {
-        public CriteriaKey CriteriaKey
-        {
-            get { return CriteriaKey.Dating; }
-        }
+        public CriteriaKey CriteriaKey => CriteriaKey.Dating;
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var datingListCriteriaContract = (DatingListCriteriaContract) searchCriteriaContract;
-            var manuscriptAlias = string.Format("m{0}", Guid.NewGuid().ToString("N"));
+
             var whereBuilder = new StringBuilder();
 
             foreach (DatingCriteriaContract datingCriteriaContract in datingListCriteriaContract.Disjunctions)
@@ -33,8 +29,8 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                 {
                     notBeforeUsed = true;
 
-                    var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
-                    whereBuilder.AppendFormat("{0}.NotAfter >= (:{1})", manuscriptAlias, uniqueParameterName);
+                    var uniqueParameterName = $"param{metadataParameters.Count}";
+                    whereBuilder.AppendFormat("metadata.NotAfter >= (:{0})", uniqueParameterName);
                     metadataParameters.Add(uniqueParameterName, datingCriteriaContract.NotBefore.Value);
                 }
 
@@ -45,8 +41,8 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                         whereBuilder.Append(" and ");
                     }
 
-                    var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
-                    whereBuilder.AppendFormat("{0}.NotBefore <= (:{1})", manuscriptAlias,uniqueParameterName);
+                    var uniqueParameterName = $"param{metadataParameters.Count}";
+                    whereBuilder.AppendFormat("metadata.NotBefore <= (:{0})", uniqueParameterName);
                     metadataParameters.Add(uniqueParameterName, datingCriteriaContract.NotAfter.Value);
                 }
                 whereBuilder.Append(")");
@@ -54,7 +50,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 
             return new SearchCriteriaQuery
             {
-                Join = string.Format("inner join bv.ManuscriptDescriptions {0}", manuscriptAlias),
+                Join = string.Empty,
                 Where = whereBuilder.ToString(),
             };
         }
