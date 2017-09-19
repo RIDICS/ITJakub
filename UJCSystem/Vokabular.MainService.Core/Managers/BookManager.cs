@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Search;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Result;
@@ -31,28 +33,38 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        public void SearchBook(SearchRequestContract request)
-        {
-            SearchByCriteria(request);
-            throw new System.NotImplementedException();
-        }
-
-        public IEnumerable<SearchResultContract> SearchByCriteria(SearchRequestContract request)
+        public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
         {
             // TODO add authorization
             //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
 
-            var filteredCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            var nonMetadataCriterias = filteredCriterias.NonMetadataCriterias;
-            var resultCriteria = filteredCriterias.ResultCriteria;
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+            var resultCriteria = processedCriterias.ResultCriteria;
 
-            var queryCreator = new SearchCriteriaQueryCreator(filteredCriterias.ConjunctionQuery, filteredCriterias.MetadataParameters);
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Sort = request.Sort,
+                SortDirection = request.SortDirection,
+                Start = request.Start,
+                Count = request.Count
+            };
 
-            // TODO draft for new search method
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQuery(queryCreator));
+            var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator);
+            var dbResult = searchByCriteriaWork.Execute();
+            
+            var resultList = new List<SearchResultContract>(dbResult.Count);
+            foreach (var dbMetadata in dbResult)
+            {
+                var resultItem = Mapper.Map<SearchResultContract>(dbMetadata);
+                resultList.Add(resultItem);
 
-            return null;
-            // TODO end of new search method
+                var pageCountItem = searchByCriteriaWork.PageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
+                resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
+            }
+
+            return resultList;
+            
 
             // If no book restriction is set, filter books in SQL and prepare for searching in eXistDB
             //if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
@@ -176,6 +188,24 @@ namespace Vokabular.MainService.Core.Managers
             //return searchResultFullContext;
         }
 
-        
+
+        public long SearchByCriteriaCount(SearchRequestContract request)
+        {
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Sort = request.Sort,
+                SortDirection = request.SortDirection,
+                Start = request.Start,
+                Count = request.Count
+            };
+
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
+            return result;
+        }
     }
 }

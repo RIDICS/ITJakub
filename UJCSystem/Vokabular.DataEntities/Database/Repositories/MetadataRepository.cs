@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
@@ -160,13 +162,57 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual long SearchByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
+        {
+            var session = GetSession();
+
+            var query = session.CreateQuery(creator.GetQueryStringForCount())
+                .SetParameters(creator);
+            var result = query.UniqueResult<long>();
+            return result;
+        }
+
         public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
             var session = GetSession();
             
-            var query = session.CreateQuery(creator.GetQueryString());
-            creator.SetParameters(query);
+            var query = session.CreateQuery(creator.GetQueryString())
+                .SetPaging(creator)
+                .SetParameters(creator);
             var result = query.List<MetadataResource>();
+            return result;
+        }
+
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataIdList)
+        {
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(metadataIdList)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(x => x.Resource.Project.Authors).Eager
+                //TODO fetch Author name
+                .List();
+            return result;
+        }
+
+        public virtual IList<PageCountResult> GetPageCount(IEnumerable<long> projectIdList)
+        {
+            PageResource pageResourceAlias = null;
+            Resource resourceAlias = null;
+            PageCountResult resultAlias = null;
+
+            var result = GetSession().QueryOver(() => pageResourceAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .SelectList(list => list
+                    .SelectGroup(() => resourceAlias.Project.Id).WithAlias(() => resultAlias.ProjectId)
+                    .SelectCount(() => pageResourceAlias.Id).WithAlias(() => resultAlias.PageCount))
+                .TransformUsing(Transformers.AliasToBean<PageCountResult>())
+                .List<PageCountResult>();
+
             return result;
         }
     }

@@ -1,8 +1,15 @@
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
+using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
+using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Result;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -89,6 +96,77 @@ namespace ITJakub.Web.Hub.Controllers
                     return "Audio knihy";
                 default:
                     return null;
+            }
+        }
+
+        protected long SearchByCriteriaCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    BookType = AreaBookType,
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                };
+                var count = client.SearchBookCount(request);
+                return count;
+            }
+        }
+
+        protected List<SearchResultContract> SearchByCriteria(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
+        {
+            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
+            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+
+            //listSearchCriteriaContracts.Add(new ResultCriteriaContract
+            //{
+            //    Start = start,
+            //    Count = count,
+            //    Sorting = (SortEnum)sortingEnum,
+            //    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
+            //    //HitSettingsContract = new HitSettingsContract // TODO currently not used
+            //    //{
+            //    //    ContextLength = 50,
+            //    //    Count = 3,
+            //    //    Start = 1
+            //    //}
+            //});
+
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    BookType = AreaBookType,
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = start,
+                    Count = count,
+                    Sort = (SortTypeEnumContract) sortingEnum,
+                    SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
+                };
+                var result = client.SearchBook(request);
+                return result;
             }
         }
     }

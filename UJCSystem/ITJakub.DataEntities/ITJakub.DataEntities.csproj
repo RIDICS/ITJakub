@@ -105,7 +105,7 @@
     <Compile Include="Database\Entities\SelectResults\HeadwordBookmarkResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\HeadwordSearchResult.cs" />
-    <Compile Include="Database\Entities\SelectResults\BookVersionDetails.cs" />
+    <Compile Include="Database\Entities\SelectResults\PageCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\TermCountResult.cs" />
     <Compile Include="Database\Entities\SelectResults\TermResult.cs" />
     <Compile Include="Database\Entities\Term.cs" />

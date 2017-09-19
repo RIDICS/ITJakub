@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using System.Text;
 using NHibernate;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search
 {
     public class SearchCriteriaQueryCreator
     {
+        private const int MaxCount = 100;
+        private const int DefaultCount = 10;
+        private const int DefaultStart = 0;
+        private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
+        // inner join to LatestPublishedSnapshots filters result only to published Projects
+
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
         private string m_headwordQueryParameter;
@@ -20,21 +27,43 @@ namespace Vokabular.DataEntities.Database.Search
             m_metadataParameters = metadataParameters;
         }
 
+        public SortTypeEnumContract? Sort { get; set; }
+        public SortDirectionEnumContract? SortDirection { get; set; }
+        public int? Start { get; set; }
+        public int? Count { get; set; }
+
+        public int GetStart()
+        {
+            return Start ?? DefaultStart;
+        }
+
+        public int GetCount()
+        {
+            return Count != null ? Math.Min(Count.Value, MaxCount) : DefaultCount;
+        }
+
+        public Dictionary<string, object> GetMetadataParameters()
+        {
+            return m_metadataParameters;
+        }
+
         public string GetQueryString()
         {
-            var queryString = "select metadata from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
-            // inner join to LatestPublishedSnapshots filters result only to published Projects
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var orderByClause = CreateOrderByClause();
 
-            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
-
-            queryString = $"{queryString}{whereClause}";
+            var queryString = $"select metadata {FromClause} {joinAndWhereClause} {orderByClause}";
 
             return queryString;
         }
 
         public string GetQueryStringForCount()
         {
-            throw new NotImplementedException();
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+
+            var queryString = $"select count(metadata) {FromClause} {joinAndWhereClause}";
+
+            return queryString;
         }
 
         public string GetQueryStringForBookVersionPair()
@@ -42,7 +71,7 @@ namespace Vokabular.DataEntities.Database.Search
             var queryString =
                 "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
 
-            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
+            var whereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
 
             queryString = string.Format("{0}{1} group by b.Guid", queryString, whereClause);
 
@@ -54,14 +83,14 @@ namespace Vokabular.DataEntities.Database.Search
             var queryString =
                 "select b.Id from Book b inner join b.LastVersion bv";
 
-            var whereClause = CreateWhereClauseForQueryString(m_conjunctionQuery);
+            var whereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
 
             queryString = string.Format("{0}{1} group by b.Id", queryString, whereClause);
 
             return queryString;
         }
 
-        private string CreateWhereClauseForQueryString(List<SearchCriteriaQuery> conjunctionQuery)
+        private string CreateJoinAndWhereClause(List<SearchCriteriaQuery> conjunctionQuery)
         {
             var joinBuilder = new StringBuilder();
             var whereBuilder = new StringBuilder();
@@ -78,6 +107,42 @@ namespace Vokabular.DataEntities.Database.Search
             }
 
             return string.Format("{0}{1}", joinBuilder, whereBuilder);
+        }
+
+        private string CreateOrderByClause()
+        {
+            if (Sort == null)
+                return string.Empty;
+
+            switch (Sort.Value)
+            {
+                case SortTypeEnumContract.Author:
+                    return $" order by metadata.Authors {GetOrderByDirection()}";
+                case SortTypeEnumContract.Title:
+                    return $" order by metadata.Title {GetOrderByDirection()}";
+                case SortTypeEnumContract.Dating:
+                    return SortDirection == SortDirectionEnumContract.Desc
+                        ? " order by metadata.NotAfter desc"
+                        : " order by metadata.NotBefore asc";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private string GetOrderByDirection()
+        {
+            if (SortDirection == null)
+                return string.Empty;
+
+            switch (SortDirection.Value)
+            {
+                case SortDirectionEnumContract.Asc:
+                    return "asc";
+                case SortDirectionEnumContract.Desc:
+                    return "desc";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public string GetQueryStringForHeadwordCount()
@@ -102,10 +167,14 @@ namespace Vokabular.DataEntities.Database.Search
         {
             m_headwordQueryParameter = headwordQuery;
         }
+    }
 
-        public void SetParameters(IQuery query)
+    public static class SearchCriteriaQueryCreatorExtensions
+    {
+        public static IQuery SetParameters(this IQuery query, SearchCriteriaQueryCreator creator)
         {
-            foreach (var parameterKeyValue in m_metadataParameters)
+            var metadataParameters = creator.GetMetadataParameters();
+            foreach (var parameterKeyValue in metadataParameters)
             {
                 if (parameterKeyValue.Value is DateTime)
                 {
@@ -122,10 +191,20 @@ namespace Vokabular.DataEntities.Database.Search
                 }
             }
 
-            if (m_headwordQueryParameter != null)
-            {
-                query.SetParameter("headwordQuery", m_headwordQueryParameter);
-            }
+            //if (m_headwordQueryParameter != null)
+            //{
+            //    query.SetParameter("headwordQuery", m_headwordQueryParameter);
+            //}
+
+            return query;
+        }
+
+        public static IQuery SetPaging(this IQuery query, SearchCriteriaQueryCreator creator)
+        {
+            query.SetFirstResult(creator.GetStart());
+            query.SetMaxResults(creator.GetCount());
+
+            return query;
         }
     }
 }

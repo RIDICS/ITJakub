@@ -10,6 +10,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Metadata;
+using Vokabular.Shared.DataContracts.Search.Result;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 
@@ -596,11 +597,27 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<BookContract> SearchBook(SearchRequestContract request)
+        public List<SearchResultContract> SearchBook(SearchRequestContract request)
         {
             try
             {
-                var result = Post<List<BookContract>>("book/search", request);
+                var result = Post<List<SearchResultContract>>("book/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchBookCount(SearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<int>("book/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)

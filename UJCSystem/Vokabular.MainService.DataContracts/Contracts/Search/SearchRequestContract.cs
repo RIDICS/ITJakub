@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Utils;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
@@ -21,7 +21,7 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public SortDirectionEnumContract? SortDirection { get; set; }
 
         [JsonConverter(typeof(SearchCriteriaJsonConverter))]
-        public List<SearchCriteriaContract> ConditionConjunction { get; set; }
+        public IList<SearchCriteriaContract> ConditionConjunction { get; set; }
     }
 
     public class HitSettingsContract

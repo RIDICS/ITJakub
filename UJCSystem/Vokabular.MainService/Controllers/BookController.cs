@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Result;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -31,16 +31,18 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPost("search")]
-        public List<BookContract> SearchBook([FromBody] SearchRequestContract request)
+        public List<SearchResultContract> SearchBook([FromBody] SearchRequestContract request)
+            // TODO possible switch SearchResultContract to BookContract
         {
-            m_bookManager.SearchBook(request);
-            throw new NotImplementedException();
+            var result = m_bookManager.SearchByCriteria(request);
+            return result;
         }
 
         [HttpPost("search-count")]
-        public int SearchBookResultCount([FromBody] SearchRequestContract request)
+        public long SearchBookResultCount([FromBody] SearchRequestContract request)
         {
-            throw new NotImplementedException();
+            var result = m_bookManager.SearchByCriteriaCount(request);
+            return result;
         }
     }
 }

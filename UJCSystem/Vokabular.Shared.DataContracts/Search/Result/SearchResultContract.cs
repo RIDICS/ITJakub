@@ -23,6 +23,12 @@ namespace Vokabular.Shared.DataContracts.Search.Result
 
         public string BiblText { get; set; }
 
+        public string OriginDate { get; set; }
+
+        public DateTime? NotBefore { get; set; }
+
+        public DateTime? NotAfter { get; set; }
+
         public string PublishPlace { get; set; }
 
         public string PublishDate { get; set; }

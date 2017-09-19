@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -184,73 +183,15 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetRestClient())
-            {
-                var request = new SearchRequestContract
-                {
-                    ConditionConjunction = listSearchCriteriaContracts,
-                    Start = 0,
-                    Count = 1,
-                    Sort = SortTypeEnumContract.Title,
-                    SortDirection = SortDirectionEnumContract.Asc,
-                };
-                var result = client.SearchBook(request);
-                // TODO this method call is currently only for testing communication
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new {count});
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum) sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                HitSettingsContract = new HitSettingsContract
-                {
-                    ContextLength = 50,
-                    Count = 3,
-                    Start = 1
-                }
-            });
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteria(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
