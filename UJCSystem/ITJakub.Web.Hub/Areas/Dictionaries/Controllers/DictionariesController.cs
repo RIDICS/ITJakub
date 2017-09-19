@@ -185,6 +185,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             return new SelectedCategoryCriteriaContract
             {
+                BookType = AreaBookType,
                 SelectedBookIds = selectedBookIds,
                 SelectedCategoryIds = selectedCategoryIds
             };

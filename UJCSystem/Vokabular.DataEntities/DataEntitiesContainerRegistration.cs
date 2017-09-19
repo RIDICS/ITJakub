@@ -20,8 +20,8 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<UserRepository>();
 
             container.AddPerWebRequest<ICriteriaImplementationBase, AuthorCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, CategoryCriteriaImplementation>(); // TODO disabled for debug
+            container.AddPerWebRequest<ICriteriaImplementationBase, AuthorizationCriteriaImplementation>();
+            container.AddPerWebRequest<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
             //container.AddPerWebRequest<ICriteriaImplementationBase, DatingCriteriaImplementation>();
             //container.AddPerWebRequest<ICriteriaImplementationBase, EditorCriteriaImplementation>();
             //container.AddPerWebRequest<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();

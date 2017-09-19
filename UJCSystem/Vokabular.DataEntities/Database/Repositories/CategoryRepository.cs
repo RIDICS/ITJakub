@@ -33,5 +33,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.Categories).Eager
                 .SingleOrDefault();
         }
+
+        public virtual IList<int> GetAllSubcategoryIds(IList<int> selectedCategoryIds)
+        {
+            return GetSession().GetNamedQuery("GetCategoryHierarchy")
+                .SetParameterList("categoryIds", selectedCategoryIds)
+                .List<int>();
+        }
     }
 }

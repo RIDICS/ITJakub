@@ -13,6 +13,9 @@ namespace Vokabular.Shared.DataContracts.Search.Criteria
         }
 
         [DataMember]
+        public BookTypeEnumContract? BookType { get; set; }
+
+        [DataMember]
         public IList<int> SelectedCategoryIds { get; set; }
 
         [DataMember]

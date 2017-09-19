@@ -27,7 +27,8 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                     whereBuilder.Append(" or");
 
                 var uniqueParameterName = $"param{metadataParameters.Count}";
-                whereBuilder.AppendFormat(" {0}.Name like (:{1})", originalAuthorAlias, uniqueParameterName); //TODO Name doesn't exist, FirstName + LastName is required
+                whereBuilder.AppendFormat(" concat({0}.FirstName, ' ', {0}.LastName) like (:{1})", originalAuthorAlias, uniqueParameterName);
+                whereBuilder.AppendFormat(" or concat({0}.LastName, ' ', {0}.FirstName) like (:{1})", originalAuthorAlias, uniqueParameterName);
                 metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 

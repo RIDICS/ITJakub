@@ -162,14 +162,12 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
-            using (var session = GetSession())
-            {
-                var query = session.CreateQuery(creator.GetQueryString());
-                creator.SetParameters(query);
-                var result = query
-                    .List<MetadataResource>();
-                return result;
-            }
+            var session = GetSession();
+            
+            var query = session.CreateQuery(creator.GetQueryString());
+            creator.SetParameters(query);
+            var result = query.List<MetadataResource>();
+            return result;
         }
     }
 }

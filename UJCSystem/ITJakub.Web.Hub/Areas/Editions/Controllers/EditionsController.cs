@@ -191,6 +191,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
@@ -240,6 +241,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
@@ -275,6 +277,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
@@ -325,6 +328,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
@@ -377,6 +381,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });
@@ -428,6 +433,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
                 {
+                    BookType = AreaBookType,
                     SelectedBookIds = selectedBookIds,
                     SelectedCategoryIds = selectedCategoryIds
                 });

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Vokabular.Core.Data;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
@@ -17,6 +19,8 @@ namespace Vokabular.Core.Search
 
         public FilteredCriterias ProcessSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
         {
+            ValidateSearchCriterias(searchCriterias);
+
             ResultCriteriaContract resultCriteria = null;
             var nonMetadataCriterias = new List<SearchCriteriaContract>();
             var metadataCriterias = new List<SearchCriteriaContract>();
@@ -49,6 +53,30 @@ namespace Vokabular.Core.Search
                 MetadataParameters = metadataParameters,
                 ConjunctionQuery = conjunction
             };
+        }
+
+        private void ValidateSearchCriterias(IList<SearchCriteriaContract> searchCriterias)
+        {
+            var countDictionary = Enum.GetValues(typeof(CriteriaKey))
+                .Cast<CriteriaKey>()
+                .ToDictionary(criteriaKey => criteriaKey, criteriaKey => 0);
+
+            foreach (var searchCriteriaContract in searchCriterias)
+            {
+                countDictionary[searchCriteriaContract.Key]++;
+            }
+
+            if (countDictionary[CriteriaKey.Authorization] > 1)
+                throw new ArgumentException("Only one Authorization criteria is allowed.");
+
+            if (countDictionary[CriteriaKey.Result] > 1)
+                throw new ArgumentException("Only one Result criteria is allowed.");
+
+            if (countDictionary[CriteriaKey.ResultRestriction] > 1)
+                throw new ArgumentException("Only one ResultRestriction criteria is allowed.");
+
+            if (countDictionary[CriteriaKey.SelectedCategory] > 1)
+                throw new ArgumentException("Only one SelectedCategory criteria is allowed.");
         }
     }
 }
