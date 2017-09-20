@@ -136,7 +136,7 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
           "delimeter": ", "
         },
         "$literaryOriginal": {

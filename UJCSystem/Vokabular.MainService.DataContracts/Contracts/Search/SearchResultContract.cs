@@ -81,9 +81,9 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public List<string> Keywords { get; set; }
 
-        public List<ResponsiblePersonContract> Editors { get; set; }
+        public List<ProjectResponsiblePersonContract> Editors { get; set; }
 
-        public IList<string> LiteraryOriginals { get; set; }
+        //public IList<string> LiteraryOriginals { get; set; }
 
         public IList<string> LiteraryKinds { get; set; }
 

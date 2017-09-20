@@ -214,5 +214,50 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             return result;
         }
+
+        public virtual MetadataResource GetMetadataWithDetail(long projectId)
+        {
+            Resource resourceAlias = null;
+            ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
+                .FutureValue();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.Keywords).Eager
+                .Future();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.LiteraryGenres).Eager
+                .Future();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.LiteraryKinds).Eager
+                .Future();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                .Fetch(x => x.Authors).Eager
+                .Fetch(x => x.Authors[0].OriginalAuthor).Eager
+                .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
+                .Future();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.ResponsiblePersons).Eager
+                .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
+                .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
+                .Future();
+
+            return result.Value;
+        }
     }
 }

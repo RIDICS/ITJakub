@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -54,6 +55,13 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 //.ForMember(dest => dest.TotalHitCount, opt => opt.MapFrom(src => src.ExternalId)) // Missing fetch
                 //.ForMember(dest => dest.VersionXmlId, opt => opt.MapFrom(src => src.ExternalId)); // Missing fetch
 
+            CreateMap<MetadataResource, SearchResultDetailContract>()
+                .IncludeBase<MetadataResource, SearchResultContract>()
+                .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.Authors))
+                .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Resource.Project.ResponsiblePersons.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor)))
+                .ForMember(dest => dest.Keywords, opt => opt.MapFrom(src => src.Resource.Project.Keywords))
+                .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.Resource.Project.LiteraryGenres))
+                .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.Resource.Project.LiteraryKinds));
         }
     }
 }

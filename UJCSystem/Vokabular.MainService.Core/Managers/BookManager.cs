@@ -206,5 +206,12 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
             return result;
         }
+
+        public SearchResultDetailContract GetBookDetail(long projectId)
+        {
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
+            var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
+            return result;
+        }
     }
 }

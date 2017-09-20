@@ -583,7 +583,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<BookWithCategoriesContract>>($"book/{bookTypeEnum}");
+                var result = Get<List<BookWithCategoriesContract>>($"book/type/{bookTypeEnum}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -616,6 +616,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Post<int>("book/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public SearchResultDetailContract GetBookDetail(long projectId)
+        {
+            try
+            {
+                var result = Get<SearchResultDetailContract>($"book/{projectId}");
                 return result;
             }
             catch (HttpRequestException e)

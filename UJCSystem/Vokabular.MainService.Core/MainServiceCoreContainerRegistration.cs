@@ -24,6 +24,7 @@ namespace Vokabular.MainService.Core
 
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
+            container.AddSingleton<Profile, KeywordProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, MetadataProfile>();

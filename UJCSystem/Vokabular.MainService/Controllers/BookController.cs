@@ -18,7 +18,7 @@ namespace Vokabular.MainService.Controllers
             m_bookManager = bookManager;
         }
 
-        [HttpGet("{bookType}")]
+        [HttpGet("type/{bookType}")]
         [ProducesResponseType(typeof(List<BookWithCategoriesContract>), StatusCodes.Status200OK)]
         public IActionResult GetBooksByType(BookTypeEnumContract? bookType)
         {
@@ -41,6 +41,13 @@ namespace Vokabular.MainService.Controllers
         public long SearchBookResultCount([FromBody] SearchRequestContract request)
         {
             var result = m_bookManager.SearchByCriteriaCount(request);
+            return result;
+        }
+
+        [HttpGet("{projectId}")]
+        public SearchResultDetailContract GetBookDetail(long projectId)
+        {
+            var result = m_bookManager.GetBookDetail(projectId);
             return result;
         }
     }
