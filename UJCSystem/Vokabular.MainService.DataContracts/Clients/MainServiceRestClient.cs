@@ -97,13 +97,13 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor, bool includeResponsiblePerson, bool includeKind, bool includeGenre)
+        public ProjectMetadataResultContract GetProjectMetadata(long projectId, bool includeAuthor, bool includeResponsiblePerson, bool includeKind, bool includeGenre, bool includeOriginal)
         {
             try
             {
                 var metadata =
                     Get<ProjectMetadataResultContract>(
-                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}");
+                        $"project/{projectId}/metadata?includeAuthor={includeAuthor}&includeResponsiblePerson={includeResponsiblePerson}&includeKind={includeKind}&includeGenre={includeGenre}&includeOriginal={includeOriginal}");
                 return metadata;
             }
             catch (HttpRequestException e)
@@ -472,6 +472,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<List<LiteraryGenreContract>>("literarygenre");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<LiteraryOriginalContract> GetLitararyOriginalList()
+        {
+            try
+            {
+                var result = Get<List<LiteraryOriginalContract>>("literaryoriginal");
                 return result;
             }
             catch (HttpRequestException e)

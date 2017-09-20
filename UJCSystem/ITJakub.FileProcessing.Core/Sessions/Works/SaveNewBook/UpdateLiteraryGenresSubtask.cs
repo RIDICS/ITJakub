@@ -20,7 +20,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var dbGenreList = m_metadataRepository.GetLiteraryGenreList();
-            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, true);
+            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, true, false);
 
             foreach (var newGenreName in bookData.LiteraryGenres)
             {

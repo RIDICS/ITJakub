@@ -16,10 +16,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models
 
         public List<LiteraryKindContract> AllLiteraryKindList { get; set; }
         public List<LiteraryGenreContract> AllLiteraryGenreList { get; set; }
+        public List<LiteraryOriginalContract> AllLiteraryOriginalList { get; set; }
         public List<ResponsibleTypeViewModel> AllResponsibleTypeList { get; set; }
         
         public HashSet<int> SelectedLiteraryKindIds { get; set; }
         public HashSet<int> SelectedLiteraryGenreIds { get; set; }
+        public HashSet<int> SelectedLiteraryOriginalIds { get; set; }
         public List<OriginalAuthorContract> Authors { get; set; }
         public List<ResponsiblePersonContract> ResponsiblePersons { get; set; }
 

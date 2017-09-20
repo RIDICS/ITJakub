@@ -90,6 +90,12 @@ BEGIN TRAN
 	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryKind(Name)] UNIQUE
     )
 
+	CREATE TABLE [dbo].[LiteraryOriginal]
+    (
+	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_LiteraryOriginal(Id)] PRIMARY KEY CLUSTERED,
+	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryOriginal(Name)] UNIQUE
+    )
+
 	CREATE TABLE [dbo].[TermCategory]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TermCategory(Id)] PRIMARY KEY CLUSTERED,
@@ -387,6 +393,13 @@ BEGIN TRAN
 	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_LiteraryKind(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 	   [LiteraryKind] int NOT NULL CONSTRAINT [FK_Project_LiteraryKind(LiteraryKind)_LiteraryKind(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryKind] (Id),
 	   CONSTRAINT [PK_Project_LiteraryKind(Project)_Project_LiteraryKind(LiteraryKind)] PRIMARY KEY ([Project], [LiteraryKind])
+    )
+
+	CREATE TABLE [dbo].[Project_LiteraryOriginal]
+    (
+	   [Project] bigint NOT NULL CONSTRAINT [FK_Project_LiteraryOriginal(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
+	   [LiteraryOriginal] int NOT NULL CONSTRAINT [FK_Project_LiteraryOriginal(LiteraryOriginal)_LiteraryOriginal(Id)] FOREIGN KEY REFERENCES [dbo].[LiteraryOriginal] (Id),
+	   CONSTRAINT [PK_Project_LiteraryOriginal(Project)_Project_LiteraryOriginal(LiteraryOriginal)] PRIMARY KEY ([Project], [LiteraryOriginal])
     )
 
 	CREATE TABLE [dbo].[Project_Keyword]

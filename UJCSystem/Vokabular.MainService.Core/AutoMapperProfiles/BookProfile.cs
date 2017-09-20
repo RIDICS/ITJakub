@@ -61,7 +61,8 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Editors, opt => opt.MapFrom(src => src.Resource.Project.ResponsiblePersons.Where(x => x.ResponsibleType.Type == ResponsibleTypeEnum.Editor)))
                 .ForMember(dest => dest.Keywords, opt => opt.MapFrom(src => src.Resource.Project.Keywords))
                 .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.Resource.Project.LiteraryGenres))
-                .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.Resource.Project.LiteraryKinds));
+                .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.Resource.Project.LiteraryKinds))
+                .ForMember(dest => dest.LiteraryOriginals, opt => opt.MapFrom(src => src.Resource.Project.LiteraryOriginals));
         }
     }
 }

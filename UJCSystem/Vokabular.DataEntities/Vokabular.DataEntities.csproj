@@ -53,6 +53,7 @@
     <EmbeddedResource Include="Database\Entities\HistoryLogBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Keyword.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryGenre.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\LiteraryOriginal.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\LiteraryKind.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\NamedResourceGroup.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\NewsSyndicationItem.hbm.xml" />

@@ -30,6 +30,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<LiteraryOriginal> GetLiteraryOriginalList()
+        {
+            return GetSession().QueryOver<LiteraryOriginal>()
+                .OrderBy(x => x.Name).Asc
+                .List();
+        }
+
         public virtual MetadataResource GetLatestMetadataResource(long projectId)
         {
             Resource resourceAlias = null;
@@ -42,7 +49,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query.SingleOrDefault();
         }
 
-        public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre)
+        public virtual Project GetAdditionalProjectMetadata(long projectId, bool includeAuthors, bool includeResponsibles, bool includeKind, bool includeGenre, bool includeOriginal)
         {
             var session = GetSession();
 
@@ -78,6 +85,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 session.QueryOver<Project>()
                     .Where(x => x.Id == projectId)
                     .Fetch(x => x.LiteraryGenres).Eager
+                    .FutureValue();
+            }
+            if (includeOriginal)
+            {
+                session.QueryOver<Project>()
+                    .Where(x => x.Id == projectId)
+                    .Fetch(x => x.LiteraryOriginals).Eager
                     .FutureValue();
             }
 
@@ -240,6 +254,11 @@ namespace Vokabular.DataEntities.Database.Repositories
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .Fetch(x => x.LiteraryKinds).Eager
+                .Future();
+
+            session.QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.LiteraryOriginals).Eager
                 .Future();
 
             session.QueryOver<Project>()

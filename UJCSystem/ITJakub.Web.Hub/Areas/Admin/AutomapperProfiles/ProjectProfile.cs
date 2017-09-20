@@ -46,6 +46,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.AutomapperProfiles
             CreateMap<ProjectMetadataResultContract, ProjectWorkMetadataViewModel>()
                 .ForMember(dest => dest.SelectedLiteraryGenreIds, opt => opt.MapFrom(src => src.LiteraryGenreList))
                 .ForMember(dest => dest.SelectedLiteraryKindIds, opt => opt.MapFrom(src => src.LiteraryKindList))
+                .ForMember(dest => dest.SelectedLiteraryOriginalIds, opt => opt.MapFrom(src => src.LiteraryOriginalList))
                 .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.AuthorList))
                 .ForMember(dest => dest.ResponsiblePersons, opt => opt.MapFrom(src => src.ResponsiblePersonList));
         }

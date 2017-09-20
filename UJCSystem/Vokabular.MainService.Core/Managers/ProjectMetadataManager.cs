@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -30,14 +31,20 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<LiteraryKindContract> GetLiteraryKindList()
         {
-            var result = new GetLiteraryKindListWork(m_metadataRepository).Execute();
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryKindList());
             return Mapper.Map<List<LiteraryKindContract>>(result);
         }
 
         public List<LiteraryGenreContract> GetLiteraryGenreList()
         {
-            var result = new GetLiteraryGenreListWork(m_metadataRepository).Execute();
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryGenreList());
             return Mapper.Map<List<LiteraryGenreContract>>(result);
+        }
+
+        public List<LiteraryOriginalContract> GetLiteraryOriginalList()
+        {
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryOriginalList());
+            return Mapper.Map<List<LiteraryOriginalContract>>(result);
         }
 
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, GetProjectMetadataParameter parameters)
@@ -67,6 +74,10 @@ namespace Vokabular.MainService.Core.Managers
                 if (parameters.IncludeGenre)
                 {
                     resultContract.LiteraryGenreList = Mapper.Map<List<LiteraryGenreContract>>(project.LiteraryGenres);
+                }
+                if (parameters.IncludeOriginal)
+                {
+                    resultContract.LiteraryOriginalList = Mapper.Map<List<LiteraryOriginalContract>>(project.LiteraryOriginals);
                 }
             }
 

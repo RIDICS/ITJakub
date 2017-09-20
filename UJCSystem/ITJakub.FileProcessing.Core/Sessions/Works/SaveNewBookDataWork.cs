@@ -51,6 +51,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             new UpdateLiteraryKindsSubtask(m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
             new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
+            new UpdateLiteraryOriginalsSubtask(m_metadataRepository).UpdateLiteraryOriginals(m_projectId, m_bookData);
             new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
 
             var updateTermsSubtask = new UpdateTermsSubtask(m_resourceRepository);

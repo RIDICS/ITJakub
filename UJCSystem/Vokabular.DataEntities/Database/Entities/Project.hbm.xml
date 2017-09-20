@@ -45,6 +45,11 @@
       <many-to-many class="LiteraryGenre" column="LiteraryGenre" />
     </bag>
 
+    <bag name="LiteraryOriginals" table="Project_LiteraryOriginal" cascade="save-update" lazy="true">
+      <key column="Project" />
+      <many-to-many class="LiteraryOriginal" column="LiteraryOriginal" />
+    </bag>
+
     <bag name="Categories" table="Project_Category" cascade="save-update" lazy="true">
       <key column="Project" />
       <many-to-many class="Category" column="Category" />

@@ -108,11 +108,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     case ProjectModuleTabType.WorkMetadata:
                         var literaryKinds = client.GetLiteraryKindList();
                         var literaryGenres = client.GetLitararyGenreList();
+                        var literaryOriginals = client.GetLitararyOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
-                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true);
+                        var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
+                        workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
                         workMetadaViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:

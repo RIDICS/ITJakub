@@ -4,12 +4,13 @@
     {
         public bool IncludeGenre { get; set; }
         public bool IncludeKind { get; set; }
+        public bool IncludeOriginal { get; set; }
         public bool IncludeAuthor { get; set; }
         public bool IncludeResponsiblePerson { get; set; }
 
         public bool IsAnyAdditionalParameter()
         {
-            return IncludeGenre || IncludeKind || IncludeAuthor || IncludeResponsiblePerson;
+            return IncludeGenre || IncludeKind || IncludeOriginal || IncludeAuthor || IncludeResponsiblePerson;
         }
     }
 }

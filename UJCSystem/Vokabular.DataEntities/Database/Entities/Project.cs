@@ -27,6 +27,8 @@ namespace Vokabular.DataEntities.Database.Entities
 
         public virtual IList<LiteraryGenre> LiteraryGenres { get; set; }
 
+        public virtual IList<LiteraryOriginal> LiteraryOriginals { get; set; }
+
         public virtual IList<Category> Categories { get; set; }
 
         public virtual IList<Keyword> Keywords { get; set; }

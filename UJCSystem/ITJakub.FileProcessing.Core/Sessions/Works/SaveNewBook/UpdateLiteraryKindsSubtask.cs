@@ -20,7 +20,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 return;
 
             var dbKindList = m_metadataRepository.GetLiteraryKindList();
-            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, true, false);
+            var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, true, false, false);
 
             foreach (var newKindName in bookData.LiteraryKinds)
             {

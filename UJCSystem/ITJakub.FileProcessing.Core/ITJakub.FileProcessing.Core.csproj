@@ -116,6 +116,7 @@
     <Compile Include="Sessions\Works\SaveNewBook\UpdateKeywordsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryGenresSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryKindsSubtask.cs" />
+    <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryOriginalsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateMetadataSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdatePagesSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateProjectSubtask.cs" />
