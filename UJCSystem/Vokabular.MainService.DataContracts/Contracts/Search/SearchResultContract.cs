@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vokabular.Shared.DataContracts.Metadata;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.Shared.DataContracts.Search.Result
+namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
     public class SearchResultContract
     {
@@ -37,8 +36,8 @@ namespace Vokabular.Shared.DataContracts.Search.Result
 
         public string PublisherEmail { get; set; }
 
-        public List<OriginalAuthorContract> Authors { get; set; }
-
+        public string AuthorsLabel { get; set; }
+        
         //public PublisherContract Publisher { get; set; }
 
         public string Copyright { get; set; }
@@ -74,5 +73,20 @@ namespace Vokabular.Shared.DataContracts.Search.Result
         public string RelicAbbreviation { get; set; }
 
         public string SourceAbbreviation { get; set; }
+    }
+
+    public class SearchResultDetailContract : SearchResultContract
+    {
+        public List<OriginalAuthorContract> Authors { get; set; }
+
+        public List<string> Keywords { get; set; }
+
+        public List<ResponsiblePersonContract> Editors { get; set; }
+
+        public IList<string> LiteraryOriginals { get; set; }
+
+        public IList<string> LiteraryKinds { get; set; }
+
+        public IList<string> LiteraryGenres { get; set; }
     }
 }

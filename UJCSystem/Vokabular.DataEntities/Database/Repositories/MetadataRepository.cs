@@ -191,8 +191,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(x => x.Id).IsInG(metadataIdList)
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.Resource.Project).Eager
-                .Fetch(x => x.Resource.Project.Authors).Eager
-                //TODO fetch Author name
+                //.Fetch(x => x.Resource.Project.Authors).Eager // Authors are used from Metadata
                 .List();
             return result;
         }

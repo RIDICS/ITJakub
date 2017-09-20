@@ -20,7 +20,7 @@
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {

@@ -10,7 +10,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
         {
             CreateMap<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.LastModification, opt => opt.MapFrom(src => src.CreateTime))
-                .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Authors))
+                .ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.AuthorsLabel))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.SubTitle, opt => opt.MapFrom(src => src.SubTitle))
                 .ForMember(dest => dest.RelicAbbreviation, opt => opt.MapFrom(src => src.RelicAbbreviation))

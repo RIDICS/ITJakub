@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
-using Vokabular.Shared.DataContracts.Metadata;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Controllers
 {

@@ -168,7 +168,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[MetadataResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Authors] varchar(2000) NULL,
+	   [AuthorsLabel] varchar(2000) NULL,
 	   [Title] nvarchar(2000) NULL,
 	   [SubTitle] nvarchar(2000) NULL,
 	   [RelicAbbreviation] varchar(100) NULL,

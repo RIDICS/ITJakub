@@ -117,7 +117,7 @@ namespace Vokabular.DataEntities.Database.Search
             switch (Sort.Value)
             {
                 case SortTypeEnumContract.Author:
-                    return $" order by metadata.Authors {GetOrderByDirection()}";
+                    return $" order by metadata.AuthorsLabel {GetOrderByDirection()}";
                 case SortTypeEnumContract.Title:
                     return $" order by metadata.Title {GetOrderByDirection()}";
                 case SortTypeEnumContract.Dating:

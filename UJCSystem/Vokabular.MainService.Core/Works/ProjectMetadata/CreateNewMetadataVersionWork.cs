@@ -52,7 +52,7 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             var newResourceVersion = new MetadataResource
             {
                 Resource = resource,
-                Authors = m_data.Authors,
+                AuthorsLabel = m_data.Authors,
                 BiblText = m_data.BiblText,
                 Copyright = m_data.Copyright,
                 CreateTime = now,

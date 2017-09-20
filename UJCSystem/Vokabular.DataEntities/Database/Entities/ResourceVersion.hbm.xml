@@ -55,7 +55,7 @@
 
       <property name="Title" />
       <property name="SubTitle" />
-      <property name="Authors" />
+      <property name="AuthorsLabel" />
       <property name="RelicAbbreviation" />
       <property name="SourceAbbreviation" />
       <property name="PublishPlace" />

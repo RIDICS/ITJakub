@@ -27,7 +27,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 : null;
             var metadata = new MetadataResource
             {
-                Authors = authorsString,
+                AuthorsLabel = authorsString,
                 BiblText = bookData.BiblText,
                 Comment = comment,
                 Copyright = bookData.Copyright,

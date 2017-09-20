@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Vokabular.MainService.DataContracts.Contracts
+﻿namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class ResponsiblePersonContract
     {

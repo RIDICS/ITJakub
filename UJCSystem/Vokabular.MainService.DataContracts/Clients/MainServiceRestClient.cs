@@ -9,8 +9,6 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
 using Vokabular.Shared;
-using Vokabular.Shared.DataContracts.Metadata;
-using Vokabular.Shared.DataContracts.Search.Result;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 

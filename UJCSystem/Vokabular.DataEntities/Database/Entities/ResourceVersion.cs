@@ -47,7 +47,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string Title { get; set; }
         public virtual string SubTitle { get; set; }
-        public virtual string Authors { get; set; }
+        public virtual string AuthorsLabel { get; set; }
         public virtual string RelicAbbreviation { get; set; }
 	    public virtual string SourceAbbreviation { get; set; }
 	    public virtual string PublishPlace { get; set; }

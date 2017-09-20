@@ -18,7 +18,6 @@ using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
-using Vokabular.Shared.DataContracts.Metadata;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {

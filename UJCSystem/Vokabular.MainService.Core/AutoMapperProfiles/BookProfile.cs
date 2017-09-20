@@ -3,7 +3,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts.Search.Result;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
@@ -26,7 +26,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id)) // TODO try convert property from BookId to ProjectId (including TypeScript)
                 .ForMember(dest => dest.BookXmlId, opt => opt.MapFrom(src => src.Resource.Project.ExternalId))
                 //.ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
-                .ForMember(dest => dest.Authors, opt => opt.Ignore())
+                .ForMember(dest => dest.AuthorsLabel, opt => opt.MapFrom(src => src.AuthorsLabel))
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
                 .ForMember(dest => dest.Copyright, opt => opt.MapFrom(src => src.Copyright))

@@ -4,7 +4,6 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts.Metadata;
 
 namespace Vokabular.MainService.Core.Managers
 {

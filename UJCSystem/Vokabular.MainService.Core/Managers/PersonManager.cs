@@ -3,7 +3,6 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.MainService.Core.Works.Person;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts.Metadata;
 
 namespace Vokabular.MainService.Core.Managers
 {
