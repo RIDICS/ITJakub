@@ -9,7 +9,6 @@
 		"Listing": "Listing",
 		"Help": "Help",
 		"Feedback": "Feedback",
-		"Listing": "Listing",
 		"Editions": "Editions",
 		"EditionPrinciples": "Edition principles",
 		"Corpora": "Corpora",
@@ -19,7 +18,6 @@
 		"ProfessionalLiterature": "Professional literature",
 		"Bibliographies": "Bibliographies",
 		"CardFiles": "Card files",
-		"Listing": "Listing",
 		"AudioBooks": "Audiobooks",
 		"Tools": "Tools",
 		"Administration": "Administration",
@@ -43,7 +41,6 @@
 		"UjcLong": "Institute of the Czech Language",
 		"CtuFelLong": "CTU Faculty of Electrical Engineering",
 		"AvcrStrategyAV21": "ASCR Strategy AV 21",
-		"MsmtLong": "Ministry of Education, Youth and Sports",
+		"MsmtLong": "Ministry of Education, Youth and Sports"
 		}
-	}
 }

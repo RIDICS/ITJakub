@@ -1,0 +1,13 @@
+{
+	"culture":"cs-CZ",
+	"scope":"RegisterViewModel",
+  "dictionary": {
+    "Uživatelské jméno": "jedna",
+    "Name": "dva",
+    "ErrorMessage": "tri",
+    "Uživatelské jméno nemůže být prázdné": "ctyri",
+    "UserName": "pet",
+    "Heslo nemůže být prázdné": "sest",
+    "Password": "sedm"
+  }
+}

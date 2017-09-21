@@ -4,24 +4,10 @@
 	"dictionary": {
 		"Vokabulář" : "Vokabulář",
 		"webový": "webový",
-		
-		"UseExternalLoginService": "Použít jinou službu pro přihlášení",
-		"UseExternalLoginService-placeholder": "Zde by mělo být možné se zaregistrovat pomocí jiných účtu",
-		"Login": "Přihlášení",
-		"Login-text": "Přihlaste se pomocí svého účtu",
-		"Login-submit": "Přihlásit se",
-		
-		"RegisterAccount": "Registrovat se jako nový uživatel",
-		"Registration": "Registrace",
-		
-		"MakeNewAccount": "Založení nového účtu",
-		"Registration-submit": "Registrovat",
-		"": "",
-		"": "",
-		"": "",
-		"": "",
 
-		
+		"UserName": "Uživatelské jméno",
+		"Uživatelské jméno":"wewe",
+		"Heslo": "Heslo",
+		"Password": "Heslo22"
 		}
-	}
 }

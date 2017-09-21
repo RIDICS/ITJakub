@@ -1,0 +1,10 @@
+{
+	"culture":"cs-CZ",
+	"scope":"LoginViewModel",
+  "dictionary": {
+    "NotEmpty": "{0} nemůže být prázdné",
+    "UserName": "Uživatelské jméno",
+    "Password": "Heslo",
+    "RememberMe": "Zůstat přihlášen po vypnutí prohlížeče"
+  }
+}

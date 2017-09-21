@@ -1,0 +1,10 @@
+{
+	"culture":"en",
+	"scope":"RegisterViewModel",
+  "dictionary": {
+    "Uživatelské jméno": "jedna",
+    "Uživatelské jméno nemůže být prázdné": "ctyri",
+    "Name": "dva"
+
+  }
+}

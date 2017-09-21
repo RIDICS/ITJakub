@@ -4,20 +4,18 @@ namespace ITJakub.Web.Hub.Models
 {
     public class LoginViewModel
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Uživatelské jméno nemůže být prázdné")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Text)]
-        [Display(Name = "Uživatelské jméno")]
+        [Display(Name = "UserName")]
         public string UserName { get; set; }
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "Heslo nemůže být prázdné")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "NotEmpty")]
         [DataType(DataType.Password)]
-        [Display(Name = "Heslo")]
+        [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [Display(Name = "Zůstat přihlášen po vypnutí prohlížeče")]
+        [Display(Name = "RememberMe")]
         public bool RememberMe { get; set; }
-
-
     }
 
     public class RegisterViewModel
