@@ -13,6 +13,7 @@ namespace Vokabular.MainService.Core
         {
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<CategoryManager>();
+            container.AddPerWebRequest<PageManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectManager>();
             container.AddPerWebRequest<ProjectMetadataManager>();
@@ -29,8 +30,10 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, MetadataProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();
+            container.AddSingleton<Profile, PageProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
             container.Install<CoreContainerRegistration>();

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Headers;
 
 namespace Vokabular.MainService.Controllers
@@ -16,11 +17,13 @@ namespace Vokabular.MainService.Controllers
 
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
+        private readonly PageManager m_pageManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, PageManager pageManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
+            m_pageManager = pageManager;
         }
 
         [HttpGet]
@@ -113,6 +116,37 @@ namespace Vokabular.MainService.Controllers
         public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract responsiblePersonIdList)
         {
             m_projectMetadataManager.SetResponsiblePersons(projectId, responsiblePersonIdList);
+        }
+
+        [HttpGet("{projectId}/page")]
+        public List<PageContract> GetPageList(long projectId)
+        {
+            var result = m_pageManager.GetPageList(projectId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/text")]
+        public List<TextWithPageContract> GetTextResourceList(long projectId, [FromQuery] long? resourceGroupId)
+        {
+            var result = m_pageManager.GetTextResourceList(projectId, resourceGroupId);
+            return result;
+        }
+        
+        [HttpGet("text/{textId}")]
+        public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
+        {
+            if (format == null)
+                format = TextFormatEnumContract.Html;
+
+            var result = m_pageManager.GetTextResource(textId, format.Value);
+            return result;
+        }
+
+        [HttpPost("text/{textId}")]
+        [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
+        public IActionResult CreateNewTextResourceVersion([FromBody] TextContract request)
+        {
+            return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
     }
 }

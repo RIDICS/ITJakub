@@ -160,7 +160,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var projectId = project.Id;
             var resourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Transcribed, DefaultImportResourceGroupName);
-            var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id);
+            var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id, false);
             var dbTextsByPageResId = new Dictionary<long, List<TextResource>>();
             foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ParentResource.Id))
             {

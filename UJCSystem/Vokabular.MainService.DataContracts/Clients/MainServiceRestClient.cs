@@ -658,5 +658,69 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public List<PageContract> GetAllPageList(long projectId)
+        {
+            try
+            {
+                var result = Get<List<PageContract>>($"project/{projectId}/page");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
+        {
+            try
+            {
+                var result = Get<List<TextWithPageContract>>($"project/{projectId}/text?resourceGroupId={resourceGroupId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FullTextContract GetTextResource(long textId, TextFormatEnumContract? format)
+        {
+            try
+            {
+                var result = Get<FullTextContract>($"project/text/{textId}?format={format.ToString()}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long CreateNewTextResourceVersion(long textId, TextContract request)
+        {
+            try
+            {
+                var result = Post<long>($"text/{textId}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }
