@@ -24,34 +24,6 @@ BEGIN TRAN
 		[PageResource] bigint NOT NULL CONSTRAINT [FK_TextComment(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
-	CREATE TABLE [dbo].[Snapshot]
-	(
-		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Snapshot(Id)] PRIMARY KEY CLUSTERED,
-		[VersionNumber] int NOT NULL,
-		[CreateTime] datetime NOT NULL,
-		[PublishTime] datetime NULL,
-		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
-		[CreatedByUser] int NOT NULL CONSTRAINT [FK_Snapshot(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[Comment] nvarchar(2000)
-	)
-
-	ALTER TABLE [dbo].[Project] ADD [LatestPublishedSnapshot] bigint NULL CONSTRAINT [FK_Project(LatestPublishedSnapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id)
-
-	
-	CREATE TABLE [dbo].[Snapshot_ResourceVersion]
-    (
-		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_ResourceVersion(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
-		[ResourceVersion] bigint NOT NULL CONSTRAINT [FK_Snapshot_ResourceVersion(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id),
-		CONSTRAINT [PK_Snapshot_ResourceVersion(Snapshot)_Snapshot_ResourceVersion(ResourceVersion)] PRIMARY KEY ([Snapshot], [ResourceVersion])
-    )
-
-	CREATE TABLE [dbo].[Snapshot_BookType]
-    (
-		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_BookType(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
-		[BookType] int NOT NULL CONSTRAINT [FK_Snapshot_BookType(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
-		CONSTRAINT [PK_Snapshot_BookType(Snapshot)_Snapshot_BookType(BookType)] PRIMARY KEY ([Snapshot], [BookType])
-    )
-
 	
     INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)

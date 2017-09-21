@@ -27,8 +27,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[User]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_User(Id)] PRIMARY KEY CLUSTERED,
-	   [FirstName] varchar(50) NOT NULL,
-	   [LastName] varchar(50) NOT NULL,
+	   [FirstName] nvarchar(50) NOT NULL,
+	   [LastName] nvarchar(50) NOT NULL,
 	   [Email] varchar(255) NOT NULL,
 	   [UserName] varchar(50) NOT NULL CONSTRAINT [UQ_User(UserName)] UNIQUE,
 	   [AuthenticationProvider] tinyint NOT NULL,
@@ -43,8 +43,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[OriginalAuthor]
     (
 	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_OriginalAuthor(Id)] PRIMARY KEY CLUSTERED,
-	   [FirstName] varchar(50) NOT NULL,
-	   [LastName] varchar(100) NOT NULL,
+	   [FirstName] nvarchar(50) NOT NULL,
+	   [LastName] nvarchar(100) NOT NULL,
 	   CONSTRAINT [UQ_OriginalAuthor(FirstName)(LastName)] UNIQUE ([FirstName],[LastName])
     )
 	
@@ -58,8 +58,8 @@ BEGIN TRAN
     CREATE TABLE [dbo].[ResponsiblePerson]
     (
 	   [Id] int IDENTITY(1,1) CONSTRAINT [PK_ResponsiblePerson(Id)] PRIMARY KEY CLUSTERED,
-	   [FirstName] varchar(50) NOT NULL,
-	   [LastName] varchar(50) NOT NULL,
+	   [FirstName] nvarchar(50) NOT NULL,
+	   [LastName] nvarchar(50) NOT NULL,
 	   CONSTRAINT [UQ_ResponsiblePerson(FirstName)(LastName)] UNIQUE ([FirstName],[LastName])
     )
 	
@@ -73,7 +73,7 @@ BEGIN TRAN
     (
        [Id] int IDENTITY(1,1) CONSTRAINT [PK_Category(Id)] PRIMARY KEY CLUSTERED,
 	   [ExternalId] varchar(150) NULL,
-	   [Description] varchar(150) NULL,
+	   [Description] nvarchar(150) NULL,
 	   [Path] varchar(MAX) NOT NULL,
 	   [ParentCategory] int NULL CONSTRAINT [FK_Category(ParentCategory)_Category(Id)] FOREIGN KEY REFERENCES [dbo].[Category](Id)
     )
@@ -81,32 +81,32 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[LiteraryGenre]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_LiteraryGenre(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryGenre(Name)] UNIQUE
+	   [Name] nvarchar(255) NOT NULL CONSTRAINT [UQ_LiteraryGenre(Name)] UNIQUE
     )
 
     CREATE TABLE [dbo].[LiteraryKind]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_LiteraryKind(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryKind(Name)] UNIQUE
+	   [Name] nvarchar(255) NOT NULL CONSTRAINT [UQ_LiteraryKind(Name)] UNIQUE
     )
 
 	CREATE TABLE [dbo].[LiteraryOriginal]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_LiteraryOriginal(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_LiteraryOriginal(Name)] UNIQUE
+	   [Name] nvarchar(255) NOT NULL CONSTRAINT [UQ_LiteraryOriginal(Name)] UNIQUE
     )
 
 	CREATE TABLE [dbo].[TermCategory]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TermCategory(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(255) NOT NULL CONSTRAINT [UQ_TermCategory(Name)] UNIQUE
+	   [Name] nvarchar(255) NOT NULL CONSTRAINT [UQ_TermCategory(Name)] UNIQUE
     )
 
 	CREATE TABLE [dbo].[Term]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Term(Id)] PRIMARY KEY CLUSTERED,
 	   [ExternalId] varchar(255) NULL,
-	   [Text] varchar(255) NOT NULL CONSTRAINT [UQ_Term(Text)] UNIQUE,
+	   [Text] nvarchar(255) NOT NULL CONSTRAINT [UQ_Term(Text)] UNIQUE,
 	   [Position] bigint NOT NULL,
 	   [TermCategory] int NOT NULL CONSTRAINT [FK_Term(TermCategory)_TermCategory(Id)] FOREIGN KEY REFERENCES [dbo].[TermCategory](Id)
     )
@@ -114,7 +114,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[Keyword]
     (
 	   [Id] int IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Keyword(Id)] PRIMARY KEY CLUSTERED,
-	   [Text] varchar(255) NOT NULL CONSTRAINT [UQ_Keyword(Text)] UNIQUE
+	   [Text] nvarchar(255) NOT NULL CONSTRAINT [UQ_Keyword(Text)] UNIQUE
     )
 
     
@@ -123,12 +123,10 @@ BEGIN TRAN
     CREATE TABLE [dbo].[Project]
     (
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Project(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(2000) NOT NULL,
+	   [Name] nvarchar(2000) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [ExternalId] varchar(255) NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_Project(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id)
-	   -- TODO possible reference to latest metadata
-	   -- TODO Unique?
 	   -- TODO last modification time?
     )
 		
@@ -136,7 +134,7 @@ BEGIN TRAN
 	(
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_NamedResourceGroup(Id)] PRIMARY KEY CLUSTERED,
 	   [Project] bigint NOT NULL CONSTRAINT [FK_NamedResourceGroup(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project] (Id),
-	   [Name] varchar(255) NOT NULL,
+	   [Name] nvarchar(255) NOT NULL,
 	   [TextType] smallint NOT NULL
 	)
 
@@ -174,28 +172,26 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[MetadataResource]
     (
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_MetadataResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [AuthorsLabel] varchar(2000) NULL,
+	   [AuthorsLabel] nvarchar(2000) NULL,
 	   [Title] nvarchar(2000) NULL,
 	   [SubTitle] nvarchar(2000) NULL,
 	   [RelicAbbreviation] varchar(100) NULL,
 	   [SourceAbbreviation] varchar(255) NULL,
-	   [PublishPlace] varchar(100) NULL,
+	   [PublishPlace] nvarchar(100) NULL,
 	   [PublishDate] varchar(50) NULL,
-	   [PublisherText] varchar(2000) NULL,
+	   [PublisherText] nvarchar(2000) NULL,
 	   [PublisherEmail] varchar(255) NULL,
 	   [Copyright] nvarchar(MAX) NULL,
 	   [BiblText] nvarchar(MAX) NULL,
 	   [OriginDate] varchar(50) NULL,
 	   [NotBefore] date NULL,
 	   [NotAfter] date NULL,
-	   [ManuscriptIdno] varchar (50) NULL,
-	   [ManuscriptSettlement] varchar (100) NULL,
-	   [ManuscriptCountry] varchar (100) NULL,
-	   [ManuscriptRepository] varchar (100) NULL,
-	   [ManuscriptExtent] varchar(255) NULL, -- TODO unkown value max size
+	   [ManuscriptIdno] nvarchar (50) NULL,
+	   [ManuscriptSettlement] nvarchar (100) NULL,
+	   [ManuscriptCountry] nvarchar (100) NULL,
+	   [ManuscriptRepository] nvarchar (100) NULL,
+	   [ManuscriptExtent] nvarchar(2000) NULL,
 	   [ManuscriptTitle] nvarchar(2000) NULL
-	   
-	   -- TODO !!! Is possible have multiple different manuscripts?
     )
 
     CREATE TABLE [dbo].[PageResource]
@@ -268,7 +264,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[BinaryResource]
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_BinaryResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
-	   [Name] varchar(255) NOT NULL,
+	   [Name] nvarchar(255) NOT NULL,
 	   [FileName] varchar(255) NOT NULL
 	)
 
@@ -278,7 +274,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[FavoriteLabel]
 	(
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_FavoriteLabel(Id)] PRIMARY KEY CLUSTERED,
-	   [Name] varchar(150) NOT NULL,
+	   [Name] nvarchar(150) NOT NULL,
 	   [Color] char(7) NOT NULL,
 	   [User] int NOT NULL CONSTRAINT [FK_FavoriteLabel(User)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 	   --[ParentLabel] bigint NULL CONSTRAINT [FK_FavoriteLabel(ParentLabel)_FavoriteLabel(Id)] FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
@@ -291,7 +287,7 @@ BEGIN TRAN
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Favorite(Id)] PRIMARY KEY CLUSTERED,
 	   [FavoriteType] varchar(255) NOT NULL,
 	   [FavoriteLabel] bigint NOT NULL FOREIGN KEY REFERENCES [dbo].[FavoriteLabel](Id),
-	   [Title] varchar(255) NULL,
+	   [Title] nvarchar(255) NULL,
 	   [Description] nvarchar(2000) NULL, --TODO is required?
 	   [CreateTime] datetime NULL,
 	   [Project] bigint NULL FOREIGN KEY REFERENCES [dbo].[Project] (Id),
@@ -300,7 +296,7 @@ BEGIN TRAN
 	   [ResourceVersion] bigint NULL FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id),
 	   --TODO FavoriteSnapshot
 	   [BookType] int NULL FOREIGN KEY REFERENCES [dbo].[BookType](Id),
-	   [Query] varchar(max) NULL,
+	   [Query] nvarchar(max) NULL,
 	   [QueryType] smallint NULL
     )
 
@@ -310,7 +306,7 @@ BEGIN TRAN
 	   [FeedbackType] varchar(255) NOT NULL,
 	   [Text] nvarchar(2000) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
-	   [AuthorName] varchar(255) NULL,
+	   [AuthorName] nvarchar(255) NULL,
 	   [AuthorEmail] varchar(255) NULL,
 	   [AuthorUser] int NULL CONSTRAINT [FK_Feedback(AuthorUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 	   [FeedbackCategory] smallint NOT NULL,
@@ -321,7 +317,7 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[NewsSyndicationItem]
 	(
 	   [Id] bigint IDENTITY(1, 1) NOT NULL CONSTRAINT [PK_NewsSyndicationItem(Id)] PRIMARY KEY CLUSTERED,
-	   [Title] varchar(255) NOT NULL,
+	   [Title] nvarchar(255) NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [Text] nvarchar(2000) NOT NULL,
 	   [Url] varchar(max) NOT NULL,
@@ -340,6 +336,19 @@ BEGIN TRAN
 	   [ResourceLevel] smallint NOT NULL
     )
 
+	CREATE TABLE [dbo].[Snapshot]
+	(
+		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_Snapshot(Id)] PRIMARY KEY CLUSTERED,
+		[VersionNumber] int NOT NULL,
+		[CreateTime] datetime NOT NULL,
+		[PublishTime] datetime NULL,
+		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_Snapshot(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[Comment] nvarchar(2000)
+	)
+
+	ALTER TABLE [dbo].[Project] ADD [LatestPublishedSnapshot] bigint NULL CONSTRAINT [FK_Project(LatestPublishedSnapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id)
+
 	CREATE TABLE [dbo].[HistoryLog]
 	(
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_HistoryLog(Id)] PRIMARY KEY CLUSTERED,
@@ -351,11 +360,11 @@ BEGIN TRAN
 		[AdditionalDescription] nvarchar(2000) NULL,
 		[ExternalId] varchar(255) NULL,
 		--[DiscussionPost] bigint NULL CONSTRAINT [FK_HistoryLog(DiscussionPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
-		--[Snapshot] bigint NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
+		[Snapshot] bigint NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
 		[ResourceVersion] bigint NULL CONSTRAINT [FK_HistoryLog(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
 	)
 
-	
+		
 -- Create M:N tables
 	
 	CREATE TABLE [dbo].[Project_OriginalAuthor]
@@ -416,8 +425,19 @@ BEGIN TRAN
 	   CONSTRAINT [PK_PageResource_Term(PageResource)_PageResource_Term(Term)] PRIMARY KEY ([PageResource], [Term])
     )
 
-	
-	-- TODO check varchar vs nvarchar
+	CREATE TABLE [dbo].[Snapshot_ResourceVersion]
+    (
+		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_ResourceVersion(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
+		[ResourceVersion] bigint NOT NULL CONSTRAINT [FK_Snapshot_ResourceVersion(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id),
+		CONSTRAINT [PK_Snapshot_ResourceVersion(Snapshot)_Snapshot_ResourceVersion(ResourceVersion)] PRIMARY KEY ([Snapshot], [ResourceVersion])
+    )
+
+	CREATE TABLE [dbo].[Snapshot_BookType]
+    (
+		[Snapshot] bigint NOT NULL CONSTRAINT [FK_Snapshot_BookType(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
+		[BookType] int NOT NULL CONSTRAINT [FK_Snapshot_BookType(BookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+		CONSTRAINT [PK_Snapshot_BookType(Snapshot)_Snapshot_BookType(BookType)] PRIMARY KEY ([Snapshot], [BookType])
+    )
 
 
 -- Insert version number to DatabaseVersion table
