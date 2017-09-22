@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<hibernate-mapping assembly="Vokabular.DataEntities" namespace="Vokabular.DataEntities.Database.Entities" xmlns="urn:nhibernate-mapping-2.2">
+  <class name="TextComment" table="[TextComment]" >
+    
+    <id name="Id" column="Id">
+      <generator class="identity" />
+    </id>
+    
+    <property name="TextReferenceId" not-null="true" />
+    
+    <property name="Text" not-null="true" />
+
+    <property name="CreateTime" not-null="true" />
+    
+    <many-to-one name="CreatedByUser" class="User" lazy="proxy" />
+
+    <many-to-one name="ParentComment" class="TextComment" lazy="proxy" />
+    
+    <many-to-one name="ResourceText" class="Resource" lazy="proxy" />
+
+    <bag name="TextComments" inverse="true" cascade="none">
+      <key column="ParentComment" />
+      <one-to-many class="TextComment" />
+    </bag>
+
+  </class>
+</hibernate-mapping>

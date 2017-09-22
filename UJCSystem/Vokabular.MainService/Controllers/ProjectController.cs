@@ -148,5 +148,25 @@ namespace Vokabular.MainService.Controllers
         {
             return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
+
+        [HttpGet("text/{textId}/comment")]
+        public List<GetTextCommentContract> GetCommentsForText(long textId)
+        {
+            var result = m_pageManager.GetCommentsForText(textId);
+            return result;
+        }
+
+        [HttpPost("text/{textId}/comment")]
+        public long CreateComment(long textId, [FromBody] CreateTextCommentContract request)
+        {
+            var resultId = m_pageManager.CreateNewComment(textId, request);
+            return resultId;
+        }
+
+        [HttpDelete("text/comment/{commentId}")]
+        public void DeleteComment(long commentId)
+        {
+            m_pageManager.DeleteComment(commentId);
+        }
     }
 }

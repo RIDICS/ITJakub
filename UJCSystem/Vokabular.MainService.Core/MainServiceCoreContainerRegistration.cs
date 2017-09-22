@@ -33,6 +33,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, PageProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
