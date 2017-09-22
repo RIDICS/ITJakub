@@ -199,5 +199,23 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.ParentComment == null)
                 .ToList();
         }
+
+        public virtual IList<NamedResourceGroup> GetNamedResourceGroupList(long projectId, ResourceTypeEnum? filterResourceType)
+        {
+            Resource resourceAlias = null;
+
+            var query = GetSession().QueryOver<NamedResourceGroup>()
+                .Where(x => x.Project.Id == projectId)
+                .OrderBy(x => x.Name).Asc
+                .TransformUsing(Transformers.DistinctRootEntity);
+
+            if (filterResourceType != null)
+            {
+                query.JoinAlias(x => x.Resources, () => resourceAlias)
+                    .And(() => resourceAlias.ResourceType == filterResourceType.Value);
+            }
+
+            return query.List();
+        }
     }
 }

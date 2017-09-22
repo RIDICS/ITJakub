@@ -67,8 +67,7 @@ namespace Vokabular.MainService.Core.Managers
             var result = Mapper.Map<List<GetTextCommentContract>>(dbResult);
             return result;
         }
-
-
+        
         public long CreateNewComment(long textId, CreateTextCommentContract newComment)
         {
             var userId = m_userManager.GetCurrentUserId();

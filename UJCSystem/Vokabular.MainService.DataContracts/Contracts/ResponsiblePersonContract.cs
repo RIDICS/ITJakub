@@ -11,4 +11,10 @@
     {
         public ResponsibleTypeContract ResponsibleType { get; set; }
     }
+
+    public class ProjectResponsiblePersonIdContract
+    {
+        public long ResponsiblePersonId { get; set; }
+        public long ResponsibleTypeId { get; set; }
+    }
 }

@@ -12,10 +12,12 @@ namespace Vokabular.MainService.Controllers
     public class ResourceController : Controller
     {
         private readonly ProjectResourceManager m_resourceManager;
+        private readonly NamedResourceGroupManager m_namedResourceGroupManager;
 
-        public ResourceController(ProjectResourceManager resourceManager)
+        public ResourceController(ProjectResourceManager resourceManager, NamedResourceGroupManager namedResourceGroupManager)
         {
             m_resourceManager = resourceManager;
+            m_namedResourceGroupManager = namedResourceGroupManager;
         }
 
         [HttpPost("session/{sessionId}/resource")]
@@ -108,6 +110,32 @@ namespace Vokabular.MainService.Controllers
                 EditionNote = "xxxxxxx"
             };
             return Ok(resultData);
+        }
+
+        [HttpGet("project/{projectId}/resource/group")]
+        public List<NamedResourceGroupContract> GetResourceGroupList(long projectId, [FromQuery] ResourceTypeEnumContract? filterResourceType)
+        {
+            var result = m_namedResourceGroupManager.GetResourceGroupList(projectId, filterResourceType);
+            return result;
+        }
+
+        [HttpPost("project/{projectId}/resource/group/")]
+        public long CreateResourceGroup(long projectId, [FromBody] NamedResourceGroupContract request)
+        {
+            var resultId = m_namedResourceGroupManager.CreateResourceGroup(projectId, request);
+            return resultId;
+        }
+
+        [HttpPut("resource/group/{resourceGroupId}")]
+        public void UpdateResourceGroup(long resourceGroupId, [FromBody] NamedResourceGroupContract request)
+        {
+            m_namedResourceGroupManager.UpdateResourceGroup(resourceGroupId, request);
+        }
+
+        [HttpDelete("resource/group/{resourceGroupId}")]
+        public void DeleteResourceGroup(long resourceGroupId)
+        {
+            m_namedResourceGroupManager.DeleteResourceGroup(resourceGroupId);
         }
     }
 
