@@ -1,13 +1,17 @@
 {
 	"culture":"cs-CZ",
 	"scope":"RegisterViewModel",
-  "dictionary": {
-    "Uživatelské jméno": "jedna",
-    "Name": "dva",
-    "ErrorMessage": "tri",
-    "Uživatelské jméno nemůže být prázdné": "ctyri",
-    "UserName": "pet",
-    "Heslo nemůže být prázdné": "sest",
-    "Password": "sedm"
-  }
+	  "dictionary": {
+		"UserName": "Uživatelské jméno",
+		"Email":"Email",
+		"Password":"Heslo",
+		"HasAtLeastNChars":"{0} musí obsahovat alespoň {2} znaků.",
+		"FirstName":"Křestní jméno",
+		"LastName":"Příjmení",
+		"ConfirmPassword":"Potvrzení hesla",
+		"PasswordsNotEqual":"Hesla se neshodují.",	
+		"NotEmpty":"{0} nemůže být prázdné",
+		"NotEmpty2":"{0} nemůže být prázdný",
+		"MustBeFilled":"{0} musí být vyplněn",
+	  }
 }

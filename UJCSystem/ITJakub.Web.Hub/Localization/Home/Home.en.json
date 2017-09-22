@@ -1,0 +1,27 @@
+{
+	"culture":"en",
+	"scope":"Home",
+	"dictionary": {
+		"AboutTitle": "About Vokabulář webový",
+		"VokabularVersion":"Vokabulář webový version: {0}",
+		
+		"ContactsTitle":"Contacts",
+		
+		"CopyrightTitle":"Copyright",
+		
+		"FeedbackTitle":"Feedback",
+		
+		"HowToCiteTitle":"How to cite",
+		
+		"IndexTitle":"Homepage",
+		"Search":"Search",
+		"Specify":"Specify",
+		"Find...":"Find...",
+		"Silence":"silence",
+		"News":"News",
+			
+		"LinksTitle":"Links",
+		
+		"SupportTitle":"Support"
+	}
+}

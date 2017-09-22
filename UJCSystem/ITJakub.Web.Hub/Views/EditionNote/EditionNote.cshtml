@@ -1,10 +1,15 @@
-﻿@using HtmlString = Microsoft.AspNetCore.Html.HtmlString
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@using HtmlString = Microsoft.AspNetCore.Html.HtmlString
+
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Ediční poznámka";
+    ViewBag.Title = Localizer.Translate("EditionNote", "EditionNote", LocTranslationSource.File);
 }
 
 <div id="edition-note-content" class="content-container top-offset-without-submenu">
-    <h1>Ediční poznámka</h1>
+    <h1>@ViewBag.Title</h1>
 
     <p>
     @(new HtmlString(@ViewData["noteText"].ToString()))

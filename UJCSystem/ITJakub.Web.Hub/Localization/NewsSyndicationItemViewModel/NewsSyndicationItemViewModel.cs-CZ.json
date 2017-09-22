@@ -1,0 +1,17 @@
+{
+  "culture": "cs-CZ",
+  "scope": "NewsSyndicationItemViewModel",
+  "dictionary": {
+    "Name:": "Název: ",
+	"Text:": "Text: ",
+	"Url:": "Url: ",
+	"Type:": "Typ: ",
+    "NameNotEmpty": "Název nemůže být prázdný",
+	"TextNotEmpty": "Text nemůže být prázdný",
+	"UrlNotEmpty": "URL nemůže být prázdná",
+    "UrlNotValid": "Vyplněná URL není validní. Musí být zapsána v úplné formě podobného formátu http://nazev.domena",
+	"WebAndMobileApp": "Web i mobilní aplikace",
+	"OnlyWeb": "Pouze web",
+	"OnlyMobileApp":"Pouze mobilní aplikace"
+  }
+}

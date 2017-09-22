@@ -1,0 +1,8 @@
+{
+	"culture":"en",
+	"scope":"Feedback",
+    "dictionary": {
+		"FeedbackManagementTitle":"Administration - Feedback management",
+        "NumberOfFeedbacks": "Number of feedbacks: "	   
+  }
+}

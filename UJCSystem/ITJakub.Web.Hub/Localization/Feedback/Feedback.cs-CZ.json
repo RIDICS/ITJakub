@@ -1,0 +1,8 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Feedback",
+    "dictionary": {
+		"FeedbackManagementTitle":"Administrace - Správa připomínek",
+        "NumberOfFeedbacks": "Počet připomínek: "	   
+  }
+}

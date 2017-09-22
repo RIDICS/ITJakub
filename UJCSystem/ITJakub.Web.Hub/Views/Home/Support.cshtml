@@ -1,7 +1,11 @@
-﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@model ITJakub.Web.Hub.Models.StaticTextViewModel
+    
+@inject ILocalization Localizer
 
 @{
-    ViewBag.Title = "Podpora";
+    ViewBag.Title = Localizer.Translate("SupportTitle", "Home", LocTranslationSource.File);
 }
 
 <div class="content-container top-offset-without-submenu">

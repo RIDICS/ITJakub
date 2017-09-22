@@ -1,5 +1,11 @@
-﻿@{
-    ViewBag.Title = "Administrace - Správa připomínek";
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+
+@{
+    ViewBag.Title = Localizer.Translate("FeedbackManagementTitle", "Feedback", LocTranslationSource.File);
 }
 
 @section scripts{
@@ -11,7 +17,7 @@
 
 <div>
     <div class="feedbacks-count-area">
-        Počet připomínek: <span id="feedbacks-count"></span>
+        @Localizer.Translate("NumberOfFeedbacks", "Feedback", LocTranslationSource.File)<span id="feedbacks-count"></span>
     </div>
 
     <div id="feedbacks" class="feedbacks-area">
