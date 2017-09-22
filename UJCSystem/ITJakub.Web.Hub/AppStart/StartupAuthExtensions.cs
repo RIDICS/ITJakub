@@ -1,5 +1,6 @@
 ﻿using System;
 using ITJakub.Web.Hub.Core.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -27,11 +28,14 @@ namespace ITJakub.Web.Hub.AppStart
                     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                     options.Lockout.MaxFailedAccessAttempts = 5;
                     
-                })
+                })          
                 .AddUserManager<ApplicationUserManager>()
                 .AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(o => o.LoginPath = new PathString("/Account/Login"));
+
 
             services.AddScoped<SignInManager<ApplicationUser>, ApplicationSignInManager>();
             services.AddScoped<IPasswordHasher<ApplicationUser>, CustomPasswordHasher>();
@@ -40,8 +44,8 @@ namespace ITJakub.Web.Hub.AppStart
 
         public static void ConfigureAuth(this IApplicationBuilder app)
         {
-            app.UseIdentity();
-            
+            app.UseAuthentication();
+
             //// Configure the db context, user manager and signin manager to use a single instance per request
             ////app.CreatePerOwinContext(ApplicationDbContext.Create);
             //app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
@@ -50,10 +54,17 @@ namespace ITJakub.Web.Hub.AppStart
             //// Enable the application to use a cookie to store information for the signed in user
             //// and to use a cookie to temporarily store information about a user logging in with a third party login provider
             //// Configure the sign in cookie
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                LoginPath = new PathString("/Account/Login")
-            });
+
+
+            //JP Removed obsolete UseCookieAuthentication. Cookie authentication setup is now in AddCustomAuthServices
+            //as services.AddAuthentication(...).AddCookie(...);
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    LoginPath = new PathString("/Account/Login")
+            //});
+
+
+
             //app.UseCookieAuthentication(new CookieAuthenticationOptions
             //{
             //    AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
