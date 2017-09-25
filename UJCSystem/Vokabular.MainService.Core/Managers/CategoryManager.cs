@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.MainService.Core.Works.Category;
+using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Works.CategoryManagement;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Managers
@@ -23,8 +24,20 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<CategoryContract> GetCategoryList()
         {
-            var result = new GetCategoryListWork(m_categoryRepository).Execute();
+            var result = m_categoryRepository.InvokeUnitOfWork(x => x.GetCategoryList());
             return Mapper.Map<List<CategoryContract>>(result);
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            var deleteCategoryWork = new DeleteCategoryWork(m_categoryRepository, categoryId);
+            deleteCategoryWork.Execute();
+        }
+
+        public void UpdateCategory(int categoryId, CategoryContract category)
+        {
+            var updateCategoryWork = new UpdateCategoryWork(m_categoryRepository, categoryId, category);
+            updateCategoryWork.Execute();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate.Criterion;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -39,6 +40,21 @@ namespace Vokabular.DataEntities.Database.Repositories
             return GetSession().GetNamedQuery("GetCategoryHierarchy")
                 .SetParameterList("categoryIds", selectedCategoryIds)
                 .List<int>();
+        }
+
+        public virtual Category GetCategoryWithSubcategories(int categoryId)
+        {
+            return GetSession().QueryOver<Category>()
+                .Where(x => x.Id == categoryId)
+                .Fetch(x => x.Categories).Eager
+                .SingleOrDefault();
+        }
+
+        public virtual IList<Category> GetCategoriesByPath(string categoryPath)
+        {
+            return GetSession().QueryOver<Category>()
+                .WhereRestrictionOn(x => x.Path).IsLike(categoryPath, MatchMode.Start)
+                .List();
         }
     }
 }
