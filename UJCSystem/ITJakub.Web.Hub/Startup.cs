@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
 using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
 using ITJakub.Web.Hub.AppStart.Middleware;
-using Localization.AspNetCore.Service;
 using Localization.AspNetCore.Service.Extensions;
 using Localization.AspNetCore.Service.Factory;
 using Localization.CoreLibrary.Dictionary.Factory;
@@ -18,13 +15,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
 using Vokabular.Shared.Options;
@@ -86,7 +81,6 @@ namespace ITJakub.Web.Hub
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
 
-            services.AddSingleton<IStringLocalizerFactory, AttributeStringLocalizerFactory>();
 
             services.AddMvc()
                 .AddDataAnnotationsLocalization(options =>
@@ -114,6 +108,7 @@ namespace ITJakub.Web.Hub
             container.Install<WebHubContainerRegistration>();
             Container = container;
             
+
             return container.CreateServiceProvider(services);
         }
 

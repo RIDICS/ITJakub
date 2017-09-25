@@ -32,25 +32,25 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult About()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeAbout);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeAbout, "home");
             return View(staticTextViewModel);
         }
 
         public ActionResult Contacts()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeContacts);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeContacts, "home");
             return View(staticTextViewModel);
         }
 
         public ActionResult Copyright()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeCopyright);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeCopyright, "home");
             return View(staticTextViewModel);
         }
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, "home", GetEncryptedClient(), GetUserName());
             return View(viewModel);
         }
 
@@ -61,7 +61,7 @@ namespace ITJakub.Web.Hub.Controllers
         {
             if (!ModelState.IsValid)
             {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, "home", GetFeedbackFormIdentification());
                 return View(model);
             }
 
@@ -71,19 +71,19 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult HowToCite()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeHowToCite);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeHowToCite, "home");
             return View(staticTextViewModel);
         }
 
         public ActionResult Links()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeLinks);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeLinks, "home");
             return View(staticTextViewModel);
         }
 
         public ActionResult Support()
         {
-            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeSupport);
+            var staticTextViewModel = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeSupport, "home");
             return View(staticTextViewModel);
         }
 

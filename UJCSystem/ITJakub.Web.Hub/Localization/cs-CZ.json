@@ -5,9 +5,30 @@
 		"Vokabulář" : "Vokabulář",
 		"webový": "webový",
 
-		"UserName": "Uživatelské jméno",
-		"Uživatelské jméno":"wewe",
-		"Heslo": "Heslo",
-		"Password": "Heslo22"
+		"FeedbackFormPlaceholder":"Zde napište vaši připomínku...",
+		"NameFormPlaceholder":"Zde zadejte Vaše jméno...",
+		"EmailFormPlaceholder":"Zde zadejte Váš e-mail...",
+		"Send":"Odeslat",
+		
+		"FeedbackSentTitle":"Připomínka odeslána",
+		"FeedbackSentAlert":"Připomínka úspěšně odeslána.",
+		
+		"Max":"Max.",
+		"Remaining":"Zbývá",
+		"YouCanUseDiacritics":"Můžete používat diakritiku",
+		"Characters":"znaků",
+		
+		"Close":"Zavřít",
+		"Save":"Uložit",
+		"Error":"Chyba",
+		"DefaultTitle":"Default title",
+		
+		"SortBy":"Řadit podle",
+		"UserAccount":"Uživatelský účet",
+		"Language":"Jazyk",
+		"SignIn":"Přihlášení",
+		"SignUp":"Registace",
+		"EditText":"Upravit text",
+		"CreateText":"Vytvořit text"
 		}
 }

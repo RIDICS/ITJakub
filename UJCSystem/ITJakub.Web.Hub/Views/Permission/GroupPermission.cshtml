@@ -1,5 +1,10 @@
-﻿@{
-    ViewBag.Title = "Administrace - Správa skupin";
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("GroupPermissionManagementTitle", "Permisson", LocTranslationSource.File);
 }
 @section styles{
     <link href="~/css/ITJakub.Permission.css" rel="stylesheet" />
@@ -8,7 +13,7 @@
     <script src="~/js/Permission/itjakub.permission.group.js"></script>
 }
 
-<h2>Správa skupin</h2>
+<h2>@Localizer.Translate("GroupPermissionManagementHeadline", "Permission", LocTranslationSource.File)</h2>
 
 <div class="row">
     <div class="permission-left-panel col-md-6">
@@ -17,40 +22,40 @@
                 <button id="createGroupButton" class="btn btn-default permission-button">+</button>
             </div>
             <div class="permission-search">
-                <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="Hledat skupinu..." />
+                <input type="text" class="form-control permission-search-input" id="mainSearchInput" placeholder="@Localizer.Translate("SearchGroup", "Permission", LocTranslationSource.File)" />
             </div>
         </div>
         <div id="selected-item-div" class="content hidden">
-            <div class="item-details-title">Vybraná skupina</div>
+            <div class="item-details-title">@Localizer.Translate("SelectedGroup", "Permission", LocTranslationSource.File)</div>
             <div class="item-details">
                 <div class="detail-item">
-                    <span class="detail-item-title">Název: </span>
+                    <span class="detail-item-title">@Localizer.Translate("Name", "Permission", LocTranslationSource.File): </span>
                     <span id="specificGroupName"></span>
                 </div>
                 <div class="detail-item">
-                    <span class="detail-item-title">Popis: </span>
+                    <span class="detail-item-title">@Localizer.Translate("Description", "Permission", LocTranslationSource.File): </span>
                     <span id="specificGroupDescription"></span>
                 </div>
             </div>
             <div class="selected-item-buttons">
-                <button id="deleteGroup" class="btn btn-default permission-button">Smazat skupinu</button>
+                <button id="deleteGroup" class="btn btn-default permission-button">@Localizer.Translate("DeleteGroup", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
     <div id="right-panel" class="permission-right-panel col-md-6 hidden">
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#tab-book-permissions" data-toggle="tab">Práva na dílo</a>
+                <a href="#tab-book-permissions" data-toggle="tab">@Localizer.Translate("BookPermissions", "Permission", LocTranslationSource.File)</a>
             </li>
             <li>
-                <a href="#tab-special-permission" data-toggle="tab">Speciální práva</a>
+                <a href="#tab-special-permission" data-toggle="tab">@Localizer.Translate("SpecialPermissisons", "Permission", LocTranslationSource.File)</a>
             </li>
         </ul>
 
         <div class="tab-content">
             <div id="tab-book-permissions" class="tab-pane active">
 
-                <div class="right-panel-title">Povolená díla pro vybranou skupinu:</div>
+                <div class="right-panel-title">@Localizer.Translate("AllowedBookList", "Permission", LocTranslationSource.File):</div>
                 <ul id="allowedBooksList" class="items-list"></ul>
 
                 <div class="category-buttons">
@@ -59,7 +64,7 @@
             </div>
             <div id="tab-special-permission" class="tab-pane">
 
-                <div class="right-panel-title">Speciální práva pro vybranou skupinu:</div>
+                <div class="right-panel-title">@Localizer.Translate("AllowedSpecialPermissionList", "Permission", LocTranslationSource.File):</div>
                 <ul id="allowedSpecialPermissionList" class="items-list"></ul>
 
                 <div class="category-buttons">
@@ -75,18 +80,18 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Nová skupina</h4>
+                <h4 class="modal-title">@Localizer.Translate("NewGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label for="new-group-name" class="col-md-3 control-label">Název skupiny</label>
+                        <label for="new-group-name" class="col-md-3 control-label">@Localizer.Translate("GroupName", "Permission", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <input class="form-control" id="new-group-name" name="new-text" type="text">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="new-group-description" class="col-md-3 control-label">Popis</label>
+                        <label for="new-group-description" class="col-md-3 control-label">@Localizer.Translate("Description", "Permission", LocTranslationSource.File)</label>
                         <div class="col-md-8">
                             <input class="form-control" id="new-group-description" name="new-text" type="text">
                         </div>
@@ -94,8 +99,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default" id="save-group">Vytvořit</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="save-group">@Localizer.Translate("Create", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
@@ -106,13 +111,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidání povolených děl</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddAllowedBooksToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body" id="add-books-to-group-form">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default" id="add-books-to-group-ok">Přidat</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="add-books-to-group-ok">@Localizer.Translate("Add", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>
@@ -123,13 +128,13 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Přidání speciálních práv</h4>
+                <h4 class="modal-title">@Localizer.Translate("AddSpecialPermissionsToGroup", "Permission", LocTranslationSource.File)</h4>
             </div>
             <div class="modal-body" id="add-special-permission-to-group-form">
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
-                <button type="button" class="btn btn-default" id="add-special-permissions-to-group-ok">Přidat</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Localizer.Translate("Close", "Permission", LocTranslationSource.File)</button>
+                <button type="button" class="btn btn-default" id="add-special-permissions-to-group-ok">@Localizer.Translate("Add", "Permission", LocTranslationSource.File)</button>
             </div>
         </div>
     </div>

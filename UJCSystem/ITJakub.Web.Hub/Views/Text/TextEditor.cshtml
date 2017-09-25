@@ -1,7 +1,11 @@
-﻿@model ITJakub.Web.Hub.Models.StaticTextViewModel
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@model ITJakub.Web.Hub.Models.StaticTextViewModel
+    
+@inject ILocalization Localizer
 
 @{
-    ViewBag.Title = "Administrace - Upravit statický text";
+    ViewBag.Title = Localizer.Translate("TextManagementTitle", "Text", LocTranslationSource.File);
 }
 
 @section styles{
@@ -12,22 +16,27 @@
 }
 
 <div class="content-container top-offset-without-submenu">
-    <h2>Textový editor</h2>
+    <h2>@Localizer.Translate("TextEditor","Text", LocTranslationSource.File)</h2>
 
     @if (Context.Request.Query.ContainsKey("textName"))
     {
         <form class="form-horizontal">
             <div class="form-group">
-                <label for="name" class="col-md-2 control-label">Název stránky</label>
+                <label for="name" class="col-md-2 control-label">@Localizer.Translate("PageName", "Text", LocTranslationSource.File)</label>
                 <div class="col-md-3">
                     <input type="text" class="form-control" id="name" disabled="disabled" value="@Model.Name">
+                </div>
+                
+                <label for="scope" class="col-md-2 control-label">Kategorie</label>
+                <div class="col-md-3">
+                    <input type="text" class="form-control" id="scope" value="@Model.Scope">
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="text" class="col-md-2 control-label">Text stránky:</label>
+                <label for="text" class="col-md-2 control-label">@Localizer.Translate("PageText", "Text", LocTranslationSource.File):</label>
                 <div class="col-md-3">
-                    <div class="alert alert-info inline-alert">Editor používá syntaxi Markdown</div>
+                    <div class="alert alert-info inline-alert">@Localizer.Translate("UsesMarkdown", "Text", LocTranslationSource.File)</div>
                 </div>
             </div>
 
@@ -42,11 +51,11 @@
                     <div class="panel panel-default">
 
                         <div class="panel-body">
-                            Autor poslední modifikace:
+                            @Localizer.Translate("LastModificationAuthor", "Text", LocTranslationSource.File):
                             <span id="modification-author">
                                 @if (string.IsNullOrEmpty(Model.LastModificationAuthor))
                                 {
-                                    @Html.Raw("(anonym)")
+                                    @Html.Raw(Localizer.TranslateFormat("AnonymousVar2", new object[]{"(",")"}, "Text", LocTranslationSource.File))
                                 }
                                 else
                                 {
@@ -54,7 +63,7 @@
                                 }
                             </span><br/>
 
-                            Čas poslední modifikace:
+                            @Localizer.Translate("LastModificationTime", "Text", LocTranslationSource.File):
                             <span id="modification-time">
                                 @Model.LastModificationTime.ToLocalTime()
                             </span>
@@ -66,22 +75,22 @@
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-6">
                             <div id="save-error" class="alert alert-danger inline-alert hidden">
-                                Chyba při ukládání textu
+                                @Localizer.Translate("TextSavingError", "Text", LocTranslationSource.File)
                             </div>
                             <div id="save-success" class="alert alert-success inline-alert hidden">
-                                Text uložen
+                                @Localizer.Translate("TextSaved", "Text", LocTranslationSource.File)
                             </div>
                         </div>
                         <div class="col-md-4">
                             <button type="button" class="form-control btn btn-default" id="save-button">
                                 <span id="save-progress" class="loading-small-button hidden"></span>
-                                Uložit
+                                @Localizer.Translate("Save", "Text", LocTranslationSource.File)
                             </button>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-offset-8 col-md-4">
-                            <a href="@Context.Request.Query["pageUrl"]" class="form-control btn btn-default">Zavřít editor</a>
+                            <a href="@Context.Request.Query["pageUrl"]" class="form-control btn btn-default">@Localizer.Translate("CloseEditor", "Text", LocTranslationSource.File)</a>
                         </div>
                     </div>
                 </div>
@@ -93,7 +102,7 @@
     }
     else
     {
-        <div class="alert alert-danger">Nebyl zvolen žádný text pro editaci.</div>
+        <div class="alert alert-danger">@Localizer.Translate("NoTextSelected", "Text", LocTranslationSource.File)</div>
     }
 
 </div>

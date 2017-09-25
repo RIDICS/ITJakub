@@ -18,10 +18,12 @@ class StaticTextEditor {
 
     private saveText() {
         var textName = $("#name").val();
+        var category = $("#scope").val();
         var markdownText = this.textEditor.getValue();
 
         var data: IStaticTextViewModel = {
             name: textName,
+            scope: category,
             text: markdownText,
             format: "markdown"
         };
@@ -61,6 +63,7 @@ class StaticTextEditor {
 interface IStaticTextViewModel {
     name?: string;
     text?: string;
+    scope?: string;
     format?: string|number;
 }
 

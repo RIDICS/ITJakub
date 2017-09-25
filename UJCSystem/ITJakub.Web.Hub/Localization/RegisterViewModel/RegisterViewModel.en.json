@@ -11,6 +11,6 @@
 		"ConfirmPassword":"Confirm password",
 		"PasswordsNotEqual":"Passwords are not equal.",	
 		"NotEmpty":"The {0} can not be empty.",
-		"MustBeFilled":"The {0} can not be empty.",
+		"MustBeFilled":"The {0} can not be empty."
 	  }
 }

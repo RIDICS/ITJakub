@@ -1,0 +1,17 @@
+{
+    "culture": "cs-CZ",
+    "scope": "global.plural",
+    "dictionary": {
+        "Characters": 
+            {"znaků": [   
+                [null, -5, "znaků"],               
+                [-4, -2, "znaky"], 
+                [-1, -1, "znak"], 
+                [0, 0, "znaků"],
+                [1, 1, "znak" ],
+                [2, 4, "znaky"],
+                [5, null, "znaků"] 
+               ]
+            }
+    }
+}

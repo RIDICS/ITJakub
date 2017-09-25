@@ -1,4 +1,5 @@
 ﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
 @using Microsoft.AspNetCore.Http.Extensions
 
 @inject ILocalization Localizer
@@ -8,7 +9,8 @@
     var pathAndQuery = new Uri(requestUrl).PathAndQuery;
 }
 
-<div class="secondary-navbar-toggle language" title="Jazyk">
+
+<div class="secondary-navbar-toggle language" title="@Localizer.Translate("Language", "global", LocTranslationSource.File)">
     <span class="glyphicon glyphicon-text-background"></span>
     <ul class="navbar-language">
         @foreach (var x in Localizer.SupportedCultures())
@@ -19,8 +21,7 @@
         }
     </ul>
 </div>
-
-<div class="secondary-navbar-toggle login" title="Uživatelský účet">
+<div class="secondary-navbar-toggle login" title="@Localizer.Translate("UserAccount", "global", LocTranslationSource.File)">
     <span class="glyphicon glyphicon-user"></span>
     @if (User.Identity.IsAuthenticated)
     {
@@ -29,7 +30,7 @@
 
             <ul class="navbar-login">
                 <li><a href="#">@Html.Raw(User.Identity.Name)</a></li>
-                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut")</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">@Localizer.Translate("LogOut","global", LocTranslationSource.File)</a></li>
             </ul>
         }
     }
@@ -40,8 +41,8 @@
             ViewBag.ReturnUrl = pathAndQuery;
         }
         <ul class="navbar-login">
-            <li>@Html.ActionLink("Přihlášení", "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
-            <li>@Html.ActionLink("Registace", "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
+            <li>@Html.ActionLink(Localizer.Translate("SignIn", "global", LocTranslationSource.File), "Login", "Account", new { area = "", returnUrl = ViewBag.ReturnUrl }, new { id = "loginLink" })</li>
+            <li>@Html.ActionLink(Localizer.Translate("SignUp", "global", LocTranslationSource.File), "Register", "Account", new { area = "" }, new { id = "registerLink" })</li>
         </ul>
     }
 </div>

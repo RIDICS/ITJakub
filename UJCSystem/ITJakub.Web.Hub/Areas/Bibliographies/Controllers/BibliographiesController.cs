@@ -51,13 +51,13 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextBibliographiesInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextBibliographiesInfo, "bibliographies");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback()
         {
-            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
+            var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, "home", GetEncryptedClient(), GetUserName());
             return View(viewModel);
         }
 
@@ -68,7 +68,7 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
         {
             if (!ModelState.IsValid)
             {
-                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, GetFeedbackFormIdentification());
+                m_feedbacksManager.FillViewModel(model, StaticTexts.TextHomeFeedback, "home", GetFeedbackFormIdentification());
                 return View(model);
             }
 

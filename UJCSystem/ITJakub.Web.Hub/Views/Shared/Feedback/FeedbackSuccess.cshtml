@@ -1,8 +1,13 @@
-﻿@{
-    ViewBag.Title = "Připomínka odeslána";
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+
+@inject ILocalization Localizer
+
+@{
+    ViewBag.Title = Localizer.Translate("FeedbackSentTitle", "global", LocTranslationSource.File);
 }
 
 <div class="alert alert-success">
-    Připomínka úspěšně odeslána.
+    @Localizer.Translate("FeedbackSentAlert", "global", LocTranslationSource.File)
 </div>
 

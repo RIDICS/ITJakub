@@ -67,7 +67,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Help()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryHelp);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryHelp, "dict");
             return View(pageStaticText);
         }
 
@@ -83,13 +83,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult Information()
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryInfo);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextDictionaryInfo, "dict");
             return View(pageStaticText);
         }
 
         public ActionResult Feedback(string bookId, string versionId, string entryId, string headword, string dictionary)
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback, "home");
             var viewModel = new HeadwordFeedbackViewModel
             {
                 BookXmlId = bookId,
@@ -123,7 +123,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             if (!ModelState.IsValid)
             {
-                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
+                model.PageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback, "home");
                 return View(model);
             }
 

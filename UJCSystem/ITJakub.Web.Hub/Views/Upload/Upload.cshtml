@@ -1,6 +1,11 @@
-﻿@model ITJakub.Web.Hub.Models.UploadViewModel
+﻿@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
+@model ITJakub.Web.Hub.Models.UploadViewModel
+    
+@inject ILocalization Localizer
+
 @{
-    ViewBag.Title = "Administrace - Nahrání díla";
+    ViewBag.Title = Localizer.Translate("UploadManagementTitle", "Upload", LocTranslationSource.File);
 }
 @section scripts{
     <script src="~/js/itjakub.upload.js"></script>
@@ -10,11 +15,11 @@
 }
 
 <div class="content-container">
-    <h2>Nahrání díla</h2>
+    <h2>@Localizer.Translate("BookUploadHeader", "Upload", LocTranslationSource.File)</h2>
     
     <div class="centered">
         <div id="upload">
-            <p> Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.</p>
+            <p> @Localizer.Translate("UploadHint", "Upload", LocTranslationSource.File)</p>
 
             <form action="@Url.Action("UploadFile", "Upload")" method="post" class="dropzone" enctype="multipart/form-data" id="dropzoneFileForm">
                 <div class="fallback">
@@ -25,24 +30,24 @@
                 </div>
             </form>
 
-            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="Zde napiste zpravu k nove verzi" style="width: 400px; height: 28px;"/>
+            <input type="text" id="uploadMessage" name="bookVeuploadMessagersionMessage" placeholder="@Localizer.Translate("NewVersionMessage", "Upload", LocTranslationSource.File)" style="width: 400px; height: 28px;"/>
 
             <button id="ProcessUploadedButton" type="button" class="btn btn-default" disabled>
-                Zpracovat
+                @Localizer.Translate("Process", "Upload", LocTranslationSource.File)
             </button>
         </div>
         <div id="processing" style="display: none">
             <div id="progressbar"></div>
-            <h2>Zpracovává se...</h2>
+            <h2>@Localizer.Translate("Processing", "Upload", LocTranslationSource.File)</h2>
         </div>
 
         <div id="done" style="display: none">
             <div class="alert alert-success success" style="display: none">
-                <h2>Zpracování proběhlo v pořádku</h2>
+                <h2>@Localizer.Translate("ProcessingOk", "Upload", LocTranslationSource.File)</h2>
             </div>
             
             <div class="alert alert-danger error" style="display: none">
-                <h2>Zpracování souborů se nezdařilo</h2>
+                <h2>@Localizer.Translate("ProcessingFailed", "Upload", LocTranslationSource.File)</h2>
                 <div class="message"></div>
             </div>
         </div>

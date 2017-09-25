@@ -12,6 +12,6 @@
 		"PasswordsNotEqual":"Hesla se neshodují.",	
 		"NotEmpty":"{0} nemůže být prázdné",
 		"NotEmpty2":"{0} nemůže být prázdný",
-		"MustBeFilled":"{0} musí být vyplněn",
+		"MustBeFilled":"{0} musí být vyplněn"
 	  }
 }

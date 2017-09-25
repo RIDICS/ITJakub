@@ -1,6 +1,10 @@
 ﻿@using ITJakub.Web.Hub.Core.Identity
 @using Microsoft.AspNetCore.Http.Extensions
+@using Localization.AspNetCore.Service
+@using Localization.CoreLibrary.Util
 @model ITJakub.Web.Hub.Models.StaticTextViewModel
+    
+@inject ILocalization Localizer
 
 <div class="static-text-container">
     <div class="static-text-panel">
@@ -8,16 +12,16 @@
         {
             if (Model.IsRecordExists)
             {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
+                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, scope = Model.Scope, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span>
-                    Upravit text
+                    @Localizer.Translate("EditText", "global", LocTranslationSource.File)
                 </a>
             }
             else
             {
-                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
+                <a href="@Url.RouteUrl("Default", new {controller = "Text", action = "Editor", textName = Model.Name, scope = Model.Scope, pageUrl = Context.Request.GetDisplayUrl()})" class="btn btn-default">
                     <span class="glyphicon glyphicon-pencil"></span>
-                    Vytvořit text
+                    @Localizer.Translate("CreateText", "global", LocTranslationSource.File)
                 </a>
             }
         }

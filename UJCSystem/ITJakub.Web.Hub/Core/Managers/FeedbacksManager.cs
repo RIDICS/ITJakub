@@ -14,9 +14,9 @@ namespace ITJakub.Web.Hub.Core.Managers
             m_staticTextManager = staticTextManager;
         }
 
-        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, ItJakubServiceEncryptedClient client, string username = null)
+        public FeedbackViewModel GetBasicViewModel(FeedbackFormIdentification formIdentification, string staticTextName, string scope,ItJakubServiceEncryptedClient client, string username = null)
         {
-            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
+            var pageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
 
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -44,9 +44,9 @@ namespace ITJakub.Web.Hub.Core.Managers
             }
         }
 
-        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, FeedbackFormIdentification formIdentification)
+        public void FillViewModel(FeedbackViewModel viewModel, string staticTextName, string scope, FeedbackFormIdentification formIdentification)
         {
-            viewModel.PageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName);
+            viewModel.PageStaticText = m_staticTextManager.GetRenderedHtmlText(staticTextName, scope);
             viewModel.FormIdentification = formIdentification;
         }
 

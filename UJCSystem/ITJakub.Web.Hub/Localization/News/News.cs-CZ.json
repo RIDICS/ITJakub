@@ -1,0 +1,14 @@
+{
+	"culture":"cs-CZ",
+	"scope":"News",
+	"dictionary": {
+		"NewsManagementTitle" : "Administrace - Přidat novinku",
+		"AddNews":"Přidat novinku",
+		"NewsTextPlaceholder":"Zde napište text novinky...",
+		"Max":"Max.",
+		"Remaining":"Zbývá",
+		"Characters":"znaků",
+		"DiacriticsAllowed":"Můžete používat diakritiku",
+		"Submit":"Přidat"
+		}
+}
