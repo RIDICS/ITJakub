@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
+using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.Person;
 using Vokabular.MainService.DataContracts.Contracts;
 
@@ -20,6 +22,25 @@ namespace Vokabular.MainService.Core.Managers
         {
             var resultId = new CreateOriginalAuthorWork(m_personRepository, author).Execute();
             return resultId;
+        }
+
+        public OriginalAuthorContract GetOriginalAuthor(int authorId)
+        {
+            var dbResult = m_personRepository.InvokeUnitOfWork(x => x.FindById<OriginalAuthor>(authorId));
+            var result = Mapper.Map<OriginalAuthorContract>(dbResult);
+            return result;
+        }
+
+        public void UpdateOriginalAuthor(int authorId, OriginalAuthorContract author)
+        {
+            var updateOriginalAuthorWork = new UpdateOriginalAuthorWork(m_personRepository, authorId, author);
+            updateOriginalAuthorWork.Execute();
+        }
+
+        public void DeleteOriginalAuthor(int authorId)
+        {
+            var deleteOriginalAuthorWork = new DeleteOriginalAuthorWork(m_personRepository, authorId);
+            deleteOriginalAuthorWork.Execute();
         }
 
         public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
@@ -42,13 +63,13 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<OriginalAuthorContract> GetAuthorAutocomplete(string query)
         {
-            var result = new GetAuthorAutocompleteWork(m_personRepository, query, AutocompleteMaxCount).Execute();
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, AutocompleteMaxCount));
             return Mapper.Map<List<OriginalAuthorContract>>(result);
         }
 
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
         {
-            var result = new GetResponsiblePersonAutocompleteWork(m_personRepository, query, AutocompleteMaxCount).Execute();
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, AutocompleteMaxCount));
             return Mapper.Map<List<ResponsiblePersonContract>>(result);
         }
     }

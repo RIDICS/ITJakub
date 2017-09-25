@@ -23,9 +23,17 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{categoryId}")]
-        public void UpdateCategory(int categoryId, [FromBody] CategoryContract category)
+        public IActionResult UpdateCategory(int categoryId, [FromBody] CategoryContract category)
         {
-            m_categoryManager.UpdateCategory(categoryId, category);
+            try
+            {
+                m_categoryManager.UpdateCategory(categoryId, category);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
         }
 
         [HttpDelete("{categoryId}")]

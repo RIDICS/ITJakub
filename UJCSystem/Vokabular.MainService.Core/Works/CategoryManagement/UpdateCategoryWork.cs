@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.DataContracts.Clients.Errors;
 using Vokabular.MainService.DataContracts.Contracts;
 
 namespace Vokabular.MainService.Core.Works.CategoryManagement
@@ -23,6 +25,8 @@ namespace Vokabular.MainService.Core.Works.CategoryManagement
         protected override void ExecuteWorkImplementation()
         {
             var category = m_categoryRepository.FindById<Category>(m_categoryId);
+            if (category == null)
+                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
             
             category.Description = m_data.Description;
             category.ExternalId = m_data.ExternalId;

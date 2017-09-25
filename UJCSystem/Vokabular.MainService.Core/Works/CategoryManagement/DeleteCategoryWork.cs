@@ -21,7 +21,7 @@ namespace Vokabular.MainService.Core.Works.CategoryManagement
             var category = m_categoryRepository.GetCategoryWithSubcategories(m_categoryId);
 
             if (category == null)
-                throw new HttpErrorCodeException("Not found", HttpStatusCode.NotFound);
+                throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
 
             if (category.Categories.Count > 0)
                 throw new HttpErrorCodeException("Category has some sub-categories", HttpStatusCode.BadRequest);
