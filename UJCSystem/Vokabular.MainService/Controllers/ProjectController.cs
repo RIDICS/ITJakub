@@ -113,9 +113,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{projectId}/responsibleperson")]
-        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract responsiblePersonIdList)
+        public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            m_projectMetadataManager.SetResponsiblePersons(projectId, responsiblePersonIdList);
+            m_projectMetadataManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
         [HttpGet("{projectId}/page")]

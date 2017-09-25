@@ -105,9 +105,9 @@ namespace Vokabular.MainService.Core.Managers
             new SetAuthorsWork(m_metadataRepository, projectId, authorIdList.IdList).Execute();
         }
 
-        public void SetResponsiblePersons(long projectId, IntegerIdListContract responsiblePersonIdList)
+        public void SetResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            new SetResponsiblePersonsWork(m_metadataRepository, projectId, responsiblePersonIdList.IdList).Execute();
+            new SetResponsiblePersonsWork(m_metadataRepository, projectId, projectResposibleIdList).Execute();
         }
     }
 }

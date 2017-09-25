@@ -176,7 +176,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void SetProjectResponsiblePersons(long projectId, IntegerIdListContract request)
+        public void SetProjectResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> request)
         {
             try
             {

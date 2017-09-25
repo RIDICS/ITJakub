@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Vokabular.MainService.DataContracts.Contracts;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
 {
@@ -25,9 +26,9 @@ namespace ITJakub.Web.Hub.Areas.Admin.Models.Request
         public string ManuscriptRepository { get; set; }
         public string ManuscriptExtent { get; set; }
 
-        public IList<int> LiteraryKindIdList { get; set; }
-        public IList<int> LiteraryGenreIdList { get; set; }
-        public IList<int> AuthorIdList { get; set; }
-        public IList<int> ResponsiblePersonIdList { get; set; }
+        public List<int> LiteraryKindIdList { get; set; }
+        public List<int> LiteraryGenreIdList { get; set; }
+        public List<int> AuthorIdList { get; set; }
+        public List<ProjectResponsiblePersonIdContract> ProjectResponsiblePersonIdList { get; set; }
     }
 }
