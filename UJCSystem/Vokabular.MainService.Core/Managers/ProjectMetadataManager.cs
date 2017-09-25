@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -10,6 +11,7 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectMetadataManager
     {
+        private const int AutocompleteMaxCount = 5;
         private readonly MetadataRepository m_metadataRepository;
         private readonly UserManager m_userManager;
 
@@ -108,6 +110,12 @@ namespace Vokabular.MainService.Core.Managers
         public void SetResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
             new SetResponsiblePersonsWork(m_metadataRepository, projectId, projectResposibleIdList).Execute();
+        }
+
+        public List<string> GetPublisherAutocomplete(string query)
+        {
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, AutocompleteMaxCount));
+            return result.ToList();
         }
     }
 }
