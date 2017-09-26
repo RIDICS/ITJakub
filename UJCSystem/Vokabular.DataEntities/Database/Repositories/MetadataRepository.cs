@@ -288,9 +288,37 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id)
                 .AndRestrictionOn(x => x.PublisherText).IsLike(query, MatchMode.Start)
-                //.Select(x => x.PublisherText)
                 .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.PublisherText)))
                 .OrderBy(x => x.PublisherText).Asc
+                .Take(count)
+                .List<string>();
+        }
+
+        public IList<string> GetCopyrightAutocomplete(string query, int count)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.Copyright).IsLike(query, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Copyright)))
+                .OrderBy(x => x.Copyright).Asc
+                .Take(count)
+                .List<string>();
+        }
+
+
+        public IList<string> GetManuscriptRepositoryAutocomplete(string query, int count)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.ManuscriptRepository).IsLike(query, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.ManuscriptRepository)))
+                .OrderBy(x => x.ManuscriptRepository).Asc
                 .Take(count)
                 .List<string>();
         }

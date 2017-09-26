@@ -15,9 +15,23 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("publisher/autocomplete")]
-        public List<string> GetPublisherAutocomplete(string query)
+        public List<string> GetPublisherAutocomplete([FromQuery] string query)
         {
             var result = m_projectMetadataManager.GetPublisherAutocomplete(query);
+            return result;
+        }
+
+        [HttpGet("copyright/autocomplete")]
+        public List<string> GetCopyrightAutocomplete([FromQuery] string query)
+        {
+            var result = m_projectMetadataManager.GetCopyrightAutocomplete(query);
+            return result;
+        }
+
+        [HttpGet("manuscript/repository/autocomplete")]
+        public List<string> GetManuscriptRepositoryAutocomplete([FromQuery] string query)
+        {
+            var result = m_projectMetadataManager.GetManuscriptRepositoryAutocomplete(query);
             return result;
         }
     }

@@ -117,5 +117,17 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, AutocompleteMaxCount));
             return result.ToList();
         }
+
+        public List<string> GetCopyrightAutocomplete(string query)
+        {
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, AutocompleteMaxCount));
+            return result.ToList();
+        }
+
+        public List<string> GetManuscriptRepositoryAutocomplete(string query)
+        {
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, AutocompleteMaxCount));
+            return result.ToList();
+        }
     }
 }
