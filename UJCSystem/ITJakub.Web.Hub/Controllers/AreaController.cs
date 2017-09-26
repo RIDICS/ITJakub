@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Controllers
@@ -98,11 +99,46 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        protected long SearchByCriteriaCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        private List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
+        {
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+
+            if (!string.IsNullOrEmpty(text))
+            {
+                var wordListCriteria = new WordListCriteriaContract
+                {
+                    Key = key,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {text}
+                        }
+                    }
+                };
+                listSearchCriteriaContracts.Add(wordListCriteria);
+            }
+
+            return listSearchCriteriaContracts;
+        }
+
+        protected long SearchByCriteriaTextCount(CriteriaKey key, string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = CreateTextCriteriaList(key, text);
+
+            return SearchByCriteriaCount(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+        }
+
+        protected long SearchByCriteriaJsonCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
             var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
+            return SearchByCriteriaCount(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+        }
+
+        protected long SearchByCriteriaCount(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
             if (selectedBookIds != null || selectedCategoryIds != null)
             {
                 listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
@@ -124,12 +160,24 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
 
-        protected List<SearchResultContract> SearchByCriteria(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
-            IList<int> selectedCategoryIds)
+        protected List<SearchResultContract> SearchByCriteriaText(CriteriaKey key, string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var listSearchCriteriaContracts = CreateTextCriteriaList(key, text);
+
+            return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+        }
+
+        protected List<SearchResultContract> SearchByCriteriaJson(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
+            return SearchByCriteria(listSearchCriteriaContracts, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+        }
+
+        protected List<SearchResultContract> SearchByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
+        {
             //listSearchCriteriaContracts.Add(new ResultCriteriaContract
             //{
             //    Start = start,
