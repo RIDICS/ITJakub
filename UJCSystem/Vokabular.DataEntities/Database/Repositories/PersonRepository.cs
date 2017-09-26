@@ -26,6 +26,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             OriginalAuthor authorAlias = null;
 
+            queryString = EscapeQuery(queryString);
             queryString = queryString.Replace(" ", $"{WildcardAny} ");
             
             var query = GetSession().QueryOver(() => authorAlias)
@@ -67,6 +68,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
             ResponsiblePerson responsibleAlias = null;
 
+            queryString = EscapeQuery(queryString);
             queryString = queryString.Replace(" ", $"{WildcardAny} ");
 
             return GetSession().QueryOver(() => responsibleAlias)

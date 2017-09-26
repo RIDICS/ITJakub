@@ -282,6 +282,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<string> GetPublisherAutocomplete(string query, int count)
         {
+            query = EscapeQuery(query);
+
             Resource resourceAlias = null;
 
             return GetSession().QueryOver<MetadataResource>()
@@ -296,6 +298,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<string> GetCopyrightAutocomplete(string query, int count)
         {
+            query = EscapeQuery(query);
+
             Resource resourceAlias = null;
 
             return GetSession().QueryOver<MetadataResource>()
@@ -311,6 +315,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<string> GetManuscriptRepositoryAutocomplete(string query, int count)
         {
+            query = EscapeQuery(query);
+
             Resource resourceAlias = null;
 
             return GetSession().QueryOver<MetadataResource>()
@@ -325,6 +331,8 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
         {
+            queryString = EscapeQuery(queryString);
+
             Resource resourceAlias = null;
             Project projectAlias = null;
             Snapshot snapshotAlias = null;

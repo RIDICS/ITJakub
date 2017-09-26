@@ -149,18 +149,19 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
         
         public ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
+                var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
+                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+                return Json(resultStringList);
             }
         }
 
         public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }

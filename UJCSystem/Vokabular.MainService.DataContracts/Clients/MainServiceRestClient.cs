@@ -567,11 +567,10 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var url = "author/autocomplete".AddQueryString("query", query);
-                if (bookType != null)
-                {
-                    url.AddQueryString("bookType", bookType.Value.ToString());
-                }
+                var url = UrlQueryBuilder.Create("author/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .ToQuery();
 
                 var result = Get<List<OriginalAuthorContract>>(url);
                 return result;
@@ -585,16 +584,17 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null)
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
         {
             try
             {
-                var url = "metadata/title/autocomplete".AddQueryString("query", query);
-                if (bookType != null)
-                {
-                    url.AddQueryString("bookType", bookType.Value.ToString());
-                }
-
+                var url = UrlQueryBuilder.Create("metadata/title/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
+                    .AddParameterList("selectedProjectIds", selectedProjectIds)
+                    .ToQuery();
+                
                 var result = Get<List<string>>(url);
                 return result;
             }
