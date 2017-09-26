@@ -155,7 +155,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
             };
         }
 
-        public override IList<TextResource> GetProjectTexts(long projectId, long namedResourceGroupId)
+        public override IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             return new List<TextResource>
             {

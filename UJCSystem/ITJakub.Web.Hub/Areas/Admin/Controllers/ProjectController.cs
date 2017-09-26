@@ -474,7 +474,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectResponsiblePersons(projectId, new IntegerIdListContract {IdList = request.ResponsiblePersonIdList});
+                    client.SetProjectResponsiblePersons(projectId, request.ProjectResponsiblePersonIdList);
                 }
                 catch (HttpRequestException)
                 {

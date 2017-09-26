@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -35,16 +38,32 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual IList<TextResource> GetProjectTexts(long projectId, long namedResourceGroupId)
+        public virtual IList<TextResource> GetProjectTexts(long projectId, long? namedResourceGroupId, bool fetchParentPage)
         {
             Resource resourceAlias = null;
-            
-            return GetSession().QueryOver<TextResource>()
+
+            var session = GetSession();
+
+            if (fetchParentPage)
+            {
+                session.QueryOver<PageResource>()
+                    .JoinAlias(x => x.Resource, () => resourceAlias)
+                    .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
+                    .Fetch(x => x.Resource).Eager
+                    .Future();
+            }
+
+            var query = session.QueryOver<TextResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
-                .Where(() => resourceAlias.Project.Id == projectId && resourceAlias.NamedResourceGroup.Id == namedResourceGroupId)
+                .Where(() => resourceAlias.Project.Id == projectId)
                 .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .Fetch(x => x.Resource).Eager
-                .List();
+                .Fetch(x => x.Resource).Eager;
+
+            if (namedResourceGroupId != null)
+                query.And(() => resourceAlias.NamedResourceGroup.Id == namedResourceGroupId.Value);
+
+            var result = query.Future();
+            return result.ToList();
         }
 
         public virtual IList<ImageResource> GetProjectImages(long projectId, long namedResourceGroupId)
@@ -151,6 +170,52 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => resourceAlias.Project.Id == projectId && resourceAlias.LatestVersion.Id == x.Id)
                 .And(x => resourceAlias.ContentType == ContentTypeEnum.FullLiteraryWork)
                 .List();
+        }
+
+        public virtual TextResource GetTextResource(long resourceId)
+        {
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<TextResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
+                .Fetch(x => x.BookVersion).Eager
+                .SingleOrDefault();
+        }
+
+        public virtual IList<TextComment> GetCommentsForText(long textId)
+        {
+            TextComment subcommentAlias = null;
+
+            return GetSession().QueryOver<TextComment>()
+                .JoinAlias(x => x.TextComments, () => subcommentAlias, JoinType.LeftOuterJoin)
+                .OrderBy(x => x.CreateTime).Asc
+                .OrderBy(() => subcommentAlias.CreateTime).Asc
+                .Where(x => x.ResourceText.Id == textId)
+                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(x => x.TextComments).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List()
+                .Where(x => x.ParentComment == null)
+                .ToList();
+        }
+
+        public virtual IList<NamedResourceGroup> GetNamedResourceGroupList(long projectId, ResourceTypeEnum? filterResourceType)
+        {
+            Resource resourceAlias = null;
+
+            var query = GetSession().QueryOver<NamedResourceGroup>()
+                .Where(x => x.Project.Id == projectId)
+                .OrderBy(x => x.Name).Asc
+                .TransformUsing(Transformers.DistinctRootEntity);
+
+            if (filterResourceType != null)
+            {
+                query.JoinAlias(x => x.Resources, () => resourceAlias)
+                    .And(() => resourceAlias.ResourceType == filterResourceType.Value);
+            }
+
+            return query.List();
         }
     }
 }

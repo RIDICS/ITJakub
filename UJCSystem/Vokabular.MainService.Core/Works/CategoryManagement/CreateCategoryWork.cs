@@ -1,8 +1,9 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.DataContracts.Contracts;
 
-namespace Vokabular.MainService.Core.Works.Category
+namespace Vokabular.MainService.Core.Works.CategoryManagement
 {
     public class CreateCategoryWork : UnitOfWorkBase<int>
     {
@@ -18,11 +19,11 @@ namespace Vokabular.MainService.Core.Works.Category
         protected override int ExecuteWorkImplementation()
         {
             var parentCategory = m_data.ParentCategoryId != null
-                ? m_categoryRepository.FindById<DataEntities.Database.Entities.Category>(m_data.ParentCategoryId)
+                ? m_categoryRepository.FindById<Category>(m_data.ParentCategoryId)
                 : null;
             var parentPath = parentCategory != null ? parentCategory.Path : string.Empty;
 
-            var category = new DataEntities.Database.Entities.Category
+            var category = new Category
             {
                 Description = m_data.Description,
                 ExternalId = m_data.ExternalId,

@@ -106,6 +106,11 @@ interface IResponsibleType {
     type: ResponsibleTypeEnum;
 }
 
+interface ISaveProjectResponsiblePerson {
+    responsiblePersonId: number;
+    responsibleTypeId: number;
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
@@ -131,7 +136,7 @@ interface ISaveMetadataResource extends IMetadataResource {
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;
     authorIdList: Array<number>;
-    responsiblePersonIdList: Array<number>;
+    projectResponsiblePersonIdList: Array<ISaveProjectResponsiblePerson>;
 }
 
 interface IMetadataSaveResult {
