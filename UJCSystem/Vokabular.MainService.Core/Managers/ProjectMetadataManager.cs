@@ -16,11 +16,13 @@ namespace Vokabular.MainService.Core.Managers
         private const int AutocompleteMaxCount = 5;
         private readonly MetadataRepository m_metadataRepository;
         private readonly UserManager m_userManager;
+        private readonly CategoryRepository m_categoryRepository;
 
-        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager)
+        public ProjectMetadataManager(MetadataRepository metadataRepository, UserManager userManager, CategoryRepository categoryRepository)
         {
             m_metadataRepository = metadataRepository;
             m_userManager = userManager;
+            m_categoryRepository = categoryRepository;
         }
 
         public int CreateLiteraryKind(string name)
@@ -132,10 +134,16 @@ namespace Vokabular.MainService.Core.Managers
             return result.ToList();
         }
 
-        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType)
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType, List<int> selectedCategoryIds, List<long> selectedProjectIds)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetTitleAutocomplete(query, bookTypeEnum, AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x =>
+            {
+                var allCategoryIds = selectedCategoryIds.Count > 0
+                    ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
+                    : selectedCategoryIds;
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, AutocompleteMaxCount);
+            });
             return result.ToList();
         }
     }

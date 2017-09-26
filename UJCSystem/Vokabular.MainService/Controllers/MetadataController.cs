@@ -37,9 +37,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("title/autocomplete")]
-        public List<string> GetTitleAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType)
+        public List<string> GetTitleAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType,
+            [FromQuery] List<int> selectedCategoryIds, [FromQuery] List<long> selectedProjectIds)
         {
-            var result = m_projectMetadataManager.GetTitleAutocomplete(query, bookType);
+            var result = m_projectMetadataManager.GetTitleAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
             return result;
         }
     }

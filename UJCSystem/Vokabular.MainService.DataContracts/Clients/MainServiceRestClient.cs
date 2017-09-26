@@ -563,11 +563,39 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query)
+        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query, BookTypeEnumContract? bookType = null)
         {
             try
             {
-                var result = Get<List<OriginalAuthorContract>>("author/autocomplete".AddQueryString("query", query));
+                var url = "author/autocomplete".AddQueryString("query", query);
+                if (bookType != null)
+                {
+                    url.AddQueryString("bookType", bookType.Value.ToString());
+                }
+
+                var result = Get<List<OriginalAuthorContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null)
+        {
+            try
+            {
+                var url = "metadata/title/autocomplete".AddQueryString("query", query);
+                if (bookType != null)
+                {
+                    url.AddQueryString("bookType", bookType.Value.ToString());
+                }
+
+                var result = Get<List<string>>(url);
                 return result;
             }
             catch (HttpRequestException e)

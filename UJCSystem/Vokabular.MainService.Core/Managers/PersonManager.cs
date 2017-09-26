@@ -75,6 +75,9 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
         {
+            if (query == null)
+                query = string.Empty;
+
             var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, AutocompleteMaxCount));
             return Mapper.Map<List<ResponsiblePersonContract>>(result);
         }

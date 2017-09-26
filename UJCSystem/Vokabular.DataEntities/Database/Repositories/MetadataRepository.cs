@@ -323,12 +323,13 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, int count)
+        public IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
         {
             Resource resourceAlias = null;
             Project projectAlias = null;
             Snapshot snapshotAlias = null;
             BookType bookTypeAlias = null;
+            Category categoryAlias = null;
 
             var query = GetSession().QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
@@ -343,6 +344,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 query.JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
                     .Where(() => bookTypeAlias.Type == bookType.Value);
+            }
+
+            if (selectedCategoryIds.Count > 0 || selectedProjectIds.Count > 0)
+            {
+                query.JoinAlias(() => projectAlias.Categories, () => categoryAlias, JoinType.LeftOuterJoin)
+                    .Where(Restrictions.Or(
+                        Restrictions.InG(Projections.Property(() => categoryAlias.Id), selectedCategoryIds),
+                        Restrictions.InG(Projections.Property(() => projectAlias.Id), selectedProjectIds)
+                    ));
             }
 
             return query
