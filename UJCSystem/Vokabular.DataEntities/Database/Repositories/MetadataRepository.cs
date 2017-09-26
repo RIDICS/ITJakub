@@ -322,5 +322,32 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(count)
                 .List<string>();
         }
+
+        public IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, int count)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+
+            var query = GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.Title).IsLike(queryString, MatchMode.Anywhere)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Title)))
+                .OrderBy(x => x.Title).Asc;
+
+            if (bookType != null)
+            {
+                query.JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == bookType.Value);
+            }
+
+            return query
+                .Take(count)
+                .List<string>();
+        }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Clients.Errors;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -24,9 +25,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("autocomplete")]
-        public List<OriginalAuthorContract> GetAutocomplete([FromQuery] string query)
+        public List<OriginalAuthorContract> GetAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType)
         {
-            return m_personManager.GetAuthorAutocomplete(query);
+            return m_personManager.GetAuthorAutocomplete(query, bookType);
         }
 
         [HttpGet("{authorId}")]

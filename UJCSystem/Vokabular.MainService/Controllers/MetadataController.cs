@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -32,6 +33,13 @@ namespace Vokabular.MainService.Controllers
         public List<string> GetManuscriptRepositoryAutocomplete([FromQuery] string query)
         {
             var result = m_projectMetadataManager.GetManuscriptRepositoryAutocomplete(query);
+            return result;
+        }
+
+        [HttpGet("title/autocomplete")]
+        public List<string> GetTitleAutocomplete([FromQuery] string query, [FromQuery] BookTypeEnumContract? bookType)
+        {
+            var result = m_projectMetadataManager.GetTitleAutocomplete(query, bookType);
             return result;
         }
     }

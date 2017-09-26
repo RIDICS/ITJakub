@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.Person;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -61,9 +63,13 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<ResponsibleTypeContract>>(result);
         }
 
-        public List<OriginalAuthorContract> GetAuthorAutocomplete(string query)
+        public List<OriginalAuthorContract> GetAuthorAutocomplete(string query, BookTypeEnumContract? bookType)
         {
-            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, AutocompleteMaxCount));
+            if (query == null)
+                query = string.Empty;
+
+            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, AutocompleteMaxCount));
             return Mapper.Map<List<OriginalAuthorContract>>(result);
         }
 

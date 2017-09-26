@@ -5,7 +5,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -13,8 +12,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
     {
         public BookProfile()
         {
-            CreateMap<BookTypeEnum, BookTypeEnumContract>().ReverseMap();
-
             CreateMap<MetadataResource, BookContract>()
                 .IncludeBase<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
