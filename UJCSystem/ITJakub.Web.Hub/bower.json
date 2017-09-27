@@ -14,7 +14,8 @@
     "jquery-eu-cookie-law-popup": "1.1.0",
     "jquery-zoom": "1.7.20",
     "wheelzoom": "3.0.4",
-    "simplemde": "1.11.2",
+    "simplemde-custom-markdown-mode": "#71b7a583e230b967116c99141291d94276ba1433",
+    "font-awesome": "4.7.0",
     "bootstrap-colorpicker-plus": "#0fdd970",
     "s-pagination": "1.1.1"
   }
