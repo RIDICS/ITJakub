@@ -96,3 +96,5 @@ project.lock.json
 project.fragment.lock.json
 !gulpfile.js
 !Gruntfile.js
+
+**/ITJakub.Web.Hub/comments/*
