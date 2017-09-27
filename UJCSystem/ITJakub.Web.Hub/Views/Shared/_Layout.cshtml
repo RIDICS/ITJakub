@@ -2,6 +2,7 @@
 @using ITJakub.Web.Hub.Helpers
 @using Localization.AspNetCore.Service
 @using Localization.CoreLibrary.Util
+@using Microsoft.AspNetCore.Http
 
 @inject ILocalization Localizer
 
@@ -575,7 +576,12 @@
                 </li>
             </ul>
             <div class="footer-text">
-                @Localizer.TranslateFormat("FooterText", new[]{@FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value}, "layout", LocTranslationSource.File)
+                @{
+                    string vokabularStarted = FooterHelper.VokabularStarted(new DateTime(2015, 1, 1)).Value;
+                    string vokabularStartedNew = FooterHelper.VokabularStartedLocalized(new DateTime(2015, 1, 1), Context.Request.Cookies[ServiceBase.CultureCookieName]).Value;
+                }
+
+                @Localizer.TranslateFormat("FooterText", new object[] {vokabularStartedNew}, "layout", LocTranslationSource.File)
             </div>
             <div class="footer-logos">
                 <a href="http://www.ujc.cas.cz/" class="ujc" title="@Localizer.Translate("UjcLong", "layout")">

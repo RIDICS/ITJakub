@@ -4,7 +4,8 @@
 	"dictionary": {
 		"Vokabulář" : "Vokabulář",
 		"webový": "webový",
-
+		"and":"and",
+		
 		"FeedbackFormPlaceholder":"Type your feedback here...",
 		"NameFormPlaceholder":"Type your name here...",
 		"EmailFormPlaceholder":"Type your e-mail here...",

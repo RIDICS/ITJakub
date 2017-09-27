@@ -81,6 +81,9 @@
     <Reference Include="Localization.Database.EFCore">
       <HintPath>..\..\..\localization-ridics\Solution\Localization.Database.EFCore\bin\Debug\netstandard1.4\Localization.Database.EFCore.dll</HintPath>
     </Reference>
+    <Reference Include="Localization.Web.Script">
+      <HintPath>..\..\..\localization-ridics\Solution\Localization.Web.Script\bin\Debug\netstandard1.4\Localization.Web.Script.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

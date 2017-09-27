@@ -1,34 +1,14 @@
 {
 	"culture":"en",
-	"scope":"global",
+	"scope":"Upload",
 	"dictionary": {
-		"Vokabulář" : "Vokabulář",
-		"webový": "webový",
-
-		"FeedbackFormPlaceholder":"Type your feedback here...",
-		"NameFormPlaceholder":"Type your name here...",
-		"EmailFormPlaceholder":"Typr your e-mail here...",
-		"Send":"Send",
-		
-		"FeedbackSentTitle":"Feedback sent",
-		"FeedbackSentAlert":"Feedback successfuly sent.",
-		
-		"Max":"Max.",
-		"Remaining":"Remaining",
-		"YouCanUseDiacritics":"You can use diacritics",
-		"Characters":"characters",
-		
-		"Close":"Close",
-		"Save":"Save",
-		"Error":"Error",
-		"DefaultTitle":"Default title",
-		
-		"SortBy":"Sort by",
-		"UserAccount":"User account",
-		"Language":"Language",
-		"SignIn":"Sign in",
-		"SignUp":"Sign up",
-		"EditText":"Edit text",
-		"CreateText":"Create text"
-		}
+		"UploadManagementTitle":"Administration - Upload book",
+		"BookUploadHeader":"Upload book",
+		"UploadHint":"To upload files click on the form and make a selection or drag and drom them on the form.",
+		"NewVersionMessage":"Write message to new version here",
+		"Process":"Process",
+		"Processing":"Processing...",
+		"ProcessingOk":"Processing was successful",
+		"ProcessingFailed":"Processing was not successful"
+	}
 }

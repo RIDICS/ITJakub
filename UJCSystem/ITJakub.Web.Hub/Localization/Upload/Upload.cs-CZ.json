@@ -3,12 +3,12 @@
 	"scope":"Upload",
 	"dictionary": {
 		"UploadManagementTitle":"Administrace - Nahrání díla",
-		"BookUpload":"Nahrání díla",
+		"BookUploadHeader":"Nahrání díla",
 		"UploadHint":"Pro nahrání souborů klikněte na formulář a proveďtě výběr nebo je na formlulář přetáhněte.",
 		"NewVersionMessage":"Zde napište zprávu k nové verzi",
 		"Process":"Zpracovat",
 		"Processing":"Zpracovává se...",
-		"ProcessingSuccess":"Zpracování proběhlo v pořádku",
+		"ProcessingOk":"Zpracování proběhlo v pořádku",
 		"ProcessingFailed":"Zpracování souborů se nezdařilo"
 	}
 }
