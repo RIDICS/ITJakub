@@ -89,12 +89,8 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult GetCorpusWithCategories()
         {
-            using (var client = GetMainServiceClient())
-            {
-                var booksWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-
-                return Json(booksWithCategories);
-            }
+            var result = GetBooksAndCategories();
+            return Json(result);
         }
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
@@ -315,59 +311,15 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum) sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                HitSettingsContract = new HitSettingsContract
-                {
-                    ContextLength = 50,
-                    Count = 3,
-                    Start = 1
-                }
-            });
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,

@@ -101,11 +101,8 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         
         public ActionResult GetAudioWithCategories()
         {
-            using (var client = GetMainServiceClient())
-            {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-                return Json(audiosWithCategories);
-            }
+            var result = GetBooksAndCategories();
+            return Json(result);
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)

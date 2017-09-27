@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
-using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -96,34 +92,14 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
 
         public ActionResult AdvancedSearchResultsCount(string json)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new { count });
-            }
+            var count = SearchByCriteriaJsonCount(json, null, null);
+            return Json(new { count });
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum)sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-            });
-
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new { results }, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
 

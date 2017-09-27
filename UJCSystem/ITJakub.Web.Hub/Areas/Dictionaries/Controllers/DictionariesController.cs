@@ -76,12 +76,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionariesWithCategories()
         {
-            using (var client = GetMainServiceClient())
-            {
-                var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-
-                return Json(dictionariesAndCategories);
-            }
+            var result = GetBooksAndCategories();
+            return Json(result);
         }
 
         public ActionResult Information()
@@ -451,34 +447,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult DictionaryAdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
-
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult DictionaryAdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
-            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count, sortingEnum, sortAsc));
-
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult DictionaryBasicSearchResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
