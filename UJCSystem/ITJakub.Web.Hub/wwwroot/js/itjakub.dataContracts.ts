@@ -176,6 +176,16 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+interface ICommentSctucture {
+    id: string;
+    nested: boolean;
+    page: number;
+    name: string;
+    body: string;
+    order: number;
+    time: number;
+}
+
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {
 //    None = "None",
