@@ -235,12 +235,22 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
             ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            OriginalAuthor originalAuthorAlias = null;
+            ProjectResponsiblePerson projectResponsiblePersonAlias = null;
+            ResponsiblePerson responsiblePersonAlias = null;
+            ResponsibleType responsibleTypeAlias = null;
             
             var session = GetSession();
 
             var result = session.QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.DefaultBookType, () => bookTypeAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
                 .FutureValue();
 
@@ -267,6 +277,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectOriginalAuthorAlias.OriginalAuthor, () => originalAuthorAlias, JoinType.LeftOuterJoin)
                 .Fetch(x => x.Authors).Eager
                 .Fetch(x => x.Authors[0].OriginalAuthor).Eager
                 .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
@@ -274,6 +285,9 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
+                .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectResponsiblePersonAlias.ResponsiblePerson, () => responsiblePersonAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectResponsiblePersonAlias.ResponsibleType, () => responsibleTypeAlias, JoinType.LeftOuterJoin)
                 .Fetch(x => x.ResponsiblePersons).Eager
                 .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
                 .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
