@@ -249,8 +249,8 @@ namespace Vokabular.DataEntities.Database.Repositories
             var result = session.QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.DefaultBookType, () => bookTypeAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => snapshotAlias.DefaultBookType, () => bookTypeAlias, JoinType.LeftOuterJoin)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
                 .FutureValue();
 
