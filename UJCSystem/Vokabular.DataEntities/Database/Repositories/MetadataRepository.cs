@@ -207,6 +207,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.Resource.Project).Eager
                 //.Fetch(x => x.Resource.Project.Authors).Eager // Authors are used from Metadata
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
                 .List();
             return result;
         }

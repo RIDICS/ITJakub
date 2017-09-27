@@ -344,7 +344,8 @@ BEGIN TRAN
 		[PublishTime] datetime NULL,
 		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_Snapshot(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[Comment] nvarchar(2000)
+		[Comment] nvarchar(2000),
+		[DefaultBookType] int NOT NULL CONSTRAINT [FK_Snapshot(DefaultBookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id)
 	)
 
 	ALTER TABLE [dbo].[Project] ADD [LatestPublishedSnapshot] bigint NULL CONSTRAINT [FK_Project(LatestPublishedSnapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id)
