@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
+using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
@@ -513,6 +515,79 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                             request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
                 };
                 return Json(response);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SaveComment(string jsonBody)
+        {
+            if (jsonBody == null)
+            {
+                return null;
+            }
+            dynamic json = JsonConvert.DeserializeObject(jsonBody);
+            var page = json.page;
+            var filename = page + "-" + Guid.NewGuid();
+            using (var newCommentFile = new FileStream($".\\comments\\{filename}.txt", FileMode.Create,
+                FileAccess.ReadWrite))
+            {
+                using (var writer = new StreamWriter(newCommentFile))
+                {
+                    writer.Write(jsonBody);
+                }
+            }
+            return new JsonResult("Written");
+        }
+
+        [HttpPost]
+        public IActionResult GetGuid()
+        {
+            var guid = Guid.NewGuid();
+            return new JsonResult(guid);
+        }
+
+        [HttpPost]
+        public IActionResult LoadCommentFile(int pageNumber)
+        {
+            var i = 0;
+            string[] parts;
+            try
+            {
+                const string path = @".\\comments\\";
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                string[] files = Directory.GetFiles(path, pageNumber + "-*.txt");
+                parts = new string[files.Length];
+                foreach (string file in files)
+                {
+                    using (var textFile = new FileStream(file,
+                        FileMode.Open,
+                        FileAccess.Read))
+                    {
+                        using (var reader = new StreamReader(textFile))
+                        {
+                            var text = reader.ReadToEnd();
+                            parts[i] = text;
+                            i++;
+                        }
+                    }
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                string[] response = { "error-no-file" };
+                return new JsonResult(response); //TODO handle exceptions properly
+            }
+            if (parts.Length > 0)
+            {
+                return new JsonResult(parts);
+            }
+            else
+            {
+                string[] response = { "error-no-file" };
+                return new JsonResult(response); //TODO handle exceptions properly
             }
         }
 
