@@ -98,3 +98,4 @@ project.fragment.lock.json
 !Gruntfile.js
 
 **/ITJakub.Web.Hub/comments/*
+!**/lib-custom/jq-simple-connect/source/*
