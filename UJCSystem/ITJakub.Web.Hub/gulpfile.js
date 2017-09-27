@@ -286,6 +286,17 @@ gulp.task("bundle:itjakub_professionalliterature_list", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/ProfessionalLiterature/js"));
 });
 
+gulp.task("bundle:ridics_admin_text-editor", function () {
+    return gulp.src([
+            paths.webroot + "Areas/Admin/js/ridics.project.text-editor*.js",
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat("ridics.project.text-editor.bundle.js"))
+        .pipe(sourcemaps.write())
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
+});
+
 gulp.task("bundlejs_areas",
 [
     "bundle:itjakub_audiobooks",
@@ -295,7 +306,8 @@ gulp.task("bundlejs_areas",
     "bundle:itjakub_dictionary_search",
     "bundle:itjakub_dictionary_headwords",
     "bundle:itjakub_lemmatization",
-    "bundle:itjakub_professionalliterature_list"
+    "bundle:itjakub_professionalliterature_list",
+    "bundle:ridics_admin_text-editor"
 ]);
 
 
