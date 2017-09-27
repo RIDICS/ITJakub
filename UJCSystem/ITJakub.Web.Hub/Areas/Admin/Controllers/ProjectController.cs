@@ -117,7 +117,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         workMetadaViewModel.AllLiteraryKindList = literaryKinds;
                         workMetadaViewModel.AllLiteraryGenreList = literaryGenres;
                         workMetadaViewModel.AllLiteraryOriginalList = literaryOriginals;
-                        workMetadaViewModel.AllResponsibleTypeList = Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
+                        workMetadaViewModel.AllResponsibleTypeList =
+                            Mapper.Map<List<ResponsibleTypeViewModel>>(responsibleTypes);
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
@@ -154,7 +155,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
         public IActionResult ProjectResourceVersion(long resourceId)
         {
-            using (var client= GetRestClient())
+            using (var client = GetRestClient())
             {
                 var resourceVersionList = client.GetResourceVersionHistory(resourceId);
                 var viewModel = Mapper.Map<List<ResourceVersionViewModel>>(resourceVersionList);
@@ -301,11 +302,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId, new NewResourceContract
-                {
-                    SessionId = request.SessionId,
-                    Comment = request.Comment
-                });
+                var resourceVersionId = client.ProcessUploadedResourceVersion(request.ResourceId,
+                    new NewResourceContract
+                    {
+                        SessionId = request.SessionId,
+                        Comment = request.Comment
+                    });
                 return Json(resourceVersionId);
             }
         }
@@ -342,7 +344,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(newResourceId);
             }
         }
-        
+
         [HttpPost]
         public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
         {
@@ -441,8 +443,10 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     ManuscriptIdno = request.ManuscriptIdno,
                     ManuscriptRepository = request.ManuscriptRepository,
                     ManuscriptSettlement = request.ManuscriptSettlement,
-                    NotAfter = request.NotAfter != null ? (DateTime?)new DateTime(request.NotAfter.Value, 1, 1) : null,
-                    NotBefore = request.NotBefore != null ? (DateTime?)new DateTime(request.NotBefore.Value, 1, 1) : null,
+                    NotAfter = request.NotAfter != null ? (DateTime?) new DateTime(request.NotAfter.Value, 1, 1) : null,
+                    NotBefore = request.NotBefore != null
+                        ? (DateTime?) new DateTime(request.NotBefore.Value, 1, 1)
+                        : null,
                     OriginDate = request.OriginDate,
                     PublishDate = request.PublishDate,
                     PublishPlace = request.PublishPlace,
@@ -476,7 +480,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectResponsiblePersons(projectId, new IntegerIdListContract {IdList = request.ResponsiblePersonIdList});
+                    client.SetProjectResponsiblePersons(projectId,
+                        new IntegerIdListContract {IdList = request.ResponsiblePersonIdList});
                 }
                 catch (HttpRequestException)
                 {
@@ -485,7 +490,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectLiteraryKinds(projectId, new IntegerIdListContract {IdList = request.LiteraryKindIdList});
+                    client.SetProjectLiteraryKinds(projectId,
+                        new IntegerIdListContract {IdList = request.LiteraryKindIdList});
                 }
                 catch (HttpRequestException)
                 {
@@ -494,7 +500,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
                 try
                 {
-                    client.SetProjectLiteraryGenres(projectId, new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
+                    client.SetProjectLiteraryGenres(projectId,
+                        new IntegerIdListContract {IdList = request.LiteraryGenreIdList});
                 }
                 catch (HttpRequestException)
                 {
@@ -511,7 +518,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     NewResourceVersionId = newResourceVersionId,
                     LastModificationText = DateTime.Now.ToString(CultureInfo.CurrentCulture),
                     LiteraryOriginalText =
-                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry, request.ManuscriptSettlement,
+                        LiteraryOriginalTextConverter.GetLiteraryOriginalText(request.ManuscriptCountry,
+                            request.ManuscriptSettlement,
                             request.ManuscriptRepository, request.ManuscriptIdno, request.ManuscriptExtent),
                 };
                 return Json(response);
@@ -577,7 +585,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             catch (FileNotFoundException)
             {
-                string[] response = { "error-no-file" };
+                string[] response = {"error-no-file"};
                 return new JsonResult(response); //TODO handle exceptions properly
             }
             if (parts.Length > 0)
@@ -586,7 +594,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
             else
             {
-                string[] response = { "error-no-file" };
+                string[] response = {"error-no-file"};
                 return new JsonResult(response); //TODO handle exceptions properly
             }
         }

@@ -6,7 +6,7 @@
 }
 
 @section styles {
-    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css"/>
 }
 @section scripts {
     <script src="~/Areas/Admin/js/ridics.project.module.js"></script>
@@ -31,9 +31,9 @@
                     <a href="#" class="list-group-item" id="project-navigation-video">Video</a>
                 </div>
             </div>
-            
+
             <div class="horizontal-splitter"></div>
-            
+
             <div class="resource-panel" id="resource-panel">
                 <select size="11" class="form-control" id="resource-list"></select>
 
@@ -46,9 +46,9 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="vertical-splitter"></div>
-        
+
         <div class="vertical-splitter-control">
             <button id="splitter-button" class="btn btn-default">
                 <span class="glyphicon glyphicon-menu-left"></span>
@@ -74,7 +74,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadResource", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0" />
+                                    <input type="hidden" id="new-resource-session-id" name="sessionId" value="0"/>
                                 </div>
                             </form>
                         </div>
@@ -108,7 +108,7 @@
                     <div class="form-group">
                         <label for="rename-resource-original" class="col-md-3 control-label">Původní název</label>
                         <div class="col-md-8">
-                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled" />
+                            <input type="text" id="rename-resource-original" class="form-control" disabled="disabled"/>
                         </div>
                     </div>
                     <div class="form-group">
@@ -179,7 +179,7 @@
                         <div class="col-md-12">
                             <form action="@Url.Action("UploadNewResourceVersion", "Project")" method="post" class="dropzone" enctype="multipart/form-data" id="new-resource-version-upload">
                                 <div class="hidden">
-                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0" />
+                                    <input type="hidden" id="new-resource-version-session-id" name="sessionId" value="0"/>
                                 </div>
                             </form>
                         </div>

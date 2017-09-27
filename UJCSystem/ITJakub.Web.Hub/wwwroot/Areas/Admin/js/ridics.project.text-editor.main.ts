@@ -21,7 +21,7 @@ class TextEditorMain {
         pageTextEditor.processAreaSwitch();
 
         connections.toggleConnections();
-        for (let i = 1; i <= 5; i++) { //TODO remove after debugging
+        for (let i = 1; i <= 15; i++) { //TODO remove after debugging
             pageStructure.createPage(i);
         }
         this.processRespondToCommentClick(commentInput);

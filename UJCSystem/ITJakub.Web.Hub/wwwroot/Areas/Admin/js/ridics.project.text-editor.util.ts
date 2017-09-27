@@ -1,7 +1,7 @@
 ﻿class Util {
     private serverAddress = "localhost:2927"; //TODO debug
 
-    getServerAddress(): string {//TODO debug
+    getServerAddress(): string { //TODO debug
         return this.serverAddress;
     }
 
@@ -75,13 +75,14 @@
 
     getNumberOfCommentsOnPage(pageNumber: number) {
         var numberOfComments = 0;
-        $.post(`http://${this.serverAddress}/admin/project/GetCommentSectionNumberOfFiles`, //check what does async affect
+        $.post(
+            `http://${this.serverAddress}/admin/project/GetCommentSectionNumberOfFiles`, //check what does async affect
             {
                 pageNumber: pageNumber
             }).done((data: number) => {
                 numberOfComments = data;
             }
-            );
+        );
         return numberOfComments;
     }
 

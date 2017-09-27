@@ -113,7 +113,6 @@
     }
 
     afterSuccesfullSend() {
-        alert("Succesfully sent");
         this.toggleCommentInputPanel();
     }
 }

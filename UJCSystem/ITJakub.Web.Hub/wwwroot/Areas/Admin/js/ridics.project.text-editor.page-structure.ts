@@ -26,7 +26,7 @@
         ) { //render later pages after previous ones, render first page after panel
             $(".page-row").last().after(html);
         } else {
-            $(".top-panel").after(html);
+            $(".pages-start").after(html);
         }
         this.commentArea.constructCommentArea(pageNumber);
         this.commentArea.collapseIfCommentAreaIsTall(pageNumber,

@@ -192,7 +192,7 @@
         $(commentArea).remove();
     }
 
-    processToggleNestedCommentClick() {
+    processToggleNestedCommentClick() {//TODO fix scroll to top broken after integration
         const button = $(".toggle-nested-comments");
         button.on("click",
             (event: JQueryEventObject) => {
