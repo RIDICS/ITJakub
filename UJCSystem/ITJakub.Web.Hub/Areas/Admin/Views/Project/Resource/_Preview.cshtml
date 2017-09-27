@@ -1,1 +1,45 @@
-﻿Náhled
+﻿<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid text-center">
+        <button type="button" class="btn btn-default navbar-btn editing-mode-button">Toggle editing mode</button>
+    </div>
+</nav>
+
+<div class="row text-center top-panel">
+    <!--Generated page structure goes here-->
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-primary text-edit-panel navbar-fixed-bottom">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-11">
+                        <h3 class="panel-title">Add your name and commentary here</h3>
+                    </div>
+                    <div class="col-xs-1">
+                        <span class="btn btn-primary pull-right close-form-input">
+                            <i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="panel-body">
+                <p>Name:</p>
+                <textarea rows="1" cols="30" id="nameInput" class="form-control textarea-no-resize"></textarea>
+                <p>Commentary:</p>
+                <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
+            </div>
+            <div class="panel-footer clearfix text-center">
+                <input type="button" id="commentFinish" value="Comment send" class="btn btn-primary">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(() => {
+        var main = new TextEditorMain();
+        main.init();
+    });
+</script>
