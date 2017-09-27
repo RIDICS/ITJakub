@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Grammar;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Grammar;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -136,24 +136,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             using (var client = GetMainServiceClient())
             {
                 var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }

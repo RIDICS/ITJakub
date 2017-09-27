@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Controllers;
@@ -30,8 +31,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.BibliographicalItem;
-        
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.BibliographicalItem;
+
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
             return new FeedbackFormIdentification { Area = "Bibliographies", Controller = "Bibliographies" };
@@ -74,20 +75,21 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             return View("Feedback/FeedbackSuccess");
         }
 
-        public ActionResult GetTypeaheadAuthor(string query)
+        public override ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadAuthors(query);
-                return Json(result);
+                var result = client.GetOriginalAuthorAutocomplete(query);
+                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+                return Json(resultStringList);
             }
         }
 
-        public ActionResult GetTypeaheadTitle(string query)
+        public override ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadTitles(query);
+                var result = client.GetTitleAutocomplete(query, null, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }

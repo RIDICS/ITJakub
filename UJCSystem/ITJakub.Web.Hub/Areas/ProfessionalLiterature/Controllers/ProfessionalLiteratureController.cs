@@ -37,7 +37,7 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             return new FeedbackFormIdentification { Area = "ProfessionalLiterature", Controller = "ProfessionalLiterature" };
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.ProfessionalLiterature;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.ProfessionalLiterature;
 
         public ActionResult Index()
         {
@@ -126,24 +126,6 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
         {
             var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextProfessionalHelp);
             return View(pageStaticText);
-        }
-
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
         }
 
         public ActionResult GetProfessionalLiteratureWithCategories()

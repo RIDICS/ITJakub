@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Edition;
         
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -147,25 +147,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         #endregion
         
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
-                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
-                return Json(resultStringList);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
         public ActionResult GetEditionsWithCategories()
         {
             var result = GetBooksAndCategories();

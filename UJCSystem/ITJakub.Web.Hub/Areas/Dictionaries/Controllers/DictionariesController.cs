@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Dictionary;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Dictionary;
 
         public ActionResult Index()
         {
@@ -396,16 +396,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 return Json(result);
             }
         }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
+        
         public ActionResult GetHeadwordBookmarks()
         {
             using (var client = GetMainServiceClient())

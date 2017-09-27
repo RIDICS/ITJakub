@@ -5,6 +5,7 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -20,7 +21,26 @@ namespace ITJakub.Web.Hub.Controllers
         {
         }
 
-        public abstract BookTypeEnumContract AreaBookType { get; }
+        protected abstract BookTypeEnumContract AreaBookType { get; }
+
+        public virtual ActionResult GetTypeaheadAuthor(string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetOriginalAuthorAutocomplete(query, AreaBookType);
+                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+                return Json(resultStringList);
+            }
+        }
+
+        public virtual ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetTitleAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
+                return Json(result);
+            }
+        }
 
         protected BooksAndCategoriesContract GetBooksAndCategories()
         {
@@ -98,7 +118,7 @@ namespace ITJakub.Web.Hub.Controllers
                     return null;
             }
         }
-
+        
         private List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>();

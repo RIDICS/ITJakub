@@ -31,7 +31,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -98,25 +98,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             return View();
         }
 
-
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
+        
         public ActionResult GetAudioWithCategories()
         {
             using (var client = GetMainServiceClient())

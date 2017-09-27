@@ -32,7 +32,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.TextBank;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.TextBank;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -406,24 +406,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             {
                 var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
                 return Json(new {results = results.SearchResults}, GetJsonSerializerSettingsForBiblModule());
-            }
-        }
-
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, null, null);
-                return Json(result);
             }
         }
     }
