@@ -20,8 +20,6 @@
         const threadEnd = `</ul>`;
         const listStart = `<li class="media">`;
         const listEnd = "</li>";
-        var commentImage =
-            "<a href=\"#\"><img alt=\"48x48\" class=\"media-object\" src=\"placeholder-image/48.jpg\" style=\"width: 48px; height: 48px;\"></a>";
         const commentLeftPartEnd = "</div>";
         const commentBodyStart = "<div class=\"media-body\">";
         const mainCommentBodyEnd = "</div>";
@@ -32,6 +30,7 @@
         var nested: boolean = false;
         var page: number = 0;
         var id: string = "";
+        var picture: string = "";
         var currentId: string = "";
         var needToCloseTag: boolean = false;
         var name: string = "";
@@ -51,9 +50,12 @@
             page = content[i].page;
             name = content[i].name;
             body = content[i].body;
+            picture = content[i].picture;
             orderOfNestedComment = content[i].order;
             var time = content[i].time;
             var timeUtc = new Date(time);
+            var commentImage =
+                `<a href="#"><img alt="48x48" class="media-object" src="${picture}" style="width: 48px; height: 48px;"></a>`;
             var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${id}-comment">`;
             var commentName = `<h5 class="media-heading">${name}</h5>`;
             var mainCommentBody =
@@ -197,6 +199,7 @@
         button.on("click",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
+                const editorPageContainer = ".tab-content";
                 var target = $(event.target as HTMLElement);
                 var parentComment = target.parents(".media-list");
                 var commentArea = parentComment.parent(".comment-area");
@@ -223,7 +226,7 @@
                     } else {
                         const scroll =
                             { scrollTop: $(parentComment).offset().top - container.offset().top };
-                        $(".tab-content").animate(scroll);
+                        $(`${editorPageContainer}`).animate(scroll);
                     }
                 }
                 this.toggleAreaSizeIconHide(pageNumber);
@@ -234,7 +237,6 @@
         const button = $(".toggleCommentViewAreaSize");
         button.on("click",
             (event: JQueryEventObject) => {
-                console.log("called comm area toggle func");
                 event.stopImmediatePropagation();
                 var target = $(event.target as HTMLElement);
                 var commentViewArea = target.parents(".comment-area");

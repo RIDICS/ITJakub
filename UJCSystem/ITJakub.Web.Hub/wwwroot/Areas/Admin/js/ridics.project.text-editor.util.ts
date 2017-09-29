@@ -203,6 +203,7 @@
         if (jsonString !== null) {
             const stringObject = JSON.parse(jsonString);
             const id: string = stringObject.id;
+            const picture = stringObject.picture;
             const name: string = stringObject.name;
             const body: string = stringObject.body;
             const page: number = parseInt(stringObject.page);
@@ -211,6 +212,7 @@
             const nested: boolean = (stringObject.nested === "true");
             const result: ICommentSctucture = {
                 id: id,
+                picture : picture,
                 name: name,
                 body: body,
                 page: page,

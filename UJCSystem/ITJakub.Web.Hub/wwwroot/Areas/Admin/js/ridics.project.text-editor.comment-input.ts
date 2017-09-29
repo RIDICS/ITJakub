@@ -39,15 +39,15 @@
                 if (commentText === "" || nameText === "") {
                     alert("Comment or name is empty. Please fill both of them");
                 } else {
-                    var id = commentId;
-                    var timeOfComment = time;
-                    var jsonString =
-                        `{"id":"${id}","nested":"${nested}","page":"${page}","name":"${nameText}","body":"${commentText
+                    const id = commentId;
+                    const timeOfComment = time;
+                    const jsonString = `{"id":"${id}","picture":"http://lorempixel.com/48/48","nested":"${nested}","page":"${page
+                        }","name":"${nameText}","body":"${commentText
                         }","order":"${orderOfNestedComment}","time":"${timeOfComment
-                        }"}`; //create Json string manually
-                    var payload: Object = {
+                        }"}`; //TODO change picture url to actual one, investigate better ways to create json
+                    const payload: Object = {
                         jsonBody: jsonString
-                    }
+                    };
                     $.post(`http://${serverAddress}/admin/project/SaveComment`, //check what does async affect
                         payload,
                         this.afterSuccesfullSend.bind(this)
@@ -55,9 +55,29 @@
                         commentTextArea.val("");
                         nameTextArea.val("");
                         this.commentArea.reloadCommentArea(page);
+                        this.processRespondToCommentClick();
                     });
 
                     buttonSend.off();
+                }
+            });
+    }
+
+    processRespondToCommentClick() {
+        const commentButton = $(".respond-to-comment");
+        commentButton.click(
+            (event: JQueryEventObject) => { // Process click on "Respond" button
+                const target = event.target as HTMLElement;
+                const compositionAreaPage =
+                    $(target).parents(".comment-area").siblings(".composition-area").children(".page");
+                var page = $(compositionAreaPage).data("page") as number;
+                const uniqueIdWithText = $(target).parent().siblings(".main-comment").attr("id");
+                var uniqueId = uniqueIdWithText.replace("-comment", "");
+                if (uniqueId !== null && typeof uniqueId !== "undefined") {
+                    const responses = $(target).siblings(".media").length;
+                    this.addCommentFromCommentArea(uniqueId, page, responses + 1);
+                } else {
+                    console.log("Something is wrong. This comment doesn't have an id.");
                 }
             });
     }

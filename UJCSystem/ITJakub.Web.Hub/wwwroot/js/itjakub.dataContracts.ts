@@ -177,6 +177,7 @@ enum ResponsibleTypeEnum {
 }
 
 interface ICommentSctucture {
+    picture: string;
     id: string;
     nested: boolean;
     page: number;
