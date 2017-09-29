@@ -531,7 +531,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             if (jsonBody == null)
             {
-                return null;
+                return new JsonResult("Error");
             }
             dynamic json = JsonConvert.DeserializeObject(jsonBody);
             var page = json.page;
