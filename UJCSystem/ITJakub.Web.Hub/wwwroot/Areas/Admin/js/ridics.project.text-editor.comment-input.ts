@@ -39,33 +39,44 @@
                 if (commentText === "" || nameText === "") {
                     alert("Comment or name is empty. Please fill both of them");
                 } else {
+                    var response = "";
                     const id = commentId;
                     const timeOfComment = time;
-                    const jsonString = `{"id":"${id}","picture":"http://lorempixel.com/48/48","nested":"${nested}","page":"${page
+                    const json: Object = JSON.parse(
+                        `{"id":"${id}","picture":"http://lorempixel.com/48/48","nested":"${nested}","page":"${page
                         }","name":"${nameText}","body":"${commentText
                         }","order":"${orderOfNestedComment}","time":"${timeOfComment
-                        }"}`; //TODO change picture url to actual one, investigate better ways to create json
+                        }"}`); //TODO change picture url to actual one, escape characters
+                    const jsonString = JSON.stringify(json);
                     const payload: Object = {
                         jsonBody: jsonString
                     };
                     $.post(`http://${serverAddress}/admin/project/SaveComment`, //check what does async affect
                         payload,
-                        this.afterSuccesfullSend.bind(this)
+                        (data: string) => {
+                            response = data;
+                            if (response === "Written") {
+                                console.log("trying to close panel");
+                                this.toggleCommentInputPanel();
+                                alert("Successfully sent");
+                            } else if (response === "Error") {
+                                console.log("Sent empty comment. This is not normal");
+                            }
+                        }
                     ).done(() => {
                         commentTextArea.val("");
                         nameTextArea.val("");
                         this.commentArea.reloadCommentArea(page);
-                        this.processRespondToCommentClick();
                     });
-
                     buttonSend.off();
                 }
             });
     }
 
     processRespondToCommentClick() {
-        const commentButton = $(".respond-to-comment");
-        commentButton.click(
+        console.log("attach to click");
+        $("#project-resource-preview").on("click",
+            "button.respond-to-comment",
             (event: JQueryEventObject) => { // Process click on "Respond" button
                 const target = event.target as HTMLElement;
                 const compositionAreaPage =
@@ -129,10 +140,6 @@
         const nested = true;
         const time = Date.now();
         this.processCommentSendClick(nested, page, id, number, time);
-        this.toggleCommentInputPanel();
-    }
-
-    afterSuccesfullSend() {
         this.toggleCommentInputPanel();
     }
 }

@@ -8,7 +8,7 @@
     }
 
     createPage(pageNumber: number) {
-        console.log("trying to create page " + pageNumber);
+        console.log("trying to create page " + pageNumber);//TODO debug
         let elm = "";
         const renderedText = this.util.loadRenderedText(pageNumber);
 

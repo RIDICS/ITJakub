@@ -55,7 +55,8 @@
             var time = content[i].time;
             var timeUtc = new Date(time);
             var commentImage =
-                `<a href="#"><img alt="48x48" class="media-object" src="${picture}" style="width: 48px; height: 48px;"></a>`;
+                `<a href="#"><img alt="48x48" class="media-object" src="${picture
+                    }" style="width: 48px; height: 48px;"></a>`;
             var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${id}-comment">`;
             var commentName = `<h5 class="media-heading">${name}</h5>`;
             var mainCommentBody =
@@ -98,7 +99,7 @@
                 }
             }
             if (page !== pageNumber) {
-                console.log(`Something is wrong. Page numbers are not equal. ${page} ${pageNumber}`);
+                console.log(`Something is wrong. Page numbers are not equal. ${page} ${pageNumber}`);//TODO debug
             }
         }
 
@@ -218,14 +219,19 @@
                     $(nestedComments).removeClass("nested-comment-opened");
                     $(nestedComments).addClass("nested-comment-collapsed");
                     const container = target.parents(".comment-area");
+                    const editorPageContainerEl = $(editorPageContainer);
                     if ($(container).hasClass("comment-area-collapsed")) {
                         container.animate({
                             scrollTop:
-                            $(parentComment).offset().top - container.offset().top + container.scrollTop()
+                                $(parentComment).offset().top - container.offset().top + container.scrollTop()
                         });
                     } else {
                         const scroll =
-                            { scrollTop: $(parentComment).offset().top - container.offset().top };
+                        {
+                            scrollTop: $(parentComment).offset().top -
+                                editorPageContainerEl.offset().top +
+                                editorPageContainerEl.scrollTop()
+                        };
                         $(`${editorPageContainer}`).animate(scroll);
                     }
                 }
@@ -256,7 +262,7 @@
         const nestedCommentsCollapsed = $(commentAreaEl).children(".media-list").children(".media")
             .children(".media-body").children(".media")
             .hasClass(
-            "nested-comment-collapsed"); // if nested comments section was collapsed, collapse it after reload too.
+                "nested-comment-collapsed"); // if nested comments section was collapsed, collapse it after reload too.
         this.collapseIfCommentAreaIsTall(page, sectionWasCollapsed, nestedCommentsCollapsed);
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();

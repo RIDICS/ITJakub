@@ -168,7 +168,7 @@
             }
             return ids;
         } else {
-            console.log("no comments");
+            console.log("no comments");//TODO debug
             return null;
         }
     }
@@ -194,7 +194,7 @@
             }
             return nestedComments;
         } else {
-            console.log(`No comments on page ${pageNumber}`);
+            console.log(`No comments on page ${pageNumber}`);//TODO debug
             return null;
         }
     }
