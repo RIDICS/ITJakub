@@ -19,7 +19,7 @@ class Connections {
         return overflowing;
     }
 
-    private drawConnections(id: string): void {
+    private drawConnections(id: string): void {//TODO investigate possibility of setting initial opacity
         const from = $(`#${id}-text`);
         const to = $(`#${id}-comment`).children().children(".media-object");
         jqSimpleConnect.connect(from,
