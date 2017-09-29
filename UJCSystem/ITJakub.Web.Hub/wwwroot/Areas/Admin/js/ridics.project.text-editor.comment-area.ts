@@ -192,7 +192,7 @@
         $(commentArea).remove();
     }
 
-    processToggleNestedCommentClick() {//TODO fix scroll to top broken after integration
+    processToggleNestedCommentClick() {
         const button = $(".toggle-nested-comments");
         button.on("click",
             (event: JQueryEventObject) => {
@@ -223,7 +223,7 @@
                     } else {
                         const scroll =
                             { scrollTop: $(parentComment).offset().top - container.offset().top };
-                        $("html, body").animate(scroll);
+                        $(".tab-content").animate(scroll);
                     }
                 }
                 this.toggleAreaSizeIconHide(pageNumber);
