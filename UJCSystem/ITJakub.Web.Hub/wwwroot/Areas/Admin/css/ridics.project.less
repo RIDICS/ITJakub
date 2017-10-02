@@ -407,114 +407,128 @@ table {
     }
 }
 
-/*TODO text editor styles start here, check whether thry interfere with anything*/ 
-
-.textarea-no-resize {
-    resize: none;
-}
-
-#commentInput {
-    width: 100%;
-}
-
-.comment-area {
-    min-height: @comment-area-min-height;
-    position: relative;
-
-    &-collapsed {
-        max-height: @comment-area-max-height;
-        overflow-y: auto; /* Trigger vertical scroll    */
-        overflow-x: hidden; /* Hide the horizontal scroll */
-        &-even {
-            background-color: @even-comment-area-background-color;
-        }
-
-        &-odd {
-            background-color: @odd-comment-area-background-color;
-        }
-    }
-}
+/*TODO text editor styles start here, check whether they interfere with anything*/
 
 .page-row {
     margin: 10px 0 10px 0;
-}
 
-.ellipsis {
-    color: blue;
-    cursor: pointer;
+    .comment-area {
+        min-height: @comment-area-min-height;
+        position: relative;
+
+        .comment-body {
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .id-in-comment-area {
+            font-weight: bolder;
+            font-size: 12px;
+        }
+
+        .thread-divider {
+            height: 1px;
+            background-color: @thread-divider-color;
+        }
+
+        .nested-comment-collapsed {
+            display: none;
+        }
+
+        .show-nested-comments {
+            cursor: pointer;
+        }
+
+        .collapse-icon {
+            display: none;
+        }
+
+        .ellipsis {
+            color: blue;
+            cursor: pointer;
+
+            &-container {
+                position: absolute;
+                top: 5px;
+                right: 5px;
+            }
+        }
+
+        .respond-to-comment {
+            margin-bottom: 2px;
+            max-height: 18px;
+            font-size: 11px;
+        }
+
+        .replied-on {
+            font-size: 10px;
+            margin-bottom: 4px;
+        }
+
+        &-collapsed {
+            max-height: @comment-area-max-height;
+            overflow-y: auto; /* Trigger vertical scroll    */
+            overflow-x: hidden; /* Hide the horizontal scroll */
+            &-even {
+                background-color: @even-comment-area-background-color;
+            }
+
+            &-odd {
+                background-color: @odd-comment-area-background-color;
+            }
+        }
+    }
+
+    .composition-area{
+    .editor {
+        width: 100%;
+
+        & textarea {
+            width: 100%;
+            min-height: 100px;
+        }
+    }
+
+    .cm-comment {
+        &-start {
+            background: @comment-start-color;
+            cursor: not-allowed;
+        }
+
+        &-end {
+            background: @comment-end-color;
+            cursor: not-allowed;
+        }
+    }
+    }
 }
 
 .text-edit-panel {
     display: none;
-}
 
-.respond-to-comment {
-    margin-bottom: 2px;
-    max-height: 18px;
-    font-size: 11px;
-}
-
-.editor {
-    width: 100%;
-
-    & textarea {
+    #commentInput {
         width: 100%;
-        min-height: 100px;
     }
-}
 
-.replied-on {
-    font-size: 10px;
-    margin-bottom: 4px;
+    .textarea-no-resize {
+        resize: none;
+    }
+
+    .input-comment-panel-title {
+        margin: 5px 0 5px 0;
+    }
+
+    .comment-body-title {
+        margin: 5px 0 5px 0;
+    }
+
+    .person-name-title {
+        margin: 5px 0 5px 0;
+    }
 }
 
 .jqSimpleConnect {
     opacity: 0.4;
-}
-
-.nested-comment-collapsed {
-    display: none;
-}
-
-.show-nested-comments {
-    cursor: pointer;
-}
-
-.comment-body {
-    font-size: 12px;
-    margin-bottom: 4px;
-}
-
-.id-in-comment-area {
-    font-weight: bolder;
-    font-size: 12px;
-}
-
-.thread-divider {
-    height: 1px;
-    background-color: @thread-divider-color;
-}
-
-.cm-comment {
-    &-start {
-        background: @comment-start-color;
-        cursor: not-allowed;
-    }
-
-    &-end {
-        background: @comment-end-color;
-        cursor: not-allowed;
-    }
-}
-
-.collapse-icon {
-    display: none;
-}
-
-.ellipsis-container {
-    position: absolute;
-    top: 5px;
-    right: 5px;
 }
 
 #project-resource-preview { /*parent has overflow y auto, which might create vertical scrollbar, which takes space of usually 15px*/
