@@ -93,43 +93,38 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             return Json(result);
         }
 
+        #region Search book
+
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if(!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
+
+        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
+        {
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
+        }
+
+        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
+        }
+
+        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
+            IList<int> selectedCategoryIds)
+        {
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
+        }
+
+        #endregion
+
+
+        #region Search corpus
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
@@ -171,59 +166,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 var count = client.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
 
                 return Json(new {count});
-            }
-        }
-
-        public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
-            IList<int> selectedCategoryIds)
-        {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                    HitSettingsContract = new HitSettingsContract
-                    {
-                        ContextLength = 50,
-                        Count = 3,
-                        Start = 1
-                    }
-                }
-            };
-
-            if(!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
@@ -309,19 +251,6 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             }
         }
 
-        public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
-        {
-            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
-            return Json(new { count });
-        }
-
-        public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
-            IList<int> selectedCategoryIds)
-        {
-            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
-            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
-        }
-
         public ActionResult AdvancedSearchCorpusPaged(string json, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
@@ -360,5 +289,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
                 return Json(new {results = results.SearchResults}, GetJsonSerializerSettingsForBiblModule());
             }
         }
+
+        #endregion
     }
 }

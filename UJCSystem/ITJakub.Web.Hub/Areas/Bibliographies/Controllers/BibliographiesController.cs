@@ -8,9 +8,6 @@ using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
@@ -102,72 +99,16 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
-
         public ActionResult TextSearchCount(string text)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-                return Json(new { count });
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null);
+            return Json(new { count });
         }
-
-
+        
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-            
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new { results }, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
     }
 }

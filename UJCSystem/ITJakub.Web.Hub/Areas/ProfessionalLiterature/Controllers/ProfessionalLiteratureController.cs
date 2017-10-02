@@ -149,180 +149,28 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Fulltext, text, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                    HitSettingsContract = new HitSettingsContract
-                    {
-                        ContextLength = 50,
-                        Count = 3,
-                        Start = 1
-                    }
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                    HitSettingsContract = new HitSettingsContract
-                    {
-                        ContextLength = 50,
-                        Count = 3,
-                        Start = 1
-                    }
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaText(CriteriaKey.Fulltext, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         #region search in book
