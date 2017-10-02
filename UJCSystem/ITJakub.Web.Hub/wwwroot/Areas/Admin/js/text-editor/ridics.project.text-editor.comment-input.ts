@@ -75,7 +75,7 @@
 
     processRespondToCommentClick() {
         console.log("attach to click");
-        $("#project-resource-preview").on("click",
+        $(document).on("click",
             "button.respond-to-comment",
             (event: JQueryEventObject) => { // Process click on "Respond" button
                 const target = event.target as HTMLElement;

@@ -196,8 +196,7 @@
     }
 
     processToggleNestedCommentClick() {
-        const button = $(".toggle-nested-comments");
-        button.on("click",
+        $(document).on("click", ".toggle-nested-comments",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".tab-content";
@@ -240,8 +239,7 @@
     }
 
     processToggleCommentAresSizeClick() {
-        const button = $(".toggleCommentViewAreaSize");
-        button.on("click",
+        $(document).on("click", ".toggleCommentViewAreaSize",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 var target = $(event.target as HTMLElement);
