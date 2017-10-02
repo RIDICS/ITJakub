@@ -9,8 +9,9 @@
         $(document).on("lazybeforeunveil",
             (event) => {
                 var target = $(event.target);
-                var page = target.data("pageq");
+                var page = target.data("page");
                 this.pageStructure.createPage(page);
+                $(target).children(".image-placeholder").remove();
             });
     }
 }

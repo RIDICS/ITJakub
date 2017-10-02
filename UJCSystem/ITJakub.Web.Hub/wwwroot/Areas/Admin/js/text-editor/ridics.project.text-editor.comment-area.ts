@@ -137,7 +137,7 @@
         areaContent += ellipsisBodyEnd;
         areaContent += ellipsisEnd;
         const html = $.parseHTML(areaContent);
-        const compositionArea = $(`*[data-page="${pageNumber}"]`).parent(".composition-area");
+        const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
         const compositionAreaHeight = $(compositionArea).height();
         const commentArea = compositionArea.siblings(".comment-area");
         const commentAreaHeight = $(commentArea).height();
@@ -165,7 +165,7 @@
 
     toggleAreaSizeIconHide(pageNumber: number) {
         const commentAreaCollapsedMaxHeight = 170;
-        const compositionArea = $(`*[data-page="${pageNumber}"]`).parent(".composition-area");
+        const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
         const commentArea = compositionArea.siblings(".comment-area");
         const commentAreaHeight = $(commentArea).prop("scrollHeight");
         const ellipsisIconExpand = commentArea.find(".expand-icon");
@@ -184,14 +184,13 @@
     constructCommentArea = (pageNumber: number) => {
         const content = this.util.parseLoadedCommentFiles(pageNumber);
         const html = this.constructCommentAreaHtml(content, pageNumber);
-        const page = $(`*[data-page="${pageNumber}"]`);
-        const pageRow = page.parent().parent();
+        const pageRow = $(`*[data-page="${pageNumber}"]`);;
         $(pageRow).append(html);
     }
 
     destroyCommentArea(pageNumber: number) {
         const page = $(`*[data-page="${pageNumber}"]`);
-        const commentArea = page.parent(".composition-area").siblings(".comment-area");
+        const commentArea = page.children(".composition-area").siblings(".comment-area");
         $(commentArea).remove();
     }
 
@@ -255,7 +254,7 @@
     reloadCommentArea(page: number) {
         this.destroyCommentArea(page);
         this.constructCommentArea(page);
-        const commentAreaEl = $(`*[data-page="${page}"]`).parent(".composition-area").siblings(".comment-area");
+        const commentAreaEl = $(`*[data-page="${page}"]`).children(".composition-area").siblings(".comment-area");
         const sectionWasCollapsed = $(commentAreaEl).hasClass("comment-area-collapsed");
         const nestedCommentsCollapsed = $(commentAreaEl).children(".media-list").children(".media")
             .children(".media-body").children(".media")

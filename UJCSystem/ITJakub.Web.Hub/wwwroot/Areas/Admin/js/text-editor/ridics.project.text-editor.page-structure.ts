@@ -11,9 +11,9 @@
         console.log("trying to create page " + pageNumber);//TODO debug
         let elm = "";
         const renderedText = this.util.loadRenderedText(pageNumber);
-        const pageEl = $(`*[data-pageq="${pageNumber}"]`);
+        const pageEl = $(`*[data-page="${pageNumber}"]`);
         elm += "<div class=\"col-xs-7 composition-area\">";
-        elm += `<div class="page" data-page="${pageNumber}">`;
+        elm += `<div class="page">`;
         elm += "<div class=\"viewer\">";
         elm += `<span>${renderedText}</span>`;
         elm += "</div>";

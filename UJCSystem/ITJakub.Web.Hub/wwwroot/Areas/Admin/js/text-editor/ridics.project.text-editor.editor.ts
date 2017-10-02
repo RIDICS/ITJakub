@@ -35,15 +35,16 @@
                 if (this.editingMode) {
                     let pageDiffers = false;
                     const jElSelected = e.target as HTMLElement;
-                    const jEl = $(jElSelected).closest(".page");
+                    const jEl = $(jElSelected).closest(".page-row");
                     const pageNumber = jEl.data("page") as number;
                     if (pageNumber !== this.currentPageNumber) {
                         pageDiffers = true;
                     }
                     this.currentPageNumber = jEl.data("page") as number;
                     const page = $(`[data-page=${pageNumber}]`);
-                    const pageDom = $(page).children(".editor").children("textarea");
-                    const editorExists = $(page).children(".editor").children(".CodeMirror").length;
+                    const editor = page.find(".editor");
+                    const pageDom = $(editor).children("textarea");
+                    const editorExists = $(editor).children(".CodeMirror").length;
                     if (!editorExists) {
                         if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
                             this.simplemde.toTextArea();
