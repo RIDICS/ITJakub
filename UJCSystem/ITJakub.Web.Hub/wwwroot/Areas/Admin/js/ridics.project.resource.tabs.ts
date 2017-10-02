@@ -69,5 +69,8 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
         super();
     }
 
-    initTab() { }
+    initTab() {
+        const main = new TextEditorMain();
+        main.init();
+    }
 }

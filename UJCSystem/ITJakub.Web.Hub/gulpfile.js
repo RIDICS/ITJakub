@@ -288,7 +288,7 @@ gulp.task("bundle:itjakub_professionalliterature_list", function () {
 
 gulp.task("bundle:ridics_admin_text-editor", function () {
     return gulp.src([
-            paths.webroot + "Areas/Admin/js/ridics.project.text-editor*.js",
+            paths.webroot + "Areas/Admin/js/text-editor/ridics.project.text-editor*.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("ridics.project.text-editor.bundle.js"))

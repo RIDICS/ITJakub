@@ -80,7 +80,7 @@
             return pageContent;
     }
 
-    getNumberOfCommentsOnPage(pageNumber: number) {
+    getNumberOfCommentsOnPage(pageNumber: number):number {
         var numberOfComments = 0;
         $.post(
             `http://${this.serverAddress}/admin/project/GetCommentSectionNumberOfFiles`, //check what does async affect

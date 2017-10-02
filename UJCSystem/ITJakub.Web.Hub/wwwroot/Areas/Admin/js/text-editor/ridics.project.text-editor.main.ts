@@ -1,5 +1,5 @@
-﻿///<reference path="../../../../wwwroot/lib-custom/@types/simplemde/index.d.ts" />
-///<reference path="../../../../node_modules/@types/jquery/index.d.ts" />
+﻿///<reference path="../../../../../wwwroot/lib-custom/@types/simplemde/index.d.ts" />
+///<reference path="../../../../../node_modules/@types/jquery/index.d.ts" />
 ///<reference path="./ridics.project.text-editor.connections.ts" />
 ///<reference path="./ridics.project.text-editor.editor.ts" />
 ///<reference path="./ridics.project.text-editor.util.ts" />
@@ -21,7 +21,7 @@ class TextEditorMain {
         pageTextEditor.processAreaSwitch();
 
         connections.toggleConnections();
-        for (let i = 1; i <= 15; i++) { //TODO remove after debugging
+        for (let i = 1; i <= 150; i++) { //TODO remove after debugging
             pageStructure.createPage(i);
         }
         commentInput.processRespondToCommentClick();
