@@ -225,7 +225,7 @@
   "TextBank": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -236,15 +236,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -252,13 +251,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -316,7 +308,7 @@
             },
             {
               "label": "Předloha",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "Zkratka památky",
@@ -328,11 +320,11 @@
             },
             {
               "label": "Literární druh",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "Literární žánr",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "Poslední úprava edice",
@@ -367,7 +359,25 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }
@@ -425,7 +435,7 @@
   "Default": {
     "middle-panel": {
       "title": "{$withoutEmpty}",
-      "body": "{$authors}",
+      "body": "{AuthorsLabel}",
       "variables": {
         "$authors": {
           "type": "array",
@@ -448,20 +458,19 @@
   "AudioBook": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Stáhnout celou audioknihu: {$fullRecords}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Stáhnout celou audioknihu: {$fullRecords}",
       "favorites": {
         "maxCount": 5
       },
       "variables": {
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -469,13 +478,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$fullRecords": {
           "type": "array",
@@ -550,7 +552,7 @@
   "Grammar": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -561,15 +563,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -577,13 +578,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -641,7 +635,7 @@
             },
             {
               "label": "Předloha",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "Zkratka památky",
@@ -653,11 +647,11 @@
             },
             {
               "label": "Literární druh",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "Literární žánr",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "Poslední úprava edice",
@@ -692,7 +686,25 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }
@@ -719,7 +731,7 @@
   "ProfessionalLiterature": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -730,15 +742,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -746,13 +757,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -810,7 +814,7 @@
             },
             {
               "label": "Předloha",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "Zkratka památky",
@@ -822,11 +826,11 @@
             },
             {
               "label": "Literární druh",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "Literární žánr",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "Poslední úprava edice",
@@ -861,7 +865,25 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }
@@ -888,7 +910,7 @@
   "BibliographicalItem": {
     "middle-panel": {
       "title": "{$printAuthors}{Title}",
-      "body": "{PublishPlace}, {PublishDate}, {$publisher} <br> {$manuscripts} <br> Počet stran: {PageCount}",
+      "body": "{PublishPlace}, {PublishDate}, {PublisherText} <br> {$manuscript} <br> Počet stran: {PageCount}",
       "favorites": {
         "maxCount": 5
       },
@@ -899,15 +921,14 @@
           "onTrue": "{Editor}",
           "onFalse": "was false"
         },
-        "$manuscripts": {
-          "type": "array",
-          "scope": "Manuscripts",
-          "pattern": "{Settlement}, {Repository}, {OriginDate}",
-          "delimeter": " <br> "
+        "$manuscript": {
+          "type": "basic",
+          "pattern": "{ManuscriptSettlement}, {ManuscriptRepository}, {OriginDate}",
+          "printIfNullValue": false
         },
         "$printAuthors": {
           "type": "basic",
-          "pattern": "{$authors}: ",
+          "pattern": "{AuthorsLabel}: ",
           "printIfNullValue": false
         },
         "$authors": {
@@ -915,13 +936,6 @@
           "scope": "Authors",
           "pattern": "{Name}",
           "delimeter": ", "
-        },
-        "$publisher": {
-          "type": "basic",
-          "scope": "Publisher",
-          "pattern": "{Text}",
-          "printIfNullValue": false,
-          "replaceNullValueBy": ""
         },
         "$litType": {
           "type": "array",
@@ -979,7 +993,7 @@
             },
             {
               "label": "Předloha",
-              "pattern": "{Pattern}"
+              "pattern": "{$literaryOriginal}"
             },
             {
               "label": "Zkratka památky",
@@ -991,11 +1005,11 @@
             },
             {
               "label": "Literární druh",
-              "pattern": "{LiteraryType}"
+              "pattern": "{$literaryType}"
             },
             {
               "label": "Literární žánr",
-              "pattern": "{LiteraryGenre}"
+              "pattern": "{$literaryGenre}"
             },
             {
               "label": "Poslední úprava edice",
@@ -1030,7 +1044,25 @@
         "$editor": {
           "type": "array",
           "scope": "Editors",
-          "pattern": "{Text}",
+          "pattern": "{FirstName} {LastName}",
+          "delimeter": ", "
+        },
+        "$literaryOriginal": {
+          "type": "array",
+          "scope": "LiteraryOriginals",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryType": {
+          "type": "array",
+          "scope": "LiteraryKinds",
+          "pattern": "{$this}",
+          "delimeter": ", "
+        },
+        "$literaryGenre": {
+          "type": "array",
+          "scope": "LiteraryGenres",
+          "pattern": "{$this}",
           "delimeter": ", "
         }
       }
