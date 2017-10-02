@@ -641,6 +641,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return new JsonResult(parts); //TODO handle exceptions, return "error-no-file"
         }
 
+        [HttpPost]
+        public IActionResult GetNumberOfPages(string compositionId) //TODO add logic
+        {
+            int pages=2000;
+
+            return new JsonResult(pages); //TODO handle exceptions, return "error-no-file"
+        }
+
         #region Typeahead
 
         public IActionResult GetTypeaheadOriginalAuthor(string query)

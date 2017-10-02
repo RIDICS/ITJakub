@@ -64,6 +64,20 @@
     }
 
     /**
+* Gets number of pages in a composition from the server.
+* @param {string} compositionId - Number of page for which to load plain text
+* @returns {number} Number of pages
+*/
+    getNumberOfPages(compositionId: string): number { //TODO add logic
+        let numberOfPages: number;
+        $.ajaxSetup({ async: false }); // make async
+        $.post(`http://${this.serverAddress}/admin/project/GetNumberOfPages`,
+            { compositionId: compositionId },
+            (data: number) => { numberOfPages = data; });
+        return numberOfPages;
+    }
+
+    /**
      * Loads markdown rendered to html from the server.
      * @param {Number} pageNumber  - Number of page for which to load rendered text
      * @returns {string} Rendered text
