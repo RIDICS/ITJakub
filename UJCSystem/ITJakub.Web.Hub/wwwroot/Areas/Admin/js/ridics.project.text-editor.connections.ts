@@ -5,13 +5,13 @@ class Connections {
 
     /**
      * Checks whether the commentator's name of a comment with a certain id is not visible.
-     * @param {string} id Unique id of a commentary
+     * @param {string} commentId Unique id of a commentary
      * @returns Whether the connection is not visible
      */
-    private checkIfOverFlowing(id: string): boolean {
+    private checkIfOverFlowing(commentId: string): boolean {
         let overflowing: boolean = false;
-        const name = $(`#${id}-comment`).siblings(".media-body").children(".comment-body");
-        const commentAreaHeight = $(`#${id}-comment`).parents(".comment-area").height();
+        const name = $(`#${commentId}-comment`).siblings(".media-body").children(".comment-body");
+        const commentAreaHeight = $(`#${commentId}-comment`).parents(".comment-area").height();
         if (name.position().top > commentAreaHeight || name.position().top < 15
         ) { //commenter's name is higher or lower than comment area
             overflowing = true;
@@ -19,9 +19,9 @@ class Connections {
         return overflowing;
     }
 
-    private drawConnections(id: string): void {//TODO investigate possibility of setting initial opacity
-        const from = $(`#${id}-text`);
-        const to = $(`#${id}-comment`).children().children(".media-object");
+    private drawConnections(commentId: string): void {
+        const from = $(`#${commentId}-text`);
+        const to = $(`#${commentId}-comment`).children().children(".media-object");
         jqSimpleConnect.connect(from,
             to,
             { radius: 2, color: "cyan", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
@@ -31,6 +31,7 @@ class Connections {
         $(document.documentElement).on("mouseenter",
             ".media-list",
             (event: JQueryEventObject) => {
+                event.stopImmediatePropagation();
                 const target = event.target as HTMLElement;
                 var thread = $(target).parents(".media-list");
                 var uniqueIdWithText = $(thread).children(".media").children(".main-comment").attr("id");
