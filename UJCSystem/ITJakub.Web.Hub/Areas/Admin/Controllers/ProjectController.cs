@@ -599,6 +599,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult LoadRenderedCompositionPage(int pageNumber) //TODO add logic
+        {
+            string parts;
+            if (pageNumber == 1)
+            {
+                parts =
+                    "<span id=\"80a055fb-8d6a-4b61-ac63-4e0c845425c2-text\">Comment to text</span><span id=\"4b877225-9456-403d-86a5-c7f8901572a5-text\">Cras sit amet nibh libero,</span><span> in gravida nulla. <span id=\"1504620630028-text\">Nulla</span> vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</span>";
+            }
+            else if (pageNumber == 2)
+            {
+                parts =
+                    "<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Nullam vitae <span id=\"3844fc54-83cb-49f5-a6c9-63c55138bfb4-text\">posuere lectus</span>.<br>Vivamus vitae tincidunt eros, sit amet euismod lectus.<br>Donec in lorem venenatis, faucibus ligula faucibus, condimentum purus.</span>";
+            }
+            else if (pageNumber == 3)
+            {
+                parts =
+                    "<span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Nullam vitae </span><span id=\"1f9ce475-5a28-433a-b07b-1547b5df25da-text\">posuere lectus</span>.<br><span>Vivamus vitae tincidunt eros, sit amet euismod lectus.<br>Donec in lorem venenatis, faucibus ligula faucibus, condimentum purus.</span>";
+            }
+            else
+                parts =
+                    "<span>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure.</span>";
+
+            return new JsonResult(parts); //TODO handle exceptions, return "error-no-file"
+        }
+
+        [HttpPost]
+        public IActionResult LoadPlaintextCompositionPage(int pageNumber) //TODO add logic
+        {
+            string parts;
+            if (pageNumber == 2)
+            {
+                parts =
+                    "$3844fc54-83cb-49f5-a6c9-63c55138bfb4%HIIIIIIIIIIII\nHHHHHHHHHHHHHHHHH\n%3844fc54-83cb-49f5-a6c9-63c55138bfb4$";
+            }
+            else
+                parts =
+                    "Plain text\nAAAAAAAAAAAAAAAAAAAAAAA\nBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB\nCCCCCCCCCCCCCCCCCCCCCCCCCCC";
+
+            return new JsonResult(parts); //TODO handle exceptions, return "error-no-file"
+        }
+
         #region Typeahead
 
         public IActionResult GetTypeaheadOriginalAuthor(string query)
