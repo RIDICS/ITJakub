@@ -15,6 +15,7 @@ namespace Vokabular.DataEntities.Database.Search
         private const int DefaultStart = 0;
         private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
         // inner join to LatestPublishedSnapshots filters result only to published Projects
+        private const string ResultFromClause = "from MetadataResource metadata1 inner join metadata1.Resource resource1";// left outer join resource1.Project project1 inner join project1.LatestPublishedSnapshot snapshot1";
 
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
@@ -50,9 +51,9 @@ namespace Vokabular.DataEntities.Database.Search
         public string GetQueryString()
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
-            var orderByClause = CreateOrderByClause();
+            var orderByClause = CreateOrderByClause("metadata1");
 
-            var queryString = $"select metadata {FromClause} {joinAndWhereClause} {orderByClause}";
+            var queryString = $"select metadata1 {ResultFromClause} where resource1.LatestVersion.Id = metadata1.Id and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) {orderByClause}";
 
             return queryString;
         }
@@ -61,7 +62,7 @@ namespace Vokabular.DataEntities.Database.Search
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
 
-            var queryString = $"select count(metadata) {FromClause} {joinAndWhereClause}";
+            var queryString = $"select count(distinct metadata.Id) {FromClause} {joinAndWhereClause}";
 
             return queryString;
         }
@@ -109,7 +110,7 @@ namespace Vokabular.DataEntities.Database.Search
             return string.Format("{0}{1}", joinBuilder, whereBuilder);
         }
 
-        private string CreateOrderByClause()
+        private string CreateOrderByClause(string metadataAlias)
         {
             if (Sort == null)
                 return string.Empty;
@@ -117,13 +118,13 @@ namespace Vokabular.DataEntities.Database.Search
             switch (Sort.Value)
             {
                 case SortTypeEnumContract.Author:
-                    return $" order by metadata.AuthorsLabel {GetOrderByDirection()}";
+                    return $" order by {metadataAlias}.AuthorsLabel {GetOrderByDirection()}";
                 case SortTypeEnumContract.Title:
-                    return $" order by metadata.Title {GetOrderByDirection()}";
+                    return $" order by {metadataAlias}.Title {GetOrderByDirection()}";
                 case SortTypeEnumContract.Dating:
                     return SortDirection == SortDirectionEnumContract.Desc
-                        ? " order by metadata.NotAfter desc"
-                        : " order by metadata.NotBefore asc";
+                        ? $" order by {metadataAlias}.NotAfter desc"
+                        : $" order by {metadataAlias}.NotBefore asc";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
