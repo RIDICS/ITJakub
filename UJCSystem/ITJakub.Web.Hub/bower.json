@@ -6,7 +6,7 @@
     "jquery-ui": "1.12.1",
     "jquery-validation": "1.17.0",
     "jquery-validation-unobtrusive": "3.2.6",
-    "jquery-lazy": "1.7.5",
+    "lazysizes": "3.0.0", 
     "bootstrap": "3.3.7",
     "modernizr": "2.8.3",
     "respond": "1.4.2",
