@@ -9,6 +9,7 @@
 ///<reference path="./ridics.project.text-editor.lazyloading.ts" />
 
 class TextEditorMain {
+    private numberOfPages;
     init() {
         const connections = new Connections();
         const util = new Util();
@@ -18,6 +19,7 @@ class TextEditorMain {
         const pageStructure = new PageStructure(commentArea, util);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const numberOfPages = util.getNumberOfPages("id");
+        this.numberOfPages = numberOfPages;
         pageTextEditor.processPageModeSwitch();
 
         pageTextEditor.processAreaSwitch();
@@ -34,4 +36,38 @@ class TextEditorMain {
         commentArea.processToggleNestedCommentClick();
     }
 
+    createSlider() {
+        $(() => {
+            var thisInstance = this;
+            var handle = $("#custom-handle");
+            $("#slider").slider({
+                min: 1,
+                max: this.numberOfPages,
+                step: 1,
+                create: function() {
+                    handle.text($(this).slider("value"));
+                },
+                slide: function (event, ui) {
+                    handle.text(ui.value);
+                    thisInstance.refreshSwatch();
+                },
+                change: this.refreshSwatch
+            });
+        });
+    }
+
+    refreshSwatch() {
+        const page = $("#slider").slider("value");
+        const container = $("#project-resource-preview");
+        const pageEl = $(`*[data-page="${page}"]`);
+        const editorPageContainer = ".tab-content";
+        const scroll =
+        {
+                scrollTop: pageEl.offset().top -
+                    container.offset().top +
+                    container.scrollTop()
+        };
+        $(`${editorPageContainer}`).animate(scroll);
+        //console.log(scroll);
+    }
 }

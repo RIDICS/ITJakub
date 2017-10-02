@@ -72,5 +72,6 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
     initTab() {
         const main = new TextEditorMain();
         main.init();
+        main.createSlider();
     }
 }
