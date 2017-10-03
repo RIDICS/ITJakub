@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel.Syndication;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Identity;
@@ -9,6 +8,7 @@ using ITJakub.Web.Hub.Models.FeedResults;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SyndicationFeed;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -42,10 +42,18 @@ namespace ITJakub.Web.Hub.Controllers
                 var feeds = client.GetWebNewsSyndicationItems(0, count);
                 foreach (var feed in feeds)
                 {
-                    var syndicationItem = new SyndicationItem(feed.Title, feed.Text, new Uri(feed.Url));
-                    syndicationItem.PublishDate = feed.CreateDate;
-                    var person = new SyndicationPerson(feed.UserEmail) {Name = $"{feed.UserFirstName} {feed.UserLastName}"};
-                    syndicationItem.Authors.Add(person);
+                    var syndicationItem = new SyndicationItem
+                    {
+                        Id = feed.Id.ToString(),
+                        Title = feed.Title,
+                        Description = feed.Text,
+                        Published = feed.CreateDate,
+                        LastUpdated = DateTimeOffset.UtcNow,
+                    };
+                    var person = new SyndicationPerson($"{feed.UserFirstName} {feed.UserLastName}", feed.UserEmail);
+                    var url = new SyndicationLink(new Uri(feed.Url));
+                    syndicationItem.AddContributor(person);
+                    syndicationItem.AddLink(url);
 
                     items.Add(syndicationItem);
                 }

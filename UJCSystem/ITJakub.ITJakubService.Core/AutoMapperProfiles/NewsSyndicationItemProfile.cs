@@ -10,6 +10,7 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
         protected override void Configure()
         {
             CreateMap<NewsSyndicationItem, NewsSyndicationItemContract>()
+                .ForMember(m => m.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(m => m.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(m => m.Text, opt => opt.MapFrom(src => src.Text))
                 .ForMember(m => m.Url, opt => opt.MapFrom(src => src.Url))
@@ -30,7 +31,5 @@ namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
                 .ForMember(m => m.UserLastName, opt => opt.MapFrom(src => src.User.LastName));
 
         }
-
-
     }
 }
