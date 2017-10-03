@@ -1,38 +1,43 @@
-﻿<div class="toggle-mode-panel container-fluid text-center">
-    <button type="button" class="btn btn-default navbar-btn editing-mode-button">Toggle editing mode</button>
+﻿                <div class="toggle-mode-panel container-fluid text-center">
+    <button type="button" class="btn btn-default editing-mode-button">Toggle editing mode</button>
+</div>
+<div id="pageSlider" class="text-editor-page-slider">
+    <div id="pageSlider-handle" class="ui-slider-handle"></div>
 </div>
 
-<div id="slider"><div id="custom-handle" class="ui-slider-handle"></div></div>
-
-<div class="pages-start">
-    <!--Generated page structure after this block-->
-</div>
-
-<div class="row">
-    <div class="col-xs-12">
-        <div class="panel panel-default text-edit-panel navbar-fixed-bottom">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-11">
-                        <h3 class="panel-title input-comment-panel-title">Add your name and commentary here:</h3>
-                    </div>
-                    <div class="col-xs-1">
-                        <span class="btn btn-default pull-right close-form-input">
-                            <i class="fa fa-lg fa-times" aria-hidden="true"></i>
-                        </span>
-                    </div>
+        <div class="editor-super-container">
+            <div class="editor-areas">
+                <div class="pages-start">
+                    <!--Generated page structure is in this block-->
                 </div>
 
-            </div>
-            <div class="panel-body">
-                <p class="person-name-title">Name:</p>
-                <textarea rows="1" cols="30" id="nameInput" class="form-control textarea-no-resize"></textarea>
-                <p class="comment-body-title">Commentary:</p>
-                <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
-            </div>
-            <div class="panel-footer clearfix text-center">
-                <input type="button" id="commentFinish" value="Comment send" class="btn btn-default">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-default text-edit-panel navbar-fixed-bottom">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-11">
+                                        <h3 class="panel-title input-comment-panel-title">Add your name and commentary here:</h3>
+                                    </div>
+                                    <div class="col-xs-1">
+                                        <span class="btn btn-default pull-right close-form-input">
+                                            <i class="fa fa-lg fa-times" aria-hidden="true"></i>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="panel-body">
+                                <p class="person-name-title">Name:</p>
+                                <textarea rows="1" cols="30" id="nameInput" class="form-control textarea-no-resize"></textarea>
+                                <p class="comment-body-title">Commentary:</p>
+                                <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
+                            </div>
+                            <div class="panel-footer clearfix text-center">
+                                <input type="button" id="commentFinish" value="Comment send" class="btn btn-default">
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>

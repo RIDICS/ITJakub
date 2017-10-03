@@ -100,8 +100,7 @@
     }
 
     processPageModeSwitch = () => {
-        const button = $(".editing-mode-button");
-        button.on("click",
+        $(document).on("click", ".editing-mode-button",
             () => {
                 this.editingMode = !this.editingMode;
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {

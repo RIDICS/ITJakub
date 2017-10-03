@@ -10,6 +10,7 @@
 
 class TextEditorMain {
     private numberOfPages;
+    private updateOnlySliderValue = false;
     init() {
         const connections = new Connections();
         const util = new Util();
@@ -38,36 +39,54 @@ class TextEditorMain {
 
     createSlider() {
         $(() => {
-            var thisInstance = this;
-            var handle = $("#custom-handle");
-            $("#slider").slider({
+            var handle = $("#pageSlider-handle");
+            $("#pageSlider").slider({
                 min: 1,
                 max: this.numberOfPages,
                 step: 1,
                 create: function() {
                     handle.text($(this).slider("value"));
                 },
-                slide: function (event, ui) {
+                slide(event, ui) {
                     handle.text(ui.value);
-                    thisInstance.refreshSwatch();
                 },
-                change: this.refreshSwatch
-            });
+                change: () => {
+                    if (!this.updateOnlySliderValue) {
+                        this.refreshSwatch();
+                    }
+                }
+        });
         });
     }
 
+    updateSlider(pageNumber: number) {
+        $("#pageSlider").slider("option", "value", pageNumber);
+        $("#pageSlider-handle").text(pageNumber);
+    }
+
     refreshSwatch() {
-        const page = $("#slider").slider("value");
-        const container = $("#project-resource-preview");
+        const page = $("#pageSlider").slider("value");
+        const container = $(".pages-start");
         const pageEl = $(`*[data-page="${page}"]`);
-        const editorPageContainer = ".tab-content";
-        const scroll =
-        {
-                scrollTop: pageEl.offset().top -
-                    container.offset().top +
-                    container.scrollTop()
-        };
-        $(`${editorPageContainer}`).animate(scroll);
-        //console.log(scroll);
+        const editorPageContainer = ".pages-start";
+        const scrollTo = pageEl.offset().top - container.offset().top + container.scrollTop();
+        $(`${editorPageContainer}`).scrollTop(scrollTo);
+    }
+
+    pageUserOn() {
+        const containerXPos = $(".pages-start").offset().left;
+        const containerYPos = $(".pages-start").offset().top;
+        const element = document.elementFromPoint(containerXPos, containerYPos);
+        const jqEl = $(element);
+        const page = jqEl.parents(".page-row");
+        if (page !== null && typeof page !== "undefined") {
+            const pageNumber:number = $(page).data("page");
+            if (typeof pageNumber !== "undefined" && pageNumber !== null) {
+                console.log(pageNumber);
+                this.updateOnlySliderValue = true;
+                this.updateSlider(pageNumber);
+                this.updateOnlySliderValue = false;
+            }
+        }
     }
 }

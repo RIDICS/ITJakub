@@ -409,6 +409,10 @@ table {
 
 /*TODO text editor styles start here, check whether they interfere with anything*/
 
+.editing-mode-button {
+    margin-bottom: 8px;
+}
+
 .page-row {
     margin: 10px 0 10px 0;
 
@@ -479,27 +483,27 @@ table {
         }
     }
 
-    .composition-area{
-    .editor {
-        width: 100%;
-
-        & textarea {
+    .composition-area {
+        .editor {
             width: 100%;
-            min-height: 100px;
-        }
-    }
 
-    .cm-comment {
-        &-start {
-            background: @comment-start-color;
-            cursor: not-allowed;
+            & textarea {
+                width: 100%;
+                min-height: 100px;
+            }
         }
 
-        &-end {
-            background: @comment-end-color;
-            cursor: not-allowed;
+        .cm-comment {
+            &-start {
+                background: @comment-start-color;
+                cursor: not-allowed;
+            }
+
+            &-end {
+                background: @comment-end-color;
+                cursor: not-allowed;
+            }
         }
-    }
     }
 }
 
@@ -535,11 +539,35 @@ table {
 padding-right: 15px;
 }
 
-#custom-handle {/*TODO taken from sample, check what can be changed*/
-    width: 3em;
+#pageSlider-handle { /*TODO taken from sample, check what can be changed*/
+    width: 2.4em;
     height: 1.6em;
     top: 50%;
     margin-top: -.8em;
     text-align: center;
     line-height: 1.6em;
+}
+
+.editor-areas {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    padding-top: 15px;
+}
+
+.pages-start{
+    position: relative;
+    max-height: 100%;
+    overflow: auto;
+}
+
+.editor-super-container {
+    height: 560px; //TODO debug
+    position: relative;
+}
+
+.text-editor-page-slider{
+    background-color:@text-editor-sliderbar-color;
+    border:none !important;/*to override default jquery border styling*/
 }

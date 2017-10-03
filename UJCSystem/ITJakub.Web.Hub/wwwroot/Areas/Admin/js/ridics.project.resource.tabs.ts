@@ -73,5 +73,6 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
         const main = new TextEditorMain();
         main.init();
         main.createSlider();
+        $(".pages-start").on("scroll resize",() => {main.pageUserOn();});
     }
 }

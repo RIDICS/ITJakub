@@ -198,7 +198,7 @@
         $(document).on("click", ".toggle-nested-comments",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
-                const editorPageContainer = ".tab-content";
+                const editorPageContainer = ".pages-start";
                 var target = $(event.target as HTMLElement);
                 var parentComment = target.parents(".media-list");
                 var commentArea = parentComment.parent(".comment-area");
