@@ -70,9 +70,11 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
     }
 
     initTab() {
+        $(".page-row").remove();//TODO investigate row not deleting when switching back to tab
         const main = new TextEditorMain();
         main.init();
         main.createSlider();
-        $(".pages-start").on("scroll resize",() => {main.pageUserOn();});
+        $(".pages-start").on("scroll resize", () => { main.pageUserOn(); });
+        main.sliderToolbarHover();
     }
 }

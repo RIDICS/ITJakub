@@ -459,8 +459,7 @@ table {
         }
 
         .respond-to-comment {
-            margin-bottom: 2px;
-            max-height: 18px;
+            max-height: 22px;
             font-size: 11px;
         }
 
@@ -539,13 +538,29 @@ table {
 padding-right: 15px;
 }
 
-#pageSlider-handle { /*TODO taken from sample, check what can be changed*/
-    width: 2.4em;
-    height: 1.6em;
+#page-slider-handle {
+    width: 1.5em;
+    height: 1.5em;
     top: 50%;
+    border: none !important; /*to override default jquery border styling*/
     margin-top: -.8em;
     text-align: center;
-    line-height: 1.6em;
+    border-radius: 50%;
+    background-color: @text-editor-sliderbar-hander-color;
+}
+
+.slider-tooltip {
+    position: absolute;
+    top: 22px;
+    left: -25px;
+    display: none;
+    background-color: @text-editor-sliderbar-color;
+    color:white;
+    white-space:nowrap;
+    line-height:2em;
+    height:30px;
+    width:86px;
+    border-radius:10%;
 }
 
 .editor-areas {
@@ -570,4 +585,6 @@ padding-right: 15px;
 .text-editor-page-slider{
     background-color:@text-editor-sliderbar-color;
     border:none !important;/*to override default jquery border styling*/
+    height:4px;
+    margin: 0 35px 0 35px;
 }
