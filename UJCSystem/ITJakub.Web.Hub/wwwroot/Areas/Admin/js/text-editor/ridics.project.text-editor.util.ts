@@ -78,20 +78,16 @@
     }
 
     /**
-     * Loads markdown rendered to html from the server.
-     * @param {Number} pageNumber  - Number of page for which to load rendered text
-     * @returns {string} Rendered text
-     */
-    loadRenderedText(pageNumber: number): string {
+ * Loads markdown rendered to html from the server.
+ * @param {Number} pageNumber  - Number of page for which to load rendered text
+ * @returns {JQueryXHR} Ajax query of rendered text
+ */
+    loadRenderedText(pageNumber: number): JQueryXHR {
         let pageContent: string;
-        $.ajaxSetup({ async: false }); // make async
-        $.post(`http://${this.serverAddress}/admin/project/LoadRenderedCompositionPage`,
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/LoadRenderedCompositionPage`,
             { pageNumber: pageNumber },
             (data: string) => { pageContent = data; });
-        if (pageContent === "error-no-file") {
-            return null;
-        } else
-            return pageContent;
+        return ajax;
     }
 
     getNumberOfCommentsOnPage(pageNumber: number):number {
