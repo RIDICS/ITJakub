@@ -195,5 +195,8 @@ class TextEditorMain {
         const editorPageContainer = ".pages-start";
         const scrollTo = pageEl.offset().top - container.offset().top + container.scrollTop();
         $(`${editorPageContainer}`).scrollTop(scrollTo);
+        this.updateOnlySliderValue = true;
+        this.updateSlider(pageNumber);
+        this.updateOnlySliderValue = false;
     }
 }
