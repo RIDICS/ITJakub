@@ -75,11 +75,7 @@ class TextEditorMain {
 
     refreshSwatch() {
         const page = $("#page-slider").slider("value");
-        const container = $(".pages-start");
-        const pageEl = $(`*[data-page="${page}"]`);
-        const editorPageContainer = ".pages-start";
-        const scrollTo = pageEl.offset().top - container.offset().top + container.scrollTop();
-        $(`${editorPageContainer}`).scrollTop(scrollTo);
+        this.scrollToPage(page);
     }
 
     pageUserOn() {
@@ -97,5 +93,39 @@ class TextEditorMain {
                 this.updateOnlySliderValue = false;
             }
         }
+    }
+
+    attachEventToGoToPageButton() {
+        $(document).on("click", ".go-to-page-button", () => {
+            this.processPageInputField();
+        });
+    }
+
+    attachEventInputFieldEnterKey() {
+        $(document).on("keypress", ".go-to-page-field", (event) => {
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if (keycode === 13) {//Enter key
+                this.processPageInputField();
+            }
+        });   
+    }
+
+    processPageInputField() {
+        const inputField = $(".go-to-page-field");
+        const page = inputField.val();
+        if (page > this.numberOfPages || page < 1) {
+            alert(`Page ${page} does not exist`);
+        } else {
+            this.scrollToPage(page);
+        }
+        inputField.val("");
+    }
+
+    scrollToPage(pageNumber:number) {
+        const container = $(".pages-start");
+        const pageEl = $(`*[data-page="${pageNumber}"]`);
+        const editorPageContainer = ".pages-start";
+        const scrollTo = pageEl.offset().top - container.offset().top + container.scrollTop();
+        $(`${editorPageContainer}`).scrollTop(scrollTo);
     }
 }

@@ -76,5 +76,7 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
         main.createSlider();
         $(".pages-start").on("scroll resize", () => { main.pageUserOn(); });
         main.sliderToolbarHover();
+        main.attachEventToGoToPageButton();
+        main.attachEventInputFieldEnterKey();
     }
 }
