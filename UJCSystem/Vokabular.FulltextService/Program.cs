@@ -42,6 +42,8 @@ namespace Vokabular.FulltextService
                 {
                     builderContext.HostingEnvironment.ConfigureLog4Net("log4net.config");
                     builder.AddConfiguration(builderContext.Configuration.GetSection("Logging"));
+                    builder.AddConsole();
+                    builder.AddDebug();
                     builder.AddLog4Net();
                 })
                 .UseStartup<Startup>()
