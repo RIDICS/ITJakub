@@ -44,7 +44,6 @@ class TextEditorMain {
         }
         this.createSlider();
         $(".pages-start").on("scroll resize", () => { this.pageUserOn(); });
-        this.sliderToolbarHover();
         this.attachEventToGoToPageButton();
         this.attachEventInputFieldEnterKey();
         this.attachEventShowPageCheckbox();
@@ -57,18 +56,21 @@ class TextEditorMain {
     private createSlider() {
         $(() => {
             var tooltip = $(".slider-tooltip");
+            var tooltipText = tooltip.children(".slider-tooltip-text");
             $("#page-slider").slider({
                 min: 1,
                 max: this.numberOfPages,
                 step: 1,
                 create: function() {
-                    tooltip.text(`Page: ${$(this).slider("value")}`);
+                    tooltipText.text(`Page: ${$(this).slider("value")}`);
                 },
                 slide(event, ui) {
-                    tooltip.text(`Page: ${ui.value}`);
+                    tooltipText.text(`Page: ${ui.value}`);
+                    tooltip.show();
                 },
                 change: () => {
                     if (!this.updateOnlySliderValue) {
+                        tooltip.hide();
                         this.refreshSwatch();
                     }
                 }
@@ -76,14 +78,9 @@ class TextEditorMain {
         });
     }
 
-    private sliderToolbarHover() {
-        $(document).on("mouseenter", "#page-slider-handle", () => { $(".slider-tooltip").show(); });
-        $(document).on("mouseleave", "#page-slider-handle", () => { $(".slider-tooltip").hide(); });
-    }
-
     private updateSlider(pageNumber: number) {
         $("#page-slider").slider("option", "value", pageNumber);
-        $(".slider-tooltip").text(`Page: ${pageNumber}`);
+        $(".slider-tooltip-text").text(`Page: ${pageNumber}`);
     }
 
     private refreshSwatch() {
@@ -150,10 +147,12 @@ class TextEditorMain {
         const page = parseInt(inputField.val());
         if (page > this.numberOfPages || page < 1) {
             alert(`Page ${page} does not exist`);
+            inputField.val("");
         } else {
             this.navigateToPage(page);
+            inputField.val("");
+            inputField.blur();
         }
-        inputField.val("");
     }
 
     private navigateToPage(pageNumber: number) {

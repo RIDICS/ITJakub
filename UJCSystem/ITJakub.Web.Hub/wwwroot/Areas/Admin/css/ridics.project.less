@@ -547,20 +547,36 @@ padding-right: 15px;
     text-align: center;
     border-radius: 50%;
     background-color: @text-editor-sliderbar-hander-color;
+    outline:none;
+}
+
+.slider-tooltip1 {
+    margin: 22px -36px;
+    width:96px;
+    display: none;
+    background-color: @text-editor-sliderbar-color;
+    color: white;
+    white-space: nowrap;
+    line-height: 2em;
+    border-radius: 10%;
 }
 
 .slider-tooltip {
     position: absolute;
     top: 22px;
-    left: -25px;
+    left: 50%;
+    transform: translate(-50%, 0);
     display: none;
     background-color: @text-editor-sliderbar-color;
-    color:white;
-    white-space:nowrap;
-    line-height:2em;
-    height:30px;
-    width:86px;
-    border-radius:10%;
+    color: white;
+    white-space: nowrap;
+    line-height: 2em;
+    border-radius: 10%;
+
+    &-text {
+        position: relative;
+        margin:0 5px;
+    }
 }
 
 .editor-areas {
