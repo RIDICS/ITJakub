@@ -9,6 +9,6 @@ namespace Vokabular.Shared
         public static ILogger CreateLogger<T>()
         {
             return LoggerFactory.CreateLogger<T>();
-        } 
+        }
     }
 }
