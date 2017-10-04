@@ -8,12 +8,14 @@
 ///<reference path="./ridics.project.text-editor.page-structure.ts" />
 ///<reference path="./ridics.project.text-editor.lazyloading.ts" />
 
+declare var lazySizes: any;
+
 class TextEditorMain {
-    private numberOfPages;
+    private numberOfPages: number;
     private updateOnlySliderValue = false;
     private showPageNumber = false;
 
-    getShowPageNumbers():boolean {
+    getShowPageNumbers(): boolean {
         return this.showPageNumber;
     }
 
@@ -75,8 +77,8 @@ class TextEditorMain {
     }
 
     private sliderToolbarHover() {
-        $(document).on("mouseenter", "#page-slider-handle", () => { $(".slider-tooltip").show();});
-        $(document).on("mouseleave", "#page-slider-handle", () => { $(".slider-tooltip").hide();});
+        $(document).on("mouseenter", "#page-slider-handle", () => { $(".slider-tooltip").show(); });
+        $(document).on("mouseleave", "#page-slider-handle", () => { $(".slider-tooltip").hide(); });
     }
 
     private updateSlider(pageNumber: number) {
@@ -86,7 +88,7 @@ class TextEditorMain {
 
     private refreshSwatch() {
         const page = $("#page-slider").slider("value");
-        this.scrollToPage(page);
+        this.navigateToPage(page);
     }
 
     private pageUserOn() {
@@ -98,7 +100,6 @@ class TextEditorMain {
         if (page !== null && typeof page !== "undefined") {
             const pageNumber: number = $(page).data("page");
             if (typeof pageNumber !== "undefined" && pageNumber !== null) {
-                console.log(pageNumber);
                 this.updateOnlySliderValue = true;
                 this.updateSlider(pageNumber);
                 this.updateOnlySliderValue = false;
@@ -107,26 +108,32 @@ class TextEditorMain {
     }
 
     private attachEventToGoToPageButton() {
-        $(document).on("click", ".go-to-page-button", () => {
-            this.processPageInputField();
-        });
+        $(document).on("click",
+            ".go-to-page-button",
+            () => {
+                this.processPageInputField();
+            });
     }
 
     private attachEventInputFieldEnterKey() {
-        $(document).on("keypress", ".go-to-page-field", (event) => {
-            var keycode = (event.keyCode ? event.keyCode : event.which);
-            if (keycode === 13) {//Enter key
-                this.processPageInputField();
-            }
-        });   
+        $(document).on("keypress",
+            ".go-to-page-field",
+            (event) => {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode === 13) { //Enter key
+                    this.processPageInputField();
+                }
+            });
     }
 
     private attachEventShowPageCheckbox() {
-        $(document).on("click", ".display-page-checkbox", () => {
-            const isChecked = $(".display-page-checkbox").prop("checked");
-            this.showPageNumber = isChecked;
-            this.togglePageNumbers(isChecked);
-        });
+        $(document).on("click",
+            ".display-page-checkbox",
+            () => {
+                const isChecked = $(".display-page-checkbox").prop("checked");
+                this.showPageNumber = isChecked;
+                this.togglePageNumbers(isChecked);
+            });
     }
 
     private togglePageNumbers(show: boolean) {
@@ -140,16 +147,49 @@ class TextEditorMain {
 
     private processPageInputField() {
         const inputField = $(".go-to-page-field");
-        const page = inputField.val();
+        const page = parseInt(inputField.val());
         if (page > this.numberOfPages || page < 1) {
             alert(`Page ${page} does not exist`);
         } else {
-            this.scrollToPage(page);
+            this.navigateToPage(page);
         }
         inputField.val("");
     }
 
-    private scrollToPage(pageNumber:number) {
+    private navigateToPage(pageNumber: number) {
+        const numberOfPagesToPreload = 15;
+        const preloadedPage = pageNumber - numberOfPagesToPreload;
+        if (preloadedPage > 1) {
+            this.trackLoading(pageNumber);
+            $(".preloading-pages-spinner").show();
+            for (let i = preloadedPage; i <= pageNumber; i++) {
+                const currentPageEl = $(`*[data-page="${i}"]`);
+                if (!currentPageEl.hasClass("lazyloaded")) {
+                    lazySizes.loader.unveil(currentPageEl[0]);
+                }
+            }
+            if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
+                this.scrollToPage(pageNumber);
+            }
+            $(".preloading-pages-spinner").hide();
+        } else {
+            this.scrollToPage(pageNumber);
+        }
+
+    }
+
+    private trackLoading(pageNumber: number) {
+        $(document).on("lazyloaded",
+            (event) => {
+                var pageEl = $(event.target);
+                var page = pageEl.data("page") as number;
+                if (page === pageNumber) {
+                    this.scrollToPage(pageNumber);
+                };
+            });
+    }
+
+    scrollToPage(pageNumber: number) {
         const container = $(".pages-start");
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const editorPageContainer = ".pages-start";
