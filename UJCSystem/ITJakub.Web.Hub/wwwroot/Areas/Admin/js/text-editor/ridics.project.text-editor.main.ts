@@ -11,6 +11,11 @@
 class TextEditorMain {
     private numberOfPages;
     private updateOnlySliderValue = false;
+    private showPageNumber = false;
+
+    getShowPageNumbers():boolean {
+        return this.showPageNumber;
+    }
 
     init() {
         const connections = new Connections();
@@ -18,7 +23,7 @@ class TextEditorMain {
         const commentArea = new CommentArea(util);
         const commentInput = new CommentInput(commentArea, util);
         const pageTextEditor = new Editor(commentInput, util);
-        const pageStructure = new PageStructure(commentArea, util);
+        const pageStructure = new PageStructure(commentArea, util, this);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const numberOfPages = util.getNumberOfPages("id");
         this.numberOfPages = numberOfPages;
@@ -35,13 +40,19 @@ class TextEditorMain {
                     `<div class="row page-row lazyload" data-page="${i
                     }"><div class="text-center image-placeholder"><img src=${gifSpinner} /></div></div>`);
         }
+        this.createSlider();
+        $(".pages-start").on("scroll resize", () => { this.pageUserOn(); });
+        this.sliderToolbarHover();
+        this.attachEventToGoToPageButton();
+        this.attachEventInputFieldEnterKey();
+        this.attachEventShowPageCheckbox();
         lazyLoad.lazyLoad();
         commentInput.processRespondToCommentClick();
         commentArea.processToggleCommentAresSizeClick();
         commentArea.processToggleNestedCommentClick();
     }
 
-    createSlider() {
+    private createSlider() {
         $(() => {
             var tooltip = $(".slider-tooltip");
             $("#page-slider").slider({
@@ -63,22 +74,22 @@ class TextEditorMain {
         });
     }
 
-    sliderToolbarHover() {
+    private sliderToolbarHover() {
         $(document).on("mouseenter", "#page-slider-handle", () => { $(".slider-tooltip").show();});
         $(document).on("mouseleave", "#page-slider-handle", () => { $(".slider-tooltip").hide();});
     }
 
-    updateSlider(pageNumber: number) {
+    private updateSlider(pageNumber: number) {
         $("#page-slider").slider("option", "value", pageNumber);
         $(".slider-tooltip").text(`Page: ${pageNumber}`);
     }
 
-    refreshSwatch() {
+    private refreshSwatch() {
         const page = $("#page-slider").slider("value");
         this.scrollToPage(page);
     }
 
-    pageUserOn() {
+    private pageUserOn() {
         const containerXPos = $(".pages-start").offset().left;
         const containerYPos = $(".pages-start").offset().top;
         const element = document.elementFromPoint(containerXPos, containerYPos);
@@ -95,13 +106,13 @@ class TextEditorMain {
         }
     }
 
-    attachEventToGoToPageButton() {
+    private attachEventToGoToPageButton() {
         $(document).on("click", ".go-to-page-button", () => {
             this.processPageInputField();
         });
     }
 
-    attachEventInputFieldEnterKey() {
+    private attachEventInputFieldEnterKey() {
         $(document).on("keypress", ".go-to-page-field", (event) => {
             var keycode = (event.keyCode ? event.keyCode : event.which);
             if (keycode === 13) {//Enter key
@@ -110,7 +121,24 @@ class TextEditorMain {
         });   
     }
 
-    processPageInputField() {
+    private attachEventShowPageCheckbox() {
+        $(document).on("click", ".display-page-checkbox", () => {
+            const isChecked = $(".display-page-checkbox").prop("checked");
+            this.showPageNumber = isChecked;
+            this.togglePageNumbers(isChecked);
+        });
+    }
+
+    private togglePageNumbers(show: boolean) {
+        const pageNumberEl = $(".page-number");
+        if (show) {
+            pageNumberEl.show();
+        } else {
+            pageNumberEl.hide();
+        }
+    }
+
+    private processPageInputField() {
         const inputField = $(".go-to-page-field");
         const page = inputField.val();
         if (page > this.numberOfPages || page < 1) {
@@ -121,7 +149,7 @@ class TextEditorMain {
         inputField.val("");
     }
 
-    scrollToPage(pageNumber:number) {
+    private scrollToPage(pageNumber:number) {
         const container = $(".pages-start");
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const editorPageContainer = ".pages-start";
