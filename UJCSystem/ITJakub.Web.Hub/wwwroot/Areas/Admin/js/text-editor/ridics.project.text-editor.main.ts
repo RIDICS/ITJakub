@@ -179,7 +179,7 @@ class TextEditorMain {
     }
 
     private trackLoading(pageNumber: number) {
-        $(document).on("lazyloaded",
+        $(".pages-start").on("lazyloaded",
             (event) => {
                 var pageEl = $(event.target);
                 var page = pageEl.data("page") as number;

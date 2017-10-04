@@ -6,7 +6,7 @@
     }
 
     lazyLoad() {
-        $(document).on("lazybeforeunveil",
+        $(".pages-start").on("lazybeforeunveil",
             (event) => {
                 var target = $(event.target);
                 var page = target.data("page");
