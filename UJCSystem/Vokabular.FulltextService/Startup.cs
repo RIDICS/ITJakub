@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using Vokabular.FulltextService.Containers;
 using Vokabular.FulltextService.Containers.Extensions;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.FulltextService
 {
@@ -26,6 +28,11 @@ namespace Vokabular.FulltextService
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            // Configuration options
+            services.AddOptions();
+            services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+
+            // Add framework services
             services.AddMvc();
 
             // Inject an implementation of ISwaggerProvider with defaulted settings applied

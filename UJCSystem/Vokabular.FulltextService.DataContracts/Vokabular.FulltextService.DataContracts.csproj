@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Clients\" />
+    <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj" />
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
   </ItemGroup>
 
 </Project>
