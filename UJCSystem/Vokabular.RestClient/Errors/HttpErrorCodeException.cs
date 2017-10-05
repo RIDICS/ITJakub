@@ -2,7 +2,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 
-namespace Vokabular.MainService.DataContracts.Clients.Errors
+namespace Vokabular.RestClient.Errors
 {
     public class HttpErrorCodeException : HttpRequestException
     {

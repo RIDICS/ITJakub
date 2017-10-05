@@ -1,4 +1,4 @@
-namespace Vokabular.MainService.DataContracts.Clients.Errors
+namespace Vokabular.RestClient.Errors
 {
     public static class ErrorMessages
     {

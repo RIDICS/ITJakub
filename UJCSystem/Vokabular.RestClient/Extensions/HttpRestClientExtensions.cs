@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Vokabular.MainService.DataContracts.Clients.Extensions
+namespace Vokabular.RestClient.Extensions
 {
     internal static class HttpRestClientExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
-using Vokabular.MainService.DataContracts.Clients.Errors;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Controllers
 {

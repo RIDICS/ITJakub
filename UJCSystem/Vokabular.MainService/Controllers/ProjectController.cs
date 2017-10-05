@@ -5,7 +5,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Headers;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {

@@ -2,8 +2,8 @@ using System.Net;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Vokabular.MainService.DataContracts.Clients.Errors;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Core.Works.Person
 {

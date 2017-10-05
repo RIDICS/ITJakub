@@ -7,10 +7,10 @@ using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Clients.Errors;
-using Vokabular.MainService.DataContracts.Clients.Extensions;
+using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Extensions;
 
-namespace Vokabular.MainService.DataContracts.Clients
+namespace Vokabular.RestClient
 {
     public abstract class RestClientBase : IDisposable
     {

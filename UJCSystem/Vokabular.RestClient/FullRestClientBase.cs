@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Vokabular.MainService.DataContracts.Clients
+namespace Vokabular.RestClient
 {
     public abstract class FullRestClientBase : RestClientBase
     {

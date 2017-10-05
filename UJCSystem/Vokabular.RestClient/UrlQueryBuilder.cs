@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Vokabular.MainService.DataContracts.Clients.Extensions;
+using Vokabular.RestClient.Extensions;
 
-namespace Vokabular.MainService.DataContracts.Clients
+namespace Vokabular.RestClient
 {
     public class UrlQueryBuilder
     {

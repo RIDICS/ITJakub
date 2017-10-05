@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
-using Vokabular.MainService.DataContracts.Headers;
+using Vokabular.RestClient.Headers;
 
-namespace Vokabular.MainService.DataContracts.Clients
+namespace Vokabular.RestClient
 {
     public class GetResult<T>
     {

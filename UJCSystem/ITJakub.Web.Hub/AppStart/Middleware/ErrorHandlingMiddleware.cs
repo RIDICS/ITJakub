@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Vokabular.MainService.DataContracts.Clients.Errors;
+using Vokabular.RestClient.Errors;
 
 namespace ITJakub.Web.Hub.AppStart.Middleware
 {

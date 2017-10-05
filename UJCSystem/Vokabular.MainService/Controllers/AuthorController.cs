@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
-using Vokabular.MainService.DataContracts.Clients.Errors;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers

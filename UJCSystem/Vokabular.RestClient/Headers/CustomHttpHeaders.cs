@@ -1,4 +1,4 @@
-﻿namespace Vokabular.MainService.DataContracts.Headers
+﻿namespace Vokabular.RestClient.Headers
 {
     public static class CustomHttpHeaders
     {
