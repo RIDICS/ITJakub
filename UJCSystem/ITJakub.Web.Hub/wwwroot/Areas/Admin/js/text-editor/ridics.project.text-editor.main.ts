@@ -14,6 +14,7 @@ class TextEditorMain {
     private numberOfPages: number;
     private updateOnlySliderValue = false;
     private showPageNumber = false;
+    private pageToSkipTo:number =0;
 
     getShowPageNumbers(): boolean {
         return this.showPageNumber;
@@ -48,6 +49,7 @@ class TextEditorMain {
         this.attachEventInputFieldEnterKey();
         this.attachEventShowPageCheckbox();
         lazyLoad.lazyLoad();
+        this.trackLoading();
         commentInput.processRespondToCommentClick();
         commentArea.processToggleCommentAresSizeClick();
         commentArea.processToggleNestedCommentClick();
@@ -159,8 +161,8 @@ class TextEditorMain {
         const numberOfPagesToPreload = 15;
         const preloadedPage = pageNumber - numberOfPagesToPreload;
         if (preloadedPage > 1) {
-            this.trackLoading(pageNumber);
             $(".preloading-pages-spinner").show();
+            this.pageToSkipTo = pageNumber;
             for (let i = preloadedPage; i <= pageNumber; i++) {
                 const currentPageEl = $(`*[data-page="${i}"]`);
                 if (!currentPageEl.hasClass("lazyloaded")) {
@@ -177,14 +179,14 @@ class TextEditorMain {
 
     }
 
-    private trackLoading(pageNumber: number) {
+    private trackLoading() {
         $(".pages-start").on("lazyloaded",
             (event) => {
                 var pageEl = $(event.target);
                 var page = pageEl.data("page") as number;
-                if (page === pageNumber) {
-                    this.scrollToPage(pageNumber);
-                };
+                if (page === this.pageToSkipTo) {
+                    this.scrollToPage(page);
+                }
             });
     }
 
