@@ -19,13 +19,16 @@
         const time = Date.now();
         const nested = false;
         const nestedCommentOrder = 0;
-        const commentId = (this.commentInput).addCommentSignsAndReturnCommentNumber(editor);
-        this.commentInput.processCommentSendClick(nested,
-            currentPageNumber,
-            commentId,
-            nestedCommentOrder,
-            time);
-        this.commentInput.toggleCommentInputPanel();
+        const ajax = (this.commentInput).addCommentSignsAndReturnCommentNumber(editor);
+        ajax.done((data: string) => {
+            const commentId = data;
+            this.commentInput.processCommentSendClick(nested,
+                currentPageNumber,
+                commentId,
+                nestedCommentOrder,
+                time);
+            this.commentInput.toggleCommentInputPanel();
+        });
     }
 
     processAreaSwitch = () => {
@@ -114,25 +117,37 @@
     toggleDivAndTextarea = () => {
         var page = $(".page");
         if (this.editingMode) { // changing div to textarea here
-            page.each((index: number) => {
-                const child = page[index] as Element;
+            page.each((index: number, child:Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const plainText = this.util.loadPlainText(pageNumber);
+                const ajax = this.util.loadPlainText(pageNumber);
                 const viewerElement = $(child).children(".viewer");
                 viewerElement.remove();
-                const elm = `<div class="editor"><textarea>${plainText}</textarea></div>`;
-                $(child).append(elm);
+                this.createEditorAreaBody(child, ajax);
             });
         } else { // changing textarea to div here
-            page.each((index: number) => {
-                const child = page[index] as Element;
+            page.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const renderedText = this.util.loadRenderedText(pageNumber);
+                const ajax = this.util.loadRenderedText(pageNumber);
                 const editorElement = $(child).children(".editor");
                 editorElement.remove();
-                const elm = `<div class="viewer">${renderedText}</div>`;
-                $($(child)).append(elm);
+                this.createViewerAreaBody(child, ajax);
             });
         }
+    }
+
+    private createEditorAreaBody(child: Element, ajax:JQueryXHR) {
+        ajax.done((data: string) => {
+            const plainText = data;
+            const elm = `<div class="editor"><textarea>${plainText}</textarea></div>`;
+            $(child).append(elm);
+        });
+    }
+
+    private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
+        ajax.done((data: string) => {
+            const renderedText = data;
+            const elm = `<div class="viewer">${renderedText}</div>`;
+            $(child).append(elm);
+        });
     }
 }

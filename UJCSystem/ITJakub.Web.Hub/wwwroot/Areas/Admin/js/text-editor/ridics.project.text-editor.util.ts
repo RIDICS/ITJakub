@@ -6,16 +6,13 @@
     }
 
     /**
-     * Generates guid on the server
-     * @returns {string} GUID
-     */
-    getGuid(): string {
-        let guid = "";
-        $.ajaxSetup({ async: false }); // make async
-        $.post(`http://${this.serverAddress}/admin/project/GetGuid`,
-            {},
-            (data: string) => { guid = data; });
-        return guid;
+ * Generates guid on the server
+ * @returns {JQueryXHR} Ajax conraining GUID
+ */
+    getGuid(): JQueryXHR {
+        const ajax=$.post(`http://${this.serverAddress}/admin/project/GetGuid`,
+            {});
+        return ajax;
     }
 
     /**
@@ -35,7 +32,7 @@
             return fileContent;
     }
 
-    loadCommentFile(pageNumber: number): ICommentSctucture[] {
+    private loadCommentFile(pageNumber: number): ICommentSctucture[] {
         const contentStringArray = this.loadCommentFileString(pageNumber);
         if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
             let commentsParsed: ICommentSctucture[] = [];
@@ -47,34 +44,25 @@
     }
 
     /**
-    * Loads plain text with markdown from the server.
-    * @param {Number} pageNumber - Number of page for which to load plain text
-    * @returns {string} Plain text
-    */
-    loadPlainText(pageNumber: number): string { //TODO add logic
-        let pageContent: string;
-        $.ajaxSetup({ async: false }); // make async
-        $.post(`http://${this.serverAddress}/admin/project/LoadPlaintextCompositionPage`,
-            { pageNumber: pageNumber },
-            (data: string) => { pageContent = data; });
-        if (pageContent === "error-no-file") {
-            return null;
-        } else
-            return pageContent;
+* Loads plain text with markdown from the server.
+* @param {Number} pageNumber - Number of page for which to load plain text
+* @returns {JQueryXHR} Ajax containing page plain text
+*/
+    loadPlainText(pageNumber: number): JQueryXHR {
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/LoadPlaintextCompositionPage`,
+            { pageNumber: pageNumber });
+            return ajax;
     }
 
     /**
 * Gets number of pages in a composition from the server.
 * @param {string} compositionId - Number of page for which to load plain text
-* @returns {number} Number of pages
+* @returns {JQueryXHR} Ajax containing number of pages
 */
-    getNumberOfPages(compositionId: string): number { //TODO add logic
-        let numberOfPages: number;
-        $.ajaxSetup({ async: false }); // make async
-        $.post(`http://${this.serverAddress}/admin/project/GetNumberOfPages`,
-            { compositionId: compositionId },
-            (data: number) => { numberOfPages = data; });
-        return numberOfPages;
+    getNumberOfPages(compositionId: string): JQueryXHR {
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetNumberOfPages`,
+            { compositionId: compositionId });
+        return ajax;
     }
 
     /**
@@ -88,19 +76,6 @@
             { pageNumber: pageNumber },
             (data: string) => { pageContent = data; });
         return ajax;
-    }
-
-    getNumberOfCommentsOnPage(pageNumber: number):number {
-        var numberOfComments = 0;
-        $.post(
-            `http://${this.serverAddress}/admin/project/GetCommentSectionNumberOfFiles`, //check what does async affect
-            {
-                pageNumber: pageNumber
-            }).done((data: number) => {
-                numberOfComments = data;
-            }
-        );
-        return numberOfComments;
     }
 
     /**
@@ -143,7 +118,7 @@
      * @param {number[]} indexes - Array of indexes where to split comment array.
      * @returns {ICommentSctucture[]}
      */
-    splitArrayToArrays(content: ICommentSctucture[], indexes: number[]): ICommentSctucture[] {
+    private splitArrayToArrays(content: ICommentSctucture[], indexes: number[]): ICommentSctucture[] {
         let result: ICommentSctucture[] = [];
         let beginIndex = 0;
         let endIndex = 0;
@@ -216,7 +191,7 @@
         }
     }
 
-    fromJson(jsonString: string): ICommentSctucture {
+    private fromJson(jsonString: string): ICommentSctucture {
         if (jsonString !== null) {
             const stringObject = JSON.parse(jsonString);
             const id: string = stringObject.id;
