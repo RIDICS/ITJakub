@@ -8,13 +8,21 @@ class Connections {
      * @param {string} commentId Unique id of a commentary
      * @returns Whether the connection is not visible
      */
-    private checkIfOverFlowing(commentId: string): boolean {
+    private checkIfOverFlowing(commentId: string): boolean {//TODO fix, broken after integration
         let overflowing: boolean = false;
-        const name = $(`#${commentId}-comment`).siblings(".media-body").children(".comment-body");
-        const commentAreaHeight = $(`#${commentId}-comment`).parents(".comment-area").height();
-        if (name.position().top > commentAreaHeight || name.position().top < 15
-        ) { //commenter's name is higher or lower than comment area
-            overflowing = true;
+        const textEl = $(`#${commentId}-text`);
+        if (length in textEl) {
+            const pageTextOffsetTop = textEl.offset().top;
+            const commentEl = $(`#${commentId}-comment`);
+            const commentName = commentEl.siblings(".media-body").find(".media-heading");
+            const pageContainer = $(".editor-areas");
+            const pageBottom = pageContainer.offset().top + pageContainer.height();
+            if (pageTextOffsetTop < pageContainer.offset().top ||
+                pageTextOffsetTop > pageBottom ||
+                commentName.position().top < 0 ||
+                commentName.offset().top > pageBottom) { //related text is offscreen or commenters name is offscreen
+                overflowing = true;
+            }
         }
         return overflowing;
     }
