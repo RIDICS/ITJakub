@@ -19,34 +19,15 @@ namespace ITJakub.Web.Hub
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var globalbuilder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("globalsettings.json");
-            var globalConfiguration = globalbuilder.Build();
-
-            var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
-
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //builder.AddUserSecrets();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
             ApplicationConfig.Configuration = Configuration;
 
             env.ConfigureLog4Net("log4net.config");
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IIocContainer Container { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
