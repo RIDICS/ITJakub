@@ -10,7 +10,7 @@
  * @param {string[][]} content  - Array or arrays of comment values in format {comment id, comment nestedness, comment page, person's name, comment body, order of nested comment, time}
  * @param {Number} pageNUmber - Number of page, which comments relates to.
  */
-    constructCommentAreaHtml(content: ICommentSctucture[], pageNumber: number) {
+    private constructCommentAreaHtml(content: ICommentSctucture[], pageNumber: number) {
         if (content === null) {
             return null;
         }
@@ -113,8 +113,7 @@
         return html;
     }
 
-    getNestedCommentsNumber = (pageNumber: number): number[] => {
-        const content = this.constructCommentArea(pageNumber);
+    private getNestedCommentsNumber = (content: ICommentSctucture[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) => {
         var nestedComments: number[] = [];
         var thread = 0;
         if (content !== null && typeof content !== "undefined") {
@@ -132,10 +131,7 @@
                     nestedComments[thread]++;
                 }
             }
-            return nestedComments;
-        } else {
-            console.log(`No comments on page ${pageNumber}`);//TODO debug
-            return null;
+            this.collapseIfCommentAreaIsTall(nestedComments, pageNumber, sectionCollapsed, nestedCommentCollapsed);
         }
     }
 
@@ -145,8 +141,7 @@
      * @param sectionCollapsed - Whether section has to be collapsed
      * @param nestedCommentCollapsed - Whether nested comments have to be collapsed
      */
-    collapseIfCommentAreaIsTall = (pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) => {
-        var numberOfNestedComments = this.getNestedCommentsNumber(pageNumber);
+    private collapseIfCommentAreaIsTall = (numberOfNestedComments:number[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) => {
         var areaContent = "";
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
@@ -207,15 +202,77 @@
         }
     }
 
-    constructCommentArea = (pageNumber: number):ICommentSctucture[] => {
-        const content = this.util.parseLoadedCommentFiles(pageNumber);
-        const html = this.constructCommentAreaHtml(content, pageNumber);
-        const pageRow = $(`*[data-page="${pageNumber}"]`);;
-        $(pageRow).append(html);
-        return content;
+    /**
+ * Loads contents of files with comments in a page from the server.
+ * @param {Number} pageNumber Number of page for which to load comment file contents
+ * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
+ * @param {boolean} nestedCommentCollapsed Whether nested comments have to be collapsed
+ */
+    asyncConstructCommentArea(pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
+        let fileContent: string[];
+        $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
+            { pageNumber: pageNumber }).done(
+            (data: string[]) => {
+                fileContent = data;
+                if (fileContent[0] !== "error-no-file") {
+                    this.loadCommentFile(fileContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+                }
+            });
     }
 
-    destroyCommentArea(pageNumber: number) {
+    private loadCommentFile(contentStringArray: string[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
+        if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
+            let commentsParsed: ICommentSctucture[] = [];
+            for (let i = 0; i < contentStringArray.length; i++) {
+                commentsParsed[i] = this.util.fromJson(contentStringArray[i]);
+            }
+            this.parseLoadedCommentFiles(commentsParsed, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+        }
+    }
+
+    /**
+     * Parses comments to construct comment area later.
+     * @param {ICommentSctucture[]} content Array of comments
+     * @param {number} pageNumber Number of page comments are on
+     * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
+     * @param nestedCommentCollapsed Whether nested comments have to be collapsed
+     */
+    private parseLoadedCommentFiles(content: ICommentSctucture[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
+        if (content !== null && typeof content !== "undefined") {
+            content.sort((a, b) => { //sort by id, ascending
+                if (a.id < b.id) {
+                    return -1;
+                }
+                if (a.id === b.id) {
+                    return 0;
+                }
+                if (a.id > b.id) {
+                    return 1;
+                }
+            });
+
+            let id = content[0].id;
+            const indexes: number[] = [];
+            for (let i = 0; i < content.length; i++) {
+                const currentId = content[i].id;
+                if (currentId !== id) {
+                    indexes.push(i);
+                    id = currentId;
+                }
+            }
+            const sortedContent = this.util.splitArrayToArrays(content, indexes);
+            this.constructCommentArea(sortedContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+        }
+    }
+
+    private constructCommentArea = (content: ICommentSctucture[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) => {
+        const html = this.constructCommentAreaHtml(content, pageNumber);
+        const pageRow = $(`*[data-page="${pageNumber}"]`);
+        $(pageRow).append(html);
+        this.getNestedCommentsNumber(content, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+    }
+
+    private destroyCommentArea(pageNumber: number) {
         const page = $(`*[data-page="${pageNumber}"]`);
         const commentArea = page.children(".composition-area").siblings(".comment-area");
         $(commentArea).remove();
@@ -286,7 +343,7 @@
             .children(".media-body").children(".media")
             .hasClass(
                 "nested-comment-collapsed"); // if nested comments section was collapsed, collapse it after reload too.
-        this.collapseIfCommentAreaIsTall(page, sectionWasCollapsed, nestedCommentsCollapsed);
+        this.asyncConstructCommentArea(page, sectionWasCollapsed, nestedCommentsCollapsed);
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();
         this.processToggleCommentAresSizeClick();

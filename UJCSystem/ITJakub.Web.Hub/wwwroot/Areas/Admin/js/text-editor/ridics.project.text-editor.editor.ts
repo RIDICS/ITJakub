@@ -103,7 +103,8 @@
     }
 
     processPageModeSwitch = () => {
-        $(document).on("click", ".editing-mode-button",
+        $(document).on("click",
+            ".editing-mode-button",
             () => {
                 this.editingMode = !this.editingMode;
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
@@ -117,7 +118,7 @@
     toggleDivAndTextarea = () => {
         var page = $(".page");
         if (this.editingMode) { // changing div to textarea here
-            page.each((index: number, child:Element) => {
+            page.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
                 const ajax = this.util.loadPlainText(pageNumber);
                 const viewerElement = $(child).children(".viewer");
@@ -135,7 +136,7 @@
         }
     }
 
-    private createEditorAreaBody(child: Element, ajax:JQueryXHR) {
+    private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
         ajax.done((data: string) => {
             const plainText = data;
             const elm = `<div class="editor"><textarea>${plainText}</textarea></div>`;

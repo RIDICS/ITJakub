@@ -139,7 +139,7 @@
         jTextInputPanel.toggle();
     }
 
-    addCommentFromCommentArea(id: string, page: number, number: number) {
+    private addCommentFromCommentArea(id: string, page: number, number: number) {
         const nested = true;
         const time = Date.now();
         this.processCommentSendClick(nested, page, id, number, time);

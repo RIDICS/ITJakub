@@ -3,7 +3,7 @@
     private readonly util: Util;
     private readonly main: TextEditorMain;
 
-    constructor(commentArea: CommentArea, util: Util, main:TextEditorMain) {
+    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
@@ -11,7 +11,7 @@
 
     createPage(pageNumber: number) {
         const showPageNumber = this.main.getShowPageNumbers();
-        console.log("trying to create page " + pageNumber);//TODO debug
+        console.log("trying to create page " + pageNumber); //TODO debug
         let elm = "";
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         elm += "<div class=\"col-xs-7 composition-area\">";
@@ -24,7 +24,7 @@
         const html = $.parseHTML(elm);
         $(pageEl).append(html);
         this.appendRenderedText(pageNumber, showPageNumber);
-        this.commentArea.collapseIfCommentAreaIsTall(pageNumber,
+        this.commentArea.asyncConstructCommentArea(pageNumber,
             true,
             true); //collapse section on page load, collapse nested comments on page load
         this.commentArea.toggleAreaSizeIconHide(pageNumber);
