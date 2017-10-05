@@ -24,7 +24,6 @@
         const html = $.parseHTML(elm);
         $(pageEl).append(html);
         this.appendRenderedText(pageNumber, showPageNumber);
-        this.commentArea.constructCommentArea(pageNumber);
         this.commentArea.collapseIfCommentAreaIsTall(pageNumber,
             true,
             true); //collapse section on page load, collapse nested comments on page load

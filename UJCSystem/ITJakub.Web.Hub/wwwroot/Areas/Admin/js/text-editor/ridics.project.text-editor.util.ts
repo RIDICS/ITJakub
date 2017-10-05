@@ -165,32 +165,6 @@
         }
     }
 
-    getNestedCommentsNumber = (pageNumber: number): number[] => {
-        const content = this.parseLoadedCommentFiles(pageNumber);
-        var nestedComments: number[] = [];
-        var thread = 0;
-        if (content !== null && typeof content !== "undefined") {
-            let id = content[0].id;
-            nestedComments[0] = 0;
-            for (let i = 0; i < content.length; i++) {
-                const currentId = content[i].id;
-                if (currentId !== id) {
-                    thread++;
-                    id = currentId;
-                    nestedComments[thread] = 0;
-                }
-                if (content[i].nested) {
-
-                    nestedComments[thread]++;
-                }
-            }
-            return nestedComments;
-        } else {
-            console.log(`No comments on page ${pageNumber}`);//TODO debug
-            return null;
-        }
-    }
-
     private fromJson(jsonString: string): ICommentSctucture {
         if (jsonString !== null) {
             const stringObject = JSON.parse(jsonString);

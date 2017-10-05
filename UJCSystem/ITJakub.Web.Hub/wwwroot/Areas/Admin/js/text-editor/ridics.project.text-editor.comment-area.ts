@@ -113,6 +113,32 @@
         return html;
     }
 
+    getNestedCommentsNumber = (pageNumber: number): number[] => {
+        const content = this.constructCommentArea(pageNumber);
+        var nestedComments: number[] = [];
+        var thread = 0;
+        if (content !== null && typeof content !== "undefined") {
+            let id = content[0].id;
+            nestedComments[0] = 0;
+            for (let i = 0; i < content.length; i++) {
+                const currentId = content[i].id;
+                if (currentId !== id) {
+                    thread++;
+                    id = currentId;
+                    nestedComments[thread] = 0;
+                }
+                if (content[i].nested) {
+
+                    nestedComments[thread]++;
+                }
+            }
+            return nestedComments;
+        } else {
+            console.log(`No comments on page ${pageNumber}`);//TODO debug
+            return null;
+        }
+    }
+
     /**
      * Collapses comment area, adds buttons to enlarge
      * @param pageNumber - Number of page where to collapse comment area
@@ -120,7 +146,7 @@
      * @param nestedCommentCollapsed - Whether nested comments have to be collapsed
      */
     collapseIfCommentAreaIsTall = (pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) => {
-        var numberOfNestedComments = this.util.getNestedCommentsNumber(pageNumber);
+        var numberOfNestedComments = this.getNestedCommentsNumber(pageNumber);
         var areaContent = "";
         const ellipsisStart = "<div class=\"ellipsis-container\">";
         const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
@@ -181,11 +207,12 @@
         }
     }
 
-    constructCommentArea = (pageNumber: number) => {
+    constructCommentArea = (pageNumber: number):ICommentSctucture[] => {
         const content = this.util.parseLoadedCommentFiles(pageNumber);
         const html = this.constructCommentAreaHtml(content, pageNumber);
         const pageRow = $(`*[data-page="${pageNumber}"]`);;
         $(pageRow).append(html);
+        return content;
     }
 
     destroyCommentArea(pageNumber: number) {
@@ -253,7 +280,6 @@
 
     reloadCommentArea(page: number) {
         this.destroyCommentArea(page);
-        this.constructCommentArea(page);
         const commentAreaEl = $(`*[data-page="${page}"]`).children(".composition-area").siblings(".comment-area");
         const sectionWasCollapsed = $(commentAreaEl).hasClass("comment-area-collapsed");
         const nestedCommentsCollapsed = $(commentAreaEl).children(".media-list").children(".media")
