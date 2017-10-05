@@ -79,9 +79,9 @@
             "button.respond-to-comment",
             (event: JQueryEventObject) => { // Process click on "Respond" button
                 const target = event.target as HTMLElement;
-                const compositionAreaPage =
-                    $(target).parents(".comment-area").siblings(".composition-area").children(".page");
-                var page = $(compositionAreaPage).data("page") as number;
+                const pageRow =
+                    $(target).parents(".comment-area").parent(".page-row");
+                var page = $(pageRow).data("page") as number;
                 const uniqueIdWithText = $(target).parent().siblings(".main-comment").attr("id");
                 var uniqueId = uniqueIdWithText.replace("-comment", "");
                 if (uniqueId !== null && typeof uniqueId !== "undefined") {
