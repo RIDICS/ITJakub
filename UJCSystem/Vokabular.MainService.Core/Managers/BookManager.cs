@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Search;
@@ -17,11 +19,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
+        private readonly BookRepository m_bookRepository;
 
-        public BookManager(MetadataRepository metadataRepository, MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor)
+        public BookManager(MetadataRepository metadataRepository, MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
+            m_bookRepository = bookRepository;
         }
 
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
@@ -212,6 +216,55 @@ namespace Vokabular.MainService.Core.Managers
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
             return result;
+        }
+
+        public List<PageContract> GetBookPageList(long projectId)
+        {
+            var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageList(projectId));
+            var result = Mapper.Map<List<PageContract>>(listResult);
+            return result;
+        }
+
+        public List<ChapterContract> GetBookChapterList(long projectId)
+        {
+            var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetChapterList(projectId));
+            var result = Mapper.Map<List<ChapterContract>>(listResult);
+            return result;
+        }
+
+        public List<TermContract> GetPageTermList(long resourcePageId)
+        {
+            var listResult = m_bookRepository.InvokeUnitOfWork(x => x.GetPageTermList(resourcePageId));
+            var result = Mapper.Map<List<TermContract>>(listResult);
+            return result;
+        }
+
+        public bool HasBookPageText(long resourcePageId)
+        {
+            var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
+            return textResourceList.Count > 0;
+        }
+
+        public bool HasBookPageImage(long resourcePageId)
+        {
+            var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
+            return imageResourceList.Count > 0;
+        }
+
+        public string GetPageText(long resourcePageId)
+        {
+            var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
+
+            // TODO get text from Fulltext Service
+            throw new NotImplementedException();
+        }
+
+        public Stream GetPageImage(long resourcePageId)
+        {
+            var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
+
+            // TODO get image form File Storage
+            throw new NotImplementedException();
         }
     }
 }

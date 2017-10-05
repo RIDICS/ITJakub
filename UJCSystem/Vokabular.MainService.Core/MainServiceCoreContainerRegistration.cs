@@ -26,6 +26,7 @@ namespace Vokabular.MainService.Core
 
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
+            container.AddSingleton<Profile, ChapterProfile>();
             container.AddSingleton<Profile, KeywordProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
@@ -36,6 +37,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, ProjectProfile>();
             container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, TermProfile>();
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
             container.AddSingleton<Profile, UserProfile>();

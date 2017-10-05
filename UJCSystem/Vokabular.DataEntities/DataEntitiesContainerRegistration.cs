@@ -12,6 +12,7 @@ namespace Vokabular.DataEntities
         {
             container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
 
+            container.AddPerWebRequest<BookRepository>();
             container.AddPerWebRequest<CategoryRepository>();
             container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<PersonRepository>();
