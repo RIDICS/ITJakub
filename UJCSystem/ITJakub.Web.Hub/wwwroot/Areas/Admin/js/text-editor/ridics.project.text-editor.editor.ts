@@ -14,6 +14,10 @@
         return this.currentPageNumber;
     }
 
+    getIsEditingMode() {
+        return this.editingMode;
+    }
+
     addCommentFromEditor = (editor: SimpleMDE) => {
         const currentPageNumber = this.getCurrentPageNumber();
         const time = Date.now();

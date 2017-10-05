@@ -26,7 +26,7 @@ class TextEditorMain {
         const commentArea = new CommentArea(util);
         const commentInput = new CommentInput(commentArea, util);
         const pageTextEditor = new Editor(commentInput, util);
-        const pageStructure = new PageStructure(commentArea, util, this);
+        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const ajax = util.getNumberOfPages("id");
         pageTextEditor.processPageModeSwitch();
