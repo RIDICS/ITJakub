@@ -107,7 +107,7 @@
     }
 
     processPageModeSwitch = () => {
-        $(document).on("click",
+        $("#project-resource-preview").on("click",
             ".editing-mode-button",
             () => {
                 this.editingMode = !this.editingMode;
@@ -120,22 +120,24 @@
     }
 
     toggleDivAndTextarea = () => {
-        var page = $(".page");
+        var pageRow = $(".lazyloaded");
         if (this.editingMode) { // changing div to textarea here
-            page.each((index: number, child: Element) => {
+            pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
+                const page = $(child).children(".composition-area").children(".page");
                 const ajax = this.util.loadPlainText(pageNumber);
-                const viewerElement = $(child).children(".viewer");
+                const viewerElement = $(page).children(".viewer");
                 viewerElement.remove();
-                this.createEditorAreaBody(child, ajax);
+                this.createEditorAreaBody(page[0], ajax);
             });
         } else { // changing textarea to div here
-            page.each((index: number, child: Element) => {
+            pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
+                const page = $(child).children(".composition-area").children(".page");
                 const ajax = this.util.loadRenderedText(pageNumber);
-                const editorElement = $(child).children(".editor");
+                const editorElement = $(page).children(".editor");
                 editorElement.remove();
-                this.createViewerAreaBody(child, ajax);
+                this.createViewerAreaBody(page[0], ajax);
             });
         }
     }

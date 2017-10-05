@@ -279,7 +279,7 @@
     }
 
     processToggleNestedCommentClick() {
-        $(document).on("click", ".toggle-nested-comments",
+        $("#project-resource-preview").on("click", ".toggle-nested-comments",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 const editorPageContainer = ".pages-start";
@@ -322,7 +322,7 @@
     }
 
     processToggleCommentAresSizeClick() {
-        $(document).on("click", ".toggleCommentViewAreaSize",
+        $("#project-resource-preview").on("click", ".toggleCommentViewAreaSize",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 var target = $(event.target as HTMLElement);

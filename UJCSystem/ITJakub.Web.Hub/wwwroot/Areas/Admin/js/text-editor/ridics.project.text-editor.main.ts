@@ -110,7 +110,7 @@ class TextEditorMain {
     }
 
     private attachEventToGoToPageButton() {
-        $(document).on("click",
+        $("#project-resource-preview").on("click",
             ".go-to-page-button",
             () => {
                 this.processPageInputField();
@@ -118,7 +118,7 @@ class TextEditorMain {
     }
 
     private attachEventInputFieldEnterKey() {
-        $(document).on("keypress",
+        $("#project-resource-preview").on("keypress",
             ".go-to-page-field",
             (event) => {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -129,7 +129,7 @@ class TextEditorMain {
     }
 
     private attachEventShowPageCheckbox() {
-        $(document).on("click",
+        $("#project-resource-preview").on("click",
             ".display-page-checkbox",
             () => {
                 const isChecked = $(".display-page-checkbox").prop("checked");
@@ -150,6 +150,7 @@ class TextEditorMain {
     private processPageInputField() {
         const inputField = $(".go-to-page-field");
         const page = parseInt(inputField.val());
+        console.log(page);
         if (page > this.numberOfPages || page < 1) {
             alert(`Page ${page} does not exist`);
             inputField.val("");
@@ -175,7 +176,6 @@ class TextEditorMain {
             if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
                 this.scrollToPage(pageNumber);
             }
-            $(".preloading-pages-spinner").hide();
         } else {
             this.scrollToPage(pageNumber);
         }
@@ -189,6 +189,7 @@ class TextEditorMain {
                 var page = pageEl.data("page") as number;
                 if (page === this.pageToSkipTo) {
                     this.scrollToPage(page);
+                    $(".preloading-pages-spinner").hide();
                 }
             });
     }

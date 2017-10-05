@@ -60,6 +60,7 @@
                 const compositionAreaDiv = pageEl.find(".rendered-text");
                 const pageBody = data;
                 $(compositionAreaDiv).append(pageBody);
+                $(pageEl).children(".image-placeholder").remove();
             }
         });
 
@@ -71,8 +72,8 @@
             if (data !== "error-no-file") {
                 const pageEl = $(`*[data-page="${pageNumber}"]`);
                 const textArea = pageEl.find(".plain-text");
-                console.log(textArea);
                 $(textArea).val(data);
+                $(pageEl).children(".image-placeholder").remove();
             }
         });
 
