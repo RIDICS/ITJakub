@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
-using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.Search
 {
-    public class SearchByCriteriaWork : UnitOfWorkBase<IList<MetadataResource>>
+    public class SearchAudioByCriteriaWork : UnitOfWorkBase<IList<MetadataResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
 
-        public SearchByCriteriaWork(MetadataRepository metadataRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
+        public SearchAudioByCriteriaWork(MetadataRepository metadataRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_queryCreator = queryCreator;
@@ -25,13 +24,14 @@ namespace Vokabular.MainService.Core.Works.Search
 
             var metadataIdList = metadataList.Select(x => x.Id);
             m_metadataRepository.GetMetadataWithFetchForBiblModule(metadataIdList);
-
+            
             var projectIdList = metadataList.Select(x => x.Resource.Project.Id);
-            PageCounts = m_metadataRepository.GetPageCount(projectIdList);
+            var fullBookRecordings = m_metadataRepository.GetFullBookRecordings(projectIdList);
+            FullBookRecordingsByProjectId = fullBookRecordings.GroupBy(key => key.Resource.Project.Id).ToDictionary(key => key.Key, val => val.ToList());
 
             return metadataList;
         }
 
-        public IList<PageCountResult> PageCounts { get; set; }
+        public Dictionary<long, List<AudioResource>> FullBookRecordingsByProjectId { get; set; }
     }
 }

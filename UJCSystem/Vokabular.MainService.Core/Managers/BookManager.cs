@@ -228,6 +228,45 @@ namespace Vokabular.MainService.Core.Managers
             //return searchResultFullContext;
         }
 
+        public List<AudioBookSearchResultContract> SearchAudioByCriteria(SearchRequestContract request)
+        {
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Sort = request.Sort,
+                SortDirection = request.SortDirection,
+                Start = request.Start,
+                Count = request.Count
+            };
+            
+            // Search only in relational DB
+
+            var searchByCriteriaWork = new SearchAudioByCriteriaWork(m_metadataRepository, queryCreator);
+            var dbResult = searchByCriteriaWork.Execute();
+
+            //var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
+            var resultList = new List<AudioBookSearchResultContract>(dbResult.Count);
+            foreach (var dbMetadata in dbResult)
+            {
+                var resultItem = Mapper.Map<AudioBookSearchResultContract>(dbMetadata);
+                resultList.Add(resultItem);
+
+                if (searchByCriteriaWork.FullBookRecordingsByProjectId.TryGetValue(dbMetadata.Resource.Project.Id, out var audioList))
+                {
+                    resultItem.FullBookRecordings = Mapper.Map<List<AudioContract>>(audioList);
+                }
+                else
+                {
+                    resultItem.FullBookRecordings = new List<AudioContract>();
+                }
+            }
+            
+            return resultList;
+        }
 
         public long SearchByCriteriaCount(SearchRequestContract request)
         {
@@ -253,6 +292,11 @@ namespace Vokabular.MainService.Core.Managers
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
             var result = Mapper.Map<SearchResultDetailContract>(metadataResult);
             return result;
+        }
+
+        public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
+        {
+            throw new NotImplementedException(); // TODO create UnitOfWork class (probably two queries will be required)
         }
 
         public List<PageContract> GetBookPageList(long projectId)

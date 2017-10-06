@@ -24,6 +24,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
 
+            container.AddSingleton<Profile, AudioProfile>();
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
             container.AddSingleton<Profile, ChapterProfile>();
@@ -40,6 +41,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, TermProfile>();
             container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
+            container.AddSingleton<Profile, TrackProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
             container.Install<CoreContainerRegistration>();

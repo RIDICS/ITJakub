@@ -89,4 +89,11 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public IList<string> LiteraryGenres { get; set; }
     }
+
+    public class AudioBookSearchResultContract : SearchResultContract
+    {
+        public IList<TrackWithRecordingContract> Tracks { get; set; }
+
+        public IList<AudioContract> FullBookRecordings { get; set; }
+    }
 }

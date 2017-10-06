@@ -60,6 +60,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.Resource.Project.LiteraryGenres))
                 .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.Resource.Project.LiteraryKinds))
                 .ForMember(dest => dest.LiteraryOriginals, opt => opt.MapFrom(src => src.Resource.Project.LiteraryOriginals));
+
+            CreateMap<MetadataResource, AudioBookSearchResultContract>()
+                .IncludeBase<MetadataResource, SearchResultContract>();
         }
     }
 }

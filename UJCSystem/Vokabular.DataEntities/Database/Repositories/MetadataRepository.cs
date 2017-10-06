@@ -261,6 +261,25 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public IList<AudioResource> GetFullBookRecordings(IEnumerable<long> projectIdList)
+        {
+            Resource resourceAlias = null;
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+            
+            var result = GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(x => x.ParentResource == null && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .AndRestrictionOn(() => projectAlias.Id).IsInG(projectIdList)
+                .OrderBy(() => projectAlias.Id).Asc
+                .OrderBy(x => x.AudioType).Asc
+                .List();
+
+            return result;
+        }
+
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;
