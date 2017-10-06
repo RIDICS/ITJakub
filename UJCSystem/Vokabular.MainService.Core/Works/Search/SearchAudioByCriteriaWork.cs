@@ -10,11 +10,13 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchAudioByCriteriaWork : UnitOfWorkBase<IList<MetadataResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly BookRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
 
-        public SearchAudioByCriteriaWork(MetadataRepository metadataRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
+        public SearchAudioByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
+            m_bookRepository = bookRepository;
             m_queryCreator = queryCreator;
         }
 
@@ -26,7 +28,7 @@ namespace Vokabular.MainService.Core.Works.Search
             m_metadataRepository.GetMetadataWithFetchForBiblModule(metadataIdList);
             
             var projectIdList = metadataList.Select(x => x.Resource.Project.Id);
-            var fullBookRecordings = m_metadataRepository.GetFullBookRecordings(projectIdList);
+            var fullBookRecordings = m_bookRepository.GetFullBookRecordings(projectIdList);
             FullBookRecordingsByProjectId = fullBookRecordings.GroupBy(key => key.Resource.Project.Id).ToDictionary(key => key.Key, val => val.ToList());
 
             return metadataList;

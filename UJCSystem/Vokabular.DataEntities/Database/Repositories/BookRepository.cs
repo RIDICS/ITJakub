@@ -11,6 +11,58 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
+        public virtual IList<AudioResource> GetFullBookRecordings(IEnumerable<long> projectIdList)
+        {
+            Resource resourceAlias = null;
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(x => x.ParentResource == null && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .AndRestrictionOn(() => projectAlias.Id).IsInG(projectIdList)
+                .OrderBy(() => projectAlias.Id).Asc
+                .OrderBy(x => x.AudioType).Asc
+                .List();
+
+            return result;
+        }
+
+        public IList<AudioResource> GetRecordings(long projectId)
+        {
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<AudioResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Fetch(x => x.Resource).Eager
+                .OrderBy(x => x.ParentResource).Asc
+                .OrderBy(x => x.AudioType).Asc
+                .List();
+
+            return result;
+        }
+
+        public IList<TrackResource> GetTracks(long projectId)
+        {
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<TrackResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Fetch(x => x.Resource).Eager
+                .OrderBy(x => x.Position).Asc
+                .List();
+
+            return result;
+        }
+
         public virtual IList<PageResource> GetPageList(long projectId)
         {
             Resource resourceAlias = null;

@@ -261,25 +261,6 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<AudioResource> GetFullBookRecordings(IEnumerable<long> projectIdList)
-        {
-            Resource resourceAlias = null;
-            Snapshot snapshotAlias = null;
-            Project projectAlias = null;
-            
-            var result = GetSession().QueryOver<AudioResource>()
-                .JoinAlias(x => x.Resource, () => resourceAlias)
-                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
-                .Where(x => x.ParentResource == null && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
-                .AndRestrictionOn(() => projectAlias.Id).IsInG(projectIdList)
-                .OrderBy(() => projectAlias.Id).Asc
-                .OrderBy(x => x.AudioType).Asc
-                .List();
-
-            return result;
-        }
-
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;
@@ -344,7 +325,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result.Value;
         }
 
-        public IList<string> GetPublisherAutocomplete(string query, int count)
+        public virtual IList<string> GetPublisherAutocomplete(string query, int count)
         {
             query = EscapeQuery(query);
 
@@ -360,7 +341,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<string> GetCopyrightAutocomplete(string query, int count)
+        public virtual IList<string> GetCopyrightAutocomplete(string query, int count)
         {
             query = EscapeQuery(query);
 
@@ -377,7 +358,7 @@ namespace Vokabular.DataEntities.Database.Repositories
         }
 
 
-        public IList<string> GetManuscriptRepositoryAutocomplete(string query, int count)
+        public virtual IList<string> GetManuscriptRepositoryAutocomplete(string query, int count)
         {
             query = EscapeQuery(query);
 
@@ -393,7 +374,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List<string>();
         }
 
-        public IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
+        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
         {
             queryString = EscapeQuery(queryString);
 

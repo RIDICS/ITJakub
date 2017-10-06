@@ -16,6 +16,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
                 .ForMember(dest => dest.ChapterId, opt => opt.MapFrom(src => src.ResourceChapter.Id))
                 .ForMember(dest => dest.BeginningPageId, opt => opt.MapFrom(src => src.ResourceBeginningPage.Id));
+
+            CreateMap<TrackResource, TrackWithRecordingContract>()
+                .IncludeBase<TrackResource, TrackContract>();
         }
     }
 }

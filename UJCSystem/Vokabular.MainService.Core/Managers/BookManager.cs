@@ -245,7 +245,7 @@ namespace Vokabular.MainService.Core.Managers
             
             // Search only in relational DB
 
-            var searchByCriteriaWork = new SearchAudioByCriteriaWork(m_metadataRepository, queryCreator);
+            var searchByCriteriaWork = new SearchAudioByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
             var dbResult = searchByCriteriaWork.Execute();
 
             //var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
@@ -296,7 +296,30 @@ namespace Vokabular.MainService.Core.Managers
 
         public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
         {
-            throw new NotImplementedException(); // TODO create UnitOfWork class (probably two queries will be required)
+            var audioBookDetailWork = new GetAudioBookDetailWork(m_metadataRepository, m_bookRepository, projectId);
+            var dbResult = audioBookDetailWork.Execute();
+
+            var bookInfo = Mapper.Map<AudioBookSearchResultContract>(dbResult);
+
+            var audioResourceByTrackId = audioBookDetailWork.Recordings.Where(x => x.ParentResource != null)
+                .GroupBy(key => key.ParentResource.Id)
+                .ToDictionary(key => key.Key, val => val.ToList());
+
+            var trackList = new List<TrackWithRecordingContract>(audioBookDetailWork.Tracks.Count);
+            foreach (var trackResource in audioBookDetailWork.Tracks)
+            {
+                var track = Mapper.Map<TrackWithRecordingContract>(trackResource);
+                trackList.Add(track);
+
+                if (audioResourceByTrackId.TryGetValue(trackResource.Resource.Id, out var audioList))
+                {
+                    track.Recordings = Mapper.Map<List<AudioContract>>(audioList);
+                }
+            }
+
+            bookInfo.Tracks = trackList;
+
+            return bookInfo;
         }
 
         public List<PageContract> GetBookPageList(long projectId)
