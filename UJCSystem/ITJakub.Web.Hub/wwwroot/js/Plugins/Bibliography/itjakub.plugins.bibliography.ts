@@ -340,15 +340,18 @@ class BibliographyModule {
 //}
 
 //functions used in VariableInterpreter.interpretScript
-var audioTypeTranslation = [
-    "Neznámý",
-    "Mp3",
-    "Ogg",
-    "Wav"
-];
 
-function translateAudioType(audioType: number): string {
-    return audioTypeTranslation[audioType];
+function translateAudioType(audioType: AudioType): string {
+    switch (audioType) {
+        case AudioType.Mp3:
+            return "Mp3";
+        case AudioType.Ogg:
+            return "Ogg";
+        case AudioType.Wav:
+            return "Wav";
+        default:
+            return "Neznámý";
+    }
 }
 
 function fillLeadingZero(seconds: number): string {

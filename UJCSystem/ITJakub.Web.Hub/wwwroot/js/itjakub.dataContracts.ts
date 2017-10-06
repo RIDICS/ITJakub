@@ -181,6 +181,13 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+enum AudioType {
+    Unknown = "Unknown",
+    Mp3 = "Mp3",
+    Ogg = "Ogg",
+    Wav = "Wav",
+}
+
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {
 //    None = "None",

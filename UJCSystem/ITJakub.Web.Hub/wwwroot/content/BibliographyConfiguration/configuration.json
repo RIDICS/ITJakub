@@ -488,7 +488,7 @@
         },
         "$translateAudioType": {
           "type": "script",
-          "pattern": "translateAudioType({AudioType});",
+          "pattern": "translateAudioType(\"{AudioType}\");",
           "printIfNullValue": false
         }
       }
@@ -526,7 +526,7 @@
         },
         "$printLength": {
           "type": "script",
-          "scope": "Length",
+          "scope": "Duration",
           "pattern": "getAudioLengthString(\"{$this}\")"
         },
         "$trackRecordings": {
@@ -543,7 +543,7 @@
         },
         "$translateAudioType": {
           "type": "script",
-          "pattern": "translateAudioType({AudioType});",
+          "pattern": "translateAudioType(\"{AudioType}\");",
           "printIfNullValue": false
         }
       }

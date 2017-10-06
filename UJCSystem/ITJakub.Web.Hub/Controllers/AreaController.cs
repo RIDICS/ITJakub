@@ -119,7 +119,7 @@ namespace ITJakub.Web.Hub.Controllers
             }
         }
         
-        private List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
+        protected List<SearchCriteriaContract> CreateTextCriteriaList(CriteriaKey key, string text)
         {
             var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
 
@@ -142,6 +142,19 @@ namespace ITJakub.Web.Hub.Controllers
             return listSearchCriteriaContracts;
         }
 
+        protected void AddCategoryCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
+        {
+            if (selectedBookIds != null || selectedCategoryIds != null)
+            {
+                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                {
+                    BookType = AreaBookType,
+                    SelectedBookIds = selectedBookIds,
+                    SelectedCategoryIds = selectedCategoryIds
+                });
+            }
+        }
+
         protected long SearchByCriteriaTextCount(CriteriaKey key, string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var listSearchCriteriaContracts = CreateTextCriteriaList(key, text);
@@ -159,15 +172,7 @@ namespace ITJakub.Web.Hub.Controllers
 
         protected long SearchByCriteriaCount(List<SearchCriteriaContract> listSearchCriteriaContracts, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
             using (var client = GetRestClient())
             {
@@ -212,15 +217,7 @@ namespace ITJakub.Web.Hub.Controllers
             //    //}
             //});
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
             using (var client = GetRestClient())
             {

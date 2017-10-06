@@ -656,6 +656,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<AudioBookSearchResultContract>>("audiobook/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public long SearchBookCount(SearchRequestContract request)
         {
             try
@@ -677,6 +693,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Get<SearchResultDetailContract>($"book/{projectId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
+        {
+            try
+            {
+                var result = Get<AudioBookSearchResultContract>($"audiobook/{projectId}");
                 return result;
             }
             catch (HttpRequestException e)
