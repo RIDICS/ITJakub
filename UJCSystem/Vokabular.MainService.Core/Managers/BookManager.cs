@@ -4,13 +4,16 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Search;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
@@ -36,6 +39,22 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
+        private List<SearchResultContract> MapToSearchResult(IList<MetadataResource> dbResult,
+            IList<PageCountResult> dbPageCounts)
+        {
+            var resultList = new List<SearchResultContract>(dbResult.Count);
+            foreach (var dbMetadata in dbResult)
+            {
+                var resultItem = Mapper.Map<SearchResultContract>(dbMetadata);
+                resultList.Add(resultItem);
+
+                var pageCountItem = dbPageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
+                resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
+            }
+
+            return resultList;
+        }
+
         public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
         {
             // TODO add authorization
@@ -53,20 +72,38 @@ namespace Vokabular.MainService.Core.Managers
                 Count = request.Count
             };
 
-            var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator);
-            var dbResult = searchByCriteriaWork.Execute();
-            
-            var resultList = new List<SearchResultContract>(dbResult.Count);
-            foreach (var dbMetadata in dbResult)
+            if (processedCriterias.NonMetadataCriterias.Count > 0)
             {
-                var resultItem = Mapper.Map<SearchResultContract>(dbMetadata);
-                resultList.Add(resultItem);
+                // Search in fulltext DB
 
-                var pageCountItem = searchByCriteriaWork.PageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
-                resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
+                var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+                var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
+                {
+                    Key = CriteriaKey.ResultRestriction,
+                    ProjectIds = projectIdList
+                };
+                nonMetadataCriterias.Add(projectRestrictionCriteria);
+
+                // TODO send request to fulltext DB and remove this mock:
+                var mockResultProjectIdList = new List<long>(){1};
+
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
+                var dbResult = searchByCriteriaFulltextResultWork.Execute();
+
+                var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts);
+                return resultList;
             }
+            else
+            {
+                // Search in relational DB
 
-            return resultList;
+                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator);
+                var dbResult = searchByCriteriaWork.Execute();
+
+                var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
+                return resultList;
+            }
             
 
             // If no book restriction is set, filter books in SQL and prepare for searching in eXistDB

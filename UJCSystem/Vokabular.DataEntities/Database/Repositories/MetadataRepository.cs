@@ -198,6 +198,17 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual IList<long> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        {
+            var session = GetSession();
+
+            var query = session.CreateQuery(creator.GetProjectIdListQueryString())
+                .SetPaging(creator)
+                .SetParameters(creator);
+            var result = query.List<long>();
+            return result;
+        }
+
         public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataIdList)
         {
             var session = GetSession();
@@ -207,6 +218,24 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.Resource.Project).Eager
                 //.Fetch(x => x.Resource.Project.Authors).Eager // Authors are used from Metadata
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProject(IEnumerable<long> projectIdList)
+        {
+            Resource resourceAlias = null;
+
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
                 .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
                 .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
                 .List();

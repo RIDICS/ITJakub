@@ -58,6 +58,15 @@ namespace Vokabular.DataEntities.Database.Search
             return queryString;
         }
 
+        public string GetProjectIdListQueryString()
+        {
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            
+            var queryString = $"select distinct project.Id {FromClause} {joinAndWhereClause}";
+
+            return queryString;
+        }
+
         public string GetQueryStringForCount()
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);

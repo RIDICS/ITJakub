@@ -34,4 +34,27 @@ namespace Vokabular.MainService.Core.Works.Search
 
         public IList<PageCountResult> PageCounts { get; set; }
     }
+
+    public class SearchByCriteriaFulltextResultWork : UnitOfWorkBase<IList<MetadataResource>>
+    {
+        private readonly MetadataRepository m_metadataRepository;
+        private readonly IList<long> m_projectIdList;
+
+        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, IList<long> projectIdList) : base(metadataRepository)
+        {
+            m_metadataRepository = metadataRepository;
+            m_projectIdList = projectIdList;
+        }
+
+        protected override IList<MetadataResource> ExecuteWorkImplementation()
+        {
+            var metadataList = m_metadataRepository.GetMetadataWithFetchForBiblModuleByProject(m_projectIdList);
+
+            PageCounts = m_metadataRepository.GetPageCount(m_projectIdList);
+
+            return metadataList;
+        }
+
+        public IList<PageCountResult> PageCounts { get; set; }
+    }
 }
