@@ -16,6 +16,7 @@ using ITJakub.Web.Hub.Models.Requests.Dictionary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -138,10 +139,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View("Feedback/FeedbackSuccess");
         }
 
-        private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
+        private List<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            return Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            return Mapper.Map<List<SearchCriteriaContract>>(deserialized);
         }
 
         private WordListCriteriaContract CreateWordListContract(CriteriaKey criteriaKey, string text)
@@ -283,31 +284,57 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
 
-            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
+            //if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            //{
+            //    listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
+            //}
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                };
+                var resultCount = client.SearchHeadwordCount(newRequest);
                 return Json(resultCount);
             }
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+            //    return Json(resultCount);
+            //}
         }
 
         [HttpPost]
         public ActionResult SearchCriteria([FromBody] DictionarySearchCriteriaRequest request)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
-            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count));
+            //listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count)); //not required
 
-            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            //if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            //{
+            //    listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
+            //}
+            AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
+
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+            //    return Json(result);
+            //}
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
-                return Json(result);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = request.Start,
+                    Count = request.Count,
+                };
+                var resultCount = client.SearchHeadword(newRequest);
+                // TODO return data in format required by Dictionary reader
+                return Json(resultCount);
             }
         }
 

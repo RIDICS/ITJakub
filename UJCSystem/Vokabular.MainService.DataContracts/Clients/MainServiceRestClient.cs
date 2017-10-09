@@ -656,6 +656,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<HeadwordItemContract> SearchHeadword(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<HeadwordItemContract>>("headword/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
         {
             try
@@ -677,6 +693,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Post<int>("book/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHeadwordCount(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<int>("headword/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)

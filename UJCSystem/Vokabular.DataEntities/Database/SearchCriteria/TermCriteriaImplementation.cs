@@ -33,6 +33,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 
             return new SearchCriteriaQuery
             {
+                CriteriaKey = CriteriaKey,
                 Join = string.Format("inner join project.Resources {0} inner join {0}.ResourceVersions {1} inner join {1}.Terms {2}", resourceAlias, pageResourceAlias, termAlias),
                 Where = whereBuilder.ToString(),
             };

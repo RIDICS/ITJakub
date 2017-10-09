@@ -29,6 +29,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
             
             return new SearchCriteriaQuery
             {
+                CriteriaKey = CriteriaKey,
                 Join = string.Empty,
                 Where = whereBuilder.ToString(),
             };

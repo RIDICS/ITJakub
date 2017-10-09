@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using Vokabular.DataEntities.Database.Search;
@@ -11,15 +10,11 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 {
     public class HeadwordCriteriaImplementation : ICriteriaImplementationBase
     {
-        public CriteriaKey CriteriaKey
-        {
-            get { return CriteriaKey.Headword; }
-        }
+        public CriteriaKey CriteriaKey => CriteriaKey.Headword;
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
-            var bookHeadwordAlias = string.Format("bh{0}", Guid.NewGuid().ToString("N"));
             var whereBuilder = new StringBuilder();
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
@@ -29,14 +24,15 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                     whereBuilder.Append(" or");
                 }
 
-                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
-                whereBuilder.AppendFormat(" {0}.Headword like (:{1})", bookHeadwordAlias, uniqueParameterName);
+                var uniqueParameterName = $"param{metadataParameters.Count}";
+                whereBuilder.AppendFormat(" headwordItem.Headword like (:{0})", uniqueParameterName);
                 metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
-                Join = string.Format("inner join bv.BookHeadwords {0}", bookHeadwordAlias),
+                CriteriaKey = CriteriaKey,
+                Join = string.Empty,
                 Where = whereBuilder.ToString()
             };
         }

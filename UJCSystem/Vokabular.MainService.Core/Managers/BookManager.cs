@@ -287,6 +287,75 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
+        {
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+            var resultCriteria = processedCriterias.ResultCriteria;
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Start = request.Start,
+                Count = request.Count
+            };
+
+            if (processedCriterias.NonMetadataCriterias.Count > 0)
+            {
+                // TODO: Search in fulltext DB
+
+                //var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+                //var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
+                //{
+                //    Key = CriteriaKey.ResultRestriction,
+                //    ProjectIds = projectIdList
+                //};
+                //nonMetadataCriterias.Add(projectRestrictionCriteria);
+
+                //// TODO send request to fulltext DB and remove this mock:
+                //var mockResultProjectIdList = new List<long>() { 1 };
+
+                //var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
+                //var dbResult = searchByCriteriaFulltextResultWork.Execute();
+
+                //var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts);
+                //return resultList;
+            }
+            else
+            {
+                // Search in relational DB
+
+                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, queryCreator);
+                var dbResult = searchByCriteriaWork.Execute();
+
+                var resultList = Mapper.Map<List<HeadwordContract>>(dbResult);
+                return resultList;
+            }
+
+
+            throw new NotImplementedException();
+        }
+
+        public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
+        {
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Start = request.Start,
+                Count = request.Count
+            };
+
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
+            return result;
+        }
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));

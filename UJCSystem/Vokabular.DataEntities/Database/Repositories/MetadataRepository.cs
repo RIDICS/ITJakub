@@ -187,6 +187,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual long SearchHeadwordByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetHeadwordQueryStringForCount())
+                .SetParameters(creator);
+            var result = query.UniqueResult<long>();
+            return result;
+        }
+
         public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
             var session = GetSession();
@@ -206,6 +214,15 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SetPaging(creator)
                 .SetParameters(creator);
             var result = query.List<long>();
+            return result;
+        }
+
+        public virtual IList<HeadwordResource> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetHeadwordQueryString())
+                .SetPaging(creator)
+                .SetParameters(creator);
+            var result = query.List<HeadwordResource>();
             return result;
         }
 

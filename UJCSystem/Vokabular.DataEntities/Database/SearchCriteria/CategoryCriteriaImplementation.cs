@@ -79,6 +79,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
             
             return new SearchCriteriaQuery
             {
+                CriteriaKey = CriteriaKey,
                 Join = joinBuilder.ToString(),
                 Where = whereBuilder.ToString()
             };

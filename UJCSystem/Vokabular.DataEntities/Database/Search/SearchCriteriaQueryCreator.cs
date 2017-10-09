@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using NHibernate;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
@@ -16,6 +17,7 @@ namespace Vokabular.DataEntities.Database.Search
         private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
         // inner join to LatestPublishedSnapshots filters result only to published Projects
         private const string ResultFromClause = "from MetadataResource metadata1 inner join metadata1.Resource resource1";// left outer join resource1.Project project1 inner join project1.LatestPublishedSnapshot snapshot1";
+        private const string HeadwordFromClause = "from HeadwordResource headword inner join headword.Resource resource1 inner join headword.HeadwordItems headwordItem";
 
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
@@ -76,27 +78,24 @@ namespace Vokabular.DataEntities.Database.Search
             return queryString;
         }
 
-        public string GetQueryStringForBookVersionPair()
+        public string GetHeadwordQueryString()
         {
-            var queryString =
-                "select b.Guid as Guid, min(bv.VersionId) as VersionId from Book b inner join b.LastVersion bv";
-
-            var whereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
-
-            queryString = string.Format("{0}{1} group by b.Guid", queryString, whereClause);
-
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
+            
+            var queryString = $"select headword {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) order by headword.Sorting asc";
+            
             return queryString;
         }
 
-        public string GetQueryStringForIdList()
+        public string GetHeadwordQueryStringForCount()
         {
-            var queryString =
-                "select b.Id from Book b inner join b.LastVersion bv";
+            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
+            var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
 
-            var whereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
-
-            queryString = string.Format("{0}{1} group by b.Id", queryString, whereClause);
-
+            //var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where {FromClause} {joinAndWhereClause}"; // TODO missing joins for headword restrictions
+            var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause})";
+            
             return queryString;
         }
 
@@ -107,7 +106,7 @@ namespace Vokabular.DataEntities.Database.Search
 
             whereBuilder.Append(" where metadata.Id = resource.LatestVersion.Id");
 
-            foreach (var criteriaQuery in conjunctionQuery)
+            foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey != CriteriaKey.Headword))
             {
                 if (!string.IsNullOrEmpty(criteriaQuery.Join))
                     joinBuilder.Append(' ').Append(criteriaQuery.Join);
@@ -117,6 +116,19 @@ namespace Vokabular.DataEntities.Database.Search
             }
 
             return string.Format("{0}{1}", joinBuilder, whereBuilder);
+        }
+
+        private string CreateWhereConditionForHeadwords(List<SearchCriteriaQuery> conjunctionQuery)
+        {
+            var whereBuilder = new StringBuilder();
+
+            foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey == CriteriaKey.Headword))
+            {
+                whereBuilder.Append(" and");
+                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
+            }
+
+            return whereBuilder.ToString();
         }
 
         private string CreateOrderByClause(string metadataAlias)
@@ -153,29 +165,6 @@ namespace Vokabular.DataEntities.Database.Search
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-
-        public string GetQueryStringForHeadwordCount()
-        {
-            var selectQueryString =
-                "select b1.Id as BookId, count(distinct bh1.XmlEntryId) as HeadwordCount from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
-
-            selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery group by b1.Id", selectQueryString, GetQueryStringForIdList());
-            return selectQueryString;
-        }
-
-        public string GetQueryStringForHeadwordList()
-        {
-            var selectQueryString =
-                "select distinct b1.Guid as BookGuid, bv1.VersionId as BookVersionId, bv1.Title as BookTitle, bv1.Acronym as BookAcronym, bh1.DefaultHeadword as Headword, bh1.XmlEntryId as XmlEntryId, bh1.SortOrder as SortOrder, bh1.Image as Image from Book b1 inner join b1.LastVersion bv1 inner join bv1.BookHeadwords bh1";
-
-            selectQueryString = string.Format("{0} where b1.Id in ({1}) and bh1.Headword like :headwordQuery order by bh1.SortOrder", selectQueryString, GetQueryStringForIdList());
-            return selectQueryString;
-        }
-
-        public void SetHeadwordQueryParameter(string headwordQuery)
-        {
-            m_headwordQueryParameter = headwordQuery;
         }
     }
 
