@@ -78,12 +78,12 @@ namespace Vokabular.DataEntities.Database.Search
             return queryString;
         }
 
-        public string GetHeadwordQueryString()
+        public string GetHeadwordResourceIdsQueryString()
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
             var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
             
-            var queryString = $"select headword {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) order by headword.Sorting asc";
+            var queryString = $"select headword.Id as Id, min(headword.Sorting) as Sorting {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) group by headword.Id order by Sorting asc";
             
             return queryString;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
@@ -19,11 +20,18 @@ namespace Vokabular.MainService.Core.Works.Search
 
         protected override IList<HeadwordResource> ExecuteWorkImplementation()
         {
-            var headwordList = m_metadataRepository.SearchHeadwordByCriteriaQuery(m_queryCreator);
-            
-            // TODO fetch HeadwordItems in second query
+            var headwordsDbResult = m_metadataRepository.SearchHeadwordByCriteriaQuery(m_queryCreator);
+            var headwordIds = headwordsDbResult.Select(x => x.Id).ToList();
+            var headwords = m_metadataRepository.GetHeadwordWithFetch(headwordIds);
 
-            return headwordList;
+            var resultHeadwords = new List<HeadwordResource>(headwords.Count);
+            foreach (var headwordId in headwordIds)
+            {
+                var headword = headwords.First(x => x.Id == headwordId);
+                resultHeadwords.Add(headword);
+            }
+            
+            return resultHeadwords;
         }
     }
 }

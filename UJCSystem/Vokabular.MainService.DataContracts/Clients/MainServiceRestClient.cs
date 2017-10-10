@@ -656,11 +656,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<HeadwordItemContract> SearchHeadword(HeadwordSearchRequestContract request)
+        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request)
         {
             try
             {
-                var result = Post<List<HeadwordItemContract>>("headword/search", request);
+                var result = Post<List<HeadwordContract>>("headword/search", request);
                 return result;
             }
             catch (HttpRequestException e)

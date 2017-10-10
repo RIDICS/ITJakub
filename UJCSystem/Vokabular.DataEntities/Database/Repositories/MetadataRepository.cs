@@ -217,12 +217,13 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<HeadwordResource> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
-            var query = GetSession().CreateQuery(creator.GetHeadwordQueryString())
+            var query = GetSession().CreateQuery(creator.GetHeadwordResourceIdsQueryString())
                 .SetPaging(creator)
-                .SetParameters(creator);
-            var result = query.List<HeadwordResource>();
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>());
+            var result = query.List<HeadwordSearchResult>();
             return result;
         }
 
@@ -255,6 +256,16 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.Resource.Project).Eager
                 .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
                 .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+        
+        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
+        {
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.HeadwordItems).Eager
                 .List();
             return result;
         }

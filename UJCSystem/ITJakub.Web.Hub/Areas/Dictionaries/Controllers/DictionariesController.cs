@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
@@ -285,10 +286,6 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
 
             AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
-            //if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
-            //{
-            //    listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
-            //}
 
             using (var client = GetRestClient())
             {
@@ -299,43 +296,85 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 var resultCount = client.SearchHeadwordCount(newRequest);
                 return Json(resultCount);
             }
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
-            //    return Json(resultCount);
-            //}
         }
 
         [HttpPost]
         public ActionResult SearchCriteria([FromBody] DictionarySearchCriteriaRequest request)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
-            //listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count)); //not required
-
-            //if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
-            //{
-            //    listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
-            //}
+            
             AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
-
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
-            //    return Json(result);
-            //}
 
             using (var client = GetRestClient())
             {
+                // Search headwords
                 var newRequest = new HeadwordSearchRequestContract
                 {
                     ConditionConjunction = listSearchCriteriaContracts,
                     Start = request.Start,
                     Count = request.Count,
                 };
-                var resultCount = client.SearchHeadword(newRequest);
-                // TODO return data in format required by Dictionary reader
-                return Json(resultCount);
+                var resultHeadwords = client.SearchHeadword(newRequest);
+
+                // Load info about dictionaries/books
+                var bookListDictionary = new Dictionary<string, DictionaryContract>();
+                foreach (var projectId in resultHeadwords.Select(x => x.ProjectId).Distinct())
+                {
+                    var bookInfo = client.GetProjectMetadata(projectId, false, false, false, false, false);
+                    var resultBookInfo = new DictionaryContract
+                    {
+                        BookId = projectId,
+                        BookXmlId = projectId.ToString(), // TODO remove
+                        BookAcronym = bookInfo.SourceAbbreviation,
+                        BookTitle = bookInfo.Title,
+                        BookVersionId = 0, // TODO not specified
+                        BookVersionXmlId = null //TODO not specified
+                    };
+                    bookListDictionary.Add(projectId.ToString(), resultBookInfo);
+                }
+                
+                // Create response
+                var result = new HeadwordListContract
+                {
+                    HeadwordList = MapHeadwordsToGroupedList(resultHeadwords),
+                    BookList = bookListDictionary
+                };
+                
+                return Json(result);
             }
+        }
+
+        //todo move upper in this file
+        private List<HeadwordContract> MapHeadwordsToGroupedList(List<Vokabular.MainService.DataContracts.Contracts.HeadwordContract> headwords)
+        {
+            var resultList = new List<HeadwordContract>();
+            HeadwordContract lastHeadword = null;
+            foreach (var headwordContract in headwords)
+            {
+                if (lastHeadword == null || lastHeadword.Headword != headwordContract.DefaultHeadword)
+                {
+                    lastHeadword = new HeadwordContract
+                    {
+                        Headword = headwordContract.DefaultHeadword,
+                        Dictionaries = new List<HeadwordBookInfoContract>()
+                    };
+                    resultList.Add(lastHeadword);
+                }
+
+                foreach (var resourcePageId in headwordContract.HeadwordItems.Select(x => x.ResourcePageId).Distinct())
+                {
+                    var dictionaryInfo = new HeadwordBookInfoContract
+                    {
+                        BookXmlId = headwordContract.ProjectId.ToString(), // TODO change XmlId to normal ID
+                        EntryXmlId = headwordContract.Id.ToString(),
+                        Image = null, //TODO remove Image
+                        PageId = resourcePageId, // TODO add PageId usage to DictionaryViewer
+                    };
+                    lastHeadword.Dictionaries.Add(dictionaryInfo);
+                }
+            }
+
+            return resultList;
         }
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)

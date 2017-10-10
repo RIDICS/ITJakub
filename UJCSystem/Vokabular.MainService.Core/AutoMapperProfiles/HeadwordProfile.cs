@@ -12,6 +12,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Id))
                 .ForMember(dest => dest.VersionId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.VersionNumber, opt => opt.MapFrom(src => src.VersionNumber))
+                .ForMember(dest => dest.ProjectId, opt => opt.MapFrom(src => src.Resource.Project.Id))
                 .ForMember(dest => dest.DefaultHeadword, opt => opt.MapFrom(src => src.DefaultHeadword))
                 .ForMember(dest => dest.ExternalId, opt => opt.MapFrom(src => src.ExternalId))
                 .ForMember(dest => dest.Sorting, opt => opt.MapFrom(src => src.Sorting))

@@ -7,6 +7,7 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long Id { get; set; }
         public long VersionId { get; set; }
         public int VersionNumber { get; set; }
+        public long ProjectId { get; set; }
 
         public string ExternalId { get; set; }
         public string DefaultHeadword { get; set; }
@@ -19,6 +20,6 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public long Id { get; set; }
         public string Headword { get; set; }
         public string HeadwordOriginal { get; set; }
-        public long ResourcePageId { get; set; }
+        public long? ResourcePageId { get; set; }
     }
 }
