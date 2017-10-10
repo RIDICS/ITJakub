@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Vokabular.RestClient.Extensions;
 
@@ -62,11 +60,6 @@ namespace Vokabular.RestClient
                 AppendParameter(name, item.ToString());
             }
             return this;
-        }
-
-        public UrlQueryBuilder AddParameterList(string name, IEnumerable<string> list)
-        {
-            return AddParameterList(name, (IEnumerable) list?.Select(x => x.EncodeQueryString()));
         }
 
         public string ToQuery()

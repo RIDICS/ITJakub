@@ -608,6 +608,29 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("headword/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
+                    .AddParameterList("selectedProjectIds", selectedProjectIds)
+                    .ToQuery();
+
+                var result = Get<List<string>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<ResponsiblePersonContract> GetResponsiblePersonAutocomplete(string query)
         {
             try

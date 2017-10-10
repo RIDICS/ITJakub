@@ -4,6 +4,7 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Person;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
@@ -12,7 +13,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class PersonManager
     {
-        private const int AutocompleteMaxCount = 5;
         private readonly PersonRepository m_personRepository;
 
         public PersonManager(PersonRepository personRepository)
@@ -69,7 +69,7 @@ namespace Vokabular.MainService.Core.Managers
                 query = string.Empty;
 
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
-            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, AutocompleteMaxCount));
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetAuthorAutocomplete(query, bookTypeEnum, DefaultValues.AutocompleteMaxCount));
             return Mapper.Map<List<OriginalAuthorContract>>(result);
         }
 
@@ -78,7 +78,7 @@ namespace Vokabular.MainService.Core.Managers
             if (query == null)
                 query = string.Empty;
 
-            var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, AutocompleteMaxCount));
+            var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, DefaultValues.AutocompleteMaxCount));
             return Mapper.Map<List<ResponsiblePersonContract>>(result);
         }
     }

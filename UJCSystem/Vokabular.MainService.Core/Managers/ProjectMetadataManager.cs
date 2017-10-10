@@ -5,6 +5,7 @@ using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Parameter;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.ProjectMetadata;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Types;
@@ -13,7 +14,6 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class ProjectMetadataManager
     {
-        private const int AutocompleteMaxCount = 5;
         private readonly MetadataRepository m_metadataRepository;
         private readonly UserManager m_userManager;
         private readonly CategoryRepository m_categoryRepository;
@@ -118,19 +118,19 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<string> GetPublisherAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetPublisherAutocomplete(query, DefaultValues.AutocompleteMaxCount));
             return result.ToList();
         }
 
         public List<string> GetCopyrightAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetCopyrightAutocomplete(query, DefaultValues.AutocompleteMaxCount));
             return result.ToList();
         }
 
         public List<string> GetManuscriptRepositoryAutocomplete(string query)
         {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, AutocompleteMaxCount));
+            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetManuscriptRepositoryAutocomplete(query, DefaultValues.AutocompleteMaxCount));
             return result.ToList();
         }
 
@@ -142,7 +142,7 @@ namespace Vokabular.MainService.Core.Managers
                 var allCategoryIds = selectedCategoryIds.Count > 0
                     ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
                     : selectedCategoryIds;
-                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, AutocompleteMaxCount);
+                return x.GetTitleAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteMaxCount);
             });
             return result.ToList();
         }

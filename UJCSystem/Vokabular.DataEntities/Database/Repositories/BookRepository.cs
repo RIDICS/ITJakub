@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -122,6 +125,47 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.ParentResource.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.CreateTime).Desc
                 .List();
+        }
+
+        public virtual IList<string> GetHeadwordAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
+        {
+            queryString = EscapeQuery(queryString);
+
+            HeadwordResource headwordResourceAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            var query = GetSession().QueryOver<HeadwordItem>()
+                .JoinAlias(x => x.HeadwordResource, () => headwordResourceAlias)
+                .JoinAlias(() => headwordResourceAlias.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .Where(() => headwordResourceAlias.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.Headword).IsLike(queryString, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<HeadwordItem>(x => x.Headword)))
+                .OrderBy(x => x.Headword).Asc;
+
+            if (bookType != null)
+            {
+                query.JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == bookType.Value);
+            }
+
+            if (selectedCategoryIds.Count > 0 || selectedProjectIds.Count > 0)
+            {
+                query.JoinAlias(() => projectAlias.Categories, () => categoryAlias, JoinType.LeftOuterJoin)
+                    .Where(Restrictions.Or(
+                        Restrictions.InG(Projections.Property(() => categoryAlias.Id), selectedCategoryIds),
+                        Restrictions.InG(Projections.Property(() => projectAlias.Id), selectedProjectIds)
+                    ));
+            }
+
+            return query
+                .Take(count)
+                .List<string>();
         }
     }
 }

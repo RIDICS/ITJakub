@@ -10,6 +10,7 @@ using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
@@ -23,12 +24,15 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
+        private readonly CategoryRepository m_categoryRepository;
 
-        public BookManager(MetadataRepository metadataRepository, MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository)
+        public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
+            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
+            m_categoryRepository = categoryRepository;
         }
 
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
@@ -438,6 +442,19 @@ namespace Vokabular.MainService.Core.Managers
 
             // TODO get image form File Storage
             throw new NotImplementedException();
+        }
+
+        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)
+        {
+            var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);
+            var result = m_bookRepository.InvokeUnitOfWork(x =>
+            {
+                var allCategoryIds = selectedCategoryIds.Count > 0
+                    ? m_categoryRepository.GetAllSubcategoryIds(selectedCategoryIds)
+                    : selectedCategoryIds;
+                return x.GetHeadwordAutocomplete(query, bookTypeEnum, allCategoryIds, selectedProjectIds, DefaultValues.AutocompleteMaxCount);
+            });
+            return result.ToList();
         }
     }
 }

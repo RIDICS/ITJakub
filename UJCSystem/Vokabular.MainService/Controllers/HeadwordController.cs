@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -28,6 +29,12 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_bookManager.SearchHeadwordByCriteriaCount(request);
             return result;
+        }
+
+        [HttpGet("autocomplete")]
+        public List<string> GetAutocomplete([FromQuery] string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        {
+            return m_bookManager.GetHeadwordAutocomplete(query, bookType, selectedCategoryIds, selectedProjectIds);
         }
     }
 }
