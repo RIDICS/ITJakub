@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
@@ -178,11 +177,16 @@ namespace Vokabular.DataEntities.Database.Repositories
             {
                 query = GetSession().GetNamedQuery("GetHeadwordRowNumber");
             }
+            else if (selectedCategoryIds.Count == 0)
+            {
+                query = GetSession().GetNamedQuery("GetHeadwordRowNumberByProject")
+                    .SetParameterList("projectIds", selectedProjectIds);
+            }
             else
             {
-                throw new NotImplementedException();
-                //query = GetSession().GetNamedQuery("GetHeadwordRowNumberFiltered")
-                //    .SetParameterList("bookIds", selectedBookIds);
+                query = GetSession().GetNamedQuery("GetHeadwordRowNumberByProjectAndCategory")
+                    .SetParameterList("projectIds", selectedProjectIds)
+                    .SetParameterList("categoryIds", selectedCategoryIds);
             }
 
             queryString = $"{EscapeQuery(queryString)}%";

@@ -56,5 +56,17 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(x => x.Path).IsLike(categoryPath, MatchMode.Start)
                 .List();
         }
+
+        public virtual long GetAnyProjectIdByCategory(IEnumerable<int> categoryIds)
+        {
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<Category>()
+                .WhereRestrictionOn(x => x.Id).IsInG(categoryIds)
+                .JoinAlias(x => x.Projects, () => projectAlias)
+                .Select(x => projectAlias.Id)
+                .Take(1)
+                .SingleOrDefault<long>();
+        }
     }
 }
