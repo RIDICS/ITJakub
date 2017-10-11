@@ -14,7 +14,6 @@
     createPage(pageNumber: number) {
         const isEditingMode = this.editor.getIsEditingMode();
         const showPageNumber = this.main.getShowPageNumbers();
-        console.log("trying to create page " + pageNumber); //TODO debug
         let elm = "";
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         elm += "<div class=\"col-xs-7 composition-area\">";
