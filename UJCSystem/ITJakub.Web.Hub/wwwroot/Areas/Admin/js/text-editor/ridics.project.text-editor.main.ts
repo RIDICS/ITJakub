@@ -141,9 +141,9 @@ class TextEditorMain {
     private togglePageNumbers(show: boolean) {
         const pageNumberEl = $(".page-number");
         if (show) {
-            pageNumberEl.show();
+            pageNumberEl.removeClass("invisible");
         } else {
-            pageNumberEl.hide();
+            pageNumberEl.addClass("invisible");
         }
     }
 
@@ -175,6 +175,7 @@ class TextEditorMain {
             }
             if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
                 this.scrollToPage(pageNumber);
+                $(".preloading-pages-spinner").hide();
             }
         } else {
             this.scrollToPage(pageNumber);

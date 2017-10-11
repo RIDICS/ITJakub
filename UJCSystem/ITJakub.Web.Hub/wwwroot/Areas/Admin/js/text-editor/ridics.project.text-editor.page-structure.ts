@@ -19,13 +19,11 @@
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         elm += "<div class=\"col-xs-7 composition-area\">";
         elm += `<div class="page">`;
-        let displayStyle;
-        if (showPageNumber) {
-            displayStyle = "display: block;";
-        } else {
-            displayStyle = "display: none;";
+        let invisibleClass="";
+        if (!showPageNumber) {
+            invisibleClass = "invisible";
         }
-        elm += `<div class="page-number" style="${displayStyle}">[${pageNumber}]</div>`;
+        elm += `<div class="page-number ${invisibleClass}">[${pageNumber}]</div>`;
         if (!isEditingMode) {
             elm += "<div class=\"viewer\">";
             elm += `<span class="rendered-text"></span>`;
