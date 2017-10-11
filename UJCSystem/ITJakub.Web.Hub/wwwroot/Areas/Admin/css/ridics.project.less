@@ -415,6 +415,8 @@ table {
 
 .page-row {
     margin: 10px 0 10px 0;
+    position: relative;
+    min-height: 30px;
 
     .comment-area {
         min-height: @comment-area-min-height;
@@ -614,4 +616,11 @@ padding-right: 15px;
     top:50%;
     left:50%;
     display:none;
+}
+
+.image-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index:20;
 }

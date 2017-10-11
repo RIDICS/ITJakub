@@ -55,12 +55,12 @@
     appendRenderedText(pageNumber: number, showPageNumber: boolean) {
         const renderedText = this.util.loadRenderedText(pageNumber);
         renderedText.done((data: string) => {
-            if (data !== "error-no-file") {
+            if (data !== "error-no-file") {   
                 const pageEl = $(`*[data-page="${pageNumber}"]`);
                 const compositionAreaDiv = pageEl.find(".rendered-text");
                 const pageBody = data;
                 $(compositionAreaDiv).append(pageBody);
-                $(pageEl).children(".image-placeholder").remove();
+                $(pageEl).children(".image-placeholder").hide();
             }
         });
 
@@ -73,7 +73,7 @@
                 const pageEl = $(`*[data-page="${pageNumber}"]`);
                 const textArea = pageEl.find(".plain-text");
                 $(textArea).val(data);
-                $(pageEl).children(".image-placeholder").remove();
+                $(pageEl).children(".image-placeholder").hide();
             }
         });
 

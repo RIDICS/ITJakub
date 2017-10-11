@@ -125,36 +125,44 @@
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
                 const page = $(child).children(".composition-area").children(".page");
-                const ajax = this.util.loadPlainText(pageNumber);
+                const placeholderSpinner = $(child).children(".image-placeholder");
+                placeholderSpinner.show();
+                const plainTextAjax = this.util.loadPlainText(pageNumber);
                 const viewerElement = $(page).children(".viewer");
                 viewerElement.remove();
-                this.createEditorAreaBody(page[0], ajax);
+                this.createEditorAreaBody(page[0], plainTextAjax);
             });
         } else { // changing textarea to div here
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
                 const page = $(child).children(".composition-area").children(".page");
-                const ajax = this.util.loadRenderedText(pageNumber);
+                const placeholderSpinner = $(child).children(".image-placeholder");
+                placeholderSpinner.show();
+                const renderedTextAjax = this.util.loadRenderedText(pageNumber);
                 const editorElement = $(page).children(".editor");
                 editorElement.remove();
-                this.createViewerAreaBody(page[0], ajax);
+                this.createViewerAreaBody(page[0], renderedTextAjax);
             });
         }
     }
 
     private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
         ajax.done((data: string) => {
+            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
             const plainText = data;
             const elm = `<div class="editor"><textarea>${plainText}</textarea></div>`;
             $(child).append(elm);
+            placeHolderSpinner.hide();
         });
     }
 
     private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
         ajax.done((data: string) => {
+            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
             const renderedText = data;
             const elm = `<div class="viewer">${renderedText}</div>`;
             $(child).append(elm);
+            placeHolderSpinner.hide();
         });
     }
 }
