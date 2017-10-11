@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using Vokabular.DataEntities.Database.Daos;
@@ -166,6 +168,31 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query
                 .Take(count)
                 .List<string>();
+        }
+        
+        public virtual long GetHeadwordRowNumber(string queryString, IList<long> selectedProjectIds, IList<int> selectedCategoryIds, BookTypeEnum bookType)
+        {
+            IQuery query;
+
+            if (selectedProjectIds.Count == 0 && selectedCategoryIds.Count == 0)
+            {
+                query = GetSession().GetNamedQuery("GetHeadwordRowNumber");
+            }
+            else
+            {
+                throw new NotImplementedException();
+                //query = GetSession().GetNamedQuery("GetHeadwordRowNumberFiltered")
+                //    .SetParameterList("bookIds", selectedBookIds);
+            }
+
+            queryString = $"{EscapeQuery(queryString)}%";
+
+            var result = query
+                .SetParameter("query", queryString)
+                .SetParameter("bookType", bookType)
+                .UniqueResult<long>();
+
+            return result;
         }
     }
 }

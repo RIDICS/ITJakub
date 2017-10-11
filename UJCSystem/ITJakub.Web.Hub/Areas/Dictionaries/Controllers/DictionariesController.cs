@@ -372,9 +372,19 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var rowNumber = client.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, AreaBookType);
+                var request = new HeadwordRowNumberSearchRequestContract
+                {
+                    Query = query,
+                    Category = new SelectedCategoryCriteriaContract
+                    {
+                        BookType = AreaBookType,
+                        SelectedBookIds = selectedBookIds,
+                        SelectedCategoryIds = selectedCategoryIds,
+                    }
+                };
+                var rowNumber = client.SearchHeadwordRowNumber(request);
 
                 var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 

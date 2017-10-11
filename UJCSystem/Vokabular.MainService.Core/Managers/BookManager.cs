@@ -456,5 +456,16 @@ namespace Vokabular.MainService.Core.Managers
             });
             return result.ToList();
         }
+
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        {
+            if (request.Category.BookType == null)
+                throw new ArgumentException("Null value of BookType is not supported");
+
+            var bookTypeEnum = Mapper.Map<BookTypeEnum>(request.Category.BookType);
+            var result = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordRowNumber(request.Query, request.Category.SelectedBookIds, request.Category.SelectedCategoryIds, bookTypeEnum));
+
+            return result;
+        }
     }
 }

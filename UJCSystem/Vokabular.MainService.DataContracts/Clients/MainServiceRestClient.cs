@@ -743,6 +743,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<int>("headword/search-row-number", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             try

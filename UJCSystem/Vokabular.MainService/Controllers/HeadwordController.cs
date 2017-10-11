@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -28,6 +29,13 @@ namespace Vokabular.MainService.Controllers
         public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request)
         {
             var result = m_bookManager.SearchHeadwordByCriteriaCount(request);
+            return result;
+        }
+
+        [HttpPost("search-row-number")]
+        public long SearchHeadwordRowNumber([FromBody] HeadwordRowNumberSearchRequestContract request)
+        {
+            var result = m_bookManager.SearchHeadwordRowNumber(request);
             return result;
         }
 
