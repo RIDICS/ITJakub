@@ -102,14 +102,19 @@
 
     private processPageInputField() {
         const inputField = $(".go-to-page-field");
-        const page = parseInt(inputField.val());
-        if (page > this.main.getNumberOfPages() || page < 1) {
-            alert(`Page ${page} does not exist`);
-            inputField.val("");
+        const inputFieldValue = inputField.val() as string;
+        if (inputFieldValue === "") {
+            alert("You haven't entered anything");
         } else {
-            this.navigateToPage(page);
-            inputField.val("");
-            inputField.blur();
+            const page = parseInt(inputFieldValue);
+            if (page > this.main.getNumberOfPages() || page < 1) {
+                alert(`Page ${page} does not exist`);
+                inputField.val("");
+            } else {
+                this.navigateToPage(page);
+                inputField.val("");
+                inputField.blur();
+            }
         }
     }
 
@@ -156,7 +161,9 @@
         const container = $(".pages-start");
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const editorPageContainer = ".pages-start";
-        const scrollTo = pageEl.offset().top - container.offset().top + container.scrollTop();
+        const compositionPagePosition = pageEl.offset().top;
+        const compositionPageContainerPosition = container.offset().top;
+        const scrollTo = compositionPagePosition - compositionPageContainerPosition + container.scrollTop();
         $(`${editorPageContainer}`).scrollTop(scrollTo);
         this.updateOnlySliderValue = true;
         this.updateSlider(pageNumber);
