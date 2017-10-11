@@ -19,7 +19,7 @@
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         elm += "<div class=\"col-xs-7 composition-area\">";
         elm += `<div class="page">`;
-        let invisibleClass="";
+        let invisibleClass = "";
         if (!showPageNumber) {
             invisibleClass = "invisible";
         }
@@ -32,7 +32,7 @@
         if (isEditingMode) {
             elm += "<div class=\"editor\">";
             elm += `<textarea class="plain-text"></textarea>`;
-            elm += "</div>";   
+            elm += "</div>";
         }
         elm += "</div>";
         elm += "</div>";
@@ -46,18 +46,22 @@
         }
         this.commentArea.asyncConstructCommentArea(pageNumber,
             true,
-            true); //collapse section on page load, collapse nested comments on page load
-        this.commentArea.toggleAreaSizeIconHide(pageNumber);
+            true);
+        this.commentArea
+            .toggleAreaSizeIconHide(pageNumber); //collapse section on page load, collapse nested comments on page load
     }
 
     appendRenderedText(pageNumber: number, showPageNumber: boolean) {
         const renderedText = this.util.loadRenderedText(pageNumber);
         renderedText.done((data: string) => {
-            if (data !== "error-no-file") {   
+            if (data !== "error-no-file") {
                 const pageEl = $(`*[data-page="${pageNumber}"]`);
                 const compositionAreaDiv = pageEl.find(".rendered-text");
                 const pageBody = data;
                 $(compositionAreaDiv).append(pageBody);
+                pageEl.css("min-height", "0");
+                var event = $.Event("pageConstructed", { page: pageNumber });
+                compositionAreaDiv.trigger(event);
                 $(pageEl).children(".image-placeholder").hide();
             }
         });
@@ -69,8 +73,10 @@
         plainText.done((data: string) => {
             if (data !== "error-no-file") {
                 const pageEl = $(`*[data-page="${pageNumber}"]`);
-                const textArea = pageEl.find(".plain-text");
-                $(textArea).val(data);
+                const textAreaEl = $(pageEl.find(".plain-text"));
+                textAreaEl.val(data);
+                var event = $.Event("pageConstructed", { page: pageNumber });
+                textAreaEl.trigger(event);
                 $(pageEl).children(".image-placeholder").hide();
             }
         });
