@@ -641,11 +641,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetNumberOfPages(string compositionId) //TODO add logic
+        public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
         {
-            int pages=2000;
+            using (var client = GetRestClient())
+            {
+                var result = client.GetAllTextResourceList(projectId, resourceGroupId);
+                return Json(result);
+            }
+        }
 
-            return new JsonResult(pages); //TODO handle exceptions, return "error-no-file"
+        [HttpPost]
+        public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetTextResource(textId, format);
+                return Json(result);
+            }
         }
 
         #region Typeahead
