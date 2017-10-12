@@ -191,6 +191,32 @@ interface ICommentSctucture {
     order: number;
     time: number;
 }
+
+interface IParentPage {
+    id: number;
+    versionId: number;
+    name: string;
+     position: number;
+}
+
+interface ITextProjectPage {
+    bookVersionId: number;
+    externalId: string;
+    id: number;
+    parentPage: IParentPage;
+    versionId: number;
+    versionNumber: number;
+}
+
+interface IPageText {
+    text: string;
+    id: number;
+    versionId: number;
+    versionNumber: number;
+    externalId: string;
+    bookVersionId: number;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",
