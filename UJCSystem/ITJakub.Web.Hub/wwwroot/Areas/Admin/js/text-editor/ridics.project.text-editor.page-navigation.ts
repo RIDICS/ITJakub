@@ -166,7 +166,7 @@
         const compositionPagePosition = pageEl.offset().top;
         const compositionPageContainerPosition = container.offset().top;
         const scrollTo = compositionPagePosition - compositionPageContainerPosition + container.scrollTop();
-        $(`${editorPageContainer}`).scrollTop(scrollTo);
+        $(editorPageContainer).scrollTop(scrollTo);
         this.updateOnlySliderValue = true;
         this.updateSlider(pageNumber);
         this.updateOnlySliderValue = false;
