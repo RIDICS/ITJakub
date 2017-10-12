@@ -407,7 +407,6 @@ table {
     }
 }
 
-/*TODO text editor styles start here, check whether they interfere with anything*/
 
 .editing-mode-button {
     margin-bottom: 8px;
@@ -597,7 +596,7 @@ padding-right: 15px;
 }
 
 .editor-super-container {
-    height: 470px; //TODO debug
+    height: 470px;
     position: relative;
 }
 
@@ -630,14 +629,15 @@ padding-right: 15px;
     visibility:hidden;
 }
 
-.go-to-page {/*TODO debug*/
-        &-button{
-            background-color: #8E5523 !important;
-            color:white !important;
-            border:none !important;
-                }
-        &-field{
-            border:none !important;
-            outline:none !important;
-               }
+.go-to-page {
+    &-button {
+        background-color: #8E5523 !important; /*to override main styles without need to create copy of bootstrap styles*/
+        color: white !important;
+        border: none !important;
+    }
+
+    &-field {
+        border: none !important;
+        outline: none !important;
+    }
 }
