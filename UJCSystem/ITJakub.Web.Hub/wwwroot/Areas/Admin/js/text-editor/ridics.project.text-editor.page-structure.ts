@@ -47,8 +47,6 @@
         this.commentArea.asyncConstructCommentArea(pageNumber,
             true,
             true);
-        this.commentArea
-            .toggleAreaSizeIconHide(pageNumber); //collapse section on page load, collapse nested comments on page load
     }
 
     appendRenderedText(textId: number, showPageNumber: boolean) {

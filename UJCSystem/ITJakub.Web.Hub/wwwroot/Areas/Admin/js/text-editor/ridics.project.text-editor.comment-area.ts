@@ -186,8 +186,8 @@
 
     toggleAreaSizeIconHide(pageNumber: number) {
         const commentAreaCollapsedMaxHeight = 170;
-        const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
-        const commentArea = compositionArea.siblings(".comment-area");
+        const page = $(`*[data-page="${pageNumber}"]`);
+        const commentArea = page.children(".comment-area");
         const commentAreaHeight = $(commentArea).prop("scrollHeight");
         const ellipsisIconExpand = commentArea.find(".expand-icon");
         const ellipsisIconCollapse = commentArea.find(".collapse-icon");
@@ -218,6 +218,7 @@
                 if (fileContent[0] !== "error-no-file") {
                     this.loadCommentFile(fileContent, textId, sectionCollapsed, nestedCommentCollapsed);
                 }
+                this.toggleAreaSizeIconHide(textId);//collapse section on page load, collapse nested comments on page load
             });
         ajax.fail(() => {
             alert(`Failed to construct comment area for page${textId}`);
