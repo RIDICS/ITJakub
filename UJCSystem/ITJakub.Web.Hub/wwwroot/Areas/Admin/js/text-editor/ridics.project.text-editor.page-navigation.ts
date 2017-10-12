@@ -8,20 +8,20 @@
 
     private updateOnlySliderValue = false;
     private pageToSkipTo: number = 0;
-    private loadingPages: number[] = [];
     private neededPageLoaded = false;
+    private skippingToPage = false;
 
 
     init() {
-        this.createSlider();
+        var loadingPages: number[] = [];
+        this.createSlider(loadingPages);
         $(".pages-start").on("scroll resize", () => { this.pageUserOn(); });
-        this.attachEventToGoToPageButton();
-        this.attachEventInputFieldEnterKey();
-
-        this.trackLoading();
+        this.attachEventToGoToPageButton(loadingPages);
+        this.attachEventInputFieldEnterKey(loadingPages);
+        this.trackLoading(loadingPages);
     }
 
-    private createSlider() {
+    private createSlider(loadingPages: number[]) {
         $(() => {
             var tooltip = $(".slider-tooltip");
             var tooltipText = tooltip.children(".slider-tooltip-text");
@@ -39,7 +39,7 @@
                 change: () => {
                     if (!this.updateOnlySliderValue) {
                         tooltip.hide();
-                        this.refreshSwatch();
+                        this.refreshSwatch(loadingPages);
                     }
                 }
             });
@@ -51,9 +51,9 @@
         $(".slider-tooltip-text").text(`Page: ${pageNumber}`);
     }
 
-    private refreshSwatch() {
+    private refreshSwatch(loadingPages: number[]) {
         const page = $("#page-slider").slider("value");
-        this.navigateToPage(page);
+        this.navigateToPage(page, loadingPages);
     }
 
     private pageUserOn() {
@@ -64,7 +64,7 @@
         const page = jqEl.parents(".page-row");
         if (page !== null && typeof page !== "undefined") {
             const pageNumber: number = $(page).data("page");
-            if (typeof pageNumber !== "undefined" && pageNumber !== null) {
+            if (typeof pageNumber !== "undefined" && pageNumber !== null && !this.skippingToPage) {
                 this.updateOnlySliderValue = true;
                 this.updateSlider(pageNumber);
                 this.updateOnlySliderValue = false;
@@ -72,21 +72,21 @@
         }
     }
 
-    private attachEventToGoToPageButton() {
+    private attachEventToGoToPageButton(loadingPages: number[]) {
         $("#project-resource-preview").on("click",
             ".go-to-page-button",
             () => {
-                this.processPageInputField();
+                this.processPageInputField(loadingPages);
             });
     }
 
-    private attachEventInputFieldEnterKey() {
+    private attachEventInputFieldEnterKey(loadingPages: number[]) {
         $("#project-resource-preview").on("keypress",
             ".go-to-page-field",
             (event) => {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode === 13) { //Enter key
-                    this.processPageInputField();
+                    this.processPageInputField(loadingPages);
                 }
             });
     }
@@ -100,7 +100,7 @@
         }
     }
 
-    private processPageInputField() {
+    private processPageInputField(loadingPages: number[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
@@ -111,23 +111,24 @@
                 alert(`Page ${page} does not exist`);
                 inputField.val("");
             } else {
-                this.navigateToPage(page);
+                this.navigateToPage(page, loadingPages);
                 inputField.val("");
                 inputField.blur();
             }
         }
     }
 
-    private navigateToPage(pageNumber: number) {
+    private navigateToPage(pageNumber: number, loadingPages: number[]) {
         const numberOfPagesToPreload = 10;
         const preloadedPage = pageNumber - numberOfPagesToPreload;
         if (preloadedPage > 1) {
             $(".preloading-pages-spinner").show();
             this.pageToSkipTo = pageNumber;
+            this.skippingToPage = true;
             for (let i = preloadedPage; i <= pageNumber; i++) {
                 const currentPageEl = $(`*[data-page="${i}"]`);
                 if (!currentPageEl.hasClass("lazyloaded")) {
-                    this.loadingPages.push(i);
+                    loadingPages.push(i);
                     lazySizes.loader.unveil(currentPageEl[0]);
                 }
             }
@@ -141,17 +142,18 @@
 
     }
 
-    private trackLoading() {
+    private trackLoading(loadingPages: number[]) {
         $(".pages-start").on("pageConstructed",
             (event: any) => { //custom event
                 var page = (event.page) as number;
-                this.loadingPages = this.loadingPages.filter(e => e !== page);
+                loadingPages = loadingPages.filter(e => e !== page);
                 if (page === this.pageToSkipTo) {
                     this.neededPageLoaded = true;
                 }
-                if ((this.loadingPages.length === 0) && this.neededPageLoaded) {
+                if ((loadingPages.length === 0) && this.neededPageLoaded) {
                     this.scrollToPage(this.pageToSkipTo);
                     $(".preloading-pages-spinner").hide();
+                    this.skippingToPage = false;
                     this.neededPageLoaded = false;
                 }
             });
