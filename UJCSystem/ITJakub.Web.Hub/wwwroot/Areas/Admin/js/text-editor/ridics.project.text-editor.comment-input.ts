@@ -56,7 +56,6 @@
                         (data: string) => {
                             response = data;
                             if (response === "Written") {
-                                console.log("trying to close panel");
                                 this.toggleCommentInputPanel();
                                 alert("Successfully sent");
                             } else if (response === "Error") {

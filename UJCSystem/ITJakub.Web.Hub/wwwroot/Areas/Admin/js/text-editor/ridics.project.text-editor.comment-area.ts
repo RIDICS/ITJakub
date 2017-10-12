@@ -99,7 +99,7 @@
                 }
             }
             if (page !== pageNumber) {
-                console.log(`Something is wrong. Page numbers are not equal. ${page} ${pageNumber}`);//TODO debug
+                console.log(`Something is wrong. Page numbers are not equal. ${page} ${pageNumber}`);
             }
         }
 
