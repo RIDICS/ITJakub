@@ -15,40 +15,41 @@
         return ajax;
     }
 
+    getProjectContent(projectId: number) {
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetProjectContent`,
+            {
+                projectId: projectId
+            });
+        return ajax;
+    }
+
 
     /**
 * Loads plain text with markdown from the server.
 * @param {Number} pageNumber - Number of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
-    loadPlainText(pageNumber: number): JQueryXHR {
+    loadPlainText(pageNumber: number): JQueryXHR {//TODO change logic to textId
         const ajax = $.post(`http://${this.serverAddress}/admin/project/LoadPlaintextCompositionPage`,
             { pageNumber: pageNumber });
         return ajax;
     }
 
     /**
-* Gets number of pages in a composition from the server.
-* @param {string} compositionId - Number of page for which to load plain text
-* @returns {JQueryXHR} Ajax containing number of pages
+* Loads markdown rendered to html from the server.
+* @param {Number} textId  - Id of page for which to load rendered text
+* @returns {JQueryXHR} Ajax query of rendered text
 */
-    getNumberOfPages(compositionId: string): JQueryXHR {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetNumberOfPages`,
-            { compositionId: compositionId });
+    loadRenderedText(textId: number): JQueryXHR {
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`, {textId:textId});
         return ajax;
     }
 
-    /**
- * Loads markdown rendered to html from the server.
- * @param {Number} pageNumber  - Number of page for which to load rendered text
- * @returns {JQueryXHR} Ajax query of rendered text
- */
-    loadRenderedText(pageNumber: number): JQueryXHR {
-        let pageContent: string;
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/LoadRenderedCompositionPage`,
-            { pageNumber: pageNumber },
-            (data: string) => { pageContent = data; });
-        return ajax;
+    savePlainText(body: string, textId: number){
+        const plainText = this.loadPlainText(textId);//TODO wait for get plaintext api functionality
+        plainText.done((data: string) => {
+            //TODO add logic
+        });
     }
 
     /**
@@ -85,7 +86,7 @@
         return result;
     }
 
-    fromJson(jsonString: string): ICommentSctucture {
+    commentFromJson(jsonString: string): ICommentSctucture {
         if (jsonString !== null) {
             const stringObject = JSON.parse(jsonString);
             const id: string = stringObject.id;
@@ -108,6 +109,11 @@
             };
             return result;
         } else return null;
+    }
+
+    compositionPageFromJson(jsonString: string): ITextProjectPage {
+//TODO write logic
+        return null;
     }
 
 }

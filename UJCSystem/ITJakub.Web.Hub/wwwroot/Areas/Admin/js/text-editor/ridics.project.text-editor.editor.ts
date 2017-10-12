@@ -157,9 +157,9 @@
     }
 
     private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
-        ajax.done((data: string) => {
+        ajax.done((data: IPageText) => {
             const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
-            const renderedText = data;
+            const renderedText = data.text;
             const elm = `<div class="viewer">${renderedText}</div>`;
             $(child).append(elm);
             placeHolderSpinner.hide();

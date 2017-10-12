@@ -16,13 +16,14 @@
         const showPageNumber = this.main.getShowPageNumbers();
         let elm = "";
         const pageEl = $(`*[data-page="${pageNumber}"]`);
+        const pageName = pageEl.data("page-name");
         elm += "<div class=\"col-xs-7 composition-area\">";
         elm += `<div class="page">`;
         let invisibleClass = "";
         if (!showPageNumber) {
             invisibleClass = "invisible";
         }
-        elm += `<div class="page-number ${invisibleClass}">[${pageNumber}]</div>`;
+        elm += `<div class="page-number ${invisibleClass}">[${pageName}]</div>`;
         if (!isEditingMode) {
             elm += "<div class=\"viewer\">";
             elm += `<span class="rendered-text"></span>`;
@@ -50,34 +51,41 @@
             .toggleAreaSizeIconHide(pageNumber); //collapse section on page load, collapse nested comments on page load
     }
 
-    appendRenderedText(pageNumber: number, showPageNumber: boolean) {
-        const renderedText = this.util.loadRenderedText(pageNumber);
-        renderedText.done((data: string) => {
-            if (data !== "error-no-file") {
-                const pageEl = $(`*[data-page="${pageNumber}"]`);
-                const compositionAreaDiv = pageEl.find(".rendered-text");
-                const pageBody = data;
+    appendRenderedText(textId: number, showPageNumber: boolean) {
+        const renderedText = this.util.loadRenderedText(textId);
+        const pageEl = $(`*[data-page="${textId}"]`);
+        const compositionAreaDiv = pageEl.find(".rendered-text");
+        renderedText.done((data: IPageText) => {
+                const pageBody = data.text;
                 $(compositionAreaDiv).append(pageBody);
                 pageEl.css("min-height", "0");
-                var event = $.Event("pageConstructed", { page: pageNumber });
+                var event = $.Event("pageConstructed", { page: textId });
                 compositionAreaDiv.trigger(event);
                 $(pageEl).children(".image-placeholder").hide();
-            }
+        });
+        renderedText.fail(() => {
+            $(compositionAreaDiv).text("Failed to load content");
+            pageEl.css("min-height", "0");
+            $(pageEl).children(".image-placeholder").hide();
         });
 
     }
 
     appendPlainText(pageNumber: number) {
         const plainText = this.util.loadPlainText(pageNumber);
+        const pageEl = $(`*[data-page="${pageNumber}"]`);
+        const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: string) => {
             if (data !== "error-no-file") {
-                const pageEl = $(`*[data-page="${pageNumber}"]`);
-                const textAreaEl = $(pageEl.find(".plain-text"));
                 textAreaEl.val(data);
                 var event = $.Event("pageConstructed", { page: pageNumber });
                 textAreaEl.trigger(event);
                 $(pageEl).children(".image-placeholder").hide();
             }
+        });
+        plainText.fail(() => {
+            textAreaEl.val("Failed to load content.");
+            $(pageEl).children(".image-placeholder").hide();
         });
 
     }

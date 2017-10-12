@@ -12,48 +12,54 @@
     private skippingToPage = false;
 
 
-    init() {
+    init(compositionPages: ITextProjectPage[]) {
         var loadingPages: number[] = [];
-        this.createSlider(loadingPages);
-        $(".pages-start").on("scroll resize", () => { this.pageUserOn(); });
+        this.createSlider(loadingPages, compositionPages);
+        $(".pages-start").on("scroll resize",
+            () => {
+                this.pageUserOn();
+            });
         this.attachEventToGoToPageButton(loadingPages);
         this.attachEventInputFieldEnterKey(loadingPages);
         this.trackLoading(loadingPages);
     }
 
-    private createSlider(loadingPages: number[]) {
+    private createSlider(loadingPages: number[], compositionPages: ITextProjectPage[]) {
         $(() => {
             var tooltip = $(".slider-tooltip");
             var tooltipText = tooltip.children(".slider-tooltip-text");
             $("#page-slider").slider({
-                min: 1,
-                max: this.main.getNumberOfPages(),
+                min: 0,
+                max: compositionPages.length - 1,
                 step: 1,
                 create: function() {
-                    tooltipText.text(`Page: ${$(this).slider("value")}`);
+                    tooltipText.text(`Page: ${compositionPages[$(this).slider("value")].parentPage.name}`);
                 },
                 slide(event, ui) {
-                    tooltipText.text(`Page: ${ui.value}`);
+                    tooltipText.text(`Page: ${compositionPages[ui.value].parentPage.name}`);
                     tooltip.show();
                 },
                 change: () => {
                     if (!this.updateOnlySliderValue) {
                         tooltip.hide();
-                        this.refreshSwatch(loadingPages);
+                        this.refreshSwatch(loadingPages, compositionPages);
                     }
                 }
             });
         });
     }
 
-    private updateSlider(pageNumber: number) {
-        $("#page-slider").slider("option", "value", pageNumber);
-        $(".slider-tooltip-text").text(`Page: ${pageNumber}`);
+    private updateSlider(textId: number) {
+        const index = $(".page-row").index($(`*[data-page="${textId}"]`));
+        $("#page-slider").slider("option", "value", index);
+        $(".slider-tooltip-text").text(`Page: ${index}`);
     }
 
-    private refreshSwatch(loadingPages: number[]) {
-        const page = $("#page-slider").slider("value");
-        this.navigateToPage(page, loadingPages);
+    private refreshSwatch(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+        const pageIdIndex = $("#page-slider").slider("value");
+        const pageId = compositionPages[pageIdIndex].id;
+        console.log(pageId);
+        this.navigateToPage(pageId, loadingPages);
     }
 
     private pageUserOn() {
@@ -62,6 +68,7 @@
         const element = document.elementFromPoint(containerXPos, containerYPos);
         const jqEl = $(element);
         const page = jqEl.parents(".page-row");
+
         if (page !== null && typeof page !== "undefined") {
             const pageNumber: number = $(page).data("page");
             if (typeof pageNumber !== "undefined" && pageNumber !== null && !this.skippingToPage) {
@@ -106,12 +113,13 @@
         if (inputFieldValue === "") {
             alert("You haven't entered anything");
         } else {
-            const page = parseInt(inputFieldValue);
-            if (page > this.main.getNumberOfPages() || page < 1) {
-                alert(`Page ${page} does not exist`);
+            const pageEl = $(`*[data-page-name="${inputFieldValue}"]`);
+            const pageId = pageEl.data("page");
+            if (!pageEl.length) { //TODO check max number of pages
+                alert(`Page ${inputFieldValue} does not exist`);
                 inputField.val("");
             } else {
-                this.navigateToPage(page, loadingPages);
+                this.navigateToPage(pageId, loadingPages);
                 inputField.val("");
                 inputField.blur();
             }
@@ -134,6 +142,7 @@
             }
             if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
                 this.scrollToPage(pageNumber);
+                this.skippingToPage = false;
                 $(".preloading-pages-spinner").hide();
             }
         } else {

@@ -208,23 +208,27 @@
  * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
  * @param {boolean} nestedCommentCollapsed Whether nested comments have to be collapsed
  */
-    asyncConstructCommentArea(pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
+    asyncConstructCommentArea(textId: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
         let fileContent: string[];
-        $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
-            { pageNumber: pageNumber }).done(
+        var ajax = $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
+            { pageNumber: textId });
+        ajax.done(
             (data: string[]) => {
                 fileContent = data;
                 if (fileContent[0] !== "error-no-file") {
-                    this.loadCommentFile(fileContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+                    this.loadCommentFile(fileContent, textId, sectionCollapsed, nestedCommentCollapsed);
                 }
             });
+        ajax.fail(() => {
+            alert(`Failed to construct comment area for page${textId}`);
+        });
     }
 
     private loadCommentFile(contentStringArray: string[], pageNumber: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
         if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
             let commentsParsed: ICommentSctucture[] = [];
             for (let i = 0; i < contentStringArray.length; i++) {
-                commentsParsed[i] = this.util.fromJson(contentStringArray[i]);
+                commentsParsed[i] = this.util.commentFromJson(contentStringArray[i]);
             }
             this.parseLoadedCommentFiles(commentsParsed, pageNumber, sectionCollapsed, nestedCommentCollapsed);
         }
