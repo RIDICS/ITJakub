@@ -132,6 +132,33 @@ interface IMetadataResource {
     lastModification?: string;
 }
 
+interface IBookContract {
+    id: number;
+    title: string;
+    subTitle: string;
+    authors: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    publishPlace: string;
+    publishDate: string;
+    publisherText: string;
+    publisherEmail: string;
+    copyright: string;
+    biblText: string;
+    originDate: string;
+    notBefore: string;
+    notAfter: string;
+
+    manuscriptIdno: string;
+    manuscriptSettlement: string;
+    manuscriptCountry: string;
+    manuscriptRepository: string;
+    manuscriptExtent: string;
+    manuscriptTitle: string;
+
+    lastModification: string;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;

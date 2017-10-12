@@ -46,6 +46,13 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}")]
+        public BookContract GetBookInfo(long projectId)
+        {
+            var result = m_bookManager.GetBookInfo(projectId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/detail")]
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             var result = m_bookManager.GetBookDetail(projectId);

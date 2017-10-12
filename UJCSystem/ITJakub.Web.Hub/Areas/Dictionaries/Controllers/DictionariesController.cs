@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
 using AutoMapper;
-using ITJakub.ITJakubService.DataContracts;
-using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Controllers;
@@ -11,6 +8,7 @@ using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
+using ITJakub.Web.Hub.DataContracts;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using ITJakub.Web.Hub.Models.Requests.Dictionary;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +18,8 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
+using BookContract = Vokabular.MainService.DataContracts.Contracts.BookContract;
+using HeadwordBookInfoContract = ITJakub.Web.Hub.DataContracts.HeadwordBookInfoContract;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 {
@@ -239,7 +239,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return Json(result);
         }
 
-        private HeadwordListContract SearchHeadwordByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts,
+        private ResultHeadwordListContract SearchHeadwordByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts,
             int start, int count)
         {
             using (var client = GetRestClient())
@@ -254,24 +254,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 var resultHeadwords = client.SearchHeadword(newRequest);
 
                 // Load info about dictionaries/books
-                var bookListDictionary = new Dictionary<string, DictionaryContract>();
+                var bookListDictionary = new Dictionary<long, BookContract>();
                 foreach (var projectId in resultHeadwords.Select(x => x.ProjectId).Distinct())
                 {
-                    var bookInfo = client.GetProjectMetadata(projectId, false, false, false, false, false);
-                    var resultBookInfo = new DictionaryContract
-                    {
-                        BookId = projectId,
-                        BookXmlId = projectId.ToString(), // TODO remove
-                        BookAcronym = bookInfo.SourceAbbreviation,
-                        BookTitle = bookInfo.Title,
-                        BookVersionId = 0, // TODO not specified
-                        BookVersionXmlId = null //TODO not specified
-                    };
-                    bookListDictionary.Add(projectId.ToString(), resultBookInfo);
+                    var bookInfo = client.GetBookInfo(projectId);
+                    bookListDictionary.Add(projectId, bookInfo);
                 }
 
                 // Create response
-                var result = new HeadwordListContract
+                var result = new ResultHeadwordListContract
                 {
                     HeadwordList = MapHeadwordsToGroupedList(resultHeadwords),
                     BookList = bookListDictionary
@@ -281,15 +272,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             }
         }
 
-        private List<HeadwordContract> MapHeadwordsToGroupedList(List<Vokabular.MainService.DataContracts.Contracts.HeadwordContract> headwords)
+        private List<HeadwordWithDictionariesContract> MapHeadwordsToGroupedList(List<Vokabular.MainService.DataContracts.Contracts.HeadwordContract> headwords)
         {
-            var resultList = new List<HeadwordContract>();
-            HeadwordContract lastHeadword = null;
+            var resultList = new List<HeadwordWithDictionariesContract>();
+            HeadwordWithDictionariesContract lastHeadword = null;
             foreach (var headwordContract in headwords)
             {
                 if (lastHeadword == null || lastHeadword.Headword != headwordContract.DefaultHeadword)
                 {
-                    lastHeadword = new HeadwordContract
+                    lastHeadword = new HeadwordWithDictionariesContract
                     {
                         Headword = headwordContract.DefaultHeadword,
                         Dictionaries = new List<HeadwordBookInfoContract>()
@@ -301,10 +292,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                 {
                     var dictionaryInfo = new HeadwordBookInfoContract
                     {
-                        BookXmlId = headwordContract.ProjectId.ToString(), // TODO change XmlId to normal ID
-                        EntryXmlId = headwordContract.Id.ToString(),
-                        Image = null, //TODO remove Image
-                        PageId = resourcePageId, // TODO add PageId usage to DictionaryViewer
+                        BookId = headwordContract.ProjectId,
+                        HeadwordId = headwordContract.Id,
+                        HeadwordVersionId = headwordContract.VersionId,
+                        PageId = resourcePageId,
                     };
                     lastHeadword.Dictionaries.Add(dictionaryInfo);
                 }
@@ -313,16 +304,17 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return resultList;
         }
 
-        public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
+        public ActionResult GetHeadwordDescription(long headwordId)
         {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, AreaBookType);
-                return Json(result);
-            }
+            return NotFound(); // TODO implement
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, AreaBookType);
+            //    return Json(result);
+            //}
         }
 
-        public ActionResult GetHeadwordDescriptionFromSearch(string criteria, string bookGuid, string xmlEntryId, bool isCriteriaJson)
+        public ActionResult GetHeadwordDescriptionFromSearch(string criteria, bool isCriteriaJson, long headwordId)
         {
             IList<SearchCriteriaContract> listSearchCriteriaContracts;
             if (isCriteriaJson)
@@ -336,12 +328,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
                 };
             }
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
-                    AreaBookType);
-                return Json(result);
-            }
+            return NotFound(); // TODO implement
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
+            //        AreaBookType);
+            //    return Json(result);
+            //}
         }
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
@@ -439,13 +432,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             }
         }
 
-        public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
+        //public FileResult GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName) // Original signature
+        public ActionResult GetHeadwordImage(long pageId)
         {
-            using (var client = GetMainServiceClient())
-            {
-                var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
-                return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
-            }
+            return NotFound();
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var resultStream = client.GetHeadwordImage(bookXmlId, bookVersionXmlId, fileName);
+            //    return File(resultStream, MediaTypeNames.Image.Jpeg); //TODO resolve content type properly
+            //}
         }
 
         private void AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)

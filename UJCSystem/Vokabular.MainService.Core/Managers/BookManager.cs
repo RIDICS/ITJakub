@@ -385,6 +385,13 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public BookContract GetBookInfo(long projectId)
+        {
+            var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
+            var result = Mapper.Map<BookContract>(metadataResult);
+            return result;
+        }
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataWithDetail(projectId));
