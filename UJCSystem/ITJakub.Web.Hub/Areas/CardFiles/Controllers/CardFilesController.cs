@@ -27,7 +27,7 @@ namespace ITJakub.Web.Hub.Areas.CardFiles.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.CardFile;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.CardFile;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {

@@ -12,6 +12,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string Comment { get; set; }
         public virtual Project Project { get; set; }
         public virtual User CreatedByUser { get; set; }
+        public virtual BookType DefaultBookType { get; set; }
         
         public virtual IList<ResourceVersion> ResourceVersions { get; set; }
         public virtual IList<BookType> BookTypes { get; set; }

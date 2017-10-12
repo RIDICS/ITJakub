@@ -5,6 +5,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 
@@ -13,10 +14,12 @@ namespace Vokabular.MainService.Core.Managers
     public class PageManager
     {
         private readonly ResourceRepository m_resourceRepository;
+        private readonly UserManager m_userManager;
 
-        public PageManager(ResourceRepository resourceRepository)
+        public PageManager(ResourceRepository resourceRepository, UserManager userManager)
         {
             m_resourceRepository = resourceRepository;
+            m_userManager = userManager;
         }
 
         public List<PageContract> GetPageList(long projectId)
@@ -56,6 +59,27 @@ namespace Vokabular.MainService.Core.Managers
             }
             
             return result;
+        }
+
+        public List<GetTextCommentContract> GetCommentsForText(long textId)
+        {
+            var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetCommentsForText(textId));
+            var result = Mapper.Map<List<GetTextCommentContract>>(dbResult);
+            return result;
+        }
+        
+        public long CreateNewComment(long textId, CreateTextCommentContract newComment)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            var createNewCommentWork = new CreateNewTextCommentWork(m_resourceRepository, textId, newComment, userId);
+            var resultId = createNewCommentWork.Execute();
+            return resultId;
+        }
+
+        public void DeleteComment(long commentId)
+        {
+            var deleteCommentWork = new DeleteTextCommentWork(m_resourceRepository, commentId);
+            deleteCommentWork.Execute();
         }
     }
 }

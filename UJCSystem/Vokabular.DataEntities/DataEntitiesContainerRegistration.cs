@@ -12,6 +12,7 @@ namespace Vokabular.DataEntities
         {
             container.AddPerWebRequest<IUnitOfWork, UnitOfWork>();
 
+            container.AddPerWebRequest<BookRepository>();
             container.AddPerWebRequest<CategoryRepository>();
             container.AddPerWebRequest<MetadataRepository>();
             container.AddPerWebRequest<PersonRepository>();
@@ -24,8 +25,8 @@ namespace Vokabular.DataEntities
             container.AddPerWebRequest<ICriteriaImplementationBase, CategoryCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, DatingCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, EditorCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
-            //container.AddPerWebRequest<ICriteriaImplementationBase, TermCriteriaImplementation>();
+            container.AddPerWebRequest<ICriteriaImplementationBase, HeadwordCriteriaImplementation>();
+            container.AddPerWebRequest<ICriteriaImplementationBase, TermCriteriaImplementation>();
             container.AddPerWebRequest<ICriteriaImplementationBase, TitleCriteriaImplementation>();
         }
     }

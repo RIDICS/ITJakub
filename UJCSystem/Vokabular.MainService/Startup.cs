@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Swashbuckle.AspNetCore.Swagger;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
@@ -54,6 +55,11 @@ namespace Vokabular.MainService
             // Inject an implementation of ISwaggerProvider with defaulted settings applied
             services.AddSwaggerGen(options =>
             {
+                options.SwaggerDoc("v1", new Info
+                {
+                    Title = "Vokabular MainService API",
+                    Version = "v1",
+                });
                 options.DescribeAllEnumsAsStrings();
             });
 
@@ -83,7 +89,11 @@ namespace Vokabular.MainService
             app.UseSwagger();
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
-            app.UseSwaggerUi();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vokabular MainService API v1");
+                c.SupportedSubmitMethods(new[] {"get", "post", "put", "delete", "head"});
+            });
 
             applicationLifetime.ApplicationStopped.Register(OnShutdown);
         }

@@ -56,8 +56,11 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                 {
                     var categoryUniqueParameterName = $"param{metadataParameters.Count}";
 
-                    joinBuilder.Append("left join project.Categories category ");
-                    whereBuilder.AppendFormat("category.Id in (:{0})", categoryUniqueParameterName);
+                    //joinBuilder.Append("left join project.Categories category ");
+                    //whereBuilder.AppendFormat("category.Id in (:{0})", categoryUniqueParameterName);
+                    whereBuilder.AppendFormat(
+                        "project.Id in (select project_c.Id from Project project_c inner join project_c.Categories category_c where category_c.Id in (:{0}))",
+                        categoryUniqueParameterName);
                     metadataParameters.Add(categoryUniqueParameterName, subcategoryIds);
                 }
 
@@ -79,6 +82,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
             
             return new SearchCriteriaQuery
             {
+                CriteriaKey = CriteriaKey,
                 Join = joinBuilder.ToString(),
                 Where = whereBuilder.ToString()
             };

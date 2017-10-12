@@ -32,7 +32,7 @@
 
   <sql-query name="GetCategoryHierarchy">
     <![CDATA[
-      select c2.Id
+      select distinct(c2.Id)
       from Category c1
       join Category c2 on c2.Path like (c1.Path + '%')
       where c1.Id in (:categoryIds)

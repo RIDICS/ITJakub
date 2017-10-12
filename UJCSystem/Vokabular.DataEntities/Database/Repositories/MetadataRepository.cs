@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
@@ -186,6 +187,14 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        public virtual long SearchHeadwordByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetHeadwordQueryStringForCount())
+                .SetParameters(creator);
+            var result = query.UniqueResult<long>();
+            return result;
+        }
+
         public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
             var session = GetSession();
@@ -194,6 +203,27 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .SetPaging(creator)
                 .SetParameters(creator);
             var result = query.List<MetadataResource>();
+            return result;
+        }
+
+        public virtual IList<long> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        {
+            var session = GetSession();
+
+            var query = session.CreateQuery(creator.GetProjectIdListQueryString())
+                .SetPaging(creator)
+                .SetParameters(creator);
+            var result = query.List<long>();
+            return result;
+        }
+
+        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetHeadwordResourceIdsQueryString())
+                .SetPaging(creator)
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>());
+            var result = query.List<HeadwordSearchResult>();
             return result;
         }
 
@@ -206,6 +236,36 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.Resource.Project).Eager
                 //.Fetch(x => x.Resource.Project.Authors).Eager // Authors are used from Metadata
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProject(IEnumerable<long> projectIdList)
+        {
+            Resource resourceAlias = null;
+
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .WhereRestrictionOn(() => resourceAlias.Project.Id).IsInG(projectIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+        
+        public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
+        {
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.HeadwordItems).Eager
                 .List();
             return result;
         }
@@ -232,12 +292,22 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual MetadataResource GetMetadataWithDetail(long projectId)
         {
             Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
             ProjectOriginalAuthor projectOriginalAuthorAlias = null;
+            OriginalAuthor originalAuthorAlias = null;
+            ProjectResponsiblePerson projectResponsiblePersonAlias = null;
+            ResponsiblePerson responsiblePersonAlias = null;
+            ResponsibleType responsibleTypeAlias = null;
             
             var session = GetSession();
 
             var result = session.QueryOver<MetadataResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => snapshotAlias.DefaultBookType, () => bookTypeAlias, JoinType.LeftOuterJoin)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Project.Id == projectId)
                 .FutureValue();
 
@@ -264,6 +334,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
                 .JoinAlias(x => x.Authors, () => projectOriginalAuthorAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectOriginalAuthorAlias.OriginalAuthor, () => originalAuthorAlias, JoinType.LeftOuterJoin)
                 .Fetch(x => x.Authors).Eager
                 .Fetch(x => x.Authors[0].OriginalAuthor).Eager
                 .OrderBy(() => projectOriginalAuthorAlias.Sequence).Asc
@@ -271,12 +342,103 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             session.QueryOver<Project>()
                 .Where(x => x.Id == projectId)
+                .JoinAlias(x => x.ResponsiblePersons, () => projectResponsiblePersonAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectResponsiblePersonAlias.ResponsiblePerson, () => responsiblePersonAlias, JoinType.LeftOuterJoin)
+                .JoinAlias(() => projectResponsiblePersonAlias.ResponsibleType, () => responsibleTypeAlias, JoinType.LeftOuterJoin)
                 .Fetch(x => x.ResponsiblePersons).Eager
                 .Fetch(x => x.ResponsiblePersons[0].ResponsiblePerson).Eager
                 .Fetch(x => x.ResponsiblePersons[0].ResponsibleType).Eager
                 .Future();
 
             return result.Value;
+        }
+
+        public virtual IList<string> GetPublisherAutocomplete(string query, int count)
+        {
+            query = EscapeQuery(query);
+
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.PublisherText).IsLike(query, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.PublisherText)))
+                .OrderBy(x => x.PublisherText).Asc
+                .Take(count)
+                .List<string>();
+        }
+
+        public virtual IList<string> GetCopyrightAutocomplete(string query, int count)
+        {
+            query = EscapeQuery(query);
+
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.Copyright).IsLike(query, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Copyright)))
+                .OrderBy(x => x.Copyright).Asc
+                .Take(count)
+                .List<string>();
+        }
+
+
+        public virtual IList<string> GetManuscriptRepositoryAutocomplete(string query, int count)
+        {
+            query = EscapeQuery(query);
+
+            Resource resourceAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.ManuscriptRepository).IsLike(query, MatchMode.Start)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.ManuscriptRepository)))
+                .OrderBy(x => x.ManuscriptRepository).Asc
+                .Take(count)
+                .List<string>();
+        }
+
+        public virtual IList<string> GetTitleAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
+        {
+            queryString = EscapeQuery(queryString);
+
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+            Snapshot snapshotAlias = null;
+            BookType bookTypeAlias = null;
+            Category categoryAlias = null;
+
+            var query = GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .JoinAlias(() => projectAlias.LatestPublishedSnapshot, () => snapshotAlias)
+                .Where(x => x.Id == resourceAlias.LatestVersion.Id)
+                .AndRestrictionOn(x => x.Title).IsLike(queryString, MatchMode.Anywhere)
+                .Select(Projections.Distinct(Projections.Property<MetadataResource>(x => x.Title)))
+                .OrderBy(x => x.Title).Asc;
+
+            if (bookType != null)
+            {
+                query.JoinAlias(() => snapshotAlias.BookTypes, () => bookTypeAlias)
+                    .Where(() => bookTypeAlias.Type == bookType.Value);
+            }
+
+            if (selectedCategoryIds.Count > 0 || selectedProjectIds.Count > 0)
+            {
+                query.JoinAlias(() => projectAlias.Categories, () => categoryAlias, JoinType.LeftOuterJoin)
+                    .Where(Restrictions.Or(
+                        Restrictions.InG(Projections.Property(() => categoryAlias.Id), selectedCategoryIds),
+                        Restrictions.InG(Projections.Property(() => projectAlias.Id), selectedProjectIds)
+                    ));
+            }
+
+            return query
+                .Take(count)
+                .List<string>();
         }
     }
 }

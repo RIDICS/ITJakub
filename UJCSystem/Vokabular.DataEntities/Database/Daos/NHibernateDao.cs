@@ -33,6 +33,11 @@ namespace Vokabular.DataEntities.Database.Daos
             return m_unitOfWork.CurrentSession;
         }
 
+        protected string EscapeQuery(string query)
+        {
+            return query?.Replace("[", "[[]");
+        }
+
         public virtual object FindById(Type type, object id)
         {
             try

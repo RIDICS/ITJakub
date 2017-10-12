@@ -1,19 +1,13 @@
 ﻿using System.Collections.Generic;
-using AutoMapper;
+using System.Linq;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Controllers;
-using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Core.Managers;
 using ITJakub.Web.Hub.Models;
-using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
@@ -30,8 +24,8 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.BibliographicalItem;
-        
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.BibliographicalItem;
+
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
             return new FeedbackFormIdentification { Area = "Bibliographies", Controller = "Bibliographies" };
@@ -74,122 +68,47 @@ namespace ITJakub.Web.Hub.Areas.Bibliographies.Controllers
             return View("Feedback/FeedbackSuccess");
         }
 
-        public ActionResult GetTypeaheadAuthor(string query)
+        public override ActionResult GetTypeaheadAuthor(string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadAuthors(query);
-                return Json(result);
+                var result = client.GetOriginalAuthorAutocomplete(query);
+                var resultStringList = result.Select(x => $"{x.LastName} {x.FirstName}");
+                return Json(resultStringList);
             }
         }
 
-        public ActionResult GetTypeaheadTitle(string query)
+        public override ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadTitles(query);
+                var result = client.GetTitleAutocomplete(query, null, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
 
         public ActionResult AdvancedSearchResultsCount(string json)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new { count });
-            }
+            var count = SearchByCriteriaJsonCount(json, null, null);
+            return Json(new { count });
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum)sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-            });
-
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new { results }, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, null, null);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
-
 
         public ActionResult TextSearchCount(string text)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-
-                return Json(new { count });
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, null, null);
+            return Json(new { count });
         }
-
-
+        
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Start = start,
-                    Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-            
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new { results }, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, null, null);
+            return Json(new { results = result }, GetJsonSerializerSettingsForBiblModule());
         }
     }
 }

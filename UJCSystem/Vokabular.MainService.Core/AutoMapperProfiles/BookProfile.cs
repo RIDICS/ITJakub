@@ -5,7 +5,6 @@ using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -13,8 +12,6 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
     {
         public BookProfile()
         {
-            CreateMap<BookTypeEnum, BookTypeEnumContract>().ReverseMap();
-
             CreateMap<MetadataResource, BookContract>()
                 .IncludeBase<MetadataResource, ProjectMetadataContract>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Resource.Project.Id));
@@ -26,7 +23,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
             CreateMap<MetadataResource, SearchResultContract>()
                 .ForMember(dest => dest.BookId, opt => opt.MapFrom(src => src.Resource.Project.Id)) // TODO try convert property from BookId to ProjectId (including TypeScript)
                 .ForMember(dest => dest.BookXmlId, opt => opt.MapFrom(src => src.Resource.Project.ExternalId))
-                //.ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
+                .ForMember(dest => dest.BookType, opt => opt.MapFrom(src => src.Resource.Project.LatestPublishedSnapshot.DefaultBookType.Type))
                 .ForMember(dest => dest.AuthorsLabel, opt => opt.MapFrom(src => src.AuthorsLabel))
                 //.ForMember(dest => dest.Authors, opt => opt.MapFrom(src => src.Resource.Project.ExternalId)) // Missing fetch
                 .ForMember(dest => dest.BiblText, opt => opt.MapFrom(src => src.BiblText))
@@ -63,6 +60,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.LiteraryGenres, opt => opt.MapFrom(src => src.Resource.Project.LiteraryGenres))
                 .ForMember(dest => dest.LiteraryKinds, opt => opt.MapFrom(src => src.Resource.Project.LiteraryKinds))
                 .ForMember(dest => dest.LiteraryOriginals, opt => opt.MapFrom(src => src.Resource.Project.LiteraryOriginals));
+
+            CreateMap<MetadataResource, AudioBookSearchResultContract>()
+                .IncludeBase<MetadataResource, SearchResultContract>();
         }
     }
 }

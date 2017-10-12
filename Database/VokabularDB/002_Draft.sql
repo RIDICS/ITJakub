@@ -17,11 +17,12 @@ BEGIN TRAN
 	CREATE TABLE [dbo].[TextComment]
 	(
 		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TextComment(Id)] PRIMARY KEY CLUSTERED,
+		[TextReferenceId] varchar(100) NOT NULL,
 		[Text] nvarchar(2000) NOT NULL,
 		[CreateTime] datetime NOT NULL,
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_TextComment(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[ParentComment] bigint NULL CONSTRAINT [FK_TextComment(ParentComment)_TextComment(Id)] FOREIGN KEY REFERENCES [dbo].[TextComment](Id),
-		[PageResource] bigint NOT NULL CONSTRAINT [FK_TextComment(PageResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
+		[ResourceText] bigint NOT NULL CONSTRAINT [FK_TextComment(TextResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
 	

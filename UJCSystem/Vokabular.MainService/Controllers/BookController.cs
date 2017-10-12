@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -48,6 +49,69 @@ namespace Vokabular.MainService.Controllers
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             var result = m_bookManager.GetBookDetail(projectId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/page")]
+        public List<PageContract> GetBookPageList(long projectId)
+        {
+            var result = m_bookManager.GetBookPageList(projectId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/chapter")]
+        public List<ChapterContract> GetBookChapterList(long projectId)
+        {
+            var result = m_bookManager.GetBookChapterList(projectId);
+            return result;
+        }
+
+        [HttpGet("page/{pageId}/term")]
+        public List<TermContract> GetPageTermList(long pageId)
+        {
+            var result = m_bookManager.GetPageTermList(pageId);
+            return result;
+        }
+
+        [HttpHead("page/{pageId}/text")]
+        public IActionResult HasPageText(long pageId)
+        {
+            var result = m_bookManager.HasBookPageText(pageId);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("page/{pageId}/text")]
+        public string GetPageText(long pageId)
+        {
+            var result = m_bookManager.GetPageText(pageId);
+            return result;
+        }
+
+        [HttpHead("page/{pageId}/image")]
+        public IActionResult HasPageImage(long pageId)
+        {
+            var result = m_bookManager.HasBookPageImage(pageId);
+            if (result)
+            {
+                return Ok();
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("page/{pageId}/image")]
+        public Stream GetPageImage(long pageId)
+        {
+            var result = m_bookManager.GetPageImage(pageId);
             return result;
         }
     }

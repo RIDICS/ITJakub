@@ -313,7 +313,7 @@
 
     private saveMetadata() {
         var selectedAuthorIds = new Array<number>();
-        var selectedResponsibleIds = new Array<number>();
+        var selectedResponsibleIds = new Array<ISaveProjectResponsiblePerson>();
         var selectedKindIds = new Array<number>();
         var selectedGenreIds = new Array<number>();
 
@@ -321,7 +321,11 @@
             selectedAuthorIds.push($(elem).data("id"));
         });
         $("#work-metadata-editors .editor-item").each((index, elem) => {
-            selectedResponsibleIds.push($(elem).data("id"));
+            var projectResponsible: ISaveProjectResponsiblePerson = {
+                responsiblePersonId: $(elem).data("person-id"),
+                responsibleTypeId: $(elem).data("responsible-type-id")
+            };
+            selectedResponsibleIds.push(projectResponsible);
         });
         $("#work-metadata-literary-kind input:checked").each((index, elem) => {
             selectedKindIds.push($(elem).val());
@@ -351,7 +355,7 @@
             authorIdList: selectedAuthorIds,
             literaryGenreIdList: selectedGenreIds,
             literaryKindIdList: selectedKindIds,
-            responsiblePersonIdList: selectedResponsibleIds
+            projectResponsiblePersonIdList: selectedResponsibleIds
         };
 
         var $loadingGlyph = $("#work-metadata-save-button .saving-icon");

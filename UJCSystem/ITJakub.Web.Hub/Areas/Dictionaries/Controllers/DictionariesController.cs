@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Mime;
 using AutoMapper;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Areas.Dictionaries.Models;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -16,9 +16,9 @@ using ITJakub.Web.Hub.Models.Requests.Dictionary;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Dictionary;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.Dictionary;
 
         public ActionResult Index()
         {
@@ -76,12 +76,8 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetDictionariesWithCategories()
         {
-            using (var client = GetMainServiceClient())
-            {
-                var dictionariesAndCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-
-                return Json(dictionariesAndCategories);
-            }
+            var result = GetBooksAndCategories();
+            return Json(result);
         }
 
         public ActionResult Information()
@@ -142,10 +138,10 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             return View("Feedback/FeedbackSuccess");
         }
 
-        private IList<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
+        private List<SearchCriteriaContract> DeserializeJsonSearchCriteria(string json)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            return Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            return Mapper.Map<List<SearchCriteriaContract>>(deserialized);
         }
 
         private WordListCriteriaContract CreateWordListContract(CriteriaKey criteriaKey, string text)
@@ -160,126 +156,58 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
             };
         }
 
-        private ResultCriteriaContract CreateResultCriteriaContract(int start, int count)
-        {
-            return new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count
-            };
-        }
-
-        private ResultCriteriaContract CreateResultCriteriaContract(int start, int count, short sortingEnum, bool sortAsc)
-        {
-            return new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum) sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-            };
-        }
-
-        private SelectedCategoryCriteriaContract CreateCategoryCriteriaContract(IList<long> selectedBookIds,
-            IList<int> selectedCategoryIds)
-        {
-            return new SelectedCategoryCriteriaContract
-            {
-                BookType = AreaBookType,
-                SelectedBookIds = selectedBookIds,
-                SelectedCategoryIds = selectedCategoryIds
-            };
-        }
-
-        private bool IsNullOrEmpty<T>(IList<T> list)
-        {
-            return list == null || list.Count == 0;
-        }
-
         public ActionResult SearchBasicResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContractBasic = new List<SearchCriteriaContract>();
+            var searchContractBasic = CreateTextCriteriaList(CriteriaKey.Headword, text);
 
-            if (!string.IsNullOrEmpty(text))
-            {
-                searchContractBasic.Add(CreateWordListContract(CriteriaKey.Headword, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                searchContractBasic.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
+            AddCategoryCriteria(searchContractBasic, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var headwordCount = client.SearchHeadwordByCriteriaResultsCount(searchContractBasic, DictionarySearchTarget.Headword);
-                return Json(headwordCount);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = searchContractBasic,
+                };
+                var resultCount = client.SearchHeadwordCount(newRequest);
+                return Json(resultCount);
             }
         }
 
         public ActionResult SearchBasicFulltextResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContractFulltext = new List<SearchCriteriaContract>();
+            var searchContractFulltext = CreateTextCriteriaList(CriteriaKey.HeadwordDescription, text);
 
-            if (!string.IsNullOrEmpty(text))
+            AddCategoryCriteria(searchContractFulltext, selectedBookIds, selectedCategoryIds);
+            
+            using (var client = GetRestClient())
             {
-                searchContractFulltext.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                searchContractFulltext.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var fulltextCount = client.SearchHeadwordByCriteriaResultsCount(searchContractFulltext, DictionarySearchTarget.Fulltext);
-                return Json(fulltextCount);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = searchContractFulltext,
+                };
+                var resultCount = client.SearchHeadwordCount(newRequest);
+                return Json(resultCount);
             }
         }
 
         public ActionResult SearchBasicHeadword(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContract = new List<SearchCriteriaContract>
-            {
-                CreateResultCriteriaContract(start, count)
-            };
+            var searchContractBasic = CreateTextCriteriaList(CriteriaKey.Headword, text);
 
-            if (!string.IsNullOrEmpty(text))
-            {
-                searchContract.Add(CreateWordListContract(CriteriaKey.Headword, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
+            AddCategoryCriteria(searchContractBasic, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Headword);
-                return Json(result);
-            }
+            var result = SearchHeadwordByCriteria(searchContractBasic, start, count);
+            return Json(result);
         }
 
         public ActionResult SearchBasicFulltext(string text, int start, int count, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var searchContract = new List<SearchCriteriaContract>
-            {
-                CreateResultCriteriaContract(start, count)
-            };
+            var searchContractFulltext = CreateTextCriteriaList(CriteriaKey.HeadwordDescription, text);
 
-            if (!string.IsNullOrEmpty(text))
-            {
-                searchContract.Add(CreateWordListContract(CriteriaKey.HeadwordDescription, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                searchContract.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
+            AddCategoryCriteria(searchContractFulltext, selectedBookIds, selectedCategoryIds);
 
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.SearchHeadwordByCriteria(searchContract, DictionarySearchTarget.Fulltext);
-                return Json(result);
-            }
+            var result = SearchHeadwordByCriteria(searchContractFulltext, start, count);
+            return Json(result);
         }
 
         [HttpPost]
@@ -287,13 +215,15 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
 
-            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var resultCount = client.SearchHeadwordByCriteriaResultsCount(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                };
+                var resultCount = client.SearchHeadwordCount(newRequest);
                 return Json(resultCount);
             }
         }
@@ -302,17 +232,85 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         public ActionResult SearchCriteria([FromBody] DictionarySearchCriteriaRequest request)
         {
             var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(request.Json);
-            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(request.Start, request.Count));
+            
+            AddCategoryCriteria(listSearchCriteriaContracts, request.SelectedBookIds, request.SelectedCategoryIds);
 
-            if (!IsNullOrEmpty(request.SelectedBookIds) || !IsNullOrEmpty(request.SelectedCategoryIds))
+            var result = SearchHeadwordByCriteria(listSearchCriteriaContracts, request.Start, request.Count);
+            return Json(result);
+        }
+
+        private HeadwordListContract SearchHeadwordByCriteria(List<SearchCriteriaContract> listSearchCriteriaContracts,
+            int start, int count)
+        {
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(request.SelectedBookIds, request.SelectedCategoryIds));
+                // Search headwords
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = start,
+                    Count = count,
+                };
+                var resultHeadwords = client.SearchHeadword(newRequest);
+
+                // Load info about dictionaries/books
+                var bookListDictionary = new Dictionary<string, DictionaryContract>();
+                foreach (var projectId in resultHeadwords.Select(x => x.ProjectId).Distinct())
+                {
+                    var bookInfo = client.GetProjectMetadata(projectId, false, false, false, false, false);
+                    var resultBookInfo = new DictionaryContract
+                    {
+                        BookId = projectId,
+                        BookXmlId = projectId.ToString(), // TODO remove
+                        BookAcronym = bookInfo.SourceAbbreviation,
+                        BookTitle = bookInfo.Title,
+                        BookVersionId = 0, // TODO not specified
+                        BookVersionXmlId = null //TODO not specified
+                    };
+                    bookListDictionary.Add(projectId.ToString(), resultBookInfo);
+                }
+
+                // Create response
+                var result = new HeadwordListContract
+                {
+                    HeadwordList = MapHeadwordsToGroupedList(resultHeadwords),
+                    BookList = bookListDictionary
+                };
+
+                return result;
             }
-            using (var client = GetMainServiceClient())
+        }
+
+        private List<HeadwordContract> MapHeadwordsToGroupedList(List<Vokabular.MainService.DataContracts.Contracts.HeadwordContract> headwords)
+        {
+            var resultList = new List<HeadwordContract>();
+            HeadwordContract lastHeadword = null;
+            foreach (var headwordContract in headwords)
             {
-                var result = client.SearchHeadwordByCriteria(listSearchCriteriaContracts, DictionarySearchTarget.Fulltext);
-                return Json(result);
+                if (lastHeadword == null || lastHeadword.Headword != headwordContract.DefaultHeadword)
+                {
+                    lastHeadword = new HeadwordContract
+                    {
+                        Headword = headwordContract.DefaultHeadword,
+                        Dictionaries = new List<HeadwordBookInfoContract>()
+                    };
+                    resultList.Add(lastHeadword);
+                }
+
+                foreach (var resourcePageId in headwordContract.HeadwordItems.Select(x => x.ResourcePageId).Distinct())
+                {
+                    var dictionaryInfo = new HeadwordBookInfoContract
+                    {
+                        BookXmlId = headwordContract.ProjectId.ToString(), // TODO change XmlId to normal ID
+                        EntryXmlId = headwordContract.Id.ToString(),
+                        Image = null, //TODO remove Image
+                        PageId = resourcePageId, // TODO add PageId usage to DictionaryViewer
+                    };
+                    lastHeadword.Dictionaries.Add(dictionaryInfo);
+                }
             }
+
+            return resultList;
         }
 
         public ActionResult GetHeadwordDescription(string bookGuid, string xmlEntryId)
@@ -348,28 +346,45 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
         {
-            using (var client = GetMainServiceClient())
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                var resultCount = client.GetHeadwordCount(selectedCategoryIds, selectedBookIds, AreaBookType);
+                var newRequest = new HeadwordSearchRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts,
+                };
+                var resultCount = client.SearchHeadwordCount(newRequest);
                 return Json(resultCount);
             }
         }
 
         public ActionResult GetHeadwordList(IList<int> selectedCategoryIds, IList<long> selectedBookIds, int page, int pageSize)
         {
-            using (var client = GetMainServiceClient())
-            {
-                var start = (page - 1)*pageSize;
-                HeadwordListContract result = client.GetHeadwordList(selectedCategoryIds, selectedBookIds, start, pageSize, AreaBookType);
-                return Json(result);
-            }
+            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            var start = (page - 1) * pageSize;
+            var result = SearchHeadwordByCriteria(listSearchCriteriaContracts, start, pageSize);
+            return Json(result);
         }
 
         public ActionResult GetHeadwordPageNumber(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query, int pageSize)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var rowNumber = client.GetHeadwordRowNumber(selectedCategoryIds, selectedBookIds, query, AreaBookType);
+                var request = new HeadwordRowNumberSearchRequestContract
+                {
+                    Query = query,
+                    Category = new SelectedCategoryCriteriaContract
+                    {
+                        BookType = AreaBookType,
+                        SelectedBookIds = selectedBookIds,
+                        SelectedCategoryIds = selectedCategoryIds,
+                    }
+                };
+                var rowNumber = client.SearchHeadwordRowNumber(request);
 
                 var resultPageNumber = (rowNumber - 1) / pageSize + 1;
 
@@ -390,22 +405,13 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetTypeaheadDictionaryHeadword(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var result = client.GetTypeaheadDictionaryHeadwords(selectedCategoryIds, selectedBookIds, query, AreaBookType);
+                var result = client.GetHeadwordAutocomplete(query, AreaBookType, selectedCategoryIds, selectedBookIds);
                 return Json(result);
             }
         }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
+        
         public ActionResult GetHeadwordBookmarks()
         {
             using (var client = GetMainServiceClient())
@@ -445,93 +451,43 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
         private void AddHeadwordFeedback(string content, string bookXmlId, string bookVersionXmlId, string entryXmlId, string name, string email)
         {
             var username = HttpContext.User.Identity.Name;
-                    using (var client = GetMainServiceClient())
-                    {
+            using (var client = GetMainServiceClient())
+            {
                 if (string.IsNullOrWhiteSpace(username))
-                    {
-                        client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
-                    }
+                {
+                    client.CreateAnonymousFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, name, email);
+                }
                 else
-                    {
-                        client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
-                    }
+                {
+                    client.CreateFeedbackForHeadword(content, bookXmlId, bookVersionXmlId, entryXmlId, username);
+                }
             }
         }
 
         public ActionResult DictionaryAdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
-
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult DictionaryAdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = DeserializeJsonSearchCriteria(json);
-            listSearchCriteriaContracts.Add(CreateResultCriteriaContract(start, count, sortingEnum, sortAsc));
-
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult DictionaryBasicSearchResultsCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.SearchCriteriaResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult DictionaryBasicSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                CreateResultCriteriaContract(start, count, sortingEnum, sortAsc)
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                listSearchCriteriaContracts.Add(CreateWordListContract(CriteriaKey.Title, text));
-            }
-            if (!IsNullOrEmpty(selectedBookIds) || !IsNullOrEmpty(selectedCategoryIds))
-            {
-                listSearchCriteriaContracts.Add(CreateCategoryCriteriaContract(selectedBookIds, selectedCategoryIds));
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.SearchByCriteria(listSearchCriteriaContracts);
-                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
-            }
+            var results = SearchByCriteriaText(CriteriaKey.Title, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
+            return Json(new { books = results }, GetJsonSerializerSettingsForBiblModule());
         }
 
         public ActionResult GetDictionaryInfo(string bookXmlId)

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate.SqlCommand;
+using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -179,6 +181,41 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .Fetch(x => x.BookVersion).Eager
                 .SingleOrDefault();
+        }
+
+        public virtual IList<TextComment> GetCommentsForText(long textId)
+        {
+            TextComment subcommentAlias = null;
+
+            return GetSession().QueryOver<TextComment>()
+                .JoinAlias(x => x.TextComments, () => subcommentAlias, JoinType.LeftOuterJoin)
+                .OrderBy(x => x.CreateTime).Asc
+                .OrderBy(() => subcommentAlias.CreateTime).Asc
+                .Where(x => x.ResourceText.Id == textId)
+                .Fetch(x => x.CreatedByUser).Eager
+                .Fetch(x => x.TextComments).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .List()
+                .Where(x => x.ParentComment == null)
+                .ToList();
+        }
+
+        public virtual IList<NamedResourceGroup> GetNamedResourceGroupList(long projectId, ResourceTypeEnum? filterResourceType)
+        {
+            Resource resourceAlias = null;
+
+            var query = GetSession().QueryOver<NamedResourceGroup>()
+                .Where(x => x.Project.Id == projectId)
+                .OrderBy(x => x.Name).Asc
+                .TransformUsing(Transformers.DistinctRootEntity);
+
+            if (filterResourceType != null)
+            {
+                query.JoinAlias(x => x.Resources, () => resourceAlias)
+                    .And(() => resourceAlias.ResourceType == filterResourceType.Value);
+            }
+
+            return query.List();
         }
     }
 }

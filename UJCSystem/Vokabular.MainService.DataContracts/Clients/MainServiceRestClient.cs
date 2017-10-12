@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
-using Vokabular.MainService.DataContracts.Clients.Extensions;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
+using Vokabular.RestClient;
+using Vokabular.RestClient.Extensions;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
@@ -176,7 +177,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public void SetProjectResponsiblePersons(long projectId, IntegerIdListContract request)
+        public void SetProjectResponsiblePersons(long projectId, List<ProjectResponsiblePersonIdContract> request)
         {
             try
             {
@@ -563,11 +564,62 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query)
+        public List<OriginalAuthorContract> GetOriginalAuthorAutocomplete(string query, BookTypeEnumContract? bookType = null)
         {
             try
             {
-                var result = Get<List<OriginalAuthorContract>>("author/autocomplete".AddQueryString("query", query));
+                var url = UrlQueryBuilder.Create("author/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .ToQuery();
+
+                var result = Get<List<OriginalAuthorContract>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<string> GetTitleAutocomplete(string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("metadata/title/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
+                    .AddParameterList("selectedProjectIds", selectedProjectIds)
+                    .ToQuery();
+                
+                var result = Get<List<string>>(url);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType = null, IList<int> selectedCategoryIds = null, IList<long> selectedProjectIds = null)
+        {
+            try
+            {
+                var url = UrlQueryBuilder.Create("headword/autocomplete")
+                    .AddParameter("query", query)
+                    .AddParameter("bookType", bookType)
+                    .AddParameterList("selectedCategoryIds", selectedCategoryIds)
+                    .AddParameterList("selectedProjectIds", selectedProjectIds)
+                    .ToQuery();
+
+                var result = Get<List<string>>(url);
                 return result;
             }
             catch (HttpRequestException e)
@@ -627,6 +679,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<HeadwordContract> SearchHeadword(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<HeadwordContract>>("headword/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<AudioBookSearchResultContract> SearchAudioBook(SearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<AudioBookSearchResultContract>>("audiobook/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public long SearchBookCount(SearchRequestContract request)
         {
             try
@@ -643,11 +727,59 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public long SearchHeadwordCount(HeadwordSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<int>("headword/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchHeadwordRowNumber(HeadwordRowNumberSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<int>("headword/search-row-number", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             try
             {
                 var result = Get<SearchResultDetailContract>($"book/{projectId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public AudioBookSearchResultContract GetAudioBookDetail(long projectId)
+        {
+            try
+            {
+                var result = Get<AudioBookSearchResultContract>($"audiobook/{projectId}");
                 return result;
             }
             catch (HttpRequestException e)

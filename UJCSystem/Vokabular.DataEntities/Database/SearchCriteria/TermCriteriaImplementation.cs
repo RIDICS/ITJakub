@@ -11,16 +11,14 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 {
     public class TermCriteriaImplementation : ICriteriaImplementationBase
     {
-        public CriteriaKey CriteriaKey
-        {
-            get { return CriteriaKey.Term; }
-        }
+        public CriteriaKey CriteriaKey => CriteriaKey.Term;
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
             var wordListCriteria = (WordListCriteriaContract)searchCriteriaContract;
-            var pageAlias = string.Format("pa{0}", Guid.NewGuid().ToString("N"));
-            var termAlias = string.Format("ta{0}", Guid.NewGuid().ToString("N"));
+            var resourceAlias = string.Format("r{0:N}", Guid.NewGuid());
+            var pageResourceAlias = string.Format("pr{0:N}", Guid.NewGuid());
+            var termAlias = string.Format("t{0:N}", Guid.NewGuid());
             var whereBuilder = new StringBuilder();
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
@@ -28,14 +26,15 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
                 if (whereBuilder.Length > 0)
                     whereBuilder.Append(" or");
 
-                var uniqueParameterName = string.Format("up{0}", Guid.NewGuid().ToString("N"));
+                var uniqueParameterName = $"param{metadataParameters.Count}";
                 whereBuilder.AppendFormat(" {0}.Text like (:{1})", termAlias, uniqueParameterName);
                 metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
             }
 
             return new SearchCriteriaQuery
             {
-                Join = string.Format("inner join bv.BookPages {0} inner join {0}.Terms {1}", pageAlias, termAlias),
+                CriteriaKey = CriteriaKey,
+                Join = string.Format("inner join project.Resources {0} inner join {0}.ResourceVersions {1} inner join {1}.Terms {2}", resourceAlias, pageResourceAlias, termAlias),
                 Where = whereBuilder.ToString(),
             };
         }

@@ -44,6 +44,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             {
                 Project = project,
                 BookTypes = bookTypes,
+                DefaultBookType = bookTypes.FirstOrDefault(),
                 Comment = m_comment,
                 CreateTime = now,
                 PublishTime = now,

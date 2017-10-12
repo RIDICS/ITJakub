@@ -8,12 +8,18 @@ namespace Vokabular.Shared.DataContracts.Search.Criteria
     [DataContract]
     public class ResultRestrictionCriteriaContract : SearchCriteriaContract
     {
-        public override CriteriaKey Key
-        {
-            get { return CriteriaKey.ResultRestriction; }
-        }
+        public override CriteriaKey Key => CriteriaKey.ResultRestriction;
 
         [DataMember]
         public IList<BookVersionPairContract> ResultBooks { get; set; }
+    }
+
+    [DataContract]
+    public class NewResultRestrictionCriteriaContract : SearchCriteriaContract
+    {
+        public override CriteriaKey Key => CriteriaKey.ResultRestriction;
+
+        [DataMember]
+        public IList<long> ProjectIds { get; set; }
     }
 }

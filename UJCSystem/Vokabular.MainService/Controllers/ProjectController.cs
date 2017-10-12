@@ -5,7 +5,7 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Headers;
+using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
@@ -113,9 +113,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpPut("{projectId}/responsibleperson")]
-        public void SetResponsiblePersons(long projectId, [FromBody] IntegerIdListContract responsiblePersonIdList)
+        public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            m_projectMetadataManager.SetResponsiblePersons(projectId, responsiblePersonIdList);
+            m_projectMetadataManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
         [HttpGet("{projectId}/page")]
@@ -147,6 +147,26 @@ namespace Vokabular.MainService.Controllers
         public IActionResult CreateNewTextResourceVersion([FromBody] TextContract request)
         {
             return StatusCode(StatusCodes.Status409Conflict); // Version conflict
+        }
+
+        [HttpGet("text/{textId}/comment")]
+        public List<GetTextCommentContract> GetCommentsForText(long textId)
+        {
+            var result = m_pageManager.GetCommentsForText(textId);
+            return result;
+        }
+
+        [HttpPost("text/{textId}/comment")]
+        public long CreateComment(long textId, [FromBody] CreateTextCommentContract request)
+        {
+            var resultId = m_pageManager.CreateNewComment(textId, request);
+            return resultId;
+        }
+
+        [HttpDelete("text/comment/{commentId}")]
+        public void DeleteComment(long commentId)
+        {
+            m_pageManager.DeleteComment(commentId);
         }
     }
 }

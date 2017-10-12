@@ -45,6 +45,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Database\Entities\BookType.hbm.xml" />
+    <EmbeddedResource Include="Database\Entities\TextComment.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\Category.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteBase.hbm.xml" />
     <EmbeddedResource Include="Database\Entities\FavoriteLabel.hbm.xml" />

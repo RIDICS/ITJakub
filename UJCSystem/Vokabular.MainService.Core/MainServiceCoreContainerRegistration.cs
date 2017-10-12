@@ -13,6 +13,7 @@ namespace Vokabular.MainService.Core
         {
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<CategoryManager>();
+            container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<PageManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectManager>();
@@ -23,17 +24,25 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
 
+            container.AddSingleton<Profile, AudioProfile>();
             container.AddSingleton<Profile, BookProfile>();
             container.AddSingleton<Profile, CategoryProfile>();
+            container.AddSingleton<Profile, ChapterProfile>();
+            container.AddSingleton<Profile, HeadwordProfile>();
             container.AddSingleton<Profile, KeywordProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
             container.AddSingleton<Profile, MetadataProfile>();
+            container.AddSingleton<Profile, NamedResourceGroupProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();
             container.AddSingleton<Profile, PageProfile>();
             container.AddSingleton<Profile, ProjectProfile>();
+            container.AddSingleton<Profile, ResourceProfile>();
             container.AddSingleton<Profile, ResponsiblePersonProfile>();
+            container.AddSingleton<Profile, TermProfile>();
+            container.AddSingleton<Profile, TextCommentProfile>();
             container.AddSingleton<Profile, TextProfile>();
+            container.AddSingleton<Profile, TrackProfile>();
             container.AddSingleton<Profile, UserProfile>();
 
             container.Install<CoreContainerRegistration>();

@@ -25,6 +25,9 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
 
         [DataMember]
         public string Image { get; set; }
+
+        [DataMember]
+        public long? PageId { get; set; }
     }
 
     [DataContract]

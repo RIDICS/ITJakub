@@ -34,6 +34,7 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 
             return new SearchCriteriaQuery
             {
+                CriteriaKey = CriteriaKey,
                 Join = string.Format("inner join project.Authors {0} inner join {0}.OriginalAuthor {1}", projectOriginalAuthorAlias, originalAuthorAlias),
                 Where = whereBuilder.ToString()
             };

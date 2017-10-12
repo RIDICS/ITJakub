@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Vokabular.DataEntities.Database.Entities {
     
-    public class Category : IEquatable<Category> {
-
+    public class Category : IEquatable<Category>
+    {
         public virtual int Id { get; set; }
 
         public virtual Category ParentCategory { get; set; }

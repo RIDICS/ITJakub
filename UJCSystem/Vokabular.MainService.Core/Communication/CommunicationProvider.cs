@@ -1,4 +1,5 @@
 using ITJakub.FileProcessing.DataContracts;
+using Vokabular.FulltextService.DataContracts.Clients;
 
 namespace Vokabular.MainService.Core.Communication
 {
@@ -7,6 +8,7 @@ namespace Vokabular.MainService.Core.Communication
         private readonly CommunicationConfigurationProvider m_configurationProvider;
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
+        private const string FulltextServiceEndpointName = "FulltextService";
         
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
         {
@@ -19,6 +21,12 @@ namespace Vokabular.MainService.Core.Communication
             var binding = m_configurationProvider.GetBasicHttpBindingStreamed();
             var client = new FileProcessingServiceClient(binding, endpoint);
             return client;
+        }
+
+        public FulltextServiceClient GetFulltextServiceClient()
+        {
+            var uri = m_configurationProvider.GetEndpointUri(FulltextServiceEndpointName);
+            return new FulltextServiceClient(uri);
         }
     }
 }

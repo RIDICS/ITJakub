@@ -6,12 +6,18 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
 {
-    public class SearchRequestContract
+    public class SearchRequestContractBase
     {
         public int? Start { get; set; }
 
         public int? Count { get; set; }
 
+        [JsonConverter(typeof(SearchCriteriaJsonConverter))]
+        public IList<SearchCriteriaContract> ConditionConjunction { get; set; }
+    }
+
+    public class SearchRequestContract : SearchRequestContractBase
+    {
         public HitSettingsContract HitSettingsContract { get; set; }
 
         public TermsSettingsContract TermsSettingsContract { get; set; }
@@ -19,9 +25,6 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
         public SortTypeEnumContract? Sort { get; set; }
 
         public SortDirectionEnumContract? SortDirection { get; set; }
-
-        [JsonConverter(typeof(SearchCriteriaJsonConverter))]
-        public IList<SearchCriteriaContract> ConditionConjunction { get; set; }
     }
 
     public class HitSettingsContract
@@ -36,5 +39,9 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
     public class TermsSettingsContract
     {
         // count and start ommited because missing use case. This contract is used as request for loading terms.
+    }
+
+    public class HeadwordSearchRequestContract : SearchRequestContractBase
+    {
     }
 }

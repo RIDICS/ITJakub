@@ -12,9 +12,8 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
@@ -31,7 +30,7 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             m_feedbacksManager = feedbacksManager;
         }
 
-        public override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
+        protected override BookTypeEnumContract AreaBookType => BookTypeEnumContract.AudioBook;
 
         private FeedbackFormIdentification GetFeedbackFormIdentification()
         {
@@ -53,29 +52,6 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
         {
             var viewModel = m_feedbacksManager.GetBasicViewModel(GetFeedbackFormIdentification(), StaticTexts.TextHomeFeedback, GetEncryptedClient(), GetUserName());
             return View(viewModel);
-
-            //var pageStaticText = m_staticTextManager.GetRenderedHtmlText(StaticTexts.TextHomeFeedback);
-
-            //var username = HttpContext.User.Identity.Name;
-            //if (string.IsNullOrWhiteSpace(username))
-            //{
-            //    return View(new FeedbackViewModel
-            //    {
-            //        PageStaticText = pageStaticText
-            //    });
-            //}
-            //using (var client = GetEncryptedClient())
-            //{
-            //    var user = client.FindUserByUserName(username);
-            //    var viewModel = new FeedbackViewModel
-            //    {
-            //        Name = string.Format("{0} {1}", user.FirstName, user.LastName),
-            //        Email = user.Email,
-            //        PageStaticText = pageStaticText
-            //    };
-
-            //    return View(viewModel);
-            //}
         }
 
         [HttpPost]
@@ -98,173 +74,67 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             return View();
         }
 
-
-        public ActionResult GetTypeaheadAuthor(string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadAuthorsByBookType(query, AreaBookType);
-                return Json(result);
-            }
-        }
-
-        public ActionResult GetTypeaheadTitle(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTitlesByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
+        
         public ActionResult GetAudioWithCategories()
         {
-            using (var client = GetMainServiceClient())
-            {
-                var audiosWithCategories = client.GetBooksWithCategoriesByBookType(AreaBookType);
-                return Json(audiosWithCategories);
-            }
+            var result = GetBooksAndCategories();
+            return Json(result);
         }
 
         public ActionResult AdvancedSearchResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaJsonCount(json, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
 
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Start = start,
-                Count = count,
-                Sorting = (SortEnum) sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-            });
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                var request = new SearchRequestContract
                 {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-                return Json(new {books = results.Results}, GetJsonSerializerSettingsForBiblModule());
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    Start = start,
+                    Count = count,
+                    Sort = (SortTypeEnumContract)sortingEnum,
+                    SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
+                };
+                var results = client.SearchAudioBook(request);
+                return Json(new {books = results}, GetJsonSerializerSettingsForBiblModule());
             }
         }
-
 
         public ActionResult TextSearchCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if(!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.GetAudioBooksSearchResultsCount(listSearchCriteriaContracts);
-
-                return Json(new {count});
-            }
+            var count = SearchByCriteriaTextCount(CriteriaKey.Title, text, selectedBookIds, selectedCategoryIds);
+            return Json(new { count });
         }
-
-
+        
         public ActionResult TextSearchPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Title, text);
+            
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                new ResultCriteriaContract
+                var request = new SearchRequestContract
                 {
+                    ConditionConjunction = listSearchCriteriaContracts,
                     Start = start,
                     Count = count,
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Title,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
+                    Sort = (SortTypeEnumContract)sortingEnum,
+                    SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
                 };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-
-            if (selectedBookIds != null || selectedCategoryIds != null)
-            {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
-                {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
-                });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.GetAudioBooksSearchResults(listSearchCriteriaContracts);
-                return Json(new {books = results.Results}, GetJsonSerializerSettingsForBiblModule());
+                var results = client.SearchAudioBook(request);
+                return Json(new { books = results }, GetJsonSerializerSettingsForBiblModule());
             }
         }
 
