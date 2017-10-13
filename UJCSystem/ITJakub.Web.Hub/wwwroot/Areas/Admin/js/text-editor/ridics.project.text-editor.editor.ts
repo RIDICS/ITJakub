@@ -1,6 +1,7 @@
 ﻿class Editor {
     private currentPageNumber = 0; //default initialisation
     private editingMode = false;
+    private originalContent = "";
     private simplemde: SimpleMDE;
     private readonly commentInput: CommentInput;
     private readonly util: Util;
@@ -36,7 +37,9 @@
     }
 
     processAreaSwitch = () => {
-        $(document.documentElement).on("click",
+        var editorExists = false;
+
+        $("#project-resource-preview").on("click",
             ".editor",
             (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
@@ -47,76 +50,100 @@
                     if (pageNumber !== this.currentPageNumber) {
                         pageDiffers = true;
                     }
-                    this.currentPageNumber = jEl.data("page") as number;
-                    const page = $(`[data-page=${pageNumber}]`);
-                    const editor = page.find(".editor");
-                    const pageDom = $(editor).children("textarea");
-                    const editorExists = $(editor).children(".CodeMirror").length;
+                    this.currentPageNumber = pageNumber;
+
+                    editorExists = ($(".CodeMirror").length !== 0);
                     if (!editorExists) {
                         if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
                             this.simplemde.toTextArea();
                             this.simplemde = null;
                         }
-                        const simpleMdeOptions: SimpleMDE.Options = {
-                            element: pageDom[0],
-                            autoDownloadFontAwesome: false,
-                            spellChecker: false,
-                            mode: "gfm",
-                            toolbar: [
-                                "bold", "italic", "heading", "|", "quote", "preview", {
-                                    name: "comment",
-                                    action: this.addCommentFromEditor,
-                                    className: "fa fa-comment",
-                                    title: "Add comment"
-                                }
-                            ]
-                        };
-                        this.simplemde = new SimpleMDE(simpleMdeOptions);
-                        this.simplemde.defineMode("comment",
-                            () => ({
-                                token(stream: any) {
-                                    if (stream.match(
-                                        /(\$([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\%)/)
-                                    ) {
-                                        return "comment-start";
-                                    }
-                                    if (stream.match(
-                                        /(\%([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\$)/)
-                                    ) {
-                                        return "comment-end";
-                                    }
-                                    while (stream.next() != null &&
-                                        !stream.match(
-                                            /(([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12})/,
-                                            false)) {
-                                        return null;
-                                    }
-
-                                }
-                            }));
-
-                        this.simplemde.codemirror.addOverlay("comment");
-
+                        this.addEditor(jEl);
+                        this.originalContent = this.simplemde.value();
                     }
                     if (editorExists && pageDiffers) {
+                        const contentBeforeClose = this.simplemde.value();
+                        if (contentBeforeClose !== this.originalContent) {
+                            console.log("Contents differ");
+                        }
                         this.simplemde.toTextArea();
                         this.simplemde = null;
+                        this.addEditor(jEl);
+                        this.originalContent = this.simplemde.value();
                     }
                 }
             });
-    }
 
-    processPageModeSwitch = () => {
         $("#project-resource-preview").on("click",
             ".editing-mode-button",
             () => {
                 this.editingMode = !this.editingMode;
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
+                    const contentBeforeClose = this.simplemde.value();
+                    if (contentBeforeClose !== this.originalContent) {
+                        console.log("Contents differ change mode");
+                    }
                     this.simplemde.toTextArea();
                     this.simplemde = null;
                 }
                 this.toggleDivAndTextarea();
             });
+    }
+
+    private saveContents(textId: number, contents: string) {
+        console.log(textId);//TODO add logic
+        console.log(contents);
+        this.originalContent = contents;
+    }
+
+    private addEditor(jEl: JQuery) {
+        const editor = jEl.find(".editor");
+        const textAreaEl = $(editor).children("textarea");
+        const textId = jEl.data("page") as number;
+        const simpleMdeOptions: SimpleMDE.Options = {
+            element: textAreaEl[0],
+            autoDownloadFontAwesome: false,
+            spellChecker: false,
+            mode: "gfm",
+            toolbar: [
+                "bold", "italic", "heading", "|", "quote", "preview", {
+                    name: "comment",
+                    action: this.addCommentFromEditor,
+                    className: "fa fa-comment",
+                    title: "Add comment"
+                }, "|", {
+                    name: "save",
+                    action: (editor)=>{this.saveContents(textId,editor.value())},
+                    className: "fa fa-floppy-o",
+                    title: "Save"
+                }
+            ]
+        };
+        this.simplemde = new SimpleMDE(simpleMdeOptions);
+        this.simplemde.defineMode("comment",
+            () => ({
+                token(stream: any) {
+                    if (stream.match(
+                        /(\$([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\%)/)
+                    ) {
+                        return "comment-start";
+                    }
+                    if (stream.match(
+                        /(\%([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\$)/)
+                    ) {
+                        return "comment-end";
+                    }
+                    while (stream.next() != null &&
+                        !stream.match(
+                            /(([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12})/,
+                            false)) {
+                        return null;
+                    }
+
+                }
+            }));
+
+        this.simplemde.codemirror.addOverlay("comment");
     }
 
     toggleDivAndTextarea = () => {

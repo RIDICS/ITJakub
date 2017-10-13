@@ -29,7 +29,6 @@ class TextEditorMain {
         const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this);
         const projectAjax = util.getProjectContent(1);//TODO debug
-        pageTextEditor.processPageModeSwitch();
         pageTextEditor.processAreaSwitch();
         connections.toggleConnections();
         const gifSpinner =
