@@ -64,7 +64,7 @@
                     if (editorExists && pageDiffers) {
                         const contentBeforeClose = this.simplemde.value();
                         if (contentBeforeClose !== this.originalContent) {
-                            console.log("Contents differ");
+                            this.showSaveConfirmationDialog();
                         }
                         this.simplemde.toTextArea();
                         this.simplemde = null;
@@ -81,13 +81,35 @@
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
                     const contentBeforeClose = this.simplemde.value();
                     if (contentBeforeClose !== this.originalContent) {
-                        console.log("Contents differ change mode");
+                        this.showSaveConfirmationDialog();//TODO wait for user response
                     }
                     this.simplemde.toTextArea();
                     this.simplemde = null;
                 }
                 this.toggleDivAndTextarea();
             });
+    }
+
+    private showSaveConfirmationDialog() {
+        $("#save-confirmation-dialog").dialog("open");
+    }
+
+    createConfirmationDialog() {
+        $("#save-confirmation-dialog").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "Close without saving": function () {
+                    $(this).dialog("close");
+                },
+                "Cancel": function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
     }
 
     private saveContents(textId: number, contents: string) {
