@@ -66,13 +66,15 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         //public IList<PageResultContext> Results { get; set; }
 
-        public int TermsPageHitsCount { get; set; }
+        //public int TermsPageHitsCount { get; set; }
 
         //public IList<PageDescriptionContract> TermsPageHits { get; set; }
 
         public string RelicAbbreviation { get; set; }
 
         public string SourceAbbreviation { get; set; }
+
+        public SearchTermResultContract TermPageHits { get; set; }
     }
 
     public class SearchResultDetailContract : SearchResultContract

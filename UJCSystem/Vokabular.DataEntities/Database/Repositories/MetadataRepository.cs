@@ -2,6 +2,7 @@
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
+using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -286,6 +287,14 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .TransformUsing(Transformers.AliasToBean<PageCountResult>())
                 .List<PageCountResult>();
 
+            return result;
+        }
+
+        public IList<PageResource> GetPagesWithTerms(TermCriteriaConditionCreator creator)
+        {
+            var query = GetSession().CreateQuery(creator.GetQueryString())
+                .SetParameters(creator);
+            var result = query.List<PageResource>();
             return result;
         }
 

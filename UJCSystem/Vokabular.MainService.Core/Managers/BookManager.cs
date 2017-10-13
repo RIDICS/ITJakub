@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using AutoMapper;
 using Vokabular.Core.Search;
+using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
@@ -92,6 +93,8 @@ namespace Vokabular.MainService.Core.Managers
                 // TODO send request to fulltext DB and remove this mock:
                 var mockResultProjectIdList = new List<long>(){1};
 
+                // TODO fetch Terms
+
                 var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
@@ -102,7 +105,14 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in relational DB
 
-                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator);
+                TermCriteriaConditionCreator termCriteria = null;
+                if (request.FetchTerms && request.ConditionConjunction.Any(x => x.Key == CriteriaKey.Term))
+                {
+                    termCriteria = new TermCriteriaConditionCreator();
+                    termCriteria.AddCriteria(processedCriterias.MetadataCriterias);
+                }
+
+                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator, termCriteria);
                 var dbResult = searchByCriteriaWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
