@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using AutoMapper;
 using Vokabular.Core.Data;
 using Vokabular.Core.Search;
@@ -16,6 +17,7 @@ using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -23,6 +25,7 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class BookManager
     {
+        private readonly CriteriaKey[] SupportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
@@ -543,6 +546,42 @@ namespace Vokabular.MainService.Core.Managers
                 return x.GetHeadwordRowNumber(request.Query, projectIds, categoryIds, bookTypeEnum);
             });
 
+            return result;
+        }
+
+        public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
+        {
+            var termConditions = new List<SearchCriteriaContract>();
+            var fulltextConditions = new List<SearchCriteriaContract>();
+            foreach (var searchCriteriaContract in request.ConditionConjunction)
+            {
+                if (searchCriteriaContract.Key == CriteriaKey.Term)
+                {
+                    termConditions.Add(searchCriteriaContract);
+                }
+                else if (SupportedSearchPageCriteria.Contains(searchCriteriaContract.Key))
+                {
+                    fulltextConditions.Add(searchCriteriaContract);
+                }
+                else
+                {
+                    throw new HttpErrorCodeException($"Not supported criteria key: {searchCriteriaContract.Key}", HttpStatusCode.BadRequest);
+                }
+            }
+
+            var termConditionCreator = new TermCriteriaConditionCreator();
+            termConditionCreator.AddCriteria(termConditions);
+            termConditionCreator.SetProjectIds(new[] {projectId});
+
+            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+
+            if (fulltextConditions.Count > 0)
+            {
+                // TODO filter pages by fulltext conditions
+                throw new NotImplementedException();
+            }
+            
+            var result = Mapper.Map<List<PageContract>>(dbResult);
             return result;
         }
     }

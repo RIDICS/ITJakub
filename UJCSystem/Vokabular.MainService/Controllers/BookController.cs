@@ -45,6 +45,13 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpPost("{projectId}/page/search")]
+        public List<PageContract> SearchPage(long projectId, [FromBody] SearchPageRequestContract request)
+        {
+            var result = m_bookManager.SearchPage(projectId, request);
+            return result;
+        }
+
         [HttpGet("{projectId}")]
         public BookContract GetBookInfo(long projectId)
         {

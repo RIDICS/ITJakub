@@ -759,6 +759,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<PageContract>>($"book/{projectId}/page/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public BookContract GetBookInfo(long projectId)
         {
             try

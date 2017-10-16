@@ -81,10 +81,9 @@ namespace Vokabular.DataEntities.Database.ConditionCriteria
                 var criteria = CriteriaList[i];
                 var termAlias = $"term{i}";
 
-                if (i > 0)
-                    whereBuilder.Append(" and ");
-
-                whereBuilder.Append('(');
+                whereBuilder
+                    .Append(" and ")
+                    .Append('(');
 
                 for (var j = 0; j < criteria.Disjunctions.Count; j++)
                 {
@@ -106,7 +105,7 @@ namespace Vokabular.DataEntities.Database.ConditionCriteria
                 joinBuilder.AppendFormat(" inner join page.Terms {0}", termAlias);
             }
 
-            return $"select page from PageResource page join fetch page.Resource resource {joinBuilder} where resource.LatestVersion.Id = page.Id and resource.Project.Id in (:projectIds) and {whereBuilder} order by resource.Project.Id";
+            return $"select page from PageResource page join fetch page.Resource resource {joinBuilder} where resource.LatestVersion.Id = page.Id and resource.Project.Id in (:projectIds) {whereBuilder} order by resource.Project.Id, page.Position";
         }
     }
 }
