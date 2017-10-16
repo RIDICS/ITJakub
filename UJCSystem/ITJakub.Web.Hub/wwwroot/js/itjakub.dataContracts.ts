@@ -159,6 +159,43 @@ interface IBookContract {
     lastModification: string;
 }
 
+interface ICorpusSearchResult {
+    bookId: number;
+    bookXmlId: string;
+    versionXmlId: string;
+    title: string;
+    author: string;
+    originDate: string;
+    acronym: string;
+    notes: Array<string>;
+    pageResultContext: IPageResultContext;
+    verseResultContext: IVerseResultContext;
+    bibleVerseResultContext: IBibleVerseResultContext;
+}
+
+interface IPageResultContext {
+    pageXmlId: string;
+    pageName: string;
+    contextStructure: IKwicStructure;
+}
+
+interface IKwicStructure {
+    before: string;
+    match: string;
+    after: string;
+}
+
+interface IVerseResultContext {
+    verseXmlId: string;
+    verseName: string;
+}
+
+interface IBibleVerseResultContext {
+    bibleBook: string;
+    bibleChapter: string;
+    bibleVerse: string;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;

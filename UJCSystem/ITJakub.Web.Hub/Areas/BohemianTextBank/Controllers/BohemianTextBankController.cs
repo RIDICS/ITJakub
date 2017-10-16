@@ -220,7 +220,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
-                return Json(new {results = results.SearchResults}, GetJsonSerializerSettingsForBiblModule());
+                return Json(new {results = results.SearchResults});
             }
         }
 
@@ -286,7 +286,7 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             using (var client = GetMainServiceClient())
             {
                 var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
-                return Json(new {results = results.SearchResults}, GetJsonSerializerSettingsForBiblModule());
+                return Json(new {results = results.SearchResults});
             }
         }
 
