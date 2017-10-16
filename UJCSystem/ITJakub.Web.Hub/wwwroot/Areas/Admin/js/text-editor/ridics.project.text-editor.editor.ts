@@ -128,6 +128,8 @@
                                 thisClass.toggleDivAndTextarea();
                             });
                     } else if (contentBeforeClose === this.originalContent) {
+                        thisClass.simplemde.toTextArea();
+                        thisClass.simplemde = null;
                         thisClass.toggleDivAndTextarea();
                     }
                 }
