@@ -459,12 +459,11 @@ namespace Vokabular.MainService.Core.Managers
                 new CorpusSearchResultContract
                 {
                     Title = "Title",
-                    Acronym = "T1",
+                    SourceAbbreviation = "Ts",
+                    RelicAbbreviation = "Tr",
                     Author = "AuthLabel",
-                    BookXmlId = "xml1",
                     BookId = 1,
                     OriginDate = "1990",
-                    VersionXmlId = "ver-xml-1",
                     Notes = new List<string> {"not1", "not2"},
                     BibleVerseResultContext = new BibleVerseResultContext
                     {
@@ -472,10 +471,12 @@ namespace Vokabular.MainService.Core.Managers
                         BibleChapter = "BC",
                         BibleVerse = "BV"
                     },
-                    PageResultContext = new PageResultContext
+                    PageResultContext = new PageWithContextContract
                     {
-                        PageName = "25r",
-                        PageXmlId = "xml25",
+                        Id = 2581,
+                        VersionId = 3692,
+                        Name = "25r",
+                        Position = 25,
                         ContextStructure = new KwicStructure
                         {
                             After = "end of sentence",

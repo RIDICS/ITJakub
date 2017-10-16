@@ -179,22 +179,19 @@ function initSearch() {
             var verseContext = result.verseResultContext;
             var bibleVerseContext = result.bibleVerseResultContext;
             var contextStructure = pageContext.contextStructure;
-            var bookXmlId = result.bookXmlId;
             var bookId = result.bookId;
-            var pageXmlId = pageContext.pageXmlId;
-            var acronym = result.acronym;
+            var pageId = pageContext.id;
+            var acronym = result.sourceAbbreviation;
             var notes = result.notes;
 
             var tr = document.createElement("tr");
             $(tr).addClass("search-result");
-            $(tr).data("bookXmlId", bookXmlId);
             $(tr).data("bookId", bookId);
-            $(tr).data("versionXmlId", result.versionXmlId);
             $(tr).data("author", result.author);
             $(tr).data("title", result.title);
             $(tr).data("dating", result.originDate);
-            $(tr).data("pageXmlId", pageXmlId);
-            $(tr).data("pageName", pageContext.pageName);
+            $(tr).data("pageId", pageId);
+            $(tr).data("pageName", pageContext.name);
             $(tr).data("acronym", acronym);
 
 
@@ -264,7 +261,7 @@ function initSearch() {
             var abbrevTd = document.createElement("td");
 
             var abbrevHref = document.createElement("a");
-            abbrevHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookXmlId + "&searchText=" + search.getLastQuery() + "&page=" + pageXmlId;
+            abbrevHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + search.getLastQuery() + "&page=" + pageId;
             abbrevHref.innerHTML = acronym;
 
             abbrevTd.appendChild(abbrevHref);
@@ -490,7 +487,7 @@ function initSearch() {
         editionNoteAnchor.href = '/EditionNote/EditionNote?bookId=' + $(tableRow).data("bookId");
 
         var folioHref = document.createElement("a");
-        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookXmlId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageXmlId");
+        folioHref.href = getBaseUrl() + "Editions/Editions/Listing?bookId=" + $(tableRow).data("bookId") + "&searchText=" + search.getLastQuery() + "&page=" + $(tableRow).data("pageId");
         folioHref.innerHTML = typeof $(tableRow).data("pageName") !== "undefined" && $(tableRow).data("pageName") !== null ? $(tableRow).data("pageName") : undefinedReplaceString;
 
         $("#detail-folio").empty();

@@ -111,6 +111,17 @@ interface ISaveProjectResponsiblePerson {
     responsibleTypeId: number;
 }
 
+interface IPage {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+}
+
+interface IPageWithContext extends IPage {
+    contextStructure: IKwicStructure;
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
@@ -161,22 +172,17 @@ interface IBookContract {
 
 interface ICorpusSearchResult {
     bookId: number;
-    bookXmlId: string;
-    versionXmlId: string;
+    //bookXmlId: string;
+    //versionXmlId: string;
     title: string;
     author: string;
     originDate: string;
-    acronym: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
     notes: Array<string>;
-    pageResultContext: IPageResultContext;
+    pageResultContext: IPageWithContext;
     verseResultContext: IVerseResultContext;
     bibleVerseResultContext: IBibleVerseResultContext;
-}
-
-interface IPageResultContext {
-    pageXmlId: string;
-    pageName: string;
-    contextStructure: IKwicStructure;
 }
 
 interface IKwicStructure {
