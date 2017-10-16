@@ -106,7 +106,7 @@ namespace Vokabular.DataEntities.Database.ConditionCriteria
                 joinBuilder.AppendFormat(" inner join page.Terms {0}", termAlias);
             }
 
-            return $"select page from PageResource page join fetch page.Resource resource {joinBuilder} where resource.LatestVersion.Id = page.Id and resource.Project.Id in (:projectIds) and {whereBuilder}";
+            return $"select page from PageResource page join fetch page.Resource resource {joinBuilder} where resource.LatestVersion.Id = page.Id and resource.Project.Id in (:projectIds) and {whereBuilder} order by resource.Project.Id";
         }
     }
 }

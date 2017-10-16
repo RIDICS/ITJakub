@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using AutoMapper;
+using Vokabular.Core.Data;
 using Vokabular.Core.Search;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
@@ -45,9 +46,12 @@ namespace Vokabular.MainService.Core.Managers
         }
 
         private List<SearchResultContract> MapToSearchResult(IList<MetadataResource> dbResult,
-            IList<PageCountResult> dbPageCounts)
+            IList<PageCountResult> dbPageCounts, IList<PageResource> termHits)
         {
             var resultList = new List<SearchResultContract>(dbResult.Count);
+            var termResultDictionary = termHits?
+                .GroupBy(x => x.Resource.Project.Id)
+                .ToDictionary(key => key.Key, val => val.OrderBy(x => x.Position).ToList());
             foreach (var dbMetadata in dbResult)
             {
                 var resultItem = Mapper.Map<SearchResultContract>(dbMetadata);
@@ -55,9 +59,35 @@ namespace Vokabular.MainService.Core.Managers
 
                 var pageCountItem = dbPageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
                 resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
+
+                if (termResultDictionary != null)
+                {
+                    if (!termResultDictionary.TryGetValue(dbMetadata.Resource.Project.Id, out var termPageHitList))
+                    {
+                        termPageHitList = new List<PageResource>();
+                    }
+                    
+                    resultItem.TermPageHits = new SearchTermResultContract
+                    {
+                        PageHitsCount = termPageHitList.Count,
+                        PageHits = Mapper.Map<List<PageContract>>(termPageHitList),
+                    };
+                }
             }
 
             return resultList;
+        }
+
+        private TermCriteriaConditionCreator CreateTermConditionCreatorOrDefault(SearchRequestContract request, FilteredCriterias processedCriterias)
+        {
+            TermCriteriaConditionCreator termCriteria = null;
+            if (request.FetchTerms && request.ConditionConjunction.Any(x => x.Key == CriteriaKey.Term))
+            {
+                termCriteria = new TermCriteriaConditionCreator();
+                termCriteria.AddCriteria(processedCriterias.MetadataCriterias);
+            }
+
+            return termCriteria;
         }
 
         public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
@@ -93,29 +123,22 @@ namespace Vokabular.MainService.Core.Managers
                 // TODO send request to fulltext DB and remove this mock:
                 var mockResultProjectIdList = new List<long>(){1};
 
-                // TODO fetch Terms
-
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
+                var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList, termCriteria);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
-                var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts);
+                var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);
                 return resultList;
             }
             else
             {
                 // Search in relational DB
 
-                TermCriteriaConditionCreator termCriteria = null;
-                if (request.FetchTerms && request.ConditionConjunction.Any(x => x.Key == CriteriaKey.Term))
-                {
-                    termCriteria = new TermCriteriaConditionCreator();
-                    termCriteria.AddCriteria(processedCriterias.MetadataCriterias);
-                }
-
+                var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
                 var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator, termCriteria);
                 var dbResult = searchByCriteriaWork.Execute();
 
-                var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
+                var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts, searchByCriteriaWork.TermHits);
                 return resultList;
             }
             
