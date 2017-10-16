@@ -69,17 +69,20 @@
                             dialogEl.text(
                                 `There's an open editor in page ${editorPageName
                                 }. Are you sure you want to close it without saving?`);
-                            this.createConfirmationDialog(function() {
-                                    thisClass.simplemde.toTextArea();
-                                    thisClass.simplemde = null;
-                                    thisClass.currentPageNumber = pageNumber;
-                                    thisClass.addEditor(jEl);
-                                    thisClass.originalContent = thisClass.simplemde.value();
+                            this.createConfirmationDialog(() => {
+                                    this.simplemde.toTextArea();
+                                    this.simplemde = null;
+                                    this.currentPageNumber = pageNumber;
+                                    this.addEditor(jEl);
+                                    this.originalContent = this.simplemde.value();
                                 },
                                 () => {
                                     const textareaEl = jEl.find(".editor").children(".textarea-plain-text");
                                     textareaEl.trigger("blur");
                                     this.simplemde.codemirror.focus();
+                                },
+                                () => {
+                                    this.saveContents(this.currentPageNumber, contentBeforeClose);
                                 });
                         } else if (contentBeforeClose === this.originalContent) {
                             thisClass.simplemde.toTextArea();
@@ -109,14 +112,20 @@
                         dialogEl.text(
                             `There's an open editor in page ${editorPageName
                             }. Are you sure you want to close it without saving?`);
-                        this.createConfirmationDialog(function() {
-                                thisClass.simplemde.toTextArea();
-                                thisClass.simplemde = null;
-                                thisClass.editingMode = !thisClass.editingMode;
-                                thisClass.toggleDivAndTextarea();
+                        this.createConfirmationDialog(
+                            () => {
+                                this.simplemde.toTextArea();
+                                this.simplemde = null;
+                                this.toggleDivAndTextarea();
                             },
                             () => {
                                 this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
+                            },
+                            () => {
+                                this.saveContents(this.currentPageNumber, contentBeforeClose);
+                                thisClass.simplemde.toTextArea();
+                                thisClass.simplemde = null;
+                                thisClass.toggleDivAndTextarea();
                             });
                     } else if (contentBeforeClose === this.originalContent) {
                         thisClass.toggleDivAndTextarea();
@@ -126,22 +135,38 @@
             });
     }
 
-    private createConfirmationDialog(onClose: Function, onCancel: Function) {
+    private createConfirmationDialog(onClose: Function, onCancel: Function, onSave: Function) {
         $("#save-confirmation-dialog").dialog({
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
-            buttons: {
-                "Close without saving": function() {
-                    onClose();
-                    $(this).dialog("close");
+            dialogClass: "save-confirmation-dialogue",
+            buttons: [
+                {
+                    text: "Close without saving",
+                    click: function() {
+                        onClose();
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default save-confirmation-dialogue-button"
                 },
-                "Cancel": function() {
-                    $(this).dialog("close");
-                    onCancel();
+                {
+                    text: "Cancel",
+                    click: function() {
+                        $(this).dialog("close");
+                        onCancel();
+                    },
+                    class: "btn btn-default save-confirmation-dialogue-button"
+                }, {
+                    text: "Save",
+                    click: function() {
+                        onSave();
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default save-confirmation-dialogue-button"
                 }
-            }
+            ]
         });
     }
 

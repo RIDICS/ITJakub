@@ -642,6 +642,18 @@ padding-right: 15px;
     }
 }
 
-#save-confirmation-dialog{
-    display:none;
+#save-confirmation-dialog {
+    display: none;
+}
+
+.save-confirmation-dialogue {
+    .ui-dialog-titlebar {
+        background-color: @confirmation-dialogue-color;
+        color: white;
+        font-family: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; //from ITjakubStyle
+    }
+
+    &-button {
+        margin: 0.5em 0.8em !important; //to override jquery-ui
+    }
 }
