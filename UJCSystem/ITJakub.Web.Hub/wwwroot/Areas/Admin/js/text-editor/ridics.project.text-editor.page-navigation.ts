@@ -19,9 +19,10 @@
             () => {
                 this.pageUserOn();
             });
-        this.attachEventToGoToPageButton(loadingPages);
-        this.attachEventInputFieldEnterKey(loadingPages);
+        this.attachEventToGoToPageButton(loadingPages, compositionPages);
+        this.attachEventInputFieldEnterKey(loadingPages, compositionPages);
         this.trackLoading(loadingPages);
+        this.showTooltipOnHover();
     }
 
     private createSlider(loadingPages: number[], compositionPages: ITextProjectPage[]) {
@@ -49,17 +50,24 @@
         });
     }
 
-    private updateSlider(textId: number) {
-        const index = $(".page-row").index($(`*[data-page="${textId}"]`));
-        $("#page-slider").slider("option", "value", index);
-        $(".slider-tooltip-text").text(`Page: ${index}`);
+    private showTooltipOnHover() {
+        var tooltip = $(".slider-tooltip");
+        $("#project-resource-preview").on("mouseenter", "#page-slider-handle", () => { tooltip.show(); });
+        $("#project-resource-preview").on("mouseleave", "#page-slider-handle", () => { tooltip.hide(); });
+    }
+
+    private updateSlider(textId: number) {//TODO jumps while pages are loading
+        const pageEl = $(`*[data-page="${textId}"]`);
+        const pageName = pageEl.data("page-name");
+        const index = $(".page-row").index(pageEl);
+            $("#page-slider").slider("option", "value", index);
+            $(".slider-tooltip-text").text(`Page: ${pageName}`);
     }
 
     private refreshSwatch(loadingPages: number[], compositionPages: ITextProjectPage[]) {
         const pageIdIndex = $("#page-slider").slider("value");
         const pageId = compositionPages[pageIdIndex].id;
-        console.log(pageId);
-        this.navigateToPage(pageId, loadingPages);
+        this.navigateToPage(pageId, loadingPages, compositionPages);
     }
 
     private pageUserOn() {
@@ -79,21 +87,21 @@
         }
     }
 
-    private attachEventToGoToPageButton(loadingPages: number[]) {
+    private attachEventToGoToPageButton(loadingPages: number[], compositionPages: ITextProjectPage[]) {
         $("#project-resource-preview").on("click",
             ".go-to-page-button",
             () => {
-                this.processPageInputField(loadingPages);
+                this.processPageInputField(loadingPages, compositionPages);
             });
     }
 
-    private attachEventInputFieldEnterKey(loadingPages: number[]) {
+    private attachEventInputFieldEnterKey(loadingPages: number[], compositionPages: ITextProjectPage[]) {
         $("#project-resource-preview").on("keypress",
             ".go-to-page-field",
             (event) => {
                 var keycode = (event.keyCode ? event.keyCode : event.which);
                 if (keycode === 13) { //Enter key
-                    this.processPageInputField(loadingPages);
+                    this.processPageInputField(loadingPages, compositionPages);
                 }
             });
     }
@@ -107,7 +115,7 @@
         }
     }
 
-    private processPageInputField(loadingPages: number[]) {
+    private processPageInputField(loadingPages: number[], compositionPages: ITextProjectPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
@@ -115,21 +123,22 @@
         } else {
             const pageEl = $(`*[data-page-name="${inputFieldValue}"]`);
             const pageId = pageEl.data("page");
-            if (!pageEl.length) { //TODO check max number of pages
+            if (!pageEl.length) {
                 alert(`Page ${inputFieldValue} does not exist`);
                 inputField.val("");
             } else {
-                this.navigateToPage(pageId, loadingPages);
+                this.navigateToPage(pageId, loadingPages, compositionPages);
                 inputField.val("");
                 inputField.blur();
             }
         }
     }
 
-    private navigateToPage(pageNumber: number, loadingPages: number[]) {
+    private navigateToPage(pageNumber: number, loadingPages: number[], compositionPages: ITextProjectPage[]) {
+        const firstId = compositionPages[0].id;
         const numberOfPagesToPreload = 10;
         const preloadedPage = pageNumber - numberOfPagesToPreload;
-        if (preloadedPage > 1) {
+        if (preloadedPage > firstId) {
             $(".preloading-pages-spinner").show();
             this.pageToSkipTo = pageNumber;
             this.skippingToPage = true;
