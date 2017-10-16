@@ -37,12 +37,13 @@
     }
 
     processAreaSwitch = () => {
-        var editorExists = false;
+        var editorExistsInTab = false;
 
         $("#project-resource-preview").on("click",
             ".editor",
             (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
+                    const thisClass = this;
                     let pageDiffers = false;
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
@@ -50,10 +51,9 @@
                     if (pageNumber !== this.currentPageNumber) {
                         pageDiffers = true;
                     }
-                    this.currentPageNumber = pageNumber;
-
-                    editorExists = ($(".CodeMirror").length !== 0);
-                    if (!editorExists) {
+                    const editorEl = $(".CodeMirror");
+                    editorExistsInTab = (editorEl.length !== 0);
+                    if (!editorExistsInTab) {
                         if (typeof this.simplemde !== "undefined" && this.simplemde !== null) {
                             this.simplemde.toTextArea();
                             this.simplemde = null;
@@ -61,15 +61,33 @@
                         this.addEditor(jEl);
                         this.originalContent = this.simplemde.value();
                     }
-                    if (editorExists && pageDiffers) {
+                    if (editorExistsInTab && pageDiffers) {
                         const contentBeforeClose = this.simplemde.value();
                         if (contentBeforeClose !== this.originalContent) {
-                            this.showSaveConfirmationDialog();
+                            const dialogEl = $("#save-confirmation-dialog");
+                            const editorPageName = editorEl.parents(".page-row").data("page-name");
+                            dialogEl.text(
+                                `There's an open editor in page ${editorPageName
+                                }. Are you sure you want to close it without saving?`);
+                            this.createConfirmationDialog(function() {
+                                    thisClass.simplemde.toTextArea();
+                                    thisClass.simplemde = null;
+                                    thisClass.currentPageNumber = pageNumber;
+                                    thisClass.addEditor(jEl);
+                                    thisClass.originalContent = thisClass.simplemde.value();
+                                },
+                                () => {
+                                    const textareaEl = jEl.find(".editor").children(".textarea-plain-text");
+                                    textareaEl.trigger("blur");
+                                    this.simplemde.codemirror.focus();
+                                });
+                        } else if (contentBeforeClose === this.originalContent) {
+                            thisClass.simplemde.toTextArea();
+                            thisClass.simplemde = null;
+                            thisClass.currentPageNumber = pageNumber;
+                            thisClass.addEditor(jEl);
+                            thisClass.originalContent = thisClass.simplemde.value();
                         }
-                        this.simplemde.toTextArea();
-                        this.simplemde = null;
-                        this.addEditor(jEl);
-                        this.originalContent = this.simplemde.value();
                     }
                 }
             });
@@ -77,43 +95,58 @@
         $("#project-resource-preview").on("click",
             ".editing-mode-button",
             () => {
+                const thisClass = this;
                 this.editingMode = !this.editingMode;
+                if (typeof this.simplemde === "undefined" || this.simplemde === null) {
+                    this.toggleDivAndTextarea();
+                }
                 if (typeof this.simplemde !== "undefined" && !this.editingMode && this.simplemde !== null) {
                     const contentBeforeClose = this.simplemde.value();
                     if (contentBeforeClose !== this.originalContent) {
-                        this.showSaveConfirmationDialog();//TODO wait for user response
+                        const dialogEl = $("#save-confirmation-dialog");
+                        const editorEl = $(".CodeMirror");
+                        const editorPageName = editorEl.parents(".page-row").data("page-name");
+                        dialogEl.text(
+                            `There's an open editor in page ${editorPageName
+                            }. Are you sure you want to close it without saving?`);
+                        this.createConfirmationDialog(function() {
+                                thisClass.simplemde.toTextArea();
+                                thisClass.simplemde = null;
+                                thisClass.editingMode = !thisClass.editingMode;
+                                thisClass.toggleDivAndTextarea();
+                            },
+                            () => {
+                                this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
+                            });
+                    } else if (contentBeforeClose === this.originalContent) {
+                        thisClass.toggleDivAndTextarea();
                     }
-                    this.simplemde.toTextArea();
-                    this.simplemde = null;
                 }
-                this.toggleDivAndTextarea();
+
             });
     }
 
-    private showSaveConfirmationDialog() {
-        $("#save-confirmation-dialog").dialog("open");
-    }
-
-    createConfirmationDialog() {
+    private createConfirmationDialog(onClose: Function, onCancel: Function) {
         $("#save-confirmation-dialog").dialog({
-            autoOpen: false,
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
             buttons: {
-                "Close without saving": function () {
+                "Close without saving": function() {
+                    onClose();
                     $(this).dialog("close");
                 },
-                "Cancel": function () {
+                "Cancel": function() {
                     $(this).dialog("close");
+                    onCancel();
                 }
             }
         });
     }
 
     private saveContents(textId: number, contents: string) {
-        console.log(textId);//TODO add logic
+        console.log(textId); //TODO add logic
         console.log(contents);
         this.originalContent = contents;
     }
@@ -135,7 +168,7 @@
                     title: "Add comment"
                 }, "|", {
                     name: "save",
-                    action: (editor)=>{this.saveContents(textId,editor.value())},
+                    action: (editor) => { this.saveContents(textId, editor.value()) },
                     className: "fa fa-floppy-o",
                     title: "Save"
                 }
@@ -199,7 +232,7 @@
         ajax.done((data: string) => {
             const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
             const plainText = data;
-            const elm = `<div class="editor"><textarea>${plainText}</textarea></div>`;
+            const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
             $(child).append(elm);
             placeHolderSpinner.hide();
         });
