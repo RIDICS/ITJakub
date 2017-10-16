@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace Vokabular.Shared.DataContracts.Search.Corpus
 {
     [DataContract]
     public class KwicStructure

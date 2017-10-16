@@ -13,9 +13,8 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
-using Vokabular.Shared.DataContracts.Search.CriteriaItem;
-using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
@@ -128,43 +127,21 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
 
         public ActionResult TextSearchFulltextCount(string text, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>();
-
-            if(!string.IsNullOrEmpty(text))
-            {
-                var wordCriteriaList = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordCriteriaList);
-            }
-            else
+            if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                var count = client.SearchCorpusCount(new CorpusSearchRequestContract
                 {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
+                    ConditionConjunction = listSearchCriteriaContracts
                 });
-            }
-
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
-
                 return Json(new {count});
             }
         }
@@ -172,81 +149,47 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, int contextLength, short sortingEnum, bool sortAsc,
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
-            {
-                new ResultCriteriaContract
-                {
-                    Sorting = (SortEnum) sortingEnum,
-                    Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                    HitSettingsContract = new HitSettingsContract
-                    {
-                        ContextLength = contextLength,
-                        Count = count,
-                        Start = start
-                    }
-                }
-            };
-
-            if (!string.IsNullOrEmpty(text))
-            {
-                var wordListCriteria = new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                };
-
-                listSearchCriteriaContracts.Add(wordListCriteria);
-            }
-            else
+            if (string.IsNullOrEmpty(text))
             {
                 throw new ArgumentException("text can't be null in fulltext search");
             }
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                var resultList = client.SearchCorpus(new CorpusSearchRequestContract
                 {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    // TODO is sorting required? is sorting possible?
                 });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
-                return Json(new {results = results.SearchResults});
+                return Json(new {results = resultList});
             }
         }
 
         public ActionResult AdvancedSearchCorpusResultsCount(string json, IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
-
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
             {
                 throw new ArgumentException("search in text can't be ommited");
             }
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
+
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                var count = client.SearchCorpusCount(new CorpusSearchRequestContract
                 {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
+                    ConditionConjunction = listSearchCriteriaContracts,
                 });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var count = client.GetCorpusSearchResultsCount(listSearchCriteriaContracts);
                 return Json(new {count});
             }
         }
@@ -255,38 +198,26 @@ namespace ITJakub.Web.Hub.Areas.BohemianTextBank.Controllers
             IList<long> selectedBookIds, IList<int> selectedCategoryIds)
         {
             var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(json, new ConditionCriteriaDescriptionConverter());
-            var listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+            var listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
 
             if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Fulltext || x.Key == CriteriaKey.Heading || x.Key == CriteriaKey.Sentence || x.Key == CriteriaKey.TokenDistance) == null) //TODO add check on string values empty
             {
                 throw new ArgumentException("search in text can't be ommited");
             }
 
-            listSearchCriteriaContracts.Add(new ResultCriteriaContract
-            {
-                Sorting = (SortEnum) sortingEnum,
-                Direction = sortAsc ? ListSortDirection.Ascending : ListSortDirection.Descending,
-                HitSettingsContract = new HitSettingsContract
-                {
-                    ContextLength = contextLength,
-                    Count = count,
-                    Start = start
-                }
-            });
+            AddCategoryCriteria(listSearchCriteriaContracts, selectedBookIds, selectedCategoryIds);
 
-            if (selectedBookIds != null || selectedCategoryIds != null)
+            using (var client = GetRestClient())
             {
-                listSearchCriteriaContracts.Add(new SelectedCategoryCriteriaContract
+                var resultList = client.SearchCorpus(new CorpusSearchRequestContract
                 {
-                    BookType = AreaBookType,
-                    SelectedBookIds = selectedBookIds,
-                    SelectedCategoryIds = selectedCategoryIds
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                    ConditionConjunction = listSearchCriteriaContracts,
+                    // TODO is sorting required? is sorting possible?
                 });
-            }
-            using (var client = GetMainServiceClient())
-            {
-                var results = client.GetCorpusSearchResults(listSearchCriteriaContracts);
-                return Json(new {results = results.SearchResults});
+                return Json(new {results = resultList});
             }
         }
 

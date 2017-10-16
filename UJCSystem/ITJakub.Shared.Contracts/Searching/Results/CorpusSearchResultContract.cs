@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 
 namespace ITJakub.Shared.Contracts.Searching.Results
 {

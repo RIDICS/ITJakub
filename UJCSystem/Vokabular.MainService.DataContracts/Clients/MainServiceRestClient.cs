@@ -715,7 +715,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("book/search-count", request);
+                var result = Post<long>("book/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -731,7 +731,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("headword/search-count", request);
+                var result = Post<long>("headword/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -747,7 +747,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("headword/search-row-number", request);
+                var result = Post<long>("headword/search-row-number", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -764,6 +764,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = Post<List<PageContract>>($"book/{projectId}/page/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<CorpusSearchResultContract>>("corpus/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchCorpusCount(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<long>("corpus/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)

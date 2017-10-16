@@ -18,6 +18,7 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -25,7 +26,7 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class BookManager
     {
-        private readonly CriteriaKey[] SupportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
+        private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
@@ -421,6 +422,84 @@ namespace Vokabular.MainService.Core.Managers
             }
         }
 
+        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
+        {
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
+            {
+                Start = request.Start,
+                Count = request.Count,
+            };
+
+            if (processedCriterias.NonMetadataCriterias.Count == 0)
+            {
+                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
+            }
+
+            // Search in fulltext DB
+
+            var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+            var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
+            {
+                Key = CriteriaKey.ResultRestriction,
+                ProjectIds = projectIdList
+            };
+            nonMetadataCriterias.Add(projectRestrictionCriteria);
+
+            // TODO send request to fulltext DB and remove this mock:
+
+            var mockResults = new List<CorpusSearchResultContract>
+            {
+                new CorpusSearchResultContract
+                {
+                    Title = "Title",
+                    Acronym = "T1",
+                    Author = "AuthLabel",
+                    BookXmlId = "xml1",
+                    BookId = 1,
+                    OriginDate = "1990",
+                    VersionXmlId = "ver-xml-1",
+                    Notes = new List<string> {"not1", "not2"},
+                    BibleVerseResultContext = new BibleVerseResultContext
+                    {
+                        BibleBook = "BB",
+                        BibleChapter = "BC",
+                        BibleVerse = "BV"
+                    },
+                    PageResultContext = new PageResultContext
+                    {
+                        PageName = "25r",
+                        PageXmlId = "xml25",
+                        ContextStructure = new KwicStructure
+                        {
+                            After = "end of sentence",
+                            Match = "word",
+                            Before = "sentece start"
+                        }
+                    },
+                    VerseResultContext = new VerseResultContext
+                    {
+                        VerseName = "Verse1",
+                        VerseXmlId = "xml-v"
+                    }
+                }
+            };
+
+            return mockResults;
+        }
+
+        public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
+        {
+            // TODO implement this method and remove mock
+            return 1;
+        }
+
         public BookContract GetBookInfo(long projectId)
         {
             var metadataResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetLatestMetadataResource(projectId));
@@ -559,7 +638,7 @@ namespace Vokabular.MainService.Core.Managers
                 {
                     termConditions.Add(searchCriteriaContract);
                 }
-                else if (SupportedSearchPageCriteria.Contains(searchCriteriaContract.Key))
+                else if (m_supportedSearchPageCriteria.Contains(searchCriteriaContract.Key))
                 {
                     fulltextConditions.Add(searchCriteriaContract);
                 }
