@@ -144,8 +144,9 @@ namespace Vokabular.MainService.Controllers
 
         [HttpPost("text/{textId}")]
         [ProducesResponseType(typeof(long), StatusCodes.Status200OK)]
-        public IActionResult CreateNewTextResourceVersion([FromBody] TextContract request)
+        public IActionResult CreateNewTextResourceVersion([FromBody] ShortTextContract request)
         {
+            //TODO add logic
             return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
 
