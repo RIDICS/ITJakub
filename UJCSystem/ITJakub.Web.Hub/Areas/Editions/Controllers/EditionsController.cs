@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
@@ -51,13 +52,6 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return File(fullPath, "application/json", fullPath);
         }
 
-        public ActionResult HasBookImage(string bookId, string versionId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                return Json(new { HasBookImage = client.HasBookImage(bookId, versionId) });
-            }
-        }
         public FileResult GetBookImage(string bookId, int position)
         {
             using (var client = GetMainServiceClient())
@@ -80,21 +74,29 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult Listing(string bookId, string searchText, string page)
+        // TODO rename parameter page to pageId
+        public ActionResult Listing(long bookId, string searchText, string page)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var book = client.GetBookInfoWithPages(bookId);
+                var book = client.GetBookInfo(bookId);
+                var pages = client.GetBookPageList(bookId);
                 return
                     View(new BookListingModel
                     {
-                        BookId = book.BookId,
-                        BookXmlId = book.BookXmlId,
-                        VersionXmlId = book.LastVersionXmlId,
+                        BookId = book.Id,
+                        BookXmlId = book.Id.ToString(), // TODO remove this property
+                        VersionXmlId = null, // TODO replace this property with snapshot ID
                         BookTitle = book.Title,
-                        BookPages = book.BookPages,
+                        //BookPages = book.BookPages, // TODO change BookPages structure
+                        BookPages = pages.Select(x => new BookPageContract
+                        {
+                            XmlId = x.Id.ToString(),
+                            Text = x.Name,
+                            Position = x.Position,
+                        }).ToList(),
                         SearchText = searchText,
-                        InitPageXmlId = page,
+                        InitPageXmlId = page, // TODO rename to InitPageId
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });

@@ -102,6 +102,18 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual int GetPublishedResourceCount<T>(long projectId) where T : ResourceVersion
+        {
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<T>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .RowCount();
+        }
+
         public virtual IList<TextResource> GetPageText(long resourcePageId)
         {
             Snapshot snapshotAlias = null;

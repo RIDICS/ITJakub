@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
@@ -28,11 +27,19 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             };
         }
 
-        public ActionResult HasBookPageByXmlId(string bookId, string versionId)
+        public ActionResult HasBookImage(long bookId, long snapshotId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                return Json(new {HasBookPage = client.HasBookPageByXmlId(bookId, versionId)}, GetJsonSerializerSettings());
+                return Json(new { HasBookImage = client.HasBookAnyImage(bookId) });
+            }
+        }
+
+        public ActionResult HasBookText(long bookId, long snapshotId)
+        {
+            using (var client = GetRestClient())
+            {
+                return Json(new {HasBookPage = client.HasBookAnyText(bookId)}, GetJsonSerializerSettings());
             }
         }
 

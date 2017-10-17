@@ -564,6 +564,20 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
+        public bool HasBookAnyText(long projectId)
+        {
+            var bookTextCount =
+                m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<TextResource>(projectId));
+            return bookTextCount > 0;
+        }
+
+        public bool HasBookAnyImage(long projectId)
+        {
+            var bookImageCount =
+                m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceCount<ImageResource>(projectId));
+            return bookImageCount > 0;
+        }
+
         public bool HasBookPageText(long resourcePageId)
         {
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));

@@ -155,7 +155,7 @@
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, versionId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId },
                 url: document.getElementsByTagName("body")[0].getAttribute("data-has-book-text-url"),
                 dataType: "json",
                 contentType: "application/json",
@@ -194,7 +194,7 @@
             $.ajax({
                 type: "GET",
                 traditional: true,
-                data: { bookId: bookId, versionId: bookVersionId },
+                data: { bookId: bookId, snapshotId: bookVersionId },
                 url: this.readerContainer.getAttribute("data-has-image-url"),
                 dataType: "json",
                 contentType: "application/json",

@@ -80,6 +80,20 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpHead("{projectId}/text")]
+        public IActionResult HasBookAnyText(long projectId)
+        {
+            var hasAny = m_bookManager.HasBookAnyText(projectId);
+            return hasAny ? (IActionResult)Ok() : NotFound();
+        }
+
+        [HttpHead("{projectId}/image")]
+        public IActionResult HasBookAnyImage(long projectId)
+        {
+            var hasAny = m_bookManager.HasBookAnyImage(projectId);
+            return hasAny ? (IActionResult)Ok() : NotFound();
+        }
+
         [HttpGet("page/{pageId}/term")]
         public List<TermContract> GetPageTermList(long pageId)
         {
@@ -90,15 +104,8 @@ namespace Vokabular.MainService.Controllers
         [HttpHead("page/{pageId}/text")]
         public IActionResult HasPageText(long pageId)
         {
-            var result = m_bookManager.HasBookPageText(pageId);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            var hasText = m_bookManager.HasBookPageText(pageId);
+            return hasText ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/text")]
@@ -111,15 +118,8 @@ namespace Vokabular.MainService.Controllers
         [HttpHead("page/{pageId}/image")]
         public IActionResult HasPageImage(long pageId)
         {
-            var result = m_bookManager.HasBookPageImage(pageId);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            var hasImage = m_bookManager.HasBookPageImage(pageId);
+            return hasImage ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/image")]
