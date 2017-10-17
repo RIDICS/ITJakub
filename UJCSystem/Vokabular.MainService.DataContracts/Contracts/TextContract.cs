@@ -1,5 +1,12 @@
 ﻿namespace Vokabular.MainService.DataContracts.Contracts
 {
+    public class ShortTextContract
+    {
+        public string Text { get; set; }
+        public long Id { get; set; }
+        public long VersionNumber { get; set; }
+    }
+
     public class TextContract
     {
         public long Id { get; set; }
