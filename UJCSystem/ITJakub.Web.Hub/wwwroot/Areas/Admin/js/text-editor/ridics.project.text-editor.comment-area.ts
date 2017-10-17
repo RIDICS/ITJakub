@@ -34,6 +34,7 @@
         var currentId: string = "";
         var needToCloseTag: boolean = false;
         var name: string = "";
+        var surname: string = "";
         var body: string = "";
         var orderOfNestedComment: number = 0;
         var numberOfComments = content.length;
@@ -49,6 +50,7 @@
             nested = content[i].nested;
             page = content[i].page;
             name = content[i].name;
+            surname = content[i].surname;
             body = content[i].body;
             picture = content[i].picture;
             orderOfNestedComment = content[i].order;
@@ -58,7 +60,7 @@
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
             var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${id}-comment">`;
-            var commentName = `<h5 class="media-heading">${name}</h5>`;
+            var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
@@ -215,8 +217,8 @@
  */
     asyncConstructCommentArea(textId: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
         let fileContent: string[];
-        var ajax = $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
-            { pageNumber: textId });
+        const ajax = $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
+            { textId: textId });
         ajax.done(
             (data: string[]) => {
                 fileContent = data;
@@ -255,30 +257,33 @@
         pageNumber: number,
         sectionCollapsed: boolean,
         nestedCommentCollapsed: boolean) {
+        console.log(content);//TODO debug
         if (content !== null && typeof content !== "undefined") {
-            content.sort((a, b) => { //sort by id, ascending
-                if (a.id < b.id) {
-                    return -1;
-                }
-                if (a.id === b.id) {
-                    return 0;
-                }
-                if (a.id > b.id) {
-                    return 1;
-                }
-            });
+            if (content.length > 0) {
+                content.sort((a, b) => { //sort by id, ascending
+                    if (a.id < b.id) {
+                        return -1;
+                    }
+                    if (a.id === b.id) {
+                        return 0;
+                    }
+                    if (a.id > b.id) {
+                        return 1;
+                    }
+                });
 
-            let id = content[0].id;
-            const indexes: number[] = [];
-            for (let i = 0; i < content.length; i++) {
-                const currentId = content[i].id;
-                if (currentId !== id) {
-                    indexes.push(i);
-                    id = currentId;
+                let id = content[0].id;
+                const indexes: number[] = [];
+                for (let i = 0; i < content.length; i++) {
+                    const currentId = content[i].id;
+                    if (currentId !== id) {
+                        indexes.push(i);
+                        id = currentId;
+                    }
                 }
+                const sortedContent = this.util.splitArrayToArrays(content, indexes);
+                this.constructCommentArea(sortedContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
             }
-            const sortedContent = this.util.splitArrayToArrays(content, indexes);
-            this.constructCommentArea(sortedContent, pageNumber, sectionCollapsed, nestedCommentCollapsed);
         }
     }
 

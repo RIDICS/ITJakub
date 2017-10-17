@@ -23,6 +23,7 @@
         var serverAddress = this.util.getServerAddress(); //TODO debug
         var commentTextArea = $("#commentInput");
         var nameTextArea = $("#nameInput");
+        var surnameTextArea = $("#surnameInput");
         const buttonSend = $("#commentFinish");
         const buttonClose = $(".close-form-input");
         buttonClose.on("click",
@@ -36,7 +37,8 @@
                 event.stopImmediatePropagation();
                 var commentText = commentTextArea.val() as string;
                 var nameText = nameTextArea.val() as string;
-                if (commentText === "" || nameText === "") {
+                var surnameText = surnameTextArea.val() as string;
+                if (commentText === "" || nameText === "" || surnameText === "") {
                     alert("Comment or name is empty. Please fill both of them");
                 } else {
                     var response = "";
@@ -44,7 +46,7 @@
                     const timeOfComment = time;
                     const json: Object = JSON.parse(
                         `{"id":"${id}","picture":"http://lorempixel.com/48/48","nested":"${nested}","page":"${page
-                        }","name":"${nameText}","body":"${commentText
+                        }","name":"${nameText}","surname":"${surnameText}","body":"${commentText
                         }","order":"${orderOfNestedComment}","time":"${timeOfComment
                         }"}`); //TODO change picture url to actual one, escape characters
                     const jsonString = JSON.stringify(json);
@@ -65,6 +67,7 @@
                     ).done(() => {
                         commentTextArea.val("");
                         nameTextArea.val("");
+                        surnameTextArea.val("");
                         this.commentArea.reloadCommentArea(page);
                     });
                     buttonSend.off();

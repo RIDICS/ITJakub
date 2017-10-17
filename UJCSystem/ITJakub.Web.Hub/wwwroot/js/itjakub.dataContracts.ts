@@ -187,6 +187,7 @@ interface ICommentSctucture {
     nested: boolean;
     page: number;
     name: string;
+    surname: string;
     body: string;
     order: number;
     time: number;
