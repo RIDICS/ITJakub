@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<div id="save-confirmation-dialog" title="Do you want to leave without saving?"></div>
+<div id="save-confirmation-dialog"></div>
 
 <div class="editor-super-container">
             <div class="editor-areas">
@@ -47,10 +47,24 @@
 
                             </div>
                             <div class="panel-body">
-                                <p class="person-name-title">Name:</p>
-                                <textarea rows="1" cols="30" id="nameInput" class="form-control textarea-no-resize"></textarea>
-                                <p class="comment-body-title">Commentary:</p>
-                                <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="nameInput">First name:</label>
+                                            <input type="text" class="form-control" id="nameInput">
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="form-group">
+                                            <label for="surnameInput">Last name:</label>
+                                            <input type="text" class="form-control" id="surnameInput">
+                                        </div>
+                                        </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="commentInput">Commentary:</label>
+                                    <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
+                                </div>
                             </div>
                             <div class="panel-footer clearfix text-center">
                                 <input type="button" id="commentFinish" value="Comment send" class="btn btn-default">
