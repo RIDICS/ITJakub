@@ -522,14 +522,6 @@ table {
     .input-comment-panel-title {
         margin: 5px 0 5px 0;
     }
-
-    .comment-body-title {
-        margin: 5px 0 5px 0;
-    }
-
-    .person-name-title {
-        margin: 5px 0 5px 0;
-    }
 }
 
 .jqSimpleConnect {
@@ -655,5 +647,15 @@ padding-right: 15px;
 
     &-button {
         margin: 0.5em 0.8em !important; //to override jquery-ui
+    }
+
+    &-close-button {
+        color: white;
+        background-color: @button-color;
+        border: none;
+
+        :hover {
+            background-color: @button-color-active;
+        }
     }
 }
