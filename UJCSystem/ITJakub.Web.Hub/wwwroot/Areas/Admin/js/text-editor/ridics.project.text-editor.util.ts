@@ -29,9 +29,9 @@
 * @param {Number} pageNumber - Number of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
-    loadPlainText(pageNumber: number): JQueryXHR {//TODO change logic to textId
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/LoadPlaintextCompositionPage`,
-            { pageNumber: pageNumber });
+    loadPlainText(textId: number): JQueryXHR {
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`,
+            { textId: textId, format: "Raw" });
         return ajax;
     }
 
@@ -41,14 +41,27 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`, {textId:textId});
+        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`, { textId: textId, format: "Html"});
         return ajax;
     }
 
-    savePlainText(body: string, textId: number){
-        const plainText = this.loadPlainText(textId);//TODO wait for get plaintext api functionality
-        plainText.done((data: string) => {
-            //TODO add logic
+    savePlainText(body: string, textId: number){//TODO finish
+        const plainText = this.loadPlainText(textId);
+        plainText.done((data: IPageText) => {
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            const request = {
+                Id: id,
+                Text: body,
+                VersionNumber: versionNumber//TODO
+        };
+            const ajax = $.post(`http://${this.serverAddress}/admin/project/SetTextResource`,
+                {
+                    textId: textId,
+                    request: request
+                });
+            ajax.done(() => { console.log("saved succesfully"); });
+
         });
     }
 
@@ -92,6 +105,7 @@
             const id: string = stringObject.id;
             const picture = stringObject.picture;
             const name: string = stringObject.name;
+            const surname: string = stringObject.surname;
             const body: string = stringObject.body;
             const page: number = parseInt(stringObject.page);
             const order: number = parseInt(stringObject.order);
@@ -101,6 +115,7 @@
                 id: id,
                 picture: picture,
                 name: name,
+                surname: surname,
                 body: body,
                 page: page,
                 order: order,

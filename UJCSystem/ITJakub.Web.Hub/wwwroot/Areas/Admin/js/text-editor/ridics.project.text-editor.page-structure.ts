@@ -73,13 +73,11 @@
         const plainText = this.util.loadPlainText(pageNumber);
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const textAreaEl = $(pageEl.find(".plain-text"));
-        plainText.done((data: string) => {
-            if (data !== "error-no-file") {
-                textAreaEl.val(data);
+        plainText.done((data: IPageText) => {
+                textAreaEl.val(data.text);
                 var event = $.Event("pageConstructed", { page: pageNumber });
                 textAreaEl.trigger(event);
                 $(pageEl).children(".image-placeholder").hide();
-            }
         });
         plainText.fail(() => {
             textAreaEl.val("Failed to load content.");
