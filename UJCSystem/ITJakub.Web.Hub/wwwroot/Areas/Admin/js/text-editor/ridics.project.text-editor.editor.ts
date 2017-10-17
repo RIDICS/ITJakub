@@ -48,6 +48,8 @@
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
                     const pageNumber = jEl.data("page") as number;
+                    console.log(pageNumber);
+                    console.log(this.currentPageNumber);
                     if (pageNumber !== this.currentPageNumber) {
                         pageDiffers = true;
                     }
@@ -144,6 +146,8 @@
             width: 400,
             modal: true,
             dialogClass: "save-confirmation-dialogue",
+            close: () => { onCancel(); },
+            title: "Do you want to leave without saving?",
             buttons: [
                 {
                     text: "Close without saving",
@@ -159,7 +163,8 @@
                         $(this).dialog("close");
                         onCancel();
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button"
+                    class: "btn btn-default save-confirmation-dialogue-button",
+                    id: "dialog-cancel-button"
                 }, {
                     text: "Save",
                     click: function() {
@@ -168,7 +173,16 @@
                     },
                     class: "btn btn-default save-confirmation-dialogue-button"
                 }
-            ]
+            ],
+            open: (event, ui) => {
+                $("#dialog-cancel-button").focus();
+                const targetElement = $(event.target);
+                targetElement.closest(".ui-dialog")
+                    .find(".ui-dialog-titlebar-close")
+                    .removeClass("ui-dialog-titlebar-close")
+                    .addClass("save-confirmation-dialogue-close-button")
+                    .html("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>");//hack, because bootstrap breaks close button icon
+            }
         });
     }
 
@@ -256,9 +270,9 @@
     }
 
     private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
-        ajax.done((data: string) => {
+        ajax.done((data: IPageText) => {
             const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
-            const plainText = data;
+            const plainText = data.text;
             const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
             $(child).append(elm);
             placeHolderSpinner.hide();
