@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using log4net;
+using Microsoft.Extensions.Options;
 using Vokabular.Core.Storage.PathResolvers;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.Shared.DataContracts.Types;
@@ -15,9 +16,9 @@ namespace Vokabular.Core.Storage
         private readonly Dictionary<ResourceType, IResourceTypePathResolver> m_resourceTypePathResolvers;
         private readonly string m_rootFolderPath;
 
-        public FileSystemManager(IList<IResourceTypePathResolver> resourceTypePathResolvers, string rootFolder)
+        public FileSystemManager(IList<IResourceTypePathResolver> resourceTypePathResolvers, IOptions<PathConfiguration> pathOptions)
         {
-            m_rootFolderPath = rootFolder;
+            m_rootFolderPath = pathOptions.Value.FileStorageRootFolder;
             m_resourceTypePathResolvers = new Dictionary<ResourceType, IResourceTypePathResolver>();
             foreach (var pathResolver in resourceTypePathResolvers)
             {

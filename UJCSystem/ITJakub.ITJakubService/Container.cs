@@ -10,6 +10,7 @@ using Castle.Windsor.Installer;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Vokabular.Core;
 using Vokabular.Shared.Container;
 
@@ -56,6 +57,8 @@ namespace ITJakub.ITJakubService
             //Install(Configuration.FromXml(GetConfigResource()));
 
             Install<CoreContainerRegistration>();
+
+            AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
         }
 
         private void ConfigureAutoMapper()
