@@ -27,7 +27,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             };
         }
 
-        public ActionResult HasBookImage(long bookId, long snapshotId)
+        public ActionResult HasBookImage(long bookId, long? snapshotId)
         {
             using (var client = GetRestClient())
             {
@@ -35,7 +35,7 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             }
         }
 
-        public ActionResult HasBookText(long bookId, long snapshotId)
+        public ActionResult HasBookText(long bookId, long? snapshotId)
         {
             using (var client = GetRestClient())
             {
@@ -43,14 +43,25 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             }
         }
 
-        public ActionResult GetBookPageByXmlId(string bookId, string pageXmlId)
+        public ActionResult GetBookPage(long? snapshotId, long pageId)
         {
-            using (var client = GetMainServiceClient())
-            {
-                var text = client.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html,
-                    BookTypeEnumContract.Edition);
-                return Json(new {pageText = text}, GetJsonSerializerSettings());
-            }
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var text = client.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html,
+            //        BookTypeEnumContract.Edition);
+            //    return Json(new {pageText = text}, GetJsonSerializerSettings());
+            //}
+            return NotFound();
+        }
+
+        public ActionResult GetBookImage(long? snapshotId, long pageId)
+        {
+            //using (var client = GetMainServiceClient())
+            //{
+            //    var imageDataStream = client.GetBookPageImage(bookId, position);
+            //    return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
+            //}
+            return NotFound();
         }
 
         public ActionResult GetTermsOnPage(string bookId, string pageXmlId)

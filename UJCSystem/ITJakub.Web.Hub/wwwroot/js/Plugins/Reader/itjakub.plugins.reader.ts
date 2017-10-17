@@ -2082,13 +2082,13 @@ class ImagePanel extends RightSidePanel {
     }
 
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
-        var pagePosition = pageIndex + 1;
+        var pageInfo = this.parentReader.pages[pageIndex];
         $(this.innerContent).empty();
       
         
         var image: HTMLImageElement = document.createElement("img");
         image.classList.add("reader-image");
-        image.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.xmlId;
 
         var imageLink: HTMLAnchorElement = document.createElement("a");
         imageLink.classList.add("no-click-href");
@@ -2129,7 +2129,7 @@ class ImagePanel extends RightSidePanel {
                 
             }
         };
-        img.src = getBaseUrl() + "Editions/Editions/GetBookImage?bookId=" + this.parentReader.bookId + "&position=" + pagePosition;
+        img.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.xmlId;
 
         if (typeof this.windowBody !== "undefined") {
             $(this.windowBody).empty();
@@ -2292,8 +2292,8 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
-            url: getBaseUrl() + "Reader/GetBookPageByXmlId",
+            data: { snapshotId: this.parentReader.versionId, pageId: page.xmlId },
+            url: getBaseUrl() + "Reader/GetBookPage",
             dataType: "json",
             contentType: "application/json",
             success: (response) => {

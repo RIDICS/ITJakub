@@ -51,15 +51,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
             return File(fullPath, "application/json", fullPath);
         }
-
-        public FileResult GetBookImage(string bookId, int position)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var imageDataStream = client.GetBookPageImage(bookId, position);
-                return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
-            }
-        }
+        
 
         #region Views and Feedback
 
