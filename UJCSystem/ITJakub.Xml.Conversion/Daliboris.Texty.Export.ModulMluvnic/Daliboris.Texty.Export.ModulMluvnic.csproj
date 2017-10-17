@@ -61,9 +61,9 @@
     <Compile Include="MluvniceModulNastaveni.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
-      <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>
-      <Name>ITJakub.Shared.Contracts</Name>
+    <ProjectReference Include="..\..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\Daliboris.OOXML.Pomucky\Daliboris.OOXML.Pomucky.csproj">
       <Project>{114b8733-decf-4402-ba25-e3dbe265e993}</Project>

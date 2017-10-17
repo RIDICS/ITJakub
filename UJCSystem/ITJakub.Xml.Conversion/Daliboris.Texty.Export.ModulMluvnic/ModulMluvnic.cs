@@ -11,7 +11,7 @@ using CodeCarvings.Piczard.Filters.Watermarks;
 using Daliboris.Pomucky.Xml;
 using Daliboris.Texty.Evidence.Rozhrani;
 using Daliboris.Texty.Export.Rozhrani;
-using ITJakub.Shared.Contracts.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Daliboris.Texty.Export
 {

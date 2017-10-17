@@ -10,6 +10,7 @@ using Castle.Windsor.Installer;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Vokabular.Core;
 using Vokabular.DataEntities;
 using Vokabular.Shared.Container;
 
@@ -55,6 +56,7 @@ namespace ITJakub.FileProcessing.Service
             Install(Configuration.FromAppConfig());
             //Install(Configuration.FromXml(GetConfigResource()));
 
+            Install<CoreContainerRegistration>();
             Install<DataEntitiesContainerRegistration>();
         }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ITJakub.Core.Resources
+namespace Vokabular.Core.Storage.Resources
 {
     public class ResourceMissingException : Exception
     {

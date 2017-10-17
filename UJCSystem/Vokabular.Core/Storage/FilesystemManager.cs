@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using ITJakub.Core.PathResolvers;
-using ITJakub.Core.Resources;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage.PathResolvers;
+using Vokabular.Core.Storage.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Core
+namespace Vokabular.Core.Storage
 {
     public class FileSystemManager
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog m_log = LogManager.GetLogger(typeof(FileSystemManager));
+
         private readonly Dictionary<ResourceType, IResourceTypePathResolver> m_resourceTypePathResolvers;
         private readonly string m_rootFolderPath;
 

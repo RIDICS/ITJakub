@@ -165,6 +165,10 @@
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
+      <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
+      <Name>Vokabular.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>

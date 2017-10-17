@@ -92,7 +92,6 @@
     <Compile Include="ResourceLevelEnumContract.cs" />
     <Compile Include="ResourceUploadContract.cs" />
     <Compile Include="ISearchService.cs" />
-    <Compile Include="Resources\ResourceType.cs" />
     <Compile Include="Resources\UploadResourceContract.cs" />
     <Compile Include="Searching\Criteria\DictionarySearchTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,6 +1,6 @@
-﻿using ITJakub.Shared.Contracts.Resources;
+﻿using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Core.Resources
+namespace Vokabular.Core.Storage.Resources
 {
     public class Resource
     {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using AutoMapper;
-using ITJakub.Core;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
@@ -12,8 +11,8 @@ using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.MobileApps.MobileContracts;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Clients;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage;
 using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
