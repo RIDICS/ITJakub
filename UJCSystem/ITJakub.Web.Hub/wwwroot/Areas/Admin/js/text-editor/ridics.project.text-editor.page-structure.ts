@@ -17,13 +17,14 @@
         let elm = "";
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const pageName = pageEl.data("page-name");
-        elm += "<div class=\"col-xs-7 composition-area\">";
-        elm += `<div class="page">`;
         let invisibleClass = "";
         if (!showPageNumber) {
             invisibleClass = "invisible";
         }
-        elm += `<div class="page-number ${invisibleClass}">[${pageName}]</div>`;
+        elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div>`;
+        elm += "<div class=\"col-xs-7 composition-area\">";
+        elm += `<div class="page">`;
+
         if (!isEditingMode) {
             elm += "<div class=\"viewer\">";
             elm += `<span class="rendered-text"></span>`;
