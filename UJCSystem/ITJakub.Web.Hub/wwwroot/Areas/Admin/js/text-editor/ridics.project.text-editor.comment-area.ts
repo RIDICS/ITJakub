@@ -216,33 +216,29 @@
  * @param {boolean} nestedCommentCollapsed Whether nested comments have to be collapsed
  */
     asyncConstructCommentArea(textId: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
-        let fileContent: string[];
-        const ajax = $.post(`http://${this.util.getServerAddress()}/admin/project/LoadCommentFile`,
+        let fileContent: ICommentSctucture[];
+        const ajax = $.post(`${this.util.getServerAddress()}admin/project/LoadCommentFile`,
             { textId: textId });
         ajax.done(
-            (data: string[]) => {
+            (data: ICommentSctucture[]) => {
                 fileContent = data;
-                if (fileContent[0] !== "error-no-file") {
+                if (fileContent.length>0) {
                     this.loadCommentFile(fileContent, textId, sectionCollapsed, nestedCommentCollapsed);
                 }
                 this.toggleAreaSizeIconHide(
                     textId); //collapse section on page load, collapse nested comments on page load
             });
         ajax.fail(() => {
-            alert(`Failed to construct comment area for page${textId}`);
+            alert(`Failed to construct comment area for page ${textId}`);
         });
     }
 
-    private loadCommentFile(contentStringArray: string[],
+    private loadCommentFile(contentStringArray: ICommentSctucture[],
         pageNumber: number,
         sectionCollapsed: boolean,
         nestedCommentCollapsed: boolean) {
         if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
-            let commentsParsed: ICommentSctucture[] = [];
-            for (let i = 0; i < contentStringArray.length; i++) {
-                commentsParsed[i] = this.util.commentFromJson(contentStringArray[i]);
-            }
-            this.parseLoadedCommentFiles(commentsParsed, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+            this.parseLoadedCommentFiles(contentStringArray, pageNumber, sectionCollapsed, nestedCommentCollapsed);
         }
     }
 
