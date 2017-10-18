@@ -8,6 +8,7 @@
 ///<reference path="./ridics.project.text-editor.page-structure.ts" />
 ///<reference path="./ridics.project.text-editor.page-navigation.ts" />
 ///<reference path="./ridics.project.text-editor.lazyloading.ts" />
+///<reference path="./ridics.project.text-editor.gui.ts" />
 
 declare var lazySizes: any;
 
@@ -24,7 +25,8 @@ class TextEditorMain {
         const util = new Util();
         const commentArea = new CommentArea(util);
         const commentInput = new CommentInput(commentArea, util);
-        const pageTextEditor = new Editor(commentInput, util);
+        const gui = new TextEditorGui();
+        const pageTextEditor = new Editor(commentInput, util, gui);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this);
