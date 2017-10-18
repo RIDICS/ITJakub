@@ -553,6 +553,50 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetNewCommentId()
+        {//TODO debug
+            var id = 0L;
+                const string lastIdFile = @".\comments\lastId";
+            if (!System.IO.File.Exists(lastIdFile))
+            {
+                var file = System.IO.File.Create(lastIdFile);
+                file.Close();
+                    using (var writer = new StreamWriter(lastIdFile))
+                    {
+                        writer.Write(id);
+                    writer.Flush();
+                    writer.Close();
+                    }
+            }
+            else
+            {
+                using (var textFile = new FileStream(lastIdFile,
+                    FileMode.Open,
+                    FileAccess.Read))
+                {
+                    using (var reader = new StreamReader(textFile)) 
+                    {
+                        id = long.Parse(reader.ReadLine() ?? throw new InvalidOperationException());
+                        reader.Close();
+                    }
+                }
+                using (var textFile = new FileStream(lastIdFile,
+                    FileMode.Open,
+                    FileAccess.Write))
+                {
+                    using (var writer = new StreamWriter(textFile))
+                    {
+                        id++;
+                        writer.Write(id);
+                        writer.Flush();
+                        writer.Close();
+                    }
+                }
+            }
+            return Json(id);
+        }
+
+        [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
             var parts = new List<CommentStructure>();
