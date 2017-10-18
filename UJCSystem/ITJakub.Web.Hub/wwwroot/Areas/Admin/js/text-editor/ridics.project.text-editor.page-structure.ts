@@ -12,42 +12,46 @@
     }
 
     createPage(pageNumber: number) {
-        const isEditingMode = this.editor.getIsEditingMode();
-        const showPageNumber = this.main.getShowPageNumbers();
-        let elm = "";
         const pageEl = $(`*[data-page="${pageNumber}"]`);
-        const pageName = pageEl.data("page-name");
-        let invisibleClass = "";
-        if (!showPageNumber) {
-            invisibleClass = "invisible";
-        }
-        elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div>`;
-        elm += "<div class=\"col-xs-7 composition-area\">";
-        elm += `<div class="page">`;
+        if (pageEl.length) {
+            const isEditingMode = this.editor.getIsEditingMode();
+            const showPageNumber = this.main.getShowPageNumbers();
+            let elm = "";
+            const pageName = pageEl.data("page-name");
+            let invisibleClass = "";
+            if (!showPageNumber) {
+                invisibleClass = "invisible";
+            }
+            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div>`;
+            elm += "<div class=\"col-xs-7 composition-area\">";
+            elm += `<div class="page">`;
 
-        if (!isEditingMode) {
-            elm += "<div class=\"viewer\">";
-            elm += `<span class="rendered-text"></span>`;
+            if (!isEditingMode) {
+                elm += "<div class=\"viewer\">";
+                elm += `<span class="rendered-text"></span>`;
+                elm += "</div>";
+            }
+            if (isEditingMode) {
+                elm += "<div class=\"editor\">";
+                elm += `<textarea class="plain-text"></textarea>`;
+                elm += "</div>";
+            }
             elm += "</div>";
-        }
-        if (isEditingMode) {
-            elm += "<div class=\"editor\">";
-            elm += `<textarea class="plain-text"></textarea>`;
             elm += "</div>";
+            const html = $.parseHTML(elm);
+            $(pageEl).append(html);
+            if (!isEditingMode) {
+                this.appendRenderedText(pageNumber, showPageNumber);
+            }
+            if (isEditingMode) {
+                this.appendPlainText(pageNumber);
+            }
+            this.commentArea.asyncConstructCommentArea(pageNumber,
+                true,
+                true);
+        } else {
+            console.log("You are requesting to create a page for which element does not exist");
         }
-        elm += "</div>";
-        elm += "</div>";
-        const html = $.parseHTML(elm);
-        $(pageEl).append(html);
-        if (!isEditingMode) {
-            this.appendRenderedText(pageNumber, showPageNumber);
-        }
-        if (isEditingMode) {
-            this.appendPlainText(pageNumber);
-        }
-        this.commentArea.asyncConstructCommentArea(pageNumber,
-            true,
-            true);
     }
 
     appendRenderedText(textId: number, showPageNumber: boolean) {
