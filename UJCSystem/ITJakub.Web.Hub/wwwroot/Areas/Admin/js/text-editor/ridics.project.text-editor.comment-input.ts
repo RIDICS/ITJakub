@@ -42,15 +42,15 @@
                     alert("Comment or name is empty. Please fill both of them");
                 } else {
                     var response = "";
-                    const comment: ICommentSctucture = {//TODO change picture url to actual one, escape characters
-                        id : commentId,
-                        picture : "http://lorempixel.com/48/48", 
-                        nested : nested,
-                        page : page,
-                        name : nameText,
-                        surname : surnameText,
-                        body : commentText,
-                        order : orderOfNestedComment,
+                    const comment: ICommentSctucture = { //TODO change picture url to actual one, escape characters
+                        id: commentId,
+                        picture: "http://lorempixel.com/48/48",
+                        nested: nested,
+                        textId: page,
+                        name: nameText,
+                        surname: surnameText,
+                        body: commentText,
+                        order: orderOfNestedComment,
                         time: time
                     };
                     $.post(`${serverAddress}admin/project/SaveComment`, //check what does async affect
@@ -96,8 +96,7 @@
             });
     }
 
-    addCommentSignsAndReturnCommentNumber(editor: SimpleMDE): JQueryXHR {
-        const ajax = this.util.getGuid();
+    toggleCommentSignsAndReturnCommentNumber(editor: SimpleMDE, addSigns: boolean): JQueryXHR {
         const cm = editor.codemirror as CodeMirror.Doc;
         let output = "";
         let markSize: number;
@@ -106,35 +105,38 @@
         const selectionStartLine = cm.getCursor("from").line;
         const selectionEndChar = cm.getCursor("to").ch;
         const selectionEndLine = cm.getCursor("to").line;
-        const guidRegExpString =
-            "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
+        const idRegExpString =
+            "\\d+";
         const customCommentarySign =
             selectedText.match(
                 new RegExp(
-                    `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
-        ajax.done((data: string) => {
-            const uniqueNumber = data;
-            if (customCommentarySign === null) {
-                var uniqueNumberLength = uniqueNumber.toString().length;
-                markSize = uniqueNumberLength + 2; // + $ + %
-                output = `$${uniqueNumber}%${selectedText}%${uniqueNumber}$`;
-                cm.replaceSelection(output);
-                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
-                    { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
-            } else {
-                output = selectedText.replace(
-                    new RegExp(`\\$${guidRegExpString}\\%`),
-                    "");
-                output = output.replace(
-                    new RegExp(`\\%${guidRegExpString}\\$`),
-                    "");
-                markSize = customCommentarySign[0].length;
-                cm.replaceSelection(output);
-                cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
-                    { line: selectionEndLine, ch: selectionEndChar - markSize });
-            }
-        });
-        return ajax;
+                    `\\$${idRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
+        if (!addSigns) {
+            output = selectedText.replace(
+                new RegExp(`\\$${idRegExpString}\\%`),
+                "");
+            output = output.replace(
+                new RegExp(`\\%${idRegExpString}\\$`),
+                "");
+            markSize = customCommentarySign[0].length;
+            cm.replaceSelection(output);
+            cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
+                { line: selectionEndLine, ch: selectionEndChar - markSize });
+        } else {
+            const ajax = this.util.getNewCommentId();
+            ajax.done((data: string) => {
+                const uniqueNumber = data;
+                if (addSigns) {
+                    var uniqueNumberLength = uniqueNumber.toString().length;
+                    markSize = uniqueNumberLength + 2; // + $ + %
+                    output = `$${uniqueNumber}%${selectedText}%${uniqueNumber}$`;
+                    cm.replaceSelection(output);
+                    cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
+                        { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
+                }
+            });
+            return ajax;
+        }
     }
 
     toggleCommentInputPanel() {
