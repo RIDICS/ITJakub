@@ -55,7 +55,7 @@
                     };
                     $.post(`${serverAddress}admin/project/SaveComment`, //check what does async affect
                         {
-                            jsonBody: comment
+                            comment: comment
                         },
                         (data: string) => {
                             response = data;
