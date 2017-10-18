@@ -526,24 +526,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveComment(string jsonBody)
+        public IActionResult SaveComment(CommentStructure comment)
         {
-            if (jsonBody == null)
+            if (comment == null)
             {
                 return new JsonResult("Error");
             }
-            dynamic json = JsonConvert.DeserializeObject(jsonBody);
-            var page = json.page;
-            var filename = page + "-" + Guid.NewGuid();
+            var textId = comment.TextId;
+            var filename = textId + "-" + Guid.NewGuid();
             using (var newCommentFile = new FileStream($".\\comments\\{filename}.txt", FileMode.Create,
                 FileAccess.ReadWrite))
             {
                 using (var writer = new StreamWriter(newCommentFile))
                 {
-                    writer.Write(jsonBody);
+                    writer.Write(JsonConvert.SerializeObject(comment));
                 }
             }
-            return new JsonResult("Written");
+            return Json("Written");
         }
 
         [HttpPost]
@@ -556,8 +555,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
-            var i = 0;
-            string[] parts;
+            var parts = new List<CommentStructure>();
             try
             {
                 const string path = @".\\comments\\";
@@ -566,7 +564,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     Directory.CreateDirectory(path);
                 }
                 string[] files = Directory.GetFiles(path, textId + "-*.txt");
-                parts = new string[files.Length];
                 foreach (string file in files)
                 {
                     using (var textFile = new FileStream(file,
@@ -575,69 +572,56 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     {
                         using (var reader = new StreamReader(textFile))
                         {
-                            var text = reader.ReadToEnd();
-                            parts[i] = text;
-                            i++;
+                            var comment = JsonConvert.DeserializeObject<CommentStructure>(reader.ReadToEnd());
+                            parts.Add(comment);
                         }
                     }
                 }
             }
             catch (FileNotFoundException)
             {
-                string[] response = {"error-no-file"};
-                return new JsonResult(response);
+                return Json(new CommentStructure[0]);
             }
-            if (parts.Length > 0)
-            {
-                return new JsonResult(parts);
-            }
-            else
-            {
-                string[] response = {"error-no-file"};
-                return new JsonResult(response);
-            }
+            return Json(parts);
         }
 
         [HttpPost] /*TODO rename and use this function*/
         public IActionResult LoadCommentFile1(long textId)
         {
-            string[] parts = { };
+            var parts = new List<CommentStructure>();
             using (var client = GetRestClient())
             {
                 var result = client.GetCommentsForText(textId);
-                var i = 0;
-                if (result.Count > 0)
+                if (result.Count <= 0)
                 {
-                    foreach (GetTextCommentContract pageComments in result)
+                    return Json(parts);
+                }
+                var comment = new CommentStructure();
+                foreach (var pageComments in result)
+                {
+                    comment.Order = 0;
+                    comment.Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds();
+                    comment.Body = pageComments.Text;
+                    comment.Picture = pageComments.User.AvatarUrl;
+                    comment.Id = pageComments.Id;
+                    comment.Nested = false;
+                    comment.TextId = textId; //TODO textReferenceId textResourceId
+                    comment.Name = pageComments.User.FirstName;
+                    comment.Surname = pageComments.User.LastName;
+                    parts.Add(comment);
+                    if (pageComments.TextComments.Count > 0)
                     {
-                        var order = 0;
-                        var time = ((DateTimeOffset)(pageComments.CreateTime)).ToUnixTimeSeconds();
-                        var body = pageComments.Text;
-                        var picture = pageComments.User.AvatarUrl;
-                        var id = pageComments.Id;
-                        var nested=false;
-                        //var page; TODO textReferenceId textResourceId
-                        var name = pageComments.User.FirstName;
-                        var surname = pageComments.User.LastName;
-                        parts[i] =
-                            $"{{\"id\":\"{id}\",\"picture\":\"{picture}\",\"nested\":\"{nested}\",\"page\":\"{textId}\",\"name\":\"{name}\",\"body\":\"{body}\",\"surname\":\"{surname}\",\"order\":\"{order}\",\"time\":\"{time}\"}}";
-                        i++;
-                        if (pageComments.TextComments.Count > 0)
+                        foreach (var textComment in pageComments.TextComments)
                         {
-                            foreach (var textComment in pageComments.TextComments)
-                            {
-                                nested = true;
-                                order++;
-                                time = ((DateTimeOffset)(pageComments.CreateTime)).ToUnixTimeSeconds();
-                                body = textComment.Text;
-                                picture = textComment.User.AvatarUrl;
-                                id = textComment.Id;
-                                name = textComment.User.FirstName;
-                                surname = pageComments.User.LastName;
-                                parts[i] =
-                                    $"{{\"id\":\"{id}\",\"picture\":\"{picture}\",\"nested\":\"{nested}\",\"page\":\"{textId}\",\"name\":\"{name}\",\"surname\":\"{surname}\",\"body\":\"{body}\",\"order\":\"{order}\",\"time\":\"{time}\"}}";
-                                i++;
-                            }
+                            comment.Nested = true;
+                            comment.Order++;
+                            comment.Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds();
+                            comment.Body = textComment.Text;
+                            comment.Picture = textComment.User.AvatarUrl;
+                            comment.Id = textComment.Id;
+                            comment.Name = textComment.User.FirstName;
+                            comment.Surname = pageComments.User.LastName;
+                            parts.Add(comment);
                         }
                     }
                 }
@@ -706,6 +690,19 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         #endregion
+    }
+
+    public class CommentStructure
+    {
+        public long Id { get; set; }
+        public string Picture { get; set; }
+        public bool Nested { get; set; }
+        public long TextId { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Body { get; set; }
+        public int Order { get; set; }
+        public long Time { get; set; }
     }
 
     public static class ProjectMock
