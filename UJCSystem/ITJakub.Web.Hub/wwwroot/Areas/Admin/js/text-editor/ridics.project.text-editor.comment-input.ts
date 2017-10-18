@@ -42,19 +42,21 @@
                     alert("Comment or name is empty. Please fill both of them");
                 } else {
                     var response = "";
-                    const id = commentId;
-                    const timeOfComment = time;
-                    const json: Object = JSON.parse(
-                        `{"id":"${id}","picture":"http://lorempixel.com/48/48","nested":"${nested}","page":"${page
-                        }","name":"${nameText}","surname":"${surnameText}","body":"${commentText
-                        }","order":"${orderOfNestedComment}","time":"${timeOfComment
-                        }"}`); //TODO change picture url to actual one, escape characters
-                    const jsonString = JSON.stringify(json);
-                    const payload: Object = {
-                        jsonBody: jsonString
+                    const comment: ICommentSctucture = {//TODO change picture url to actual one, escape characters
+                        id : commentId,
+                        picture : "http://lorempixel.com/48/48", 
+                        nested : nested,
+                        page : page,
+                        name : nameText,
+                        surname : surnameText,
+                        body : commentText,
+                        order : orderOfNestedComment,
+                        time: time
                     };
-                    $.post(`http://${serverAddress}/admin/project/SaveComment`, //check what does async affect
-                        payload,
+                    $.post(`${serverAddress}admin/project/SaveComment`, //check what does async affect
+                        {
+                            jsonBody: comment
+                        },
                         (data: string) => {
                             response = data;
                             if (response === "Written") {
