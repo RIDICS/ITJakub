@@ -1,7 +1,7 @@
 ﻿class Util {
-    private serverAddress = "localhost:2927"; //TODO debug
+    private serverAddress = getBaseUrl();
 
-    getServerAddress(): string { //TODO debug
+    getServerAddress(): string {
         return this.serverAddress;
     }
 
@@ -10,13 +10,13 @@
  * @returns {JQueryXHR} Ajax conraining GUID
  */
     getGuid(): JQueryXHR {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetGuid`,
+        const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`,
             {});
         return ajax;
     }
 
     getProjectContent(projectId: number) {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetProjectContent`,
+        const ajax = $.post(`${this.serverAddress}admin/project/GetProjectContent`,
             {
                 projectId: projectId
             });
@@ -30,7 +30,7 @@
 * @returns {JQueryXHR} Ajax containing page plain text
 */
     loadPlainText(textId: number): JQueryXHR {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`,
+        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`,
             { textId: textId, format: "Raw" });
         return ajax;
     }
@@ -41,7 +41,7 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`http://${this.serverAddress}/admin/project/GetTextResource`, { textId: textId, format: "Html"});
+        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`, { textId: textId, format: "Html"});
         return ajax;
     }
 
@@ -55,7 +55,7 @@
                 Text: body,
                 VersionNumber: versionNumber//TODO
         };
-            const ajax = $.post(`http://${this.serverAddress}/admin/project/SetTextResource`,
+            const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
                 {
                     textId: textId,
                     request: request
@@ -97,33 +97,6 @@
             beginIndex = endIndex;
         }
         return result;
-    }
-
-    commentFromJson(jsonString: string): ICommentSctucture {
-        if (jsonString !== null) {
-            const stringObject = JSON.parse(jsonString);
-            const id: string = stringObject.id;
-            const picture = stringObject.picture;
-            const name: string = stringObject.name;
-            const surname: string = stringObject.surname;
-            const body: string = stringObject.body;
-            const page: number = parseInt(stringObject.page);
-            const order: number = parseInt(stringObject.order);
-            const time: number = parseInt(stringObject.time);
-            const nested: boolean = (stringObject.nested === "true");
-            const result: ICommentSctucture = {
-                id: id,
-                picture: picture,
-                name: name,
-                surname: surname,
-                body: body,
-                page: page,
-                order: order,
-                time: time,
-                nested: nested
-            };
-            return result;
-        } else return null;
     }
 
     compositionPageFromJson(jsonString: string): ITextProjectPage {
