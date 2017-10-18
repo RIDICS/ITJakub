@@ -28,7 +28,7 @@
         const nestedCommentBodyEnd = "</div>";
         const nestedCommentEnd = "</div>";
         var nested: boolean = false;
-        var page: number = 0;
+        var textId: number = 0;
         var id: string = "";
         var picture: string = "";
         var currentId: string = "";
@@ -48,7 +48,7 @@
             }
             currentId = id;
             nested = content[i].nested;
-            page = content[i].page;
+            textId = content[i].textId;
             name = content[i].name;
             surname = content[i].surname;
             body = content[i].body;
@@ -64,7 +64,7 @@
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
             var nestedCommentBody = `<p class="comment-body">${body}</p>`;
-            if (page === pageNumber) {
+            if (textId === pageNumber) {
                 if (needToCloseTag) {
                     areaContent += mainCommentBodyEnd;
                     areaContent += listEnd;
@@ -100,8 +100,8 @@
                     areaContent += nestedCommentEnd;
                 }
             }
-            if (page !== pageNumber) {
-                console.log(`Something is wrong. Page numbers are not equal. ${page} ${pageNumber}`);
+            if (textId !== pageNumber) {
+                console.log(`Something is wrong. Page numbers are not equal. ${textId} ${pageNumber}`);
             }
         }
 
@@ -253,7 +253,6 @@
         pageNumber: number,
         sectionCollapsed: boolean,
         nestedCommentCollapsed: boolean) {
-        console.log(content);//TODO debug
         if (content !== null && typeof content !== "undefined") {
             if (content.length > 0) {
                 content.sort((a, b) => { //sort by id, ascending

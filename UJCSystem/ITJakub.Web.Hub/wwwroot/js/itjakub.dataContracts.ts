@@ -185,7 +185,7 @@ interface ICommentSctucture {
     picture: string;
     id: string;
     nested: boolean;
-    page: number;
+    textId: number;
     name: string;
     surname: string;
     body: string;
