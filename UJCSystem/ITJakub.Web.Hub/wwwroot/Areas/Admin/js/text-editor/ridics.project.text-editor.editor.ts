@@ -19,21 +19,25 @@
         return this.editingMode;
     }
 
-    addCommentFromEditor = (editor: SimpleMDE) => {
-        const currentPageNumber = this.getCurrentPageNumber();
-        const time = Date.now();
-        const nested = false;
-        const nestedCommentOrder = 0;
-        const ajax = (this.commentInput).addCommentSignsAndReturnCommentNumber(editor);
-        ajax.done((data: string) => {
-            const commentId = data;
-            this.commentInput.processCommentSendClick(nested,
-                currentPageNumber,
-                commentId,
-                nestedCommentOrder,
-                time);
-            this.commentInput.toggleCommentInputPanel();
-        });
+    toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
+        this.commentInput.toggleCommentInputPanel();
+        if (userIsEnteringText) {
+            const currentPageNumber = this.getCurrentPageNumber();
+            const time = Date.now();
+            const nested = false;
+            const nestedCommentOrder = 0;
+            const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
+            ajax.done((data: string) => {
+                const commentId = data;
+                this.commentInput.processCommentSendClick(nested,
+                    currentPageNumber,
+                    commentId,
+                    nestedCommentOrder,
+                    time);
+            });
+        } else {
+            (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
+        }
     }
 
     processAreaSwitch = () => {
@@ -48,8 +52,6 @@
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
                     const pageNumber = jEl.data("page") as number;
-                    console.log(pageNumber);
-                    console.log(this.currentPageNumber);
                     if (pageNumber !== this.currentPageNumber) {
                         pageDiffers = true;
                     }
@@ -74,7 +76,6 @@
                             this.createConfirmationDialog(() => {
                                     this.simplemde.toTextArea();
                                     this.simplemde = null;
-                                    this.currentPageNumber = pageNumber;
                                     this.addEditor(jEl);
                                     this.originalContent = this.simplemde.value();
                                 },
@@ -89,7 +90,6 @@
                         } else if (contentBeforeClose === this.originalContent) {
                             thisClass.simplemde.toTextArea();
                             thisClass.simplemde = null;
-                            thisClass.currentPageNumber = pageNumber;
                             thisClass.addEditor(jEl);
                             thisClass.originalContent = thisClass.simplemde.value();
                         }
@@ -181,7 +181,8 @@
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
                     .addClass("save-confirmation-dialogue-close-button")
-                    .html("<i class=\"fa fa-times\" aria-hidden=\"true\"></i>");//hack, because bootstrap breaks close button icon
+                    .html(
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
     }
@@ -196,6 +197,8 @@
         const editor = jEl.find(".editor");
         const textAreaEl = $(editor).children("textarea");
         const textId = jEl.data("page") as number;
+        this.currentPageNumber = textId;
+        var userIsEnteringText = false;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
@@ -204,7 +207,10 @@
             toolbar: [
                 "bold", "italic", "heading", "|", "quote", "preview", {
                     name: "comment",
-                    action: this.addCommentFromEditor,
+                    action: ((editor) => {
+                        userIsEnteringText = !userIsEnteringText;
+                        this.toggleCommentFromEditor(editor, userIsEnteringText);
+                    }),
                     className: "fa fa-comment",
                     title: "Add comment"
                 }, "|", {
@@ -220,18 +226,18 @@
             () => ({
                 token(stream: any) {
                     if (stream.match(
-                        /(\$([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\%)/)
+                        /(\$\d+\%)/)
                     ) {
                         return "comment-start";
                     }
                     if (stream.match(
-                        /(\%([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\$)/)
+                        /(\%\d+\$)/)
                     ) {
                         return "comment-end";
                     }
                     while (stream.next() != null &&
                         !stream.match(
-                            /(([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12})/,
+                            /\d+/,
                             false)) {
                         return null;
                     }
@@ -240,6 +246,7 @@
             }));
 
         this.simplemde.codemirror.addOverlay("comment");
+        this.simplemde.codemirror.focus();
     }
 
     toggleDivAndTextarea = () => {
