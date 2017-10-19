@@ -20,6 +20,10 @@ class TextEditorMain {
         return this.numberOfPages;
     }
 
+    getShowPageNumbers(): boolean {
+        return this.showPageNumber;
+    }
+
     init() {
         const connections = new Connections();
         const util = new Util();
@@ -60,9 +64,5 @@ class TextEditorMain {
                 this.showPageNumber = isChecked;
                 pageNavigation.togglePageNumbers(isChecked);
             });
-    }
-
-    getShowPageNumbers(): boolean {
-        return this.showPageNumber;
     }
 }
