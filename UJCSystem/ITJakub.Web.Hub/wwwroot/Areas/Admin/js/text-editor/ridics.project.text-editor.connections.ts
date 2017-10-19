@@ -8,7 +8,7 @@ class Connections {
      * @param {string} commentId Unique id of a commentary
      * @returns Whether the connection is not visible
      */
-    private checkIfOverFlowing(commentId: string): boolean {//TODO fix, broken after integration
+    private checkIfOverFlowing(commentId: string): boolean {
         let overflowing: boolean = false;
         const textEl = $(`#${commentId}-text`);
         if (length in textEl) {
