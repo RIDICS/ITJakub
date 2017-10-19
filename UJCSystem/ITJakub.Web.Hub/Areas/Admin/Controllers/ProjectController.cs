@@ -525,7 +525,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost]//TODO text-based loading function is removed, so remove this when new save function implemented
         public IActionResult SaveComment(CommentStructure comment)
         {
             if (comment == null)
@@ -553,119 +553,105 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetNewCommentId()
-        {//TODO debug
-            var id = 0L;
-                const string lastIdFile = @".\comments\lastId";
-            if (!System.IO.File.Exists(lastIdFile))
-            {
-                var file = System.IO.File.Create(lastIdFile);
-                file.Close();
-                    using (var writer = new StreamWriter(lastIdFile))
-                    {
-                        writer.Write(id);
-                    writer.Flush();
-                    writer.Close();
-                    }
-            }
-            else
-            {
-                using (var textFile = new FileStream(lastIdFile,
-                    FileMode.Open,
-                    FileAccess.Read))
-                {
-                    using (var reader = new StreamReader(textFile)) 
-                    {
-                        id = long.Parse(reader.ReadLine() ?? throw new InvalidOperationException());
-                        reader.Close();
-                    }
-                }
-                using (var textFile = new FileStream(lastIdFile,
-                    FileMode.Open,
-                    FileAccess.Write))
-                {
-                    using (var writer = new StreamWriter(textFile))
-                    {
-                        id++;
-                        writer.Write(id);
-                        writer.Flush();
-                        writer.Close();
-                    }
-                }
-            }
-            return Json(id);
-        }
-
-        [HttpPost]
         public IActionResult LoadCommentFile(long textId)
-        {
-            var parts = new List<CommentStructure>();
-            try
-            {
-                const string path = @".\\comments\\";
-                if (!Directory.Exists(path))
-                {
-                    Directory.CreateDirectory(path);
-                }
-                string[] files = Directory.GetFiles(path, textId + "-*.txt");
-                foreach (string file in files)
-                {
-                    using (var textFile = new FileStream(file,
-                        FileMode.Open,
-                        FileAccess.Read))
-                    {
-                        using (var reader = new StreamReader(textFile))
-                        {
-                            var comment = JsonConvert.DeserializeObject<CommentStructure>(reader.ReadToEnd());
-                            parts.Add(comment);
-                        }
-                    }
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                return Json(new CommentStructure[0]);
-            }
-            return Json(parts);
-        }
-
-        [HttpPost] /*TODO rename and use this function*/
-        public IActionResult LoadCommentFile1(long textId)
         {
             var parts = new List<CommentStructure>();
             using (var client = GetRestClient())
             {
-                var result = client.GetCommentsForText(textId);
+                //var result = client.GetCommentsForText(textId); TODO return when server returns actual data
+                var comment2 = new GetTextCommentContract////TODO remove from this line when server returns actual data
+                {
+                    CreateTime = DateTime.Now,
+                    TextResourceId = 1L,
+                    Id = 2L,
+                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
+                    Text = "Green",
+                    User = new UserContract
+                    {
+                        Id = 2,
+                        AvatarUrl = "http://via.placeholder.com/48x48",
+                        FirstName = "Arya",
+                        LastName = "Stark",
+                        UserName = "Arry"
+                    },
+                    TextComments = new List<GetTextCommentContract>()
+                };
+                var comment3 = new GetTextCommentContract
+                {
+                    CreateTime = DateTime.Now,
+                    TextResourceId = 1L,
+                    Id = 3L,
+                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
+                    Text = "Red",
+                    User = new UserContract
+                    {
+                        Id = 2,
+                        AvatarUrl = "http://via.placeholder.com/48x48",
+                        FirstName = "John",
+                        LastName = "Snow",
+                        UserName = "king"
+                    },
+                    TextComments = new List<GetTextCommentContract>()
+                };
+                var inter = new List<GetTextCommentContract> {comment2, comment3};
+                var comment1 = new GetTextCommentContract
+                {
+                    CreateTime = DateTime.Now,
+                    TextResourceId = 1L,
+                    Id = 1L,
+                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
+                    Text = "Tea",
+                    User = new UserContract
+                    {
+                        Id = 1,
+                        AvatarUrl = "http://via.placeholder.com/48x48",
+                        FirstName = "John",
+                        LastName = "Arryn",
+                        UserName = "Johnny"
+                    },
+                    TextComments =inter
+                };
+                var result = new List<GetTextCommentContract> {comment1};//TODO remove to this line when server returns actual data
                 if (result.Count <= 0)
                 {
                     return Json(parts);
                 }
-                var comment = new CommentStructure();
                 foreach (var pageComments in result)
                 {
-                    comment.Order = 0;
-                    comment.Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds();
-                    comment.Body = pageComments.Text;
-                    comment.Picture = pageComments.User.AvatarUrl;
-                    comment.Id = pageComments.Id;
-                    comment.Nested = false;
-                    comment.TextId = textId; //TODO textReferenceId textResourceId
-                    comment.Name = pageComments.User.FirstName;
-                    comment.Surname = pageComments.User.LastName;
-                    parts.Add(comment);
+                    var order = 0;
+                    var mainComment = new CommentStructure
+                    {
+                        Order = order,
+                        Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds(),
+                        Text = pageComments.Text,
+                        Picture = pageComments.User.AvatarUrl,
+                        Id = pageComments.Id,
+                        Nested = false,
+                        TextId = textId,
+                        TextReferenceId = pageComments.TextReferenceId,
+                        Name = pageComments.User.FirstName,
+                        Surname = pageComments.User.LastName
+                    };
+                    parts.Add(mainComment);
                     if (pageComments.TextComments.Count > 0)
                     {
                         foreach (var textComment in pageComments.TextComments)
                         {
-                            comment.Nested = true;
-                            comment.Order++;
-                            comment.Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds();
-                            comment.Body = textComment.Text;
-                            comment.Picture = textComment.User.AvatarUrl;
-                            comment.Id = textComment.Id;
-                            comment.Name = textComment.User.FirstName;
-                            comment.Surname = pageComments.User.LastName;
-                            parts.Add(comment);
+                            order++;
+                            var nestedComment = new CommentStructure
+                            {
+                                Order = order,
+                                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeSeconds(),
+                                Text = textComment.Text,
+                                Picture = textComment.User.AvatarUrl,
+                                Id = textComment.Id,
+                                Nested = true,
+                                TextId = textId,
+                                TextReferenceId = textComment.TextReferenceId,
+                                Name = textComment.User.FirstName,
+                                Surname = textComment.User.LastName
+                            };
+                            parts.Add(nestedComment);
                         }
                     }
                 }
@@ -674,11 +660,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost] /*TODO rename and use this function*/
-        public IActionResult SaveComment1(long textId, CreateTextCommentContract request)
+        public IActionResult SaveComment1(CreateTextCommentContract comment, long textId)
         {
             using (var client = GetRestClient())
             {
-                var result = client.CreateComment(textId, request);
+                var result = client.CreateComment(textId, comment);
                 return Json(result);
             }
         }
@@ -736,15 +722,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         #endregion
     }
 
-    public class CommentStructure
+    public class CommentStructure : TextCommentContractBase
     {
-        public long Id { get; set; }
         public string Picture { get; set; }
         public bool Nested { get; set; }
         public long TextId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Body { get; set; }
         public int Order { get; set; }
         public long Time { get; set; }
     }
