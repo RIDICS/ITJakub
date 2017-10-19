@@ -1,9 +1,0 @@
-{
-  "directory": "wwwroot/lib",
-  "registry": {
-    "search": [
-      "http://censeo.felk.cvut.cz:83/bower/Default-Bower",
-      "https://bower.herokuapp.com"
-    ]
-  }
-}
