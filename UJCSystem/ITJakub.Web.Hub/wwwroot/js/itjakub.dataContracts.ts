@@ -155,8 +155,7 @@ enum FavoriteType {
     HeadwordBookmark = 6,
 }
 
-enum QueryTypeEnum
-{
+enum QueryTypeEnum {
     Search = 0,
     List = 1,
     Reader = 2,
@@ -181,14 +180,22 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
-interface ICommentSctucture {
+interface ICommentStructureBase {
+    id: number;
+    textReferenceId: string;
+    text: string;
+}
+
+interface ICommentStructureReply extends ICommentStructureBase {
+    parentCommentId: number;
+}
+
+interface ICommentSctucture extends ICommentStructureBase {
     picture: string;
-    id: string;
     nested: boolean;
     textId: number;
     name: string;
     surname: string;
-    body: string;
     order: number;
     time: number;
 }
@@ -197,7 +204,7 @@ interface IParentPage {
     id: number;
     versionId: number;
     name: string;
-     position: number;
+    position: number;
 }
 
 interface ITextProjectPage {
