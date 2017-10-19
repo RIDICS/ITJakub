@@ -81,7 +81,7 @@
                     areaContent += commentImage;
                     areaContent += commentLeftPartEnd;
                     areaContent += commentBodyStart;
-                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${id}</div>`;
+                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${textReferenceId}</div>`;
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
                         .toTimeString()
