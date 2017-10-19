@@ -216,11 +216,14 @@ interface ITextProjectPage {
     versionNumber: number;
 }
 
-interface IPageText {
+interface IPageTextBase {
     text: string;
     id: number;
-    versionId: number;
     versionNumber: number;
+}
+
+interface IPageText extends IPageTextBase{
+    versionId: number;
     externalId: string;
     bookVersionId: number;
 }
