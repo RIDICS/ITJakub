@@ -45,24 +45,13 @@
         return ajax;
     }
 
-    savePlainText(body: string, textId: number){//TODO finish
-        const plainText = this.loadPlainText(textId);
-        plainText.done((data: IPageText) => {
-            const id = data.id;
-            const versionNumber = data.versionNumber;
-            const request = {
-                Id: id,
-                Text: body,
-                VersionNumber: versionNumber//TODO
-        };
-            const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
-                {
-                    textId: textId,
-                    request: request
-                });
-            ajax.done(() => { console.log("saved succesfully"); });
-
-        });
+    savePlainText(textId: number, request: IPageTextBase) {
+        const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
+            {
+                textId: textId,
+                request: request
+            });
+        return ajax;
     }
 
     /**

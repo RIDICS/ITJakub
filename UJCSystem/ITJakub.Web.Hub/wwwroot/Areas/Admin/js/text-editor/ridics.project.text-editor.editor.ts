@@ -137,9 +137,29 @@
     }
 
     private saveContents(textId: number, contents: string) {
-        console.log(textId); //TODO add logic
-        console.log(contents);
-        this.originalContent = contents;
+        const plainText = this.util.loadPlainText(textId);
+        plainText.done((data: IPageText) => {
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            const request: IPageTextBase = {
+                id: id,
+                text: contents,
+                versionNumber: versionNumber//TODO
+            };
+            const saveAjax = this.util.savePlainText(textId, request);
+            saveAjax.done(() => {
+                console.log(textId); //TODO add logic
+                console.log(contents);
+                this.gui.successfullySavedContent();
+                this.originalContent = contents;
+            });
+            saveAjax.fail(() => {
+                this.gui.saveContentUnsuccessfull();
+            });
+        });
+        plainText.fail(() => {
+            this.gui.saveContentUnsuccessfull();
+        });
     }
 
     private addEditor(jEl: JQuery) {
