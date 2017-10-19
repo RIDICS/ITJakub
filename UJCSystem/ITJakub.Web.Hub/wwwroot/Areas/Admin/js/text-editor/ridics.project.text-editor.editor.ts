@@ -24,18 +24,13 @@
     toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         this.commentInput.toggleCommentInputPanel();
         if (userIsEnteringText) {
-            const currentPageNumber = this.getCurrentPageNumber();
-            const time = Date.now();
-            const nested = false;
-            const nestedCommentOrder = 0;
+            const textId = this.getCurrentPageNumber();
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
             ajax.done((data: string) => {
-                const commentId = data;
-                this.commentInput.processCommentSendClick(nested,
-                    currentPageNumber,
-                    commentId,
-                    nestedCommentOrder,
-                    time);
+                const textReferenceId = data;
+                const id = 0;//creating comment
+                const parentComment = 0;//creating comment
+                this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
             });
         } else {
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
@@ -180,18 +175,18 @@
             () => ({
                 token(stream: any) {
                     if (stream.match(
-                        /(\$\d+\%)/)
+                        /(\$([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\%)/)
                     ) {
                         return "comment-start";
                     }
                     if (stream.match(
-                        /(\%\d+\$)/)
+                        /(\%([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\$)/)
                     ) {
                         return "comment-end";
                     }
                     while (stream.next() != null &&
                         !stream.match(
-                            /\d+/,
+                            /([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}/,
                             false)) {
                         return null;
                     }
