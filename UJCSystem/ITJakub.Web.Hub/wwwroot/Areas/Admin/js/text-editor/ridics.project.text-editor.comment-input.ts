@@ -15,15 +15,11 @@
 * @param {Number} orderOfNestedComment - Order of a nested comment in a list of nested comments
 * @param {Number} time - UTC UNIX time when comment was made
 */
-    processCommentSendClick(nested: boolean,
-        page: number,
-        commentId: string,
-        orderOfNestedComment: number,
-        time: number) {
-        var serverAddress = this.util.getServerAddress(); //TODO debug
+    processCommentSendClick(
+        textId: number,
+        textReferenceId: string, id:number, parentCommentId:number) {
+        var serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
-        var nameTextArea = $("#nameInput");
-        var surnameTextArea = $("#surnameInput");
         const buttonSend = $("#commentFinish");
         const buttonClose = $(".close-form-input");
         buttonClose.on("click",
@@ -36,26 +32,20 @@
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 var commentText = commentTextArea.val() as string;
-                var nameText = nameTextArea.val() as string;
-                var surnameText = surnameTextArea.val() as string;
-                if (commentText === "" || nameText === "" || surnameText === "") {
-                    alert("Comment or name is empty. Please fill both of them");
+                if (commentText === "") {
+                    alert("Comment is empty. Please fill it");
                 } else {
                     var response = "";
-                    const comment: ICommentSctucture = { //TODO change picture url to actual one, escape characters
-                        id: commentId,
-                        picture: "http://lorempixel.com/48/48",
-                        nested: nested,
-                        textId: page,
-                        name: nameText,
-                        surname: surnameText,
-                        body: commentText,
-                        order: orderOfNestedComment,
-                        time: time
+                    const comment: ICommentStructureReply = {
+                        id: id,
+                        text: commentText,
+                        parentCommentId: parentCommentId,
+                        textReferenceId: textReferenceId
                     };
-                    $.post(`${serverAddress}admin/project/SaveComment`, //check what does async affect
+                    $.post(`${serverAddress}admin/project/SaveComment`,
                         {
-                            comment: comment
+                            comment: comment,
+                            textId: textId
                         },
                         (data: string) => {
                             response = data;
@@ -68,9 +58,7 @@
                         }
                     ).done(() => {
                         commentTextArea.val("");
-                        nameTextArea.val("");
-                        surnameTextArea.val("");
-                        this.commentArea.reloadCommentArea(page);
+                        this.commentArea.reloadCommentArea(textId);
                     });
                     buttonSend.off();
                 }
@@ -84,12 +72,12 @@
                 const target = event.target as HTMLElement;
                 const pageRow =
                     $(target).parents(".comment-area").parent(".page-row");
-                var page = $(pageRow).data("page") as number;
-                const uniqueIdWithText = $(target).parent().siblings(".main-comment").attr("id");
-                var uniqueId = uniqueIdWithText.replace("-comment", "");
-                if (uniqueId !== null && typeof uniqueId !== "undefined") {
-                    const responses = $(target).siblings(".media").length;
-                    this.addCommentFromCommentArea(uniqueId, page, responses + 1);
+                var textId = $(pageRow).data("page") as number;
+                const textReferenceIdWithText = $(target).parent().siblings(".main-comment").attr("id");
+                const parentCommentId = $(target).parent().siblings(".main-comment").data("parent-comment-id") as number;
+                var textReferenceId = textReferenceIdWithText.replace("-comment", "");
+                if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
+                    this.addCommentFromCommentArea(textReferenceId, textId, parentCommentId);
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
                 }
@@ -105,37 +93,37 @@
         const selectionStartLine = cm.getCursor("from").line;
         const selectionEndChar = cm.getCursor("to").ch;
         const selectionEndLine = cm.getCursor("to").line;
-        const idRegExpString =
-            "\\d+";
+        const guidRegExpString =
+            "([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}";
         const customCommentarySign =
             selectedText.match(
                 new RegExp(
-                    `\\$${idRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
+                    `\\$${guidRegExpString}\\%`)); //searching on one side only because of the same amount of characters.
         if (!addSigns) {
             output = selectedText.replace(
-                new RegExp(`\\$${idRegExpString}\\%`),
+                new RegExp(`\\$${guidRegExpString}\\%`),
                 "");
             output = output.replace(
-                new RegExp(`\\%${idRegExpString}\\$`),
+                new RegExp(`\\%${guidRegExpString}\\$`),
                 "");
             markSize = customCommentarySign[0].length;
             cm.replaceSelection(output);
             cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
                 { line: selectionEndLine, ch: selectionEndChar - markSize });
         } else {
-            const ajax = this.util.getNewCommentId();
-            ajax.done((data: string) => {
-                const uniqueNumber = data;
+            const ajaxTextReferenceId = this.util.createTextRefereceId();
+            ajaxTextReferenceId.done((data: string) => {
+                const textReferenceId = data;
                 if (addSigns) {
-                    var uniqueNumberLength = uniqueNumber.toString().length;
+                    var uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
-                    output = `$${uniqueNumber}%${selectedText}%${uniqueNumber}$`;
+                    output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
                     cm.replaceSelection(output);
                     cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                 }
             });
-            return ajax;
+            return ajaxTextReferenceId;
         }
     }
 
@@ -144,10 +132,9 @@
         jTextInputPanel.toggle();
     }
 
-    private addCommentFromCommentArea(id: string, page: number, number: number) {
-        const nested = true;
-        const time = Date.now();
-        this.processCommentSendClick(nested, page, id, number, time);
+    private addCommentFromCommentArea(textRefernceId: string, textId: number, parentCommentId: number) {
+        const id = 0;//creating comment
+        this.processCommentSendClick(textId, textRefernceId, id, parentCommentId);
         this.toggleCommentInputPanel();
     }
 }
