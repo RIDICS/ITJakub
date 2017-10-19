@@ -9,18 +9,8 @@
  * Generates guid on the server
  * @returns {JQueryXHR} Ajax conraining GUID
  */
-    getGuid(): JQueryXHR {//TODO remove when id func is finished
+    createTextRefereceId(): JQueryXHR {
         const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`,
-            {});
-        return ajax;
-    }
-
-    /**
-* Gets comment id from the server
-* @returns {JQueryXHR} Ajax conraining GUID
-*/
-    getNewCommentId(): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetNewCommentId`,
             {});
         return ajax;
     }
@@ -107,11 +97,6 @@
             beginIndex = endIndex;
         }
         return result;
-    }
-
-    compositionPageFromJson(jsonString: string): ITextProjectPage {
-//TODO write logic
-        return null;
     }
 
 }
