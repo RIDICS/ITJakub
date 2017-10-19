@@ -29,7 +29,8 @@
         const nestedCommentEnd = "</div>";
         var nested: boolean = false;
         var textId: number = 0;
-        var id: string = "";
+        var textReferenceId: string = "";
+        var id: number = 0;
         var picture: string = "";
         var currentId: string = "";
         var needToCloseTag: boolean = false;
@@ -42,16 +43,17 @@
         areaContent += sectionStart;
         for (let i = 0; i < numberOfComments; i++) {
             id = content[i].id;
-            if ((i > 0 && currentId !== id) || i === numberOfComments
+            textReferenceId = content[i].textReferenceId;
+            if ((i > 0 && currentId !== textReferenceId) || i === numberOfComments
             ) { //at the start of a new thread, close previous one
                 needToCloseTag = true;
             }
-            currentId = id;
+            currentId = textReferenceId;
             nested = content[i].nested;
             textId = content[i].textId;
             name = content[i].name;
             surname = content[i].surname;
-            body = content[i].body;
+            body = content[i].text;
             picture = content[i].picture;
             orderOfNestedComment = content[i].order;
             var time = content[i].time;
@@ -59,7 +61,7 @@
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
-            var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${id}-comment">`;
+            var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
@@ -174,7 +176,7 @@
             if (sectionCollapsed) {
                 $(commentArea).toggleClass("comment-area-collapsed");
             }
-            var children = $(commentArea).children(".media-list");
+            const children = $(commentArea).children(".media-list");
             children.each((index: number, childNode: Node) => {
                 if (numberOfNestedComments[index] > 2) {
                     const child = childNode as Element;
