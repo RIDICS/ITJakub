@@ -6,7 +6,7 @@ namespace Vokabular.FulltextService.Core.Managers
     public class TextResourceManager
     {
         private readonly CommunicationProvider m_communicationProvider;
-        private const string Index = "module";
+        private const string Index = "module"; //TODO rename index and type
         private const string Type = "page";
 
         public TextResourceManager(CommunicationProvider communicationProvider)

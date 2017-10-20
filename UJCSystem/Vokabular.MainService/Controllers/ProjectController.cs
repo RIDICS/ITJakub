@@ -148,8 +148,8 @@ namespace Vokabular.MainService.Controllers
         {
             var result = m_pageManager.CreateNewTextResourceVersion(request);
             return Ok(result);
-            //TODO add logic
-            return StatusCode(StatusCodes.Status409Conflict); // Version conflict
+            //TODO check result
+            //return StatusCode(StatusCodes.Status409Conflict); // Version conflict
         }
 
         [HttpGet("text/{textId}/comment")]

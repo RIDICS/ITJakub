@@ -1,5 +1,4 @@
 ﻿using System;
-using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -27,21 +26,24 @@ namespace Vokabular.MainService.Core.Works.Text
         {
             var timeNow = DateTime.UtcNow;
             var latestVersion = m_resourceRepository.GetTextResource(m_newTextContract.Id);
+            var newVersionNumber = latestVersion.VersionNumber + 1;
             //TODO check version conflict
 
-            var client = m_communicationProvider.GetFulltextServiceClient();
-            var textId = client.CreateTextResource(m_newTextContract.Text);
+            var fulltextClient = m_communicationProvider.GetFulltextServiceClient();
+            var externalTextId = fulltextClient.CreateTextResource(m_newTextContract.Text, newVersionNumber);
             //TODO check succes 
+
             var newVersion = new TextResource
             {
                 CreatedByUser = m_resourceRepository.Load<User>(m_userId),
                 CreateTime = timeNow,
-                ExternalId = textId,//TODO fill from elastic
+                ExternalId = externalTextId,
                 ParentResource = latestVersion.ParentResource,
                 Resource = latestVersion.Resource,
-                VersionNumber = latestVersion.VersionNumber + 1,
+                VersionNumber = newVersionNumber,
             };
             newVersion.Resource.LatestVersion = newVersion;
+
             var result = (long)m_resourceRepository.Create(newVersion);
             return result;
         }

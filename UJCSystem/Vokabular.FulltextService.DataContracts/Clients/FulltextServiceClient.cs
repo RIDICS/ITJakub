@@ -24,11 +24,11 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         {
         }
 
-        public TextResourceContract GetTextResource(string resourceId)
+        public TextResourceContract GetTextResource(string resourceId, int formatValue)
         {
             try
             {
-                var textResource = Get<TextResourceContract>($"text/{resourceId}");
+                var textResource = Get<TextResourceContract>($"text/{resourceId}?formatValue={formatValue}");
                 return textResource;
             }
             catch (HttpRequestException e)
@@ -41,9 +41,9 @@ namespace Vokabular.FulltextService.DataContracts.Clients
         }
 
 
-        public string CreateTextResource(string text)
+        public string CreateTextResource(string text, int versionNumber)
         {
-            var textResource = new TextResourceContract{ Text = text };
+            var textResource = new TextResourceContract{ Text = text, VersionNumber  = versionNumber};
 
             try
             {
@@ -59,6 +59,5 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
     }
-
     
 }

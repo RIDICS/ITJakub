@@ -44,26 +44,12 @@ namespace Vokabular.MainService.Core.Managers
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
             var result = Mapper.Map<FullTextContract>(dbResult);
-            // TODO load data from external database
+            
             var client = m_communicationProvider.GetFulltextServiceClient();
-            var page = client.GetTextResource("796be5f9-5867-4d46-986e-714f2a6b530d-0");
-            result.Text = page.Text;
-            // TODO mock:
-            /*
-            switch (formatValue)
-            {
-                case TextFormatEnumContract.Raw:
-                    result.Text = "*Mock text* from **MainService.**";
-                    break;
-                case TextFormatEnumContract.Html:
-                    result.Text = "<b>Mock text</b> from <i>MainService.</i>";
-                    break;
-                case TextFormatEnumContract.Rtf:
-                    throw new NotSupportedException();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(formatValue), formatValue, null);
-            }
-            */
+            
+            var textResource = client.GetTextResource(result.ExternalId, (int)formatValue);
+            result.Text = textResource.Text;
+
             return result;
         }
 
