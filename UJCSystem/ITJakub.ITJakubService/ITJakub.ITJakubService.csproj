@@ -136,6 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
+      <Link>ITJakub.Secrets.config</Link>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
