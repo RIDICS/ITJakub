@@ -200,10 +200,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
-      <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
-      <Name>ITJakub.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>
@@ -212,9 +208,17 @@
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
+      <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
+      <Name>Vokabular.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
+      <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>
+      <Name>Vokabular.Shared.DataContracts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

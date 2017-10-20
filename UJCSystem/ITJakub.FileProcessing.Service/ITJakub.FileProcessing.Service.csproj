@@ -88,9 +88,16 @@
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.1.0.2\lib\netstandard1.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=1.0.2.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.1.0.2\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=1.0.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.1.0.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=4.1.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
@@ -118,6 +125,7 @@
     <Compile Include="Container.cs" />
     <Compile Include="FileProcessingService.cs" />
     <Compile Include="NHibernateInstaller.cs" />
+    <Compile Include="PathConfigImplementation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -164,6 +172,10 @@
     <ProjectReference Include="..\ITJakub.Xml.Conversion\Ujc.Ovj.Ooxml.Conversion\Ujc.Ovj.Ooxml.Conversion.csproj">
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj">
+      <Project>{88ef00d2-ce46-4054-a764-9093ba9dde4e}</Project>
+      <Name>Vokabular.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>

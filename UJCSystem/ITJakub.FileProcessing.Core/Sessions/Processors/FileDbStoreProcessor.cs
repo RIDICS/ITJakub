@@ -1,4 +1,4 @@
-using ITJakub.Core;
+using Vokabular.Core.Storage;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {

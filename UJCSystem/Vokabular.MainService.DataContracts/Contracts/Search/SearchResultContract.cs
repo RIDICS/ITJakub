@@ -62,17 +62,15 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
         public string ManuscriptTitle { get; set; }
 
-        public int TotalHitCount { get; set; }
+        //public int TotalHitCount { get; set; } // Search hits in book (similar to Corpus search, but only in one book)
 
         //public IList<PageResultContext> Results { get; set; }
-
-        public int TermsPageHitsCount { get; set; }
-
-        //public IList<PageDescriptionContract> TermsPageHits { get; set; }
 
         public string RelicAbbreviation { get; set; }
 
         public string SourceAbbreviation { get; set; }
+
+        public SearchTermResultContract TermPageHits { get; set; }
     }
 
     public class SearchResultDetailContract : SearchResultContract

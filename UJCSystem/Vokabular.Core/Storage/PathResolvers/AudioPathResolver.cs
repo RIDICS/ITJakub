@@ -1,7 +1,7 @@
 using System.IO;
-using ITJakub.Shared.Contracts.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Core.PathResolvers
+namespace Vokabular.Core.Storage.PathResolvers
 {
     public class AudioPathResolver : IResourceTypePathResolver
     {

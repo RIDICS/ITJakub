@@ -10,6 +10,8 @@ using Castle.Windsor.Installer;
 using log4net;
 using log4net.Config;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Vokabular.Core;
 using Vokabular.DataEntities;
 using Vokabular.Shared.Container;
 
@@ -55,7 +57,10 @@ namespace ITJakub.FileProcessing.Service
             Install(Configuration.FromAppConfig());
             //Install(Configuration.FromXml(GetConfigResource()));
 
+            Install<CoreContainerRegistration>();
             Install<DataEntitiesContainerRegistration>();
+
+            AddSingleton<IOptions<PathConfiguration>, PathConfigImplementation>(); // TODO after switch to ASP.NET Core use framework options handler
         }
 
         private void ConfigureAutoMapper()

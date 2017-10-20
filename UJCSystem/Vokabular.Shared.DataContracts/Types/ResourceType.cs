@@ -1,4 +1,4 @@
-﻿namespace ITJakub.Shared.Contracts.Resources
+﻿namespace Vokabular.Shared.DataContracts.Types
 {
     public enum ResourceType
     {

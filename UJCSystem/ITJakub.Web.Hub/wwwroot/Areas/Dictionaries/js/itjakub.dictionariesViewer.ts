@@ -14,8 +14,8 @@ class DictionaryViewer {
     private favoriteHeadwordList: IDictionaryFavoriteHeadword[];
     private dictionariesMetadataList: IBookListDictionary;
     private showPageCallback: (pageNumber: number) => void;
-    private addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void;
-    private removeFavoriteCallback: (bookId: string, entryXmlId: string) => void;
+    private addNewFavoriteCallback: (bookId: number, headwordId: number) => void;
+    private removeFavoriteCallback: (bookId: number, headwordId: number) => void;
     private searchCriteria: string;
     private isCriteriaJson: boolean;
     private defaultPageNumber: number;
@@ -57,7 +57,7 @@ class DictionaryViewer {
         this.pagination.goToPage(pageNumber);
     }
 
-    public setFavoriteCallback(addNewFavoriteCallback: (bookId: string, entryXmlId: string) => void, removeFavoriteCallback: (bookId: string, entryXmlId: string) => void) {
+    public setFavoriteCallback(addNewFavoriteCallback: (bookId: number, headwordId: number) => void, removeFavoriteCallback: (bookId: number, headwordId: number) => void) {
         this.addNewFavoriteCallback = addNewFavoriteCallback;
         this.removeFavoriteCallback = removeFavoriteCallback;
     }
@@ -85,7 +85,7 @@ class DictionaryViewer {
     private isHeadwordFavorite(headwordDictionaryInfo: IHeadwordBookInfo): boolean {
         for (var i = 0; i < this.favoriteHeadwordList.length; i++) {
             var favoriteHeadword = this.favoriteHeadwordList[i];
-            if (headwordDictionaryInfo.bookXmlId === favoriteHeadword.bookId && headwordDictionaryInfo.entryXmlId === favoriteHeadword.entryXmlId)
+            if (headwordDictionaryInfo.bookId === favoriteHeadword.fakeBookId && headwordDictionaryInfo.headwordId === favoriteHeadword.fakeHeadwordId)
                 return true;
         }
         return false;
@@ -180,13 +180,13 @@ class DictionaryViewer {
 
             for (var j = 0; j < record.dictionaries.length; j++) {
                 var dictionary = record.dictionaries[j];
-                var dictionaryMetadata = this.dictionariesMetadataList[dictionary.bookXmlId];
+                var dictionaryMetadata = this.dictionariesMetadataList[dictionary.bookId];
                 var currentIndex = this.headwordDescriptionDivs.length;
 
                 // create description
                 var mainHeadwordDiv = document.createElement("div");
 
-                if (dictionary.image) {
+                if (dictionary.pageId) { //image may be exists
                     var imageCheckBoxDiv = document.createElement("div");
                     var imageCheckBox = document.createElement("input");
                     var imageIconSpan = document.createElement("span");
@@ -225,18 +225,17 @@ class DictionaryViewer {
                 var commentsDiv = document.createElement("div");
                 var commentsLink = document.createElement("a");
                 $(commentsLink).text("Připomínky");
-                commentsLink.href = "Feedback?bookId=" + dictionaryMetadata.bookXmlId
-                    + "&versionId=" + dictionaryMetadata.bookVersionXmlId
-                    + "&entryId=" + dictionary.entryXmlId
+                commentsLink.href = "Feedback?bookId=" + dictionaryMetadata.id
+                    + "&headwordVersionId=" + dictionary.headwordVersionId
                     + "&headword=" + record.headword
-                    + "&dictionary=" + encodeURIComponent(dictionaryMetadata.bookTitle);
+                    + "&dictionary=" + encodeURIComponent(dictionaryMetadata.title);
                 $(commentsDiv).addClass("dictionary-entry-comments");
                 commentsDiv.appendChild(commentsLink);
 
                 var dictionaryDiv = document.createElement("div");
                 var dictionaryLink = document.createElement("a");
-                $(dictionaryLink).text(dictionaryMetadata.bookTitle);
-                dictionaryLink.href = "List?bookId=" + dictionary.bookXmlId;
+                $(dictionaryLink).text(dictionaryMetadata.title);
+                dictionaryLink.href = "List?search=" + encodeURIComponent(dictionaryMetadata.title);
                 $(dictionaryDiv).addClass("dictionary-entry-name");
                 dictionaryDiv.appendChild(dictionaryLink);
 
@@ -268,7 +267,7 @@ class DictionaryViewer {
 
                 var aLink = document.createElement("a");
                 aLink.href = "#";
-                aLink.innerHTML = dictionaryMetadata.bookAcronym;
+                aLink.innerHTML = dictionaryMetadata.sourceAbbreviation;
                 aLink.setAttribute("data-entry-index", String(currentIndex));
                 $(aLink).addClass("dictionary-result-headword-book");
                 this.createLinkListener(aLink, record.headword, dictionary, descriptionDiv);
@@ -295,8 +294,7 @@ class DictionaryViewer {
 
             var index = $(mainDiv).data("entry-index");
             var entryInfo = this.dictionariesInfo[index];
-            var bookVersionXmlId = this.dictionariesMetadataList[entryInfo.bookXmlId].bookVersionXmlId;
-            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?bookXmlId=" + entryInfo.bookXmlId + "&bookVersionXmlId=" + bookVersionXmlId + "&fileName=" + entryInfo.image;
+            var imageLink = getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordImage?pageId=" + entryInfo.pageId;
             var imageElement = document.createElement("img");
             imageElement.setAttribute("src", imageLink);
             imageContainer.append(imageElement);
@@ -329,11 +327,11 @@ class DictionaryViewer {
         if (isFavorite) {
             $(element).removeClass("glyphicon-star");
             $(element).addClass("glyphicon-star-empty");
-            this.removeFavoriteCallback(dictionaryInfo.bookXmlId, dictionaryInfo.entryXmlId);
+            this.removeFavoriteCallback(dictionaryInfo.bookId, dictionaryInfo.headwordId);
         } else {
             $(element).removeClass("glyphicon-star-empty");
             $(element).addClass("glyphicon-star");
-            this.addNewFavoriteCallback(dictionaryInfo.bookXmlId, dictionaryInfo.entryXmlId);
+            this.addNewFavoriteCallback(dictionaryInfo.bookId, dictionaryInfo.headwordId);
         }
     }
 
@@ -427,8 +425,7 @@ class DictionaryViewer {
             traditional: true,
             url: getBaseUrl() + "Dictionaries/Dictionaries/GetHeadwordDescription",
             data: {
-                bookGuid: headwordInfo.bookXmlId,
-                xmlEntryId: headwordInfo.entryXmlId
+                headwordId: headwordInfo.headwordId
             },
             dataType: "json",
             contentType: "application/json",
@@ -436,7 +433,7 @@ class DictionaryViewer {
                 this.showLoadHeadword(response, container);
             },
             error: () => {
-                if (!headwordInfo.image) {
+                if (!headwordInfo.pageId) {
                     this.showLoadError(headword, container);
                 } else {
                     this.loadImageOnError(headwordIndex, container);
@@ -455,8 +452,7 @@ class DictionaryViewer {
             data: {
                 criteria: this.searchCriteria,
                 isCriteriaJson: this.isCriteriaJson,
-                bookGuid: headwordInfo.bookXmlId,
-                xmlEntryId: headwordInfo.entryXmlId
+                headwordId: headwordInfo.headwordId
             },
             dataType: "json",
             contentType: "application/json",
@@ -464,7 +460,7 @@ class DictionaryViewer {
                 this.showLoadHeadword(response, container);
             },
             error: () => {
-                if (!headwordInfo.image) {
+                if (!headwordInfo.pageId) {
                     this.showLoadError(headword, container);
                 } else {
                     this.loadImageOnError(headwordIndex, container);
@@ -574,5 +570,5 @@ class DictionaryViewer {
 }
 
 interface IBookListDictionary {
-    [bookXmlId: string]: IDictionaryContract;
+    [bookXmlId: number]: IBookContract;
 }

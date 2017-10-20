@@ -141,10 +141,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
-      <Project>{92e907e3-ace0-4fc6-8919-040031e5192e}</Project>
-      <Name>ITJakub.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>

@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NHibernate;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search
 {
-    public class SearchCriteriaQueryCreator
+    public class SearchCriteriaQueryCreator : ISearchCriteriaCreator
     {
         private const int MaxCount = 100;
         private const int DefaultCount = 10;
@@ -21,7 +19,6 @@ namespace Vokabular.DataEntities.Database.Search
 
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
-        private string m_headwordQueryParameter;
 
         public SearchCriteriaQueryCreator(List<SearchCriteriaQuery> conjunctionQuery,
             Dictionary<string, object> metadataParameters)
@@ -45,10 +42,7 @@ namespace Vokabular.DataEntities.Database.Search
             return Count != null ? Math.Min(Count.Value, MaxCount) : DefaultCount;
         }
 
-        public Dictionary<string, object> GetMetadataParameters()
-        {
-            return m_metadataParameters;
-        }
+        public Dictionary<string, object> Parameters => m_metadataParameters;
 
         public string GetQueryString()
         {
@@ -93,7 +87,6 @@ namespace Vokabular.DataEntities.Database.Search
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
             var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
 
-            //var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where {FromClause} {joinAndWhereClause}"; // TODO missing joins for headword restrictions
             var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause})";
             
             return queryString;
@@ -165,45 +158,6 @@ namespace Vokabular.DataEntities.Database.Search
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-    }
-
-    public static class SearchCriteriaQueryCreatorExtensions
-    {
-        public static IQuery SetParameters(this IQuery query, SearchCriteriaQueryCreator creator)
-        {
-            var metadataParameters = creator.GetMetadataParameters();
-            foreach (var parameterKeyValue in metadataParameters)
-            {
-                if (parameterKeyValue.Value is DateTime)
-                {
-                    //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
-                    query.SetDateTime2(parameterKeyValue.Key, (DateTime)parameterKeyValue.Value);
-                }
-                else if (parameterKeyValue.Value is IList)
-                {
-                    query.SetParameterList(parameterKeyValue.Key, (IList)parameterKeyValue.Value);
-                }
-                else
-                {
-                    query.SetParameter(parameterKeyValue.Key, parameterKeyValue.Value);
-                }
-            }
-
-            //if (m_headwordQueryParameter != null)
-            //{
-            //    query.SetParameter("headwordQuery", m_headwordQueryParameter);
-            //}
-
-            return query;
-        }
-
-        public static IQuery SetPaging(this IQuery query, SearchCriteriaQueryCreator creator)
-        {
-            query.SetFirstResult(creator.GetStart());
-            query.SetMaxResults(creator.GetCount());
-
-            return query;
         }
     }
 }

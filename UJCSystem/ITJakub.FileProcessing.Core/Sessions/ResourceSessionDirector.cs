@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Core.Resources;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {

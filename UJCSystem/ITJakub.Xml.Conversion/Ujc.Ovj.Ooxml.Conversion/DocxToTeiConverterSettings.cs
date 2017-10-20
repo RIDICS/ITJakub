@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ITJakub.Shared.Contracts.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Ujc.Ovj.Ooxml.Conversion
 {

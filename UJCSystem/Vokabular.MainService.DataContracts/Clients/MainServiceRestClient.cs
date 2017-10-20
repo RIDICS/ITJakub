@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -8,6 +9,7 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
+using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -715,7 +717,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("book/search-count", request);
+                var result = Post<long>("book/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -731,7 +733,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("headword/search-count", request);
+                var result = Post<long>("headword/search-count", request);
                 return result;
             }
             catch (HttpRequestException e)
@@ -747,7 +749,71 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Post<int>("headword/search-row-number", request);
+                var result = Post<long>("headword/search-row-number", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<PageContract> SearchPage(long projectId, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<PageContract>>($"book/{projectId}/page/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<CorpusSearchResultContract> SearchCorpus(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<List<CorpusSearchResultContract>>("corpus/search", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public long SearchCorpusCount(CorpusSearchRequestContract request)
+        {
+            try
+            {
+                var result = Post<long>("corpus/search-count", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public BookContract GetBookInfo(long projectId)
+        {
+            try
+            {
+                var result = Get<BookContract>($"book/{projectId}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -763,7 +829,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<SearchResultDetailContract>($"book/{projectId}");
+                var result = Get<SearchResultDetailContract>($"book/{projectId}/detail");
                 return result;
             }
             catch (HttpRequestException e)
@@ -896,6 +962,82 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
             catch (HttpRequestException e)
             {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<PageContract> GetBookPageList(long projectId)
+        {
+            try
+            {
+                var result = Get<List<PageContract>>($"project/{projectId}/page");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<ChapterContract> GetBookChapterList(long projectId)
+        {
+            try
+            {
+                var result = Get<List<ChapterContract>>($"project/{projectId}/chapter");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public bool HasBookAnyImage(long projectId)
+        {
+            try
+            {
+                Head($"book/{projectId}/image");
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                var statusException = e as HttpErrorCodeException;
+                if (statusException?.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public bool HasBookAnyText(long projectId)
+        {
+            try
+            {
+                Head($"book/{projectId}/text");
+                return true;
+            }
+            catch (HttpRequestException e)
+            {
+                var statusException = e as HttpErrorCodeException;
+                if (statusException?.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return false;
+                }
+
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 

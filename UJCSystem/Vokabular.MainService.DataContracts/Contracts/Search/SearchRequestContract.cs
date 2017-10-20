@@ -18,30 +18,21 @@ namespace Vokabular.MainService.DataContracts.Contracts.Search
 
     public class SearchRequestContract : SearchRequestContractBase
     {
-        public HitSettingsContract HitSettingsContract { get; set; }
-
-        public TermsSettingsContract TermsSettingsContract { get; set; }
+        public bool FetchTerms { get; set; }
 
         public SortTypeEnumContract? Sort { get; set; }
 
         public SortDirectionEnumContract? SortDirection { get; set; }
     }
 
-    public class HitSettingsContract
-    {
-        public int? Count { get; set; }
-
-        public int? Start { get; set; }
-
-        public int ContextLength { get; set; }
-    }
-
-    public class TermsSettingsContract
-    {
-        // count and start ommited because missing use case. This contract is used as request for loading terms.
-    }
-
     public class HeadwordSearchRequestContract : SearchRequestContractBase
     {
+    }
+
+    public class CorpusSearchRequestContract : SearchRequestContractBase
+    {
+        //public HitSettingsContract HitSettingsContract { get; set; } HitSettings is redundant in direct corpus search
+
+        public int ContextLength { get; set; }
     }
 }

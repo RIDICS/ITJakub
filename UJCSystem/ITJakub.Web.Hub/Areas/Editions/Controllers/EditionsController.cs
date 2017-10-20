@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -13,10 +13,11 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
-using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
 namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 {
@@ -50,22 +51,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             var fullPath = "~/Areas/Editions/content/BibliographyPlugin/search_configuration.json";
             return File(fullPath, "application/json", fullPath);
         }
-
-        public ActionResult HasBookImage(string bookId, string versionId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                return Json(new { HasBookImage = client.HasBookImage(bookId, versionId) });
-            }
-        }
-        public FileResult GetBookImage(string bookId, int position)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var imageDataStream = client.GetBookPageImage(bookId, position);
-                return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
-            }
-        }
+        
 
         #region Views and Feedback
 
@@ -80,21 +66,29 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
             return View();
         }
 
-        public ActionResult Listing(string bookId, string searchText, string page)
+        // TODO rename parameter page to pageId
+        public ActionResult Listing(long bookId, string searchText, string page)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var book = client.GetBookInfoWithPages(bookId);
+                var book = client.GetBookInfo(bookId);
+                var pages = client.GetBookPageList(bookId);
                 return
                     View(new BookListingModel
                     {
-                        BookId = book.BookId,
-                        BookXmlId = book.BookXmlId,
-                        VersionXmlId = book.LastVersionXmlId,
+                        BookId = book.Id,
+                        BookXmlId = book.Id.ToString(), // TODO remove this property
+                        VersionXmlId = null, // TODO replace this property with snapshot ID
                         BookTitle = book.Title,
-                        BookPages = book.BookPages,
+                        //BookPages = book.BookPages, // TODO change BookPages structure
+                        BookPages = pages.Select(x => new BookPageContract
+                        {
+                            XmlId = x.Id.ToString(),
+                            Text = x.Name,
+                            Position = x.Position,
+                        }).ToList(),
                         SearchText = searchText,
-                        InitPageXmlId = page,
+                        InitPageXmlId = page, // TODO rename to InitPageId
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
                     });

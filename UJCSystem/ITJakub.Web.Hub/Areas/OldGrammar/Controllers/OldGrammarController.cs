@@ -150,12 +150,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            // TODO determine why TermSettingsContract is added to criteria
-            //if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Term) != null)
-            //{
-            //    listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
-            //}
-
             var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
             return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
@@ -188,12 +182,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            // TODO determine why TermSettingsContract is added to criteria
-            //if (!string.IsNullOrWhiteSpace(text))
-            //{
-            //    listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
-            //}
-
             var result = SearchByCriteriaText(CriteriaKey.Term, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
             return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
