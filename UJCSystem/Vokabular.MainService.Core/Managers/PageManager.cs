@@ -5,6 +5,7 @@ using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
@@ -15,11 +16,13 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly ResourceRepository m_resourceRepository;
         private readonly UserManager m_userManager;
+        private readonly CommunicationProvider m_communicationProvider;
 
-        public PageManager(ResourceRepository resourceRepository, UserManager userManager)
+        public PageManager(ResourceRepository resourceRepository, UserManager userManager, CommunicationProvider communicationProvider)
         {
             m_resourceRepository = resourceRepository;
             m_userManager = userManager;
+            m_communicationProvider = communicationProvider;
         }
 
         public List<PageContract> GetPageList(long projectId)
@@ -42,8 +45,11 @@ namespace Vokabular.MainService.Core.Managers
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetTextResource(textId));
             var result = Mapper.Map<FullTextContract>(dbResult);
             // TODO load data from external database
-
+            var client = m_communicationProvider.GetFulltextServiceClient();
+            var page = client.GetTextResource("796be5f9-5867-4d46-986e-714f2a6b530d-0");
+            result.Text = page.Text;
             // TODO mock:
+            /*
             switch (formatValue)
             {
                 case TextFormatEnumContract.Raw:
@@ -57,7 +63,7 @@ namespace Vokabular.MainService.Core.Managers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(formatValue), formatValue, null);
             }
-            
+            */
             return result;
         }
 
@@ -80,6 +86,14 @@ namespace Vokabular.MainService.Core.Managers
         {
             var deleteCommentWork = new DeleteTextCommentWork(m_resourceRepository, commentId);
             deleteCommentWork.Execute();
+        }
+
+        public long CreateNewTextResourceVersion(ShortTextContract request)
+        {
+            var userId = m_userManager.GetCurrentUserId();
+            var createNewTextResourceWork = new CreateNewTextResourceWork(m_resourceRepository, request, userId, m_communicationProvider);
+            var resultId = createNewTextResourceWork.Execute();
+            return resultId;
         }
     }
 }

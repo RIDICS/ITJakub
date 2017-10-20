@@ -1,4 +1,5 @@
 ﻿using Vokabular.FulltextService.Core.Communication;
+using Vokabular.FulltextService.Core.Managers;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.FulltextService.Core
@@ -9,6 +10,7 @@ namespace Vokabular.FulltextService.Core
         {
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
+            container.AddPerWebRequest<TextResourceManager>();
         }
     }
 }
