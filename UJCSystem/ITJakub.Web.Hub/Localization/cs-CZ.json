@@ -28,6 +28,7 @@
 		"UserAccount":"Uživatelský účet",
 		"Language":"Jazyk",
 		"SignIn":"Přihlášení",
+		"LogOut": "Odhlásit",
 		"SignUp":"Registace",
 		"EditText":"Upravit text",
 		"CreateText":"Vytvořit text"
