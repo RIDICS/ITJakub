@@ -3,12 +3,14 @@
     private readonly util: Util;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
+    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor) {
+    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor, gui:TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
         this.editor = editor;
+        this.gui = gui;
     }
 
     createPage(pageNumber: number) {
@@ -55,11 +57,14 @@
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
             compositionAreaDiv.trigger(event);
-            $(pageEl).find(".loading").hide();
         });
         renderedText.fail(() => {
-            $(compositionAreaDiv).text("Failed to load content");
+            const pageName = pageEl.data("page-name");
+            this.gui.showMessageDialog("Fail", `Failed to load page ${pageName}`);
+            $(compositionAreaDiv).text();
             pageEl.css("min-height", "0");
+        });
+        renderedText.always(() => {
             $(pageEl).find(".loading").hide();
         });
 

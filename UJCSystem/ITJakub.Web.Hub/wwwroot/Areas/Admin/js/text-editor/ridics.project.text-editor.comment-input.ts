@@ -1,10 +1,12 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
     private readonly util: Util;
+    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util) {
+    constructor(commentArea: CommentArea, util: Util, gui: TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
+        this.gui = gui;
     }
 
     /**
@@ -35,7 +37,7 @@
                 event.stopImmediatePropagation();
                 var commentText = commentTextArea.val() as string;
                 if (commentText === "") {
-                    alert("Comment is empty. Please fill it");
+                    this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
                 } else {
                     var response = "";
                     const comment: ICommentStructureReply = {
@@ -53,7 +55,7 @@
                             response = data;
                             if (response === "Written") {
                                 this.toggleCommentInputPanel();
-                                alert("Successfully sent");
+                                this.gui.showMessageDialog("Success", "Successfully sent");
                             } else if (response === "Error") {
                                 console.log("Sent empty comment. This is not normal");
                             }

@@ -34,7 +34,7 @@
                     class: "btn btn-default save-confirmation-dialogue-button"
                 }
             ],
-            open: (event, ui) => {
+            open: (event) => {
                 $("#dialog-cancel-button").focus();
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
@@ -47,7 +47,7 @@
         });
     }
 
-    successfullySavedContent() {
+    showMessageDialog(title:string, message:string) {
         const dialogEl = $("#status-dialog");
         dialogEl.dialog({
             resizable: false,
@@ -55,79 +55,17 @@
             width: 400,
             modal: true,
             dialogClass: "status-dialog",
-            title: "Success!",
+            title: title,
             buttons: [
                 {
-                    text: "Ok",
-                    click: function() {
-                        $(this).dialog("close");
-                    },
-                    class: "btn btn-default"
-                }
-            ],
-            open: (event, ui) => {
-                const targetElement = $(event.target);
-                targetElement.closest(".ui-dialog")
-                    .find(".ui-dialog-titlebar-close")
-                    .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
-                    .html(
-                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
-            }
-        });
-        dialogEl.text("Your changes have been successfully saved.");
-    }
-
-    saveContentUnsuccessfull() {
-        const dialogEl = $("#status-dialog");
-        dialogEl.dialog({
-            resizable: false,
-            height: "auto",
-            width: 400,
-            modal: true,
-            dialogClass: "status-dialog",
-            title: "Fail",
-            buttons: [
-                {
-                    text: "Close",
-                    click: function() {
-                        $(this).dialog("close");
-                    },
-                    class: "btn btn-default"
-                }
-            ],
-            open: (event, ui) => {
-                const targetElement = $(event.target);
-                targetElement.closest(".ui-dialog")
-                    .find(".ui-dialog-titlebar-close")
-                    .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
-                    .html(
-                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
-            }
-        });
-        dialogEl.text("There was an error while saving your changes.");
-    }
-
-    noSuchPage(pageName: string) {
-        const dialogEl = $("#status-dialog");
-        dialogEl.dialog({
-            resizable: false,
-            height: "auto",
-            width: 400,
-            modal: true,
-            dialogClass: "status-dialog",
-            title: "No such page",
-            buttons: [
-                {
-                    text: "Close",
+                    text: "OK",
                     click: function () {
                         $(this).dialog("close");
                     },
                     class: "btn btn-default"
                 }
             ],
-            open: (event, ui) => {
+            open: (event) => {
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
@@ -137,6 +75,6 @@
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
-        dialogEl.text(`Page ${pageName} does not exist.`);
+        dialogEl.text(message);
     }
 }

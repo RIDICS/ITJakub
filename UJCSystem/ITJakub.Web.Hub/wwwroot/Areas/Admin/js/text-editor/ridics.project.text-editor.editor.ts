@@ -150,15 +150,15 @@
             saveAjax.done(() => {
                 console.log(textId); //TODO add logic
                 console.log(contents);
-                this.gui.successfullySavedContent();
+                this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
                 this.originalContent = contents;
             });
             saveAjax.fail(() => {
-                this.gui.saveContentUnsuccessfull();
+                this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
             });
         });
         plainText.fail(() => {
-            this.gui.saveContentUnsuccessfull();
+            this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
         });
     }
 

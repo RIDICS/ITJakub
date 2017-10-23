@@ -25,16 +25,17 @@ class TextEditorMain {
     }
 
     init() {
+        const gui = new TextEditorGui();
         const connections = new Connections();
         const util = new Util();
         const commentArea = new CommentArea(util);
-        const commentInput = new CommentInput(commentArea, util);
-        const gui = new TextEditorGui();
+        const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui);
-        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
+        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this, gui);
-        const projectAjax = util.getProjectContent(1); //TODO debug
+        const projectId = 1; //TODO debug
+        const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.processAreaSwitch();
         connections.toggleConnections();
         projectAjax.done((data: ITextProjectPage[]) => {

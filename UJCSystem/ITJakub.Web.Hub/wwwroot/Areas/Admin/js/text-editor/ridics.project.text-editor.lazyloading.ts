@@ -16,7 +16,7 @@
     }
 
     initConfig() {
-        var lazyConfig: any = (window as any).lazySizesConfig;
+        const lazyConfig = (window as any).lazySizesConfig;
         lazyConfig.loadMode = 1; //only load visible elements
     }
 }

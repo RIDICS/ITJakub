@@ -58,7 +58,7 @@
         $("#project-resource-preview").on("mouseleave", "#page-slider-handle", () => { tooltip.hide(); });
     }
 
-    private updateSlider(textId: number) { //TODO jumps while pages are loading
+    private updateSlider(textId: number) {
         const pageEl = $(`*[data-page="${textId}"]`);
         const pageName = pageEl.data("page-name");
         const index = $(".page-row").index(pageEl);
@@ -121,12 +121,12 @@
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
-            alert("You haven't entered anything");
+            this.gui.showMessageDialog("Warning","You haven't entered anything. Please enter a page name.");
         } else {
             const pageEl = $(`*[data-page-name="${inputFieldValue}"]`);
             const pageId = pageEl.data("page");
             if (!pageEl.length) {
-                this.gui.noSuchPage(inputFieldValue);
+                this.gui.showMessageDialog("Warning", `Page ${inputFieldValue} does not exist.`);
                 inputField.val("");
             } else {
                 this.navigateToPage(pageId, loadingPages, compositionPages);
