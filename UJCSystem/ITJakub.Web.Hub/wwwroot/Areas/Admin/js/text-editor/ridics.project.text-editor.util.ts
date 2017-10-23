@@ -10,12 +10,11 @@
  * @returns {JQueryXHR} Ajax conraining GUID
  */
     createTextRefereceId(): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`,
-            {});
+        const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`);
         return ajax;
     }
 
-    getProjectContent(projectId: number) {
+    getProjectContent(projectId: number): JQueryXHR {
         const ajax = $.post(`${this.serverAddress}admin/project/GetProjectContent`,
             {
                 projectId: projectId
@@ -45,7 +44,7 @@
         return ajax;
     }
 
-    savePlainText(textId: number, request: IPageTextBase) {
+    savePlainText(textId: number, request: IPageTextBase): JQueryXHR {
         const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
             {
                 textId: textId,

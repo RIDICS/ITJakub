@@ -13,7 +13,7 @@
 declare var lazySizes: any;
 
 class TextEditorMain {
-    private numberOfPages: number;
+    private numberOfPages: number = 0;
     private showPageNumber = false;
 
     getNumberOfPages(): number {
@@ -28,7 +28,7 @@ class TextEditorMain {
         const gui = new TextEditorGui();
         const connections = new Connections();
         const util = new Util();
-        const commentArea = new CommentArea(util);
+        const commentArea = new CommentArea(util, gui);
         const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
@@ -48,7 +48,6 @@ class TextEditorMain {
                         }" data-page-name="${data[i].parentPage.name
                         }"></div>`);
             }
-
             lazyLoad.lazyLoad();
             pageNavigation.init(data);
             this.attachEventShowPageCheckbox(pageNavigation);

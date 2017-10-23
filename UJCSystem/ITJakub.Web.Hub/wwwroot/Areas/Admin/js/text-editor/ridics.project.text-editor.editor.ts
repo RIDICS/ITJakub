@@ -13,6 +13,8 @@
         this.gui = gui;
     }
 
+    private userIsEnteringText = false;
+
     getCurrentPageNumber() {
         return this.currentPageNumber;
     }
@@ -21,8 +23,7 @@
         return this.editingMode;
     }
 
-    toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
-        this.commentInput.toggleCommentInputPanel();
+    private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
             const textId = this.getCurrentPageNumber();
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
@@ -31,20 +32,31 @@
                 const id = 0; //creating comment
                 const parentComment = 0; //creating comment
                 this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
+                const buttonClose = $(".close-form-input");
+                buttonClose.on("click",
+                    (event: JQueryEventObject) => {
+                        event.stopImmediatePropagation();
+                        this.commentInput.toggleCommentInputPanel();
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                        this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
+                        buttonClose.off();
+                    });
+            });
+            ajax.fail(() => {
+                this.gui.showMessageDialog("Error", "Comment addition failed");
             });
         } else {
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
+            this.commentInput.toggleCommentInputPanel();
         }
     }
 
     processAreaSwitch = () => {
         var editorExistsInTab = false;
-
         $("#project-resource-preview").on("click",
             ".editor",
             (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
-                    const thisClass = this;
                     let pageDiffers = false;
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
@@ -85,10 +97,10 @@
                                     this.saveContents(this.currentPageNumber, contentBeforeClose);
                                 });
                         } else if (contentBeforeClose === this.originalContent) {
-                            thisClass.simplemde.toTextArea();
-                            thisClass.simplemde = null;
-                            thisClass.addEditor(jEl);
-                            thisClass.originalContent = thisClass.simplemde.value();
+                            this.simplemde.toTextArea();
+                            this.simplemde = null;
+                            this.addEditor(jEl);
+                            this.originalContent = this.simplemde.value();
                         }
                     }
                 }
@@ -148,8 +160,6 @@
             };
             const saveAjax = this.util.savePlainText(textId, request);
             saveAjax.done(() => {
-                console.log(textId); //TODO add logic
-                console.log(contents);
                 this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
                 this.originalContent = contents;
             });
@@ -167,7 +177,6 @@
         const textAreaEl = $(editor).children("textarea");
         const textId = jEl.data("page") as number;
         this.currentPageNumber = textId;
-        var userIsEnteringText = false;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
@@ -177,8 +186,8 @@
                 "bold", "italic", "heading", "|", "quote", "preview", {
                     name: "comment",
                     action: ((editor) => {
-                        userIsEnteringText = !userIsEnteringText;
-                        this.toggleCommentFromEditor(editor, userIsEnteringText);
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                        this.toggleCommentFromEditor(editor, this.userIsEnteringText);
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
@@ -250,7 +259,18 @@
             const placeHolderSpinner = $(child).siblings(".loading");
             const plainText = data.text;
             const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
-            if (this.editingMode){$(child).append(elm);}
+            if (this.editingMode) {
+                $(child).append(elm);
+            }
+            placeHolderSpinner.hide();
+        });
+        ajax.fail(() => {
+            const placeHolderSpinner = $(child).siblings(".loading");
+            if (this.editingMode) {
+                const elm =
+                    `<div class="editor"><textarea class="textarea-plain-text">Failed to load data from server</textarea></div>`;
+                $(child).append(elm);
+            }
             placeHolderSpinner.hide();
         });
     }
@@ -260,7 +280,17 @@
             const placeHolderSpinner = $(child).siblings(".loading");
             const renderedText = data.text;
             const elm = `<div class="viewer">${renderedText}</div>`;
-            if (!this.editingMode){$(child).append(elm);}
+            if (!this.editingMode) {
+                $(child).append(elm);
+            }
+            placeHolderSpinner.hide();
+        });
+        ajax.fail(() => {
+            const placeHolderSpinner = $(child).siblings(".loading");
+            if (!this.editingMode) {
+                const elm = `<div class="viewer">Failed to load data from server</div>`;
+                $(child).append(elm);
+            }
             placeHolderSpinner.hide();
         });
     }

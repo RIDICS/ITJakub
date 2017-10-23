@@ -121,7 +121,7 @@
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
-            this.gui.showMessageDialog("Warning","You haven't entered anything. Please enter a page name.");
+            this.gui.showMessageDialog("Warning", "You haven't entered anything. Please enter a page name.");
         } else {
             const pageEl = $(`*[data-page-name="${inputFieldValue}"]`);
             const pageId = pageEl.data("page");

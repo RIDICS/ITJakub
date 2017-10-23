@@ -15,7 +15,7 @@
             });
     }
 
-    initConfig() {
+    private initConfig() {
         const lazyConfig = (window as any).lazySizesConfig;
         lazyConfig.loadMode = 1; //only load visible elements
     }

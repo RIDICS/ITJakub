@@ -25,13 +25,6 @@
         var serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
         const buttonSend = $("#commentFinish");
-        const buttonClose = $(".close-form-input");
-        buttonClose.on("click",
-            (event: JQueryEventObject) => {
-                event.stopImmediatePropagation();
-                this.toggleCommentInputPanel();
-                buttonClose.off();
-            });
         buttonSend.on("click",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
@@ -39,30 +32,26 @@
                 if (commentText === "") {
                     this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
                 } else {
-                    var response = "";
                     const comment: ICommentStructureReply = {
                         id: id,
                         text: commentText,
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    $.post(`${serverAddress}admin/project/SaveComment`,
+                    const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
                         {
                             comment: comment,
                             textId: textId
-                        },
-                        (data: string) => {
-                            response = data;
-                            if (response === "Written") {
-                                this.toggleCommentInputPanel();
-                                this.gui.showMessageDialog("Success", "Successfully sent");
-                            } else if (response === "Error") {
-                                console.log("Sent empty comment. This is not normal");
-                            }
                         }
-                    ).done(() => {
+                    );
+                    sendAjax.done(() => {
+                        this.toggleCommentInputPanel();
+                        this.gui.showMessageDialog("Success", "Successfully sent");
                         commentTextArea.val("");
                         this.commentArea.reloadCommentArea(textId);
+                    });
+                    sendAjax.fail(() => {
+                        this.gui.showMessageDialog("Error", "Sending failed. Server error.");
                     });
                     buttonSend.off();
                 }
@@ -90,6 +79,7 @@
     }
 
     toggleCommentSignsAndReturnCommentNumber(editor: SimpleMDE, addSigns: boolean): JQueryXHR {
+
         const cm = editor.codemirror as CodeMirror.Doc;
         let output = "";
         let markSize: number;
@@ -119,14 +109,18 @@
             const ajaxTextReferenceId = this.util.createTextRefereceId();
             ajaxTextReferenceId.done((data: string) => {
                 const textReferenceId = data;
+                this.toggleCommentInputPanel();
                 if (addSigns) {
-                    var uniqueNumberLength = textReferenceId.length;
+                    const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
                     output = `$${textReferenceId}%${selectedText}%${textReferenceId}$`;
                     cm.replaceSelection(output);
                     cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                 }
+            });
+            ajaxTextReferenceId.fail(() => {
+                this.gui.showMessageDialog("Error", "Comment creation failed");
             });
             return ajaxTextReferenceId;
         }
@@ -140,6 +134,13 @@
     private addCommentFromCommentArea(textRefernceId: string, textId: number, parentCommentId: number) {
         const id = 0; //creating comment
         this.processCommentSendClick(textId, textRefernceId, id, parentCommentId);
+        const buttonClose = $(".close-form-input");
+        buttonClose.on("click",
+            (event: JQueryEventObject) => {
+                event.stopImmediatePropagation();
+                this.toggleCommentInputPanel();
+                buttonClose.off();
+            }); //TODO
         this.toggleCommentInputPanel();
     }
 }
