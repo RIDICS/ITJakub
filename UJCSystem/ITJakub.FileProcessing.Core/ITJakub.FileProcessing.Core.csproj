@@ -53,8 +53,8 @@
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -83,6 +83,10 @@
     <Compile Include="Data\TransformationData.cs" />
     <Compile Include="Data\VisibilityEnum.cs" />
     <Compile Include="Sessions\ActiveSessionManager.cs" />
+    <Compile Include="Communication\FileProcessingCommunicationProvider.cs" />
+    <Compile Include="Sessions\Processors\Fulltext\ElasticSearchStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\Fulltext\ExistDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\Fulltext\IFulltextResourceProcessor.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ExtractableArchiveTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ImageTypeResolver.cs" />
@@ -96,7 +100,7 @@
     <Compile Include="Sessions\Processors\XmlConversionProcessor.cs" />
     <Compile Include="Sessions\Processors\MetadataProcessor.cs" />
     <Compile Include="Sessions\Processors\RelationalDbStoreProcessor.cs" />
-    <Compile Include="Sessions\Processors\ExistDbStoreProcessor.cs" />
+    <Compile Include="Sessions\Processors\FulltextDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceSessionDirector.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ResourceTypeResolverBase.cs" />
     <Compile Include="Sessions\ResourceTypeResolverManager.cs" />
@@ -215,6 +219,14 @@
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj">
       <Project>{7ff7fb5d-4eff-46dd-9682-21dd476abcb0}</Project>
       <Name>Vokabular.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj">
+      <Project>{fdf4a88b-28b9-4167-b4e9-e4a950bc6c0e}</Project>
+      <Name>Vokabular.FulltextService.DataContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj">
+      <Project>{2e80933f-418a-4181-aad3-84d4059fbbea}</Project>
+      <Name>Vokabular.RestClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj">
       <Project>{d172f949-ae59-4029-bf5c-40b633362034}</Project>

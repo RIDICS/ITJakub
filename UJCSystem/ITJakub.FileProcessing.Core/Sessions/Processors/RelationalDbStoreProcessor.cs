@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;

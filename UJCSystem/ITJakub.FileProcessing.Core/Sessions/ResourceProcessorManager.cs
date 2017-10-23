@@ -8,7 +8,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
     public class ResourceProcessorManager
     {
         private readonly AudioBookArchiveProcessor m_audiobookArchiveProcessor;
-        private readonly ExistDbStoreProcessor m_existDbStoreProcessor;
+        private readonly FulltextDbStoreProcessor m_fulltextDbStoreProcessor;
         private readonly ExtractableArchiveProcessor m_extractableArchiveProcessor;
         private readonly FileDbStoreProcessor m_fileDbStoreProcessor;
         private readonly MetadataProcessor m_metadataProcessor;
@@ -18,7 +18,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public ResourceProcessorManager(XmlConversionProcessor xmlConversionProcessor,
             MetadataProcessor metadataProcessor, RelationalDbStoreProcessor relationalDbStoreProcessor,
-            FileDbStoreProcessor fileDbStoreProcessor, ExistDbStoreProcessor existDbStoreProcessor,
+            FileDbStoreProcessor fileDbStoreProcessor, FulltextDbStoreProcessor fulltextDbStoreProcessor,
             ExtractableArchiveProcessor extractableArchiveProcessor, TransformationsProcessor transformationsProcessor, 
             AudioBookArchiveProcessor audiobookArchiveProcessor)
         {
@@ -26,7 +26,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             m_metadataProcessor = metadataProcessor;
             m_relationalDbStoreProcessor = relationalDbStoreProcessor;
             m_fileDbStoreProcessor = fileDbStoreProcessor;
-            m_existDbStoreProcessor = existDbStoreProcessor;
+            m_fulltextDbStoreProcessor = fulltextDbStoreProcessor;
             m_extractableArchiveProcessor = extractableArchiveProcessor;
             m_transformationsProcessor = transformationsProcessor;
             m_audiobookArchiveProcessor = audiobookArchiveProcessor;
@@ -78,7 +78,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         private void ProcessExistDbStore(ResourceSessionDirector resourceDirector)
         {
-            m_existDbStoreProcessor.Process(resourceDirector);
+            m_fulltextDbStoreProcessor.Process(resourceDirector);
         }
 
         private void ProcessRelationalDbStore(ResourceSessionDirector resourceDirector)
