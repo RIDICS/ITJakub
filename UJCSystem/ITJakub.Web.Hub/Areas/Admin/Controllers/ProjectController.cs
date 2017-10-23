@@ -525,31 +525,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]//TODO text-based loading function is removed, so remove this when new save function implemented
-        public IActionResult SaveComment(CommentStructure comment)
-        {
-            if (comment == null)
-            {
-                return new JsonResult("Error");
-            }
-            var textId = comment.TextId;
-            var filename = textId + "-" + Guid.NewGuid();
-            using (var newCommentFile = new FileStream($".\\comments\\{filename}.txt", FileMode.Create,
-                FileAccess.ReadWrite))
-            {
-                using (var writer = new StreamWriter(newCommentFile))
-                {
-                    writer.Write(JsonConvert.SerializeObject(comment));
-                }
-            }
-            return Json("Written");
-        }
-
         [HttpPost]
         public IActionResult GetGuid()
         {
             var guid = Guid.NewGuid();
-            return new JsonResult(guid);
+            return Json(guid);
         }
 
         [HttpPost]
@@ -659,8 +639,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return Json(parts);
         }
 
-        [HttpPost] /*TODO rename and use this function*/
-        public IActionResult SaveComment1(CreateTextCommentContract comment, long textId)
+        [HttpPost]
+        public IActionResult SaveComment(CreateTextCommentContract comment, long textId)
         {
             using (var client = GetRestClient())
             {
