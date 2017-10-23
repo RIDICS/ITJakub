@@ -1,0 +1,11 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Dictionaries",
+	"dictionary": {
+		"DictionaryTerms" : "Slovníková hesla",
+		"NoEntryFound" : "Žádné výsledky k zobrazení",
+		"Feedback" : "Připomínky",
+		"ImageTermLoadError" : "Chyba při načítání obrázku k heslu '{0}'.",
+		"TermLoadError" : "Chyba při náčítání hesla '{0}'."	
+		}
+}

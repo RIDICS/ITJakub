@@ -1,0 +1,57 @@
+{
+	"culture":"cs-CZ",
+	"scope":"FavoriteJs",
+	"dictionary": {
+		"Filter" : "Filtrovat:",
+		"TagName" : "Název štítku",
+		"FilterTagsByName" : "Filtrovat štítky podle názvu",
+		"AllShowed" : "Zobrazeno vše",
+		"ShowAll" : "Zobrazit vše",
+		"NoTagsInFilter" : "Žádný štítek odpovídající zadanému filtru",
+		"InsertQueryFromFav" : "Vložit dotaz z oblíbených: ",
+		"NoQueryInFilter" : "Žádný oblíbený dotaz odpovídající zvoleným filtrům",
+		"ChooseTag" : "Pro zobrazení oblíbených dotazů vyberte štítek ze seznamu",
+		"SaveCurrentQuery" : "Uložit stávající dotaz",
+		"NewFavQuery" : "Nový oblíbený dotaz",
+		"CreateFavQueryError" : "Chyba při vytváření oblíbeného dotazu",
+		"InsertQuery" : "Vložit dotaz",
+		"ReplaceQuery" : "Opravdu chcete vložit zvolený dotaz a nahradit ním stávající?",
+		"Close" : "Zavřít",
+		"Insert" : "Vložit",
+		"SearchQuery" : "Vyhledat dotaz",
+		"SearchByName" : "Vyhledat dotaz podle názvu",
+		
+		
+		
+		"ChooseFav" : " Vybrat oblíbené knihy a kategorie",
+		"NoTagsHasFav" : "Žádný štítek neobsahuje oblíbenou knihu nebo kategorii",
+		"DeleteModalText" : "Opravdu chcete smazat vybraný štítek ({0})? Štítek bude smazán včetně všech přiřazených oblíbených položek.",
+		"" : "Chyba při odstraňování štítku",
+		"" : "Chyba při ukládání štítku",
+		"" : "Nebylo zadáno jméno.",
+		"" : " Nesprávný formát barvy (požadovaný formát: #000000)."
+		"NoName" : "<bez názvu>",
+		"DeleteFav" : "Smazat oblíbenou položku",
+		"DeleteItemModalText" : "Opravdu chcete smazat vybranou oblíbenou položku ({0})?",
+		"" : "Upravit oblíbenou položku",
+		"" : "Chyba při odstraňování položky",
+		"" : "Chyba při ukládání položky",
+		"" : "Záložka na stránku v knize",
+		"" : "Kategorie",
+		"" : "Vyhledávací dotaz",
+		"" : "Verze knihy",
+		"" : "Neznámý typ oblíbené položky",
+		"" : "Všechny položky",
+		"" : "Štítky této položky",
+		"" : "Chyba při vytváření oblíbené položky",
+		"" : "Žádná položka",
+		"" : "{0}Seznam přiřazených štítků:{1}",
+		"" : "{0}Přidat štítek z naposledy použitých:{1}",
+		"" : "{0}Pokročilé možnosti{1}",
+		"" : "Žádná položka",
+		"" : "Přidat ze seznamu všech štítků",
+		
+		
+		
+	}
+}

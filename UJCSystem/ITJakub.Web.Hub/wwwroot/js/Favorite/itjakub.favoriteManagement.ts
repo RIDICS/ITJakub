@@ -20,6 +20,8 @@ class FavoriteManagement {
     private currentTypeFilter: number;
     private currentNameFilter: string;
 
+    private localization : Localization;
+
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
         this.activeLabelForEditing = null;
@@ -33,6 +35,8 @@ class FavoriteManagement {
 
         this.newFavoriteLabelDialog = new FavoriteManagementDialog($("#new-favorite-label-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
+
+        this.localization = new Localization();
     }
 
     public init() {
@@ -290,7 +294,8 @@ class FavoriteManagement {
         var labelName = item.data("name");
 
         $("#remove-dialog .modal-body")
-            .text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
+            //.text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
+            .text(this.localization.translateFormat("DeleteModalText", new Array<string>(labelName)).value);
 
         $("#remove-dialog .remove-button")
             .off("click")
@@ -448,6 +453,8 @@ class FavoriteManagementItem {
     private removeDialog: FavoriteManagementDialog;
     private onRemoveCallback: (id: number) => void;
 
+    private localization : Localization;
+
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
         this.createTime = createTime;
@@ -455,6 +462,8 @@ class FavoriteManagementItem {
         this.id = id;
         this.type = type;
         this.container = container;
+
+        this.localization = new Localization();
 
         this.editFavoriteDialog = new FavoriteManagementDialog($("#edit-favorite-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
@@ -478,7 +487,7 @@ class FavoriteManagementItem {
         var nameLink = document.createElement("a");
         var nameDiv = document.createElement("div");
         $(nameDiv)
-            .text(this.name != null && this.name !== "" ? this.name : "<bez názvu>")
+            .text(this.name != null && this.name !== "" ? this.name : this.localization.translate("NoName", "FavoriteJs").value)
             .addClass("favorite-item-name");
         $(nameLink)
             .attr("href", getBaseUrl() + "Favorite/Favorite?id=" + this.id)
@@ -509,11 +518,12 @@ class FavoriteManagementItem {
             .append(editIcon);
         $(removeLink)
             .attr("href", "#")
-            .attr("title", "Smazat oblíbenou položku")
+            .attr("title", this.localization.translate("DeleteFav", "FavoriteJs").value)
             .append(removeIconContainer)
             .click(() => {
                 $("#remove-dialog .modal-body")
-                    .text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
+                    //.text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
+                    .text(this.localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), "FavoriteJs").value);
 
                 $("#remove-dialog .remove-button")
                     .off("click")

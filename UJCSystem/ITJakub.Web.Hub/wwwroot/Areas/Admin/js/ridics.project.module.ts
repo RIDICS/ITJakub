@@ -80,6 +80,12 @@ abstract class ProjectModuleBase {
     public abstract getLoadTabPanelContentUrl(panelType: ProjectModuleTabType): string;
     public abstract makeProjectModuleTab(panelType: ProjectModuleTabType): ProjectModuleTabBase;
 
+    protected localization: Localization;
+
+    constructor() {
+        this.localization = new Localization();
+    }
+
     protected initTabs() {
         var self = this;
         $(`#${this.getTabsId()} a`).click(function (e) {
@@ -104,7 +110,7 @@ abstract class ProjectModuleBase {
                     this.initModule();
                 } else {
                     var alert = new AlertComponentBuilder(AlertType.Error)
-                        .addContent("Chyba při načítání modulu")
+                        .addContent(this.localization.translate("ModuleError", "RidicsProject").value)
                         .buildElement();
                     $contentContainer.append(alert);
                 }
@@ -119,7 +125,7 @@ abstract class ProjectModuleBase {
             .html("<div class=\"loader\"></div>")
             .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var errorDiv = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání záložky.")
+                    var errorDiv = new AlertComponentBuilder(AlertType.Error).addContent(this.localization.translate("BookmarkError", "RidicsProject").value)
                         .buildElement();
                     $tabPanel.empty().append(errorDiv);
                     this.moduleTab = null;
@@ -188,11 +194,13 @@ class ProjectResourceModule extends ProjectModuleBase {
     private duplicateResourceDialog: BootstrapDialogWrapper;
     private resourceVersionModule: ProjectResourceVersionModule;
 
+
     constructor(projectId: number, resourceType: ResourceType) {
         super();
         this.projectId = projectId;
         this.resourceType = resourceType;
         this.projectClient = new ProjectClient();
+        this.localization = new Localization();
     }
 
     getModuleType(): ProjectModuleType { return ProjectModuleType.Resource; }
@@ -370,7 +378,7 @@ class ProjectResourceModule extends ProjectModuleBase {
         var optionElement = document.createElement("option");
         $(optionElement)
             .prop("disabled", true)
-            .text("Chyba při načítání zdrojů")
+            .text(this.localization.translate("ResourceError", "RidicsProject").value)
             .appendTo($resourceList);
     }
 
@@ -468,8 +476,11 @@ class ProjectResourceVersionModule {
     private $iconDown: JQuery;
     private versionPanelHeight: number;
 
+    private localization: Localization;
+
     constructor(resourceId: number) {
         this.resourceId = resourceId;
+        this.localization = new Localization();
     }
 
     public static staticInit() {
@@ -503,7 +514,7 @@ class ProjectResourceVersionModule {
             .append("<div class=\"loading\"></div>")
             .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var error = new AlertComponentBuilder(AlertType.Error).addContent("Chyba při načítání seznamu verzí");
+                    var error = new AlertComponentBuilder(AlertType.Error).addContent(this.localization.translate("VersionListError", "RidicsProject").value);
                     $resourceVersionPanel.empty().append(error.buildElement());
                 }
             });

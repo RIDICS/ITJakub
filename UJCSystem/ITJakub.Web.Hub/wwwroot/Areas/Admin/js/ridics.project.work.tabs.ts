@@ -11,10 +11,14 @@
     private selectedAuthorId: number;
     private selectedResponsiblePersonId: number;
 
+    private localization: Localization;
+
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
         this.projectClient = new ProjectClient();
+
+        this.localization = new Localization();
 
         this.addPublisherDialog = new BootstrapDialogWrapper({
             element: $("#add-publisher-dialog"),
@@ -157,12 +161,12 @@
         var email = $("#add-publisher-email").val();
 
         if (!name) {
-            this.addPublisherDialog.showError("Nebyl vyplněn název nakladatele");
+            this.addPublisherDialog.showError(this.localization.translate("MissingPublisherNameError", "Admin").value);
         }
 
         this.projectClient.createPublisher(name, email, (newPublisherId, errorCode) => {
             if (errorCode !== null) {
-                this.addPublisherDialog.showError("Chyba při vytváření nového nakladatele");
+                this.addPublisherDialog.showError(this.localization.translate("CreatePublisherError", "Admin").value);
                 return;
             }
 
@@ -175,12 +179,12 @@
         var name = $("#add-literary-kind-name").val();
 
         if (!name) {
-            this.addLiteraryKindDialog.showError("Nebyl vyplněn název");
+            this.addLiteraryKindDialog.showError(this.localization.translate("MissingName", "Admin").value);
         }
 
         this.projectClient.createLiteraryKind(name, (newId, errorCode) => {
             if (errorCode !== null) {
-                this.addLiteraryKindDialog.showError("Chyba při vytváření nového literárního druhu");
+                this.addLiteraryKindDialog.showError(this.localization.translate("CreateLiteraryKind", "Admin").value);
                 return;
             }
 
@@ -193,12 +197,12 @@
         var name = $("#add-literary-genre-name").val();
 
         if (!name) {
-            this.addLiteraryGenreDialog.showError("Nebyl vyplněn název");
+            this.addLiteraryGenreDialog.showError(this.localization.translate("MissingName", "Admin").value);
         }
 
         this.projectClient.createLiteraryGenre(name, (newId, errorCode) => {
             if (errorCode !== null) {
-                this.addLiteraryGenreDialog.showError("Chyba při vytváření nového literárního žánru");
+                this.addLiteraryGenreDialog.showError(this.localization.translate("CreateLiteraryGenre", "Admin").value);
                 return;
             }
 
@@ -403,9 +407,13 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
 class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
     private projectId: number;
 
+    private localization: Localization;
+
     constructor(projectId: number) {
         super();
         this.projectId = projectId;
+
+        this.localization = new Localization();
     }
 
     initTab() {
@@ -427,7 +435,7 @@ class ProjectWorkPublicationsTab extends ProjectModuleTabBase {
         $("#new-snapshot-container").append("<div class=\"loader\"></div>").load(url, null, (responseText, textStatus, xmlHttpRequest) => {
             if (xmlHttpRequest.status !== HttpStatusCode.Success) {
                 var errorElement = new AlertComponentBuilder(AlertType.Error)
-                    .addContent("Chyba při načítání zdrojů k publikaci")
+                    .addContent(this.localization.translate("CreateResourcesError", "Admin").value)
                     .buildElement();
                 $("#new-snapshot-container").empty().append(errorElement);
                 return;

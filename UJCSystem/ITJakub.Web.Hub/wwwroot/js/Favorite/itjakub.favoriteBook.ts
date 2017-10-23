@@ -6,12 +6,16 @@
     private favoriteManager: FavoriteManager;
     private loading: boolean;
 
+    private localization : Localization;
+
     constructor(container: JQuery, bookType: BookTypeEnum, dropdownSelect: DropDownSelect2) {
         this.dropdownSelect = dropdownSelect;
         this.bookType = bookType;
         this.container = container;
         this.favoriteManager = new FavoriteManager();
         this.loading = false;
+
+        this.localization = new Localization();
     }
 
     public make() {
@@ -24,7 +28,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonContentSpan)
-            .text(" Vybrat oblíbené knihy a kategorie");
+            .text(this.localization.translate("ChooseFav", "FavoriteJs").value);
         $(headerButton)
             .attr("type", "button")
             .addClass("favorite-book-select-button")
@@ -101,7 +105,7 @@
                 var emptyDiv = document.createElement("div");
                 $(emptyDiv)
                     .addClass("text-center")
-                    .text("Žádný štítek neobsahuje oblíbenou knihu nebo kategorii");
+                    .text(this.localization.translate("NoTagsHasFav", "FavoriteJs").value);
                 this.bodyDiv.appendChild(emptyDiv);
             }
 

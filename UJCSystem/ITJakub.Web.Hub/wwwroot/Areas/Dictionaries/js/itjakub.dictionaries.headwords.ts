@@ -2,6 +2,8 @@
     var selectedCategoryIds: Array<number> = [];
     var selectedBookIds: Array<number> = [];
     var defaultPageNumber: number = Number(pageNumber);
+
+    var localization = new Localization();
     
     try {
         selectedCategoryIds = JSON.parse(categoryIdList);
@@ -15,7 +17,7 @@
     var dictionaryViewerWrapper = new DictionaryViewerListWrapper(dictionaryViewer, pageSize);
 
     var searchBox = new SearchBox("#searchbox", "Dictionaries/Dictionaries");
-    searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla");
+    searchBox.addDataSet("DictionaryHeadword", localization.translate("DictionaryTerms", "Dictionaries").value);
     searchBox.create();
 
     var inputElement = <HTMLInputElement>$("#searchbox").get(0);
@@ -27,7 +29,7 @@
     var updateSearchBox = (state: State) => {
         var parametersUrl = DropDownSelect2.getUrlStringFromState(state);
         searchBox.clearAndDestroy();
-        searchBox.addDataSet("DictionaryHeadword", "Slovníková hesla", parametersUrl);
+        searchBox.addDataSet("DictionaryHeadword", localization.translate("DictionaryTerms", "Dictionaries").value, parametersUrl);
         searchBox.create();
     }
 

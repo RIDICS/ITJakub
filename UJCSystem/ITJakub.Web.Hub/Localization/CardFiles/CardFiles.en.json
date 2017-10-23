@@ -1,0 +1,20 @@
+{
+	"culture":"en",
+	"scope":"CardFiles",
+	"dictionary": {
+		"LoadingError" : "...",
+		"NotFilled" : "...",
+		"SmallPreview" : "...",
+		"List" : "...",
+		"Keywords" : "...",
+		"Preview" : "...",
+		"CardFile" : "...",
+		"Drawer" : "...",
+		"Pages" : "...",
+		"Keywords" : "...",
+		"Notice" : "...",
+		"Note" : "... ",
+		
+		"CardFiles" : "Card files"
+		}
+}

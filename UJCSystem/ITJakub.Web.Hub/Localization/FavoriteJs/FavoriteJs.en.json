@@ -1,0 +1,24 @@
+{
+	"culture":"en",
+	"scope":"FavoriteJs",
+	"dictionary": {
+		"Filter" : "Filter:",
+		"TagName" : "Tag name",
+		"FilterTagsByName" : "Filter tags by name",
+		"AllShowed" : "All showed",
+		"ShowAll" : "Show all",
+		"NoTagsInFilter" : "Žádný štítek odpovídající zadanému filtru",
+		"InsertQueryFromFav" : "Vložit dotaz z oblíbených: ",
+		"NoQueryInFilter" : "Žádný oblíbený dotaz odpovídající zvoleným filtrům",
+		"ChooseTag" : "Pro zobrazení oblíbených dotazů vyberte štítek ze seznamu",
+		"SaveCurrentQuery" : "Save current query",
+		"NewFavQuery" : "New favorite query",
+		"CreateFavQueryError" : "Error while creating favorite query",
+		"InsertQuery" : "Insert query",
+		"ReplaceQuery" : "Opravdu chcete vložit zvolený dotaz a nahradit ním stávající?",
+		"Close" : "Close",
+		"Insert" : "Insert",
+		"SearchQuery" : "Search query",
+		"SearchByName" : "Search query by name"
+		}
+}

@@ -1,0 +1,19 @@
+{
+	"culture":"cs-CZ",
+	"scope":"CardFiles",
+	"dictionary": {
+		"LoadingError" : "Nepodařilo se načíst výsledek ze zásuvky '{0}' z kartotétky '{1}'",
+		"NotFilled" : "&lt;Nezadáno&gt;",
+		"SmallPreview" : "Malý náhled",
+		"List" : "Lístek: ",
+		"Preview" : "Náhled",
+		"CardFile" : "Kartotéka: ",
+		"Drawer" : "Zásuvka: ",
+		"Pages" : "Stránky: ",
+		"Keywords" : "Hesla: ",
+		"Notice" : "Upozornění: ",
+		"Note" : "Poznámka: ",
+		
+		"CardFiles" : "Kartotéky"
+		}
+}

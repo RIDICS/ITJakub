@@ -2,10 +2,15 @@
 
 function initSearch() {
 
+    var localization = new Localization();
+
+
     var resultsCountOnPage = 30;
     var paginationMaxVisibleElements = 5;
+    
+    var defaultErrorMessage = localization.translate("SearchDefaultError", "BohemianTextBank").value;
 
-    var defaultErrorMessage = "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu.";
+    
 
     const urlSearchKey = "search";
     const urlPageKey = "page";

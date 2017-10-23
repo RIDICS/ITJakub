@@ -1,0 +1,22 @@
+{
+	"culture":"cs-CZ",
+	"scope":"Lemmatization",
+	"dictionary": {
+		"Token" : "Token",
+		"Modify" : "Upravit",
+		"Delete" : "Smazat",
+		"MorfologicCharacteristic" : "Morfologická charakteristika:",
+		"Description" : "Popis:",
+		"CanonicForm" : "Kanonická forma",
+		"Type" : "Typ",
+		"Description" : "Popis",
+		
+		"Lemma" : "Lemma",
+		"OldLemma" : "Staré lemma",
+		"Stema" : "Stemma",
+		"OldStemma" : "Staré stemma",
+		"HyperLemma" : "Hyperlemma",
+		"HyperStemma" : "Hyperstemma",
+		"Term" : "Téma"
+		}
+}

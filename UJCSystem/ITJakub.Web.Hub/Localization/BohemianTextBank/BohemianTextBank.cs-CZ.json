@@ -1,0 +1,8 @@
+{
+	"culture":"cs-CZ",
+	"scope":"BohemianTextBank",
+	"dictionary": {
+		"SearchDefaultError" : "Vyhledávání se nezdařilo. Ujistěte se, zda máte zadáno alespoň jedno kritérium na vyhledávání v textu."
+		
+		}
+}

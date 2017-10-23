@@ -1,0 +1,7 @@
+{
+	"culture":"en",
+	"scope":"Lemmatization",
+	"dictionary": {
+		"Token" : "Token"
+		}
+}

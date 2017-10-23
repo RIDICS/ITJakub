@@ -1,0 +1,19 @@
+{
+	"culture":"en",
+	"scope":"Admin",
+	"dictionary": {
+		"ListError" : "...",
+		"ModuleError" : "...",
+		"BookmarkError" : "...",
+		"ResourceError" : "..",
+		"VersionListError" : "...",
+		
+		"MissingPublisherNameError" : "...",
+		"CreatePublisherError" : "...",
+		"MissingName" : "...",
+		"CreateLiteraryKind" : "...",
+		"CreateLiteraryGenre" : "...",
+		
+		"CreateResourcesError" : "..."
+		}
+}

@@ -382,12 +382,16 @@ class LemmatizationCharacteristicTable {
     private descriptionDiv: HTMLDivElement;
     private morphologicalSpan: HTMLSpanElement;
     private reloadCallback: () => void;
+
+    private localization : Localization;
     
     constructor(characteristicEditor: LemmatizationCharacteristicEditor, item: ITokenCharacteristic, container: HTMLDivElement, canEdit: boolean) {
         this.canEdit = canEdit;
         this.characteristicEditor = characteristicEditor;
         this.container = container;
         this.item = item;
+
+        this.localization = new Localization();
     }
 
     make(reloadCallback: () => void) {
@@ -409,13 +413,13 @@ class LemmatizationCharacteristicTable {
         $(editCharacteristicButton)
             .addClass("lemmatization-edit")
             .addClass("lemmatization-big-left-space")
-            .text("Upravit")
+            .text(this.localization.translate("Modify", "Dictionary").value)
             .click(() => {
                 this.characteristicEditor.showEdit(this.item, this.updateUiAfterSave.bind(this));
             });
         $(deleteCharacteristicButton)
             .addClass("lemmatization-edit")
-            .text("Smazat")
+            .text(this.localization.translate("Delete", "Lemmatization").value)
             .click(() => {
                 this.delete();
             });
@@ -426,7 +430,7 @@ class LemmatizationCharacteristicTable {
         $(morphologicalLabelDiv)
             .addClass("lemmatization-label")
             .addClass("lemmatization-big-label-width")
-            .text("Morfologická charakteristika:");
+            .text(this.localization.translate("MorfologicCharacteristic", "Lemmatization").value);
         $(morphologicalContentSpan)
             .addClass("lemmatization-label-content-big")
             .text(this.item.morphologicalCharacteristic);
@@ -463,11 +467,11 @@ class LemmatizationCharacteristicTable {
         $(th1).addClass("column-commands")
             .text("");
         $(th2).addClass("column-canonical-form")
-            .text("Kanonická forma");
+            .text(this.localization.translate("CanonicForm", "Lemmatization").value);
         $(th3).addClass("column-type")
-            .text("Typ");
+            .text(this.localization.translate("Type", "Lemmatization").value);
         $(th4).addClass("column-description")
-            .text("Popis");
+            .text(this.localization.translate("Description", "Lemmatization").value);
         $(headerTr)
             .append(th1)
             .append(th2)

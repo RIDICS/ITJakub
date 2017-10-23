@@ -1,0 +1,11 @@
+{
+	"culture":"en",
+	"scope":"Dictionaries",
+	"dictionary": {
+		"DictionaryTerms" : "...",
+		"NoEntryFound" : "...",
+		"Feedback" : "...",
+		"ImageTermLoadError" : "...",
+		"TermLoadError" : "..."	
+		}
+}

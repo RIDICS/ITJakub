@@ -215,7 +215,9 @@ class FavoritePopoverBuilder {
         var color = new HexColor(item.favoriteLabel.color);
         var fontColor = FavoriteHelper.getDefaultFontColor(color);
         var borderColor = FavoriteHelper.getDefaultBorderColor(color);
-        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="Uloženo jako: ${item.title
+        var title = "Uloženo jako: ";
+
+        return `<div class="favorite-item"><span class="label label-favorite" data-toggle="tooltip" title="${title}${item.title
             }" style="background-color: ${escapeHtmlChars(item.favoriteLabel.color)}; border-color:${borderColor}; color: ${fontColor};">${escapeHtmlChars(item.favoriteLabel.name)
             }<a href="#" class="favorite-book-remove" data-id="${escapeHtmlChars(item.id.toString())
             }" style="color: ${fontColor}"><span class="glyphicon glyphicon-remove"></span></a></span></div>`;
@@ -247,7 +249,9 @@ class FavoritePopoverBuilder {
             resultStrings.push(labelHtml);
         }
 
-        var nextButtonString = '<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="Přidat ze seznamu všech štítků"><span style="color: black; font-weight: bold; margin-left: 3px;">...</span></a></span>';
+        var title = "Přidat ze seznamu všech štítků";
+
+        var nextButtonString = `<span class="label-favorite-container"><a href="#" class="show-all-favorite-button" title="${title}"><span style="color: black; font-weight: bold; margin-left: 3px;">...</span></a></span>`;
         resultStrings.push(nextButtonString);
 
         return resultStrings.join("");
