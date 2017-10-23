@@ -140,6 +140,12 @@ interface IMetadataSaveResult {
     lastModificationText: string;
 }
 
+interface ILocalizedString {
+    name: string;
+    resourceNotFound: boolean;
+    value : string;
+}
+
 enum FavoriteType {
     Unknown = 0,
     Book = 1,
@@ -175,6 +181,8 @@ enum ResponsibleTypeEnum {
     Editor = 1,
     Kolace = 2,
 }
+
+
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {
