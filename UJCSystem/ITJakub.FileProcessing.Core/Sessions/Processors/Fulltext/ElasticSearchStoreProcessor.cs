@@ -24,8 +24,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
                 // TODO convert stream content from XML to TXT
-                throw new NotImplementedException();
+                client.CreateTextResource(resourceUploadContract);
             }
+            return String.Empty;
         }
 
         public void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract)

@@ -5,6 +5,7 @@ using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.Core.Managers.Markdown;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Controllers
 {
@@ -22,18 +23,18 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpGet("{textResourceId}")]
-        public TextResourceContract GetTextResource(string textResourceId, [FromQuery] int formatValue)
+        public TextResourceContract GetTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue)
         {
             var textResource = m_textResourceManager.GetTextResource(textResourceId);
             
             switch (formatValue)
             {
-                case 0:
+                case TextFormatEnumContract.Raw:
                     break;
-                case 1:
+                case TextFormatEnumContract.Html:
                     textResource.Text = m_markdownToHtmlConverter.ConvertToHtml(textResource.Text);
                     break;
-                case 2:
+                case TextFormatEnumContract.Rtf:
                     throw new NotSupportedException();
                 default:
                     throw new ArgumentOutOfRangeException(nameof(formatValue), formatValue, null);

@@ -9,6 +9,7 @@ using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Works.Text;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -47,7 +48,7 @@ namespace Vokabular.MainService.Core.Managers
             
             var client = m_communicationProvider.GetFulltextServiceClient();
             
-            var textResource = client.GetTextResource(result.ExternalId, (int)formatValue);
+            var textResource = client.GetTextResource(result.ExternalId, formatValue);
             result.Text = textResource.Text;
 
             return result;
