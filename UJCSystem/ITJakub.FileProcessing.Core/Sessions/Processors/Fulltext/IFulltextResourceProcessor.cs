@@ -1,4 +1,5 @@
-﻿using ITJakub.Shared.Contracts;
+﻿using System.Collections.Generic;
+using ITJakub.Shared.Contracts;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 {
@@ -11,5 +12,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract);
 
         void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract);
+
+        void PublishSnapshot(long projectId, List<string> externalPageIds);
     }
 }

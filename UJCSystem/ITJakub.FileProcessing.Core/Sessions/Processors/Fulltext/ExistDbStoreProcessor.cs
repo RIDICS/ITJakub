@@ -1,4 +1,5 @@
-﻿using ITJakub.FileProcessing.Core.Communication;
+﻿using System.Collections.Generic;
+using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
@@ -43,6 +44,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             {
                 ssc.UploadBibliographyFile(resourceUploadContract);
             }
+        }
+
+        public void PublishSnapshot(long projectId, List<string> externalPageIds)
+        {
+            // Snapshots are not supported in eXistDB storage, uploaded book version is directly published
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.Shared.Contracts;
 
@@ -22,6 +23,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         {
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
+                // TODO convert stream content from XML to TXT
                 throw new NotImplementedException();
             }
         }
@@ -34,6 +36,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         public void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract)
         {
             // This data is not stored in ElasticSearch
+        }
+
+        public void PublishSnapshot(long projectId, List<string> externalPageIds)
+        {
+            // TODO is projectId required, is snapshotId required?
+            throw new NotImplementedException();
         }
     }
 }

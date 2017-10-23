@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
@@ -11,16 +15,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly CategoryRepository m_categoryRepository;
         private readonly ResourceRepository m_resourceRepository;
+        private readonly IFulltextResourceProcessor m_fulltextResourceProcessor;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            ResourceRepository resourceRepository)
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
+            ResourceRepository resourceRepository, IFulltextResourceProcessor fulltextResourceProcessor)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
-            m_categoryRepository = categoryRepository;
             m_resourceRepository = resourceRepository;
+            m_fulltextResourceProcessor = fulltextResourceProcessor;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -28,12 +32,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
-            // TODO determine if Snapshot should be created
             var projectId = saveNewBookDataWork.ProjectId;
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
             var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
             var bookData = saveNewBookDataWork.BookData;
+
+            PublishSnapshotToExternalDatabase(projectId, bookData.Pages);
 
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message);
             createNewSnapshot.Execute();
@@ -73,6 +78,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //{
             //     m_permissionRepository.CreatePermissionIfNotExist(newPermission);
             //}
+        }
+
+        private void PublishSnapshotToExternalDatabase(long projectId, List<BookPageData> bookDataPages)
+        {
+            var externalIds = bookDataPages.Select(x => x.XmlId).ToList();
+            m_fulltextResourceProcessor.PublishSnapshot(projectId, externalIds);
         }
     }
 }
