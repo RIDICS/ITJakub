@@ -1,5 +1,7 @@
 ﻿using System;
 using ITJakub.Web.Hub.Core.Communication;
+using Localization.AspNetCore.Service;
+using Localization.CoreLibrary.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,8 +10,12 @@ namespace ITJakub.Web.Hub.Controllers
 {
     public class LocalizationController : BaseController
     {
-        public LocalizationController(CommunicationProvider communicationProvider) : base(communicationProvider)
+        private readonly IDictionary m_dictionary;
+
+
+        public LocalizationController(CommunicationProvider communicationProvider, IDictionary dictionary) : base(communicationProvider)
         {
+            m_dictionary = dictionary;
         }
 
         public IActionResult SetLanguage(string culture, string returnUrl)
@@ -26,6 +32,11 @@ namespace ITJakub.Web.Hub.Controllers
                 );
 
             return LocalRedirect(returnUrl);
+        }
+
+        public ActionResult Dictionary(string scope)
+        {
+            return Json(m_dictionary.GetDictionary(scope, LocTranslationSource.Auto));
         }
     }
 }

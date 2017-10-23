@@ -15,6 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Plugins\Localization\LocalizationController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="App.config" />
     <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views\**\*.cshtml;Content\**\*;log4net.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
@@ -87,6 +91,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controllers\Plugins\Localization\" />
     <Folder Include="Localization\" />
   </ItemGroup>
 
