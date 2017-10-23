@@ -11,7 +11,7 @@
             buttons: [
                 {
                     text: "Close without saving",
-                    click: function () {
+                    click: function() {
                         onClose();
                         $(this).dialog("close");
                     },
@@ -19,7 +19,7 @@
                 },
                 {
                     text: "Cancel",
-                    click: function () {
+                    click: function() {
                         $(this).dialog("close");
                         onCancel();
                     },
@@ -27,7 +27,7 @@
                     id: "dialog-cancel-button"
                 }, {
                     text: "Save",
-                    click: function () {
+                    click: function() {
                         onSave();
                         $(this).dialog("close");
                     },
@@ -42,25 +42,29 @@
                     .removeClass("ui-dialog-titlebar-close")
                     .addClass("save-confirmation-dialogue-close-button")
                     .html(
-                    "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
     }
 
     successfullySavedContent() {
-        const dialogEl = $("#save-status-dialog");
+        const dialogEl = $("#status-dialog");
         dialogEl.dialog({
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
+            dialogClass: "status-dialog",
             title: "Success!",
-            buttons: {
-                Ok: function () {
-                    $(this).dialog("close");
+            buttons: [
+                {
+                    text: "Ok",
+                    click: function() {
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default"
                 }
-            },
+            ],
             open: (event, ui) => {
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
@@ -75,19 +79,23 @@
     }
 
     saveContentUnsuccessfull() {
-        const dialogEl = $("#save-status-dialog");
+        const dialogEl = $("#status-dialog");
         dialogEl.dialog({
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
+            dialogClass: "status-dialog",
             title: "Fail",
-            buttons: {
-                Ok: function () {
-                    $(this).dialog("close");
+            buttons: [
+                {
+                    text: "Close",
+                    click: function() {
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default"
                 }
-            },
+            ],
             open: (event, ui) => {
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
@@ -99,5 +107,36 @@
             }
         });
         dialogEl.text("There was an error while saving your changes.");
+    }
+
+    noSuchPage(pageName: string) {
+        const dialogEl = $("#status-dialog");
+        dialogEl.dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            dialogClass: "status-dialog",
+            title: "No such page",
+            buttons: [
+                {
+                    text: "Close",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default"
+                }
+            ],
+            open: (event, ui) => {
+                const targetElement = $(event.target);
+                targetElement.closest(".ui-dialog")
+                    .find(".ui-dialog-titlebar-close")
+                    .removeClass("ui-dialog-titlebar-close")
+                    .addClass("save-confirmation-dialogue-close-button")
+                    .html(
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
+            }
+        });
+        dialogEl.text(`Page ${pageName} does not exist.`);
     }
 }

@@ -22,22 +22,13 @@
             if (!showPageNumber) {
                 invisibleClass = "invisible";
             }
-            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div>`;
-            elm += "<div class=\"col-xs-7 composition-area\">";
-            elm += `<div class="page">`;
-
+            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div><div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page">`;
             if (!isEditingMode) {
-                elm += "<div class=\"viewer\">";
-                elm += `<span class="rendered-text"></span>`;
-                elm += "</div>";
+                elm += `<div class="viewer"><span class="rendered-text"></span></div></div></div>`;
             }
             if (isEditingMode) {
-                elm += "<div class=\"editor\">";
-                elm += `<textarea class="plain-text"></textarea>`;
-                elm += "</div>";
+                elm += `<div class="editor"><textarea class="plain-text"></textarea></div></div></div>`;
             }
-            elm += "</div>";
-            elm += "</div>";
             const html = $.parseHTML(elm);
             $(pageEl).append(html);
             if (!isEditingMode) {
@@ -59,17 +50,17 @@
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: IPageText) => {
-                const pageBody = data.text;
-                $(compositionAreaDiv).append(pageBody);
-                pageEl.css("min-height", "0");
-                var event = $.Event("pageConstructed", { page: textId });
-                compositionAreaDiv.trigger(event);
-                $(pageEl).children(".image-placeholder").hide();
+            const pageBody = data.text;
+            $(compositionAreaDiv).append(pageBody);
+            pageEl.css("min-height", "0");
+            var event = $.Event("pageConstructed", { page: textId });
+            compositionAreaDiv.trigger(event);
+            $(pageEl).find(".loading").hide();
         });
         renderedText.fail(() => {
             $(compositionAreaDiv).text("Failed to load content");
             pageEl.css("min-height", "0");
-            $(pageEl).children(".image-placeholder").hide();
+            $(pageEl).find(".loading").hide();
         });
 
     }
@@ -79,14 +70,14 @@
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: IPageText) => {
-                textAreaEl.val(data.text);
-                var event = $.Event("pageConstructed", { page: pageNumber });
-                textAreaEl.trigger(event);
-                $(pageEl).children(".image-placeholder").hide();
+            textAreaEl.val(data.text);
+            var event = $.Event("pageConstructed", { page: pageNumber });
+            textAreaEl.trigger(event);
+            $(pageEl).find(".loading").hide();
         });
         plainText.fail(() => {
             textAreaEl.val("Failed to load content.");
-            $(pageEl).children(".image-placeholder").hide();
+            $(pageEl).find(".loading").hide();
         });
 
     }

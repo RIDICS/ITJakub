@@ -17,6 +17,6 @@
 
     initConfig() {
         var lazyConfig: any = (window as any).lazySizesConfig;
-        lazyConfig.loadMode = 1;//only load visible elements
+        lazyConfig.loadMode = 1; //only load visible elements
     }
 }

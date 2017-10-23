@@ -41,7 +41,7 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`, { textId: textId, format: "Html"});
+        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`, { textId: textId, format: "Html" });
         return ajax;
     }
 

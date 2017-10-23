@@ -61,7 +61,8 @@
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
-            var mainCommentLeftPartStart = `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
+            var mainCommentLeftPartStart =
+                `<div class="media-left main-comment" id="${textReferenceId}-comment" data-parent-comment-id="${id}">`;
             var commentName = `<h5 class="media-heading">${name} ${surname}</h5>`;
             var mainCommentBody =
                 `<p class="comment-body">${body}</p><button class="respond-to-comment">Respond</button>`;
@@ -81,7 +82,8 @@
                     areaContent += commentImage;
                     areaContent += commentLeftPartEnd;
                     areaContent += commentBodyStart;
-                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${textReferenceId}</div>`;
+                    areaContent += `<div class="text-center id-in-comment-area text-muted">Commentary ${textReferenceId
+                        }</div>`;
                     areaContent += commentName;
                     areaContent += `<p class="replied-on text-muted">On ${timeUtc.toDateString()} at ${timeUtc
                         .toTimeString()
@@ -224,7 +226,7 @@
         ajax.done(
             (data: ICommentSctucture[]) => {
                 fileContent = data;
-                if (fileContent.length>0) {
+                if (fileContent.length > 0) {
                     this.loadCommentFile(fileContent, textId, sectionCollapsed, nestedCommentCollapsed);
                 }
                 this.toggleAreaSizeIconHide(

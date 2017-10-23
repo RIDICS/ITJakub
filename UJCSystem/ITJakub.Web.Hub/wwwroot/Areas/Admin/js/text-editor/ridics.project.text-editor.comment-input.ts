@@ -17,7 +17,9 @@
 */
     processCommentSendClick(
         textId: number,
-        textReferenceId: string, id:number, parentCommentId:number) {
+        textReferenceId: string,
+        id: number,
+        parentCommentId: number) {
         var serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
         const buttonSend = $("#commentFinish");
@@ -74,7 +76,8 @@
                     $(target).parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
                 const textReferenceIdWithText = $(target).parent().siblings(".main-comment").attr("id");
-                const parentCommentId = $(target).parent().siblings(".main-comment").data("parent-comment-id") as number;
+                const parentCommentId =
+                    $(target).parent().siblings(".main-comment").data("parent-comment-id") as number;
                 var textReferenceId = textReferenceIdWithText.replace("-comment", "");
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
                     this.addCommentFromCommentArea(textReferenceId, textId, parentCommentId);
@@ -133,7 +136,7 @@
     }
 
     private addCommentFromCommentArea(textRefernceId: string, textId: number, parentCommentId: number) {
-        const id = 0;//creating comment
+        const id = 0; //creating comment
         this.processCommentSendClick(textId, textRefernceId, id, parentCommentId);
         this.toggleCommentInputPanel();
     }

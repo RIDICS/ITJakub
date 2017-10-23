@@ -28,8 +28,8 @@
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
             ajax.done((data: string) => {
                 const textReferenceId = data;
-                const id = 0;//creating comment
-                const parentComment = 0;//creating comment
+                const id = 0; //creating comment
+                const parentComment = 0; //creating comment
                 this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
             });
         } else {
@@ -144,7 +144,7 @@
             const request: IPageTextBase = {
                 id: id,
                 text: contents,
-                versionNumber: versionNumber//TODO
+                versionNumber: versionNumber //TODO
             };
             const saveAjax = this.util.savePlainText(textId, request);
             saveAjax.done(() => {
@@ -224,7 +224,7 @@
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
                 const page = $(child).children(".composition-area").children(".page");
-                const placeholderSpinner = $(child).children(".image-placeholder");
+                const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const plainTextAjax = this.util.loadPlainText(pageNumber);
                 const viewerElement = $(page).children(".viewer");
@@ -235,7 +235,7 @@
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
                 const page = $(child).children(".composition-area").children(".page");
-                const placeholderSpinner = $(child).children(".image-placeholder");
+                const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const renderedTextAjax = this.util.loadRenderedText(pageNumber);
                 const editorElement = $(page).children(".editor");
@@ -247,20 +247,20 @@
 
     private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
         ajax.done((data: IPageText) => {
-            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
+            const placeHolderSpinner = $(child).siblings(".loading");
             const plainText = data.text;
             const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
-            $(child).append(elm);
+            if (this.editingMode){$(child).append(elm);}
             placeHolderSpinner.hide();
         });
     }
 
     private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
         ajax.done((data: IPageText) => {
-            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
+            const placeHolderSpinner = $(child).siblings(".loading");
             const renderedText = data.text;
             const elm = `<div class="viewer">${renderedText}</div>`;
-            $(child).append(elm);
+            if (!this.editingMode){$(child).append(elm);}
             placeHolderSpinner.hide();
         });
     }
