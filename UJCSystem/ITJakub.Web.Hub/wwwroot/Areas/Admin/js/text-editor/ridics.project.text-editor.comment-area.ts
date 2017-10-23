@@ -1,8 +1,10 @@
 ﻿class CommentArea {
     private readonly util: Util;
+    private readonly gui: TextEditorGui;
 
-    constructor(util: Util) {
+    constructor(util: Util, gui: TextEditorGui) {
         this.util = util;
+        this.gui = gui;
     }
 
     /**
@@ -195,7 +197,7 @@
         }
     }
 
-    toggleAreaSizeIconHide(textId: number) {
+    private toggleAreaSizeIconHide(textId: number) {
         const commentAreaCollapsedMaxHeight = 170;
         const page = $(`*[data-page="${textId}"]`);
         const commentArea = page.children(".comment-area");
@@ -221,6 +223,7 @@
  */
     asyncConstructCommentArea(textId: number, sectionCollapsed: boolean, nestedCommentCollapsed: boolean) {
         let fileContent: ICommentSctucture[];
+        const pageName = $(`*[data-page="${textId}"]`).data("page-name") as string;
         const ajax = $.post(`${this.util.getServerAddress()}admin/project/LoadCommentFile`,
             { textId: textId });
         ajax.done(
@@ -233,7 +236,7 @@
                     textId); //collapse section on page load, collapse nested comments on page load
             });
         ajax.fail(() => {
-            alert(`Failed to construct comment area for page ${textId}`);
+            this.gui.showMessageDialog("Error", `Failed to construct comment area for page ${pageName}`);
         });
     }
 
