@@ -47,7 +47,7 @@
         }
     }
 
-    private appendRenderedText(textId: number, showPageNumber: boolean) {
+    private appendRenderedText(textId: number, showPageNumber: boolean){
         const renderedText = this.util.loadRenderedText(textId);
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
@@ -71,10 +71,9 @@
         renderedText.always(() => {
             $(pageEl).find(".loading").hide();
         });
-
     }
 
-    private appendPlainText(pageNumber: number) {
+    private appendPlainText(pageNumber: number){
         const plainText = this.util.loadPlainText(pageNumber);
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const textAreaEl = $(pageEl.find(".plain-text"));
@@ -93,6 +92,5 @@
         plainText.always(() => {
             $(pageEl).find(".loading").hide();
         });
-
     }
 }

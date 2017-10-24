@@ -141,7 +141,7 @@
                     nestedComments[thread]++;
                 }
             }
-            this.collapseIfCommentAreaIsTall(nestedComments, pageNumber, sectionCollapsed, nestedCommentCollapsed);
+            //this.collapseIfCommentAreaIsTall(nestedComments, pageNumber, sectionCollapsed, nestedCommentCollapsed); TODO
         }
     }
 
@@ -151,56 +151,59 @@
      * @param sectionCollapsed - Whether section has to be collapsed
      * @param nestedCommentCollapsed - Whether nested comments have to be collapsed
      */
-    private collapseIfCommentAreaIsTall = (numberOfNestedComments: number[],
+    collapseIfCommentAreaIsTall = (numberOfNestedComments: number[],
         pageNumber: number,
         sectionCollapsed: boolean,
         nestedCommentCollapsed: boolean) => {
-        var areaContent = "";
-        const ellipsisStart = "<div class=\"ellipsis-container\">";
-        const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
-        const ellipsisIconExpand =
-            "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
-        const ellipsisIconCollapse =
-            "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
-        const ellipsisBodyEnd = "</div>";
-        const ellipsisEnd = "</div>";
-        areaContent += ellipsisStart;
-        areaContent += ellipsisBodyStart;
-        areaContent += ellipsisIconExpand;
-        areaContent += ellipsisIconCollapse;
-        areaContent += ellipsisBodyEnd;
-        areaContent += ellipsisEnd;
-        const html = $.parseHTML(areaContent);
-        const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
-        const compositionAreaHeight = $(compositionArea).height();
-        const commentArea = compositionArea.siblings(".comment-area");
-        const commentAreaHeight = $(commentArea).height();
-        if (commentAreaHeight > compositionAreaHeight && commentAreaHeight > 170
-        ) { // 140px - min comment area height, 170px to fit main comment and one typical response
-            if (sectionCollapsed) {
-                $(commentArea).toggleClass("comment-area-collapsed");
-            }
-            const children = $(commentArea).children(".media-list");
-            children.each((index: number, childNode: Node) => {
-                if (numberOfNestedComments[index] > 2) {
-                    const child = childNode as Element;
-                    if (nestedCommentCollapsed) {
-                        $(child).children(".media").children(".media-body").children(".media")
-                            .addClass("nested-comment-collapsed");
-                    }
-                    $(child).append(`<p class="text-center">
+            var areaContent = "";
+            const ellipsisStart = "<div class=\"ellipsis-container\">";
+            const ellipsisBodyStart = "<div class=\"ellipsis toggleCommentViewAreaSize\">";
+            const ellipsisIconExpand =
+                "<i class=\"fa fa-expand expand-icon fa-lg\" aria-hidden=\"true\" title=\"Expand comment area\"></i>";
+            const ellipsisIconCollapse =
+                "<i class=\"fa fa-compress collapse-icon fa-lg\" aria-hidden=\"true\" title=\"Collapse comment area\"></i>";
+            const ellipsisBodyEnd = "</div>";
+            const ellipsisEnd = "</div>";
+            areaContent += ellipsisStart;
+            areaContent += ellipsisBodyStart;
+            areaContent += ellipsisIconExpand;
+            areaContent += ellipsisIconCollapse;
+            areaContent += ellipsisBodyEnd;
+            areaContent += ellipsisEnd;
+            const html = $.parseHTML(areaContent);
+            const compositionArea = $(`*[data-page="${pageNumber}"]`).children(".composition-area");
+            const compositionAreaHeight = $(compositionArea).height();
+            console.log($(compositionArea).height());
+            const commentArea = compositionArea.siblings(".comment-area");
+            const commentAreaHeight = $(commentArea).height();
+            if (commentAreaHeight > compositionAreaHeight
+            ) {
+                if (sectionCollapsed) {
+                    $(commentArea).toggleClass("comment-area-collapsed");
+                    $(commentArea).css("max-height", compositionAreaHeight);
+                }
+                const children = $(commentArea).children(".media-list");
+                children.each((index: number, childNode: Node) => {
+                    if (numberOfNestedComments[index] > 2) {
+                        const child = childNode as Element;
+                        if (nestedCommentCollapsed) {
+                            $(child).children(".media").children(".media-body").children(".media")
+                                .addClass("nested-comment-collapsed");
+                        }
+                        $(child).append(`<p class="text-center">
                                          <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
                                      </p>`);
-                }
-            });
-            $(commentArea).append(html);
-        }
+                    }
+                });
+                $(commentArea).append(html);
+            }
     }
 
     private toggleAreaSizeIconHide(textId: number) {
-        const commentAreaCollapsedMaxHeight = 170;
         const page = $(`*[data-page="${textId}"]`);
         const commentArea = page.children(".comment-area");
+        const compositionArea = page.children(".composition-area");
+        const commentAreaCollapsedMaxHeight = compositionArea.height();
         const commentAreaHeight = $(commentArea).prop("scrollHeight");
         const ellipsisIconExpand = commentArea.find(".expand-icon");
         const ellipsisIconCollapse = commentArea.find(".collapse-icon");
@@ -353,9 +356,17 @@
             ".toggleCommentViewAreaSize",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
-                var target = $(event.target as HTMLElement);
-                var commentViewArea = target.parents(".comment-area");
-                var textCenter = $(target).parents(".ellipsis-container");
+                const target = $(event.target as HTMLElement);
+                const commentViewArea = target.parents(".comment-area");
+                const textCenter = $(target).parents(".ellipsis-container");
+                const commentArea = commentViewArea.parents(".comment-area");
+                const compositionArea = commentArea.siblings(".composition-area");
+                const compositionAreaHeight = compositionArea.height();
+                if (commentViewArea.hasClass("comment-area-collapsed")) {
+                    $(commentViewArea).css("max-height", compositionAreaHeight);
+                } else {
+                    $(commentViewArea).css("max-height", "initial");
+                }
                 $(commentViewArea).toggleClass("comment-area-collapsed");
                 $(textCenter).children(".ellipsis").children(".expand-icon").toggle();
                 $(textCenter).children(".ellipsis").children(".collapse-icon").toggle();

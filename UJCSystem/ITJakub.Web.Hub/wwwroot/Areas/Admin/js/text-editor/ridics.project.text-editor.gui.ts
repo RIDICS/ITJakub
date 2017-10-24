@@ -70,11 +70,38 @@
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
+                    .addClass("status-dialog-close-button")
                     .html(
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
         dialogEl.text(message);
+    }
+
+    showCommentInputDialog() {
+        const dialogEl = $("#comment-input-dialog");
+        dialogEl.dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            dialogClass: "comment-input-dialog",
+            title: "Your comment",
+            buttons: [
+                {
+                    text: "Send",
+                    class: "btn btn-default send-comment-button"
+                }
+            ],
+            open: (event) => {
+                const targetElement = $(event.target);
+                targetElement.closest(".ui-dialog")
+                    .find(".ui-dialog-titlebar-close")
+                    .removeClass("ui-dialog-titlebar-close")
+                    .addClass("comment-input-dialogue-close-button")
+                    .html(
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
+            }
+        });
     }
 }

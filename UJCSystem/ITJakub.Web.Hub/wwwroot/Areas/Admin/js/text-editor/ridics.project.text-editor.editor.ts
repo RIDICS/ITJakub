@@ -25,6 +25,7 @@
 
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
+            $(".preloading-pages-spinner").show();
             const textId = this.getCurrentPageNumber();
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
             ajax.done((data: string) => {
@@ -32,22 +33,25 @@
                 const id = 0; //creating comment
                 const parentComment = 0; //creating comment
                 this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
-                const buttonClose = $(".close-form-input");
-                buttonClose.on("click",
+                const commentInputDialogEl = $(".comment-input-dialog");
+                commentInputDialogEl.on("click", ".comment-input-dialogue-close-button",
                     (event: JQueryEventObject) => {
                         event.stopImmediatePropagation();
-                        this.commentInput.toggleCommentInputPanel();
                         this.userIsEnteringText = !this.userIsEnteringText;
                         this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
-                        buttonClose.off();
+                        commentInputDialogEl.off();
                     });
             });
             ajax.fail(() => {
                 this.gui.showMessageDialog("Error", "Comment addition failed");
             });
+            ajax.always(() => {
+                $(".preloading-pages-spinner").hide();
+            });
         } else {
+            const commentInputDialogEl = $(".comment-input-dialog");
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
-            this.commentInput.toggleCommentInputPanel();
+            commentInputDialogEl.dialog("close");
         }
     }
 
@@ -151,25 +155,25 @@
     private saveContents(textId: number, contents: string) {
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionArea = pageEl.children(".composition-area");
-            const id = compositionArea.data("id");
-            const versionNumber = compositionArea.data("version-number");
-            const request: IPageTextBase = {
-                id: id,
-                text: contents,
-                versionNumber: versionNumber
-            };
-            const saveAjax = this.util.savePlainText(textId, request);
-            saveAjax.done(() => {
-                this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
-                this.originalContent = contents;
-            });
-            saveAjax.fail(() => {
-                if (saveAjax.status === 409) {
-                    this.gui.showMessageDialog("Fail", "Failed to save your changes due to version conflict.");
-                } else {
-                    this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
-                }
-            });
+        const id = compositionArea.data("id");
+        const versionNumber = compositionArea.data("version-number");
+        const request: IPageTextBase = {
+            id: id,
+            text: contents,
+            versionNumber: versionNumber
+        };
+        const saveAjax = this.util.savePlainText(textId, request);
+        saveAjax.done(() => {
+            this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
+            this.originalContent = contents;
+        });
+        saveAjax.fail(() => {
+            if (saveAjax.status === 409) {
+                this.gui.showMessageDialog("Fail", "Failed to save your changes due to version conflict.");
+            } else {
+                this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
+            }
+        });
     }
 
     private addEditor(jEl: JQuery) {
