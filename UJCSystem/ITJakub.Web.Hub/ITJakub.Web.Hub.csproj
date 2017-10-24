@@ -65,7 +65,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <Target Name="ApplyXdtConfigTransform" BeforeTargets="_TransformWebConfig">
+  <Target Name="ApplyXdtConfigTransform" BeforeTargets="MSDeployPublish">
     <PropertyGroup>
       <_SourceWebConfig>$(MSBuildThisFileDirectory)Web.config</_SourceWebConfig>
       <_XdtTransform>$(MSBuildThisFileDirectory)Web.$(Configuration).config</_XdtTransform>
