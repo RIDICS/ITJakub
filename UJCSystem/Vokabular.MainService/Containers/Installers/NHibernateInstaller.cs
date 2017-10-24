@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -6,6 +7,7 @@ using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.Options;
 
 namespace Vokabular.MainService.Containers.Installers
 {
@@ -13,7 +15,10 @@ namespace Vokabular.MainService.Containers.Installers
     {
         public void Install(IIocContainer container)
         {
-            var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString =
+                ApplicationConfig.Configuration.GetConnectionString(SettingKeys.MainConnectionString) ??
+                throw new ArgumentException("Connection string not found");
+
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>
                 {

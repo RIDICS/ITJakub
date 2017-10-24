@@ -1,3 +1,4 @@
+using System;
 using ITJakub.Web.DataEntities.Database.Daos;
 using Microsoft.Extensions.Configuration;
 using NHibernate.Cfg;
@@ -6,6 +7,7 @@ using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.Shared;
 using Vokabular.Shared.Container;
+using Vokabular.Shared.Options;
 
 namespace ITJakub.Web.Hub.AppStart.Installers
 {
@@ -13,7 +15,10 @@ namespace ITJakub.Web.Hub.AppStart.Installers
     {
         public void Install(IIocContainer container)
         {
-            var connectionString = ApplicationConfig.Configuration.GetConnectionString("DefaultConnection");
+            var connectionString =
+                ApplicationConfig.Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
+                throw new ArgumentException("Connection string not found");
+
             var cfg = new Configuration()
                 .DataBaseIntegration(db =>
                 {

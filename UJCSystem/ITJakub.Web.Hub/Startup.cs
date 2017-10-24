@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using ITJakub.Web.Hub.AppStart;
 using ITJakub.Web.Hub.AppStart.Containers;
 using ITJakub.Web.Hub.AppStart.Extensions;
@@ -35,12 +36,15 @@ namespace ITJakub.Web.Hub
                 .AddJsonFile("globalsettings.json");
             var globalConfiguration = globalbuilder.Build();
 
+            var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
             var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true);
+                .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
+                .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
+                .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true);
 
             if (env.IsDevelopment())
             {

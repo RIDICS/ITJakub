@@ -7,15 +7,6 @@ namespace ITJakub.CardFile.Core
     {
         private static void Main(string[] args)
         {
-            //var service = new CardFilesServiceClient();
-
-            //if (service.ClientCredentials != null)
-            //{
-            //    service.ClientCredentials.HttpDigest.ClientCredential = new NetworkCredential("api", "***REMOVED***");
-
-            //    service.ClientCredentials.HttpDigest.AllowedImpersonationLevel = TokenImpersonationLevel.Impersonation;
-            //}
-
             var service = new CardFilesCommunicationManager();
 
             var files = service.GetFiles();
