@@ -140,7 +140,7 @@
                 event.stopImmediatePropagation();
                 this.toggleCommentInputPanel();
                 buttonClose.off();
-            }); //TODO
+            });
         this.toggleCommentInputPanel();
     }
 }

@@ -24,7 +24,7 @@ class TextEditorMain {
         return this.showPageNumber;
     }
 
-    init() {
+    init(projectId:number) {
         const gui = new TextEditorGui();
         const connections = new Connections();
         const util = new Util();
@@ -34,7 +34,6 @@ class TextEditorMain {
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this, gui);
-        const projectId = 1; //TODO debug
         const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.processAreaSwitch();
         connections.toggleConnections();
