@@ -79,8 +79,10 @@ namespace ITJakub.Web.Hub
             });
 
             // Localization
+            var connectionString = Configuration.GetConnectionString(SettingKeys.WebConnectionString) ??
+                                   throw new ArgumentException("Connection string not found");
             services.AddDbContext<StaticTextsContext>(options => options
-                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                .UseSqlServer(connectionString));
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddLocalizationService();
