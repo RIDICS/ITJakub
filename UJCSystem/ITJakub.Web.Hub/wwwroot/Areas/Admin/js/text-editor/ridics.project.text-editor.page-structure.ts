@@ -52,7 +52,11 @@
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: IPageText) => {
+            const compositionAreaEl = pageEl.children(".composition-area");           
             const pageBody = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             $(compositionAreaDiv).append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
@@ -76,6 +80,10 @@
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: IPageText) => {
             textAreaEl.val(data.text);
+            const compositionAreaEl = pageEl.children(".composition-area");
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             var event = $.Event("pageConstructed", { page: pageNumber });
             textAreaEl.trigger(event);
         });

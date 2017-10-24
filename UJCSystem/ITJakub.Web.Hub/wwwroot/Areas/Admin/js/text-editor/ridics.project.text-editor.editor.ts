@@ -149,14 +149,14 @@
     }
 
     private saveContents(textId: number, contents: string) {
-        const plainText = this.util.loadPlainText(textId);
-        plainText.done((data: IPageText) => {
-            const id = data.id;
-            const versionNumber = data.versionNumber;
+        const pageEl = $(`*[data-page="${textId}"]`);
+        const compositionArea = pageEl.children(".composition-area");
+            const id = compositionArea.data("id");
+            const versionNumber = compositionArea.data("version-number");
             const request: IPageTextBase = {
                 id: id,
                 text: contents,
-                versionNumber: versionNumber //TODO
+                versionNumber: versionNumber
             };
             const saveAjax = this.util.savePlainText(textId, request);
             saveAjax.done(() => {
@@ -164,12 +164,12 @@
                 this.originalContent = contents;
             });
             saveAjax.fail(() => {
-                this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
+                if (saveAjax.status === 409) {
+                    this.gui.showMessageDialog("Fail", "Failed to save your changes due to version conflict.");
+                } else {
+                    this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
+                }
             });
-        });
-        plainText.fail(() => {
-            this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
-        });
     }
 
     private addEditor(jEl: JQuery) {
@@ -232,32 +232,38 @@
         if (this.editingMode) { // changing div to textarea here
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const page = $(child).children(".composition-area").children(".page");
+                const compositionAreaEl = $(child).children(".composition-area");
                 const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const plainTextAjax = this.util.loadPlainText(pageNumber);
-                const viewerElement = $(page).children(".viewer");
-                viewerElement.remove();
-                this.createEditorAreaBody(page[0], plainTextAjax);
+                this.createEditorAreaBody(compositionAreaEl, plainTextAjax);
             });
         } else { // changing textarea to div here
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const page = $(child).children(".composition-area").children(".page");
+                const compositionAreaEl = $(child).children(".composition-area");
                 const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const renderedTextAjax = this.util.loadRenderedText(pageNumber);
-                const editorElement = $(page).children(".editor");
-                editorElement.remove();
-                this.createViewerAreaBody(page[0], renderedTextAjax);
+                this.createViewerAreaBody(compositionAreaEl, renderedTextAjax);
             });
         }
     }
 
-    private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
+    private createEditorAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+        const child = compositionAreaEl.children(".page");
         ajax.done((data: IPageText) => {
+            const editorElement = child.children(".editor");
+            if (editorElement.length) {
+                editorElement.remove();
+            }
+            const viewerElement = child.children(".viewer");
+            viewerElement.remove();
             const placeHolderSpinner = $(child).siblings(".loading");
             const plainText = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
             if (this.editingMode) {
                 $(child).append(elm);
@@ -275,10 +281,20 @@
         });
     }
 
-    private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
+    private createViewerAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+        const child = compositionAreaEl.children(".page");
         ajax.done((data: IPageText) => {
+            const viewerElement = child.children(".viewer");
+            if (viewerElement.length) {
+                viewerElement.remove();
+            }
+            const editorElement = child.children(".editor");
+            editorElement.remove();
             const placeHolderSpinner = $(child).siblings(".loading");
             const renderedText = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             const elm = `<div class="viewer">${renderedText}</div>`;
             if (!this.editingMode) {
                 $(child).append(elm);
