@@ -50,7 +50,7 @@ namespace Vokabular.MainService.Core.Managers
                     result.Text = "*Mock text* from **MainService.**";
                     break;
                 case TextFormatEnumContract.Html:
-                    result.Text = "<b>Mock text</b> from <i>MainService.</i>";
+                    result.Text = "<b>Mock <span id=\"dc3b9720-199c-4d79-93e5-ba94efb1f44a-text\">text</span></b> from <i>MainService.</i>";
                     break;
                 case TextFormatEnumContract.Rtf:
                     throw new NotSupportedException();
