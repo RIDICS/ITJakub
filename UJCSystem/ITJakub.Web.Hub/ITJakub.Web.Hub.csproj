@@ -1635,6 +1635,9 @@
     <Content Include="Areas\Lemmatization\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Derivation\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Derivation\Content\itjakub.derivation.less" />
+    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
+      <Link>ITJakub.Secrets.config</Link>
+    </Content>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>

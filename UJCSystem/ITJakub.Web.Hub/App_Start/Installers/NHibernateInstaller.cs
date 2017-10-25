@@ -1,11 +1,14 @@
+using System.Configuration;
 using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.Web.DataEntities.Database.Daos;
+using Jewelery;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace ITJakub.Web.Hub.App_Start.Installers
 {
@@ -40,7 +43,8 @@ namespace ITJakub.Web.Hub.App_Start.Installers
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {
-                        db.ConnectionString = Properties.Settings.Default.DefaultConnectionString;
+                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.WebConnectionString]
+                            .GetStringOrThrowArgumentException("Connection string not found");
                         db.Dialect<MsSql2008Dialect>();
                         db.Driver<SqlClientDriver>();
                         db.ConnectionProvider<DriverConnectionProvider>();
