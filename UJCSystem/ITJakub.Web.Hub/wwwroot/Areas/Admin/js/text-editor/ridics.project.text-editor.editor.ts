@@ -34,7 +34,7 @@
                 const parentComment = 0; //creating comment
                 this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
                 const commentInputDialogEl = $(".comment-input-dialog");
-                commentInputDialogEl.on("click", ".comment-input-dialogue-close-button",
+                commentInputDialogEl.on("click", ".comment-input-dialog-close-button",
                     (event: JQueryEventObject) => {
                         event.stopImmediatePropagation();
                         this.userIsEnteringText = !this.userIsEnteringText;

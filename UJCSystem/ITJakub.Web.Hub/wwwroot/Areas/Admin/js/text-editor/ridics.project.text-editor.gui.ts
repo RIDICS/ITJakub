@@ -5,7 +5,7 @@
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
+            dialogClass: "save-confirmation-dialog",
             close: () => { onCancel(); },
             title: "Do you want to leave without saving?",
             buttons: [
@@ -15,7 +15,7 @@
                         onClose();
                         $(this).dialog("close");
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button"
+                    class: "btn btn-default save-confirmation-dialog-button"
                 },
                 {
                     text: "Cancel",
@@ -23,7 +23,7 @@
                         $(this).dialog("close");
                         onCancel();
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button",
+                    class: "btn btn-default save-confirmation-dialog-button",
                     id: "dialog-cancel-button"
                 }, {
                     text: "Save",
@@ -31,7 +31,7 @@
                         onSave();
                         $(this).dialog("close");
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button"
+                    class: "btn btn-default save-confirmation-dialog-button"
                 }
             ],
             open: (event) => {
@@ -40,7 +40,7 @@
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
+                    .addClass("save-confirmation-dialog-close-button")
                     .html(
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
@@ -62,7 +62,7 @@
                     click: function () {
                         $(this).dialog("close");
                     },
-                    class: "btn btn-default"
+                    class: "btn btn-default status-dialog-button"
                 }
             ],
             open: (event) => {
@@ -90,7 +90,7 @@
             buttons: [
                 {
                     text: "Send",
-                    class: "btn btn-default send-comment-button"
+                    class: "btn btn-default send-comment-button comment-input-dialog-button"
                 }
             ],
             open: (event) => {
@@ -98,7 +98,7 @@
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("comment-input-dialogue-close-button")
+                    .addClass("comment-input-dialog-close-button")
                     .html(
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
