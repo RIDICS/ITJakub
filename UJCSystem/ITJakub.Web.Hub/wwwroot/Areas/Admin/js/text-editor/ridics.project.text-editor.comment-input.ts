@@ -128,14 +128,14 @@
     private addCommentFromCommentArea(textRefernceId: string,
         textId: number,
         parentCommentId: number,
-        jElement: JQuery) {
+        buttonEl: JQuery) {
         const id = 0; //creating comment
         const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
-        jElement.after(elm);
-        jElement.remove();
+        buttonEl.after(elm);
+        buttonEl.detach();
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
-        this.processCommentReply(textId, textRefernceId, id, parentCommentId, textareaEl);
+        this.processCommentReply(textId, textRefernceId, id, parentCommentId, textareaEl, buttonEl);
     }
 
     private processCommentReply(
@@ -143,14 +143,15 @@
         textReferenceId: string,
         id: number,
         parentCommentId: number,
-        textAreaEl: JQuery) {
+        textAreaEl: JQuery, buttonEl: JQuery) {
         var serverAddress = this.util.getServerAddress();
         textAreaEl.on("focusout",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
                 if (commentText === "") {
-                    this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
+                    textAreaEl.after(buttonEl);
+                    textAreaEl.detach();
                 } else {
                     const comment: ICommentStructureReply = {
                         id: id,
