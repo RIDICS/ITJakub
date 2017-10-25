@@ -1,4 +1,6 @@
-﻿using Castle.Facilities.NHibernate;
+﻿using System;
+using System.Configuration;
+using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using NHibernate;
 using NHibernate.Cfg;
@@ -6,6 +8,8 @@ using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
 using Vokabular.DataEntities.Database.Daos;
+using Vokabular.Shared.Options;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace ITJakub.FileProcessing.Service
 {
@@ -40,14 +44,14 @@ namespace ITJakub.FileProcessing.Service
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {
-                        db.ConnectionString = Properties.Settings.Default.DefaultConnectionString;
+                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.MainConnectionString] ?? throw new ArgumentException("Connection string not found");
                         db.Dialect<MsSql2008Dialect>();
                         db.Driver<SqlClientDriver>();
                         db.ConnectionProvider<DriverConnectionProvider>();
                         db.BatchSize = 5000;
                         db.Timeout = byte.MaxValue;
                         //db.LogFormattedSql = true;
-                        //db.LogSqlInConsole = true;                     
+                        //db.LogSqlInConsole = true;
                     })
                     .AddAssembly(typeof(NHibernateDao).Assembly);
                 return cfg;
