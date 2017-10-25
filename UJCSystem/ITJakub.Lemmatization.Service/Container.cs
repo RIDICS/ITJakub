@@ -32,7 +32,7 @@ namespace ITJakub.Lemmatization.Service
         private Container()
         {
             //configure log4net
-            XmlConfigurator.Configure(new FileInfo("log4net.config"));
+            XmlConfigurator.Configure();
             m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
             //Add subresolvers

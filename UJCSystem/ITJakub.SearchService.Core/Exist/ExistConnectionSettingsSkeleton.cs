@@ -1,6 +1,5 @@
-﻿using System;
-using System.Configuration;
-using Vokabular.Shared.Options;
+﻿using System.Configuration;
+using Jewelery;
 
 namespace ITJakub.SearchService.Core.Exist
 {
@@ -13,8 +12,8 @@ namespace ITJakub.SearchService.Core.Exist
             BaseUri = baseUri;
             ViewsCollection = viewsCollection;
             ResourcesCollection = resourcesCollection;
-            DbUser = ConfigurationManager.AppSettings[SettingKeys.ExistDbUser] ?? throw new ArgumentException("eXistDB username not found");
-            DbPassword = ConfigurationManager.AppSettings[SettingKeys.ExistDbPassword] ?? throw new ArgumentException("eXistDB user password not found");
+            DbUser = ConfigurationManager.AppSettings[SettingKeys.ExistDbUser].GetStringOrThrowArgumentException("eXistDB username not found");
+            DbPassword = ConfigurationManager.AppSettings[SettingKeys.ExistDbPassword].GetStringOrThrowArgumentException("eXistDB user password not found");
             XQueriesRelativeUri = xQueriesRelativeUri;
             TransformationRelativeUri = transformationRelativeUri;
             DbMaxResults = dbMaxResults;

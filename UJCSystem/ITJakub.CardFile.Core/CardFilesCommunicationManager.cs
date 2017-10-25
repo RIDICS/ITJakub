@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
 using ITJakub.CardFile.Core.DataContractEntities;
+using Jewelery;
 using log4net;
-using Vokabular.Shared.Options;
 
 namespace ITJakub.CardFile.Core
 {
@@ -41,11 +41,11 @@ namespace ITJakub.CardFile.Core
             }
         }
 
-        private string UserName => ConfigurationManager.AppSettings[SettingKeys.CardFilesUser] ??
-                                   throw new ArgumentException("Card files username not found");
+        private string UserName => ConfigurationManager.AppSettings[SettingKeys.CardFilesUser]
+            .GetStringOrThrowArgumentException("Card files username not found");
 
-        private string UserPassword => ConfigurationManager.AppSettings[SettingKeys.CardFilesPassword] ??
-                                       throw new ArgumentException("Card files password not found");
+        private string UserPassword => ConfigurationManager.AppSettings[SettingKeys.CardFilesPassword]
+            .GetStringOrThrowArgumentException("Card files password not found");
 
         public files GetFiles()
         {

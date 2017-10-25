@@ -1,4 +1,6 @@
-﻿namespace Vokabular.Shared.Options
+﻿using System;
+
+namespace Jewelery
 {
     public static class SettingKeys
     {
@@ -10,5 +12,12 @@
         public const string ExistDbPassword = "ExistDbPassword";
         public const string CardFilesUser = "CardFilesUser";
         public const string CardFilesPassword = "CardFilesPassword";
+
+        public static string GetStringOrThrowArgumentException(this string value, string exceptionMessage)
+        {
+            if (value == null)
+                throw new ArgumentException(exceptionMessage);
+            return value;
+        }
     }
 }

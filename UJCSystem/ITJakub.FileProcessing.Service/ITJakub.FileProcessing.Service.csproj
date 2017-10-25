@@ -135,9 +135,6 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="log4net.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="packages.config" />
     <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
       <Link>ITJakub.Secrets.config</Link>
@@ -181,9 +178,9 @@
       <Project>{c1753d1a-9d38-4a6f-aa01-bdadecb2eac8}</Project>
       <Name>Ujc.Ovj.Ooxml.Conversion</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
-      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
-      <Name>Vokabular.Shared</Name>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
+      <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -228,4 +225,3 @@
   </Target>
   -->
 </Project>
-

@@ -188,9 +188,9 @@
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
-      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
-      <Name>Vokabular.Shared</Name>
+    <ProjectReference Include="..\Jewelery\Jewelery.csproj">
+      <Project>{246eadf4-905a-4fbd-b939-c88bdefdc4a7}</Project>
+      <Name>Jewelery</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -238,4 +238,3 @@
   </Target>
   -->
 </Project>
-

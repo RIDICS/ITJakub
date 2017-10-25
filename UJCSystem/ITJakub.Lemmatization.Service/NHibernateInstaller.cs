@@ -1,14 +1,13 @@
-﻿using System;
-using System.Configuration;
+﻿using System.Configuration;
 using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.Lemmatization.DataEntities;
+using Jewelery;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
-using Vokabular.Shared.Options;
 using Configuration = NHibernate.Cfg.Configuration;
 
 namespace ITJakub.Lemmatization.Service
@@ -44,7 +43,8 @@ namespace ITJakub.Lemmatization.Service
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {
-                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.DefaultConnectionString] ?? throw new ArgumentException("Connection string not found");
+                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.DefaultConnectionString]
+                            .GetStringOrThrowArgumentException("Connection string not found");
                         db.Dialect<MsSql2008Dialect>();
                         db.Driver<SqlClientDriver>();
                         db.ConnectionProvider<DriverConnectionProvider>();

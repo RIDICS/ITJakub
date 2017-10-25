@@ -82,10 +82,6 @@
       <Project>{246EADF4-905A-4FBD-B939-C88BDEFDC4A7}</Project>
       <Name>Jewelery</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
-      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
-      <Name>Vokabular.Shared</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -96,4 +92,3 @@
   </Target>
   -->
 </Project>
-
