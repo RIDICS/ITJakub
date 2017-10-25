@@ -30,7 +30,7 @@ class TextEditorMain {
         const util = new Util();
         const commentArea = new CommentArea(util, gui);
         const commentInput = new CommentInput(commentArea, util, gui);
-        const pageTextEditor = new Editor(commentInput, util, gui);
+        const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
         const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this, gui);
@@ -53,6 +53,9 @@ class TextEditorMain {
             commentInput.processRespondToCommentClick();
             commentArea.processToggleCommentAresSizeClick();
             commentArea.processToggleNestedCommentClick();
+        });
+        projectAjax.fail(() => {
+            gui.showMessageDialog("Error", "Failed to get project information.");
         });
     }
 
