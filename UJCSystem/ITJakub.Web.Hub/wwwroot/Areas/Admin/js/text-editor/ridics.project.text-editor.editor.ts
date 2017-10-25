@@ -13,6 +13,8 @@
         this.gui = gui;
     }
 
+    private userIsEnteringText = false;
+
     getCurrentPageNumber() {
         return this.currentPageNumber;
     }
@@ -21,30 +23,44 @@
         return this.editingMode;
     }
 
-    toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
-        this.commentInput.toggleCommentInputPanel();
+    private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
+            $(".preloading-pages-spinner").show();
             const textId = this.getCurrentPageNumber();
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
             ajax.done((data: string) => {
                 const textReferenceId = data;
-                const id = 0;//creating comment
-                const parentComment = 0;//creating comment
+                const id = 0; //creating comment
+                const parentComment = 0; //creating comment
                 this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment);
+                const commentInputDialogEl = $(".comment-input-dialog");
+                commentInputDialogEl.on("click", ".comment-input-dialog-close-button",
+                    (event: JQueryEventObject) => {
+                        event.stopImmediatePropagation();
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                        this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
+                        commentInputDialogEl.off();
+                    });
+            });
+            ajax.fail(() => {
+                this.gui.showMessageDialog("Error", "Comment addition failed");
+            });
+            ajax.always(() => {
+                $(".preloading-pages-spinner").hide();
             });
         } else {
+            const commentInputDialogEl = $(".comment-input-dialog");
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);
+            commentInputDialogEl.dialog("close");
         }
     }
 
     processAreaSwitch = () => {
         var editorExistsInTab = false;
-
         $("#project-resource-preview").on("click",
             ".editor",
             (e: JQueryEventObject) => { //dynamically instantiating SimpleMDE editor on textarea
                 if (this.editingMode) {
-                    const thisClass = this;
                     let pageDiffers = false;
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
@@ -85,10 +101,10 @@
                                     this.saveContents(this.currentPageNumber, contentBeforeClose);
                                 });
                         } else if (contentBeforeClose === this.originalContent) {
-                            thisClass.simplemde.toTextArea();
-                            thisClass.simplemde = null;
-                            thisClass.addEditor(jEl);
-                            thisClass.originalContent = thisClass.simplemde.value();
+                            this.simplemde.toTextArea();
+                            this.simplemde = null;
+                            this.addEditor(jEl);
+                            this.originalContent = this.simplemde.value();
                         }
                     }
                 }
@@ -137,28 +153,26 @@
     }
 
     private saveContents(textId: number, contents: string) {
-        const plainText = this.util.loadPlainText(textId);
-        plainText.done((data: IPageText) => {
-            const id = data.id;
-            const versionNumber = data.versionNumber;
-            const request: IPageTextBase = {
-                id: id,
-                text: contents,
-                versionNumber: versionNumber//TODO
-            };
-            const saveAjax = this.util.savePlainText(textId, request);
-            saveAjax.done(() => {
-                console.log(textId); //TODO add logic
-                console.log(contents);
-                this.gui.successfullySavedContent();
-                this.originalContent = contents;
-            });
-            saveAjax.fail(() => {
-                this.gui.saveContentUnsuccessfull();
-            });
+        const pageEl = $(`*[data-page="${textId}"]`);
+        const compositionArea = pageEl.children(".composition-area");
+        const id = compositionArea.data("id");
+        const versionNumber = compositionArea.data("version-number");
+        const request: IPageTextBase = {
+            id: id,
+            text: contents,
+            versionNumber: versionNumber
+        };
+        const saveAjax = this.util.savePlainText(textId, request);
+        saveAjax.done(() => {
+            this.gui.showMessageDialog("Success!", "Your changes have been successfully saved.");
+            this.originalContent = contents;
         });
-        plainText.fail(() => {
-            this.gui.saveContentUnsuccessfull();
+        saveAjax.fail(() => {
+            if (saveAjax.status === 409) {
+                this.gui.showMessageDialog("Fail", "Failed to save your changes due to version conflict.");
+            } else {
+                this.gui.showMessageDialog("Fail", "There was an error while saving your changes.");
+            }
         });
     }
 
@@ -167,7 +181,6 @@
         const textAreaEl = $(editor).children("textarea");
         const textId = jEl.data("page") as number;
         this.currentPageNumber = textId;
-        var userIsEnteringText = false;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
@@ -177,8 +190,8 @@
                 "bold", "italic", "heading", "|", "quote", "preview", {
                     name: "comment",
                     action: ((editor) => {
-                        userIsEnteringText = !userIsEnteringText;
-                        this.toggleCommentFromEditor(editor, userIsEnteringText);
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                        this.toggleCommentFromEditor(editor, this.userIsEnteringText);
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
@@ -223,44 +236,81 @@
         if (this.editingMode) { // changing div to textarea here
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const page = $(child).children(".composition-area").children(".page");
-                const placeholderSpinner = $(child).children(".image-placeholder");
+                const compositionAreaEl = $(child).children(".composition-area");
+                const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const plainTextAjax = this.util.loadPlainText(pageNumber);
-                const viewerElement = $(page).children(".viewer");
-                viewerElement.remove();
-                this.createEditorAreaBody(page[0], plainTextAjax);
+                this.createEditorAreaBody(compositionAreaEl, plainTextAjax);
             });
         } else { // changing textarea to div here
             pageRow.each((index: number, child: Element) => {
                 const pageNumber = $(child).data("page") as number;
-                const page = $(child).children(".composition-area").children(".page");
-                const placeholderSpinner = $(child).children(".image-placeholder");
+                const compositionAreaEl = $(child).children(".composition-area");
+                const placeholderSpinner = $(child).find(".loading");
                 placeholderSpinner.show();
                 const renderedTextAjax = this.util.loadRenderedText(pageNumber);
-                const editorElement = $(page).children(".editor");
-                editorElement.remove();
-                this.createViewerAreaBody(page[0], renderedTextAjax);
+                this.createViewerAreaBody(compositionAreaEl, renderedTextAjax);
             });
         }
     }
 
-    private createEditorAreaBody(child: Element, ajax: JQueryXHR) {
+    private createEditorAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+        const child = compositionAreaEl.children(".page");
         ajax.done((data: IPageText) => {
-            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
+            const editorElement = child.children(".editor");
+            if (editorElement.length) {
+                editorElement.remove();
+            }
+            const viewerElement = child.children(".viewer");
+            viewerElement.remove();
+            const placeHolderSpinner = $(child).siblings(".loading");
             const plainText = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             const elm = `<div class="editor"><textarea class="textarea-plain-text">${plainText}</textarea></div>`;
-            $(child).append(elm);
+            if (this.editingMode) {
+                $(child).append(elm);
+            }
+            placeHolderSpinner.hide();
+        });
+        ajax.fail(() => {
+            const placeHolderSpinner = $(child).siblings(".loading");
+            if (this.editingMode) {
+                const elm =
+                    `<div class="editor"><textarea class="textarea-plain-text">Failed to load data from server</textarea></div>`;
+                $(child).append(elm);
+            }
             placeHolderSpinner.hide();
         });
     }
 
-    private createViewerAreaBody(child: Element, ajax: JQueryXHR) {
+    private createViewerAreaBody(compositionAreaEl: JQuery, ajax: JQueryXHR) {
+        const child = compositionAreaEl.children(".page");
         ajax.done((data: IPageText) => {
-            const placeHolderSpinner = $(child).parent(".composition-area").siblings(".image-placeholder");
+            const viewerElement = child.children(".viewer");
+            if (viewerElement.length) {
+                viewerElement.remove();
+            }
+            const editorElement = child.children(".editor");
+            editorElement.remove();
+            const placeHolderSpinner = $(child).siblings(".loading");
             const renderedText = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
             const elm = `<div class="viewer">${renderedText}</div>`;
-            $(child).append(elm);
+            if (!this.editingMode) {
+                $(child).append(elm);
+            }
+            placeHolderSpinner.hide();
+        });
+        ajax.fail(() => {
+            const placeHolderSpinner = $(child).siblings(".loading");
+            if (!this.editingMode) {
+                const elm = `<div class="viewer">Failed to load data from server</div>`;
+                $(child).append(elm);
+            }
             placeHolderSpinner.hide();
         });
     }

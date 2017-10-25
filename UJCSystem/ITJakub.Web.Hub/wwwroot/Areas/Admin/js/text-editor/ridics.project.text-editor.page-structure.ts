@@ -3,12 +3,14 @@
     private readonly util: Util;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
+    private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor) {
+    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor, gui:TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;
         this.editor = editor;
+        this.gui = gui;
     }
 
     createPage(pageNumber: number) {
@@ -22,22 +24,13 @@
             if (!showPageNumber) {
                 invisibleClass = "invisible";
             }
-            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div>`;
-            elm += "<div class=\"col-xs-7 composition-area\">";
-            elm += `<div class="page">`;
-
+            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName}]</div><div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page">`;
             if (!isEditingMode) {
-                elm += "<div class=\"viewer\">";
-                elm += `<span class="rendered-text"></span>`;
-                elm += "</div>";
+                elm += `<div class="viewer"><span class="rendered-text"></span></div></div></div>`;
             }
             if (isEditingMode) {
-                elm += "<div class=\"editor\">";
-                elm += `<textarea class="plain-text"></textarea>`;
-                elm += "</div>";
+                elm += `<div class="editor"><textarea class="plain-text"></textarea></div></div></div>`;
             }
-            elm += "</div>";
-            elm += "</div>";
             const html = $.parseHTML(elm);
             $(pageEl).append(html);
             if (!isEditingMode) {
@@ -54,40 +47,50 @@
         }
     }
 
-    appendRenderedText(textId: number, showPageNumber: boolean) {
+    private appendRenderedText(textId: number, showPageNumber: boolean){
         const renderedText = this.util.loadRenderedText(textId);
         const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: IPageText) => {
-                const pageBody = data.text;
-                $(compositionAreaDiv).append(pageBody);
-                pageEl.css("min-height", "0");
-                var event = $.Event("pageConstructed", { page: textId });
-                compositionAreaDiv.trigger(event);
-                $(pageEl).children(".image-placeholder").hide();
+            const compositionAreaEl = pageEl.children(".composition-area");           
+            const pageBody = data.text;
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
+            $(compositionAreaDiv).append(pageBody);
+            pageEl.css("min-height", "0");
+            var event = $.Event("pageConstructed", { page: textId });
+            compositionAreaDiv.trigger(event);
         });
         renderedText.fail(() => {
-            $(compositionAreaDiv).text("Failed to load content");
+            const pageName = pageEl.data("page-name");
+            this.gui.showMessageDialog("Fail", `Failed to load page ${pageName}`);
+            $(compositionAreaDiv).text();
             pageEl.css("min-height", "0");
-            $(pageEl).children(".image-placeholder").hide();
         });
-
+        renderedText.always(() => {
+            $(pageEl).find(".loading").hide();
+        });
     }
 
-    appendPlainText(pageNumber: number) {
+    private appendPlainText(pageNumber: number){
         const plainText = this.util.loadPlainText(pageNumber);
         const pageEl = $(`*[data-page="${pageNumber}"]`);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: IPageText) => {
-                textAreaEl.val(data.text);
-                var event = $.Event("pageConstructed", { page: pageNumber });
-                textAreaEl.trigger(event);
-                $(pageEl).children(".image-placeholder").hide();
+            textAreaEl.val(data.text);
+            const compositionAreaEl = pageEl.children(".composition-area");
+            const id = data.id;
+            const versionNumber = data.versionNumber;
+            compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
+            var event = $.Event("pageConstructed", { page: pageNumber });
+            textAreaEl.trigger(event);
         });
         plainText.fail(() => {
             textAreaEl.val("Failed to load content.");
-            $(pageEl).children(".image-placeholder").hide();
         });
-
+        plainText.always(() => {
+            $(pageEl).find(".loading").hide();
+        });
     }
 }

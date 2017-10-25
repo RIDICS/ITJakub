@@ -65,13 +65,15 @@ class ProjectResourceDiscussionTab extends ProjectModuleTabBase {
 }
 
 class ProjectResourcePreviewTab extends ProjectModuleTabBase {
-    constructor(resourceId: number) {
+    private readonly projectId:number;
+    constructor(resourceId: number, projectId: number) {
         super();
+        this.projectId = projectId;
     }
 
     initTab() {
         $("#project-resource-preview").off();
         const main = new TextEditorMain();
-        main.init();
+        main.init(this.projectId);
     }
 }

@@ -5,99 +5,103 @@
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
+            dialogClass: "save-confirmation-dialog",
             close: () => { onCancel(); },
             title: "Do you want to leave without saving?",
             buttons: [
                 {
                     text: "Close without saving",
-                    click: function () {
+                    click: function() {
                         onClose();
                         $(this).dialog("close");
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button"
+                    class: "btn btn-default save-confirmation-dialog-button"
                 },
                 {
                     text: "Cancel",
-                    click: function () {
+                    click: function() {
                         $(this).dialog("close");
                         onCancel();
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button",
+                    class: "btn btn-default save-confirmation-dialog-button",
                     id: "dialog-cancel-button"
                 }, {
                     text: "Save",
-                    click: function () {
+                    click: function() {
                         onSave();
                         $(this).dialog("close");
                     },
-                    class: "btn btn-default save-confirmation-dialogue-button"
+                    class: "btn btn-default save-confirmation-dialog-button"
                 }
             ],
-            open: (event, ui) => {
+            open: (event) => {
                 $("#dialog-cancel-button").focus();
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
+                    .addClass("save-confirmation-dialog-close-button")
                     .html(
-                    "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
     }
 
-    successfullySavedContent() {
-        const dialogEl = $("#save-status-dialog");
+    showMessageDialog(title:string, message:string) {
+        const dialogEl = $("#status-dialog");
         dialogEl.dialog({
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
-            title: "Success!",
-            buttons: {
-                Ok: function () {
-                    $(this).dialog("close");
+            dialogClass: "status-dialog",
+            title: title,
+            buttons: [
+                {
+                    text: "OK",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default status-dialog-button"
                 }
-            },
-            open: (event, ui) => {
+            ],
+            open: (event) => {
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
+                    .addClass("status-dialog-close-button")
                     .html(
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
-        dialogEl.text("Your changes have been successfully saved.");
+        dialogEl.text(message);
     }
 
-    saveContentUnsuccessfull() {
-        const dialogEl = $("#save-status-dialog");
+    showCommentInputDialog() {
+        const dialogEl = $("#comment-input-dialog");
         dialogEl.dialog({
             resizable: false,
             height: "auto",
             width: 400,
             modal: true,
-            dialogClass: "save-confirmation-dialogue",
-            title: "Fail",
-            buttons: {
-                Ok: function () {
-                    $(this).dialog("close");
+            dialogClass: "comment-input-dialog",
+            title: "Your comment",
+            buttons: [
+                {
+                    text: "Send",
+                    class: "btn btn-default send-comment-button comment-input-dialog-button"
                 }
-            },
-            open: (event, ui) => {
+            ],
+            open: (event) => {
                 const targetElement = $(event.target);
                 targetElement.closest(".ui-dialog")
                     .find(".ui-dialog-titlebar-close")
                     .removeClass("ui-dialog-titlebar-close")
-                    .addClass("save-confirmation-dialogue-close-button")
+                    .addClass("comment-input-dialog-close-button")
                     .html(
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
-        dialogEl.text("There was an error while saving your changes.");
     }
 }

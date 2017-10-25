@@ -13,7 +13,7 @@
 declare var lazySizes: any;
 
 class TextEditorMain {
-    private numberOfPages: number;
+    private numberOfPages: number = 0;
     private showPageNumber = false;
 
     getNumberOfPages(): number {
@@ -24,17 +24,17 @@ class TextEditorMain {
         return this.showPageNumber;
     }
 
-    init() {
+    init(projectId:number) {
+        const gui = new TextEditorGui();
         const connections = new Connections();
         const util = new Util();
-        const commentArea = new CommentArea(util);
-        const commentInput = new CommentInput(commentArea, util);
-        const gui = new TextEditorGui();
+        const commentArea = new CommentArea(util, gui);
+        const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui);
-        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor);
+        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
         const lazyLoad = new PageLazyLoading(pageStructure);
-        const pageNavigation = new PageNavigation(this);
-        const projectAjax = util.getProjectContent(1);//TODO debug
+        const pageNavigation = new PageNavigation(this, gui);
+        const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.processAreaSwitch();
         connections.toggleConnections();
         projectAjax.done((data: ITextProjectPage[]) => {
@@ -44,9 +44,9 @@ class TextEditorMain {
                 $(".pages-start")
                     .append(
                         `<div class="row page-row lazyload" data-page="${data[i].id
-                        }" data-page-name="${data[i].parentPage.name}"><div class="image-placeholder loading"></div></div>`);
+                        }" data-page-name="${data[i].parentPage.name
+                        }"></div>`);
             }
-
             lazyLoad.lazyLoad();
             pageNavigation.init(data);
             this.attachEventShowPageCheckbox(pageNavigation);

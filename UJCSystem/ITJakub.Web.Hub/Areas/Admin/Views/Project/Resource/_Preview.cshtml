@@ -1,15 +1,21 @@
-﻿                <div class="toggle-mode-panel container-fluid text-center">
+﻿<div class="toggle-mode-panel container-fluid text-center">
     <button type="button" class="btn btn-default editing-mode-button">Toggle editing mode</button>
 </div>
 <div id="page-slider" class="text-editor-page-slider">
-    <div id="page-slider-handle" class="ui-slider-handle"><div class="slider-tooltip"><div class="slider-tooltip-text"></div></div>
-</div></div>
+    <div id="page-slider-handle" class="ui-slider-handle">
+        <div class="slider-tooltip">
+            <div class="slider-tooltip-text"></div>
+        </div>
+    </div>
+</div>
 <div class="row page-menu-row">
     <div class="col-xs-2">
         <div class="input-group">
             <input type="text" class="form-control go-to-page-field" placeholder="Go to page..." aria-label="Go to page...">
             <span class="input-group-btn">
-                <button class="btn btn-default go-to-page-button" type="button"><span class="glyphicon glyphicon-arrow-right"></span></button>
+                <button class="btn btn-default go-to-page-button" type="button">
+                    <span class="glyphicon glyphicon-arrow-right"></span>
+                </button>
             </span>
         </div>
     </div>
@@ -22,42 +28,19 @@
 </div>
 
 <div id="save-confirmation-dialog"></div>
-<div id="save-status-dialog"></div>
+<div id="status-dialog"></div>
+<div id="comment-input-dialog">
+    <div class="form-group">
+        <label for="commentInput">Comment:</label>
+        <textarea class="form-control textarea-no-resize" rows="7" cols="6" id="commentInput"></textarea>
+    </div>
+</div>
 
 <div class="editor-super-container">
-            <div class="editor-areas">
-                <div class="preloading-pages-spinner loading"></div>
-                <div class="pages-start">
-                    <!--Generated page structure is in this block-->
-                </div>
-
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel panel-default text-edit-panel navbar-fixed-bottom">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-11">
-                                        <h3 class="panel-title input-comment-panel-title">Add your name and commentary here:</h3>
-                                    </div>
-                                    <div class="col-xs-1">
-                                        <span class="btn btn-default pull-right close-form-input">
-                                            <i class="fa fa-lg fa-times" aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                </div>
-
-                            </div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="commentInput">Commentary:</label>
-                                    <textarea rows="5" cols="30" id="commentInput" class="form-control textarea-no-resize"></textarea>
-                                </div>
-                            </div>
-                            <div class="panel-footer clearfix text-center">
-                                <input type="button" id="commentFinish" value="Comment send" class="btn btn-default">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="editor-areas">
+        <div class="preloading-pages-spinner loading"></div>
+        <div class="pages-start container-fluid">
+            <!--Generated page structure is in this block-->
         </div>
+    </div>
+</div>

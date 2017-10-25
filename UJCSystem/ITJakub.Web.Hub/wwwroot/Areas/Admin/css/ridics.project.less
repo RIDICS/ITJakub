@@ -409,11 +409,10 @@ table {
 
 
 .editing-mode-button {
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .page-row {
-    margin: 10px 0 10px 0;
     position: relative;
     min-height: 150px;
 
@@ -470,7 +469,8 @@ table {
         }
 
         &-collapsed {
-            max-height: @comment-area-max-height;
+            //max-height: @comment-area-max-height;
+            min-height:170px;
             overflow-y: auto; /* Trigger vertical scroll    */
             overflow-x: hidden; /* Hide the horizontal scroll */
             &-even {
@@ -484,7 +484,12 @@ table {
     }
 
     .composition-area {
-
+        &-loading{
+            position:absolute;
+            top:25%;
+            left:40%;
+        }
+        
         .editor {
             width: 100%;
 
@@ -508,20 +513,8 @@ table {
     }
 }
 
-.text-edit-panel {
-    display: none;
-
-    #commentInput {
-        width: 100%;
-    }
-
-    .textarea-no-resize {
-        resize: none;
-    }
-
-    .input-comment-panel-title {
-        margin: 5px 0 5px 0;
-    }
+.textarea-no-resize {
+    resize: none;
 }
 
 .jqSimpleConnect {
@@ -541,55 +534,44 @@ padding-right: 15px;
     text-align: center;
     border-radius: 50%;
     background-color: @text-editor-sliderbar-hander-color;
-    outline:none;
-}
+    outline: none;
 
-.slider-tooltip1 {
-    margin: 22px -36px;
-    width:96px;
-    display: none;
-    background-color: @text-editor-sliderbar-color;
-    color: white;
-    white-space: nowrap;
-    line-height: 2em;
-    border-radius: 10%;
-}
+    & .slider-tooltip {
+        position: absolute;
+        top: 22px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        display: none;
+        background-color: @text-editor-sliderbar-color;
+        color: white;
+        white-space: nowrap;
+        line-height: 2em;
+        border-radius: 10%;
 
-.slider-tooltip {
-    position: absolute;
-    top: 22px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    display: none;
-    background-color: @text-editor-sliderbar-color;
-    color: white;
-    white-space: nowrap;
-    line-height: 2em;
-    border-radius: 10%;
-
-    &-text {
-        position: relative;
-        margin:0 5px;
+        &-text {
+            position: relative;
+            margin: 0 5px;
+        }
     }
 }
 
-.editor-areas {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    padding-top: 15px;
+.editor {
+    &-areas {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        height: 100%;
+        padding-top: 15px;
+    }
+    &-super-container {
+        height: 475px;
+        position: relative;
+    }
 }
-
 .pages-start{
     position: relative;
     max-height: 100%;
     overflow: auto;
-}
-
-.editor-super-container {
-    height: 470px;
-    position: relative;
 }
 
 .text-editor-page-slider{
@@ -608,14 +590,7 @@ padding-right: 15px;
     top:50%;
     left:50%;
     display:none;
-}
-
-.image-placeholder {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    z-index: 20;
-    min-height: 48px;
+    z-index:9999;
 }
 
 .invisible{
@@ -639,15 +614,24 @@ padding-right: 15px;
     display: none;
 }
 
-#save-status-dialog {
+#status-dialog {
     display: none;
 }
 
-.save-confirmation-dialogue {
+#comment-input-dialog{
+    display:none;
+}
+
+.save-confirmation-dialog, .status-dialog, .comment-input-dialog {
     .ui-dialog-titlebar {
         background-color: @confirmation-dialogue-color;
         color: white;
         font-family: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; //from ITjakubStyle
+    }
+
+    .ui-dialog-content {
+        margin: 5px;
+        font-size: 1.1em;
     }
 
     &-button {

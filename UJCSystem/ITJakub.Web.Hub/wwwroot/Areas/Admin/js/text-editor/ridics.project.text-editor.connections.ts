@@ -1,4 +1,4 @@
-﻿declare var jqSimpleConnect: any; //TODO add type definitions
+﻿declare var jqSimpleConnect: any;
 
 class Connections {
     private interval: number;
@@ -48,17 +48,17 @@ class Connections {
                     if (!this.checkIfOverFlowing(uniqueId)) {
                         this.drawConnections(uniqueId);
                         this.interval = setInterval(() => {
-                            if (this.checkIfOverFlowing(uniqueId)) {
-                                jqSimpleConnect.removeAll();
-                            } else {
-                                if ($(".jqSimpleConnect").length) {
-                                    jqSimpleConnect.repaintAll();
+                                if (this.checkIfOverFlowing(uniqueId)) {
+                                    jqSimpleConnect.removeAll();
                                 } else {
-                                    this.drawConnections(uniqueId);
-                                }
+                                    if ($(".jqSimpleConnect").length) {
+                                        jqSimpleConnect.repaintAll();
+                                    } else {
+                                        this.drawConnections(uniqueId);
+                                    }
 
-                            }
-                        },
+                                }
+                            },
                             25);
                     }
                 } else {

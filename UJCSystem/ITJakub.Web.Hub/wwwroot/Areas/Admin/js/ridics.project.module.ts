@@ -232,7 +232,7 @@ class ProjectResourceModule extends ProjectModuleBase {
             case ProjectModuleTabType.ResourceMetadata:
                 return new ProjectResourceMetadataTab(this.currentResourceId);
             case ProjectModuleTabType.ResourcePreview:
-                return new ProjectResourcePreviewTab(this.currentResourceId);
+                return new ProjectResourcePreviewTab(this.currentResourceId, this.projectId);
             case ProjectModuleTabType.ResourceDiscussion:
                 return new ProjectResourceDiscussionTab(this.currentResourceId);
             default:
