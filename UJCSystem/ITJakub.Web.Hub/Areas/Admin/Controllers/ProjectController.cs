@@ -565,7 +565,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     Text = "Red",
                     User = new UserContract
                     {
-                        Id = 2,
+                        Id = 3,
                         AvatarUrl = "http://via.placeholder.com/48x48",
                         FirstName = "John",
                         LastName = "Snow",
@@ -573,7 +573,24 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     },
                     TextComments = new List<GetTextCommentContract>()
                 };
-                var inter = new List<GetTextCommentContract> {comment2, comment3};
+                var comment4 = new GetTextCommentContract
+                {
+                    CreateTime = DateTime.Now,
+                    TextResourceId = 1L,
+                    Id = 4L,
+                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
+                    Text = "Stay strong",
+                    User = new UserContract
+                    {
+                        Id = 4,
+                        AvatarUrl = "http://via.placeholder.com/48x48",
+                        FirstName = "Ned",
+                        LastName = "Stark",
+                        UserName = "neds"
+                    },
+                    TextComments = new List<GetTextCommentContract>()
+                };
+                var inter = new List<GetTextCommentContract> {comment2, comment3, comment4};
                 var comment1 = new GetTextCommentContract
                 {
                     CreateTime = DateTime.Now,
