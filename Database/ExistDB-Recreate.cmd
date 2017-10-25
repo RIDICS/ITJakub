@@ -3,14 +3,16 @@
 set EXIST_URL=%1
 set SCRIPT_PATH=%2
 set COLLECTION_NAME=%3
+set USERNAME=%4
+set PASSWORD=%5
 
 if %1.==. set EXIST_URL=xmldb:exist://localhost:8080/exist/xmlrpc
 if %2.==. set SCRIPT_PATH="C:\Pool\itjakub\Database\ExistDB"
 if %3.==. set COLLECTION_NAME=jacob
+if %4.==. set USERNAME=admin
+if %5.==. set PASSWORD=admin
 
 set EXIST_HOME="C:\eXist-db"
-set USERNAME=admin
-set PASSWORD=admin
 
 
 echo Recreating eXist-db for collection %COLLECTION_NAME% on %EXIST_URL%

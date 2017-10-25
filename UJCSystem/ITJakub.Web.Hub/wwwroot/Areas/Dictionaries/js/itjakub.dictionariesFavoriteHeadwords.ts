@@ -159,7 +159,7 @@
         var entryXmlId = $(element).data("entryXmlId");
         var bookId = $(element).data("bookId");
 
-        $(element).fadeOut(() => {
+        $(element).fadeOut(null, () => {
             $(element).remove();
             this.updateVisibleHeight();
         });
