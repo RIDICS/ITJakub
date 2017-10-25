@@ -25,16 +25,6 @@ namespace ITJakub.ITJakubService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server=localhost;Database=ITJakubDB;User Id=admin;Password=***REMOVED***;")]
-        public string DefaultConnectionString {
-            get {
-                return ((string)(this["DefaultConnectionString"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:/ITJLocalStorage")]
         public string FileStorageRootFolder {
             get {
