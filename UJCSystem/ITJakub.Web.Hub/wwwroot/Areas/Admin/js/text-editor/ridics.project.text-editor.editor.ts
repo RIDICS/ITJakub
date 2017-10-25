@@ -1,22 +1,24 @@
 ﻿class Editor {
-    private currentPageNumber = 0; //default initialisation
+    private currentTextId = 0; //default initialisation
     private editingMode = false;
     private originalContent = "";
     private simplemde: SimpleMDE;
     private readonly commentInput: CommentInput;
     private readonly util: Util;
     private readonly gui: TextEditorGui;
+    private readonly commentArea: CommentArea;
 
-    constructor(commentInput: CommentInput, util: Util, gui: TextEditorGui) {
+    constructor(commentInput: CommentInput, util: Util, gui: TextEditorGui, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.gui = gui;
+        this.commentArea = commentArea;
     }
 
     private userIsEnteringText = false;
 
-    getCurrentPageNumber() {
-        return this.currentPageNumber;
+    getCurrentTextId() {
+        return this.currentTextId;
     }
 
     getIsEditingMode() {
@@ -26,7 +28,7 @@
     private toggleCommentFromEditor = (editor: SimpleMDE, userIsEnteringText: boolean) => {
         if (userIsEnteringText) {
             $(".preloading-pages-spinner").show();
-            const textId = this.getCurrentPageNumber();
+            const textId = this.getCurrentTextId();
             const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
             ajax.done((data: string) => {
                 const textReferenceId = data;
@@ -65,7 +67,7 @@
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
                     const pageNumber = jEl.data("page") as number;
-                    if (pageNumber !== this.currentPageNumber) {
+                    if (pageNumber !== this.currentTextId) {
                         pageDiffers = true;
                     }
                     const editorEl = $(".CodeMirror");
@@ -89,6 +91,8 @@
                             this.gui.createConfirmationDialog(() => {
                                     this.simplemde.toTextArea();
                                     this.simplemde = null;
+                                    this.commentArea.updateCompositionAreaHeight($(`*[data-page="${this.currentTextId}"]`));
+                                    this.commentArea.toggleAreaSizeIconHide(this.currentTextId);
                                     this.addEditor(jEl);
                                     this.originalContent = this.simplemde.value();
                                 },
@@ -98,11 +102,13 @@
                                     this.simplemde.codemirror.focus();
                                 },
                                 () => {
-                                    this.saveContents(this.currentPageNumber, contentBeforeClose);
+                                    this.saveContents(this.currentTextId, contentBeforeClose);
                                 });
                         } else if (contentBeforeClose === this.originalContent) {
                             this.simplemde.toTextArea();
                             this.simplemde = null;
+                            this.commentArea.updateCompositionAreaHeight($(`*[data-page="${this.currentTextId}"]`));
+                            this.commentArea.toggleAreaSizeIconHide(this.currentTextId);
                             this.addEditor(jEl);
                             this.originalContent = this.simplemde.value();
                         }
@@ -137,7 +143,7 @@
                                 this.editingMode = !this.editingMode; //Switch back to editing mode on cancel
                             },
                             () => {
-                                this.saveContents(this.currentPageNumber, contentBeforeClose);
+                                this.saveContents(this.currentTextId, contentBeforeClose);
                                 thisClass.simplemde.toTextArea();
                                 thisClass.simplemde = null;
                                 thisClass.toggleDivAndTextarea();
@@ -180,7 +186,7 @@
         const editor = jEl.find(".editor");
         const textAreaEl = $(editor).children("textarea");
         const textId = jEl.data("page") as number;
-        this.currentPageNumber = textId;
+        this.currentTextId = textId;
         const simpleMdeOptions: SimpleMDE.Options = {
             element: textAreaEl[0],
             autoDownloadFontAwesome: false,
@@ -229,26 +235,32 @@
 
         this.simplemde.codemirror.addOverlay("comment");
         this.simplemde.codemirror.focus();
+        this.commentArea.updateCompositionAreaHeight(jEl);
+        this.commentArea.toggleAreaSizeIconHide(textId);
     }
 
     toggleDivAndTextarea = () => {
         var pageRow = $(".lazyloaded");
         if (this.editingMode) { // changing div to textarea here
             pageRow.each((index: number, child: Element) => {
-                const pageNumber = $(child).data("page") as number;
-                const compositionAreaEl = $(child).children(".composition-area");
-                const placeholderSpinner = $(child).find(".loading");
+                const pageEl = $(child);
+                const textId = pageEl.data("page") as number;
+                const compositionAreaEl = pageEl.children(".composition-area");
+                this.commentArea.updateCompositionAreaHeight(pageEl);
+                const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
-                const plainTextAjax = this.util.loadPlainText(pageNumber);
+                const plainTextAjax = this.util.loadPlainText(textId);
                 this.createEditorAreaBody(compositionAreaEl, plainTextAjax);
             });
         } else { // changing textarea to div here
             pageRow.each((index: number, child: Element) => {
-                const pageNumber = $(child).data("page") as number;
-                const compositionAreaEl = $(child).children(".composition-area");
-                const placeholderSpinner = $(child).find(".loading");
+                const pageEl = $(child);
+                const textId = pageEl.data("page") as number;
+                const compositionAreaEl = pageEl.children(".composition-area");
+                this.commentArea.updateCompositionAreaHeight(pageEl);
+                const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
-                const renderedTextAjax = this.util.loadRenderedText(pageNumber);
+                const renderedTextAjax = this.util.loadRenderedText(textId);
                 this.createViewerAreaBody(compositionAreaEl, renderedTextAjax);
             });
         }
