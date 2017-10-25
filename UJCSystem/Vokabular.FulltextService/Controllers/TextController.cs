@@ -12,7 +12,7 @@ namespace Vokabular.FulltextService.Controllers
     [Route("api/[controller]")]
     public class TextController : Controller
     {
-        private static readonly ILogger m_logger = ApplicationLogging.CreateLogger<TextController>();
+        private static readonly ILogger Logger = ApplicationLogging.CreateLogger<TextController>();
         private readonly TextResourceManager m_textResourceManager;
         private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
 

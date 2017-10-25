@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using ITJakub.FileProcessing.Core.Communication;
 using ITJakub.Shared.Contracts;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 {
@@ -23,10 +26,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         {
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
-                // TODO convert stream content from XML to TXT
-                client.CreateTextResource(resourceUploadContract);
+                string text;
+                using (var reader = new StreamReader(resourceUploadContract.DataStream))
+                {
+                    text = reader.ReadToEnd();
+                }
+
+                return client.CreateTextResource(text, 1);
             }
-            return String.Empty;
         }
 
         public void UploadTransformationResource(VersionResourceUploadContract resourceUploadContract)
@@ -41,8 +48,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 
         public void PublishSnapshot(long projectId, List<string> externalPageIds)
         {
-            // TODO is projectId required, is snapshotId required?
-            throw new NotImplementedException();
+            using (var client = m_communicationProvider.GetFulltextServiceClient())
+            {
+                StringBuilder builder = new StringBuilder();
+                foreach (var pageId in externalPageIds)
+                {
+                    var textResource = client.GetTextResource(pageId, TextFormatEnumContract.Raw);
+                    builder.Append(textResource.Text);
+                }
+                client.CreateSnapshot(projectId, builder.ToString());
+            }
         }
     }
 }

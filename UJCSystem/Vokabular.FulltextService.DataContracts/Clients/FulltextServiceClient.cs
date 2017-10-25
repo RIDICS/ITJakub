@@ -61,12 +61,14 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public void CreateTextResource(VersionResourceUploadContract resourceUploadContract)
+        public void CreateSnapshot(long projectId, string text)
         {
+            var snapshotResource = new SnapshotResource{ Text = text, ProjectId = projectId};
+
             try
             {
-               /* var result = Post<ResultContract>($"text", textResource);
-                return result.Id;*/
+                var result = Post<ResultContract>($"snapshot", snapshotResource);
+                
             }
             catch (HttpRequestException e)
             {

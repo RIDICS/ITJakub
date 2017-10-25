@@ -5,9 +5,9 @@ namespace Vokabular.FulltextService.Core.Managers
 {
     public class TextResourceManager
     {
-        private readonly CommunicationProvider m_communicationProvider;
         private const string Index = "module"; //TODO rename index and type
         private const string Type = "page";
+        private readonly CommunicationProvider m_communicationProvider;
 
         public TextResourceManager(CommunicationProvider communicationProvider)
         {
@@ -29,7 +29,7 @@ namespace Vokabular.FulltextService.Core.Managers
             {
                 return new ResultContract {Id = response.Id};
             }
-            return new ResultContract{Id = null};
+            return new ResultContract {Id = null};
         }
     }
 }
