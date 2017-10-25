@@ -461,6 +461,10 @@ table {
         .respond-to-comment {
             max-height: 22px;
             font-size: 11px;
+
+            &-textarea{
+                width:100%;
+            }
         }
 
         .replied-on {
@@ -469,7 +473,6 @@ table {
         }
 
         &-collapsed {
-            //max-height: @comment-area-max-height;
             min-height:170px;
             overflow-y: auto; /* Trigger vertical scroll    */
             overflow-x: hidden; /* Hide the horizontal scroll */
@@ -620,6 +623,10 @@ padding-right: 15px;
 
 #comment-input-dialog{
     display:none;
+}
+
+.highlighted-element {
+    background: rgba(0,255,255,0.4);
 }
 
 .save-confirmation-dialog, .status-dialog, .comment-input-dialog {
