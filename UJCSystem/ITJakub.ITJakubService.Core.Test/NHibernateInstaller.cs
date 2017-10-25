@@ -1,4 +1,6 @@
-﻿using Castle.Facilities.NHibernate;
+﻿using System;
+using System.Configuration;
+using Castle.Facilities.NHibernate;
 using Castle.Transactions;
 using ITJakub.DataEntities.Database.Daos;
 using NHibernate;
@@ -6,6 +8,8 @@ using NHibernate.Cfg;
 using NHibernate.Connection;
 using NHibernate.Dialect;
 using NHibernate.Driver;
+using Vokabular.Shared.Options;
+using Configuration = NHibernate.Cfg.Configuration;
 
 namespace ITJakub.ITJakubService.Core.Test
 {
@@ -40,7 +44,7 @@ namespace ITJakub.ITJakubService.Core.Test
                 var cfg = new Configuration()
                     .DataBaseIntegration(db =>
                     {
-                        db.ConnectionString = Properties.Settings.Default.DefaultConnectionString;
+                        db.ConnectionString = ConfigurationManager.AppSettings[SettingKeys.TestDbConnectionString] ?? throw new ArgumentException("Connection string not found");
                         db.Dialect<MsSql2008Dialect>();
                         db.Driver<SqlClientDriver>();
                         db.ConnectionProvider<DriverConnectionProvider>();

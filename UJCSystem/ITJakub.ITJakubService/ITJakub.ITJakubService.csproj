@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\build\MSBuild.Microsoft.VisualStudio.Web.targets.props" Condition="Exists('..\packages\MSBuild.Microsoft.VisualStudio.Web.targets.14.0.0.3\build\MSBuild.Microsoft.VisualStudio.Web.targets.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.ITJakubService</RootNamespace>
     <AssemblyName>ITJakub.ITJakubService</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
@@ -25,6 +25,8 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -88,6 +90,7 @@
       <HintPath>..\packages\NHibernate.4.1.0.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
@@ -95,7 +98,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
@@ -134,6 +136,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="..\..\..\itjakub-secrets\ITJakub.Secrets.config">
+      <Link>ITJakub.Secrets.config</Link>
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Properties\PublishProfiles\CENSEO.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2_Development.pubxml" />
     <None Include="Properties\PublishProfiles\CENSEO2.pubxml" />
@@ -147,6 +153,7 @@
     </None>
     <None Include="Web.Development.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -176,6 +183,10 @@
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36a4ca21-a99d-48d3-9dff-76878cf1de0c}</Project>
       <Name>ITJakub.DataEntities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj">
+      <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
+      <Name>Vokabular.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

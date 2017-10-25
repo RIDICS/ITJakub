@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -27,12 +26,15 @@ namespace Vokabular.MainService
                         .AddJsonFile("globalsettings.json");
                     var globalConfiguration = globalbuilder.Build();
 
+                    var secretSettingsPath = globalConfiguration["SecretSettingsPath"];
                     var environmentConfiguration = globalConfiguration["EnvironmentConfiguration"];
 
                     builder
                         //.SetBasePath(env.ContentRootPath)
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{environmentConfiguration}.json", optional: true)
+                        .AddJsonFile(Path.Combine(secretSettingsPath, "ITJakub.Secrets.json"), optional: true)
+                        .AddJsonFile(Path.Combine(secretSettingsPath, $"ITJakub.Secrets.{environmentConfiguration}.json"), optional: true)
                         .AddEnvironmentVariables();
 
                 })

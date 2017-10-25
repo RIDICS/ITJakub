@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Net;
 using System.Reflection;
@@ -6,16 +7,13 @@ using System.Security.Principal;
 using System.ServiceModel;
 using ITJakub.CardFile.Core.DataContractEntities;
 using log4net;
+using Vokabular.Shared.Options;
 
 namespace ITJakub.CardFile.Core
 {
-    public class CardFilesCommunicationManager:IDisposable
+    public class CardFilesCommunicationManager : IDisposable
     {
         private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-        //TODO move to conf
-        private const string UserName = "api";
-        private const string UserPassword = "***REMOVED***";
 
         private CardFilesServiceClient m_serviceClient;
 
@@ -31,7 +29,9 @@ namespace ITJakub.CardFile.Core
                 m_serviceClient.ClientCredentials.HttpDigest.ClientCredential = new NetworkCredential(UserName, UserPassword);
 
                 m_serviceClient.ClientCredentials.HttpDigest.AllowedImpersonationLevel = TokenImpersonationLevel.Impersonation;
-            }else {
+            }
+            else
+            {
                 const string message = "Service client credentials not initialized";
 
                 if (m_log.IsFatalEnabled)
@@ -41,6 +41,11 @@ namespace ITJakub.CardFile.Core
             }
         }
 
+        private string UserName => ConfigurationManager.AppSettings[SettingKeys.CardFilesUser] ??
+                                   throw new ArgumentException("Card files username not found");
+
+        private string UserPassword => ConfigurationManager.AppSettings[SettingKeys.CardFilesPassword] ??
+                                       throw new ArgumentException("Card files password not found");
 
         public files GetFiles()
         {
@@ -79,10 +84,10 @@ namespace ITJakub.CardFile.Core
         }
 
         ~CardFilesCommunicationManager() 
-    {
-        // Finalizer calls Dispose(false)
-        Dispose(false);
-    }
+        {
+            // Finalizer calls Dispose(false)
+            Dispose(false);
+        }
 
         protected virtual void Dispose(bool disposing)
         {

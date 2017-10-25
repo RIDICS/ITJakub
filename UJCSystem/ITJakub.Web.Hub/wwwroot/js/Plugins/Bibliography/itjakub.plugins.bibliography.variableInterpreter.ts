@@ -187,7 +187,8 @@ class VariableInterpreter {
             return "";
         }
         var value: string = "";
-        $.each(actualScopedObject, (index: number, item: Object) => {
+        var actualScopedObjectList = actualScopedObject as Array<Object>;
+        $.each(actualScopedObjectList, (index: number, item: Object) => {
             if (typeof item === 'undefined' || item === null) {
                 return true; //continue
             }
