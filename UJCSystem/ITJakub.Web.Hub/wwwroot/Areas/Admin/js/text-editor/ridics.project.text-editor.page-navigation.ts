@@ -31,12 +31,15 @@
         $(() => {
             var tooltip = $(".slider-tooltip");
             var tooltipText = tooltip.children(".slider-tooltip-text");
+            const thisClass = this;
             $("#page-slider").slider({
                 min: 0,
                 max: compositionPages.length - 1,
                 step: 1,
-                create: function() {
-                    tooltipText.text(`Page: ${compositionPages[$(this).slider("value")].parentPage.name}`);
+                create: function () {
+                    const pageName = compositionPages[$(this).slider("value")].parentPage.name;
+                    tooltipText.text(`Page: ${pageName}`);
+                    thisClass.updatePageIndicator(pageName);
                 },
                 slide(event, ui) {
                     tooltipText.text(`Page: ${compositionPages[ui.value].parentPage.name}`);
@@ -58,12 +61,17 @@
         $("#project-resource-preview").on("mouseleave", "#page-slider-handle", () => { tooltip.hide(); });
     }
 
-    private updateSlider(textId: number) {
+    private updatePageNames(textId: number) {
         const pageEl = $(`*[data-page="${textId}"]`);
-        const pageName = pageEl.data("page-name");
+        const pageName = pageEl.data("page-name") as string;
         const index = $(".page-row").index(pageEl);
         $("#page-slider").slider("option", "value", index);
         $(".slider-tooltip-text").text(`Page: ${pageName}`);
+        this.updatePageIndicator(pageName);
+    }
+
+    private updatePageIndicator(pageName: string) {
+        $(".page-indicator").text(pageName);
     }
 
     private refreshSwatch(loadingPages: number[], compositionPages: ITextProjectPage[]) {
@@ -83,7 +91,7 @@
             const pageNumber: number = $(page).data("page");
             if (typeof pageNumber !== "undefined" && pageNumber !== null && !this.skippingToPage) {
                 this.updateOnlySliderValue = true;
-                this.updateSlider(pageNumber);
+                this.updatePageNames(pageNumber);
                 this.updateOnlySliderValue = false;
             }
         }
@@ -188,7 +196,7 @@
         const scrollTo = compositionPagePosition - compositionPageContainerPosition + container.scrollTop();
         $(editorPageContainer).scrollTop(scrollTo);
         this.updateOnlySliderValue = true;
-        this.updateSlider(pageNumber);
+        this.updatePageNames(pageNumber);
         this.updateOnlySliderValue = false;
     }
 
