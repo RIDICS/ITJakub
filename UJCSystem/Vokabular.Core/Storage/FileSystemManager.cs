@@ -26,10 +26,10 @@ namespace Vokabular.Core.Storage
             }
         }
 
-        public Stream GetResource(string bookId, string bookVersionId, string fileName, ResourceType resourceType)
+        public Stream GetResource(long projectId, string bookVersionId, string fileName, ResourceType resourceType)
         {
             var pathResolver = GetPathResolver(resourceType);
-            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
+            var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, fileName);
             var fullPath = GetFullPath(relativePath);
             if (File.Exists(fullPath))
                 return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -40,7 +40,7 @@ namespace Vokabular.Core.Storage
             return Stream.Null;
         }
 
-        public void SaveResource(string bookId, string bookVersionId, FileResource resource)
+        public void SaveResource(long projectId, string bookVersionId, FileResource resource)
         {
             var pathResolver = GetPathResolver(resource.ResourceType);
 
@@ -51,7 +51,7 @@ namespace Vokabular.Core.Storage
                     m_log.WarnFormat(message);
                 return;
             }
-            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
+            var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, resource.FileName);
             var fullPath = GetFullPath(relativePath);
             CreateDirsIfNotExist(fullPath);
             using (var sourceStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))

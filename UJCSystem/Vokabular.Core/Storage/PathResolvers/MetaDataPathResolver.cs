@@ -10,9 +10,9 @@ namespace Vokabular.Core.Storage.PathResolvers
             return ResourceType.ConvertedMetadata;
         }
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, fileName);
+            return Path.Combine(projectId.ToString(), bookVersionExternalId, fileName);
         }
     } 
     
@@ -23,9 +23,9 @@ namespace Vokabular.Core.Storage.PathResolvers
             return ResourceType.UploadedMetadata;
         }
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, fileName);
+            return Path.Combine(projectId.ToString(), bookVersionExternalId, fileName);
         }
     }
 }

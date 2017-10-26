@@ -10,9 +10,9 @@ namespace Vokabular.Core.Storage.PathResolvers
             return ResourceType.Page;
         }
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, "Pages", fileName);
+            return Path.Combine(projectId.ToString(), bookVersionExternalId, "Pages", fileName);
         }
     }
 }

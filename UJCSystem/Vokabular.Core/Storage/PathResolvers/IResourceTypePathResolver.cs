@@ -6,6 +6,6 @@ namespace Vokabular.Core.Storage.PathResolvers
     {
         ResourceType ResolvingResourceType();
 
-        string ResolvePath(string bookId, string bookVersionId, string fileName);
+        string ResolvePath(long projectId, string bookVersionExternalId, string fileName);
     }
 }

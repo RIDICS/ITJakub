@@ -40,7 +40,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
 
-            var stream = m_fileSystemManager.GetResource(book.Guid, book.LastVersion.VersionId, recording.FileName, ResourceType.Audio);
+            var stream = m_fileSystemManager.GetResource(book.Id, book.LastVersion.VersionId, recording.FileName, ResourceType.Audio);
 
             return new FileDataContract
             {
@@ -66,7 +66,7 @@ namespace ITJakub.ITJakubService.Core
                 throw new ArgumentException(message);
             }
                 
-            var stream = m_fileSystemManager.GetResource(book.Guid, book.LastVersion.VersionId, recording.FileName, ResourceType.Audio);
+            var stream = m_fileSystemManager.GetResource(book.Id, book.LastVersion.VersionId, recording.FileName, ResourceType.Audio);
 
             return new AudioTrackContract
             {
