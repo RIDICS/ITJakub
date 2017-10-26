@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
-using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;

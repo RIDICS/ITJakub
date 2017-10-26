@@ -2,8 +2,8 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Clients;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.Shared.DataContracts.Types;

@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts
+namespace ITJakub.SearchService.DataContracts.Types
 {
     [DataContract]
     public enum OutputFormatEnumContract : short

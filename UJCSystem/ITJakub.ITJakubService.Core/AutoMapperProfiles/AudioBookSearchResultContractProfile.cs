@@ -1,7 +1,7 @@
 using System.Globalization;
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.Shared.Contracts.Searching.Results;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {

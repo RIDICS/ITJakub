@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;

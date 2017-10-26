@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using Vokabular.Shared.DataContracts.Search.Old;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace ITJakub.SearchService.DataContracts.Contracts.SearchResults
 {
     [DataContract]
     public class PageListContract

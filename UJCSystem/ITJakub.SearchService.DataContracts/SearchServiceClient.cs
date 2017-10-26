@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
+using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 
-namespace ITJakub.Shared.Contracts.Clients
+namespace ITJakub.SearchService.DataContracts
 {
     public class SearchServiceClient : ClientBase<ISearchService>, ISearchService
     {
-        private static readonly ILog m_log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILog m_log = LogManager.GetLogger(typeof(SearchServiceClient));
 
         public SearchServiceClient()
         {

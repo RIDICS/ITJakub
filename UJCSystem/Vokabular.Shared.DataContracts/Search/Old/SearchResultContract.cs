@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using Vokabular.Shared.DataContracts.Search.Corpus;
+using Vokabular.Shared.DataContracts.Search.Old.SearchDetail;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace Vokabular.Shared.DataContracts.Search.Old
 {
     [DataContract]
     [KnownType(typeof(AudioBookSearchResultContract))]
