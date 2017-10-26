@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts;
 using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
@@ -17,6 +18,12 @@ namespace ITJakub.SearchService.DataContracts
         private static readonly ILog m_log = LogManager.GetLogger(typeof(SearchServiceClient));
 
         public SearchServiceClient()
+        {
+            if (m_log.IsDebugEnabled)
+                m_log.DebugFormat("SearchServiceClient created.");
+        }
+
+        public SearchServiceClient(Binding binding, EndpointAddress remoteAddress) : base(binding, remoteAddress)
         {
             if (m_log.IsDebugEnabled)
                 m_log.DebugFormat("SearchServiceClient created.");

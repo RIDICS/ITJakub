@@ -13,10 +13,12 @@ using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -31,14 +33,21 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
         private readonly CategoryRepository m_categoryRepository;
+        private Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository)
+            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository, IFulltextStorage[] fulltextStorages)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
+            m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
             m_categoryRepository = categoryRepository;
+        }
+
+        private IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Research)
+        {
+            return m_fulltextStorages[projectType];
         }
 
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
@@ -590,12 +599,14 @@ namespace Vokabular.MainService.Core.Managers
             return imageResourceList.Count > 0;
         }
 
-        public string GetPageText(long resourcePageId)
+        public string GetPageText(long resourcePageId, TextFormatEnumContract format)
         {
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
+            var textResource = textResourceList.First();
+            var fulltextStorage = GetFulltextStorage();
 
-            // TODO get text from Fulltext Service
-            throw new NotImplementedException();
+            var result = fulltextStorage.GetPageText(textResource, format);
+            return result;
         }
 
         public Stream GetPageImage(long resourcePageId)

@@ -996,5 +996,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public string GetPageText(long pageId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/page/{pageId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

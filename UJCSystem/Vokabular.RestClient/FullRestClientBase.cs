@@ -20,6 +20,11 @@ namespace Vokabular.RestClient
             return GetAsync<T>(uriPath).GetAwaiter().GetResult();
         }
 
+        protected string GetString(string uriPath)
+        {
+            return GetStringAsync(uriPath).GetAwaiter().GetResult();
+        }
+
         protected Stream GetStream(string uriPath)
         {
             return GetStreamAsync(uriPath).GetAwaiter().GetResult();

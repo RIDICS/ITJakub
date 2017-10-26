@@ -7,6 +7,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
@@ -45,13 +46,11 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookPage(long? snapshotId, long pageId)
         {
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var text = client.GetBookPageByXmlId(bookId, pageXmlId, OutputFormatEnumContract.Html,
-            //        BookTypeEnumContract.Edition);
-            //    return Json(new {pageText = text}, GetJsonSerializerSettings());
-            //}
-            return NotFound();
+            using (var client = GetRestClient())
+            {
+                var text = client.GetPageText(pageId, TextFormatEnumContract.Html);
+                return Json(new { pageText = text }, GetJsonSerializerSettings());
+            }
         }
 
         public ActionResult GetBookImage(long? snapshotId, long pageId)

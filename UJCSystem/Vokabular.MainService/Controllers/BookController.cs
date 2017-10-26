@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -109,9 +110,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("page/{pageId}/text")]
-        public string GetPageText(long pageId)
+        public string GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
         {
-            var result = m_bookManager.GetPageText(pageId);
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetPageText(pageId, formatValue);
             return result;
         }
 

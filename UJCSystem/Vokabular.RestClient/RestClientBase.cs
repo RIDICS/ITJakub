@@ -120,6 +120,25 @@ namespace Vokabular.RestClient
             });
         }
 
+        protected Task<string> GetStringAsync(string uriPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request);
+
+                    ProcessResponseInternal(response);
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
         protected Task<Stream> GetStreamAsync(string uriPath)
         {
             return Task.Run(async () =>

@@ -1,4 +1,5 @@
 using ITJakub.FileProcessing.DataContracts;
+using ITJakub.SearchService.DataContracts;
 using Vokabular.FulltextService.DataContracts.Clients;
 
 namespace Vokabular.MainService.Core.Communication
@@ -9,6 +10,7 @@ namespace Vokabular.MainService.Core.Communication
 
         private const string FileProcessingServiceEndpointName = "FileProcessingService";
         private const string FulltextServiceEndpointName = "FulltextService";
+        private const string SearchServiceEndpointName = "SearchService";
         
         public CommunicationProvider(CommunicationConfigurationProvider communicationConfigurationProvider)
         {
@@ -27,6 +29,14 @@ namespace Vokabular.MainService.Core.Communication
         {
             var uri = m_configurationProvider.GetEndpointUri(FulltextServiceEndpointName);
             return new FulltextServiceClient(uri);
+        }
+
+        public SearchServiceClient GetSearchServiceClient()
+        {
+            var endpoint = m_configurationProvider.GetEndpointAddress(SearchServiceEndpointName);
+            var binding = m_configurationProvider.GetBasicHttpBinding();
+            var client = new SearchServiceClient(binding, endpoint);
+            return client;
         }
     }
 }
