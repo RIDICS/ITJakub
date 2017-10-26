@@ -538,77 +538,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             var parts = new List<CommentStructure>();
             using (var client = GetRestClient())
             {
-                //var result = client.GetCommentsForText(textId); TODO return when server returns actual data
-                var comment2 = new GetTextCommentContract////TODO remove from this line when server returns actual data
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 2L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Green",
-                    User = new UserContract
-                    {
-                        Id = 2,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "Arya",
-                        LastName = "Stark",
-                        UserName = "Arry"
-                    },
-                    TextComments = new List<GetTextCommentContract>()
-                };
-                var comment3 = new GetTextCommentContract
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 3L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Red",
-                    User = new UserContract
-                    {
-                        Id = 3,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "John",
-                        LastName = "Snow",
-                        UserName = "king"
-                    },
-                    TextComments = new List<GetTextCommentContract>()
-                };
-                var comment4 = new GetTextCommentContract
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 4L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Stay strong",
-                    User = new UserContract
-                    {
-                        Id = 4,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "Ned",
-                        LastName = "Stark",
-                        UserName = "neds"
-                    },
-                    TextComments = new List<GetTextCommentContract>()
-                };
-                var inter = new List<GetTextCommentContract> {comment2, comment3, comment4};
-                var comment1 = new GetTextCommentContract
-                {
-                    CreateTime = DateTime.Now,
-                    TextResourceId = 1L,
-                    Id = 1L,
-                    TextReferenceId = "dc3b9720-199c-4d79-93e5-ba94efb1f44a",
-                    Text = "Tea",
-                    User = new UserContract
-                    {
-                        Id = 1,
-                        AvatarUrl = "http://via.placeholder.com/48x48",
-                        FirstName = "John",
-                        LastName = "Arryn",
-                        UserName = "Johnny"
-                    },
-                    TextComments =inter
-                };
-                var result = new List<GetTextCommentContract> {comment1};//TODO remove to this line when server returns actual data
+                var result = client.GetCommentsForText(textId);
                 if (result.Count <= 0)
                 {
                     return Json(parts);
