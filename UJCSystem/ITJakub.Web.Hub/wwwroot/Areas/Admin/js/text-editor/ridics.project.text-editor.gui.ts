@@ -78,19 +78,21 @@
         dialogEl.text(message);
     }
 
-    showCommentInputDialog() {
+    showCommentInputDialog(onSave:Function, onClose: Function): JQuery {
         const dialogEl = $("#comment-input-dialog");
         dialogEl.dialog({
             resizable: false,
             height: "auto",
             width: 400,
+            close: () => { onClose(); },
             modal: true,
             dialogClass: "comment-input-dialog",
             title: "Your comment",
             buttons: [
                 {
                     text: "Send",
-                    class: "btn btn-default send-comment-button comment-input-dialog-button"
+                    class: "btn btn-default send-comment-button comment-input-dialog-button",
+                    click: () => { onSave(); }
                 }
             ],
             open: (event) => {
@@ -103,5 +105,6 @@
                         "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
             }
         });
+        return dialogEl;
     }
 }
