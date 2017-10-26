@@ -21,13 +21,10 @@
         textId: number,
         textReferenceId: string,
         id: number,
-        parentCommentId: number) {
+        parentCommentId: number,
+    dialogEl:JQuery) {
         var serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
-        const commentInputDialog = $(".comment-input-dialog");
-        commentInputDialog.on("click", ".send-comment-button",
-            (event: JQueryEventObject) => {
-                event.stopImmediatePropagation();
                 var commentText = commentTextArea.val() as string;
                 if (commentText === "") {
                     this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
@@ -45,17 +42,15 @@
                         }
                     );
                     sendAjax.done(() => {
-                        commentInputDialog.dialog("close");
+                        dialogEl.dialog("close");
                         this.gui.showMessageDialog("Success", "Successfully sent");
                         commentTextArea.val("");
                         this.commentArea.reloadCommentArea(textId);
-                        commentInputDialog.off();
                     });
                     sendAjax.fail(() => {
                         this.gui.showMessageDialog("Error", "Sending failed. Server error.");
                     });
                 }
-            });
     }
 
     processRespondToCommentClick() {
@@ -108,7 +103,6 @@
             const ajaxTextReferenceId = this.util.createTextRefereceId();
             ajaxTextReferenceId.done((data: string) => {
                 const textReferenceId = data;
-                this.gui.showCommentInputDialog();
                 if (addSigns) {
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %

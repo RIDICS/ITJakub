@@ -13,57 +13,27 @@
         this.gui = gui;
     }
 
-    createPage(pageNumber: number) {
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
-        if (pageEl.length) {
+    loadSection(targetEl: JQuery) {
+        if (targetEl.hasClass("composition-area")) {
             const isEditingMode = this.editor.getIsEditingMode();
-            const showPageNumber = this.main.getShowPageNumbers();
-            let elm = "";
-            const pageName = pageEl.data("page-name");
-            let invisibleClass = "";
-            if (!showPageNumber) {
-                invisibleClass = "invisible";
-            }
-            elm += `<div class="page-number text-center ${invisibleClass}">[${pageName
-                }]</div><div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page">`;
-            if (!isEditingMode) {
-                elm += `<div class="viewer"><span class="rendered-text"></span></div></div></div>`;
-            }
+            //TODO update comment area height
             if (isEditingMode) {
-                elm += `<div class="editor"><textarea class="plain-text"></textarea></div></div></div>`;
+                const ajax = this.appendPlainText(targetEl.parent(".page-row"));
             }
-            const html = $.parseHTML(elm);
-            $(pageEl).append(html);
             if (!isEditingMode) {
-                const ajax = this.appendRenderedText(pageNumber, showPageNumber);
-                const ajax2 = this.commentArea.asyncConstructCommentArea(pageNumber);
-                ajax.done(() => {
-                    ajax2.done(() => {
-                        this.commentArea.collapseIfCommentAreaIsTall(pageNumber,
-                            true,
-                            true);
-                    });
-                });
+                const ajax = this.appendRenderedText(targetEl.parent(".page-row"));
             }
-            if (isEditingMode) {
-                const ajax = this.appendPlainText(pageNumber);
-                const ajax2 = this.commentArea.asyncConstructCommentArea(pageNumber);
-                ajax.done(() => {
-                    ajax2.done(() => {
-                        this.commentArea.collapseIfCommentAreaIsTall(pageNumber,
-                            true,
-                            true);
-                    });
-                });
-            }
-        } else {
-            console.log("You are requesting to create a page for which element does not exist");
+        }
+
+        if (targetEl.hasClass("comment-area")) {
+            const ajax2 = this.commentArea.asyncConstructCommentArea(targetEl);
+            //TODO comment area height
         }
     }
 
-    private appendRenderedText(textId: number, showPageNumber: boolean): JQueryXHR {
+    private appendRenderedText(pageEl: JQuery): JQueryXHR {
+        const textId = pageEl.data("page") as number;
         const renderedText = this.util.loadRenderedText(textId);
-        const pageEl = $(`*[data-page="${textId}"]`);
         const compositionAreaDiv = pageEl.find(".rendered-text");
         renderedText.done((data: IPageText) => {
             const compositionAreaEl = pageEl.children(".composition-area");
@@ -88,9 +58,9 @@
         return renderedText;
     }
 
-    private appendPlainText(pageNumber: number): JQueryXHR {
-        const plainText = this.util.loadPlainText(pageNumber);
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
+    private appendPlainText(pageEl: JQuery): JQueryXHR {
+        const textId = pageEl.data("page") as number;
+        const plainText = this.util.loadPlainText(textId);
         const textAreaEl = $(pageEl.find(".plain-text"));
         plainText.done((data: IPageText) => {
             textAreaEl.val(data.text);
@@ -98,7 +68,7 @@
             const id = data.id;
             const versionNumber = data.versionNumber;
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            var event = $.Event("pageConstructed", { page: pageNumber });
+            var event = $.Event("pageConstructed", { page: textId });
             textAreaEl.trigger(event);
         });
         plainText.fail(() => {

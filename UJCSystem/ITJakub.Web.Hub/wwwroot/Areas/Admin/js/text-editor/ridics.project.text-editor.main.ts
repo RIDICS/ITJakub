@@ -32,7 +32,7 @@ class TextEditorMain {
         const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
-        const lazyLoad = new PageLazyLoading(pageStructure);
+        const lazyLoad = new PageLazyLoading(pageStructure, pageTextEditor);
         const pageNavigation = new PageNavigation(this, gui);
         const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.processAreaSwitch();
@@ -41,11 +41,16 @@ class TextEditorMain {
             const numberOfPages = data.length;
             this.numberOfPages = numberOfPages;
             for (let i = 0; i < numberOfPages; i++) {
+                var commentAreaClass = "";
+                if (i % 2 === 0) {
+                    commentAreaClass="comment-area-collapsed-even"; //style even and odd comment sections separately
+                } else {
+                    commentAreaClass="comment-area-collapsed-odd";
+                }
                 $(".pages-start")
                     .append(
-                        `<div class="row page-row lazyload" data-page="${data[i].id
-                        }" data-page-name="${data[i].parentPage.name
-                        }"></div>`);
+                    `<div class="row page-row" data-page="${data[i].id}" data-page-name="${data[i].parentPage.name}"><div class="page-number text-center invisible">[${data[i].parentPage.name
+                    }]</div><div class="col-xs-7 composition-area lazyload"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div><div class="col-xs-5 comment-area ${commentAreaClass} lazyload"></div></div>`);
             }
             lazyLoad.lazyLoad();
             pageNavigation.init(data);

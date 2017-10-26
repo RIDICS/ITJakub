@@ -1,17 +1,18 @@
 ﻿class PageLazyLoading {
     private readonly pageStructure: PageStructure;
+    private readonly editor: Editor;
 
-    constructor(pageStructure: PageStructure) {
+    constructor(pageStructure: PageStructure, editor: Editor) {
         this.pageStructure = pageStructure;
+        this.editor = editor;
     }
 
     lazyLoad() {
         this.initConfig();
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
-                var target = $(event.target);
-                var page = target.data("page");
-                this.pageStructure.createPage(page);
+                var targetEl = $(event.target);
+                this.pageStructure.loadSection(targetEl);
             });
     }
 
