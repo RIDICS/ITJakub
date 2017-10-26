@@ -4,7 +4,7 @@ using ITJakub.FileProcessing.Core.Data;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 
-namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
+namespace ITJakub.FileProcessing.Core.Sessions.Works.CreateProject
 {
     public class UpdateProjectSubtask
     {

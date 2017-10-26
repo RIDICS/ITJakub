@@ -21,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             SessionId = sessionId;
             m_resourceTypeResolverManager = resourceTypeResolverManager;
             InitializeSessionFolder(resourceRootFolder);
-            Resources = new List<Resource>();
+            Resources = new List<FileResource>();
             CreateTime = DateTime.UtcNow;
         }
 
@@ -31,7 +31,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public DateTime CreateTime { get; private set; }
 
-        public List<Resource> Resources { get; set; }
+        public List<FileResource> Resources { get; set; }
 
 
         private void InitializeSessionFolder(string rootFolder)
@@ -83,7 +83,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
                 dataStream.CopyTo(fs);
             }
 
-            var resource = new Resource
+            var resource = new FileResource
             {
                 FullPath = fullpath,
                 FileName = fileName,              
@@ -97,7 +97,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             return Path.Combine(SessionPath, fileName);
         }       
 
-        public void AddResourceAndFillResourceTypeByExtension(Resource resource)
+        public void AddResourceAndFillResourceTypeByExtension(FileResource resource)
         {
             ResourceType resourceType = m_resourceTypeResolverManager.Resolve(resource.FileName);
             resource.ResourceType = resourceType;
@@ -105,7 +105,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             Resources.Add(resource);
         }
 
-        public Resource GetResourceFromSession(ResourceType resourceType, string fileName)
+        public FileResource GetResourceFromSession(ResourceType resourceType, string fileName)
         {
             return Resources.FirstOrDefault(x => x.ResourceType == resourceType && x.FileName == fileName);
         }
@@ -117,7 +117,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
         public void SetSessionInfoValue(SessionInfo sessionInfo, object value)
         {
-            m_sessionInfos.Add(sessionInfo, value);
+            m_sessionInfos[sessionInfo] = value;
         }
 
         #region IDisposable implmentation

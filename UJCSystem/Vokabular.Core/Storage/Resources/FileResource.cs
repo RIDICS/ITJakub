@@ -2,7 +2,7 @@
 
 namespace Vokabular.Core.Storage.Resources
 {
-    public class Resource
+    public class FileResource
     {
         public string FullPath { get; set; }
 

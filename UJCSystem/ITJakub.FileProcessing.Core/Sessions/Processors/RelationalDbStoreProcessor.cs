@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
@@ -12,15 +11,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly CategoryRepository m_categoryRepository;
         private readonly ResourceRepository m_resourceRepository;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             ResourceRepository resourceRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
-            m_categoryRepository = categoryRepository;
             m_resourceRepository = resourceRepository;
         }
 
@@ -29,7 +26,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
-            // TODO determine if Snapshot should be created
             var projectId = saveNewBookDataWork.ProjectId;
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;

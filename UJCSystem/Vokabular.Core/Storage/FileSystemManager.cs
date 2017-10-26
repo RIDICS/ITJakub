@@ -40,7 +40,7 @@ namespace Vokabular.Core.Storage
             return Stream.Null;
         }
 
-        public void SaveResource(string bookId, string bookVersionId, Resource resource)
+        public void SaveResource(string bookId, string bookVersionId, FileResource resource)
         {
             var pathResolver = GetPathResolver(resource.ResourceType);
 

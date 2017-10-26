@@ -89,7 +89,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private VersionResourceUploadContract GetVersionResourceUploadContract(Resource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
+        private VersionResourceUploadContract GetVersionResourceUploadContract(FileResource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
         {
             return new VersionResourceUploadContract
             {

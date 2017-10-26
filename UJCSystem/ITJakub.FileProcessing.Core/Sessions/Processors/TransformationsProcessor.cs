@@ -35,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         }
 
-        private TransformationData GetTransformationObject(Resource resource)
+        private TransformationData GetTransformationObject(FileResource resource)
         {
             const string logFormat = "{0} processing instruction in XSLT document not found.";
             const string logValidValueFormat =

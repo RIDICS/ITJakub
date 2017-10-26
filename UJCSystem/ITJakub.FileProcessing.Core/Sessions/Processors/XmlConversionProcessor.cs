@@ -41,7 +41,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             }
 
-            var metaDataResource = new Resource
+            var metaDataResource = new FileResource
             {
                 FileName = metaDataFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, metaDataFileName),
