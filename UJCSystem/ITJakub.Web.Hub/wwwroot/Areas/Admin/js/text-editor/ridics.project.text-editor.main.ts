@@ -24,7 +24,7 @@ class TextEditorMain {
         return this.showPageNumber;
     }
 
-    init(projectId:number) {
+    init(projectId: number) {
         const gui = new TextEditorGui();
         const connections = new Connections();
         const util = new Util();
@@ -43,14 +43,17 @@ class TextEditorMain {
             for (let i = 0; i < numberOfPages; i++) {
                 var commentAreaClass = "";
                 if (i % 2 === 0) {
-                    commentAreaClass="comment-area-collapsed-even"; //style even and odd comment sections separately
+                    commentAreaClass = "comment-area-collapsed-even"; //style even and odd comment sections separately
                 } else {
-                    commentAreaClass="comment-area-collapsed-odd";
+                    commentAreaClass = "comment-area-collapsed-odd";
                 }
                 $(".pages-start")
                     .append(
-                    `<div class="row page-row" data-page="${data[i].id}" data-page-name="${data[i].parentPage.name}"><div class="page-number text-center invisible">[${data[i].parentPage.name
-                    }]</div><div class="col-xs-7 composition-area lazyload"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div><div class="col-xs-5 comment-area ${commentAreaClass} lazyload"></div></div>`);
+                        `<div class="row page-row lazyload" data-page="${data[i].id}" data-page-name="${
+                        data[i].parentPage.name}"><div class="page-number text-center invisible">[${data[i].parentPage
+                        .name
+                        }]</div><div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div><div class="col-xs-5 comment-area ${
+                        commentAreaClass}"></div></div>`); //TODO make readable
             }
             lazyLoad.lazyLoad();
             pageNavigation.init(data);

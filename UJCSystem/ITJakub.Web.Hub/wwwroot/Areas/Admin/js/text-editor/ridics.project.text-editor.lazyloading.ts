@@ -12,7 +12,11 @@
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
                 var targetEl = $(event.target);
-                this.pageStructure.loadSection(targetEl);
+                if (targetEl.hasClass("page-row")) {
+                    this.pageStructure.loadPage(targetEl);
+                } else {
+                    this.pageStructure.loadSection(targetEl);
+                }
             });
     }
 

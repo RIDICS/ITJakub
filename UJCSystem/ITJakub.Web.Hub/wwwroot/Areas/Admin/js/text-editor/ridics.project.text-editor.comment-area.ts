@@ -17,6 +17,7 @@
             return null;
         }
         const textId = commentAreaEl.parent(".page-row").data("page") as number;
+        const threadsContainerStart = `<div class="threads-container">`;
         const threadStart = `<ul class="media-list">`;
         const threadEnd = `</ul>`;
         const listStart = `<li class="media">`;
@@ -28,6 +29,7 @@
         const nestedCommentLeftPartStart = "<div class=\"media-left nested-comment\">";
         const nestedCommentBodyEnd = "</div>";
         const nestedCommentEnd = "</div>";
+        const threadsContainerEnd = "</div>";
         var nested: boolean = false;
         var commentTextId: number = 0;
         var textReferenceId: string = "";
@@ -41,6 +43,7 @@
         var orderOfNestedComment: number = 0;
         var numberOfComments = content.length;
         var areaContent: string = "";
+        areaContent += threadsContainerStart;
         for (let i = 0; i < numberOfComments; i++) {
             id = content[i].id;
             textReferenceId = content[i].textReferenceId;
@@ -108,6 +111,7 @@
                 console.log(`Something is wrong. Page numbers are not equal. ${commentTextId} ${textId}`);
             }
         }
+        areaContent += threadsContainerEnd;
         var html = $.parseHTML(areaContent);
         return html;
     }
@@ -176,11 +180,14 @@
 
     toggleAreaSizeIconHide(commentAreaContainer: JQuery) {
         const commentAreaContainerHeight = commentAreaContainer.height();
-        const commentsEl = commentAreaContainer.children(".media-list");
-        const commentsHeight = commentsEl.prop("scrollHeight");
+        const threadsEl = commentAreaContainer.children(".threads-container");
+        const commentsHeight = threadsEl.prop("scrollHeight");
         const ellipsisIconExpand = commentAreaContainer.find(".expand-icon");
         const ellipsisIconCollapse = commentAreaContainer.find(".collapse-icon");
-        if (commentsHeight <= commentAreaContainerHeight) {
+        console.log(commentAreaContainer.parent(".page-row").data("page-name"));
+        console.log(commentsHeight);
+        console.log(commentAreaContainerHeight);
+        if (commentsHeight <= commentAreaContainerHeight || typeof commentsHeight === "undefined") {
             ellipsisIconExpand.hide();
             ellipsisIconCollapse.hide();
         }
@@ -208,7 +215,7 @@
                 if (fileContent.length > 0) {
                     this.loadCommentFile(fileContent, commentAreaEl);
                 } else {
-                    commentAreaEl.text("No comments yet.");//TODO style
+                    commentAreaEl.text("No comments yet."); //TODO style
                 }
             });
         ajax.fail(() => {

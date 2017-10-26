@@ -16,18 +16,37 @@
     loadSection(targetEl: JQuery) {
         if (targetEl.hasClass("composition-area")) {
             const isEditingMode = this.editor.getIsEditingMode();
-            //TODO update comment area height
             if (isEditingMode) {
                 const ajax = this.appendPlainText(targetEl.parent(".page-row"));
+                ajax.done(() => {
+                    this.commentArea.collapseIfCommentAreaIsTall(targetEl.siblings(".comment-area"), true, true)
+                });
             }
             if (!isEditingMode) {
                 const ajax = this.appendRenderedText(targetEl.parent(".page-row"));
+                ajax.done(() => {
+                    this.commentArea.collapseIfCommentAreaIsTall(targetEl.siblings(".comment-area"), true, true)
+                });
             }
         }
 
         if (targetEl.hasClass("comment-area")) {
-            const ajax2 = this.commentArea.asyncConstructCommentArea(targetEl);
-            //TODO comment area height
+            this.commentArea.asyncConstructCommentArea(targetEl);
+        }
+    }
+
+    loadPage(pageEl: JQuery) {
+        const commentArea = pageEl.children(".comment-area");
+        const isEditingMode = this.editor.getIsEditingMode();
+        if (isEditingMode) {
+            const ajax = this.appendPlainText(pageEl);
+            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
+            $.when(ajax, ajax2).done(() => { this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true) });
+        }
+        if (!isEditingMode) {
+            const ajax = this.appendRenderedText(pageEl);
+            const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
+            $.when(ajax, ajax2).done(() => { this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true) });
         }
     }
 

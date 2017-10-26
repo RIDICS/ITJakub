@@ -34,13 +34,13 @@
                 const textReferenceId = data;
                 const id = 0; //creating comment
                 const parentComment = null; //creating comment
-                const dialog=this.gui.showCommentInputDialog(()=>
-                {
-                    this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, dialog);
-            }, ()=>{
-                    this.userIsEnteringText = !this.userIsEnteringText;
-                this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
-            });
+                const dialog = this.gui.showCommentInputDialog(() => {
+                        this.commentInput.processCommentSendClick(textId, textReferenceId, id, parentComment, dialog);
+                    },
+                    () => {
+                        this.userIsEnteringText = !this.userIsEnteringText;
+                        this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
+                    });
             });
             ajax.fail(() => {
                 this.gui.showMessageDialog("Error", "Comment addition failed");
@@ -90,7 +90,8 @@
                             this.gui.createConfirmationDialog(() => {
                                     this.simplemde.toTextArea();
                                     this.simplemde = null;
-                                    this.commentArea.updateCompositionAreaHeight($(`*[data-page="${this.currentTextId}"]`));
+                                    this.commentArea.updateCompositionAreaHeight(
+                                        $(`*[data-page="${this.currentTextId}"]`));
                                     this.commentArea.toggleAreaSizeIconHide(commentAreaEl);
                                     this.addEditor(jEl);
                                     this.originalContent = this.simplemde.value();
@@ -241,9 +242,11 @@
 
     toggleDivAndTextarea = () => {
         const pageRow = $(".page-row");
-        const lazyloadedCompositionEl = $(".composition-area");
-        if (lazyloadedCompositionEl.hasClass("lazyloaded"))
-        {
+        const lazyloadedCompositionEl = pageRow.children(".composition-area");
+        if (pageRow.hasClass("lazyloaded") && !lazyloadedCompositionEl.hasClass("lazyloaded")) {
+            lazyloadedCompositionEl.addClass("lazyload");
+        }
+        if (lazyloadedCompositionEl.hasClass("lazyloaded")) {
             lazyloadedCompositionEl.removeClass("lazyloaded");
             lazyloadedCompositionEl.addClass("lazyload");
         }
@@ -270,29 +273,29 @@
 
     createEditorAreaBody(compositionAreaEl: JQuery) {
         const child = compositionAreaEl.children(".page");
-            const editorElement = child.children(".editor");
-            if (editorElement.length) {
-                editorElement.remove();
-            }
-            const viewerElement = child.children(".viewer");
-            viewerElement.remove();
-            const elm = `<div class="editor"><textarea class="plain-text"></textarea></div>`;
-            if (this.editingMode) {
-                $(child).append(elm);
-            }
+        const editorElement = child.children(".editor");
+        if (editorElement.length) {
+            editorElement.remove();
+        }
+        const viewerElement = child.children(".viewer");
+        viewerElement.remove();
+        const elm = `<div class="editor"><textarea class="plain-text"></textarea></div>`;
+        if (this.editingMode) {
+            $(child).append(elm);
+        }
     }
 
     createViewerAreaBody(compositionAreaEl: JQuery) {
         const child = compositionAreaEl.children(".page");
-            const viewerElement = child.children(".viewer");
-            if (viewerElement.length) {
-                viewerElement.remove();
-            }
-            const editorElement = child.children(".editor");
-            editorElement.remove();
-            const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
-            if (!this.editingMode) {
-                $(child).append(elm);
-            }
+        const viewerElement = child.children(".viewer");
+        if (viewerElement.length) {
+            viewerElement.remove();
+        }
+        const editorElement = child.children(".editor");
+        editorElement.remove();
+        const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
+        if (!this.editingMode) {
+            $(child).append(elm);
+        }
     }
 }
