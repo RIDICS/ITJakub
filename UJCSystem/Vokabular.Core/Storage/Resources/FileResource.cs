@@ -9,5 +9,7 @@ namespace Vokabular.Core.Storage.Resources
         public string FileName { get; set; }
 
         public ResourceType ResourceType { get; set; }
+
+        public string NewNameInStorage { get; set; }
     }
 }

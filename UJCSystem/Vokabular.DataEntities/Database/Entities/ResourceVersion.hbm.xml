@@ -46,6 +46,7 @@
       <key column="ResourceVersionId" />
 
       <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
       <property name="MimeType" not-null="true" />
       <property name="Size" not-null="true" />
     </joined-subclass>
@@ -80,6 +81,7 @@
       
       <property name="Duration" not-null="false" />
       <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
       <property name="AudioType" not-null="true" />
       <property name="MimeType" not-null="true" />
     </joined-subclass>
@@ -121,6 +123,7 @@
 
       <property name="Name" not-null="true" />
       <property name="FileName" not-null="true" />
+      <property name="FileId" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="BookVersionResource" name="BookVersionResource" >

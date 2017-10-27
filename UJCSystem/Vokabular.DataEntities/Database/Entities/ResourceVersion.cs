@@ -83,6 +83,7 @@ namespace Vokabular.DataEntities.Database.Entities
     public class ImageResource : ResourceVersion
     {
         public virtual string FileName { get; set; }
+        public virtual string FileId { get; set; }
         public virtual string MimeType { get; set; }
         public virtual int Size { get; set; }
     }
@@ -91,6 +92,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual TimeSpan? Duration { get; set; }
         public virtual string FileName { get; set; }
+        public virtual string FileId { get; set; }
         public virtual AudioTypeEnum AudioType { get; set; }
         public virtual string MimeType { get; set; }
     }
@@ -124,6 +126,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string Name { get; set; }
         public virtual string FileName { get; set; }
+        public virtual string FileId { get; set; }
     }
 
     public class BookVersionResource : ResourceVersion

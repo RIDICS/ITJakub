@@ -22,7 +22,7 @@ namespace Vokabular.Core.Storage
             m_resourceTypePathResolvers = new Dictionary<ResourceType, IResourceTypePathResolver>();
             foreach (var pathResolver in resourceTypePathResolvers)
             {
-                m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
+                m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType, pathResolver);
             }
         }
 
@@ -51,8 +51,25 @@ namespace Vokabular.Core.Storage
                     m_log.WarnFormat(message);
                 return;
             }
-            var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, resource.FileName);
-            var fullPath = GetFullPath(relativePath);
+
+            string fullPath;
+            if (pathResolver.PreserveFileNameInStorage)
+            {
+                // Possible file overwrite, but file name must be preserved
+                var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, resource.FileName);
+                fullPath = GetFullPath(relativePath);
+            }
+            else
+            {
+                do
+                {
+                    var fileNameInStorage = Guid.NewGuid().ToString();
+                    var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, fileNameInStorage);
+                    fullPath = GetFullPath(relativePath);
+                    resource.NewNameInStorage = fileNameInStorage;
+                } while (File.Exists(fullPath));
+            }
+            
             CreateDirsIfNotExist(fullPath);
             using (var sourceStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {

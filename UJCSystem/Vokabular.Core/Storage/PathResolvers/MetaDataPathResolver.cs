@@ -5,10 +5,9 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public class ConvertedMetadataPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.ConvertedMetadata;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.ConvertedMetadata;
+
+        public bool PreserveFileNameInStorage => true;
 
         public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
@@ -18,10 +17,9 @@ namespace Vokabular.Core.Storage.PathResolvers
     
     public class UploadedMetaDataPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.UploadedMetadata;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.UploadedMetadata;
+
+        public bool PreserveFileNameInStorage => true;
 
         public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {

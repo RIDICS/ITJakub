@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
 using Vokabular.DataEntities.Database.Repositories;
@@ -23,6 +26,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+            bookData.FileNameMapping = new Dictionary<string, string>();
+            foreach (var fileResource in resourceDirector.Resources.Where(x => x.NewNameInStorage != null))
+            {
+                bookData.FileNameMapping.Add(fileResource.FileName, fileResource.NewNameInStorage);
+            }
+
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
@@ -30,7 +40,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
             var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
-            var bookData = saveNewBookDataWork.BookData;
 
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message);
             createNewSnapshot.Execute();

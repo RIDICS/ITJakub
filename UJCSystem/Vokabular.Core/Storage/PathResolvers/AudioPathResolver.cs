@@ -5,10 +5,9 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public class AudioPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.Audio;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.Audio;
+
+        public bool PreserveFileNameInStorage => false;
 
         public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {

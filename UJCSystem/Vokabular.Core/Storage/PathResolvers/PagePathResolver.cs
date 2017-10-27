@@ -5,10 +5,9 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public class PagePathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.Page;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.Page;
+
+        public bool PreserveFileNameInStorage => true;
 
         public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {

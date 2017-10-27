@@ -112,6 +112,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 if (!string.IsNullOrEmpty(page.Image))
                 {
                     var imageMimeType = MimeMapping.GetMimeMapping(page.Image);
+                    bookData.FileNameMapping.TryGetValue(page.Image, out var fileId);
                     var newImageResource = new ImageResource
                     {
                         Resource = null,
@@ -119,6 +120,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreateTime = now,
                         CreatedByUser = user,
                         FileName = page.Image,
+                        FileId = fileId,
                         MimeType = imageMimeType,
                         Size = 0,
                         ParentResource = dbPageResource.Resource,

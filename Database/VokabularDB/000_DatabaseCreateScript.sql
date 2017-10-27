@@ -212,6 +212,7 @@ BEGIN TRAN
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ImageResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [FileName] varchar(255) NOT NULL,
+	   [FileId] varchar(100) NULL,
 	   [MimeType] varchar(255) NOT NULL,
 	   [Size] bigint NOT NULL
 	)
@@ -221,6 +222,7 @@ BEGIN TRAN
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_AudioResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Duration] bigint NULL,
 	   [FileName] varchar(255) NOT NULL,
+	   [FileId] varchar(100) NULL,
 	   [AudioType] tinyint NOT NULL,
 	   [MimeType] varchar(255) NOT NULL
 	)
@@ -265,7 +267,8 @@ BEGIN TRAN
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_BinaryResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] nvarchar(255) NOT NULL,
-	   [FileName] varchar(255) NOT NULL
+	   [FileName] varchar(255) NOT NULL,
+	   [FileId] varchar(100) NULL
 	)
 
 	
