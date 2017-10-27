@@ -78,6 +78,8 @@ namespace Vokabular.Core.Storage
                     sourceStream.CopyTo(writeStream);
                 }
             }
+
+            resource.NewFileSize = new FileInfo(fullPath).Length;
         }
 
         private string GetFullPath(string relativePath)

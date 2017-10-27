@@ -6,6 +6,7 @@ using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook;
 using ITJakub.FileProcessing.Service.Test.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
@@ -302,10 +303,10 @@ namespace ITJakub.FileProcessing.Service.Test
                         Image = "image_40r.jpg"
                     }
                 },
-                FileNameMapping = new Dictionary<string, string>
+                FileNameMapping = new Dictionary<string, FileResource>
                 {
-                    {"image_39v.jpg", "guid-39v"},
-                    {"image_40r.jpg", "guid-40r"}
+                    {"image_39v.jpg", new FileResource{NewNameInStorage = "guid-39v"}},
+                    {"image_40r.jpg", new FileResource{NewNameInStorage = "guid-40r"}},
                 }
             };
 
@@ -642,10 +643,10 @@ namespace ITJakub.FileProcessing.Service.Test
                         }
                     }
                 },
-                FileNameMapping = new Dictionary<string, string>
+                FileNameMapping = new Dictionary<string, FileResource>
                 {
-                    {"file-1.mp3", "guid-1"},
-                    {"file-3.mp3", "guid-3"}
+                    {"file-1.mp3", new FileResource {NewNameInStorage = "guid-1"}},
+                    {"file-3.mp3", new FileResource {NewNameInStorage = "guid-3"}},
                 }
             };
 
@@ -695,10 +696,10 @@ namespace ITJakub.FileProcessing.Service.Test
                         FileName = "file-8.mp3"
                     }
                 },
-                FileNameMapping = new Dictionary<string, string>
+                FileNameMapping = new Dictionary<string, FileResource>
                 {
-                    {"file-2.mp3", "guid-2"},
-                    {"file-8.mp3", "guid-8"}
+                    {"file-2.mp3", new FileResource{NewNameInStorage = "guid-2"}},
+                    {"file-8.mp3", new FileResource{NewNameInStorage = "guid-8"}},
                 }
             };
 

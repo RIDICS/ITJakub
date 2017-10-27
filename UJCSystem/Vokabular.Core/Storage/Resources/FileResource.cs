@@ -11,5 +11,7 @@ namespace Vokabular.Core.Storage.Resources
         public ResourceType ResourceType { get; set; }
 
         public string NewNameInStorage { get; set; }
+
+        public long NewFileSize { get; set; } 
     }
 }

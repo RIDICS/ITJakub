@@ -85,7 +85,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string FileName { get; set; }
         public virtual string FileId { get; set; }
         public virtual string MimeType { get; set; }
-        public virtual int Size { get; set; }
+        public virtual long Size { get; set; }
     }
 
     public class AudioResource : ResourceVersion

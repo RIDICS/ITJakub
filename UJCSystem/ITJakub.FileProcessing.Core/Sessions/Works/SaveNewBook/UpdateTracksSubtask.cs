@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -102,7 +103,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                    dbTrack.Position != trackData.Position;
         }
 
-        private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, string comment, User user, DateTime now, Dictionary<string, string> fileNameMapping)
+        private void UpdateAudioResources(IList<TrackRecordingData> trackRecordings, Dictionary<long, List<AudioResource>> dbAudioGroups, TrackResource dbTrack, Project project, string comment, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
         {
             List<AudioResource> dbAudioResources;
             if (!dbAudioGroups.TryGetValue(dbTrack.Resource.Id, out dbAudioResources))
@@ -135,9 +136,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             }
         }
 
-        private void CreateAudioResource(Resource resource, Resource resourceTrack, int version, TrackRecordingData data, string comment, User user, DateTime now, Dictionary<string, string> fileNameMapping)
+        private void CreateAudioResource(Resource resource, Resource resourceTrack, int version, TrackRecordingData data, string comment, User user, DateTime now, Dictionary<string, FileResource> fileNameMapping)
         {
-            fileNameMapping.TryGetValue(data.FileName, out var fileId);
+            fileNameMapping.TryGetValue(data.FileName, out var fileInfo);
 
             var newDbAudio = new AudioResource
             {
@@ -146,7 +147,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 Duration = data.Length,
                 MimeType = data.MimeType,
                 FileName = data.FileName,
-                FileId = fileId,
+                FileId = fileInfo?.NewNameInStorage,
                 VersionNumber = version,
                 Comment = comment,
                 CreateTime = now,
