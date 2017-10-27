@@ -6,6 +6,7 @@ using System.Net;
 using AutoMapper;
 using Vokabular.Core.Data;
 using Vokabular.Core.Search;
+using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -32,15 +33,18 @@ namespace Vokabular.MainService.Core.Managers
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
+        private readonly FileSystemManager m_fileSystemManager;
         private readonly CategoryRepository m_categoryRepository;
-        private Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
+        private readonly Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository, IFulltextStorage[] fulltextStorages)
+            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
+            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
+            m_fileSystemManager = fileSystemManager;
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
             m_categoryRepository = categoryRepository;
         }
@@ -612,9 +616,10 @@ namespace Vokabular.MainService.Core.Managers
         public Stream GetPageImage(long resourcePageId)
         {
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
+            var imageResource = imageResourceList.First();
 
-            // TODO get image form File Storage
-            throw new NotImplementedException();
+            var imageStream = m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
+            return imageStream;
         }
 
         public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)

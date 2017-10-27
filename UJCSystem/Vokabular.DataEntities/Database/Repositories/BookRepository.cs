@@ -134,11 +134,14 @@ namespace Vokabular.DataEntities.Database.Repositories
         public virtual IList<ImageResource> GetPageImage(long resourcePageId)
         {
             Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
             Project projectAlias = null;
 
             return GetSession().QueryOver<ImageResource>()
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
-                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                //.JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Where(x => x.ParentResource.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.CreateTime).Desc
                 .List();
