@@ -407,190 +407,214 @@ table {
     }
 }
 
-
-.editing-mode-button {
-    margin-bottom: 4px;
-}
-
-.page-row {
-    position: relative;
-    min-height: 150px;
-
-    .comment-area {
-        min-height: @comment-area-min-height;
-        position: relative;
-
-        .comment-body {
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .id-in-comment-area {
-            font-weight: bolder;
-            font-size: 12px;
-        }
-
-        .thread-divider {
-            height: 1px;
-            background-color: @thread-divider-color;
-        }
-
-        .nested-comment-collapsed {
-            display: none;
-        }
-
-        .show-nested-comments {
-            cursor: pointer;
-        }
-
-        .collapse-icon {
-            display: none;
-        }
-
-        .ellipsis {
-            color: blue;
-            cursor: pointer;
-
-            &-container {
-                position: absolute;
-                top: 5px;
-                right: 5px;
-            }
-        }
-
-        .respond-to-comment {
-            max-height: 22px;
-            font-size: 11px;
-
-            &-textarea{
-                width:100%;
-            }
-        }
-
-        .replied-on {
-            font-size: 10px;
-            margin-bottom: 4px;
-        }
-
-        &-collapsed {
-            min-height:170px;
-            overflow-y: auto; /* Trigger vertical scroll    */
-            overflow-x: hidden; /* Hide the horizontal scroll */
-            &-even {
-                background-color: @even-comment-area-background-color;
-            }
-
-            &-odd {
-                background-color: @odd-comment-area-background-color;
-            }
-        }
-    }
-
-    .composition-area {
-        &-loading{
-            position:absolute;
-            top:25%;
-            left:40%;
-        }
-        
-        .editor {
-            width: 100%;
-
-            & textarea {
-                width: 100%;
-                min-height: 100px;
-            }
-        }
-
-        .cm-comment {
-            &-start {
-                background: @comment-start-color;
-                cursor: not-allowed;
-            }
-
-            &-end {
-                background: @comment-end-color;
-                cursor: not-allowed;
-            }
-        }
-    }
-}
-
-.textarea-no-resize {
-    resize: none;
-}
-
-.jqSimpleConnect {
-    opacity: 0.4;
-}
-
 #project-resource-preview { /*parent has overflow y auto, which might create vertical scrollbar, which takes space of usually 15px*/
-padding-right: 15px;
-}
+    padding-right: 15px;
 
-#page-slider-handle {
-    width: 1.5em;
-    height: 1.5em;
-    top: 50%;
-    border: none !important; /*to override default jquery border styling*/
-    margin-top: -.8em;
-    text-align: center;
-    border-radius: 50%;
-    background-color: @text-editor-sliderbar-hander-color;
-    outline: none;
-
-    & .slider-tooltip {
-        position: absolute;
-        top: 22px;
-        left: 50%;
-        transform: translate(-50%, 0);
-        display: none;
-        background-color: @text-editor-sliderbar-color;
-        color: white;
-        white-space: nowrap;
-        line-height: 2em;
-        border-radius: 10%;
-
-        &-text {
-            position: relative;
-            margin: 0 5px;
+    .toggle-mode-panel {
+        .editing-mode-button {
+            margin-bottom: 4px;
         }
     }
-}
 
-.editor {
-    &-areas {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        height: 100%;
-        padding-top: 15px;
+    .text-editor-page-slider {
+        background-color: @text-editor-sliderbar-color;
+        border: none !important; /*to override default jquery border styling*/
+        height: 4px;
+        margin: 10px 35px 40px 35px;
+
+        #page-slider-handle {
+            width: 1.5em;
+            height: 1.5em;
+            top: 50%;
+            border: none !important; /*to override default jquery border styling*/
+            margin-top: -.8em;
+            text-align: center;
+            border-radius: 50%;
+            background-color: @text-editor-sliderbar-hander-color;
+            outline: none;
+
+            & .slider-tooltip {
+                position: absolute;
+                top: 22px;
+                left: 50%;
+                transform: translate(-50%, 0);
+                display: none;
+                background-color: @text-editor-sliderbar-color;
+                color: white;
+                white-space: nowrap;
+                line-height: 2em;
+                border-radius: 10%;
+
+                &-text {
+                    position: relative;
+                    margin: 0 5px;
+                }
+            }
+        }
     }
-    &-super-container {
-        height: 475px;
-        position: relative;
+
+    .page-menu-row {
+        margin: 0 0 5px 0;
+
+        .page-indicator {
+            font-size: 1.2em;
+            color: @page-indicator-text-color;
+            font-weight: bold;
+        }
+
+        .go-to-page {
+            &-button {
+                background-color: #8E5523 !important; /*to override main styles without need to create copy of bootstrap styles*/
+                color: white !important;
+                border: none !important;
+            }
+
+            &-field {
+                border: none !important;
+                outline: none !important;
+            }
+        }
     }
-}
-.pages-start{
-    position: relative;
-    max-height: 100%;
-    overflow: auto;
-}
 
-.text-editor-page-slider{
-    background-color:@text-editor-sliderbar-color;
-    border:none !important;/*to override default jquery border styling*/
-    height:4px;
-    margin: 10px 35px 40px 35px;
-}
+    .editor {
+        &-areas {
+            position: absolute;
+            width: 100%;
+            top: 0;
+            height: 100%;
+            padding-top: 15px;
 
-.page-menu-row {
-    margin: 0 0 5px 0;
+            .pages-start {
+                position: relative;
+                max-height: 100%;
+                overflow: auto;
 
-    .page-indicator {
-        font-size: 1.2em;
-        color: @page-indicator-text-color;
-        font-weight:bold;
+                .page-row {
+                    position: relative;
+                    min-height: 150px;
+
+                    .highlighted-element {
+                        background: rgba(0,255,255,0.4);
+                    }
+
+                    .comment-area {
+                        min-height: @comment-area-min-height;
+                        position: relative;
+
+                        .comment-placeholder {
+                            &-container {
+                                text-align: center;
+                                margin-top: 15px;
+                            }
+
+                            &-text {
+                                font-weight: bold;
+                            }
+                        }
+
+                        .comment-body {
+                            font-size: 12px;
+                            margin-bottom: 4px;
+                        }
+
+                        .id-in-comment-area {
+                            font-weight: bolder;
+                            font-size: 12px;
+                            margin-bottom: 3px;
+                        }
+
+                        .thread-divider {
+                            height: 1px;
+                            background-color: @thread-divider-color;
+                        }
+
+                        .nested-comment-collapsed {
+                            display: none;
+                        }
+
+                        .show-nested-comments {
+                            cursor: pointer;
+                        }
+
+                        .collapse-icon {
+                            display: none;
+                        }
+
+                        .ellipsis {
+                            color: blue;
+                            cursor: pointer;
+
+                            &-container {
+                                position: absolute;
+                                top: 5px;
+                                right: 5px;
+                            }
+                        }
+
+                        .respond-to-comment {
+                            max-height: 22px;
+                            font-size: 11px;
+
+                            &-textarea {
+                                width: 100%;
+                            }
+                        }
+
+                        .replied-on {
+                            font-size: 10px;
+                            margin-bottom: 4px;
+                        }
+
+                        &-collapsed {
+                            min-height: 170px;
+                            overflow-y: auto; /* Trigger vertical scroll    */
+                            overflow-x: hidden; /* Hide the horizontal scroll */
+                            &-even {
+                                background-color: @even-comment-area-background-color;
+                            }
+
+                            &-odd {
+                                background-color: @odd-comment-area-background-color;
+                            }
+                        }
+                    }
+
+                    .composition-area {
+                        &-loading {
+                            position: absolute;
+                            top: 25%;
+                            left: 40%;
+                        }
+
+                        .editor {
+                            width: 100%;
+
+                            & textarea {
+                                width: 100%;
+                                min-height: 100px;
+                            }
+                        }
+
+                        .cm-comment {
+                            &-start {
+                                background: @comment-start-color;
+                                cursor: not-allowed;
+                            }
+
+                            &-end {
+                                background: @comment-end-color;
+                                cursor: not-allowed;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &-super-container {
+            height: 475px;
+            position: relative;
+        }
     }
 }
 
@@ -606,19 +630,6 @@ padding-right: 15px;
     visibility:hidden;
 }
 
-.go-to-page {
-    &-button {
-        background-color: #8E5523 !important; /*to override main styles without need to create copy of bootstrap styles*/
-        color: white !important;
-        border: none !important;
-    }
-
-    &-field {
-        border: none !important;
-        outline: none !important;
-    }
-}
-
 #save-confirmation-dialog {
     display: none;
 }
@@ -631,8 +642,12 @@ padding-right: 15px;
     display:none;
 }
 
-.highlighted-element {
-    background: rgba(0,255,255,0.4);
+.textarea-no-resize {
+    resize: none;
+}
+
+.jqSimpleConnect {
+    opacity: 0.4;
 }
 
 .save-confirmation-dialog, .status-dialog, .comment-input-dialog {
