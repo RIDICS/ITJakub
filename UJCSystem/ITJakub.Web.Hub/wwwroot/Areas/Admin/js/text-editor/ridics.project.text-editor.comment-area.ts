@@ -210,7 +210,7 @@
                 ellipsisIconExpand.show();
             }
         }
-        if (commentAreaContainerHeight > compositionAreaHeight ||
+        if (commentAreaContainerHeight >= compositionAreaHeight ||
             commentAreaContainerHeight === minimalCommentAreaHeight) {
             if (($(ellipsisIconCollapse).is(":visible") || !$(ellipsisIconExpand).is(":visible"))) {
                 ellipsisIconCollapse.show();
