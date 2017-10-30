@@ -17,16 +17,10 @@
         if (targetEl.hasClass("composition-area")) {
             const isEditingMode = this.editor.getIsEditingMode();
             if (isEditingMode) {
-                const ajax = this.appendPlainText(targetEl.parent(".page-row"));
-                ajax.done(() => {
-                    this.commentArea.collapseIfCommentAreaIsTall(targetEl.siblings(".comment-area"), true, true)
-                });
+                this.appendPlainText(targetEl.parent(".page-row"));
             }
             if (!isEditingMode) {
-                const ajax = this.appendRenderedText(targetEl.parent(".page-row"));
-                ajax.done(() => {
-                    this.commentArea.collapseIfCommentAreaIsTall(targetEl.siblings(".comment-area"), true, true)
-                });
+                this.appendRenderedText(targetEl.parent(".page-row"));
             }
         }
 
@@ -60,7 +54,7 @@
             const id = data.id;
             const versionNumber = data.versionNumber;
             compositionAreaEl.attr({ "data-id": id, "data-version-number": versionNumber });
-            $(compositionAreaDiv).append(pageBody);
+            compositionAreaDiv.append(pageBody);
             pageEl.css("min-height", "0");
             var event = $.Event("pageConstructed", { page: textId });
             compositionAreaDiv.trigger(event);
@@ -72,7 +66,7 @@
             pageEl.css("min-height", "0");
         });
         renderedText.always(() => {
-            $(pageEl).find(".loading").hide();
+            pageEl.find(".loading").hide();
         });
         return renderedText;
     }
@@ -94,7 +88,7 @@
             textAreaEl.val("Failed to load content.");
         });
         plainText.always(() => {
-            $(pageEl).find(".loading").hide();
+            pageEl.find(".loading").hide();
         });
         return plainText;
     }
