@@ -216,9 +216,6 @@
                 ellipsisIconCollapse.show();
             }
         }
-        console.log(commentsHeight);
-        console.log(commentAreaContainerHeight);
-        console.log(compositionAreaHeight);
     }
 
     /**
@@ -329,21 +326,30 @@
                     const container = target.parents(".comment-area");
                     const editorPageContainerEl = $(editorPageContainer);
                     if ($(container).hasClass("comment-area-collapsed")) {
-                        container.animate({
-                            scrollTop:
-                                $(parentComment).offset().top - container.offset().top + container.scrollTop()
-                        });
-                    } else {
-                        const scroll =
+                        const scrollToMainComment = $(parentComment).offset().top -
+                            container.offset().top +
+                            container.scrollTop();
+                        if (scrollToMainComment < container.scrollTop())
                         {
-                            scrollTop: $(parentComment).offset().top -
-                                editorPageContainerEl.offset().top +
-                                editorPageContainerEl.scrollTop()
-                        };
-                        $(`${editorPageContainer}`).animate(scroll);
+                            container.animate({
+                                scrollTop: scrollToMainComment
+
+                            });
+                        }
+                    } else {
+                        const scrollToMainCommentWhileExpanded = $(parentComment).offset().top -
+                            editorPageContainerEl.offset().top +
+                            editorPageContainerEl.scrollTop();
+                        if (scrollToMainCommentWhileExpanded < $(editorPageContainer).scrollTop()) {
+                            const scroll =
+                            {
+                                scrollTop: scrollToMainCommentWhileExpanded
+                            };
+                            $(editorPageContainer).animate(scroll);
+                        }
                     }
                 }
-                this.toggleAreaSizeIconHide(commentArea);
+                this.toggleAreaSizeIconHide(commentArea);//TODO undefined
             });
     }
 
