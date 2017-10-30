@@ -122,7 +122,7 @@
 
 function listGrammarBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
             onClickHref(context.event, getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
@@ -133,7 +133,7 @@ function listGrammarBookReadClicked(target) {
 
 function searchGrammarBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         onClickHref(context.event, getBaseUrl() + "OldGrammar/OldGrammar/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
@@ -139,7 +140,7 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task<Stream> GetStreamAsync(string uriPath)
+        protected Task<FileResultData> GetStreamAsync(string uriPath)
         {
             return Task.Run(async () =>
             {
@@ -149,7 +150,14 @@ namespace Vokabular.RestClient
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
-                    return await response.Content.ReadAsStreamAsync();
+                    var contentType = response.Content.Headers.ContentType;
+                    var resultStream = await response.Content.ReadAsStreamAsync();
+
+                    return new FileResultData
+                    {
+                        MimeType = contentType.MediaType,
+                        Stream = resultStream,
+                    };
                 }
                 catch (TaskCanceledException e)
                 {

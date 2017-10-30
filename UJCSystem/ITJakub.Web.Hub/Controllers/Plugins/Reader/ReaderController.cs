@@ -55,12 +55,11 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
 
         public ActionResult GetBookImage(long? snapshotId, long pageId)
         {
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var imageDataStream = client.GetBookPageImage(bookId, position);
-            //    return new FileStreamResult(imageDataStream, "image/jpeg"); //TODO resolve content type properly
-            //}
-            return NotFound();
+            using (var client = GetRestClient())
+            {
+                var imageData = client.GetPageImage(pageId);
+                return new FileStreamResult(imageData.Stream, imageData.MimeType);
+            }
         }
 
         public ActionResult GetTermsOnPage(string bookId, string pageXmlId)

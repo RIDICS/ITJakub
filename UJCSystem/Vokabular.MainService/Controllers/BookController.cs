@@ -125,10 +125,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("page/{pageId}/image")]
-        public Stream GetPageImage(long pageId)
+        public IActionResult GetPageImage(long pageId)
         {
             var result = m_bookManager.GetPageImage(pageId);
-            return result;
+            return File(result.Stream, result.MimeType);
         }
     }
 }

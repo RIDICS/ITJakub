@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
@@ -25,7 +26,7 @@ namespace Vokabular.RestClient
             return GetStringAsync(uriPath).GetAwaiter().GetResult();
         }
 
-        protected Stream GetStream(string uriPath)
+        protected FileResultData GetStream(string uriPath)
         {
             return GetStreamAsync(uriPath).GetAwaiter().GetResult();
         }

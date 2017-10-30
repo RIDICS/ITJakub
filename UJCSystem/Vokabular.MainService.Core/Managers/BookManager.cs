@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using AutoMapper;
@@ -20,7 +19,9 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient.Errors;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
@@ -613,13 +614,17 @@ namespace Vokabular.MainService.Core.Managers
             return result;
         }
 
-        public Stream GetPageImage(long resourcePageId)
+        public FileResultData GetPageImage(long resourcePageId)
         {
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
             var imageResource = imageResourceList.First();
 
             var imageStream = m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
-            return imageStream;
+            return new FileResultData
+            {
+                MimeType = imageResource.MimeType,
+                Stream = imageStream,
+            };
         }
 
         public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)

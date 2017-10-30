@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using Vokabular.RestClient.Headers;
 
-namespace Vokabular.RestClient
+namespace Vokabular.RestClient.Results
 {
     public class GetResult<T>
     {

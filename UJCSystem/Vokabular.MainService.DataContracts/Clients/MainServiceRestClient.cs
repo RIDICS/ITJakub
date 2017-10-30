@@ -11,6 +11,7 @@ using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
@@ -1002,6 +1003,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = GetString($"book/page/{pageId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetPageImage(long pageId)
+        {
+            try
+            {
+                var result = GetStream($"book/page/{pageId}/image");
                 return result;
             }
             catch (HttpRequestException e)
