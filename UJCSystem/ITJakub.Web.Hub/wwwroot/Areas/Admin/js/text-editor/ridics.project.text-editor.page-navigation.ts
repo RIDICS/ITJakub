@@ -84,12 +84,10 @@
         const containerXPos = $(".pages-start").offset().left;
         const containerYPos = $(".pages-start").offset().top;
         const element = document.elementFromPoint(containerXPos, containerYPos);
-        const jqEl = $(element);
-        const page = jqEl.parents(".page-row");
-
-        if (page !== null && typeof page !== "undefined") {
-            const pageNumber: number = $(page).data("page");
-            if (typeof pageNumber !== "undefined" && pageNumber !== null && !this.skippingToPage) {
+        if (element !== null && typeof element !== "undefined") {
+            const pageNumberString = element.getAttribute("data-page");
+            if (typeof pageNumberString !== "undefined" && pageNumberString !== null && !this.skippingToPage) {
+                const pageNumber = parseInt(pageNumberString);
                 this.updateOnlySliderValue = true;
                 this.updatePageNames(pageNumber);
                 this.updateOnlySliderValue = false;
