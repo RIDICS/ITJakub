@@ -138,35 +138,13 @@ namespace ITJakub.Web.Hub.Areas.AudioBooks.Controllers
             }
         }
 
-        public FileResult DownloadAudioBookTrack(long bookId, int trackPosition, AudioTypeContract audioType)
+        public FileResult DownloadAudio(long audioId, AudioTypeContract audioType)
         {
-            var audioTrackContract = new DownloadAudioBookTrackContract
+            using (var client = GetRestClient())
             {
-                BookId = bookId,
-                RequestedAudioType = audioType,
-                TrackPosition = trackPosition
-            };
-
-            using (var client = GetStreamingClient())
-            {
-                var audioTrack = client.DownloadAudioBookTrack(audioTrackContract);
-                var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
-                return result;
-            }
-        }
-
-        public FileResult DownloadAudioBook(long bookId, AudioTypeContract audioType)
-        {
-            var audioTrackContract = new DownloadWholeBookContract
-            {
-                BookId = bookId,
-                RequestedAudioType = audioType
-            };
-            using (var client = GetStreamingClient())
-            {
-                var audioTrack = client.DownloadWholeAudiobook(audioTrackContract);
-                var result = new FileStreamResult(audioTrack.FileData, audioTrack.MimeType) {FileDownloadName = audioTrack.FileName};
-                return result;
+                var fileData = client.GetAudio(audioId);
+                Response.ContentLength = fileData.FileSize;
+                return File(fileData.Stream, fileData.MimeType, fileData.FileName);
             }
         }
     }

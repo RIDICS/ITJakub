@@ -147,14 +147,19 @@ namespace Vokabular.RestClient
                 try
                 {
                     var request = CreateRequestMessage(HttpMethod.Get, uriPath);
-                    var response = await m_client.SendAsync(request);
+                    var response = await m_client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
 
                     ProcessResponseInternal(response);
-                    var contentType = response.Content.Headers.ContentType;
+                    var contentHeaders = response.Content.Headers;
+                    var contentType = contentHeaders.ContentType;
+                    var fileName = contentHeaders.ContentDisposition.FileName;
+                    var fileSize = contentHeaders.ContentLength;
                     var resultStream = await response.Content.ReadAsStreamAsync();
 
                     return new FileResultData
                     {
+                        FileName = fileName,
+                        FileSize = fileSize,
                         MimeType = contentType.MediaType,
                         Stream = resultStream,
                     };

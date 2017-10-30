@@ -147,6 +147,20 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual T GetPublishedResourceVersion<T>(long resourceId) where T : ResourceVersion
+        {
+            Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<T>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Resource.Id == resourceId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .SingleOrDefault();
+        }
+
         public virtual IList<string> GetHeadwordAutocomplete(string queryString, BookTypeEnum? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds, int count)
         {
             queryString = EscapeQuery(queryString);

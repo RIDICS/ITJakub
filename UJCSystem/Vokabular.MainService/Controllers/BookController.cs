@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -128,7 +127,16 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetPageImage(long pageId)
         {
             var result = m_bookManager.GetPageImage(pageId);
-            return File(result.Stream, result.MimeType);
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
+        }
+
+        [HttpGet("audio/{audioId}")]
+        public IActionResult GetAudio(long audioId)
+        {
+            var result = m_bookManager.GetAudio(audioId);
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
         }
     }
 }

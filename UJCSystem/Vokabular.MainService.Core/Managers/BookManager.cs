@@ -19,7 +19,6 @@ using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Corpus;
@@ -622,8 +621,24 @@ namespace Vokabular.MainService.Core.Managers
             var imageStream = m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
             return new FileResultData
             {
+                FileName = imageResource.FileName,
                 MimeType = imageResource.MimeType,
                 Stream = imageStream,
+                FileSize = imageStream.Length,
+            };
+        }
+
+        public FileResultData GetAudio(long audioId)
+        {
+            var audioResource = m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceVersion<AudioResource>(audioId));
+            var fileStream = m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
+
+            return new FileResultData
+            {
+                FileName = audioResource.FileName,
+                MimeType = audioResource.MimeType,
+                Stream = fileStream,
+                FileSize = fileStream.Length,
             };
         }
 

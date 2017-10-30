@@ -6,5 +6,7 @@ namespace Vokabular.RestClient.Results
     {
         public Stream Stream { get; set; }
         public string MimeType { get; set; }
+        public string FileName { get; set; }
+        public long? FileSize { get; set; }
     }
 }

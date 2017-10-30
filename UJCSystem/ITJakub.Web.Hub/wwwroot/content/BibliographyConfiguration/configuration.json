@@ -482,7 +482,7 @@
         "$fullRecords": {
           "type": "array",
           "scope": "FullBookRecordings",
-          "pattern": "<a href='DownloadAudioBook?bookId={BookId}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
+          "pattern": "<a href='DownloadAudio?audioId={Id}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
           "printIfNullValue": false,
           "delimeter": " "
         },
@@ -532,13 +532,13 @@
         "$trackRecordings": {
           "type": "array",
           "scope": "Recordings",
-          "pattern": "<source src='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' type='{MimeType}'>",
+          "pattern": "<source src='DownloadAudio?audioId={Id}&audioType={AudioType}' type='{MimeType}'>",
           "delimeter": ""
         },
         "$trackRecordingsDownload": {
           "type": "array",
           "scope": "Recordings",
-          "pattern": "<a href='DownloadAudioBookTrack?bookId={BookId}&trackPosition={Position}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
+          "pattern": "<a href='DownloadAudio?audioId={Id}&audioType={AudioType}' class='audio-download-href'>{$translateAudioType}</a>",
           "delimeter": " "
         },
         "$translateAudioType": {

@@ -1029,5 +1029,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public FileResultData GetAudio(long resourceId)
+        {
+            try
+            {
+                var result = GetStream($"book/audio/{resourceId}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }
