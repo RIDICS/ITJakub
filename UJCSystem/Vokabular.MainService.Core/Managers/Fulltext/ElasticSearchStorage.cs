@@ -11,5 +11,10 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             throw new System.NotImplementedException();
         }
+
+        public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

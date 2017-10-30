@@ -7,5 +7,6 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
     {
         ProjectType ProjectType { get; }
         string GetPageText(TextResource textResource, TextFormatEnumContract format);
+        string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format);
     }
 }

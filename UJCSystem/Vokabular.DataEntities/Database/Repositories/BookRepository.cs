@@ -147,6 +147,27 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual HeadwordResource GetHeadwordResource(long resourceId, bool fetchHeadwordItems)
+        {
+            Snapshot snapshotAlias = null;
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var query = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.Resource.Id == resourceId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Fetch(x => x.BookVersion).Eager;
+
+            if (fetchHeadwordItems)
+            {
+                query = query.Fetch(x => x.HeadwordItems).Eager;
+            }
+                
+            return query.SingleOrDefault();
+        }
+
         public virtual T GetPublishedResourceVersion<T>(long resourceId) where T : ResourceVersion
         {
             Snapshot snapshotAlias = null;

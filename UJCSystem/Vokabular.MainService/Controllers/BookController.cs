@@ -131,12 +131,20 @@ namespace Vokabular.MainService.Controllers
             return File(result.Stream, result.MimeType, result.FileName);
         }
 
-        [HttpGet("audio/{audioId}")]
+        [HttpGet("audio/{audioId}/data")]
         public IActionResult GetAudio(long audioId)
         {
             var result = m_bookManager.GetAudio(audioId);
             Response.ContentLength = result.FileSize;
             return File(result.Stream, result.MimeType, result.FileName);
+        }
+
+        [HttpGet("headword/{headwordId}/text")]
+        public string GetHeadwordText(long headwordId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetHeadwordText(headwordId, formatValue);
+            return result;
         }
     }
 }

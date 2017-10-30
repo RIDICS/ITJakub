@@ -642,6 +642,15 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
+        public string GetHeadwordText(long headwordId, TextFormatEnumContract format)
+        {
+            var headwordResource = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordResource(headwordId, false));
+            var fulltextStorage = GetFulltextStorage();
+
+            var result = fulltextStorage.GetHeadwordText(headwordResource, format);
+            return result;
+        }
+
         public List<string> GetHeadwordAutocomplete(string query, BookTypeEnumContract? bookType, IList<int> selectedCategoryIds, IList<long> selectedProjectIds)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum?>(bookType);

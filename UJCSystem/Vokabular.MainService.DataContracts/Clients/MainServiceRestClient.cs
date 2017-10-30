@@ -1014,6 +1014,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public string GetHeadwordText(long headwordId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/headword/{headwordId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public FileResultData GetPageImage(long pageId)
         {
             try
@@ -1034,7 +1050,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = GetStream($"book/audio/{resourceId}");
+                var result = GetStream($"book/audio/{resourceId}/data");
                 return result;
             }
             catch (HttpRequestException e)

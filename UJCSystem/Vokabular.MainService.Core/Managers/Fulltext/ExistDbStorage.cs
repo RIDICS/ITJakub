@@ -43,5 +43,17 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 return result;
             }
         }
+
+        public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
+        {
+            var outputFormat = ConvertOutputTextFormat(format);
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var project = headwordResource.Resource.Project;
+                var bookVersion = headwordResource.BookVersion;
+                var result = ssc.GetDictionaryEntryByXmlId(project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, "dictionaryToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                return result;
+            }
+        }
     }
 }
