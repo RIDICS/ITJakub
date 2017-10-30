@@ -65,7 +65,6 @@
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
                     const pageNumber = jEl.data("page") as number;
-                    const commentAreaEl = jEl.children(".comment-area");
                     if (pageNumber !== this.currentTextId) {
                         pageDiffers = true;
                     }
@@ -90,9 +89,8 @@
                             this.gui.createConfirmationDialog(() => {
                                     this.simplemde.toTextArea();
                                     this.simplemde = null;
-                                    this.commentArea.updateCompositionAreaHeight(
+                                    this.commentArea.updateCommentAreaHeight(
                                         $(`*[data-page="${this.currentTextId}"]`));
-                                    this.commentArea.toggleAreaSizeIconHide(commentAreaEl);
                                     this.addEditor(jEl);
                                     this.originalContent = this.simplemde.value();
                                 },
@@ -107,8 +105,7 @@
                         } else if (contentBeforeClose === this.originalContent) {
                             this.simplemde.toTextArea();
                             this.simplemde = null;
-                            this.commentArea.updateCompositionAreaHeight($(`*[data-page="${this.currentTextId}"]`));
-                            this.commentArea.toggleAreaSizeIconHide(commentAreaEl);
+                            this.commentArea.updateCommentAreaHeight($(`*[data-page="${this.currentTextId}"]`));
                             this.addEditor(jEl);
                             this.originalContent = this.simplemde.value();
                         }
@@ -184,7 +181,6 @@
 
     private addEditor(jEl: JQuery) {
         const editor = jEl.find(".editor");
-        const commentAreaEl = jEl.children(".comment-area");
         const textAreaEl = $(editor).children("textarea");
         const textId = jEl.data("page") as number;
         this.currentTextId = textId;
@@ -236,8 +232,7 @@
 
         this.simplemde.codemirror.addOverlay("comment");
         this.simplemde.codemirror.focus();
-        this.commentArea.updateCompositionAreaHeight(jEl);
-        this.commentArea.toggleAreaSizeIconHide(commentAreaEl);
+        this.commentArea.updateCommentAreaHeight(jEl);
     }
 
     toggleDivAndTextarea = () => {
@@ -254,7 +249,7 @@
             pageRow.each((index: number, child: Element) => {
                 const pageEl = $(child);
                 const compositionAreaEl = pageEl.children(".composition-area");
-                this.commentArea.updateCompositionAreaHeight(pageEl);
+                this.commentArea.updateCommentAreaHeight(pageEl);
                 const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
                 this.createEditorAreaBody(compositionAreaEl);
@@ -263,7 +258,8 @@
             pageRow.each((index: number, child: Element) => {
                 const pageEl = $(child);
                 const compositionAreaEl = pageEl.children(".composition-area");
-                this.commentArea.updateCompositionAreaHeight(pageEl);
+                this.commentArea.updateCommentAreaHeight(pageEl);
+                console.log(compositionAreaEl.siblings(".comment-area"));
                 const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
                 this.createViewerAreaBody(compositionAreaEl);
@@ -279,8 +275,8 @@
         }
         const viewerElement = child.children(".viewer");
         viewerElement.remove();
-        const elm = `<div class="editor"><textarea class="plain-text"></textarea></div>`;
         if (this.editingMode) {
+            const elm = `<div class="editor"><textarea class="plain-text textarea-no-resize"></textarea></div>`;
             $(child).append(elm);
         }
     }
