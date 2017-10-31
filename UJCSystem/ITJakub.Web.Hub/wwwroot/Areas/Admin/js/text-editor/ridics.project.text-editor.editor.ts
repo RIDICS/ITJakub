@@ -184,6 +184,11 @@
         });
     }
 
+    private openMarkdownHelp() {
+        const url = "#";//TODO add link to actual markdown help
+        window.open(url, "_blank");
+    }
+
     private addEditor(jEl: JQuery) {
         const editorEl = jEl.find(".editor");
         const textAreaEl = editorEl.children("textarea");
@@ -195,7 +200,7 @@
             spellChecker: false,
             mode: "gfm",
             toolbar: [
-                "bold", "italic", "heading", "|", "quote", "preview", {
+                "bold", "italic", "|", "unordered-list", "ordered-list", "|", "heading-1", "heading-2", "heading-3", "|", "quote", "preview","horizontal-rule", "|", {
                     name: "comment",
                     action: ((editor) => {
                         this.userIsEnteringText = !this.userIsEnteringText;
@@ -203,6 +208,11 @@
                     }),
                     className: "fa fa-comment",
                     title: "Add comment"
+                }, {
+                    name: "help",
+                    action: (() => { this.openMarkdownHelp(); }),
+                    className: "fa fa-question-circle",
+                    title:"Markdown help"
                 }, "|", {
                     name: "save",
                     action: (editor) => { this.saveContents(textId, editor.value()) },
@@ -265,7 +275,6 @@
                 const pageEl = $(child);
                 const compositionAreaEl = pageEl.children(".composition-area");
                 this.commentArea.updateCommentAreaHeight(pageEl);
-                console.log(compositionAreaEl.siblings(".comment-area"));
                 const placeholderSpinner = pageEl.find(".loading");
                 placeholderSpinner.show();
                 this.createViewerAreaBody(compositionAreaEl);
