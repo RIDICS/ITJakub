@@ -134,36 +134,6 @@
 
   </class>
 
-  <sql-query name="GetHeadwordRowNumber">
-    <![CDATA[
-SELECT TOP (1) __hibernate_sort_row FROM
- (
-   select headwordre0_.ResourceVersionId as col_0_0_,
-          min(headwordre0_.Sorting) as col_1_0_,
-          min(headwordre0_.DefaultHeadword) as DefaultHeadword,
-          ROW_NUMBER() OVER(ORDER BY min(headwordre0_.Sorting)) as __hibernate_sort_row
-    from HeadwordResource headwordre0_
-      inner join [ResourceVersion] headwordre0_1_ on headwordre0_.ResourceVersionId=headwordre0_1_.Id
-      inner join [Resource] resource1_ on headwordre0_1_.Resource=resource1_.Id
-      inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource
-    where resource1_.LatestVersion=headwordre0_.ResourceVersionId and (resource1_.Project in 
-    (
-      select distinct project5_.Id
-        from MetadataResource metadatare3_ 
-        inner join [ResourceVersion] metadatare3_1_ on metadatare3_.ResourceVersionId=metadatare3_1_.Id
-    	  inner join [Resource] resource4_ on metadatare3_1_.Resource=resource4_.Id
-    	  inner join [Project] project5_ on resource4_.Project=project5_.Id
-    	  inner join [Snapshot] snapshot6_ on project5_.LatestPublishedSnapshot=snapshot6_.Id
-    	  inner join Snapshot_BookType booktypes7_ on snapshot6_.Id=booktypes7_.Snapshot
-    	  inner join [BookType] booktype8_ on booktypes7_.BookType=booktype8_.Id
-        where metadatare3_.ResourceVersionId=resource4_.LatestVersion and booktype8_.Type=:bookType
-     ))
-	   group by headwordre0_.ResourceVersionId
- ) as query
- where query.DefaultHeadword like :query 
- ORDER BY query.__hibernate_sort_row;
-    ]]>
-  </sql-query>
   <sql-query name="GetHeadwordRowNumberByProject">
     <![CDATA[
 SELECT TOP (1) __hibernate_sort_row FROM
@@ -174,59 +144,11 @@ SELECT TOP (1) __hibernate_sort_row FROM
           ROW_NUMBER() OVER(ORDER BY min(headwordre0_.Sorting)) as __hibernate_sort_row
     from HeadwordResource headwordre0_
       inner join [ResourceVersion] headwordre0_1_ on headwordre0_.ResourceVersionId=headwordre0_1_.Id
-      inner join [Resource] resource1_ on headwordre0_1_.Resource=resource1_.Id
+      inner join Snapshot_ResourceVersion snapshots5_ on headwordre0_.ResourceVersionId=snapshots5_.ResourceVersion 
+      inner join [Snapshot] snapshotal2_ on snapshots5_.Snapshot=snapshotal2_.Id 
+      inner join [Project] projectali3_ on snapshotal2_.Project=projectali3_.Id 
       inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource
-    where resource1_.LatestVersion=headwordre0_.ResourceVersionId and (resource1_.Project in 
-    (
-      select distinct project5_.Id
-        from MetadataResource metadatare3_ 
-        inner join [ResourceVersion] metadatare3_1_ on metadatare3_.ResourceVersionId=metadatare3_1_.Id
-    	  inner join [Resource] resource4_ on metadatare3_1_.Resource=resource4_.Id
-    	  inner join [Project] project5_ on resource4_.Project=project5_.Id
-    	  inner join [Snapshot] snapshot6_ on project5_.LatestPublishedSnapshot=snapshot6_.Id
-    	  inner join Snapshot_BookType booktypes7_ on snapshot6_.Id=booktypes7_.Snapshot
-    	  inner join [BookType] booktype8_ on booktypes7_.BookType=booktype8_.Id
-        where metadatare3_.ResourceVersionId=resource4_.LatestVersion
-          and booktype8_.Type=:bookType
-          and (project5_.Id in (:projectIds))
-     ))
-	   group by headwordre0_.ResourceVersionId
- ) as query
- where query.DefaultHeadword like :query 
- ORDER BY query.__hibernate_sort_row;
-    ]]>
-  </sql-query>
-  <sql-query name="GetHeadwordRowNumberByProjectAndCategory">
-    <![CDATA[
-SELECT TOP (1) __hibernate_sort_row FROM
- (
-   select headwordre0_.ResourceVersionId as col_0_0_,
-          min(headwordre0_.Sorting) as col_1_0_,
-          min(headwordre0_.DefaultHeadword) as DefaultHeadword,
-          ROW_NUMBER() OVER(ORDER BY min(headwordre0_.Sorting)) as __hibernate_sort_row
-    from HeadwordResource headwordre0_
-      inner join [ResourceVersion] headwordre0_1_ on headwordre0_.ResourceVersionId=headwordre0_1_.Id
-      inner join [Resource] resource1_ on headwordre0_1_.Resource=resource1_.Id
-      inner join [HeadwordItem] headwordit2_ on headwordre0_.ResourceVersionId=headwordit2_.HeadwordResource
-    where resource1_.LatestVersion=headwordre0_.ResourceVersionId and (resource1_.Project in 
-    (
-      select distinct project5_.Id
-        from MetadataResource metadatare3_ 
-        inner join [ResourceVersion] metadatare3_1_ on metadatare3_.ResourceVersionId=metadatare3_1_.Id
-    	  inner join [Resource] resource4_ on metadatare3_1_.Resource=resource4_.Id
-    	  inner join [Project] project5_ on resource4_.Project=project5_.Id
-    	  inner join [Snapshot] snapshot6_ on project5_.LatestPublishedSnapshot=snapshot6_.Id
-    	  inner join Snapshot_BookType booktypes7_ on snapshot6_.Id=booktypes7_.Snapshot
-    	  inner join [BookType] booktype8_ on booktypes7_.BookType=booktype8_.Id
-        where metadatare3_.ResourceVersionId=resource4_.LatestVersion
-          and booktype8_.Type=:bookType
-          and (project5_.Id in (select project9_.Id
-              from [Project] project9_
-              inner join Project_Category categories10_ on project9_.Id=categories10_.Project
-              inner join [Category] category11_ on categories10_.Category=category11_.Id where category11_.Id in (:categoryIds))
-            or project5_.Id in (:projectIds)
-          )
-     ))
+    where snapshotal2_.Id = projectali3_.LatestPublishedSnapshot and (projectali3_.Id in (:projectIds))
 	   group by headwordre0_.ResourceVersionId
  ) as query
  where query.DefaultHeadword like :query 
