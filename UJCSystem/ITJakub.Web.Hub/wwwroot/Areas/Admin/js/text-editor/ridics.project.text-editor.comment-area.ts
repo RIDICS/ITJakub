@@ -109,6 +109,7 @@
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
+                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-1"></div><div class="col-xs-2"><button class="edit-comment">Edit</button></div><div class="col-xs-2"><button class="delete-comment">Delete</button></div><div class="col-xs-7"></div></div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
