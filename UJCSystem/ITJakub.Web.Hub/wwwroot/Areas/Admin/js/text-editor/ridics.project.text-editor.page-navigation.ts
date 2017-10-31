@@ -36,7 +36,7 @@
                 min: 0,
                 max: compositionPages.length - 1,
                 step: 1,
-                create: function () {
+                create: function() {
                     const pageName = compositionPages[$(this).slider("value")].parentPage.name;
                     tooltipText.text(`Page: ${pageName}`);
                     thisClass.updatePageIndicator(pageName);
@@ -142,28 +142,28 @@
         }
     }
 
-    private navigateToPage(pageNumber: number, loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private navigateToPage(textId: number, loadingPages: number[], compositionPages: ITextProjectPage[]) {
         const firstId = compositionPages[0].id;
         const numberOfPagesToPreload = 10;
-        const preloadedPage = pageNumber - numberOfPagesToPreload;
+        const preloadedPage = textId - numberOfPagesToPreload;
         if (preloadedPage > firstId) {
             $(".preloading-pages-spinner").show();
-            this.pageToSkipTo = pageNumber;
+            this.pageToSkipTo = textId;
             this.skippingToPage = true;
-            for (let i = preloadedPage; i <= pageNumber; i++) {
+            for (let i = preloadedPage; i <= textId; i++) {
                 const currentPageEl = $(`*[data-page="${i}"]`);
                 if (!currentPageEl.hasClass("lazyloaded")) {
                     loadingPages.push(i);
                     lazySizes.loader.unveil(currentPageEl[0]);
                 }
             }
-            if ($(`*[data-page="${pageNumber}"]`).hasClass("lazyloaded")) {
-                this.scrollToPage(pageNumber);
+            if ($(`*[data-page="${textId}"]`).hasClass("lazyloaded")) {
+                this.scrollToPage(textId);
                 this.skippingToPage = false;
                 $(".preloading-pages-spinner").hide();
             }
         } else {
-            this.scrollToPage(pageNumber);
+            this.scrollToPage(textId);
         }
 
     }
@@ -185,16 +185,16 @@
             });
     }
 
-    private scrollToPage(pageNumber: number) {
+    private scrollToPage(textId: number) {
         const container = $(".pages-start");
-        const pageEl = $(`*[data-page="${pageNumber}"]`);
+        const pageEl = $(`*[data-page="${textId}"]`);
         const editorPageContainer = ".pages-start";
         const compositionPagePosition = pageEl.offset().top;
         const compositionPageContainerPosition = container.offset().top;
         const scrollTo = compositionPagePosition - compositionPageContainerPosition + container.scrollTop();
         $(editorPageContainer).scrollTop(scrollTo);
         this.updateOnlySliderValue = true;
-        this.updatePageNames(pageNumber);
+        this.updatePageNames(textId);
         this.updateOnlySliderValue = false;
     }
 

@@ -64,8 +64,8 @@
                     let pageDiffers = false;
                     const jElSelected = e.target as HTMLElement;
                     const jEl = $(jElSelected).closest(".page-row");
-                    const pageNumber = jEl.data("page") as number;
-                    if (pageNumber !== this.currentTextId) {
+                    const textId = jEl.data("page") as number;
+                    if (textId !== this.currentTextId) {
                         pageDiffers = true;
                     }
                     const editorEl = $(".CodeMirror");
@@ -278,7 +278,7 @@
         viewerElement.remove();
         if (this.editingMode) {
             const elm = `<div class="editor"><textarea class="plain-text textarea-no-resize"></textarea></div>`;
-            $(child).append(elm);
+            child.append(elm);
         }
     }
 
@@ -290,9 +290,9 @@
         }
         const editorElement = child.children(".editor");
         editorElement.remove();
-        const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
         if (!this.editingMode) {
-            $(child).append(elm);
+            const elm = `<div class="viewer"><span class="rendered-text"></span></div>`;
+            child.append(elm);
         }
     }
 }

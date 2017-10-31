@@ -9,8 +9,8 @@
 
     /**
  * Creates html structure of comment area. Input must be sorted by comment id, nestedness, nested comment order. Returns JQuery object.
- * @param {string[][]} content  - Array or arrays of comment values in format {comment id, comment nestedness, comment page, person's name, comment body, order of nested comment, time}
- * @param {Number} pageNUmber - Number of page, which comments relates to.
+ * @param {ICommentSctucture[]} content  - Array or comments.
+ * @param {JQuery} commentAreaEl - Comment area element for which to construct area..
  */
     private constructCommentAreaHtml(content: ICommentSctucture[], commentAreaEl: JQuery) {
         if (content === null) {
@@ -59,8 +59,8 @@
             body = content[i].text;
             picture = content[i].picture;
             orderOfNestedComment = content[i].order;
-            var time = content[i].time;
-            var timeUtc = new Date(time * 1000);
+            var unixTimeSeconds = content[i].time;
+            var timeUtc = new Date(unixTimeSeconds * 1000);
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
@@ -118,9 +118,9 @@
 
     /**
      * Collapses comment area, adds buttons to enlarge
-     * @param pageNumber - Number of page where to collapse comment area
-     * @param sectionCollapsed - Whether section has to be collapsed
-     * @param nestedCommentCollapsed - Whether nested comments have to be collapsed
+     * @param {JQuery} commentAreaEl - Comment area element which needs collapsing.
+     * @param {boolean} sectionCollapsed - Whether section has to be collapsed
+     * @param {boolean} nestedCommentCollapsed - Whether nested comments have to be collapsed
      */
     collapseIfCommentAreaIsTall = (
         commentAreaEl: JQuery,
@@ -214,11 +214,9 @@
         }
     }
 
-    /**
+/**
  * Loads contents of files with comments in a page from the server.
- * @param {Number} pageNumber Number of page for which to load comment file contents
- * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
- * @param {boolean} nestedCommentCollapsed Whether nested comments have to be collapsed
+ * @param {JQuery} commentAreaEl Comment area element for which to construct structure
  */
     asyncConstructCommentArea(commentAreaEl: JQuery): JQueryXHR {
         const pageRowEl = commentAreaEl.parent(".page-row");
@@ -228,8 +226,10 @@
             { textId: textId });
         ajax.done(
             (fileContent: ICommentSctucture[]) => {
-                if (fileContent.length > 0) {
-                    this.loadCommentFile(fileContent, commentAreaEl);
+                if (fileContent.length) {
+                    if (fileContent !== null && typeof fileContent !== "undefined") {
+                        this.parseLoadedCommentFiles(fileContent, commentAreaEl);
+                    }
                 } else {
                     const placeHolderText =
                         `<div class="comment-placeholder-container"><div class="comment-placeholder-text">No comments yet.</div></div>`;
@@ -242,25 +242,16 @@
         return ajax;
     }
 
-    private loadCommentFile(contentStringArray: ICommentSctucture[],
-        commentAreaEl: JQuery) {
-        if (contentStringArray !== null && typeof contentStringArray !== "undefined") {
-            this.parseLoadedCommentFiles(contentStringArray, commentAreaEl);
-        }
-    }
-
     /**
      * Parses comments to construct comment area later.
      * @param {ICommentSctucture[]} content Array of comments
-     * @param {number} pageNumber Number of page comments are on
-     * @param {boolean} sectionCollapsed Whether comment area has to be collapsed
-     * @param nestedCommentCollapsed Whether nested comments have to be collapsed
+     * @param {JQuery} commentAreaEl Comment area element of page comments are in
      */
     private parseLoadedCommentFiles(content: ICommentSctucture[],
         commentAreaEl: JQuery) {
         if (content !== null && typeof content !== "undefined") {
-            if (content.length > 0) {
-                content.sort((a, b) => { //sort by id, ascending
+            if (content.length) {
+                content.sort((a, b) => { //sort by textReferenceId, ascending
                     if (a.textReferenceId < b.textReferenceId) {
                         return -1;
                     }
@@ -291,10 +282,6 @@
         commentAreaEl: JQuery) => {
         const html = this.constructCommentAreaHtml(content, commentAreaEl);
         commentAreaEl.append(html);
-    }
-
-    private destroyCommentArea(commentArea: JQuery) {
-        commentArea.remove();
     }
 
     processToggleNestedCommentClick() {
@@ -382,7 +369,7 @@
     reloadCommentArea(textId: number) {
         const commentAreaEl = $(`*[data-page="${textId}"]`).children(".comment-area");
         const threadsContainer = commentAreaEl.children(".threads-container");
-        this.destroyCommentArea(threadsContainer);
+        threadsContainer.remove();
         if (commentAreaEl.children(".comment-placeholder-container").length) {
             commentAreaEl.children(".comment-placeholder-container").remove();
         }
