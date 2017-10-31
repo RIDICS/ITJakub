@@ -81,7 +81,7 @@ class Connections {
             });
     }
 
-    toggleConnections(): void {
+    init(): void {
         this.connectionsOnEnter();
         this.connectionsOnLeave();
     }

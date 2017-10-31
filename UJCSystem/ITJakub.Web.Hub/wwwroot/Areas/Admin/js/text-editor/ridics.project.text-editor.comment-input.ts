@@ -9,51 +9,55 @@
         this.gui = gui;
     }
 
+    init() {
+        this.processRespondToCommentClick();
+    }
+
     /**
 * Detects buttons click and sends data to server according to ICommentStructureReply
-* @param {boolean} nested - Whether the comment is a nested one
-* @param {Number} page  - Page, where comment occured
-* @param {string} commentId  - Comment id
-* @param {Number} orderOfNestedComment - Order of a nested comment in a list of nested comments
-* @param {Number} time - UTC UNIX time when comment was made
+* @param {Number} textId  - Text Id of page, where comment occured
+* @param {string} textReferenceId  - Comment thread unique id to connect composition area and comment area
+* @param {Number} id - Unique comment id 
+* @param {Number} parentCommentId - Unique id of parent comment
+* @param {JQuery} dialogEl - Dialog element to display result message about send
 */
     processCommentSendClick(
         textId: number,
         textReferenceId: string,
         id: number,
         parentCommentId: number,
-    dialogEl:JQuery) {
-        var serverAddress = this.util.getServerAddress();
+        dialogEl: JQuery) {
+        const serverAddress = this.util.getServerAddress();
         var commentTextArea = $("#commentInput");
-                var commentText = commentTextArea.val() as string;
-                if (commentText === "") {
-                    this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
-                } else {
-                    const comment: ICommentStructureReply = {
-                        id: id,
-                        text: commentText,
-                        parentCommentId: parentCommentId,
-                        textReferenceId: textReferenceId
-                    };
-                    const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
-                        {
-                            comment: comment,
-                            textId: textId
-                        }
-                    );
-                    sendAjax.done(() => {
-                        dialogEl.dialog("close");
-                        this.gui.showMessageDialog("Success", "Successfully sent");
-                        commentTextArea.val("");
-                        this.commentArea.reloadCommentArea(textId);
-                    });
-                    sendAjax.fail(() => {
-                        this.gui.showMessageDialog("Error", "Sending failed. Server error.");
-                    });
+        const commentText = commentTextArea.val() as string;
+        if (commentText === "") {
+            this.gui.showMessageDialog("Warning", "Comment is empty. Please fill it");
+        } else {
+            const comment: ICommentStructureReply = {
+                id: id,
+                text: commentText,
+                parentCommentId: parentCommentId,
+                textReferenceId: textReferenceId
+            };
+            const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
+                {
+                    comment: comment,
+                    textId: textId
                 }
+            );
+            sendAjax.done(() => {
+                dialogEl.dialog("close");
+                this.gui.showMessageDialog("Success", "Successfully sent");
+                commentTextArea.val("");
+                this.commentArea.reloadCommentArea(textId);
+            });
+            sendAjax.fail(() => {
+                this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+            });
+        }
     }
 
-    processRespondToCommentClick() {
+    private processRespondToCommentClick() {
         $("#project-resource-preview").on("click",
             "button.respond-to-comment",
             (event: JQueryEventObject) => { // Process click on "Respond" button
@@ -99,6 +103,7 @@
             cm.replaceSelection(output);
             cm.setSelection({ line: selectionStartLine, ch: selectionStartChar },
                 { line: selectionEndLine, ch: selectionEndChar - markSize });
+            return null;
         } else {
             const ajaxTextReferenceId = this.util.createTextRefereceId();
             ajaxTextReferenceId.done((data: string) => {
@@ -137,7 +142,8 @@
         textReferenceId: string,
         id: number,
         parentCommentId: number,
-        textAreaEl: JQuery, buttonEl: JQuery) {
+        textAreaEl: JQuery,
+        buttonEl: JQuery) {
         var serverAddress = this.util.getServerAddress();
         textAreaEl.on("focusout",
             (event: JQueryEventObject) => {

@@ -7,6 +7,11 @@
         this.gui = gui;
     }
 
+    init() {
+        this.processToggleCommentAresSizeClick();
+        this.processToggleNestedCommentClick();
+    }
+
     /**
  * Creates html structure of comment area. Input must be sorted by comment id, nestedness, nested comment order. Returns JQuery object.
  * @param {ICommentSctucture[]} content  - Array or comments.
@@ -165,30 +170,36 @@
         const threadsContainer = commentAreaEl.children(".threads-container");
         const children = threadsContainer.children(".media-list");
         const commentsHeight = children.prop("scrollHeight");
-        const commentAreaMinHeight = 170;
         const commentAreaHeight = commentAreaEl.height();
-
-        if (commentsHeight > commentAreaHeight || commentsHeight > commentAreaMinHeight) {
-            children.each((index: number, childNode: Element) => {
-                const thread = $(childNode);
-                const nestedComments = thread.children(".media").children(".media-body").children(".media");
-                if (nestedComments.length) {
-                    nestedComments.addClass("nested-comment-collapsed");
-                    thread.append(`<p class="text-center toggle-nested-comments-icon-container">
-                                       <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
-                                   </p>`);
-                }
-            });
+        if (children.length) {
+            if (commentsHeight > commentAreaHeight) {
+                children.each((index: number, childNode: Element) => {
+                    const thread = $(childNode);
+                    const nestedComments = thread.children(".media").children(".media-body").children(".media");
+                    if (nestedComments.length) {
+                        nestedComments.addClass("nested-comment-collapsed");
+                        thread.append(`<p class="text-center toggle-nested-comments-icon-container">
+                                           <i class="fa fa-bars fa-lg toggle-nested-comments" aria-hidden="true" title="Toggle nested comments"></i>
+                                       </p>`);
+                    }
+                });
+            }
         }
     }
 
     updateCommentAreaHeight(pageEl: JQuery) {
         const compositionAreaEl = pageEl.children(".composition-area");
         const commentAreaEl = pageEl.children(".comment-area");
+        const compositionAreaHeight = compositionAreaEl.height();
+        const commentAreaHeight = commentAreaEl.height();
         if (commentAreaEl.hasClass("comment-area-collapsed")) {
-            commentAreaEl.height(compositionAreaEl.height());
+            commentAreaEl.height(compositionAreaHeight);
         } else {
-            commentAreaEl.height("auto");
+            if (commentAreaHeight < compositionAreaHeight) {
+                commentAreaEl.height(compositionAreaHeight);
+            } else {
+                commentAreaEl.height("auto");
+            }
         }
     }
 
@@ -204,12 +215,16 @@
         }
         if (commentsHeight > commentAreaContainerHeight) {
             if (!(ellipsisIconCollapse.is(":visible") || ellipsisIconExpand.is(":visible"))) {
-                ellipsisIconExpand.show();
+                if (commentAreaContainer.hasClass("comment-area-collapsed")) {
+                    ellipsisIconExpand.show();
+                }
             }
         }
         if (commentsHeight === commentAreaContainerHeight) {
             if ((ellipsisIconCollapse.is(":visible") || !ellipsisIconExpand.is(":visible"))) {
-                ellipsisIconCollapse.show();
+                if (!commentAreaContainer.hasClass("comment-area-collapsed")) {
+                    ellipsisIconCollapse.show();
+                }
             }
         }
     }
@@ -284,7 +299,7 @@
         commentAreaEl.append(html);
     }
 
-    processToggleNestedCommentClick() {
+    private processToggleNestedCommentClick() {
         $("#project-resource-preview").on("click",
             ".toggle-nested-comments",
             (event: JQueryEventObject) => {
@@ -315,7 +330,6 @@
                         if (scrollToMainComment < container.scrollTop()) {
                             container.animate({
                                 scrollTop: scrollToMainComment
-
                             });
                         }
                     } else {
@@ -335,7 +349,7 @@
             });
     }
 
-    processToggleCommentAresSizeClick() {
+    private processToggleCommentAresSizeClick() {
         $("#project-resource-preview").on("click",
             ".toggleCommentViewAreaSize",
             (event: JQueryEventObject) => {
@@ -385,9 +399,8 @@
         });
         const buttonAreaSize = $(".toggleCommentViewAreaSize");
         buttonAreaSize.off();
-        this.processToggleCommentAresSizeClick();
         const buttonNestedComments = $(".toggle-nested-comments");
         buttonNestedComments.off();
-        this.processToggleNestedCommentClick();
+        this.init();
     }
 }

@@ -10,8 +10,6 @@
 ///<reference path="./ridics.project.text-editor.lazyloading.ts" />
 ///<reference path="./ridics.project.text-editor.gui.ts" />
 
-declare var lazySizes: any;
-
 class TextEditorMain {
     private numberOfPages: number = 0;
     private showPageNumber = false;
@@ -35,14 +33,14 @@ class TextEditorMain {
         const lazyLoad = new PageLazyLoading(pageStructure, pageTextEditor);
         const pageNavigation = new PageNavigation(this, gui);
         const projectAjax = util.getProjectContent(projectId);
-        pageTextEditor.processAreaSwitch();
-        connections.toggleConnections();
+        pageTextEditor.init();
+        connections.init();
         projectAjax.done((data: ITextProjectPage[]) => {
             const numberOfPages = data.length;
             this.numberOfPages = numberOfPages;
             for (let i = 0; i < numberOfPages; i++) {
                 const textProjectPage = data[i];
-                var commentAreaClass = "";
+                let commentAreaClass = "";
                 if (i % 2 === 0) {
                     commentAreaClass = "comment-area-collapsed-even"; //style even and odd comment sections separately
                 } else {
@@ -57,17 +55,16 @@ class TextEditorMain {
                     }]</div>`;
                 $(".pages-start")
                     .append(
-                    `<div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
-                    textProjectPage.parentPage.name
+                        `<div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
+                        textProjectPage.parentPage.name
                         }">${pageNameDiv}${compositionAreaDiv}${
                         commentAreaDiv}</div>`);
             }
-            lazyLoad.lazyLoad();
+            lazyLoad.init();
             pageNavigation.init(data);
             this.attachEventShowPageCheckbox(pageNavigation);
-            commentInput.processRespondToCommentClick();
-            commentArea.processToggleCommentAresSizeClick();
-            commentArea.processToggleNestedCommentClick();
+            commentInput.init();
+            commentArea.init();
         });
         projectAjax.fail(() => {
             gui.showMessageDialog("Error", "Failed to get project information.");

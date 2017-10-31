@@ -1,4 +1,6 @@
-﻿class PageLazyLoading {
+﻿declare var lazySizes: any;
+
+class PageLazyLoading {
     private readonly pageStructure: PageStructure;
     private readonly editor: Editor;
 
@@ -7,8 +9,7 @@
         this.editor = editor;
     }
 
-    lazyLoad() {
-        this.initConfig();
+    init() {
         $(".pages-start").on("lazybeforeunveil",
             (event) => {
                 var targetEl = $(event.target);
@@ -18,6 +19,7 @@
                     this.pageStructure.loadSection(targetEl);
                 }
             });
+        this.initConfig();
     }
 
     private initConfig() {

@@ -47,7 +47,7 @@
         });
     }
 
-    showMessageDialog(title:string, message:string) {
+    showMessageDialog(title: string, message: string) {
         const dialogEl = $("#status-dialog");
         dialogEl.dialog({
             resizable: false,
@@ -59,7 +59,7 @@
             buttons: [
                 {
                     text: "OK",
-                    click: function () {
+                    click: function() {
                         $(this).dialog("close");
                     },
                     class: "btn btn-default status-dialog-button"
@@ -78,7 +78,7 @@
         dialogEl.text(message);
     }
 
-    showCommentInputDialog(onSave:Function, onClose: Function): JQuery {
+    showCommentInputDialog(onSave: Function, onClose: Function): JQuery {
         const dialogEl = $("#comment-input-dialog");
         dialogEl.dialog({
             resizable: false,
