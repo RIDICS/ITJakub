@@ -233,6 +233,7 @@
         this.simplemde.codemirror.addOverlay("comment");
         this.simplemde.codemirror.focus();
         this.commentArea.updateCommentAreaHeight(jEl);
+        this.commentArea.toggleAreaSizeIconHide(jEl.children(".comment-area"));
     }
 
     toggleDivAndTextarea = () => {
