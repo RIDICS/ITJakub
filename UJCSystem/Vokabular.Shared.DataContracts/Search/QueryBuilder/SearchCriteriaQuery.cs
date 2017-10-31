@@ -9,5 +9,7 @@ namespace Vokabular.Shared.DataContracts.Search.QueryBuilder
         public string Join { get; set; }
         
         public string Where { get; set; }
+
+        public object Restriction { get; set; } // TODO change to specific type after DB migration to VokabularDB
     }
 }

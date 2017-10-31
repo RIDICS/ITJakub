@@ -190,9 +190,23 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual long SearchHeadwordByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
         {
-            var query = GetSession().CreateQuery(creator.GetHeadwordQueryStringForCount())
-                .SetParameters(creator);
-            var result = query.UniqueResult<long>();
+            HeadwordItem headwordItemAlias = null;
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+
+            var headwordRestrictions = creator.GetHeadwordRestrictions();
+
+            var projectIds = SearchProjectIdByCriteriaQuery(creator);
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(x => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds)
+                .And(headwordRestrictions)
+                .Select(Projections.CountDistinct<HeadwordResource>(x => x.Id))
+                .SingleOrDefault<int>();
             return result;
         }
 
@@ -212,7 +226,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             var session = GetSession();
 
             var query = session.CreateQuery(creator.GetProjectIdListQueryString())
-                .SetPaging(creator)
+                //.SetPaging(creator) // return ALL project.Ids
                 .SetParameters(creator);
             var result = query.List<long>();
             return result;
@@ -220,11 +234,30 @@ namespace Vokabular.DataEntities.Database.Repositories
 
         public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
-            var query = GetSession().CreateQuery(creator.GetHeadwordResourceIdsQueryString())
-                .SetPaging(creator)
-                .SetParameters(creator)
-                .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>());
-            var result = query.List<HeadwordSearchResult>();
+            HeadwordSearchResult resultAlias = null;
+            HeadwordItem headwordItemAlias = null;
+            Snapshot snapshotAlias = null;
+            Project projectAlias = null;
+            
+            var headwordRestrictions = creator.GetHeadwordRestrictions();
+
+            var projectIds = SearchProjectIdByCriteriaQuery(creator);
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
+                .JoinAlias(x => x.Snapshots, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
+                .Where(x => snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .AndRestrictionOn(x => projectAlias.Id).IsInG(projectIds)
+                .And(headwordRestrictions)
+                .SelectList(list => list
+                    .SelectGroup(x => x.Id).WithAlias(() => resultAlias.Id)
+                    .SelectMin(x => x.Sorting).WithAlias(() => resultAlias.Sorting))
+                .OrderBy(x => x.Sorting).Asc
+                .TransformUsing(Transformers.AliasToBean<HeadwordSearchResult>())
+                .Take(creator.GetCount())
+                .Skip(creator.GetStart())
+                .List<HeadwordSearchResult>();
             return result;
         }
 
