@@ -549,7 +549,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     var mainComment = new CommentStructure
                     {
                         Order = order,
-                        Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeSeconds(),
+                        Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeMilliseconds(),
                         Text = pageComments.Text,
                         Picture = pageComments.User.AvatarUrl,
                         Id = pageComments.Id,

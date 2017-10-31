@@ -64,8 +64,8 @@
             body = content[i].text;
             picture = content[i].picture;
             orderOfNestedComment = content[i].order;
-            var unixTimeSeconds = content[i].time;
-            var timeUtc = new Date(unixTimeSeconds * 1000);
+            var unixTimeMilliseconds = content[i].time;
+            var timeUtc = new Date(unixTimeMilliseconds);
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
