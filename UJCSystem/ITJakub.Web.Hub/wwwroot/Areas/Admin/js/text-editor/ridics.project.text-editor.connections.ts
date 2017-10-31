@@ -33,7 +33,7 @@ class Connections {
         const to = $(`#${commentId}-comment`).children().children(".media-object");
         jqSimpleConnect.connect(from,
             to,
-            { radius: 2, color: "cyan", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
+            { radius: 2, color: "red", anchorA: "vertical", anchorB: "horizontal", roundedCorners: true });
     }
 
     private connectionsOnEnter(): void {

@@ -494,7 +494,7 @@ table {
                     min-height: 150px;
 
                     .highlighted-element {
-                        background: rgba(0,255,255,0.4);
+                        background: rgba(255,0,0,0.4);
                     }
 
                     .comment-area {
@@ -512,6 +512,11 @@ table {
                                 color: @comment-placeholder-text-color;
                                 font-size: 1.1em;
                             }
+                        }
+
+                        .comment-actions-row {
+                            max-height: 22px;
+                            font-size: 11px;
                         }
 
                         .comment-body {
@@ -543,7 +548,7 @@ table {
                         }
 
                         .ellipsis {
-                            color: blue;
+                            color: @toggle-comment-section-icon-color;
                             cursor: pointer;
 
                             &-container {
