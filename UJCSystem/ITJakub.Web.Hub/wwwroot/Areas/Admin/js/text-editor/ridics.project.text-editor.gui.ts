@@ -47,6 +47,45 @@
         });
     }
 
+    createDeleteConfirmationDialog(onDelete: Function) {
+        $("#delete-confirmation-dialog").dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            dialogClass: "delete-confirmation-dialog",
+            title: "Do you want to delete this comment?",
+            buttons: [
+                {
+                    text: "Yes",
+                    click: function () {
+                        onDelete();
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default delete-confirmation-dialog-button"
+                },
+                {
+                    text: "No",
+                    click: function () {
+                        $(this).dialog("close");
+                    },
+                    class: "btn btn-default delete-confirmation-dialog-button",
+                    id: "dialog-cancel-button"
+                }
+            ],
+            open: (event) => {
+                $("#dialog-cancel-button").focus();
+                const targetElement = $(event.target);
+                targetElement.closest(".ui-dialog")
+                    .find(".ui-dialog-titlebar-close")
+                    .removeClass("ui-dialog-titlebar-close")
+                    .addClass("delete-confirmation-dialog-close-button")
+                    .html(
+                        "<i class=\"fa fa-times\" aria-hidden=\"true\"></i>"); //hack, because bootstrap breaks close button icon
+            }
+        });
+    }
+
     showMessageDialog(title: string, message: string) {
         const dialogEl = $("#status-dialog");
         dialogEl.dialog({
