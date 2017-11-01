@@ -384,7 +384,6 @@
 }
 
 class ProjectWorkPageListTab extends ProjectModuleTabBase {
-    private editDialog: BootstrapDialogWrapper;
     private projectId: number;
 
     constructor(projectId: number) {
@@ -393,14 +392,8 @@ class ProjectWorkPageListTab extends ProjectModuleTabBase {
     }
 
     initTab() {
-        this.editDialog = new BootstrapDialogWrapper({
-            element: $("#project-pages-dialog"),
-            autoClearInputs: false
-        });
-
-        $("#project-pages-edit-button").click(() => {
-            this.editDialog.show();
-        });
+        const main = new PageListEditorMain();
+        main.init(this.projectId);
     }
 }
 
