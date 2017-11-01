@@ -61,7 +61,6 @@
     private processEditCommentClick() {
         $("#project-resource-preview").on("click", ".edit-comment", (event: JQueryEventObject) => {
             const target = $(event.target);
-            target.hide();
             const commentActionsRowEl = target.parents(".comment-actions-row");
             const commentBody = commentActionsRowEl.siblings(".media-body");
             const mainCommentContentEl = commentBody.parents(".media-body");
@@ -71,12 +70,13 @@
             const textId = mainCommentLeftHeader.parents(".page-row").data("page");
             const commentTextEl = commentBody.children(".comment-body");
             const commentText = commentTextEl.text();
+            commentActionsRowEl.hide();
             commentTextEl.hide();
             commentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
             const jTextareaEl = $(".edit-comment-textarea");
             jTextareaEl.focus();
             const commentId = parseInt(commentBody.attr("data-comment-id"));
-            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, target);
+            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, commentActionsRowEl);
         });
     }
 
@@ -176,7 +176,7 @@
                 var commentText = textAreaEl.val() as string;
                 if (commentText === commentTextOriginal) {
                     jEl.show();
-                    textAreaEl.detach();
+                    textAreaEl.remove();
                 } else {
                     const comment: ICommentStructureReply = {
                         id: id,
