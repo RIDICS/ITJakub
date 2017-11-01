@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -162,6 +163,13 @@ namespace Vokabular.MainService.Controllers
         {
             var resultId = m_pageManager.CreateNewComment(textId, request);
             return resultId;
+        }
+
+        [HttpPut("text/{textId}/comment")]
+        public long UpdateComment(long textId, [FromBody] CreateTextCommentContract request)
+        {
+            //TODO add logic
+            throw new NotImplementedException();
         }
 
         [HttpDelete("text/comment/{commentId}")]
