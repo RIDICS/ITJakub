@@ -128,7 +128,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in fulltext DB
 
-                var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                var projectIdList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
                 {
@@ -152,7 +152,7 @@ namespace Vokabular.MainService.Core.Managers
                 // Search in relational DB
 
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, queryCreator, termCriteria);
+                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator, termCriteria);
                 var dbResult = searchByCriteriaWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts, searchByCriteriaWork.TermHits);
@@ -337,7 +337,7 @@ namespace Vokabular.MainService.Core.Managers
                 Count = request.Count
             };
 
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
+            var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
             return result;
         }
 
@@ -384,7 +384,7 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in relational DB
 
-                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, queryCreator);
+                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
                 var dbResult = searchByCriteriaWork.Execute();
 
                 var resultList = Mapper.Map<List<HeadwordContract>>(dbResult);
@@ -410,7 +410,7 @@ namespace Vokabular.MainService.Core.Managers
                 Count = request.Count
             };
 
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
+            var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
             return result;
         }
 
@@ -456,7 +456,7 @@ namespace Vokabular.MainService.Core.Managers
 
             // Search in fulltext DB
 
-            var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+            var projectIdList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
             var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
             {
@@ -671,19 +671,8 @@ namespace Vokabular.MainService.Core.Managers
 
             UpdateHeadwordCategoryCriteria(request.Category);
 
-            var projectIds = request.Category.SelectedBookIds ?? new List<long>();
-            var categoryIds = request.Category.SelectedCategoryIds ?? new List<int>();
-            var bookTypeEnum = Mapper.Map<BookTypeEnum>(request.Category.BookType);
-
-            var result = m_bookRepository.InvokeUnitOfWork(x =>
-            {
-                if (categoryIds.Count > 0)
-                {
-                    categoryIds = m_categoryRepository.GetAllSubcategoryIds(categoryIds);
-                }
-
-                return x.GetHeadwordRowNumber(request.Query, projectIds, categoryIds, bookTypeEnum);
-            });
+            var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request);
+            var result = searchHeadwordRowNumberWork.Execute();
 
             return result;
         }
