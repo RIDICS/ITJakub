@@ -871,6 +871,37 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public long UpdateComment(long textId, CreateTextCommentContract request)
+        {
+            try
+            {
+                var result = Put<long>($"project/text/{textId}/comment", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteComment(long commentId)
+        {
+            try
+            {
+                Delete($"project/text/comment/{commentId}");
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public long SetTextResource(long textId, ShortTextContract request)
         {
             try
