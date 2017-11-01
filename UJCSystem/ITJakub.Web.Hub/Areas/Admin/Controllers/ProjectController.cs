@@ -568,7 +568,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                             var nestedComment = new CommentStructure
                             {
                                 Order = order,
-                                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeSeconds(),
+                                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
                                 Text = textComment.Text,
                                 Picture = textComment.User.AvatarUrl,
                                 Id = textComment.Id,
@@ -593,6 +593,25 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var result = client.CreateComment(textId, comment);
                 return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UpdateComment(CreateTextCommentContract comment, long textId)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.UpdateComment(textId, comment);
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public void DeleteComment(long commentId)//TODO needs response code
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteComment(commentId);
             }
         }
 
