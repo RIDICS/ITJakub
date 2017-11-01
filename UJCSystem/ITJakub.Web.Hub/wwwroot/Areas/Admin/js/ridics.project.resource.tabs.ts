@@ -77,3 +77,17 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
         main.init(this.projectId);
     }
 }
+
+class ProjectResourceImageViewerTab extends ProjectModuleTabBase {
+    private readonly projectId: number;
+    constructor(resourceId: number, projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() {
+        $("#project-resource-preview").off();
+        const main = new ImageViewerMain();
+        main.init(this.projectId);
+    }
+}
