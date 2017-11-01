@@ -22,10 +22,17 @@
         return ajax;
     }
 
+    deleteComment(commentId: number): JQueryXHR {
+        const ajax = $.post(`${this.serverAddress}admin/project/DeleteComment`,
+            {
+                commentId:commentId
+            });
+        return ajax;
+    }
 
     /**
 * Loads plain text with markdown from the server.
-* @param {Number} pageNumber - Number of page for which to load plain text
+* @param {Number} textId - Number of page for which to load plain text
 * @returns {JQueryXHR} Ajax containing page plain text
 */
     loadPlainText(textId: number): JQueryXHR {
