@@ -297,6 +297,17 @@ gulp.task("bundle:ridics_admin_text-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
+gulp.task("bundle:ridics_admin_page-image-viewer", function () {
+    return gulp.src([
+        paths.webroot + "Areas/Admin/js/page-image-viewer/ridics.project.page-image-viewer*.js"
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat("ridics.project.page-image-viewer.bundle.js"))
+        .pipe(sourcemaps.write())
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
+});
+
 gulp.task("bundlejs_areas",
 [
     "bundle:itjakub_audiobooks",
@@ -307,7 +318,8 @@ gulp.task("bundlejs_areas",
     "bundle:itjakub_dictionary_headwords",
     "bundle:itjakub_lemmatization",
     "bundle:itjakub_professionalliterature_list",
-    "bundle:ridics_admin_text-editor"
+    "bundle:ridics_admin_text-editor",
+    "bundle:ridics_admin_page-image-viewer"
 ]);
 
 

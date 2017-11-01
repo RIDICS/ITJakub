@@ -15,6 +15,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
     <Content Remove="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
   </ItemGroup>
 
@@ -72,6 +73,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
   </ItemGroup>
 
@@ -81,9 +83,7 @@
       <_XdtTransform>$(MSBuildThisFileDirectory)Web.$(Configuration).config</_XdtTransform>
       <_TargetWebConfig>$(PublishDir)Web.config</_TargetWebConfig>
     </PropertyGroup>
-    <Exec
-        Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;"
-        Condition="Exists('$(_XdtTransform)')" />
+    <Exec Command="dotnet transform-xdt --xml &quot;$(_SourceWebConfig)&quot; --transform &quot;$(_XdtTransform)&quot; --output &quot;$(_TargetWebConfig)&quot;" Condition="Exists('$(_XdtTransform)')" />
   </Target>
   
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">
