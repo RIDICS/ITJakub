@@ -2,11 +2,9 @@
 
 class PageLazyLoading {
     private readonly pageStructure: PageStructure;
-    private readonly editor: Editor;
 
-    constructor(pageStructure: PageStructure, editor: Editor) {
+    constructor(pageStructure: PageStructure) {
         this.pageStructure = pageStructure;
-        this.editor = editor;
     }
 
     init() {

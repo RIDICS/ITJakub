@@ -11,6 +11,7 @@
 
     init() {
         this.processRespondToCommentClick();
+        this.processEditCommentClick();
     }
 
     /**
@@ -57,6 +58,28 @@
         }
     }
 
+    private processEditCommentClick() {
+        $("#project-resource-preview").on("click", ".edit-comment", (event: JQueryEventObject) => {
+            const target = $(event.target);
+            target.hide();
+            const commentActionsRowEl = target.parents(".comment-actions-row");
+            const commentBody = commentActionsRowEl.siblings(".media-body");
+            const mainCommentContentEl = commentBody.parents(".media-body");
+            const mainCommentLeftHeader = mainCommentContentEl.siblings(".main-comment");
+            const parentCommentId = mainCommentLeftHeader.data("parent-comment-id");
+            const textReferenceId = mainCommentLeftHeader.attr("id").replace("-comment", "");
+            const textId = mainCommentLeftHeader.parents(".page-row").data("page");
+            const commentTextEl = commentBody.children(".comment-body");
+            const commentText = commentTextEl.text();
+            commentTextEl.hide();
+            commentBody.append(`<textarea cols="40" rows="3" class="textarea-no-resize edit-comment-textarea">${commentText}</textarea>`);
+            const jTextareaEl = $(".edit-comment-textarea");
+            jTextareaEl.focus();
+            const commentId = parseInt(commentBody.attr("data-comment-id"));
+            this.processCommentReply(textId, textReferenceId, commentId, parentCommentId, jTextareaEl, target);
+        });
+    }
+
     private processRespondToCommentClick() {
         $("#project-resource-preview").on("click",
             "button.respond-to-comment",
@@ -65,12 +88,13 @@
                 const pageRow =
                     target.parents(".comment-area").parent(".page-row");
                 var textId = $(pageRow).data("page") as number;
-                const textReferenceIdWithText = $(target).parent().siblings(".main-comment").attr("id");
+                const textReferenceIdWithText = target.parent().siblings(".main-comment").attr("id");
                 const parentCommentId =
                     target.parent().siblings(".main-comment").data("parent-comment-id") as number;
+                const id = 0; //creating comment
                 var textReferenceId = textReferenceIdWithText.replace("-comment", "");
                 if (textReferenceId !== null && typeof textReferenceId !== "undefined") {
-                    this.addCommentFromCommentArea(textReferenceId, textId, parentCommentId, target);
+                    this.addCommentFromCommentArea(textReferenceId, textId, id, parentCommentId, target);
                 } else {
                     console.log("Something is wrong. This comment doesn't have an id.");
                 }
@@ -124,17 +148,17 @@
         }
     }
 
-    private addCommentFromCommentArea(textRefernceId: string,
+    private addCommentFromCommentArea(textReferenceId: string,
         textId: number,
+        id: number,
         parentCommentId: number,
         buttonEl: JQuery) {
-        const id = 0; //creating comment
         const elm = `<textarea class="respond-to-comment-textarea textarea-no-resize"></textarea>`;
         buttonEl.after(elm);
-        buttonEl.detach();
+        buttonEl.hide();
         const textareaEl = $(".respond-to-comment-textarea");
         textareaEl.focus();
-        this.processCommentReply(textId, textRefernceId, id, parentCommentId, textareaEl, buttonEl);
+        this.processCommentReply(textId, textReferenceId, id, parentCommentId, textareaEl, buttonEl);
     }
 
     private processCommentReply(
@@ -143,14 +167,15 @@
         id: number,
         parentCommentId: number,
         textAreaEl: JQuery,
-        buttonEl: JQuery) {
+        jEl: JQuery) {
         var serverAddress = this.util.getServerAddress();
+        var commentTextOriginal = textAreaEl.val() as string;
         textAreaEl.on("focusout",
             (event: JQueryEventObject) => {
                 event.stopImmediatePropagation();
                 var commentText = textAreaEl.val() as string;
-                if (commentText === "") {
-                    textAreaEl.after(buttonEl);
+                if (commentText === commentTextOriginal) {
+                    jEl.show();
                     textAreaEl.detach();
                 } else {
                     const comment: ICommentStructureReply = {
@@ -159,22 +184,36 @@
                         parentCommentId: parentCommentId,
                         textReferenceId: textReferenceId
                     };
-                    const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
-                        {
-                            comment: comment,
-                            textId: textId
-                        }
-                    );
-                    sendAjax.done(() => {
-                        this.gui.showMessageDialog("Success", "Successfully sent");
-                        textAreaEl.val("");
-                        textAreaEl.off();
-                        this.commentArea.reloadCommentArea(textId);
-                    });
-                    sendAjax.fail(() => {
-                        this.gui.showMessageDialog("Error", "Sending failed. Server error.");
-                    });
+                    if (id === 0) {
+                        const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
+                            {
+                                comment: comment,
+                                textId: textId
+                            }
+                        );
+                        this.onCommentSendRequest(sendAjax, textAreaEl, textId);
+                    } else {
+                        const sendAjax = $.post(`${serverAddress}admin/project/UpdateComment`,
+                            {
+                                comment: comment,
+                                textId: textId
+                            }
+                        );
+                        this.onCommentSendRequest(sendAjax, textAreaEl, textId);
+                    }
                 }
             });
+    }
+
+    private onCommentSendRequest(sendAjax:JQueryXHR, textAreaEl:JQuery, textId:number) {
+        sendAjax.done(() => {
+            this.gui.showMessageDialog("Success", "Successfully sent");
+            textAreaEl.val("");
+            textAreaEl.off();
+            this.commentArea.reloadCommentArea(textId);
+        });
+        sendAjax.fail(() => {
+            this.gui.showMessageDialog("Error", "Sending failed. Server error.");
+        });
     }
 }

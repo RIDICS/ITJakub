@@ -501,6 +501,15 @@ table {
                         min-height: @comment-area-min-height;
                         position: relative;
 
+                        .respond-to-comment, .edit-comment, .delete-comment {
+                            background-color: @comment-action-background-color;
+                            color: @comment-action-font-color;
+                            border:none;
+                            &:hover, &:active {
+                                background-color: @comment-action-background-color-hover;
+                            }
+                        }
+
                         .comment-placeholder {
                             &-container {
                                 text-align: center;
@@ -522,6 +531,7 @@ table {
                         .comment-body {
                             font-size: 12px;
                             margin-bottom: 4px;
+                            word-break: break-word;
                         }
 
                         .id-in-comment-area {
@@ -641,6 +651,10 @@ table {
     display: none;
 }
 
+#delete-confirmation-dialog {
+    display: none;
+}
+
 #status-dialog {
     display: none;
 }
@@ -657,7 +671,7 @@ table {
     opacity: 0.4;
 }
 
-.save-confirmation-dialog, .status-dialog, .comment-input-dialog {
+.save-confirmation-dialog, .delete-confirmation-dialog, .status-dialog, .comment-input-dialog {
     .ui-dialog-titlebar {
         background-color: @confirmation-dialogue-color;
         color: white;

@@ -35,12 +35,16 @@
         if (isEditingMode) {
             const ajax = this.appendPlainText(pageEl);
             const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
-            $.when(ajax, ajax2).done(() => { this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true) });
+            $.when(ajax, ajax2).done(() => {
+                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            });
         }
         if (!isEditingMode) {
             const ajax = this.appendRenderedText(pageEl);
             const ajax2 = this.commentArea.asyncConstructCommentArea(commentArea);
-            $.when(ajax, ajax2).done(() => { this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true) });
+            $.when(ajax, ajax2).done(() => {
+                this.commentArea.collapseIfCommentAreaIsTall(commentArea, true, true);
+            });
         }
     }
 

@@ -10,6 +10,7 @@
     init() {
         this.processToggleCommentAresSizeClick();
         this.processToggleNestedCommentClick();
+        this.processDeleteCommentClick();
     }
 
     /**
@@ -28,7 +29,6 @@
         const listStart = `<li class="media">`;
         const listEnd = "</li>";
         const commentLeftPartEnd = "</div>";
-        const commentBodyStart = "<div class=\"media-body\">";
         const mainCommentBodyEnd = "</div>";
         const nestedCommentStart = "<div class=\"media\">";
         const nestedCommentLeftPartStart = "<div class=\"media-left nested-comment\">";
@@ -63,9 +63,11 @@
             surname = content[i].surname;
             body = content[i].text;
             picture = content[i].picture;
+            id = content[i].id;
             orderOfNestedComment = content[i].order;
             var unixTimeMilliseconds = content[i].time;
             var timeUtc = new Date(unixTimeMilliseconds);
+            var commentBodyStart = `<div class="media-body" data-comment-id=${id}>`;
             var commentImage =
                 `<a href="#"><img alt="48x48" class="media-object" src="${picture
                     }" style="width: 48px; height: 48px;"></a>`;
@@ -109,7 +111,7 @@
                         .toTimeString().split(" ")[0]}</p>`; //only date and time, no timezone
                     areaContent += nestedCommentBody;
                     areaContent += nestedCommentBodyEnd;
-                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-1"></div><div class="col-xs-2"><button class="edit-comment">Edit</button></div><div class="col-xs-2"><button class="delete-comment">Delete</button></div><div class="col-xs-7"></div></div>`;
+                    areaContent += `<div class="row comment-actions-row"><div class="col-xs-8"></div><div class="col-xs-4"><div class="btn-group"><button type="button" class="edit-comment">Edit</button><button type="button" class="delete-comment">Delete</button></div></div></div>`;
                     areaContent += nestedCommentEnd;
                 }
             }
@@ -298,6 +300,25 @@
         commentAreaEl: JQuery) => {
         const html = this.constructCommentAreaHtml(content, commentAreaEl);
         commentAreaEl.append(html);
+    }
+
+    private processDeleteCommentClick() {
+        $("#project-resource-preview").on("click", ".delete-comment", (event: JQueryEventObject) => {
+            const target = $(event.target);
+            const commentActionsRowEl = target.parents(".comment-actions-row");
+            const commentId = parseInt(commentActionsRowEl.siblings(".media-body").attr("data-comment-id"));
+            console.log(commentId);
+            this.gui.createDeleteConfirmationDialog(() => {
+                const deleteAjax = this.util.deleteComment(commentId);
+                deleteAjax.done(() => {
+                    const textId = commentActionsRowEl.parents(".page-row").data("page");
+                    this.reloadCommentArea(textId);
+                });
+                deleteAjax.fail(() => {
+                    this.gui.showMessageDialog("Fail", "Failed to delete this comment.");
+                });
+            });
+        });
     }
 
     private processToggleNestedCommentClick() {

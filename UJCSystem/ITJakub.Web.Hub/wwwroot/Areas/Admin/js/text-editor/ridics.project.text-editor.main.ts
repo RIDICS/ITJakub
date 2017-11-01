@@ -30,7 +30,7 @@ class TextEditorMain {
         const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
-        const lazyLoad = new PageLazyLoading(pageStructure, pageTextEditor);
+        const lazyLoad = new PageLazyLoading(pageStructure);
         const pageNavigation = new PageNavigation(this, gui);
         const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.init();
