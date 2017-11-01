@@ -126,7 +126,7 @@ namespace Vokabular.MainService.Core.Managers
 
                 // TODO send request to fulltext DB and remove this mock:
                 var mockResultProjectIdList = new List<long>(){1};
-
+                //TODO
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
                 var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList, termCriteria);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();

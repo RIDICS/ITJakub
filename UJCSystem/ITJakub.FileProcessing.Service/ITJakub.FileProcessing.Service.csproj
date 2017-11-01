@@ -258,6 +258,10 @@
       <Project>{130f3c52-e563-4b9b-a70f-e7e5bbab4296}</Project>
       <Name>Vokabular.Shared</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vokabular.XmlToMarkdown\Vokabular.XmlToMarkdown.csproj">
+      <Project>{c3c6f1f5-fc80-498d-b559-b16c83826820}</Project>
+      <Name>Vokabular.XmlToMarkdown</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
