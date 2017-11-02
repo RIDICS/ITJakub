@@ -626,6 +626,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public IActionResult GetPageList(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetAllPageList(projectId);
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
         public IActionResult GetTextResource(long textId, TextFormatEnumContract? format)
         {
             using (var client = GetRestClient())

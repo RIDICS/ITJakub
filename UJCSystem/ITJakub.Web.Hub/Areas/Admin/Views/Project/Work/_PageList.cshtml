@@ -52,22 +52,19 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-5 left-panel">
-                            <select size="10" class="form-control">
-                                <option>TODO</option>
-                            </select>
-                            <button class="btn btn-default form-control">Editovat</button>
+                            <div class="page-list-container"></div>
                         </div>
                         <div class="col-md-7 form-horizontal right-panel">
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" /> Obal [FC]
+                                            <input class="book-cover-checkbox" type="checkbox" /><span class="page-list-editor-controls-label">Obal [FC]</span>
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" /> Úvodní strana [FS]
+                                            <input class="book-startpage-checkbox" type="checkbox" /><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
                                         </label>
                                     </div>
                                 </div>
@@ -75,10 +72,10 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="radio">
-                                        <label><input type="radio" name="page-type" /> Jednostránka</label>
+                                        <label><input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Jednostránka</span></label>
                                     </div>
                                     <div class="radio">
-                                        <label><input type="radio" name="page-type" /> Dvojstránka</label>
+                                        <label><input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Dvojstránka</span></label>
                                     </div>
                                 </div>
                             </div>
@@ -86,10 +83,10 @@
                                 <label class="col-md-2 control-label" for="project-pages-format">Formát</label>
                                 <div class="col-md-7">
                                     <select class="form-control input-sm" id="project-pages-format">
-                                        <option>1r, 1v, 2r, 2v, ...</option>
-                                        <option>I'1r, I'1v, I'2r, ...</option>
-                                        <option>I, II, III, IV, V, ...</option>
-                                        <option>1, 2, 3, 4, 5, ...</option>
+                                        <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
+                                        <option data-format-value="I'1r">I'1r, I'1v, I'2r, ...</option>
+                                        <option data-format-value="Roman">I, II, III, IV, V, ...</option>
+                                        <option data-format-value="Arabic">1, 2, 3, 4, 5, ...</option>
                                     </select>
                                 </div>
                             </div>
@@ -115,8 +112,7 @@
                                     <div class="col-md-12">
                                         <div class="checkbox">
                                             <label>
-                                                <input type="checkbox" /> Generovat z textového zdroje
-                                            </label>
+                                                <input class="generate-pages-from-book" type="checkbox" /><span class="page-list-editor-controls-label">Generovat z textového zdroje</span></label>
                                         </div>
                                     </div>
                                 </div>
@@ -131,18 +127,23 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-md-6">
-                                    <button type="button" class="btn btn-default">Generovat</button>
+                                    <button type="button" class="btn btn-default generate-page-list">Generovat</button>
                                 </div>
                             </div>
                             <div class="bottom-buttons">
-                                <button type="button" class="btn btn-default">
+                                <button type="button" class="btn btn-default move-page-up">
                                     <span class="glyphicon glyphicon-arrow-up"></span>
                                 </button>
-                                <button type="button" class="btn btn-default">
+                                <button type="button" class="btn btn-default move-page-down">
                                     <span class="glyphicon glyphicon-arrow-down"></span>
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="row page-list-actions-row">
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-3"><button class="btn btn-default edit-page-list">Editovat</button></div>
+                        <div class="col-xs-8"></div>
                     </div>
                 </div>
                 <div class="modal-footer">

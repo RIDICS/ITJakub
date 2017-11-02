@@ -244,6 +244,11 @@
 @page-list-panel-height: 470px;
 
 .project-pages-dialog {
+
+    .page-list-actions-row {
+        margin-top: 5px;
+    }
+
     .left-panel {
         height: @page-list-panel-height + 40px;
 
@@ -256,8 +261,26 @@
         }
     }
 
+    .page-list-container {
+        overflow-y: auto;
+        height: inherit;
+
+        .page-list {
+            list-style-type: none;
+
+            .ui-selected {
+                background: #F39814;
+                color: white;
+            }
+        }
+    }
+
     .right-panel {
         height: @page-list-panel-height;
+
+        .page-list-editor-controls-label {
+            margin-left: 5px;
+        }
     }
 
     .control-label {
