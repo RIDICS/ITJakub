@@ -26,7 +26,7 @@
         this.makeSelectable(jEl);
     }
 
-    movePageUp(jEl: JQuery) {
+    movePageUp(jEl: JQuery) {//TODO multiple page selection
         const prevPageEl = jEl.prev(".page-list-item");
         if (prevPageEl.length) {
             jEl.detach();

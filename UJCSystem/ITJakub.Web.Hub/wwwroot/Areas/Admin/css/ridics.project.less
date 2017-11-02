@@ -1,5 +1,6 @@
 ﻿@import "../../../css/ITJakub.Colors.less";
 @import "@text-editor-variables.less";
+@import "@page-list-editor-vabiables.less";
 
 @box-border: 1px solid #ddd;
 
@@ -259,17 +260,27 @@
         button {
             margin-top: 8px;
         }
+
+        .page-list-edit-textarea {
+            height: inherit;
+        }
     }
 
     .page-list-container {
-        overflow-y: auto;
         height: inherit;
 
         .page-list {
             list-style-type: none;
+            overflow-y: auto;
+            height: inherit;
 
             .ui-selected {
-                background: #F39814;
+                background: @page-list-element-selected-color;
+                color: white;
+            }
+
+            .ui-selecting {
+                background: @page-list-element-selecting-color;
                 color: white;
             }
         }
