@@ -1,4 +1,6 @@
-﻿namespace Vokabular.FulltextService.DataContracts.Contracts
+﻿using Nest;
+
+namespace Vokabular.FulltextService.DataContracts.Contracts
 {
     public class TextResourceContract
     {

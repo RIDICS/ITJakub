@@ -19,9 +19,9 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost]
-        public ResultContract CreateSnapshot([FromBody] SnapshotResource snapshotResource)
+        public ResultContract CreateSnapshot([FromBody] SnapshotResourceContract snapshotResourceContract)
         {
-            var result = m_snapshotResourceManager.CreateSnapshotResource(snapshotResource);
+            var result = m_snapshotResourceManager.CreateSnapshotResource(snapshotResourceContract);
             return result;
 
         }

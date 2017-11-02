@@ -62,7 +62,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
                     var textResource = client.GetTextResource(pageId, TextFormatEnumContract.Raw);
                     builder.Append(textResource.Text);
                 }
-                client.CreateSnapshot(projectId, builder.ToString());
+                client.CreateSnapshot(projectId, externalPageIds);
             }
         }
     }

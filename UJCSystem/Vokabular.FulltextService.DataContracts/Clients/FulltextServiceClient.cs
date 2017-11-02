@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using ITJakub.Shared.Contracts;
 using Microsoft.Extensions.Logging;
@@ -61,9 +62,9 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public void CreateSnapshot(long projectId, string text)
+        public void CreateSnapshot(long projectId, List<string> pageIds)
         {
-            var snapshotResource = new SnapshotResource{ Text = text, ProjectId = projectId};
+            var snapshotResource = new SnapshotResourceContract{ PageIds = pageIds, ProjectId = projectId};
 
             try
             {
