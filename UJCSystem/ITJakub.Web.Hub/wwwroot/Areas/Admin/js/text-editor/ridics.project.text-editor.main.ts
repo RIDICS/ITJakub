@@ -31,7 +31,7 @@ class TextEditorMain {
         const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
         const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
         const lazyLoad = new PageLazyLoading(pageStructure);
-        const pageNavigation = new PageNavigation(this, gui);
+        const pageNavigation = new TextEditorPageNavigation(this, gui);
         const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.init();
         connections.init();
@@ -71,7 +71,7 @@ class TextEditorMain {
         });
     }
 
-    private attachEventShowPageCheckbox(pageNavigation: PageNavigation) {
+    private attachEventShowPageCheckbox(pageNavigation: TextEditorPageNavigation) {
         $("#project-resource-preview").on("click",
             ".display-page-checkbox",
             () => {

@@ -1,4 +1,4 @@
-﻿class PageNavigation {
+﻿class TextEditorPageNavigation {
 
     private readonly main: TextEditorMain;
     private readonly gui: TextEditorGui;
