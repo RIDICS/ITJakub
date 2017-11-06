@@ -34,7 +34,7 @@
         </div>
 
         <div class="col-md-4 image-preview">
-            <img alt="Náhled stránky" src="~/images/Mlceni_pink.jpg" />
+            <img alt="Náhled stránky" src="~/images/Mlceni_pink.jpg"/>
         </div>
     </div>
 
@@ -59,12 +59,12 @@
                                 <div class="col-md-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input class="book-cover-checkbox" type="checkbox" /><span class="page-list-editor-controls-label">Obal [FC]</span>
+                                            <input class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Obal [FC]</span>
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input class="book-startpage-checkbox" type="checkbox" /><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
+                                            <input class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
                                         </label>
                                     </div>
                                 </div>
@@ -72,10 +72,14 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="radio">
-                                        <label><input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Jednostránka</span></label>
+                                        <label>
+                                            <input type="radio" name="page-type"/><span class="page-list-editor-controls-label">Jednostránka</span>
+                                        </label>
                                     </div>
                                     <div class="radio">
-                                        <label><input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Dvojstránka</span></label>
+                                        <label>
+                                            <input type="radio" name="page-type"/><span class="page-list-editor-controls-label">Dvojstránka</span>
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -90,38 +94,39 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group-section">
-                                <div>
-                                    Generovat stránky
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label" for="project-pages-generate-from">Od:</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control input-sm" id="project-pages-generate-from" />
+                            <div class="generate-list-inputs">
+                                <div class="form-group-section generate-list-numberic-input-group">
+                                    <div class="generate-list-numberic-input-group-heading">Generovat stránky</div>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-from">Od:</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-from"/>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label" for="project-pages-generate-to">Do:</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="form-control input-sm" id="project-pages-generate-to" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group-section">
-                                <div class="form-group">
-                                    <div class="col-md-12">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input class="generate-pages-from-book" type="checkbox" /><span class="page-list-editor-controls-label">Generovat z textového zdroje</span></label>
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label" for="project-pages-generate-to">Do:</label>
+                                        <div class="col-md-6">
+                                            <input type="text" class="form-control input-sm" id="project-pages-generate-to"/>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-md-7">
-                                        <select class="form-control input-sm">
-                                            <option>Transkripce</option>
-                                            <option>Transliterace</option>
-                                        </select>
+                                <div class="form-group-section generate-list-from-book-input-group">
+                                    <div class="form-group">
+                                        <div class="col-md-12">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input class="generate-pages-from-book" type="checkbox"/><span class="page-list-editor-controls-label">Generovat z textového zdroje</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-7">
+                                            <select class="form-control input-sm">
+                                                <option>Transkripce</option>
+                                                <option>Transliterace</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -130,6 +135,7 @@
                                     <button type="button" class="btn btn-default generate-page-list">Generovat</button>
                                 </div>
                             </div>
+
                             <div class="bottom-buttons">
                                 <button type="button" class="btn btn-default move-page-up">
                                     <span class="glyphicon glyphicon-arrow-up"></span>
@@ -142,7 +148,9 @@
                     </div>
                     <div class="row page-list-actions-row">
                         <div class="col-xs-1"></div>
-                        <div class="col-xs-3"><button class="btn btn-default edit-page-list">Editovat</button></div>
+                        <div class="col-xs-3">
+                            <button class="btn btn-default edit-page-list">Editovat</button>
+                        </div>
                         <div class="col-xs-8"></div>
                     </div>
                 </div>

@@ -261,27 +261,31 @@
             margin-top: 8px;
         }
 
-        .page-list-edit-textarea {
+
+        .page-list-container {
             height: inherit;
-        }
-    }
+            width: 100%;
 
-    .page-list-container {
-        height: inherit;
-
-        .page-list {
-            list-style-type: none;
-            overflow-y: auto;
-            height: inherit;
-
-            .ui-selected {
-                background: @page-list-element-selected-color;
-                color: white;
+            .page-list-edit-textarea {
+                height: inherit;
+                width: inherit;
             }
 
-            .ui-selecting {
-                background: @page-list-element-selecting-color;
-                color: white;
+            .page-list {
+                list-style-type: none;
+                overflow-y: auto;
+                height: inherit;
+                padding-left: 0;
+
+                .ui-selected {
+                    background: @page-list-element-selected-color;
+                    color: white;
+                }
+
+                .ui-selecting {
+                    background: @page-list-element-selecting-color;
+                    color: white;
+                }
             }
         }
     }
@@ -304,6 +308,24 @@
 
     .bottom-buttons button {
         margin-top: 3px;
+    }
+
+    .generate-list-inputs{
+
+    .generate-list-numberic-input-group {
+        margin-top: 2px;
+        margin-bottom: 2px;
+
+        &-heading {
+            margin-top: 2px;
+            margin-bottom: 4px;
+        }
+    }
+
+    .generate-list-from-book-input-group {
+        margin-top: 10px;
+        margin-bottom:4px;
+    }
     }
 }
 

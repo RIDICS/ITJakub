@@ -24,7 +24,10 @@ class PageListEditorMain {
             $(".page-list-editor-content").on("click",
                 ".edit-page-list",
                 () => {
-                    editor.convertDivListToTextarea($(".page-list")); //TODO check it exists
+                    const pageListEl = $(".page-list");
+                    if (pageListEl.length) {
+                        editor.convertDivListToTextarea(pageListEl);
+                    }
                 }
             );
             $(".page-list-editor-content").on("click",
@@ -41,7 +44,10 @@ class PageListEditorMain {
                 () => {
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
-                        listStructure.movePageUp(selectedPageEl);
+                        selectedPageEl.each((index, element) => {
+                            const selectedItemJEl = $(element);
+                            listStructure.movePageUp(selectedItemJEl);
+                        });
                     }
                 });
 
@@ -50,7 +56,10 @@ class PageListEditorMain {
                 () => {
                     const selectedPageEl = $(".page-list").children(".ui-selected");
                     if (selectedPageEl.length) {
-                        listStructure.movePageDown(selectedPageEl);
+                        $(selectedPageEl.get().reverse()).each((index, element) => {
+                            const selectedItemJEl = $(element);
+                            listStructure.movePageDown(selectedItemJEl);
+                        });
                     }
                 }
             );
@@ -63,7 +72,7 @@ class PageListEditorMain {
                         const pageListString = textAreaEl.val();
                         const pageLingStringArray = pageListString.split("\n");
                         console.log(pageLingStringArray);
-//TODO add logic
+                        //util.savePageList(pageLingStringArray); TODO use after server functions are done
                     }
                 }
             );
@@ -73,7 +82,6 @@ class PageListEditorMain {
                 (event) => {
                     event.stopPropagation();
                     const textAreaEl = $(".page-list-edit-textarea");
-                    console.log(textAreaEl);
                     if (textAreaEl.length) {
                         textAreaEl.remove();
                     }

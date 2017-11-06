@@ -29,16 +29,20 @@
     movePageUp(jEl: JQuery) {//TODO multiple page selection
         const prevPageEl = jEl.prev(".page-list-item");
         if (prevPageEl.length) {
-            jEl.detach();
-            prevPageEl.before(jEl);
+            if (!prevPageEl.hasClass("ui-selected")) {
+                jEl.detach();
+                prevPageEl.before(jEl);
+            }
         }
     }
 
     movePageDown(jEl: JQuery) {
         const nextPageEl = jEl.next(".page-list-item");
         if (nextPageEl.length) {
-            jEl.detach();
-            nextPageEl.after(jEl);
+            if (!nextPageEl.hasClass("ui-selected")) {
+                jEl.detach();
+                nextPageEl.after(jEl);
+            }
         }
     }
 }
