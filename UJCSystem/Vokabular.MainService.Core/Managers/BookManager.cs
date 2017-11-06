@@ -343,8 +343,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
         {
-            UpdateHeadwordCategoryCriteria(request); // HACK for resolving slow query execution in some cases
-
             // TODO add authorization
             //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
 
@@ -397,8 +395,6 @@ namespace Vokabular.MainService.Core.Managers
 
         public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
         {
-            UpdateHeadwordCategoryCriteria(request); // HACK for resolving slow query execution in some cases
-
             // TODO add authorization
             //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
 
@@ -412,27 +408,6 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
             return result;
-        }
-
-        private void UpdateHeadwordCategoryCriteria(HeadwordSearchRequestContract request)
-        {
-            var categoryCriteria = request.ConditionConjunction.OfType<SelectedCategoryCriteriaContract>()
-                .FirstOrDefault();
-            UpdateHeadwordCategoryCriteria(categoryCriteria);
-        }
-
-        private void UpdateHeadwordCategoryCriteria(SelectedCategoryCriteriaContract categoryCriteria)
-        {
-            if (categoryCriteria != null)
-            {
-                // Add at least one projectId if any categoryId is specified
-                if (categoryCriteria.SelectedCategoryIds != null && categoryCriteria.SelectedCategoryIds.Count > 0 &&
-                    (categoryCriteria.SelectedBookIds == null || categoryCriteria.SelectedBookIds.Count == 0))
-                {
-                    var projectId = m_categoryRepository.InvokeUnitOfWork(x => x.GetAnyProjectIdByCategory(categoryCriteria.SelectedCategoryIds));
-                    categoryCriteria.SelectedBookIds = new List<long> { projectId };
-                }
-            }
         }
 
         public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
@@ -668,8 +643,6 @@ namespace Vokabular.MainService.Core.Managers
         {
             if (request.Category.BookType == null)
                 throw new ArgumentException("Null value of BookType is not supported");
-
-            UpdateHeadwordCategoryCriteria(request.Category);
 
             var searchHeadwordRowNumberWork = new SearchHeadwordRowNumberWork(m_bookRepository, m_categoryRepository, request);
             var result = searchHeadwordRowNumberWork.Execute();
