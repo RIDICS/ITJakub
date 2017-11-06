@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITJakub.CardFile", "ITJakub.CardFile", "{E9E91BD8-38D8-4A14-8CC2-002292F7C355}"
 EndProject
@@ -225,7 +225,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.FulltextService.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.FulltextService.DataContracts", "Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj", "{FDF4A88B-28B9-4167-B4E9-E4A950BC6C0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vokabular.RestClient", "Vokabular.RestClient\Vokabular.RestClient.csproj", "{2E80933F-418A-4181-AAD3-84D4059FBBEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vokabular.RestClient", "Vokabular.RestClient\Vokabular.RestClient.csproj", "{2E80933F-418A-4181-AAD3-84D4059FBBEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

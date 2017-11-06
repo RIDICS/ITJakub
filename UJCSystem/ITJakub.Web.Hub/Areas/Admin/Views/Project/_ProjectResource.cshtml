@@ -4,12 +4,14 @@
     <ul class="nav nav-tabs" role="tablist" id="project-resource-tabs">
         <li role="presentation" class="active"><a href="#project-resource-discussion" aria-controls="project-resource-publications" role="tab">Diskuze</a></li>
         <li role="presentation"><a href="#project-resource-preview" aria-controls="project-resource-preview" role="tab">Náhled</a></li>
+        <li role="presentation"><a href="#project-resource-images" aria-controls="project-resource-preview" role="tab">Obrázky</a></li>
         <li role="presentation"><a href="#project-resource-metadata" aria-controls="project-resource-metadata" role="tab">Metadata</a></li>
     </ul>
     
     <div class="tab-content" id="resource-tab-content">
         <div role="tabpanel" class="tab-pane active" id="project-resource-discussion" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourceDiscussion)"></div>
         <div role="tabpanel" class="tab-pane" id="project-resource-preview" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourcePreview)"></div>
+        <div role="tabpanel" class="tab-pane" id="project-resource-images" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourceImages)"></div>
         <div role="tabpanel" class="tab-pane" id="project-resource-metadata" data-panel-type="@Html.Raw((int)ProjectModuleTabType.ResourceMetadata)"></div>
     </div>
     

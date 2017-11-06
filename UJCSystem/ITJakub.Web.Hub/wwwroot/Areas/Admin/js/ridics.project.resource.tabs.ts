@@ -78,7 +78,7 @@ class ProjectResourcePreviewTab extends ProjectModuleTabBase {
     }
 }
 
-class ProjectResourceImageViewerTab extends ProjectModuleTabBase {
+class ProjectResourceImagesTab extends ProjectModuleTabBase {
     private readonly projectId: number;
     constructor(resourceId: number, projectId: number) {
         super();
@@ -86,7 +86,7 @@ class ProjectResourceImageViewerTab extends ProjectModuleTabBase {
     }
 
     initTab() {
-        $("#project-resource-preview").off();
+        $("#project-resource-images").off();
         const main = new ImageViewerMain();
         main.init(this.projectId);
     }

@@ -143,6 +143,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Resource/_Preview");
                     case ProjectModuleTabType.ResourceDiscussion:
                         return PartialView("Resource/_Discussion");
+                    case ProjectModuleTabType.ResourceImages:
+                        return PartialView("Resource/_Images");
                     case ProjectModuleTabType.ResourceMetadata:
                         var resourceMetadata = client.GetResourceMetadata(resourceId.Value);
                         var resourceMetadataViewModel = Mapper.Map<ProjectResourceMetadataViewModel>(resourceMetadata);

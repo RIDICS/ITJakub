@@ -10,5 +10,6 @@
         ResourcePreview = 101,
         ResourceDiscussion = 102,
         ResourceMetadata = 103,
+        ResourceImages = 104
     }
 }
