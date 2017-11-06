@@ -43,8 +43,7 @@ namespace ITJakub.Web.Hub.Helpers
 
         public static HtmlString VokabularStartedLocalized(DateTime releaseDate, string cultureName)
         {
-            Guard.ArgumentNotNull(nameof(releaseDate), releaseDate);
-            Guard.ArgumentNotNullOrEmpty(nameof(cultureName), cultureName);
+            Guard.ArgumentNotNull(nameof(releaseDate), releaseDate);    
 
             var now = DateTime.Now;
             var difference = now - releaseDate;
@@ -54,9 +53,13 @@ namespace ITJakub.Web.Hub.Helpers
             int months = age.Month - 1;
             int days = age.Day - 1;
 
-            CultureInfo cultureInfo = new CultureInfo(cultureName);
-
             IAutoLocalizationManager localizer = Localization.CoreLibrary.Localization.Translator;
+            if (string.IsNullOrEmpty(cultureName))
+            {
+                cultureName = localizer.DefaultCulture().ToString();
+            }
+
+            CultureInfo cultureInfo = new CultureInfo(cultureName);
 
             string yearsLabel = localizer.TranslatePluralization(LocTranslationSource.File, "Years", years, cultureInfo, "global");
             string monthsLabel = localizer.TranslatePluralization(LocTranslationSource.File, "Months", years, cultureInfo, "global");
