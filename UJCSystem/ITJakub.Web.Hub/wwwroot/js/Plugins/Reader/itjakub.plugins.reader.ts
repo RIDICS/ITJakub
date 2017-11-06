@@ -1278,7 +1278,7 @@
         return this.termsPanel;
     }
 
-    setTermPanelCallback(callback: (xmlId:string, text: string) => void) {
+    setTermPanelCallback(callback: (termId: number, text: string) => void) {
         this.getTermsPanel().setTermClickedCallback(callback);
     }
 
@@ -2445,7 +2445,7 @@ class TermsPanel extends LeftSidePanel {
     private termsResultItemsLoadDiv: HTMLDivElement;
     private searchResultItemsLoadDiv: HTMLDivElement;
 
-    private termClickedCallback: (xmlId: string, text: string) => void;
+    private termClickedCallback: (termId: number, text: string) => void;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
@@ -2548,7 +2548,7 @@ class TermsPanel extends LeftSidePanel {
         }
     }
 
-    setTermClickedCallback(callback: (xmlId:string, text: string)=>void) {
+    setTermClickedCallback(callback: (termId: number, text: string)=>void) {
         this.termClickedCallback = callback;
     }
 
@@ -2571,14 +2571,14 @@ class TermsPanel extends LeftSidePanel {
         return resultItemListElement;
     }
 
-    private createTermItem(xmlId: string, text: string): HTMLLIElement {
+    private createTermItem(termId: number, text: string): HTMLLIElement {
         var termItemListElement = document.createElement("li");
 
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
-                this.termClickedCallback(xmlId, text);   
+                this.termClickedCallback(termId, text);   
             }
         });
 
@@ -2608,7 +2608,7 @@ class TermsPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            data: { snapshotId: this.parentReader.bookId, pageId: page.xmlId },
             url: getBaseUrl() + "Reader/GetTermsOnPage",
             dataType: "json",
             contentType: "application/json",
@@ -2619,10 +2619,10 @@ class TermsPanel extends LeftSidePanel {
                     $(this.termsResultItemsLoadDiv).hide();
                     $(this.termsResultItemsDiv).show();
 
-                    var terms = response["terms"];
+                    var terms = response["terms"] as Array<ITermContract>;
                     for (var i = 0; i < terms.length; i++) {
                         var term = terms[i];
-                        this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
+                        this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
                     }
 
                     if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {

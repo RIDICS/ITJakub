@@ -62,12 +62,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             }
         }
 
-        public ActionResult GetTermsOnPage(string bookId, string pageXmlId)
+        public ActionResult GetTermsOnPage(string snapshotId, long pageId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var terms = client.GetTermsOnPage(bookId, pageXmlId);
-                return Json(new {terms}, GetJsonSerializerSettings());
+                var terms = client.GetPageTermList(pageId);
+                return Json(new { terms });
             }
         }
 
