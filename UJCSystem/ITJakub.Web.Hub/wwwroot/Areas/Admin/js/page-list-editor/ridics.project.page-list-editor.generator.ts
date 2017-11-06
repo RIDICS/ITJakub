@@ -51,6 +51,7 @@ class PageListGenerator {
         default:
         {
             alert("Invalid format");
+            break;
         }
         }
         return stringList;
@@ -73,7 +74,7 @@ class PageListGenerator {
             I: 1
         };
         let roman = "";
-        let i;
+        let i: string;
         for (i in lookup) {
             while (arabic >= lookup[i]) {
                 roman += i;
