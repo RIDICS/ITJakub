@@ -57,8 +57,8 @@
 
     private showTooltipOnHover() {
         var tooltip = $(".slider-tooltip");
-        $("#project-resource-preview").on("mouseenter", "#page-slider-handle", () => { tooltip.show(); });
-        $("#project-resource-preview").on("mouseleave", "#page-slider-handle", () => { tooltip.hide(); });
+        $("#project-resource-preview").on("mouseenter", ".page-slider-handle", () => { tooltip.show(); });
+        $("#project-resource-preview").on("mouseleave", ".page-slider-handle", () => { tooltip.hide(); });
     }
 
     private updatePageNames(textId: number) {
