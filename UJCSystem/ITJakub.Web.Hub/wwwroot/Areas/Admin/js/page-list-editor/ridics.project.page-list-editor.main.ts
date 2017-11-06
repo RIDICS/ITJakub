@@ -1,4 +1,4 @@
-﻿///<reference path="./ridics.project.page-list-editor.util.ts" />
+﻿///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
 ///<reference path="./ridics.project.page-list-editor.generator.ts" />
 ///<reference path="./ridics.project.page-list-editor.list-structure.ts" />
 ///<reference path="./ridics.project.page-list-editor.editor.ts" />
@@ -9,7 +9,7 @@ class PageListEditorMain {
 
     init(projectId: number) {
 
-        const util = new PageListEditorUtil();
+        const util = new EditorsUtil();
         const listGenerator = new PageListGenerator();
         const listStructure = new PageListStructure();
         const editor = new PageListEditorTextEditor();
@@ -98,7 +98,7 @@ class PageListEditorMain {
 
     private startGeneration(listGenerator: PageListGenerator,
         projectId: number,
-        util: PageListEditorUtil,
+        util: EditorsUtil,
         listStructure: PageListStructure) {
         const fromBook = $(".generate-pages-from-book:checked").val() as boolean;
         if (fromBook) { //TODO dropdown select meaning

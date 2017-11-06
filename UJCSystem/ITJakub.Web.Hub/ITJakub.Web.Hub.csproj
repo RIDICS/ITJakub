@@ -82,7 +82,7 @@
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.generator.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.list-structure.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.main.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.util.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.util.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\text-editor\ridics.project.text-editor.gui.ts" />
   </ItemGroup>
 

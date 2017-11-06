@@ -1,11 +1,11 @@
 ﻿class PageStructure {
     private readonly commentArea: CommentArea;
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly main: TextEditorMain;
     private readonly editor: Editor;
     private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util, main: TextEditorMain, editor: Editor, gui: TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil, main: TextEditorMain, editor: Editor, gui: TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
         this.main = main;

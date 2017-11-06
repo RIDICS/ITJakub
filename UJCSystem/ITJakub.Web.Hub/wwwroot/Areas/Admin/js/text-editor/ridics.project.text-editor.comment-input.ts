@@ -1,9 +1,9 @@
 ﻿class CommentInput {
     private readonly commentArea: CommentArea;
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
 
-    constructor(commentArea: CommentArea, util: Util, gui: TextEditorGui) {
+    constructor(commentArea: CommentArea, util: EditorsUtil, gui: TextEditorGui) {
         this.commentArea = commentArea;
         this.util = util;
         this.gui = gui;

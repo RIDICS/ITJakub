@@ -2,7 +2,7 @@
 ///<reference path="../../../../../node_modules/@types/jquery/index.d.ts" />
 ///<reference path="./ridics.project.text-editor.connections.ts" />
 ///<reference path="./ridics.project.text-editor.editor.ts" />
-///<reference path="./ridics.project.text-editor.util.ts" />
+///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
 ///<reference path="./ridics.project.text-editor.comment-area.ts" />
 ///<reference path="./ridics.project.text-editor.comment-input.ts" />
 ///<reference path="./ridics.project.text-editor.page-structure.ts" />
@@ -25,7 +25,7 @@ class TextEditorMain {
     init(projectId: number) {
         const gui = new TextEditorGui();
         const connections = new Connections();
-        const util = new Util();
+        const util = new EditorsUtil();
         const commentArea = new CommentArea(util, gui);
         const commentInput = new CommentInput(commentArea, util, gui);
         const pageTextEditor = new Editor(commentInput, util, gui, commentArea);

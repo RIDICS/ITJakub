@@ -1,8 +1,8 @@
 ﻿class CommentArea {
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
 
-    constructor(util: Util, gui: TextEditorGui) {
+    constructor(util: EditorsUtil, gui: TextEditorGui) {
         this.util = util;
         this.gui = gui;
     }

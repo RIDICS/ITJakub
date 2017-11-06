@@ -1,8 +1,24 @@
-﻿class Util {
-    private serverAddress = getBaseUrl();
+﻿class EditorsUtil {
+private serverPath = getBaseUrl();
+
+    getPagesList(projectId: number):JQueryXHR {
+        const pageListAjax = $.get(`${this.serverPath}admin/project/GetPageList`,
+            {
+                projectId: projectId
+            });
+        return pageListAjax;
+}
+
+    savePageList(pageList: string[]): JQueryXHR {
+        const pageAjax = $.post(`${this.serverPath}admin/project/SavePageList`,
+            {
+                pageList: pageList
+            });
+        return pageAjax;
+    }
 
     getServerAddress(): string {
-        return this.serverAddress;
+        return this.serverPath;
     }
 
     /**
@@ -10,12 +26,12 @@
  * @returns {JQueryXHR} Ajax conraining GUID
  */
     createTextRefereceId(): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetGuid`);
+        const ajax = $.post(`${this.serverPath}admin/project/GetGuid`);
         return ajax;
     }
 
     getProjectContent(projectId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetProjectContent`,
+        const ajax = $.post(`${this.serverPath}admin/project/GetProjectContent`,
             {
                 projectId: projectId
             });
@@ -23,9 +39,9 @@
     }
 
     deleteComment(commentId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/DeleteComment`,
+        const ajax = $.post(`${this.serverPath}admin/project/DeleteComment`,
             {
-                commentId:commentId
+                commentId: commentId
             });
         return ajax;
     }
@@ -36,7 +52,7 @@
 * @returns {JQueryXHR} Ajax containing page plain text
 */
     loadPlainText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`,
+        const ajax = $.post(`${this.serverPath}admin/project/GetTextResource`,
             { textId: textId, format: "Raw" });
         return ajax;
     }
@@ -47,12 +63,12 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/GetTextResource`, { textId: textId, format: "Html" });
+        const ajax = $.post(`${this.serverPath}admin/project/GetTextResource`, { textId: textId, format: "Html" });
         return ajax;
     }
 
     savePlainText(textId: number, request: IPageTextBase): JQueryXHR {
-        const ajax = $.post(`${this.serverAddress}admin/project/SetTextResource`,
+        const ajax = $.post(`${this.serverPath}admin/project/SetTextResource`,
             {
                 textId: textId,
                 request: request
@@ -93,5 +109,4 @@
         }
         return result;
     }
-
 }

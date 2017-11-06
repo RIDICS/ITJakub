@@ -4,11 +4,11 @@
     private originalContent = "";
     private simplemde: SimpleMDE;
     private readonly commentInput: CommentInput;
-    private readonly util: Util;
+    private readonly util: EditorsUtil;
     private readonly gui: TextEditorGui;
     private readonly commentArea: CommentArea;
 
-    constructor(commentInput: CommentInput, util: Util, gui: TextEditorGui, commentArea: CommentArea) {
+    constructor(commentInput: CommentInput, util: EditorsUtil, gui: TextEditorGui, commentArea: CommentArea) {
         this.commentInput = commentInput;
         this.util = util;
         this.gui = gui;
