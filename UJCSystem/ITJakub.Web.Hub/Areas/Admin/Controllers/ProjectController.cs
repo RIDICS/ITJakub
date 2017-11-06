@@ -625,12 +625,22 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetPageList(long projectId)
         {
             using (var client = GetRestClient())
             {
                 var result = client.GetAllPageList(projectId);
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SavePageList(string[] pageList)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.SetAllPageList(pageList);
                 return Json(result);
             }
         }

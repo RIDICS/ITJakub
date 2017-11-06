@@ -807,6 +807,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public long SetAllPageList(string[] pageList)
+        {
+            try
+            {
+                //TODO add logic
+                throw new NotImplementedException();
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<TextWithPageContract> GetAllTextResourceList(long projectId, long? resourceGroupId)
         {
             try
