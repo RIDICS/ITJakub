@@ -37,6 +37,10 @@ class PageListEditorMain {
                     if (pageListEl.length) {
                         pageListEl.remove();
                     }
+                    const pageListTextareaEl = $(".page-list-edit-textarea");
+                    if (pageListTextareaEl.length) {
+                        pageListTextareaEl.remove();
+                    }
                     this.startGeneration(listGenerator, projectId, util, listStructure);
                 });
             $(".page-list-editor-content").on("click",
