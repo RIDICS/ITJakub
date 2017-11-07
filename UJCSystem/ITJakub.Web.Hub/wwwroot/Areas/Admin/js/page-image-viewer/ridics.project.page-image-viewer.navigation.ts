@@ -1,4 +1,9 @@
 ﻿class ImageViewerPageNavigation {
+    private readonly contentAddition: ImageViewerContentAddition;
+
+    constructor(contentAddition: ImageViewerContentAddition) {
+        this.contentAddition = contentAddition;
+    }
 
     init(pages: IParentPage[]) {
         this.createSlider(pages);
@@ -47,26 +52,32 @@
         $(".page-navigator").on("click",
             ".previous-page",
             () => {
-                //TODO check whether prev page exists
                 var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
                 if (!isNaN(index)) {
                     index--;
                     $(".text-editor-page-slider").slider("value", index);
                     const sliderNeedsUpdate = true;
-                    this.loadPage(index, pages, sliderNeedsUpdate);
+                    if (index > -1 && index < pages.length) {
+                        this.loadPage(index, pages, sliderNeedsUpdate);
+                    } else {
+                        alert("No more pages on the left.");
+                    }
                 }
 
             });
         $(".page-navigator").on("click",
             ".next-page",
             () => {
-                //TODO check whether next page exists
                 var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
                 if (!isNaN(index)) {
                     index++;
                     $(".text-editor-page-slider").slider("value", index);
                     const sliderNeedsUpdate = true;
-                    this.loadPage(index, pages, sliderNeedsUpdate);
+                    if (index > -1 && index < pages.length) {
+                        this.loadPage(index, pages, sliderNeedsUpdate);
+                    } else {
+                        alert("No more pages on the right.");
+                    }
                 }
             });
     }
@@ -128,6 +139,6 @@
             this.updateSlider(index, pageName);
         }
         this.updatePageIndicator(pageName);
-        //TODO add logic
+        this.contentAddition.formImageContent(pages[index].id);
     }
 }

@@ -618,6 +618,16 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        public void GetPageImage(long pageId)
+        {
+            using (var client = GetRestClient())
+            {
+                //TODO add logic
+                throw new NotImplementedException();
+            }
+        }
+
+        [HttpPost]
         public IActionResult GetProjectContent(long projectId, long? resourceGroupId)
         {
             using (var client = GetRestClient())

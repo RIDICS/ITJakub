@@ -1,13 +1,21 @@
 ﻿class EditorsUtil {
-private serverPath = getBaseUrl();
+    private serverPath = getBaseUrl();
 
-    getPagesList(projectId: number):JQueryXHR {
+    getPagesList(projectId: number): JQueryXHR {
         const pageListAjax = $.get(`${this.serverPath}admin/project/GetPageList`,
             {
                 projectId: projectId
             });
         return pageListAjax;
-}
+    }
+
+    getImageOnPage(pageId: number): JQueryXHR {
+        const pageImageAjax = $.post(`${this.serverPath}admin/project/GetPageImage`,
+            {
+                pageId: pageId
+            });
+        return pageImageAjax;
+    }
 
     savePageList(pageList: string[]): JQueryXHR {
         const pageAjax = $.post(`${this.serverPath}admin/project/SavePageList`,
