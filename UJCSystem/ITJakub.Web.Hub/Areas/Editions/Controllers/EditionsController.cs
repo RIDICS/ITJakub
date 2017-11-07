@@ -80,13 +80,7 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
                         BookXmlId = book.Id.ToString(), // TODO remove this property
                         VersionXmlId = null, // TODO replace this property with snapshot ID
                         BookTitle = book.Title,
-                        //BookPages = book.BookPages, // TODO change BookPages structure
-                        BookPages = pages.Select(x => new BookPageContract
-                        {
-                            XmlId = x.Id.ToString(),
-                            Text = x.Name,
-                            Position = x.Position,
-                        }).ToList(),
+                        BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page, // TODO rename to InitPageId
                         CanPrintEdition = User.IsInRole("CanEditionPrint"),

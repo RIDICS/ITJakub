@@ -1,8 +1,8 @@
 ﻿function initGrammarReader(bookId: number, bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
-    function readerPageChangedCallback(pageXmlId: string) {
-        updateQueryStringParameter("page", pageXmlId);
+    function readerPageChangedCallback(pageId: number) {
+        updateQueryStringParameter("page", pageId);
     }
 
     function hideTypeahead() {
@@ -111,7 +111,8 @@
     if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
         var decodedText = decodeURIComponent(initPageXmlId);
         decodedText = replaceSpecialChars(decodedText);
-        readerPlugin.moveToPage(decodedText, true);
+        var pageId = Number(decodedText);
+        readerPlugin.moveToPage(pageId, true);
     }
 
     //label item in main menu

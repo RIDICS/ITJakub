@@ -106,21 +106,12 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
             }
         }
 
-        public ActionResult GetBookPageList(string bookId)
+        public ActionResult GetBookContent(long bookId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var pages = client.GetBookPageList(bookId);
-                return Json(new {pageList = pages}, GetJsonSerializerSettings());
-            }
-        }
-
-        public ActionResult GetBookContent(string bookId)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var contentItems = client.GetBookContent(bookId);
-                return Json(new {content = contentItems}, GetJsonSerializerSettings());
+                var contentItems = client.GetBookChapterList(bookId);
+                return Json(new { content = contentItems });
             }
         }
     }

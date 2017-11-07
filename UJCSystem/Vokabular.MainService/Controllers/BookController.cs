@@ -74,7 +74,7 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}/chapter")]
-        public List<ChapterContract> GetBookChapterList(long projectId)
+        public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
             var result = m_bookManager.GetBookChapterList(projectId);
             return result;

@@ -926,7 +926,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<PageContract>>($"project/{projectId}/page");
+                var result = Get<List<PageContract>>($"book/{projectId}/page");
                 return result;
             }
             catch (HttpRequestException e)
@@ -938,11 +938,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ChapterContract> GetBookChapterList(long projectId)
+        public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
             try
             {
-                var result = Get<List<ChapterContract>>($"project/{projectId}/chapter");
+                var result = Get<List<ChapterHierarchyContract>>($"book/{projectId}/chapter");
                 return result;
             }
             catch (HttpRequestException e)

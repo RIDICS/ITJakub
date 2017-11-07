@@ -116,12 +116,7 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
                         BookXmlId = book.Id.ToString(),
                         VersionXmlId = null,
                         BookTitle = book.Title,
-                        BookPages = pages.Select(x => new BookPageContract
-                        {
-                            XmlId = x.Id.ToString(),
-                            Text = x.Name,
-                            Position = x.Position,
-                        }).ToList(),
+                        BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page,
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
@@ -139,15 +134,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         {
             var fullPath = "~/Areas/OldGrammar/Content/BibliographyPlugin/search_configuration.json";
             return File(fullPath, "application/json", fullPath);
-        }
-
-        public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
         }
 
         public ActionResult GetGrammarsWithCategories()
