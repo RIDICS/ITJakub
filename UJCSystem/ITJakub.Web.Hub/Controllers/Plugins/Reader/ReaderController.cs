@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using AutoMapper;
 using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Web.Hub.Converters;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
@@ -57,8 +59,15 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
         {
             using (var client = GetRestClient())
             {
-                var imageData = client.GetPageImage(pageId);
-                return new FileStreamResult(imageData.Stream, imageData.MimeType);
+                try
+                {
+                    var imageData = client.GetPageImage(pageId);
+                    return new FileStreamResult(imageData.Stream, imageData.MimeType);
+                }
+                catch (HttpErrorCodeException e)
+                {
+                    return StatusCode((int) e.StatusCode);
+                }
             }
         }
 

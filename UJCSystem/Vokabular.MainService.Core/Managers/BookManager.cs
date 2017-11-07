@@ -600,7 +600,12 @@ namespace Vokabular.MainService.Core.Managers
         public string GetPageText(long resourcePageId, TextFormatEnumContract format)
         {
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
-            var textResource = textResourceList.First();
+            var textResource = textResourceList.FirstOrDefault();
+            if (textResource == null)
+            {
+                return null;
+            }
+
             var fulltextStorage = GetFulltextStorage();
 
             var result = fulltextStorage.GetPageText(textResource, format);
@@ -610,7 +615,11 @@ namespace Vokabular.MainService.Core.Managers
         public FileResultData GetPageImage(long resourcePageId)
         {
             var imageResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageImage(resourcePageId));
-            var imageResource = imageResourceList.First();
+            var imageResource = imageResourceList.FirstOrDefault();
+            if (imageResource == null)
+            {
+                return null;
+            }
 
             var imageStream = m_fileSystemManager.GetResource(imageResource.Resource.Project.Id, null, imageResource.FileId, ResourceType.Image);
             return new FileResultData
@@ -625,6 +634,11 @@ namespace Vokabular.MainService.Core.Managers
         public FileResultData GetAudio(long audioId)
         {
             var audioResource = m_bookRepository.InvokeUnitOfWork(x => x.GetPublishedResourceVersion<AudioResource>(audioId));
+            if (audioResource == null)
+            {
+                return null;
+            }
+
             var fileStream = m_fileSystemManager.GetResource(audioResource.Resource.Project.Id, null, audioResource.FileId, ResourceType.Audio);
 
             return new FileResultData
@@ -639,6 +653,11 @@ namespace Vokabular.MainService.Core.Managers
         public string GetHeadwordText(long headwordId, TextFormatEnumContract format)
         {
             var headwordResource = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordResource(headwordId, false));
+            if (headwordResource == null)
+            {
+                return null;
+            }
+
             var fulltextStorage = GetFulltextStorage();
 
             var result = fulltextStorage.GetHeadwordText(headwordResource, format);

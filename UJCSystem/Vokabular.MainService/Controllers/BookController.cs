@@ -109,11 +109,14 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("page/{pageId}/text")]
-        public string GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
+        public IActionResult GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
             var result = m_bookManager.GetPageText(pageId, formatValue);
-            return result;
+            if (result == null)
+                return NotFound();
+            
+            return Ok(result);
         }
 
         [HttpHead("page/{pageId}/image")]
@@ -127,6 +130,9 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetPageImage(long pageId)
         {
             var result = m_bookManager.GetPageImage(pageId);
+            if (result == null)
+                return NotFound();
+
             Response.ContentLength = result.FileSize;
             return File(result.Stream, result.MimeType, result.FileName);
         }
@@ -135,16 +141,22 @@ namespace Vokabular.MainService.Controllers
         public IActionResult GetAudio(long audioId)
         {
             var result = m_bookManager.GetAudio(audioId);
+            if (result == null)
+                return NotFound();
+
             Response.ContentLength = result.FileSize;
             return File(result.Stream, result.MimeType, result.FileName);
         }
 
         [HttpGet("headword/{headwordId}/text")]
-        public string GetHeadwordText(long headwordId, [FromQuery] TextFormatEnumContract? format)
+        public IActionResult GetHeadwordText(long headwordId, [FromQuery] TextFormatEnumContract? format)
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
             var result = m_bookManager.GetHeadwordText(headwordId, formatValue);
-            return result;
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 }

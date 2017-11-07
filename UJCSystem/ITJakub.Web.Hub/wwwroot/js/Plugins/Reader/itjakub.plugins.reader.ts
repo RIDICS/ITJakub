@@ -769,6 +769,10 @@
                     $(textPanel.panelHtml).hide();
                     $(imagePanel.panelHtml).show();
                 });
+
+                this.hasBookImage(this.bookId, this.versionId, null, () => {
+                    imagePanel.isDisabled = true;
+                });
             }
         }
 
@@ -2078,9 +2082,11 @@ class RightSidePanel extends SidePanel {
 }
 
 class ImagePanel extends RightSidePanel {
+    isDisabled: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Obrázky", readerModule, showPanelButtonList);
+        this.isDisabled = false;
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -2092,7 +2098,9 @@ class ImagePanel extends RightSidePanel {
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
         var pageInfo = this.parentReader.pages[pageIndex];
         $(this.innerContent).empty();
-      
+
+        if (this.isDisabled)
+            return;
         
         var image: HTMLImageElement = document.createElement("img");
         image.classList.add("reader-image");
