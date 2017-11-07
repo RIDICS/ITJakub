@@ -72,10 +72,19 @@ class PageListEditorMain {
                 ".save-page-list",
                 () => {
                     const textAreaEl = $(".page-list-edit-textarea");
+                    const pageListDivEl = $(".page-list");
                     if (textAreaEl.length) {
                         const pageListString = textAreaEl.val();
-                        const pageLingStringArray = pageListString.split("\n");
-                        console.log(pageLingStringArray);
+                        const pageListStringArray = pageListString.split("\n");
+                        //util.savePageList(pageLingStringArray); TODO use after server functions are done
+                    }
+                    if (pageListDivEl.length) {
+                        const pageItemsEl = pageListDivEl.children(".page-list-item");
+                        var pageListStringArray: string[] = [];
+                        pageItemsEl.each((index, element) => {
+                            const pageEl = $(element);
+                            pageListStringArray.push(pageEl.text());
+                        });
                         //util.savePageList(pageLingStringArray); TODO use after server functions are done
                     }
                 }
@@ -94,6 +103,13 @@ class PageListEditorMain {
                 }
             );
         });
+    }
+
+    private enableCheckboxes() {
+        const fcCheckbox = $(".book-cover-checkbox");
+        const fsCheckbox = $(".book-startpage-checkbox");
+        fsCheckbox.prop("disabled", false);
+        fcCheckbox.prop("disabled", false);
     }
 
     private checkmarkFC() {
@@ -196,6 +212,7 @@ class PageListEditorMain {
             const pageListAjax = util.getPagesList(projectId);
             pageListAjax.done((data: IParentPage[]) => {
                 const pageList: string[] = [];
+                this.enableCheckboxes();
                 for (let i = 0; i < data.length; i++) {
                     const pageName = data[i].name;
                     if (pageName.toLocaleLowerCase() === "fc") {
@@ -218,14 +235,13 @@ class PageListEditorMain {
             if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
                 const from = parseInt(fromFieldValue);
                 const to = parseInt(toFieldValue);
-                const fc = $(".book-cover-checkbox").prop("checked") as boolean;
-                const fs = $(".book-startpage-checkbox").prop("checked") as boolean;
                 const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
                 const format = PageListFormat[formatString] as number;
                 if (!isNaN(from) && !isNaN(to)) {
                     if (to > from) {
-                        const pageList = listGenerator.generatePageList(from, to, format, fc, fs);
+                        const pageList = listGenerator.generatePageList(from, to, format);
                         this.populateList(pageList, listStructure);
+                        this.enableCheckboxes();
                         this.trackSpecialPagesCheckboxesState();
                     } else {
                         alert("Please swap to and from numbers.");

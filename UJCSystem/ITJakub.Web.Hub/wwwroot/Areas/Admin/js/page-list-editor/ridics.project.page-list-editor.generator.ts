@@ -6,14 +6,8 @@
 };
 
 class PageListGenerator {
-    generatePageList(from: number, to: number, style: number, fc: boolean, fs: boolean): string[] {
+    generatePageList(from: number, to: number, style: number): string[] {
         var stringList: string[] = [];
-        if (fc) {
-            stringList.push("FC");
-        }
-        if (fs) {
-            stringList.push("FS");
-        }
         switch (style) {
         case PageListFormat["1r"]:
         {
