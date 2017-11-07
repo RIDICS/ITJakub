@@ -96,19 +96,118 @@ class PageListEditorMain {
         });
     }
 
+    private checkmarkFC() {
+        const fcCheckbox = $(".book-cover-checkbox");
+        fcCheckbox.prop("checked", true);
+    }
+
+    private checkmarkFS() {
+        const fsCheckbox = $(".book-startpage-checkbox");
+        fsCheckbox.prop("checked", true);
+    }
+
+    private removeFSPage() {
+        const pageListEl = $(".page-list");
+        if (pageListEl.length) {
+            const listItems = pageListEl.children(".page-list-item");
+            listItems.each((index, element) => {
+                const listItemEl = $(element);
+                if (listItemEl.text().toLocaleLowerCase() === "fs") {
+                    listItemEl.remove();
+                }
+            });
+        }
+    }
+
+    private removeFCPage() {
+        const pageListEl = $(".page-list");
+        if (pageListEl.length) {
+            const listItems = pageListEl.children(".page-list-item");
+            listItems.each((index, element) => {
+                const listItemEl = $(element);
+                if (listItemEl.text().toLocaleLowerCase() === "fc") {
+                    listItemEl.remove();
+                }
+            });
+        }
+    }
+
+    private addFSPage() {
+        const pageListEl = $(".page-list");
+        if (pageListEl.length) {
+            const listItem = pageListEl.children(".page-list-item").first();
+            const fcPageListItem = listItem.clone().text("FS");
+            if (listItem.text().toLocaleLowerCase() === "fc") {
+                listItem.after(fcPageListItem);
+            } else {
+                listItem.before(fcPageListItem);
+            }
+        }
+    }
+
+    private addFCPage() {
+        const pageListEl = $(".page-list");
+        if (pageListEl.length) {
+            const listItem = pageListEl.children(".page-list-item").first();
+            listItem.before(listItem.clone().text("FC"));
+        }
+    }
+
+    private trackSpecialPagesCheckboxesState() {
+        $(".special-pages-controls").off();
+        var fsCheckboxPrevState = $(".book-startpage-checkbox").prop("checked") as boolean;
+        var fcCheckboxPrevState = $(".book-cover-checkbox").prop("checked") as boolean;
+        $(".special-pages-controls").on("click",
+            ".book-cover-checkbox",
+            () => {
+                const fcCheckboxCurrentState = $(".book-cover-checkbox").prop("checked") as boolean;
+                if (fcCheckboxPrevState && !fcCheckboxCurrentState) {
+                    console.log("Remove fc");
+                    this.removeFCPage();
+                }
+                if (!fcCheckboxPrevState && fcCheckboxCurrentState) {
+                    console.log("Add fc");
+                    this.addFCPage();
+                }
+                fcCheckboxPrevState = fcCheckboxCurrentState;
+            });
+        $(".special-pages-controls").on("click",
+            ".book-startpage-checkbox",
+            () => {
+                const fsCheckboxCurrentState = $(".book-startpage-checkbox").prop("checked") as boolean;
+                if (fsCheckboxPrevState && !fsCheckboxCurrentState) {
+                    console.log("Remove fs");
+                    this.removeFSPage();
+                }
+                if (!fsCheckboxPrevState && fsCheckboxCurrentState) {
+                    console.log("Add fs");
+                    this.addFSPage();
+                }
+                fsCheckboxPrevState = fsCheckboxCurrentState;
+            });
+    }
+
     private startGeneration(listGenerator: PageListGenerator,
         projectId: number,
         util: EditorsUtil,
         listStructure: PageListStructure) {
-        const fromBook = $(".generate-pages-from-book:checked").val() as boolean;
+        const fromBook = $(".generate-pages-from-book").prop("checked") as boolean;
         if (fromBook) { //TODO dropdown select meaning
             const pageListAjax = util.getPagesList(projectId);
             pageListAjax.done((data: IParentPage[]) => {
                 const pageList: string[] = [];
                 for (let i = 0; i < data.length; i++) {
-                    pageList.push(data[i].name);
+                    const pageName = data[i].name;
+                    if (pageName.toLocaleLowerCase() === "fc") {
+                        this.checkmarkFC();
+                    }
+                    if (pageName.toLocaleLowerCase() === "fs") {
+                        this.checkmarkFS();
+                    }
+                    pageList.push(pageName);
                 }
                 this.populateList(pageList, listStructure);
+                this.trackSpecialPagesCheckboxesState();
             });
             pageListAjax.fail(() => {
                 alert("Load failure due to server error.");
@@ -119,14 +218,15 @@ class PageListEditorMain {
             if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
                 const from = parseInt(fromFieldValue);
                 const to = parseInt(toFieldValue);
-                const fc = $(".book-cover-checkbox:checked").val() as boolean;
-                const fs = $(".book-startpage-checkbox:checked").val() as boolean;
+                const fc = $(".book-cover-checkbox").prop("checked") as boolean;
+                const fs = $(".book-startpage-checkbox").prop("checked") as boolean;
                 const formatString = $("#project-pages-format").find(":selected").data("format-value") as string;
                 const format = PageListFormat[formatString] as number;
                 if (!isNaN(from) && !isNaN(to)) {
                     if (to > from) {
                         const pageList = listGenerator.generatePageList(from, to, format, fc, fs);
                         this.populateList(pageList, listStructure);
+                        this.trackSpecialPagesCheckboxesState();
                     } else {
                         alert("Please swap to and from numbers.");
                     }
