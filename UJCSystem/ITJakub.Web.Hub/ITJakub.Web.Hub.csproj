@@ -78,6 +78,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.content-placement.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-list-editor\ridics.project.page-list-editor.editor.ts" />
