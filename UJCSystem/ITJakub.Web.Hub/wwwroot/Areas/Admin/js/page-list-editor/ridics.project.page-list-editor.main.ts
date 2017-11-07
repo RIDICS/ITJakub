@@ -178,11 +178,9 @@ class PageListEditorMain {
             () => {
                 const fcCheckboxCurrentState = $(".book-cover-checkbox").prop("checked") as boolean;
                 if (fcCheckboxPrevState && !fcCheckboxCurrentState) {
-                    console.log("Remove fc");
                     this.removeFCPage();
                 }
                 if (!fcCheckboxPrevState && fcCheckboxCurrentState) {
-                    console.log("Add fc");
                     this.addFCPage();
                 }
                 fcCheckboxPrevState = fcCheckboxCurrentState;
@@ -192,11 +190,9 @@ class PageListEditorMain {
             () => {
                 const fsCheckboxCurrentState = $(".book-startpage-checkbox").prop("checked") as boolean;
                 if (fsCheckboxPrevState && !fsCheckboxCurrentState) {
-                    console.log("Remove fs");
                     this.removeFSPage();
                 }
                 if (!fsCheckboxPrevState && fsCheckboxCurrentState) {
-                    console.log("Add fs");
                     this.addFSPage();
                 }
                 fsCheckboxPrevState = fsCheckboxCurrentState;

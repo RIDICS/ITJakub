@@ -1,83 +1,107 @@
 ﻿class ImageViewerPageNavigation {
-    private currentPage = 0;
 
     init(pages: IParentPage[]) {
         this.createSlider(pages);
         this.showTooltipOnHover();
-        this.pageButtonClickProcess();
-        this.listenToPageEnteredConfirmation();
+        this.pageButtonClickProcess(pages);
+        this.listenToPageEnteredConfirmation(pages);
     }
 
     private createSlider(pages: IParentPage[]) {
         $(() => {
-            var tooltip = $(".slider-tooltip");
-            var tooltipText = tooltip.children(".slider-tooltip-text");
+            const tooltip = $(".slider-tooltip");
+            const tooltipText = tooltip.children(".slider-tooltip-text");
             const thisClass = this;
             $(".text-editor-page-slider").slider({
                 min: 0,
                 max: pages.length - 1,
                 step: 1,
-                create: function () {
-                    const pageName = pages[0].name;
-                    tooltipText.text(`Page: ${pageName}`);
-                    thisClass.updatePageIndicator(pageName);
+                create: function() {
+                    const sliderNeedsUpdate = true;
+                    thisClass.loadPage(0, pages, sliderNeedsUpdate);
                 },
                 slide(event, ui) {
-                    const value = parseInt($(".text-editor-page-slider").slider("option", "value"));
-                    if (!isNaN(value)) {
-                        tooltipText.text(`Page: ${pages[value].name}`);
+                    const index = ui.value;
+                    if (!isNaN(index)) {
+                        tooltipText.text(`Page: ${pages[index].name}`);
                         tooltip.show();
                     }
                 },
-                change: () => {
-                    const pageId = $(".text-editor-page-slider").slider("option", "value") as number;
-                    this.loadPage(pageId, pages);
+                change: (event, ui) => {
+                    const index = ui.value;
+                    if (!isNaN(index)) {
+                        const sliderNeedsUpdate = false;
+                        thisClass.loadPage(index, pages, sliderNeedsUpdate);
+                    }
                 }
             });
         });
     }
 
-    private pageButtonClickProcess() {
-        $(".page-navigator").on("click", ".previous-page", () => {
-            //TODO check whether prev page exists
-            var value = parseInt($(".text-editor-page-slider").slider("option", "value"));//TODO check NaN
-            value--;
-            $(".text-editor-page-slider").slider("value", value);
-            //TODO add logic
-        });
-        $(".page-navigator").on("click", ".next-page", () => {
-            //TODO check whether next page exists
-            var value = parseInt($(".text-editor-page-slider").slider("option", "value"));//TODO check NaN
-            value++;
-            $(".text-editor-page-slider").slider("value", value);
-            //TODO add logic
-        });
+    private getPageIdByPageName(pageName: string, pages: string[]): number {
+        const index = $.inArray(pageName, pages);
+        return index;
     }
 
-    private listenToPageEnteredConfirmation() {
-            $(".page-menu-row").on("click",
-                ".go-to-page-button",
-                () => {
-                    this.processPageInputField();
-                });
+    private pageButtonClickProcess(pages: IParentPage[]) {
+        $(".page-navigator").on("click",
+            ".previous-page",
+            () => {
+                //TODO check whether prev page exists
+                var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
+                if (!isNaN(index)) {
+                    index--;
+                    $(".text-editor-page-slider").slider("value", index);
+                    const sliderNeedsUpdate = true;
+                    this.loadPage(index, pages, sliderNeedsUpdate);
+                }
 
-            $(".page-menu-row").on("keypress",
-                ".go-to-page-field",
-                (event) => {
-                    var keycode = (event.keyCode ? event.keyCode : event.which);
-                    if (keycode === 13) { //Enter key
-                        this.processPageInputField();
-                    }
-                });  
+            });
+        $(".page-navigator").on("click",
+            ".next-page",
+            () => {
+                //TODO check whether next page exists
+                var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
+                if (!isNaN(index)) {
+                    index++;
+                    $(".text-editor-page-slider").slider("value", index);
+                    const sliderNeedsUpdate = true;
+                    this.loadPage(index, pages, sliderNeedsUpdate);
+                }
+            });
     }
 
-    private processPageInputField() {
+    private listenToPageEnteredConfirmation(pages: IParentPage[]) {
+        $(".page-menu-row").on("click",
+            ".go-to-page-button",
+            () => {
+                this.processPageInputField(pages);
+            });
+
+        $(".page-menu-row").on("keypress",
+            ".go-to-page-field",
+            (event) => {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode === 13) { //Enter key
+                    this.processPageInputField(pages);
+                }
+            });
+    }
+
+    private processPageInputField(pages: IParentPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
-            alert("Warning. You haven't entered anything. Please enter a page name.");//TODO implement dialog
+            alert("Warning. You haven't entered anything. Please enter a page name."); //TODO implement dialog
         } else {
-//TODO add logic
+            const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
+            const index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
+            if (index === -1) {
+                alert("No such page.");
+            } else {
+                const sliderNeedsUpdate = true;
+                this.loadPage(index, pages, sliderNeedsUpdate);
+            }
         }
     }
 
@@ -91,7 +115,19 @@
         $(".page-indicator").text(pageName);
     }
 
-    private loadPage(pageId: number, pages: IParentPage[]) {
-        this.updatePageIndicator("Page name");//TODO add logic
+    private updateSlider(index: number, pageName: string) {
+        const tooltip = $(".slider-tooltip");
+        const tooltipText = tooltip.children(".slider-tooltip-text");
+        tooltipText.text(`Page: ${pageName}`);
+        $(".text-editor-page-slider").slider("value", index);
+    }
+
+    private loadPage(index: number, pages: IParentPage[], sliderNeedsUpdate: boolean) {
+        const pageName = pages[index].name;
+        if (sliderNeedsUpdate) {
+            this.updateSlider(index, pageName);
+        }
+        this.updatePageIndicator(pageName);
+        //TODO add logic
     }
 }
