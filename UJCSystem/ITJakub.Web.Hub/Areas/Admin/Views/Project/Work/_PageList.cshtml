@@ -59,73 +59,87 @@
                                 <div class="col-md-12">
                                     <div class="checkbox">
                                         <label>
-                                            <input class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Obal [FC]</span>
+                                            <input disabled class="book-cover-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Obal [FC]</span>
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
+                                            <input disabled class="book-startpage-checkbox" type="checkbox"/><span class="page-list-editor-controls-label">Úvodní strana [FS]</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="col-md-12">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="page-type"/><span class="page-list-editor-controls-label">Jednostránka</span>
-                                        </label>
-                                    </div>
-                                    <div class="radio">
-                                        <label>
-                                            <input type="radio" name="page-type"/><span class="page-list-editor-controls-label">Dvojstránka</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-2 control-label" for="project-pages-format">Formát</label>
-                                <div class="col-md-7">
-                                    <select class="form-control input-sm" id="project-pages-format">
-                                        <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
-                                        <option data-format-value="I'1r">I'1r, I'1v, I'2r, ...</option>
-                                        <option data-format-value="Roman">I, II, III, IV, V, ...</option>
-                                        <option data-format-value="Arabic">1, 2, 3, 4, 5, ...</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="generate-list-inputs">
-                                <div class="form-group-section generate-list-numberic-input-group">
-                                    <div class="generate-list-numberic-input-group-heading">Generovat stránky</div>
-                                    <div class="form-group">
-                                        <label class="col-md-1 control-label" for="project-pages-generate-from">Od:</label>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control input-sm" id="project-pages-generate-from"/>
+                            <div>	
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a  href="#1" data-toggle="tab">Fom input field</a>
+                                    </li>
+                                    <li><a href="#2" data-toggle="tab">From text source</a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="1">
+                                        <div class="form-group">
+                                            <div class="col-md-12">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Jednostránka</span>
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="page-type" /><span class="page-list-editor-controls-label">Dvojstránka</span>
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-1 control-label" for="project-pages-generate-to">Do:</label>
-                                        <div class="col-md-6">
-                                            <input type="text" class="form-control input-sm" id="project-pages-generate-to"/>
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label" for="project-pages-format">Formát</label>
+                                            <div class="col-md-7">
+                                                <select class="form-control input-sm" id="project-pages-format">
+                                                    <option data-format-value="1r">1r, 1v, 2r, 2v, ...</option>
+                                                    <option data-format-value="I'1r">I'1r, I'1v, I'2r, ...</option>
+                                                    <option data-format-value="Roman">I, II, III, IV, V, ...</option>
+                                                    <option data-format-value="Arabic">1, 2, 3, 4, 5, ...</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="form-group-section generate-list-from-book-input-group">
-                                    <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input class="generate-pages-from-book" type="checkbox"/><span class="page-list-editor-controls-label">Generovat z textového zdroje</span>
-                                                </label>
+                                        <div class="form-group-section generate-list-numberic-input-group">
+                                            <div class="generate-list-numberic-input-group-heading">Generovat stránky</div>
+                                            <div class="form-group">
+                                                <label class="col-md-1 control-label" for="project-pages-generate-from">Od:</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control input-sm" id="project-pages-generate-from" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-1 control-label" for="project-pages-generate-to">Do:</label>
+                                                <div class="col-md-6">
+                                                    <input type="text" class="form-control input-sm" id="project-pages-generate-to" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="col-md-7">
-                                            <select class="form-control input-sm">
-                                                <option>Transkripce</option>
-                                                <option>Transliterace</option>
-                                            </select>
+                                    <div class="tab-pane" id="2">
+                                        <div class="form-group-section generate-list-from-book-input-group">
+                                            <div class="form-group">
+                                                <div class="col-md-12">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input class="generate-pages-from-book" type="checkbox"/><span class="page-list-editor-controls-label">Generovat z textového zdroje</span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-7">
+                                                    <select class="form-control input-sm">
+                                                        <option>Transkripce</option>
+                                                        <option>Transliterace</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
