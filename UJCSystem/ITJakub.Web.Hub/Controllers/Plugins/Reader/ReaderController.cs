@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
-using System.Net;
 using AutoMapper;
-using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core.Communication;
 using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -79,38 +78,46 @@ namespace ITJakub.Web.Hub.Controllers.Plugins.Reader
                 return Json(new { terms });
             }
         }
-
-
-        public ActionResult GetBookSearchPageByXmlId(string query, bool isQueryJson, string bookId, string pageXmlId)
+        
+        private List<SearchCriteriaContract> CreateQueryCriteriaContract(CriteriaKey criteriaKey, string query)
         {
-            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            return new List<SearchCriteriaContract>
+            {
+                new WordListCriteriaContract
+                {
+                    Key = criteriaKey,
+                    Disjunctions = new List<WordCriteriaContract>
+                    {
+                        new WordCriteriaContract
+                        {
+                            Contains = new List<string> {query}
+                        }
+                    }
+                }
+            };
+        }
+
+        public ActionResult GetBookSearchPageByXmlId(string query, bool isQueryJson, long? snapshotId, long pageId)
+        {
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
             if (isQueryJson)
             {
                 var deserialized = JsonConvert.DeserializeObject<IList<ConditionCriteriaDescriptionBase>>(query,
                     new ConditionCriteriaDescriptionConverter());
-                listSearchCriteriaContracts = Mapper.Map<IList<SearchCriteriaContract>>(deserialized);
+                listSearchCriteriaContracts = Mapper.Map<List<SearchCriteriaContract>>(deserialized);
             }
             else
             {
-                listSearchCriteriaContracts = new List<SearchCriteriaContract>
-                {
-                    new WordListCriteriaContract
-                    {
-                        Key = CriteriaKey.Fulltext,
-                        Disjunctions = new List<WordCriteriaContract>
-                        {
-                            new WordCriteriaContract
-                            {
-                                Contains = new List<string> {query}
-                            }
-                        }
-                    }
-                };
+                listSearchCriteriaContracts = CreateQueryCriteriaContract(CriteriaKey.Fulltext, query);
             }
-            using (var client = GetMainServiceClient())
+
+            using (var client = GetRestClient())
             {
-                var text = client.GetEditionPageFromSearch(listSearchCriteriaContracts, bookId, pageXmlId,
-                    OutputFormatEnumContract.Html);
+                var request = new SearchPageRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts
+                };
+                var text = client.GetPageTextFromSearch(pageId, TextFormatEnumContract.Html, request);
                 return Json(new {pageText = text}, GetJsonSerializerSettings());
             }
         }

@@ -256,6 +256,25 @@ namespace Vokabular.RestClient
             });
         }
 
+        protected Task<string> PostReturnStringAsync(string uriPath, object data)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Post, uriPath);
+                    var response = await m_client.SendAsJsonAsync(request, data);
+
+                    ProcessResponseInternal(response);
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
         protected Task<T> PutAsync<T>(string uriPath, object data)
         {
             return Task.Run(async () =>

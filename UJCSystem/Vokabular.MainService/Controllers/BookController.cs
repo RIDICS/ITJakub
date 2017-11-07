@@ -119,6 +119,17 @@ namespace Vokabular.MainService.Controllers
             return Ok(result);
         }
 
+        [HttpPost("page/{pageId}/text/search")]
+        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetPageText(pageId, formatValue, request);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
         [HttpHead("page/{pageId}/image")]
         public IActionResult HasPageImage(long pageId)
         {
@@ -153,6 +164,17 @@ namespace Vokabular.MainService.Controllers
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
             var result = m_bookManager.GetHeadwordText(headwordId, formatValue);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("headword/{headwordId}/text/search")]
+        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetHeadwordText(headwordId, formatValue, request);
             if (result == null)
                 return NotFound();
 

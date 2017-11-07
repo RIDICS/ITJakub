@@ -597,7 +597,7 @@ namespace Vokabular.MainService.Core.Managers
             return imageResourceList.Count > 0;
         }
 
-        public string GetPageText(long resourcePageId, TextFormatEnumContract format)
+        public string GetPageText(long resourcePageId, TextFormatEnumContract format, SearchPageRequestContract searchRequest = null)
         {
             var textResourceList = m_bookRepository.InvokeUnitOfWork(x => x.GetPageText(resourcePageId));
             var textResource = textResourceList.FirstOrDefault();
@@ -608,7 +608,10 @@ namespace Vokabular.MainService.Core.Managers
 
             var fulltextStorage = GetFulltextStorage();
 
-            var result = fulltextStorage.GetPageText(textResource, format);
+            var result = searchRequest == null
+                ? fulltextStorage.GetPageText(textResource, format)
+                : fulltextStorage.GetPageTextFromSearch(textResource, format, searchRequest);
+
             return result;
         }
 
@@ -650,7 +653,7 @@ namespace Vokabular.MainService.Core.Managers
             };
         }
 
-        public string GetHeadwordText(long headwordId, TextFormatEnumContract format)
+        public string GetHeadwordText(long headwordId, TextFormatEnumContract format, SearchPageRequestContract request = null)
         {
             var headwordResource = m_bookRepository.InvokeUnitOfWork(x => x.GetHeadwordResource(headwordId, false));
             if (headwordResource == null)
@@ -660,7 +663,9 @@ namespace Vokabular.MainService.Core.Managers
 
             var fulltextStorage = GetFulltextStorage();
 
-            var result = fulltextStorage.GetHeadwordText(headwordResource, format);
+            var result = request == null
+                ? fulltextStorage.GetHeadwordText(headwordResource, format)
+                : fulltextStorage.GetHeadwordTextFromSearch(headwordResource, format, request);
             return result;
         }
 

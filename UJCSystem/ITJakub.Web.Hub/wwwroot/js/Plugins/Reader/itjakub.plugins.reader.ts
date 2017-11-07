@@ -2352,7 +2352,7 @@ class TextPanel extends RightSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.pageId },
+            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId },
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: "json",
             contentType: "application/json",

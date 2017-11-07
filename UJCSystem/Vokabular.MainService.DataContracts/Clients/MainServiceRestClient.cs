@@ -1077,5 +1077,37 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public string GetPageTextFromSearch(long pageId, TextFormatEnumContract format, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = PostReturnString($"book/page/{pageId}/text/search?format={format}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetHeadwordTextFromSearch(long headwordId, TextFormatEnumContract format, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = PostReturnString($"book/headword/{headwordId}/text/search?format={format}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

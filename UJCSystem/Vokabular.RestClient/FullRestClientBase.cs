@@ -51,6 +51,11 @@ namespace Vokabular.RestClient
             return PostStreamAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
         }
 
+        protected string PostReturnString(string uriPath, object data)
+        {
+            return PostReturnStringAsync(uriPath, data).GetAwaiter().GetResult();
+        }
+
         protected T Put<T>(string uriPath, object data)
         {
             return PutAsync<T>(uriPath, data).GetAwaiter().GetResult();

@@ -316,7 +316,7 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordDescriptionFromSearch(string criteria, bool isCriteriaJson, long headwordId)
         {
-            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
             if (isCriteriaJson)
             {
                 listSearchCriteriaContracts = DeserializeJsonSearchCriteria(criteria);
@@ -328,13 +328,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
                 };
             }
-            return NotFound(); // TODO implement
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
-            //        AreaBookType);
-            //    return Json(result);
-            //}
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchPageRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts
+                };
+                var result = client.GetHeadwordTextFromSearch(headwordId, TextFormatEnumContract.Html, request);
+                return Json(result);
+            }
         }
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)
