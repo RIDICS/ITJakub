@@ -9,6 +9,8 @@ class ImageViewerMain {
         compositionPagesAjax.done((pages: IParentPage[]) => {
             navigation.init(pages);
         });
-        compositionPagesAjax.fail(() => {});//TODO
+        compositionPagesAjax.fail(() => {
+            $("#project-resource-images").text("Failed to load project info.");//TODO add styled div
+        });
     }
 }
