@@ -466,8 +466,36 @@ table {
 }
 
 #project-resource-images {
+    height: 95%;
+    padding-right: 15px;
+
     .go-to-page-field-group {
         user-select: none; //page selection arrows on the same row select text here on double click
+    }
+
+    .page-image {
+        margin: 10px 0;
+    }
+
+    .page-menu-row {
+        height: 5%;
+    }
+
+    .content-images {
+        height: 90%;
+
+        .image-container {
+            height: 100%;
+
+            .image-row {
+                height: 100%;
+
+                .page-image {
+                    height: 95%;
+                    overflow-y: auto;
+                }
+            }
+        }
     }
 }
 
