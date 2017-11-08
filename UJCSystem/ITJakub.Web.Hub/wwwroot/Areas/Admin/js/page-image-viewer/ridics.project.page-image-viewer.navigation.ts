@@ -1,8 +1,10 @@
 ﻿class ImageViewerPageNavigation {
     private readonly contentAddition: ImageViewerContentAddition;
+    private readonly gui: ImageViewerPageGui;
 
-    constructor(contentAddition: ImageViewerContentAddition) {
+    constructor(contentAddition: ImageViewerContentAddition, gui: ImageViewerPageGui) {
         this.contentAddition = contentAddition;
+        this.gui = gui;
     }
 
     init(pages: IParentPage[]) {
@@ -60,7 +62,7 @@
                     if (index > -1 && index < pages.length) {
                         this.loadPage(index, pages, sliderNeedsUpdate);
                     } else {
-                        alert("No more pages on the left.");
+                        this.gui.showInfoDialog("Warning", "No more pages on the left.");
                     }
                 }
 
@@ -76,7 +78,7 @@
                     if (index > -1 && index < pages.length) {
                         this.loadPage(index, pages, sliderNeedsUpdate);
                     } else {
-                        alert("No more pages on the right.");
+                        this.gui.showInfoDialog("Warning", "No more pages on the right.");
                     }
                 }
             });
@@ -102,16 +104,18 @@
     private processPageInputField(pages: IParentPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
+        console.log(inputFieldValue);
         if (inputFieldValue === "") {
-            alert("Warning. You haven't entered anything. Please enter a page name."); //TODO implement dialog
+            this.gui.showInfoDialog("Warning", "You haven't entered anything. Please enter a page name.");
         } else {
             const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
             const index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
             if (index === -1) {
-                alert("No such page.");
+                this.gui.showInfoDialog("Warning", "No such page.");
             } else {
                 const sliderNeedsUpdate = true;
                 this.loadPage(index, pages, sliderNeedsUpdate);
+                inputField.val("");
             }
         }
     }
