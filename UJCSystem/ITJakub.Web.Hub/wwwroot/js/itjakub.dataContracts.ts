@@ -202,6 +202,22 @@ interface IBibleVerseResultContext {
     bibleVerse: string;
 }
 
+interface ITermContract {
+    id: number;
+    name: string;
+    position: number;
+    categoryId: number;
+}
+
+interface IChapterHieararchyContract {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+    beginningPageId: number;
+    subChapters: Array<IChapterHieararchyContract>;
+}
+
 interface ISaveMetadataResource extends IMetadataResource {
     literaryKindIdList: Array<number>;
     literaryGenreIdList: Array<number>;

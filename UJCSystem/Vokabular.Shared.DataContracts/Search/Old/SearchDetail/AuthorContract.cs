@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts
+namespace Vokabular.Shared.DataContracts.Search.Old.SearchDetail
 
 {
     [DataContract]

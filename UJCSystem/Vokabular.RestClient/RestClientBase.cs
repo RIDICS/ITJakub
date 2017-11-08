@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
@@ -120,7 +121,7 @@ namespace Vokabular.RestClient
             });
         }
 
-        protected Task<Stream> GetStreamAsync(string uriPath)
+        protected Task<string> GetStringAsync(string uriPath)
         {
             return Task.Run(async () =>
             {
@@ -130,7 +131,38 @@ namespace Vokabular.RestClient
                     var response = await m_client.SendAsync(request);
 
                     ProcessResponseInternal(response);
-                    return await response.Content.ReadAsStreamAsync();
+                    return await response.Content.ReadAsStringAsync();
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<FileResultData> GetStreamAsync(string uriPath)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Get, uriPath);
+                    var response = await m_client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead);
+
+                    ProcessResponseInternal(response);
+                    var contentHeaders = response.Content.Headers;
+                    var contentType = contentHeaders.ContentType;
+                    var fileName = contentHeaders.ContentDisposition.FileName;
+                    var fileSize = contentHeaders.ContentLength;
+                    var resultStream = await response.Content.ReadAsStreamAsync();
+
+                    return new FileResultData
+                    {
+                        FileName = fileName,
+                        FileSize = fileSize,
+                        MimeType = contentType.MediaType,
+                        Stream = resultStream,
+                    };
                 }
                 catch (TaskCanceledException e)
                 {
@@ -216,6 +248,25 @@ namespace Vokabular.RestClient
 
                     ProcessResponseInternal(response);
                     return GetResponseBody<T>(response);
+                }
+                catch (TaskCanceledException e)
+                {
+                    throw new HttpErrorCodeException("Request timeout", e, HttpStatusCode.GatewayTimeout);
+                }
+            });
+        }
+
+        protected Task<string> PostReturnStringAsync(string uriPath, object data)
+        {
+            return Task.Run(async () =>
+            {
+                try
+                {
+                    var request = CreateRequestMessage(HttpMethod.Post, uriPath);
+                    var response = await m_client.SendAsJsonAsync(request, data);
+
+                    ProcessResponseInternal(response);
+                    return await response.Content.ReadAsStringAsync();
                 }
                 catch (TaskCanceledException e)
                 {

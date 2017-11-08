@@ -22,14 +22,14 @@ namespace Vokabular.Core.Storage
             m_resourceTypePathResolvers = new Dictionary<ResourceType, IResourceTypePathResolver>();
             foreach (var pathResolver in resourceTypePathResolvers)
             {
-                m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType(), pathResolver);
+                m_resourceTypePathResolvers.Add(pathResolver.ResolvingResourceType, pathResolver);
             }
         }
 
-        public Stream GetResource(string bookId, string bookVersionId, string fileName, ResourceType resourceType)
+        public Stream GetResource(long projectId, string bookVersionId, string fileName, ResourceType resourceType)
         {
             var pathResolver = GetPathResolver(resourceType);
-            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, fileName);
+            var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, fileName);
             var fullPath = GetFullPath(relativePath);
             if (File.Exists(fullPath))
                 return File.Open(fullPath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -40,7 +40,7 @@ namespace Vokabular.Core.Storage
             return Stream.Null;
         }
 
-        public void SaveResource(string bookId, string bookVersionId, Resource resource)
+        public void SaveResource(long projectId, string bookVersionId, FileResource resource)
         {
             var pathResolver = GetPathResolver(resource.ResourceType);
 
@@ -51,8 +51,25 @@ namespace Vokabular.Core.Storage
                     m_log.WarnFormat(message);
                 return;
             }
-            var relativePath = pathResolver.ResolvePath(bookId, bookVersionId, resource.FileName);
-            var fullPath = GetFullPath(relativePath);
+
+            string fullPath;
+            if (pathResolver.PreserveFileNameInStorage)
+            {
+                // Possible file overwrite, but file name must be preserved
+                var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, resource.FileName);
+                fullPath = GetFullPath(relativePath);
+            }
+            else
+            {
+                do
+                {
+                    var fileNameInStorage = Guid.NewGuid().ToString();
+                    var relativePath = pathResolver.ResolvePath(projectId, bookVersionId, fileNameInStorage);
+                    fullPath = GetFullPath(relativePath);
+                    resource.NewNameInStorage = fileNameInStorage;
+                } while (File.Exists(fullPath));
+            }
+            
             CreateDirsIfNotExist(fullPath);
             using (var sourceStream = File.Open(resource.FullPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
@@ -61,6 +78,8 @@ namespace Vokabular.Core.Storage
                     sourceStream.CopyTo(writeStream);
                 }
             }
+
+            resource.NewFileSize = new FileInfo(fullPath).Length;
         }
 
         private string GetFullPath(string relativePath)

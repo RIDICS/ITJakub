@@ -6,6 +6,7 @@
     sliderOnPage: number;
     actualPageIndex: number;
     pages: Array<BookPage>;
+    pagesById: IDictionary<BookPage>;
     bookmarks: Array<IBookmarkPosition>;
     pagerDisplayPages: number;
     preloadPagesBefore: number;
@@ -41,10 +42,10 @@
     showLeftSidePanelsButtonList: Array<PanelButtonEnum>;
     showMainPanelsButtonList: Array<PanelButtonEnum>;
 
-    pageChangedCallback: (pageXmlId: string) => void;
+    pageChangedCallback: (pageId: number) => void;
 
 
-    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageXmlId: string) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
+    constructor(readerContainer: HTMLDivElement, pageChangedCallback: (pageId: number) => void, showPanelList: Array<ReaderPanelEnum>, showLeftSidePanelsButtonList: Array<PanelButtonEnum>, showMainPanelsButtonList: Array<PanelButtonEnum>) {
         this.readerContainer = readerContainer;
         this.pageChangedCallback = pageChangedCallback;
         this.pagerDisplayPages = 5;
@@ -55,12 +56,13 @@
         this.newFavoriteDialog = new NewFavoriteDialog(this.favoriteManager, true);
     }
 
-    public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList) {
+    public makeReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: IPage[]) {
         this.bookId = bookXmlId;
         this.versionId = versionXmlId;
         this.actualPageIndex = 0;
         this.sliderOnPage = 0;
         this.pages = new Array<BookPage>();
+        this.pagesById = {};
         this.bookmarks = new Array<IBookmarkPosition>(pageList.length);
         this.leftSidePanels = new Array<SidePanel>();
         this.rightSidePanels = new Array<SidePanel>();
@@ -81,7 +83,10 @@
 
         for (var i = 0; i < pageList.length; i++) { //load pageList
             var page = pageList[i];
-            this.pages.push(new BookPage(page["XmlId"], page["Text"], page["Position"]));
+            var bookPageItem = new BookPage(page.id, page.name, page.position);
+
+            this.pages.push(bookPageItem);
+            this.pagesById[bookPageItem.pageId] = bookPageItem;
         }
 
         $(this.readerContainer).empty();
@@ -336,7 +341,7 @@
 
             if (this.pages[pageIndex] !== undefined) {
                 var page: BookPage = this.pages[pageIndex];
-                this.moveToPage(page.xmlId, true);
+                this.moveToPage(page.pageId, true);
             }
             else {
                 console.error("missing page " + pageIndex);
@@ -458,7 +463,7 @@
             anchor.innerHTML = page.text;
             $(anchor).click((event: Event) => {
                 event.stopPropagation();
-                this.moveToPage(page.xmlId, true);
+                this.moveToPage(page.pageId, true);
                 return false;
             });
             liElement.appendChild(anchor);
@@ -672,7 +677,7 @@
     private loadBookmark(actualBookmark: IBookPageBookmark) {
         for (var pageIndex = 0; pageIndex < this.pages.length; pageIndex++) {
             var actualPage = this.pages[pageIndex];
-            if (actualBookmark.pageXmlId === actualPage.xmlId) {
+            if (actualBookmark.pageXmlId === actualPage.pageId.toString()) {
                 var bookmarkPosition = this.bookmarks[pageIndex];
                 if (!bookmarkPosition) {
                     bookmarkPosition = {
@@ -764,6 +769,10 @@
                     $(textPanel.panelHtml).hide();
                     $(imagePanel.panelHtml).show();
                 });
+
+                this.hasBookImage(this.bookId, this.versionId, null, () => {
+                    imagePanel.isDisabled = true;
+                });
             }
         }
 
@@ -810,8 +819,8 @@
         this.actualizePagination(pageIndex);
         this.notifyPanelsMovePage(pageIndex, scrollTo);
 
-        var pageXmlId = this.pages[pageIndex].xmlId;
-        this.pageChangedCallback(pageXmlId);
+        var pageId = this.pages[pageIndex].pageId;
+        this.pageChangedCallback(pageId);
     }
 
     notifyPanelsMovePage(pageIndex: number, scrollTo: boolean) {
@@ -824,10 +833,10 @@
         }
     }
 
-    moveToPage(pageXmlId: string, scrollTo: boolean) {
+    moveToPage(pageId: number, scrollTo: boolean) {
         var pageIndex: number = -1;
         for (var i = 0; i < this.pages.length; i++) {
-            if (this.pages[i].xmlId === pageXmlId) {
+            if (this.pages[i].pageId === pageId) {
                 pageIndex = i;
                 break;
             }
@@ -836,7 +845,7 @@
             this.moveToPageNumber(pageIndex, scrollTo);
 
         } else {
-            console.log("Page with id '" + pageXmlId + "' does not exist");
+            console.log("Page with id '" + pageId + "' does not exist");
             //TODO tell user page not exist  
         }
     }
@@ -888,7 +897,7 @@
 
     }
 
-    private createBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, tooltipTitle: string|(()=>string), favoriteLabel: IFavoriteLabel) {
+    private createBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, tooltipTitle: string|(()=>string), favoriteLabel: IFavoriteLabel) {
         var positionStep = 100 / (this.pages.length - 1);
         var bookmarkSpan = document.createElement("span");
         var $bookmarkSpan = $(bookmarkSpan);
@@ -896,11 +905,11 @@
         $bookmarkSpan.addClass("glyphicon glyphicon-bookmark bookmark");
         $bookmarkSpan.data("page-index", pageIndex);
         $bookmarkSpan.data("page-name", pageName);
-        $bookmarkSpan.data("page-xmlId", pageXmlId);
+        $bookmarkSpan.data("page-xmlId", pageId);
         $bookmarkSpan.data("title", title);
 
         $bookmarkSpan.click(() => {
-            this.moveToPage(pageXmlId, true);
+            this.moveToPage(pageId, true);
         });
 
         if (favoriteLabel) {
@@ -922,7 +931,7 @@
         return bookmarkSpan;
     }
 
-    createSingleBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
+    createSingleBookmarkSpan(pageIndex: number, pageName: string, pageId: number, title: string, favoriteLabel: IFavoriteLabel): HTMLSpanElement {
         var tooltipTitle = function() {
                 var bookmarkTitle = $(this).data("title");
                 return favoriteLabel
@@ -930,11 +939,11 @@
                     : bookmarkTitle;
         };
 
-        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageXmlId, title, tooltipTitle, favoriteLabel);
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, title, tooltipTitle, favoriteLabel);
         return bookmarkSpan;
     }
 
-    createMultipleBookmarkSpan(pageIndex: number, pageName: string, pageXmlId: string, labelCount: number): HTMLSpanElement {
+    createMultipleBookmarkSpan(pageIndex: number, pageName: string, pageId: number, labelCount: number): HTMLSpanElement {
         var favoriteLabel: IFavoriteLabel = {
             id: 0,
             name: "",
@@ -952,7 +961,7 @@
             tooltipTitle = "1 záložka";
         }
 
-        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageXmlId, "", tooltipTitle, favoriteLabel);
+        var bookmarkSpan = this.createBookmarkSpan(pageIndex, pageName, pageId, "", tooltipTitle, favoriteLabel);
         var $bookmarkSpan = $(bookmarkSpan);
         $bookmarkSpan.addClass("bookmark-multiple");
 
@@ -976,11 +985,11 @@
         $(bookmarkPosition.bookmarkSpan).remove();
         
         if (bookmarkPosition.bookmarks.length > 1) {
-            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, bookmarkPosition.bookmarks.length);
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, actualPage.text, actualPage.pageId, bookmarkPosition.bookmarks.length);
             $(bookmarkPosition.bookmarkSpan).data("favorite-id", 0);
         } else if (bookmarkPosition.bookmarks.length === 1) {
             let actualBookmark = bookmarkPosition.bookmarks[0];
-            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, actualPage.text, actualPage.xmlId, actualBookmark.title, actualBookmark.favoriteLabel);
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, actualPage.text, actualPage.pageId, actualBookmark.title, actualBookmark.favoriteLabel);
             $(bookmarkPosition.bookmarkSpan).data("favorite-id", actualBookmark.id);
         } else {
             bookmarkPosition.bookmarkSpan = null;
@@ -1042,7 +1051,7 @@
                 id: 0,
                 favoriteLabel: favoriteLabel,
                 pagePosition: page.position,
-                pageXmlId: page.xmlId,
+                pageXmlId: page.pageId.toString(),
                 title: data.itemName
             };
 
@@ -1054,9 +1063,9 @@
         $(bookmarkPosition.bookmarkSpan).remove();
         
         if (bookmarkPosition.bookmarks.length > 1) {
-            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, page.text, page.xmlId, bookmarkPosition.bookmarks.length);
+            bookmarkPosition.bookmarkSpan = this.createMultipleBookmarkSpan(pageIndex, page.text, page.pageId, bookmarkPosition.bookmarks.length);
         } else {
-            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.xmlId, data.itemName, bookmarkPosition.bookmarks[0].favoriteLabel);
+            bookmarkPosition.bookmarkSpan = this.createSingleBookmarkSpan(pageIndex, page.text, page.pageId, data.itemName, bookmarkPosition.bookmarks[0].favoriteLabel);
         }
         
         const postShowAction = () => {
@@ -1069,7 +1078,7 @@
             }
         };
 
-        this.favoriteManager.createPageBookmark(this.bookId, page.xmlId, data.itemName, labelIds, (ids, error) => {
+        this.favoriteManager.createPageBookmark(this.bookId, page.pageId.toString(), data.itemName, labelIds, (ids, error) => {
             if (error) {
                 this.newFavoriteDialog.showError("Chyba při vytváření záložky");
                 return;
@@ -1278,7 +1287,7 @@
         return this.termsPanel;
     }
 
-    setTermPanelCallback(callback: (xmlId:string, text: string) => void) {
+    setTermPanelCallback(callback: (termId: number, text: string) => void) {
         this.getTermsPanel().setTermClickedCallback(callback);
     }
 
@@ -1755,7 +1764,8 @@ class BookmarksPanel extends LeftSidePanel {
         page.classList.add("reader-bookmarks-content-item-page");
 
         const actionHook = () => {
-            rootReference.parentReader.moveToPage(bookmark.pageXmlId, true);
+            var pageId = Number(bookmark.pageXmlId);
+            rootReference.parentReader.moveToPage(pageId, true);
         };
         bookmarkIco.addEventListener("click", actionHook);
         page.addEventListener("click", actionHook);
@@ -1893,7 +1903,8 @@ class SearchResultPanel extends LeftSidePanel {
         var resultItemDiv = document.createElement("div");
         $(resultItemDiv).addClass("reader-search-result-item");
         $(resultItemDiv).click(() => {
-            this.parentReader.moveToPage(result.pageXmlId, true);
+            var pageId = Number(result.pageXmlId);
+            this.parentReader.moveToPage(pageId, true);
         });
 
         var pageNameSpan = document.createElement("span");
@@ -1947,12 +1958,12 @@ class ContentPanel extends LeftSidePanel {
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
-                var rootContentItems: JSON[] = response["content"];
+                var rootContentItems: IChapterHieararchyContract[] = response["content"];
                 var ulElement = document.createElement("ul");
                 $(ulElement).addClass("content-item-root-list");
                 for (var i = 0; i < rootContentItems.length; i++) {
-                    var jsonItem: JSON = rootContentItems[i];
-                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
+                    var chapterItem: IChapterHieararchyContract = rootContentItems[i];
+                    $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(chapterItem)));
                 }
 
                 $(this.panelBodyHtml).removeClass("loader");
@@ -1973,18 +1984,19 @@ class ContentPanel extends LeftSidePanel {
         });
     }
 
-    private parseJsonItemToContentItem(jsonItem: JSON): ContentItem {
-        return new ContentItem(jsonItem["Text"], jsonItem["ReferredPageXmlId"],
-            jsonItem["ReferredPageName"], jsonItem["ChildBookContentItems"]);
+    private parseJsonItemToContentItem(chapterItem: IChapterHieararchyContract): ContentItem {
+        var pageItem = this.parentReader.pagesById[chapterItem.beginningPageId];
+        return new ContentItem(chapterItem.name, chapterItem.beginningPageId,
+            pageItem.text, chapterItem.subChapters);
     }
 
     private makeContentItemChilds(contentItem: ContentItem): HTMLUListElement {
-        var childItems: JSON[] = contentItem.childBookContentItems;
+        var childItems: IChapterHieararchyContract[] = contentItem.childBookContentItems;
         if (childItems.length === 0) return null;
         var ulElement = document.createElement("ul");
         $(ulElement).addClass("content-item-list");
         for (var i = 0; i < childItems.length; i++) {
-            var jsonItem: JSON = childItems[i];
+            var jsonItem: IChapterHieararchyContract = childItems[i];
             $(ulElement).append(this.makeContentItem(this.parseJsonItemToContentItem(jsonItem)));
         }
         return ulElement;
@@ -1997,7 +2009,7 @@ class ContentPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(contentItem.referredPageXmlId, true);
+            this.parentReader.moveToPage(contentItem.referredPageId, true);
         });
 
 
@@ -2070,9 +2082,11 @@ class RightSidePanel extends SidePanel {
 }
 
 class ImagePanel extends RightSidePanel {
+    isDisabled: boolean;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Obrázky", readerModule, showPanelButtonList);
+        this.isDisabled = false;
     }
 
     protected makeBody(rootReference: SidePanel, window: Window): HTMLElement {
@@ -2084,11 +2098,13 @@ class ImagePanel extends RightSidePanel {
     public onMoveToPage(pageIndex: number, scrollTo: boolean) {
         var pageInfo = this.parentReader.pages[pageIndex];
         $(this.innerContent).empty();
-      
+
+        if (this.isDisabled)
+            return;
         
         var image: HTMLImageElement = document.createElement("img");
         image.classList.add("reader-image");
-        image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.xmlId;
+        image.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
 
         var imageLink: HTMLAnchorElement = document.createElement("a");
         imageLink.classList.add("no-click-href");
@@ -2129,7 +2145,7 @@ class ImagePanel extends RightSidePanel {
                 
             }
         };
-        img.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.xmlId;
+        img.src = getBaseUrl() + "Reader/GetBookImage?snapshotId=" + this.parentReader.versionId + "&pageId=" + pageInfo.pageId;
 
         if (typeof this.windowBody !== "undefined") {
             $(this.windowBody).empty();
@@ -2195,8 +2211,8 @@ class TextPanel extends RightSidePanel {
             $(pageTextDiv).addClass("page");
             $(pageTextDiv).addClass("unloaded");
             $(pageTextDiv).data("page-name", page.text);
-            $(pageTextDiv).data("page-xmlId", page.xmlId);
-            pageTextDiv.id = page.xmlId; // each page has own id
+            $(pageTextDiv).data("page-xmlId", page.pageId);
+            pageTextDiv.id = page.pageId.toString(); // each page has own id
 
             var pageNameDiv: HTMLDivElement = window.document.createElement("div");
             $(pageNameDiv).addClass("page-name");
@@ -2231,7 +2247,7 @@ class TextPanel extends RightSidePanel {
     }
 
     displayPage(page: BookPage, scrollTo: boolean, onSuccess: () => any = null, onFailed: () => any = null) {
-        var pageDiv = document.getElementById(page.xmlId);
+        var pageDiv = document.getElementById(page.pageId.toString());
         var pageLoaded: boolean = !($(pageDiv).hasClass("unloaded"));
         var pageSearchUnloaded: boolean = $(pageDiv).hasClass("search-unloaded");
         var pageLoading: boolean = $(pageDiv).hasClass("loading");
@@ -2257,7 +2273,7 @@ class TextPanel extends RightSidePanel {
 
             if (typeof this.childwindow !== "undefined") {
                 $(".reader-text-container", this.childwindow.document).scrollTop(0);
-                var pageToScrollOffset = $("#" + page.xmlId, this.childwindow.document).offset().top;
+                var pageToScrollOffset = $("#" + page.pageId, this.childwindow.document).offset().top;
                 $(".reader-text-container", this.childwindow.document).scrollTop(pageToScrollOffset);
             }
         }
@@ -2284,15 +2300,15 @@ class TextPanel extends RightSidePanel {
     }
 
     private downloadPageByXmlId(page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
-        var pageContainer = document.getElementById(page.xmlId);
+        var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
-            $(this.windowBody).find("#" + page.xmlId).addClass("loading");
+            $(this.windowBody).find("#" + page.pageId).addClass("loading");
         }
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { snapshotId: this.parentReader.versionId, pageId: page.xmlId },
+            data: { snapshotId: this.parentReader.versionId, pageId: page.pageId },
             url: getBaseUrl() + "Reader/GetBookPage",
             dataType: "json",
             contentType: "application/json",
@@ -2303,8 +2319,8 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).removeClass("unloaded");
 
                 if (typeof this.windowBody !== "undefined") {
-                    $(this.windowBody).find("#" + page.xmlId).removeClass("loading");
-                    $(this.windowBody).find("#" + page.xmlId).append(response["pageText"]);
+                    $(this.windowBody).find("#" + page.pageId).removeClass("loading");
+                    $(this.windowBody).find("#" + page.pageId).append(response["pageText"]);
                 }
 
                 if (this.parentReader.clickedMoveToPage) {
@@ -2328,15 +2344,15 @@ class TextPanel extends RightSidePanel {
     }
 
     private downloadSearchPageByXmlId(query: string, queryIsJson: boolean, page: BookPage, onSuccess: () => any = null, onFailed: () => any = null) {
-        var pageContainer = document.getElementById(page.xmlId);
+        var pageContainer = document.getElementById(page.pageId.toString());
         $(pageContainer).addClass("loading");
         if (typeof this.windowBody !== "undefined") {
-            $(this.windowBody).find("#" + page.xmlId).addClass("loading");
+            $(this.windowBody).find("#" + page.pageId).addClass("loading");
         }
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { query: query, isQueryJson: queryIsJson, bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            data: { query: query, isQueryJson: queryIsJson, snapshotId: this.parentReader.versionId, pageId: page.pageId },
             url: getBaseUrl() + "Reader/GetBookSearchPageByXmlId",
             dataType: "json",
             contentType: "application/json",
@@ -2349,8 +2365,8 @@ class TextPanel extends RightSidePanel {
                 $(pageContainer).addClass("search-loaded");
 
                 if (typeof this.windowBody !== "undefined") {
-                    $(this.windowBody).find("#" + page.xmlId).removeClass("loading");
-                    $(this.windowBody).find("#" + page.xmlId).append(response["pageText"]);
+                    $(this.windowBody).find("#" + page.pageId).removeClass("loading");
+                    $(this.windowBody).find("#" + page.pageId).append(response["pageText"]);
                 }
 
                 if (this.parentReader.clickedMoveToPage) {
@@ -2445,7 +2461,7 @@ class TermsPanel extends LeftSidePanel {
     private termsResultItemsLoadDiv: HTMLDivElement;
     private searchResultItemsLoadDiv: HTMLDivElement;
 
-    private termClickedCallback: (xmlId: string, text: string) => void;
+    private termClickedCallback: (termId: number, text: string) => void;
 
     constructor(identificator: string, readerModule: ReaderModule, showPanelButtonList: Array<PanelButtonEnum>) {
         super(identificator, "Témata", readerModule, showPanelButtonList);
@@ -2548,7 +2564,7 @@ class TermsPanel extends LeftSidePanel {
         }
     }
 
-    setTermClickedCallback(callback: (xmlId:string, text: string)=>void) {
+    setTermClickedCallback(callback: (termId: number, text: string)=>void) {
         this.termClickedCallback = callback;
     }
 
@@ -2558,7 +2574,7 @@ class TermsPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(page.PageXmlId, true);
+            this.parentReader.moveToPage(Number(page.PageXmlId), true);
         });
 
         var textSpanElement = document.createElement("span");
@@ -2571,14 +2587,14 @@ class TermsPanel extends LeftSidePanel {
         return resultItemListElement;
     }
 
-    private createTermItem(xmlId: string, text: string): HTMLLIElement {
+    private createTermItem(termId: number, text: string): HTMLLIElement {
         var termItemListElement = document.createElement("li");
 
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
             if (typeof this.termClickedCallback !== "undefined" && this.termClickedCallback !== null) {
-                this.termClickedCallback(xmlId, text);   
+                this.termClickedCallback(termId, text);   
             }
         });
 
@@ -2608,21 +2624,21 @@ class TermsPanel extends LeftSidePanel {
         $.ajax({
             type: "GET",
             traditional: true,
-            data: { bookId: this.parentReader.bookId, pageXmlId: page.xmlId },
+            data: { snapshotId: this.parentReader.bookId, pageId: page.pageId },
             url: getBaseUrl() + "Reader/GetTermsOnPage",
             dataType: "json",
             contentType: "application/json",
             success: (response) => {
 
-                if (page.xmlId === this.parentReader.getActualPage().xmlId) {
+                if (page.pageId === this.parentReader.getActualPage().pageId) {
 
                     $(this.termsResultItemsLoadDiv).hide();
                     $(this.termsResultItemsDiv).show();
 
-                    var terms = response["terms"];
+                    var terms = response["terms"] as Array<ITermContract>;
                     for (var i = 0; i < terms.length; i++) {
                         var term = terms[i];
-                        this.termsOrderedList.appendChild(this.createTermItem(term["XmlId"], term["Text"]));
+                        this.termsOrderedList.appendChild(this.createTermItem(term.id, term.name));
                     }
 
                     if (terms.length === 0 && this.termsOrderedList.innerHTML == "") {
@@ -2632,7 +2648,7 @@ class TermsPanel extends LeftSidePanel {
                 }
             },
             error: (response) => {
-                if (page.xmlId === this.parentReader.getActualPage().xmlId) {
+                if (page.pageId === this.parentReader.getActualPage().pageId) {
                     $(this.termsResultItemsLoadDiv).hide();
                     $(this.termsResultItemsDiv).show();
                     $(this.termsOrderedList).addClass("no-items");
@@ -2646,18 +2662,18 @@ class TermsPanel extends LeftSidePanel {
 
 
 class BookPage {
-    private _xmlId: string;
+    private _pageId: number;
     private _text: string;
     private _position: number;
 
-    constructor(xmlId: string, text: string, position: number) {
-        this._xmlId = xmlId;
+    constructor(pageId: number, text: string, position: number) {
+        this._pageId = pageId;
         this._text = text;
         this._position = position;
     }
 
-    get xmlId(): string {
-        return this._xmlId;
+    get pageId(): number {
+        return this._pageId;
     }
 
     get text(): string {
@@ -2670,20 +2686,20 @@ class BookPage {
 }
 
 class ContentItem {
-    private _referredPageXmlId: string;
+    private _referredPageId: number;
     private _referredPageName: string;
     private _text: string;
-    private _childBookContentItems: JSON[];
+    private _childBookContentItems: IChapterHieararchyContract[];
 
-    constructor(text: string, referredPageXmlId: string, referredPageName: string, childBookContentItems: JSON[]) {
-        this._referredPageXmlId = referredPageXmlId;
+    constructor(text: string, referredPageId: number, referredPageName: string, childBookContentItems: IChapterHieararchyContract[]) {
+        this._referredPageId = referredPageId;
         this._referredPageName = referredPageName;
         this._text = text;
         this._childBookContentItems = childBookContentItems;
     }
 
-    get referredPageXmlId(): string {
-        return this._referredPageXmlId;
+    get referredPageId(): number {
+        return this._referredPageId;
     }
 
     get referredPageName(): string {
@@ -2694,7 +2710,7 @@ class ContentItem {
         return this._text;
     }
 
-    get childBookContentItems(): JSON[] {
+    get childBookContentItems(): IChapterHieararchyContract[] {
         return this._childBookContentItems;
     }
 }

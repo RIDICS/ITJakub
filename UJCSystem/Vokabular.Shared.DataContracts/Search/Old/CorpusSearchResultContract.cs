@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace ITJakub.Shared.Contracts.Searching.Results // wrong namespace is required for deserialization from SearchService
 {
     [DataContract]
     public class CorpusSearchResultContract

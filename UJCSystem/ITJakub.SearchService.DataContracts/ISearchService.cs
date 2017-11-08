@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using ITJakub.ITJakubService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
+using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts.Searching.Results;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 
-namespace ITJakub.Shared.Contracts
+namespace ITJakub.SearchService.DataContracts
 {
     [ServiceContract]
     public interface ISearchService

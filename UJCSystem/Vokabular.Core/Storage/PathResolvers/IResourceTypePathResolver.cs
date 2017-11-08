@@ -4,8 +4,10 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public interface IResourceTypePathResolver
     {
-        ResourceType ResolvingResourceType();
+        ResourceType ResolvingResourceType { get; }
 
-        string ResolvePath(string bookId, string bookVersionId, string fileName);
+        bool PreserveFileNameInStorage { get; }
+
+        string ResolvePath(long projectId, string bookVersionExternalId, string fileName);
     }
 }

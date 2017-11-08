@@ -3,6 +3,7 @@ using Vokabular.Core;
 using Vokabular.MainService.Core.AutoMapperProfiles;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers;
+using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.MainService.Core
@@ -23,6 +24,8 @@ namespace Vokabular.MainService.Core
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
+            container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
+            container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();
 
             container.AddSingleton<Profile, AudioProfile>();
             container.AddSingleton<Profile, BookProfile>();

@@ -1,4 +1,4 @@
-﻿using ITJakub.Shared.Contracts;
+﻿using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 

@@ -11,6 +11,7 @@ using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
@@ -973,7 +974,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                var result = Get<List<PageContract>>($"project/{projectId}/page");
+                var result = Get<List<PageContract>>($"book/{projectId}/page");
                 return result;
             }
             catch (HttpRequestException e)
@@ -985,11 +986,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public List<ChapterContract> GetBookChapterList(long projectId)
+        public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
             try
             {
-                var result = Get<List<ChapterContract>>($"project/{projectId}/chapter");
+                var result = Get<List<ChapterHierarchyContract>>($"book/{projectId}/chapter");
                 return result;
             }
             catch (HttpRequestException e)
@@ -1038,6 +1039,118 @@ namespace Vokabular.MainService.DataContracts.Clients
                     return false;
                 }
 
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetPageText(long pageId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/page/{pageId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetHeadwordText(long headwordId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/headword/{headwordId}/text?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetPageImage(long pageId)
+        {
+            try
+            {
+                var result = GetStream($"book/page/{pageId}/image");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FileResultData GetAudio(long resourceId)
+        {
+            try
+            {
+                var result = GetStream($"book/audio/{resourceId}/data");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<TermContract> GetPageTermList(long pageId)
+        {
+            try
+            {
+                var result = Get<List<TermContract>>($"book/page/{pageId}/term");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetPageTextFromSearch(long pageId, TextFormatEnumContract format, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = PostReturnString($"book/page/{pageId}/text/search?format={format}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetHeadwordTextFromSearch(long headwordId, TextFormatEnumContract format, SearchPageRequestContract request)
+        {
+            try
+            {
+                var result = PostReturnString($"book/headword/{headwordId}/text/search?format={format}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
                 if (m_logger.IsErrorEnabled())
                     m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
 

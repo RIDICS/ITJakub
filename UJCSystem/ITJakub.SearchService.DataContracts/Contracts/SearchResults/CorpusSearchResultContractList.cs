@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace ITJakub.Shared.Contracts.Searching.Results // wrong namespace is required for deserialization from SearchService
 {
     [DataContract]
-    public class SearchResultContractList
+    public class CorpusSearchResultContractList
     {
         [DataMember]
-        public IList<SearchResultContract> SearchResults { get; set; }
+        public IList<CorpusSearchResultContract> SearchResults { get; set; }
 
         public virtual string ToXml()
         {
@@ -26,7 +26,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
             }
         }
 
-        public static SearchResultContractList FromXml(string xml)
+        public static CorpusSearchResultContractList FromXml(string xml)
         {
             using (Stream stream = new MemoryStream())
             {
@@ -37,8 +37,8 @@ namespace ITJakub.Shared.Contracts.Searching.Results
                 stream.Position = 0;
                 //object result = new XmlSerializer(typeof (Server)).Deserialize(stream); 
 
-                object result = new DataContractSerializer(typeof(SearchResultContractList)).ReadObject(stream);
-                return (SearchResultContractList)result;
+                object result = new DataContractSerializer(typeof(CorpusSearchResultContractList)).ReadObject(stream);
+                return (CorpusSearchResultContractList)result;
             }
         }
     }

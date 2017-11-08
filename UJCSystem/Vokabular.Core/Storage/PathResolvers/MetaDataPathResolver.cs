@@ -5,27 +5,25 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public class ConvertedMetadataPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.ConvertedMetadata;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.ConvertedMetadata;
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public bool PreserveFileNameInStorage => true;
+
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, fileName);
+            return Path.Combine(projectId.ToString(), bookVersionExternalId, fileName);
         }
     } 
     
     public class UploadedMetaDataPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.UploadedMetadata;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.UploadedMetadata;
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public bool PreserveFileNameInStorage => true;
+
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, bookVersionId, fileName);
+            return Path.Combine(projectId.ToString(), bookVersionExternalId, fileName);
         }
     }
 }

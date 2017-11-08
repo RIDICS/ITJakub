@@ -87,6 +87,7 @@
     <Compile Include="Sessions\Processors\Fulltext\ElasticSearchStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\Fulltext\ExistDbStoreProcessor.cs" />
     <Compile Include="Sessions\Processors\Fulltext\IFulltextResourceProcessor.cs" />
+    <Compile Include="Sessions\Processors\BasicProjectDataRelationalDbStoreProcessor.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\AudioTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ExtractableArchiveTypeResolver.cs" />
     <Compile Include="Sessions\ResourceTypeResolvers\ImageTypeResolver.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Sessions\Works\Helpers\PersonHelper.cs" />
     <Compile Include="Sessions\Works\Helpers\ProjectResponsibleNameEqualityComparer.cs" />
     <Compile Include="Sessions\Works\SaveNewBookDataWork.cs" />
+    <Compile Include="Sessions\Works\CreateOrUpdateProjectBasicDataWork.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateAuthorsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateCategoriesSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateChaptersSubtask.cs" />
@@ -123,7 +125,7 @@
     <Compile Include="Sessions\Works\SaveNewBook\UpdateLiteraryOriginalsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateMetadataSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdatePagesSubtask.cs" />
-    <Compile Include="Sessions\Works\SaveNewBook\UpdateProjectSubtask.cs" />
+    <Compile Include="Sessions\Works\CreateProject\UpdateProjectSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateResponsiblePersonSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateTermsSubtask.cs" />
     <Compile Include="Sessions\Works\SaveNewBook\UpdateHeadwordsSubtask.cs" />
@@ -204,6 +206,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
+      <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
+      <Name>ITJakub.SearchService.DataContracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>
       <Name>ITJakub.Shared.Contracts</Name>

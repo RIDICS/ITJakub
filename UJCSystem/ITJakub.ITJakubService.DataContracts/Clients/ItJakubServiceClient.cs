@@ -7,6 +7,8 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.ITJakubService.DataContracts.Contracts.Favorite;
+using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
@@ -15,6 +17,7 @@ using ITJakub.Shared.Contracts.Searching.Criteria;
 using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.ITJakubService.DataContracts.Clients

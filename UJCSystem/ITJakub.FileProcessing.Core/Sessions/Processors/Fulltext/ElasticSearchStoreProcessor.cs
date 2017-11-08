@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using System.Xml.Xsl;
 using ITJakub.FileProcessing.Core.Communication;
-using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts.Contracts;
 using Vokabular.Shared.Converters;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -31,9 +26,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 
         public string UploadPageToBookVersion(VersionResourceUploadContract resourceUploadContract)
         {
-            
-            
-
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
                 
@@ -56,12 +48,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         {
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
-                StringBuilder builder = new StringBuilder();
-                foreach (var pageId in externalPageIds)
-                {
-                    var textResource = client.GetTextResource(pageId, TextFormatEnumContract.Raw);
-                    builder.Append(textResource.Text);
-                }
                 client.CreateSnapshot(projectId, externalPageIds);
             }
         }

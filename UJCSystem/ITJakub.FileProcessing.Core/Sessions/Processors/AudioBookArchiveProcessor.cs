@@ -69,7 +69,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private Resource GenerateFullBookArchive(List<TrackRecordingData> recordings, BookData bookData, AudioTypeEnum audioType,
+        private FileResource GenerateFullBookArchive(List<TrackRecordingData> recordings, BookData bookData, AudioTypeEnum audioType,
             ResourceSessionDirector resourceSessionDirector)
         {
             var archiveName = GetArchiveName(bookData, audioType);
@@ -96,7 +96,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 }
             }
 
-            return new Resource
+            return new FileResource
             {
                 FileName = archiveName,
                 FullPath = fullPath,

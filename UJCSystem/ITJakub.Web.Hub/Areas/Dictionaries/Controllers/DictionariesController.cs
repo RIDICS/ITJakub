@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
@@ -306,17 +307,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
 
         public ActionResult GetHeadwordDescription(long headwordId)
         {
-            return NotFound(); // TODO implement
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var result = client.GetDictionaryEntryByXmlId(bookGuid, xmlEntryId, OutputFormatEnumContract.Html, AreaBookType);
-            //    return Json(result);
-            //}
+            using (var client = GetRestClient())
+            {
+                var result = client.GetHeadwordText(headwordId, TextFormatEnumContract.Html);
+                return Json(result);
+            }
         }
 
         public ActionResult GetHeadwordDescriptionFromSearch(string criteria, bool isCriteriaJson, long headwordId)
         {
-            IList<SearchCriteriaContract> listSearchCriteriaContracts;
+            List<SearchCriteriaContract> listSearchCriteriaContracts;
             if (isCriteriaJson)
             {
                 listSearchCriteriaContracts = DeserializeJsonSearchCriteria(criteria);
@@ -328,13 +328,16 @@ namespace ITJakub.Web.Hub.Areas.Dictionaries.Controllers
                     CreateWordListContract(CriteriaKey.HeadwordDescription, criteria)
                 };
             }
-            return NotFound(); // TODO implement
-            //using (var client = GetMainServiceClient())
-            //{
-            //    var result = client.GetDictionaryEntryFromSearch(listSearchCriteriaContracts, bookGuid, xmlEntryId, OutputFormatEnumContract.Html,
-            //        AreaBookType);
-            //    return Json(result);
-            //}
+
+            using (var client = GetRestClient())
+            {
+                var request = new SearchPageRequestContract
+                {
+                    ConditionConjunction = listSearchCriteriaContracts
+                };
+                var result = client.GetHeadwordTextFromSearch(headwordId, TextFormatEnumContract.Html, request);
+                return Json(result);
+            }
         }
 
         public ActionResult GetHeadwordCount(IList<int> selectedCategoryIds, IList<long> selectedBookIds)

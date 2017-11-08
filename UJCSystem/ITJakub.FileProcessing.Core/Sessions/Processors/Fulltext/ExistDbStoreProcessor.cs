@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Communication;
+using ITJakub.SearchService.DataContracts.Contracts;
 using ITJakub.Shared.Contracts;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext

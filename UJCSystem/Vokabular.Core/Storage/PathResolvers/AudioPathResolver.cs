@@ -5,14 +5,13 @@ namespace Vokabular.Core.Storage.PathResolvers
 {
     public class AudioPathResolver : IResourceTypePathResolver
     {
-        public ResourceType ResolvingResourceType()
-        {
-            return ResourceType.Audio;
-        }
+        public ResourceType ResolvingResourceType => ResourceType.Audio;
 
-        public string ResolvePath(string bookId, string bookVersionId, string fileName)
+        public bool PreserveFileNameInStorage => false;
+
+        public string ResolvePath(long projectId, string bookVersionExternalId, string fileName)
         {
-            return Path.Combine(bookId, "Audio", fileName);
+            return Path.Combine(projectId.ToString(), "Audio", fileName);
         }
     }
 }

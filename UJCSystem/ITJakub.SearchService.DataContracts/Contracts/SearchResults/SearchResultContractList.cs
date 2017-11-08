@@ -1,14 +1,15 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using Vokabular.Shared.DataContracts.Search.Old;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace ITJakub.SearchService.DataContracts.Contracts.SearchResults
 {
     [DataContract]
-    public class CorpusSearchResultContractList
+    public class SearchResultContractList
     {
         [DataMember]
-        public IList<CorpusSearchResultContract> SearchResults { get; set; }
+        public IList<SearchResultContract> SearchResults { get; set; }
 
         public virtual string ToXml()
         {
@@ -26,7 +27,7 @@ namespace ITJakub.Shared.Contracts.Searching.Results
             }
         }
 
-        public static CorpusSearchResultContractList FromXml(string xml)
+        public static SearchResultContractList FromXml(string xml)
         {
             using (Stream stream = new MemoryStream())
             {
@@ -37,8 +38,8 @@ namespace ITJakub.Shared.Contracts.Searching.Results
                 stream.Position = 0;
                 //object result = new XmlSerializer(typeof (Server)).Deserialize(stream); 
 
-                object result = new DataContractSerializer(typeof(CorpusSearchResultContractList)).ReadObject(stream);
-                return (CorpusSearchResultContractList)result;
+                object result = new DataContractSerializer(typeof(SearchResultContractList)).ReadObject(stream);
+                return (SearchResultContractList)result;
             }
         }
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using ITJakub.Shared.Contracts.Clients;
+using ITJakub.SearchService.DataContracts;
 using Vokabular.FulltextService.DataContracts.Clients;
 
 namespace ITJakub.FileProcessing.Core.Communication

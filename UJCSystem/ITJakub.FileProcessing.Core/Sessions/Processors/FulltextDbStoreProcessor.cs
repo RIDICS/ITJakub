@@ -5,6 +5,8 @@ using System.Reflection;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
 using Vokabular.Core.Storage.Resources;
 using Vokabular.Shared.DataContracts.Types;
@@ -81,7 +83,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private VersionResourceUploadContract GetVersionResourceUploadContract(Resource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
+        private VersionResourceUploadContract GetVersionResourceUploadContract(FileResource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
         {
             return new VersionResourceUploadContract
             {

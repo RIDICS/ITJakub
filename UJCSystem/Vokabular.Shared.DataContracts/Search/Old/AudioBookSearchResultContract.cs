@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ITJakub.Shared.Contracts.Searching.Results
+namespace Vokabular.Shared.DataContracts.Search.Old
 {
     [DataContract]
     public class AudioBookSearchResultContractList

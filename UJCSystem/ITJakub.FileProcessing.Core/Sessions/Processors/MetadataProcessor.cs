@@ -51,7 +51,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                     if (!string.IsNullOrWhiteSpace(file.FileName))
                     {
                         
-                        var accessory = new Resource
+                        var accessory = new FileResource
                         {
                             FileName = file.FileName,
                             FullPath = Path.Combine(resourceSessionDirector.SessionPath, file.FileName),
@@ -94,7 +94,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 {
                     if (!string.IsNullOrWhiteSpace(page.XmlResource))
                     {
-                        var pageResource = new Resource
+                        var pageResource = new FileResource
                         {
                             FileName = page.XmlResource,
                             FullPath = Path.Combine(resourceSessionDirector.SessionPath, page.XmlResource),
@@ -106,7 +106,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private Resource GetMetadataForProcessing(ResourceSessionDirector resourceSessionDirector)
+        private FileResource GetMetadataForProcessing(ResourceSessionDirector resourceSessionDirector)
         {
             var metaData = resourceSessionDirector.Resources.FirstOrDefault(resource => resource.ResourceType == ResourceType.UploadedMetadata) ??
                            resourceSessionDirector.Resources.FirstOrDefault(resource => resource.ResourceType == ResourceType.ConvertedMetadata);

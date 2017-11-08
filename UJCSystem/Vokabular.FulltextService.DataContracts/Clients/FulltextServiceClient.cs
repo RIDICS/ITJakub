@@ -64,7 +64,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
 
         public void CreateSnapshot(long projectId, List<string> pageIds)
         {
-            var snapshotResource = new SnapshotResourceContract{ PageIds = pageIds, ProjectId = projectId};
+            var snapshotResource = new SnapshotPageIdsResourceContract { PageIds = pageIds, ProjectId = projectId};
 
             try
             {

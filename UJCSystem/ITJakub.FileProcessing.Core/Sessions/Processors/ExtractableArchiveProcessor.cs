@@ -27,9 +27,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private List<Resource> ExtractFilesFromArchive(Resource extractableArchive, ResourceSessionDirector resourceSessionDirector)
+        private List<FileResource> ExtractFilesFromArchive(FileResource extractableArchive, ResourceSessionDirector resourceSessionDirector)
         {
-            var result = new List<Resource>();
+            var result = new List<FileResource>();
 
             using (ZipArchive archive = ZipFile.OpenRead(extractableArchive.FullPath))
             {
@@ -47,7 +47,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                                     m_log.Debug($"Extracting file '{fileName}' from archive '{extractableArchive.FullPath}'");
 
                                 entry.ExtractToFile(fullPath, false);
-                                result.Add(new Resource
+                                result.Add(new FileResource
                                 {
                                     FileName = fileName,
                                     FullPath = fullPath

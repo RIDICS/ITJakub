@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook;
 using Vokabular.DataEntities.Database.Repositories;
@@ -33,9 +34,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
         protected override void ExecuteWorkImplementation()
         {
+            m_projectId = m_nullableProjectId ?? throw new InvalidOperationException("Required ProjectId wasn't set in ResourceSessionDirector");
+            // Updating Project data is not required, because data has been already updated
+
             m_importedResourceVersionIds = new List<long>();
 
-            m_projectId = new UpdateProjectSubtask(m_projectRepository).UpdateProject(m_nullableProjectId, m_userId, m_bookData);
             m_bookVersionId = new UpdateBookVersionSubtask(m_resourceRepository).UpdateBookVersion(m_projectId, m_userId, m_message, m_bookData);
             
             //TODO update: transformations

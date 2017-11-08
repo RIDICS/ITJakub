@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace ITJakub.Shared.Contracts
+namespace ITJakub.SearchService.DataContracts.Contracts
 {
     [MessageContract]
     [KnownType(typeof (BookResourceUploadContract))]

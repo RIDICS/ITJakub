@@ -10,17 +10,19 @@ namespace Vokabular.MainService.Core.Works.Search
     public class SearchHeadwordByCriteriaWork : UnitOfWorkBase<IList<HeadwordResource>>
     {
         private readonly MetadataRepository m_metadataRepository;
+        private readonly BookRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
 
-        public SearchHeadwordByCriteriaWork(MetadataRepository metadataRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
+        public SearchHeadwordByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository, SearchCriteriaQueryCreator queryCreator) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
+            m_bookRepository = bookRepository;
             m_queryCreator = queryCreator;
         }
 
         protected override IList<HeadwordResource> ExecuteWorkImplementation()
         {
-            var headwordsDbResult = m_metadataRepository.SearchHeadwordByCriteriaQuery(m_queryCreator);
+            var headwordsDbResult = m_bookRepository.SearchHeadwordByCriteriaQuery(m_queryCreator);
             var headwordIds = headwordsDbResult.Select(x => x.Id).ToList();
             var headwords = m_metadataRepository.GetHeadwordWithFetch(headwordIds);
 

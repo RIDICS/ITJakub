@@ -9,6 +9,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
     {
         private readonly AudioBookArchiveProcessor m_audiobookArchiveProcessor;
         private readonly FulltextDbStoreProcessor m_fulltextDbStoreProcessor;
+        private readonly BasicProjectDataRelationalDbStoreProcessor m_basicProjectDataRelationalDbStoreProcessor;
         private readonly ExtractableArchiveProcessor m_extractableArchiveProcessor;
         private readonly FileDbStoreProcessor m_fileDbStoreProcessor;
         private readonly MetadataProcessor m_metadataProcessor;
@@ -19,8 +20,9 @@ namespace ITJakub.FileProcessing.Core.Sessions
         public ResourceProcessorManager(XmlConversionProcessor xmlConversionProcessor,
             MetadataProcessor metadataProcessor, RelationalDbStoreProcessor relationalDbStoreProcessor,
             FileDbStoreProcessor fileDbStoreProcessor, FulltextDbStoreProcessor fulltextDbStoreProcessor,
-            ExtractableArchiveProcessor extractableArchiveProcessor, TransformationsProcessor transformationsProcessor, 
-            AudioBookArchiveProcessor audiobookArchiveProcessor)
+            ExtractableArchiveProcessor extractableArchiveProcessor, TransformationsProcessor transformationsProcessor,
+            AudioBookArchiveProcessor audiobookArchiveProcessor,
+            BasicProjectDataRelationalDbStoreProcessor basicProjectDataRelationalDbStoreProcessor)
         {
             m_xmlConversionProcessor = xmlConversionProcessor;
             m_metadataProcessor = metadataProcessor;
@@ -30,6 +32,7 @@ namespace ITJakub.FileProcessing.Core.Sessions
             m_extractableArchiveProcessor = extractableArchiveProcessor;
             m_transformationsProcessor = transformationsProcessor;
             m_audiobookArchiveProcessor = audiobookArchiveProcessor;
+            m_basicProjectDataRelationalDbStoreProcessor = basicProjectDataRelationalDbStoreProcessor;
         }
 
         public bool ProcessSessionResources(ResourceSessionDirector resourceDirector)
@@ -46,6 +49,8 @@ namespace ITJakub.FileProcessing.Core.Sessions
 
             if (resourceDirector.Resources.Any(x => x.ResourceType == ResourceType.Audio))
                 GenerateFullBooksResources(resourceDirector); //GenerateFull audio records
+
+            ProcessBasicProjectDataRelationalDbStore(resourceDirector); //update or generate new Project in relational database
 
             var existTask = Task.Factory.StartNew(() => ProcessExistDbStore(resourceDirector)); //saves xmls to Exist
             var resourceTask = Task.Factory.StartNew(() => ProcessFileDbStore(resourceDirector)); //saves images, docx etc on physical disk
@@ -79,6 +84,11 @@ namespace ITJakub.FileProcessing.Core.Sessions
         private void ProcessExistDbStore(ResourceSessionDirector resourceDirector)
         {
             m_fulltextDbStoreProcessor.Process(resourceDirector);
+        }
+
+        private void ProcessBasicProjectDataRelationalDbStore(ResourceSessionDirector resourceDirector)
+        {
+            m_basicProjectDataRelationalDbStoreProcessor.Process(resourceDirector);
         }
 
         private void ProcessRelationalDbStore(ResourceSessionDirector resourceDirector)

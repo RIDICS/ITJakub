@@ -5,6 +5,7 @@ using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
@@ -29,6 +30,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+            bookData.FileNameMapping = new Dictionary<string, FileResource>();
+            foreach (var fileResource in resourceDirector.Resources.Where(x => x.NewNameInStorage != null))
+            {
+                bookData.FileNameMapping.Add(fileResource.FileName, fileResource);
+            }
+
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
@@ -36,7 +44,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
             var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
-            var bookData = saveNewBookDataWork.BookData;
 
             PublishSnapshotToExternalDatabase(projectId, bookData.Pages);
 

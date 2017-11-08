@@ -178,56 +178,6 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
-        public virtual long SearchByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
-        {
-            var session = GetSession();
-
-            var query = session.CreateQuery(creator.GetQueryStringForCount())
-                .SetParameters(creator);
-            var result = query.UniqueResult<long>();
-            return result;
-        }
-
-        public virtual long SearchHeadwordByCriteriaQueryCount(SearchCriteriaQueryCreator creator)
-        {
-            var query = GetSession().CreateQuery(creator.GetHeadwordQueryStringForCount())
-                .SetParameters(creator);
-            var result = query.UniqueResult<long>();
-            return result;
-        }
-
-        public virtual IList<MetadataResource> SearchByCriteriaQuery(SearchCriteriaQueryCreator creator)
-        {
-            var session = GetSession();
-            
-            var query = session.CreateQuery(creator.GetQueryString())
-                .SetPaging(creator)
-                .SetParameters(creator);
-            var result = query.List<MetadataResource>();
-            return result;
-        }
-
-        public virtual IList<long> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
-        {
-            var session = GetSession();
-
-            var query = session.CreateQuery(creator.GetProjectIdListQueryString())
-                .SetPaging(creator)
-                .SetParameters(creator);
-            var result = query.List<long>();
-            return result;
-        }
-
-        public virtual IList<HeadwordSearchResult> SearchHeadwordByCriteriaQuery(SearchCriteriaQueryCreator creator)
-        {
-            var query = GetSession().CreateQuery(creator.GetHeadwordResourceIdsQueryString())
-                .SetPaging(creator)
-                .SetParameters(creator)
-                .SetResultTransformer(Transformers.AliasToBean<HeadwordSearchResult>());
-            var result = query.List<HeadwordSearchResult>();
-            return result;
-        }
-
         public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModule(IEnumerable<long> metadataIdList)
         {
             var session = GetSession();

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Works.CreateProject;
 using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook;
 using ITJakub.FileProcessing.Service.Test.Mock;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 
@@ -300,6 +302,11 @@ namespace ITJakub.FileProcessing.Service.Test
                         Text = "40r",
                         Image = "image_40r.jpg"
                     }
+                },
+                FileNameMapping = new Dictionary<string, FileResource>
+                {
+                    {"image_39v.jpg", new FileResource{NewNameInStorage = "guid-39v"}},
+                    {"image_40r.jpg", new FileResource{NewNameInStorage = "guid-40r"}},
                 }
             };
 
@@ -318,6 +325,9 @@ namespace ITJakub.FileProcessing.Service.Test
             Assert.AreEqual(1, firstImage.VersionNumber);
             Assert.AreEqual(2, secondImage.VersionNumber);
             Assert.AreEqual(900, secondImage.Resource.Id);
+
+            Assert.IsNotNull(firstImage.FileId);
+            Assert.IsNotNull(firstImage.FileId);
         }
 
         [TestMethod]
@@ -632,6 +642,11 @@ namespace ITJakub.FileProcessing.Service.Test
                             }
                         }
                     }
+                },
+                FileNameMapping = new Dictionary<string, FileResource>
+                {
+                    {"file-1.mp3", new FileResource {NewNameInStorage = "guid-1"}},
+                    {"file-3.mp3", new FileResource {NewNameInStorage = "guid-3"}},
                 }
             };
 
@@ -654,6 +669,13 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.AreEqual(2, recording1?.VersionNumber);
             Assert.AreEqual(1, recording3?.VersionNumber);
+
+            if (recording1 == null || recording3 == null)
+            {
+                Assert.Fail();
+            }
+            Assert.IsNotNull(recording1.FileId);
+            Assert.IsNotNull(recording3.FileId);
         }
 
         [TestMethod]
@@ -673,6 +695,11 @@ namespace ITJakub.FileProcessing.Service.Test
                     {
                         FileName = "file-8.mp3"
                     }
+                },
+                FileNameMapping = new Dictionary<string, FileResource>
+                {
+                    {"file-2.mp3", new FileResource{NewNameInStorage = "guid-2"}},
+                    {"file-8.mp3", new FileResource{NewNameInStorage = "guid-8"}},
                 }
             };
 
@@ -690,6 +717,13 @@ namespace ITJakub.FileProcessing.Service.Test
 
             Assert.AreEqual(2, recording2?.VersionNumber);
             Assert.AreEqual(1, recording8?.VersionNumber);
+
+            if (recording2 == null || recording8 == null)
+            {
+                Assert.Fail();
+            }
+            Assert.IsNotNull(recording2.FileId);
+            Assert.IsNotNull(recording8.FileId);
         }
 
         [TestMethod]
