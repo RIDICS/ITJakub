@@ -618,12 +618,12 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public void GetPageImage(long pageId)
+        public IActionResult GetPageImage(long pageId)
         {
             using (var client = GetRestClient())
             {
-                //TODO add logic
-                throw new NotImplementedException();
+                var result = client.GetPageImage(pageId);
+                return new FileStreamResult(result.Stream, "image/jpeg");
             }
         }
 

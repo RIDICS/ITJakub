@@ -9,12 +9,23 @@
         return pageListAjax;
     }
 
-    getImageOnPage(pageId: number): JQueryXHR {
-        const pageImageAjax = $.post(`${this.serverPath}admin/project/GetPageImage`,
-            {
-                pageId: pageId
-            });
-        return pageImageAjax;
+    getImageOnPage(pageId: number, callbackSuccess: Function, callbackFail: Function) {
+        const params = "pageId="+pageId;
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${this.serverPath}admin/project/GetPageImage`);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.responseType = "blob";
+        xhr.send(params); 
+        xhr.onreadystatechange = function (this) {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.response, typeof this.response);
+                callbackSuccess(this.response);
+            }
+            if (this.readyState === 4 && this.status !== 200) {
+                console.log(this.response, typeof this.response);
+                callbackFail(this.response);
+            }
+        }
     }
 
     savePageList(pageList: string[]): JQueryXHR {

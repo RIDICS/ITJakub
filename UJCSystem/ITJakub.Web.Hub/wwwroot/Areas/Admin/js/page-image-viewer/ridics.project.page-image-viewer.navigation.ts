@@ -60,7 +60,7 @@
                     $(".text-editor-page-slider").slider("value", index);
                     const sliderNeedsUpdate = true;
                     if (index > -1 && index < pages.length) {
-                        this.loadPage(index, pages, sliderNeedsUpdate);
+                        //this.loadPage(index, pages, sliderNeedsUpdate);TODO check whether actually needed
                     } else {
                         this.gui.showInfoDialog("Warning", "No more pages on the left.");
                     }
@@ -76,7 +76,7 @@
                     $(".text-editor-page-slider").slider("value", index);
                     const sliderNeedsUpdate = true;
                     if (index > -1 && index < pages.length) {
-                        this.loadPage(index, pages, sliderNeedsUpdate);
+                        //this.loadPage(index, pages, sliderNeedsUpdate);TODO check whether actually needed
                     } else {
                         this.gui.showInfoDialog("Warning", "No more pages on the right.");
                     }
