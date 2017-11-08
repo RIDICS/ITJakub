@@ -153,7 +153,6 @@ BEGIN TRAN
 	(
 	   [Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_ResourceVersion(Id)] PRIMARY KEY CLUSTERED,
 	   [Resource] bigint NOT NULL CONSTRAINT [FK_ResourceVersion(Resource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id),
-	   [ParentResource] bigint NULL CONSTRAINT [FK_ResourceVersion(ParentResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id),
 	   [VersionNumber] int NOT NULL,
 	   [CreateTime] datetime NOT NULL,
 	   [CreatedByUser] int NOT NULL CONSTRAINT [FK_ResourceVersion(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User] (Id),
@@ -205,6 +204,7 @@ BEGIN TRAN
 	(
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_TextResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [ExternalId] varchar(100) NULL,
+	   [ResourcePage] bigint NULL CONSTRAINT [FK_TextResource(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id),
 	   [BookVersion] bigint NULL CONSTRAINT [FK_TextResource(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
@@ -214,7 +214,8 @@ BEGIN TRAN
 	   [FileName] varchar(255) NOT NULL,
 	   [FileId] varchar(100) NULL,
 	   [MimeType] varchar(255) NOT NULL,
-	   [Size] bigint NOT NULL
+	   [Size] bigint NOT NULL,
+	   [ResourcePage] bigint NULL CONSTRAINT [FK_ImageResource(ResourcePage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id)
 	)
 
 	CREATE TABLE [dbo].[AudioResource]
@@ -224,7 +225,8 @@ BEGIN TRAN
 	   [FileName] varchar(255) NOT NULL,
 	   [FileId] varchar(100) NULL,
 	   [AudioType] tinyint NOT NULL,
-	   [MimeType] varchar(255) NOT NULL
+	   [MimeType] varchar(255) NOT NULL,
+	   [ResourceTrack] bigint NULL CONSTRAINT [FK_AudioResource(ResourceTrack)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id)
 	)
 
 	CREATE TABLE [dbo].[TrackResource]
@@ -242,6 +244,7 @@ BEGIN TRAN
 	   [ResourceVersionId] bigint NOT NULL CONSTRAINT [PK_ChapterResource(ResourceVersionId)] PRIMARY KEY CLUSTERED FOREIGN KEY REFERENCES [dbo].[ResourceVersion] (Id),
 	   [Name] nvarchar(1000) NOT NULL,
 	   [Position] int NOT NULL,
+	   [ParentResource] bigint NULL CONSTRAINT [FK_ChapterResource(ParentResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource] (Id),
 	   [ResourceBeginningPage] bigint NULL CONSTRAINT [FK_ChapterResource(ResourceBeginningPage)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
@@ -348,7 +351,8 @@ BEGIN TRAN
 		[Project] bigint NOT NULL CONSTRAINT [FK_Snapshot(Project)_Project(Id)] FOREIGN KEY REFERENCES [dbo].[Project](Id),
 		[CreatedByUser] int NOT NULL CONSTRAINT [FK_Snapshot(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
 		[Comment] nvarchar(2000),
-		[DefaultBookType] int NOT NULL CONSTRAINT [FK_Snapshot(DefaultBookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id)
+		[DefaultBookType] int NOT NULL CONSTRAINT [FK_Snapshot(DefaultBookType)_BookType(Id)] FOREIGN KEY REFERENCES [dbo].[BookType](Id),
+		[BookVersion] bigint NULL CONSTRAINT [FK_Snapshot(BookVersion)_BookVersionResource(ResourceVersionId)] FOREIGN KEY REFERENCES [dbo].[BookVersionResource](ResourceVersionId)
 	)
 
 	ALTER TABLE [dbo].[Project] ADD [LatestPublishedSnapshot] bigint NULL CONSTRAINT [FK_Project(LatestPublishedSnapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id)
@@ -366,6 +370,17 @@ BEGIN TRAN
 		--[DiscussionPost] bigint NULL CONSTRAINT [FK_HistoryLog(DiscussionPost)_DiscussionPost(Id)] FOREIGN KEY REFERENCES [dbo].[DiscussionPost](Id),
 		[Snapshot] bigint NULL CONSTRAINT [FK_HistoryLog(Snapshot)_Snapshot(Id)] FOREIGN KEY REFERENCES [dbo].[Snapshot](Id),
 		[ResourceVersion] bigint NULL CONSTRAINT [FK_HistoryLog(ResourceVersion)_ResourceVersion(Id)] FOREIGN KEY REFERENCES [dbo].[ResourceVersion](Id)
+	)
+
+	CREATE TABLE [dbo].[TextComment]
+	(
+		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TextComment(Id)] PRIMARY KEY CLUSTERED,
+		[TextReferenceId] varchar(100) NOT NULL,
+		[Text] nvarchar(2000) NOT NULL,
+		[CreateTime] datetime NOT NULL,
+		[CreatedByUser] int NOT NULL CONSTRAINT [FK_TextComment(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
+		[ParentComment] bigint NULL CONSTRAINT [FK_TextComment(ParentComment)_TextComment(Id)] FOREIGN KEY REFERENCES [dbo].[TextComment](Id),
+		[ResourceText] bigint NOT NULL CONSTRAINT [FK_TextComment(TextResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
 	)
 
 		

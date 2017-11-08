@@ -14,22 +14,10 @@ BEGIN TRAN
 		[LastEditTime] datetime NULL
 	)
 
-	CREATE TABLE [dbo].[TextComment]
-	(
-		[Id] bigint IDENTITY(1,1) NOT NULL CONSTRAINT [PK_TextComment(Id)] PRIMARY KEY CLUSTERED,
-		[TextReferenceId] varchar(100) NOT NULL,
-		[Text] nvarchar(2000) NOT NULL,
-		[CreateTime] datetime NOT NULL,
-		[CreatedByUser] int NOT NULL CONSTRAINT [FK_TextComment(CreatedByUser)_User(Id)] FOREIGN KEY REFERENCES [dbo].[User](Id),
-		[ParentComment] bigint NULL CONSTRAINT [FK_TextComment(ParentComment)_TextComment(Id)] FOREIGN KEY REFERENCES [dbo].[TextComment](Id),
-		[ResourceText] bigint NOT NULL CONSTRAINT [FK_TextComment(TextResource)_Resource(Id)] FOREIGN KEY REFERENCES [dbo].[Resource](Id)
-	)
-
-	
-    INSERT INTO [dbo].[DatabaseVersion]
+	INSERT INTO [dbo].[DatabaseVersion]
 		(DatabaseVersion)
     VALUES
-		( '002' )
+		( '000' )
 		-- DatabaseVersion - varchar
 
 --TODO remove this user insert (used only for development)

@@ -16,8 +16,6 @@ namespace Vokabular.DataEntities.Database.Entities
         
         public virtual Resource Resource { get; set; }
 
-        public virtual Resource ParentResource { get; set; }
-
         public virtual User CreatedByUser { get; set; }
 
         public virtual IList<Snapshot> Snapshots { get; set; }
@@ -78,6 +76,7 @@ namespace Vokabular.DataEntities.Database.Entities
     {
         public virtual string ExternalId { get; set; }
         public virtual BookVersionResource BookVersion { get; set; }
+        public virtual Resource ResourcePage { get; set; }
     }
     
     public class ImageResource : ResourceVersion
@@ -86,6 +85,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string FileId { get; set; }
         public virtual string MimeType { get; set; }
         public virtual long Size { get; set; }
+        public virtual Resource ResourcePage { get; set; }
     }
 
     public class AudioResource : ResourceVersion
@@ -95,6 +95,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string FileId { get; set; }
         public virtual AudioTypeEnum AudioType { get; set; }
         public virtual string MimeType { get; set; }
+        public virtual Resource ResourceTrack { get; set; }
     }
 
     public class TrackResource : ResourceVersion
@@ -111,6 +112,7 @@ namespace Vokabular.DataEntities.Database.Entities
         public virtual string Name { get; set; }
         public virtual int Position { get; set; }
         public virtual Resource ResourceBeginningPage { get; set; }
+        public virtual Resource ParentResource { get; set; }
     }
 
     public class HeadwordResource : ResourceVersion

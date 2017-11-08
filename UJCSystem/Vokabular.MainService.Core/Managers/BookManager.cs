@@ -510,8 +510,8 @@ namespace Vokabular.MainService.Core.Managers
 
             var bookInfo = Mapper.Map<AudioBookSearchResultContract>(dbResult);
 
-            var audioResourceByTrackId = audioBookDetailWork.Recordings.Where(x => x.ParentResource != null)
-                .GroupBy(key => key.ParentResource.Id)
+            var audioResourceByTrackId = audioBookDetailWork.Recordings.Where(x => x.ResourceTrack != null)
+                .GroupBy(key => key.ResourceTrack.Id)
                 .ToDictionary(key => key.Key, val => val.ToList());
 
             var trackList = new List<TrackWithRecordingContract>(audioBookDetailWork.Tracks.Count);
