@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -40,14 +41,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
             var dbPages = m_resourceRepository.GetProjectPages(projectId);
-            var dbPagesDict = dbPages.ToDictionary(x => x.Name);
+            var dbPagesDict = dbPages.ToDictionaryMultipleValues(x => x.Name);
 
             // Update page list
             foreach (var page in bookData.Pages)
             {
-                PageResource dbPageResource;
-                
-                if (!dbPagesDict.TryGetValue(page.Text, out dbPageResource))
+                List<PageResource> dbPageResources;
+                PageResource dbPageResource = null;
+                if (dbPagesDict.TryGetValue(page.Text, out dbPageResources))
+                {
+                    dbPageResource = dbPageResources.Count == 1
+                        ? dbPageResources.First()
+                        : dbPageResources.FirstOrDefault(x => x.Position == page.Position); // If multiple pages have the same name, try identify page by Position
+                }
+
+                if (dbPageResource == null)
                 {
                     var newResource = new Resource
                     {
