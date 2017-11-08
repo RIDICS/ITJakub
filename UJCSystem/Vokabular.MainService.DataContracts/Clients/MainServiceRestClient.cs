@@ -13,6 +13,7 @@ using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
 using Vokabular.RestClient.Results;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.Extensions;
 

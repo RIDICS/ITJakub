@@ -18,6 +18,10 @@ namespace Vokabular.FulltextService.Core.Managers
         {
             var client = m_communicationProvider.GetElasticClient();
             var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(Index).Type(Type));
+            if (response.OriginalException != null)
+            {
+                throw response.OriginalException;
+            }
             return response.Source;
         }
 
@@ -28,6 +32,10 @@ namespace Vokabular.FulltextService.Core.Managers
             if (response.Created)
             {
                 return new ResultContract {Id = response.Id};
+            }
+            if (response.OriginalException != null)
+            {
+                throw response.OriginalException;
             }
             return new ResultContract {Id = null};
         }

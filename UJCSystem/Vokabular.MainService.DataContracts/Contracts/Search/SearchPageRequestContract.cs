@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using Vokabular.MainService.DataContracts.Utils;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Utils;
 
 namespace Vokabular.MainService.DataContracts.Contracts.Search
 {

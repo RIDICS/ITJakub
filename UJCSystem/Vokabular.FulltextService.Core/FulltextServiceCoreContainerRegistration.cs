@@ -13,6 +13,7 @@ namespace Vokabular.FulltextService.Core
             container.AddPerWebRequest<CommunicationProvider>();
             container.AddPerWebRequest<TextResourceManager>();
             container.AddPerWebRequest<SnapshotResourceManager>();
+            container.AddPerWebRequest<SearchManager>();
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
         }

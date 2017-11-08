@@ -13,6 +13,7 @@ using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
+using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.Core.Managers.Fulltext;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
@@ -24,6 +25,7 @@ using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Search;
 
 namespace Vokabular.MainService.Core.Managers
 {
@@ -36,15 +38,17 @@ namespace Vokabular.MainService.Core.Managers
         private readonly FileSystemManager m_fileSystemManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
+        private readonly CommunicationProvider m_communicationProvider;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
-            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager)
+            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager, CommunicationProvider communicationProvider)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_fileSystemManager = fileSystemManager;
+            m_communicationProvider = communicationProvider;
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
             m_categoryRepository = categoryRepository;
         }
@@ -132,16 +136,20 @@ namespace Vokabular.MainService.Core.Managers
 
                 var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
                 {
-                    Key = CriteriaKey.ResultRestriction,
+                    Key = CriteriaKey.NewResultRestriction,
                     ProjectIds = projectIdList
                 };
                 nonMetadataCriterias.Add(projectRestrictionCriteria);
-
-                // TODO send request to fulltext DB and remove this mock:
-                var mockResultProjectIdList = new List<long>(){1};
+                
+                FulltextSearchResultContract result;
+                using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+                {
+                    result = fulltextServiceClient.SearchByCriteria(nonMetadataCriterias);
+                }
+                
                 //TODO
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList, termCriteria);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, result.ProjectIds, termCriteria);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);

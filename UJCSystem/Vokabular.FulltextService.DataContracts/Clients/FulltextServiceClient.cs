@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using ITJakub.Shared.Contracts;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.RestClient;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.Extensions;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -70,6 +73,24 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             {
                 var result = Post<ResultContract>($"snapshot", snapshotResource);
                 
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public FulltextSearchResultContract SearchByCriteria(List<SearchCriteriaContract> searchCriterias)
+        {
+            var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias};
+            try
+            {
+                var result = Post<FulltextSearchResultContract>($"search", searchRequest);
+                return result;
+
             }
             catch (HttpRequestException e)
             {

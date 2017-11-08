@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
-namespace Vokabular.MainService.DataContracts.Utils
+namespace Vokabular.Shared.DataContracts.Utils
 {
     public class SearchCriteriaJsonConverter : JsonConverter
     {
@@ -56,6 +56,8 @@ namespace Vokabular.MainService.DataContracts.Utils
                     return typeof(ResultCriteriaContract);
                 case CriteriaKey.ResultRestriction:
                     return typeof(ResultRestrictionCriteriaContract);
+                case CriteriaKey.NewResultRestriction:
+                    return typeof(NewResultRestrictionCriteriaContract);
                 case CriteriaKey.TokenDistance:
                 case CriteriaKey.HeadwordDescriptionTokenDistance:
                     return typeof(TokenDistanceListCriteriaContract);
