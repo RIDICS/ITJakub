@@ -41,8 +41,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
             var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
+            var bookVersionId = saveNewBookDataWork.BookVersionId;
 
-            var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message);
+            var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message, bookVersionId);
             createNewSnapshot.Execute();
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);

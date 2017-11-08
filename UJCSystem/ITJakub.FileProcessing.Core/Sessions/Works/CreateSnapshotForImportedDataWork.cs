@@ -17,8 +17,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly IList<long> m_resourceVersionIds;
         private readonly BookData m_bookData;
         private readonly string m_comment;
+        private readonly long m_bookVersionId;
 
-        public CreateSnapshotForImportedDataWork(ProjectRepository projectRepository, long projectId, int userId, IList<long> resourceVersionIds, BookData bookData, string comment) : base(projectRepository)
+        public CreateSnapshotForImportedDataWork(ProjectRepository projectRepository, long projectId, int userId, IList<long> resourceVersionIds, BookData bookData, string comment, long bookVersionId) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_projectId = projectId;
@@ -26,6 +27,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             m_resourceVersionIds = resourceVersionIds;
             m_bookData = bookData;
             m_comment = comment;
+            m_bookVersionId = bookVersionId;
         }
 
         protected override void ExecuteWorkImplementation()
@@ -33,6 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             var now = DateTime.UtcNow;
             var user = m_projectRepository.Load<User>(m_userId);
             var project = m_projectRepository.Load<Project>(m_projectId);
+            var bookVersionResource = m_projectRepository.Load<BookVersionResource>(m_bookVersionId);
             var latestSnapshot = m_projectRepository.GetLatestSnapshot(m_projectId);
 
             var resourceVersions =
@@ -50,6 +53,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
                 PublishTime = now,
                 CreatedByUser = user,
                 VersionNumber = versionNumber + 1,
+                BookVersion = bookVersionResource,
                 ResourceVersions = resourceVersions
             };
 

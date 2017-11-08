@@ -89,5 +89,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         public List<long> ImportedResourceVersionIds => m_importedResourceVersionIds;
 
         public BookData BookData => m_bookData;
+
+        public long BookVersionId => m_bookVersionId;
     }
 }
