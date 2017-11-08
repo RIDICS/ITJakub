@@ -1,8 +1,8 @@
 ﻿function initReader(bookXmlId: string, versionXmlId: string, bookTitle: string, pageList: any, searchedText?: string, initPageXmlId?: string) {
 
 
-    function readerPageChangedCallback(pageXmlId: string) {
-        updateQueryStringParameter("page", pageXmlId);
+    function readerPageChangedCallback(pageId: number) {
+        updateQueryStringParameter("page", pageId);
     }
 
     var readerPanels = [ReaderPanelEnum.TextPanel, ReaderPanelEnum.ImagePanel, ReaderPanelEnum.ContentPanel, ReaderPanelEnum.SearchPanel, ReaderPanelEnum.SettingsPanel];
@@ -168,7 +168,8 @@
     if (typeof initPageXmlId !== "undefined" && initPageXmlId !== null) {
         var decodedText = decodeURIComponent(initPageXmlId);
         decodedText = replaceSpecialChars(decodedText);
-        readerPlugin.moveToPage(decodedText, true);
+        var pageId = Number(decodedText);
+        readerPlugin.moveToPage(pageId, true);
     }
 
     //label item in main menu
@@ -179,7 +180,7 @@
 
 function listBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         if (context.search.isLastQueryJson()) { //only text seach criteria we should propagate
             return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
         } else {
@@ -190,7 +191,7 @@ function listBookReadClicked(target) {
 
 function searchBookReadClicked(target) {
     return context => {
-        var bookId = $(target).parents("li.list-item").attr("data-bookid");
+        var bookId = $(target).parents("li.list-item").attr("data-id");
         return onClickHref(context.event, getBaseUrl() + "Editions/Editions/Listing?bookId=" + bookId + "&searchText=" + context.search.getLastQuery());
     };
 }

@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ITJakub.FileProcessing.Core.Data;
 using ITJakub.FileProcessing.Core.Sessions.Works;
 using log4net;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
@@ -12,29 +15,32 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
-        private readonly CategoryRepository m_categoryRepository;
         private readonly ResourceRepository m_resourceRepository;
 
-        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository, CategoryRepository categoryRepository,
+        public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
             ResourceRepository resourceRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
-            m_categoryRepository = categoryRepository;
             m_resourceRepository = resourceRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
         {
+            var bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
+            bookData.FileNameMapping = new Dictionary<string, FileResource>();
+            foreach (var fileResource in resourceDirector.Resources.Where(x => x.NewNameInStorage != null))
+            {
+                bookData.FileNameMapping.Add(fileResource.FileName, fileResource);
+            }
+
             var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
-            // TODO determine if Snapshot should be created
             var projectId = saveNewBookDataWork.ProjectId;
             var userId = saveNewBookDataWork.UserId;
             var message = saveNewBookDataWork.Message;
             var resourceVersionIds = saveNewBookDataWork.ImportedResourceVersionIds;
-            var bookData = saveNewBookDataWork.BookData;
 
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message);
             createNewSnapshot.Execute();

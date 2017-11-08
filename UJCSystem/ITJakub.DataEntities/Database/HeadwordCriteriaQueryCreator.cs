@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using NHibernate.Criterion;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;

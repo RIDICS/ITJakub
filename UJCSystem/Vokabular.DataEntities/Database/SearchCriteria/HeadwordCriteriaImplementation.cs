@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using System.Text;
+using NHibernate.Criterion;
+using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
@@ -14,26 +15,24 @@ namespace Vokabular.DataEntities.Database.SearchCriteria
 
         public SearchCriteriaQuery CreateCriteriaQuery(SearchCriteriaContract searchCriteriaContract, Dictionary<string, object> metadataParameters)
         {
+            HeadwordItem headwordItemAlias = null;
             var wordListCriteria = (WordListCriteriaContract) searchCriteriaContract;
-            var whereBuilder = new StringBuilder();
+            var disjunction = new Disjunction();
 
             foreach (WordCriteriaContract wordCriteria in wordListCriteria.Disjunctions)
             {
-                if (whereBuilder.Length > 0)
-                {
-                    whereBuilder.Append(" or");
-                }
+                var parameter = CriteriaConditionBuilder.Create(wordCriteria);
+                var restriction = Restrictions.Like(Projections.Property(() => headwordItemAlias.Headword), parameter, MatchMode.Exact);
 
-                var uniqueParameterName = $"param{metadataParameters.Count}";
-                whereBuilder.AppendFormat(" headwordItem.Headword like (:{0})", uniqueParameterName);
-                metadataParameters.Add(uniqueParameterName, CriteriaConditionBuilder.Create(wordCriteria));
+                disjunction.Add(restriction);
             }
 
             return new SearchCriteriaQuery
             {
                 CriteriaKey = CriteriaKey,
                 Join = string.Empty,
-                Where = whereBuilder.ToString()
+                Where = string.Empty,
+                Restriction = disjunction,
             };
         }
     }

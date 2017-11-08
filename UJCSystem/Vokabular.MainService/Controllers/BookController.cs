@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Controllers
@@ -45,7 +45,21 @@ namespace Vokabular.MainService.Controllers
             return result;
         }
 
+        [HttpPost("{projectId}/page/search")]
+        public List<PageContract> SearchPage(long projectId, [FromBody] SearchPageRequestContract request)
+        {
+            var result = m_bookManager.SearchPage(projectId, request);
+            return result;
+        }
+
         [HttpGet("{projectId}")]
+        public BookContract GetBookInfo(long projectId)
+        {
+            var result = m_bookManager.GetBookInfo(projectId);
+            return result;
+        }
+
+        [HttpGet("{projectId}/detail")]
         public SearchResultDetailContract GetBookDetail(long projectId)
         {
             var result = m_bookManager.GetBookDetail(projectId);
@@ -60,10 +74,24 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}/chapter")]
-        public List<ChapterContract> GetBookChapterList(long projectId)
+        public List<ChapterHierarchyContract> GetBookChapterList(long projectId)
         {
             var result = m_bookManager.GetBookChapterList(projectId);
             return result;
+        }
+
+        [HttpHead("{projectId}/text")]
+        public IActionResult HasBookAnyText(long projectId)
+        {
+            var hasAny = m_bookManager.HasBookAnyText(projectId);
+            return hasAny ? (IActionResult)Ok() : NotFound();
+        }
+
+        [HttpHead("{projectId}/image")]
+        public IActionResult HasBookAnyImage(long projectId)
+        {
+            var hasAny = m_bookManager.HasBookAnyImage(projectId);
+            return hasAny ? (IActionResult)Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/term")]
@@ -76,43 +104,81 @@ namespace Vokabular.MainService.Controllers
         [HttpHead("page/{pageId}/text")]
         public IActionResult HasPageText(long pageId)
         {
-            var result = m_bookManager.HasBookPageText(pageId);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            var hasText = m_bookManager.HasBookPageText(pageId);
+            return hasText ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/text")]
-        public string GetPageText(long pageId)
+        public IActionResult GetPageText(long pageId, [FromQuery] TextFormatEnumContract? format)
         {
-            var result = m_bookManager.GetPageText(pageId);
-            return result;
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetPageText(pageId, formatValue);
+            if (result == null)
+                return NotFound();
+            
+            return Ok(result);
+        }
+
+        [HttpPost("page/{pageId}/text/search")]
+        public IActionResult GetPageTextFromSearch(long pageId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetPageText(pageId, formatValue, request);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpHead("page/{pageId}/image")]
         public IActionResult HasPageImage(long pageId)
         {
-            var result = m_bookManager.HasBookPageImage(pageId);
-            if (result)
-            {
-                return Ok();
-            }
-            else
-            {
-                return NotFound();
-            }
+            var hasImage = m_bookManager.HasBookPageImage(pageId);
+            return hasImage ? (IActionResult) Ok() : NotFound();
         }
 
         [HttpGet("page/{pageId}/image")]
-        public Stream GetPageImage(long pageId)
+        public IActionResult GetPageImage(long pageId)
         {
             var result = m_bookManager.GetPageImage(pageId);
-            return result;
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
+        }
+
+        [HttpGet("audio/{audioId}/data")]
+        public IActionResult GetAudio(long audioId)
+        {
+            var result = m_bookManager.GetAudio(audioId);
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
+        }
+
+        [HttpGet("headword/{headwordId}/text")]
+        public IActionResult GetHeadwordText(long headwordId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetHeadwordText(headwordId, formatValue);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpPost("headword/{headwordId}/text/search")]
+        public IActionResult GetHeadwordTextFromSearch(long headwordId, [FromQuery] TextFormatEnumContract? format, [FromBody] SearchPageRequestContract request)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetHeadwordText(headwordId, formatValue, request);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
     }
 }

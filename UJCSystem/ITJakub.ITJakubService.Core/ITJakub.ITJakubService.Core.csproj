@@ -121,10 +121,6 @@
       <Project>{F00801BF-D6B2-4F6C-B808-68BABF177055}</Project>
       <Name>ITJakub.CardFile.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ITJakub.Core\ITJakub.Core.csproj">
-      <Project>{92E907E3-ACE0-4FC6-8919-040031E5192E}</Project>
-      <Name>ITJakub.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ITJakub.DataEntities\ITJakub.DataEntities.csproj">
       <Project>{36A4CA21-A99D-48D3-9DFF-76878CF1DE0C}</Project>
       <Name>ITJakub.DataEntities</Name>
@@ -140,6 +136,10 @@
     <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
       <Project>{67b4dda0-4340-4d05-9a22-831da43e70f8}</Project>
       <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
+      <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
+      <Name>ITJakub.SearchService.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9AD4D58F-3B7F-4D54-A8D6-170E2E32A13B}</Project>

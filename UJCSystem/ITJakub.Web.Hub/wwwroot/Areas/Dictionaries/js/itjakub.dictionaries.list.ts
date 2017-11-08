@@ -1,4 +1,4 @@
-﻿function initDictionaryList(bookXmlId: string) {
+﻿function initDictionaryList() {
     $(document).ready(() => {
         const modulInicializator = new ListModulInicializator({
             bibliographyModule: {

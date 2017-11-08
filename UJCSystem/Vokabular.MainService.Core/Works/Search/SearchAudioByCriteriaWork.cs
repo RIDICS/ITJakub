@@ -22,7 +22,7 @@ namespace Vokabular.MainService.Core.Works.Search
 
         protected override IList<MetadataResource> ExecuteWorkImplementation()
         {
-            var metadataList = m_metadataRepository.SearchByCriteriaQuery(m_queryCreator);
+            var metadataList = m_bookRepository.SearchByCriteriaQuery(m_queryCreator);
 
             var metadataIdList = metadataList.Select(x => x.Id);
             m_metadataRepository.GetMetadataWithFetchForBiblModule(metadataIdList);

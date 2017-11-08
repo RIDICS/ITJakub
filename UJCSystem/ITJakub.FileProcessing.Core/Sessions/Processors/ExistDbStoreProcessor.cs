@@ -2,11 +2,11 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Core.Resources;
-using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Clients;
-using ITJakub.Shared.Contracts.Resources;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Contracts;
 using log4net;
+using Vokabular.Core.Storage.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -89,7 +89,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private VersionResourceUploadContract GetVersionResourceUploadContract(Resource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
+        private VersionResourceUploadContract GetVersionResourceUploadContract(FileResource resource, ResourceSessionDirector resourceDirector, Stream dataStream)
         {
             return new VersionResourceUploadContract
             {

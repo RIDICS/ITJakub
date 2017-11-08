@@ -2,7 +2,6 @@
 using System.Linq;
 using AutoMapper;
 using ITJakub.Shared.Contracts.Notes;
-using ITJakub.Shared.Contracts.Searching.Results;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Converters;
 using ITJakub.Web.Hub.Core;
@@ -13,6 +12,7 @@ using ITJakub.Web.Hub.Models.Plugins.RegExSearch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
@@ -49,19 +49,23 @@ namespace ITJakub.Web.Hub.Areas.ProfessionalLiterature.Controllers
             return View();
         }
 
-        public ActionResult Listing(string bookId, string searchText, string page)
+        public ActionResult Listing(long bookId, string searchText, string page)
         {
-            using (var client = GetMainServiceClient())
+            // TODO modify this method according to EditionsController.Listing()
+
+            using (var client = GetRestClient())
             {
-                var book = client.GetBookInfoWithPages(bookId);
+                var book = client.GetBookInfo(bookId);
+                var pages = client.GetBookPageList(bookId);
+
                 return
                     View(new BookListingModel
                     {
-                        BookId = book.BookId,
-                        BookXmlId = book.BookXmlId,
-                        VersionXmlId = book.LastVersionXmlId,
+                        BookId = book.Id,
+                        BookXmlId = book.Id.ToString(),
+                        VersionXmlId = null,
                         BookTitle = book.Title,
-                        BookPages = book.BookPages,
+                        BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page,
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()

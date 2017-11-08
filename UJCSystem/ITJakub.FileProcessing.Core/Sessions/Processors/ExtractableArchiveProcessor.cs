@@ -4,9 +4,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
-using ITJakub.Core.Resources;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -27,9 +27,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             }
         }
 
-        private List<Resource> ExtractFilesFromArchive(Resource extractableArchive, ResourceSessionDirector resourceSessionDirector)
+        private List<FileResource> ExtractFilesFromArchive(FileResource extractableArchive, ResourceSessionDirector resourceSessionDirector)
         {
-            var result = new List<Resource>();
+            var result = new List<FileResource>();
 
             using (ZipArchive archive = ZipFile.OpenRead(extractableArchive.FullPath))
             {
@@ -47,7 +47,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                                     m_log.Debug($"Extracting file '{fileName}' from archive '{extractableArchive.FullPath}'");
 
                                 entry.ExtractToFile(fullPath, false);
-                                result.Add(new Resource
+                                result.Add(new FileResource
                                 {
                                     FileName = fileName,
                                     FullPath = fullPath

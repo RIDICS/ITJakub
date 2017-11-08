@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Castle.MicroKernel;
 using ITJakub.FileProcessing.Core.Sessions.ResourceTypeResolvers;
-using ITJakub.Shared.Contracts.Resources;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions
 {

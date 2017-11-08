@@ -228,6 +228,7 @@ namespace ITJakub.Web.Hub.Controllers
                     Count = count,
                     Sort = (SortTypeEnumContract) sortingEnum,
                     SortDirection = sortAsc ? SortDirectionEnumContract.Asc : SortDirectionEnumContract.Desc,
+                    FetchTerms = listSearchCriteriaContracts.Any(x => x.Key == CriteriaKey.Term),
                 };
                 var result = client.SearchBook(request);
                 return result;

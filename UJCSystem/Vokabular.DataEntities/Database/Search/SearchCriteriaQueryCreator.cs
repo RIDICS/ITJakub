@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using NHibernate;
+using NHibernate.Criterion;
 using Vokabular.Shared.DataContracts.Search.QueryBuilder;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.DataEntities.Database.Search
 {
-    public class SearchCriteriaQueryCreator
+    public class SearchCriteriaQueryCreator : ISearchCriteriaCreator
     {
         private const int MaxCount = 100;
         private const int DefaultCount = 10;
@@ -17,11 +16,9 @@ namespace Vokabular.DataEntities.Database.Search
         private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
         // inner join to LatestPublishedSnapshots filters result only to published Projects
         private const string ResultFromClause = "from MetadataResource metadata1 inner join metadata1.Resource resource1";// left outer join resource1.Project project1 inner join project1.LatestPublishedSnapshot snapshot1";
-        private const string HeadwordFromClause = "from HeadwordResource headword inner join headword.Resource resource1 inner join headword.HeadwordItems headwordItem";
 
         private readonly List<SearchCriteriaQuery> m_conjunctionQuery;
         private readonly Dictionary<string, object> m_metadataParameters;
-        private string m_headwordQueryParameter;
 
         public SearchCriteriaQueryCreator(List<SearchCriteriaQuery> conjunctionQuery,
             Dictionary<string, object> metadataParameters)
@@ -45,10 +42,7 @@ namespace Vokabular.DataEntities.Database.Search
             return Count != null ? Math.Min(Count.Value, MaxCount) : DefaultCount;
         }
 
-        public Dictionary<string, object> GetMetadataParameters()
-        {
-            return m_metadataParameters;
-        }
+        public Dictionary<string, object> Parameters => m_metadataParameters;
 
         public string GetQueryString()
         {
@@ -77,26 +71,17 @@ namespace Vokabular.DataEntities.Database.Search
 
             return queryString;
         }
-
-        public string GetHeadwordResourceIdsQueryString()
+        
+        public ICriterion GetHeadwordRestrictions()
         {
-            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
-            var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
-            
-            var queryString = $"select headword.Id as Id, min(headword.Sorting) as Sorting {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause}) group by headword.Id order by Sorting asc";
-            
-            return queryString;
-        }
+            var conjunction = new Conjunction();
+            foreach (var searchCriteriaQuery in m_conjunctionQuery.Where(x => x.CriteriaKey == CriteriaKey.Headword))
+            {
+                var disjunction = (Disjunction) searchCriteriaQuery.Restriction;
+                conjunction.Add(disjunction);
+            }
 
-        public string GetHeadwordQueryStringForCount()
-        {
-            var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
-            var whereHeadwordCondition = CreateWhereConditionForHeadwords(m_conjunctionQuery);
-
-            //var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where {FromClause} {joinAndWhereClause}"; // TODO missing joins for headword restrictions
-            var queryString = $"select count(distinct headword.Id) {HeadwordFromClause} where resource1.LatestVersion.Id = headword.Id {whereHeadwordCondition} and resource1.Project.Id in (select distinct project.Id {FromClause} {joinAndWhereClause})";
-            
-            return queryString;
+            return conjunction;
         }
 
         private string CreateJoinAndWhereClause(List<SearchCriteriaQuery> conjunctionQuery)
@@ -116,19 +101,6 @@ namespace Vokabular.DataEntities.Database.Search
             }
 
             return string.Format("{0}{1}", joinBuilder, whereBuilder);
-        }
-
-        private string CreateWhereConditionForHeadwords(List<SearchCriteriaQuery> conjunctionQuery)
-        {
-            var whereBuilder = new StringBuilder();
-
-            foreach (var criteriaQuery in conjunctionQuery.Where(x => x.CriteriaKey == CriteriaKey.Headword))
-            {
-                whereBuilder.Append(" and");
-                whereBuilder.Append(" (").Append(criteriaQuery.Where).Append(')');
-            }
-
-            return whereBuilder.ToString();
         }
 
         private string CreateOrderByClause(string metadataAlias)
@@ -165,45 +137,6 @@ namespace Vokabular.DataEntities.Database.Search
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-        }
-    }
-
-    public static class SearchCriteriaQueryCreatorExtensions
-    {
-        public static IQuery SetParameters(this IQuery query, SearchCriteriaQueryCreator creator)
-        {
-            var metadataParameters = creator.GetMetadataParameters();
-            foreach (var parameterKeyValue in metadataParameters)
-            {
-                if (parameterKeyValue.Value is DateTime)
-                {
-                    //set parameter as DateTime2 otherwise comparison years before 1753 doesn't work
-                    query.SetDateTime2(parameterKeyValue.Key, (DateTime)parameterKeyValue.Value);
-                }
-                else if (parameterKeyValue.Value is IList)
-                {
-                    query.SetParameterList(parameterKeyValue.Key, (IList)parameterKeyValue.Value);
-                }
-                else
-                {
-                    query.SetParameter(parameterKeyValue.Key, parameterKeyValue.Value);
-                }
-            }
-
-            //if (m_headwordQueryParameter != null)
-            //{
-            //    query.SetParameter("headwordQuery", m_headwordQueryParameter);
-            //}
-
-            return query;
-        }
-
-        public static IQuery SetPaging(this IQuery query, SearchCriteriaQueryCreator creator)
-        {
-            query.SetFirstResult(creator.GetStart());
-            query.SetMaxResults(creator.GetCount());
-
-            return query;
         }
     }
 }

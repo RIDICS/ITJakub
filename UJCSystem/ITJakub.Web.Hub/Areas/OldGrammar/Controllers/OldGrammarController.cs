@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Web.Hub.Areas.OldGrammar.Models;
 using ITJakub.Web.Hub.Controllers;
@@ -99,19 +100,23 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return View(pageStaticText);
         }
 
-        public ActionResult Listing(string bookId, string searchText, string page)
+        public ActionResult Listing(long bookId, string searchText, string page)
         {
-            using (var client = GetMainServiceClient())
+            // TODO modify this method according to EditionsController.Listing()
+
+            using (var client = GetRestClient())
             {
-                var book = client.GetBookInfoWithPages(bookId);
+                var book = client.GetBookInfo(bookId);
+                var pages = client.GetBookPageList(bookId);
+                
                 return
                     View(new BookListingModel
                     {
-                        BookId = book.BookId,
-                        BookXmlId = book.BookXmlId,
-                        VersionXmlId = book.LastVersionXmlId,
+                        BookId = book.Id,
+                        BookXmlId = book.Id.ToString(),
+                        VersionXmlId = null,
                         BookTitle = book.Title,
-                        BookPages = book.BookPages,
+                        BookPages = pages,
                         SearchText = searchText,
                         InitPageXmlId = page,
                         JsonSerializerSettingsForBiblModule = GetJsonSerializerSettingsForBiblModule()
@@ -131,15 +136,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
             return File(fullPath, "application/json", fullPath);
         }
 
-        public ActionResult GetTypeaheadTerm(IList<int> selectedCategoryIds, IList<long> selectedBookIds, string query)
-        {
-            using (var client = GetMainServiceClient())
-            {
-                var result = client.GetTypeaheadTermsByBookType(query, AreaBookType, selectedCategoryIds, selectedBookIds);
-                return Json(result);
-            }
-        }
-
         public ActionResult GetGrammarsWithCategories()
         {
             var result = GetBooksAndCategories();
@@ -150,12 +146,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         public ActionResult AdvancedSearchPaged(string json, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            // TODO determine why TermSettingsContract is added to criteria
-            //if (listSearchCriteriaContracts.FirstOrDefault(x => x.Key == CriteriaKey.Term) != null)
-            //{
-            //    listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
-            //}
-
             var result = SearchByCriteriaJson(json, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
             return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }
@@ -188,12 +178,6 @@ namespace ITJakub.Web.Hub.Areas.OldGrammar.Controllers
         public ActionResult TextSearchFulltextPaged(string text, int start, int count, short sortingEnum, bool sortAsc, IList<long> selectedBookIds,
             IList<int> selectedCategoryIds)
         {
-            // TODO determine why TermSettingsContract is added to criteria
-            //if (!string.IsNullOrWhiteSpace(text))
-            //{
-            //    listSearchCriteriaContracts.OfType<ResultCriteriaContract>().First().TermsSettingsContract = new TermsSettingsContract();
-            //}
-
             var result = SearchByCriteriaText(CriteriaKey.Term, text, start, count, sortingEnum, sortAsc, selectedBookIds, selectedCategoryIds);
             return Json(new { books = result }, GetJsonSerializerSettingsForBiblModule());
         }

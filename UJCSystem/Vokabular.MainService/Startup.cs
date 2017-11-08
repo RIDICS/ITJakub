@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using Vokabular.Core;
 using Vokabular.MainService.Containers.Extensions;
 using Vokabular.MainService.Containers;
 using Vokabular.MainService.Containers.Installers;
@@ -52,6 +53,7 @@ namespace Vokabular.MainService
             // Configuration options
             services.AddOptions();
             services.Configure<List<EndpointOption>>(Configuration.GetSection("Endpoints"));
+            services.Configure<PathConfiguration>(Configuration.GetSection("PathConfiguration"));
 
             // Add framework services.
             services.AddMvc();

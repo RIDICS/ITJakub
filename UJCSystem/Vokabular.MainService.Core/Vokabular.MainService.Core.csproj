@@ -27,16 +27,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ITJakub.FileProcessing.DataContracts\ITJakub.FileProcessing.DataContracts.csproj" />
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj" />
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\Vokabular.Core\Vokabular.Core.csproj" />
     <ProjectReference Include="..\Vokabular.DataEntities\Vokabular.DataEntities.csproj" />
     <ProjectReference Include="..\Vokabular.FulltextService.DataContracts\Vokabular.FulltextService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.MainService.DataContracts\Vokabular.MainService.DataContracts.csproj" />
     <ProjectReference Include="..\Vokabular.Shared\Vokabular.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Managers\Search\" />
   </ItemGroup>
 
 </Project>

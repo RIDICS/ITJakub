@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Xml;
 using System.Xml.Linq;
 using ITJakub.FileProcessing.Core.Data;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Resource = ITJakub.Core.Resources.Resource;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -35,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
 
         }
 
-        private TransformationData GetTransformationObject(Resource resource)
+        private TransformationData GetTransformationObject(FileResource resource)
         {
             const string logFormat = "{0} processing instruction in XSLT document not found.";
             const string logValidValueFormat =

@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ITJakub.ITJakubService.DataContracts</RootNamespace>
     <AssemblyName>ITJakub.ITJakubService.DataContracts</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +93,10 @@
     <ProjectReference Include="..\ITJakub.MobileApps.MobileContracts\ITJakub.MobileApps.MobileContracts.csproj">
       <Project>{67B4DDA0-4340-4D05-9A22-831DA43E70F8}</Project>
       <Name>ITJakub.MobileApps.MobileContracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ITJakub.SearchService.DataContracts\ITJakub.SearchService.DataContracts.csproj">
+      <Project>{ba58bca2-f98a-4dda-934c-b78c10bc0cad}</Project>
+      <Name>ITJakub.SearchService.DataContracts</Name>
     </ProjectReference>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj">
       <Project>{9ad4d58f-3b7f-4d54-a8d6-170e2e32a13b}</Project>

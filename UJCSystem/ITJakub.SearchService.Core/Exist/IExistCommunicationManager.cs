@@ -1,9 +1,7 @@
-using System;
 using System.IO;
-using System.Net.Http;
 using System.ServiceModel;
 using ITJakub.SearchService.Core.Exist.Attributes;
-using ITJakub.Shared.Contracts;
+using ITJakub.SearchService.DataContracts.Types;
 
 namespace ITJakub.SearchService.Core.Exist
 {

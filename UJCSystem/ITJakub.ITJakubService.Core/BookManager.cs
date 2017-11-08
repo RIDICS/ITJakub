@@ -4,16 +4,16 @@ using System.IO;
 using System.Reflection;
 using System.ServiceModel;
 using AutoMapper;
-using ITJakub.Core;
 using ITJakub.DataEntities.Database.Entities.Enums;
 using ITJakub.DataEntities.Database.Repositories;
 using ITJakub.ITJakubService.DataContracts;
 using ITJakub.ITJakubService.DataContracts.Contracts;
 using ITJakub.MobileApps.MobileContracts;
+using ITJakub.SearchService.DataContracts;
+using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts;
-using ITJakub.Shared.Contracts.Clients;
-using ITJakub.Shared.Contracts.Resources;
 using log4net;
+using Vokabular.Core.Storage;
 using Vokabular.Shared.DataContracts.Types;
 using BookContract = ITJakub.MobileApps.MobileContracts.BookContract;
 
@@ -125,9 +125,10 @@ namespace ITJakub.ITJakubService.Core
             m_authorizationManager.AuthorizeBook(bookXmlId);
 
             var bookPage = m_bookVersionRepository.FindBookPageByXmlIdAndPosition(bookXmlId, position);
+            var bookId = bookPage.BookVersion.Book.Id;
 
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(bookXmlId, bookPage.BookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookId, bookPage.BookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
@@ -136,9 +137,10 @@ namespace ITJakub.ITJakubService.Core
         public Stream GetBookPageImage(string bookXmlId, string pageId)
         {
             var bookPage = m_bookVersionRepository.FindBookPageByXmlId(bookXmlId, pageId);
+            var bookId = bookPage.BookVersion.Book.Id;
 
             if (bookPage.Image != null)
-                return m_fileSystemManager.GetResource(bookXmlId, bookPage.BookVersion.VersionId,
+                return m_fileSystemManager.GetResource(bookId, bookPage.BookVersion.VersionId,
                     bookPage.Image, ResourceType.Image);
 
             return Stream.Null;
@@ -147,7 +149,8 @@ namespace ITJakub.ITJakubService.Core
         public Stream GetHeadwordImage(string bookXmlId, string bookVersionXmlId, string fileName)
         {
             m_authorizationManager.AuthorizeBook(bookXmlId);
-            return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
+            throw new NotImplementedException("Book.Id is required - load from database or change method parameter");
+            //return m_fileSystemManager.GetResource(bookXmlId, bookVersionXmlId, fileName, ResourceType.Image);
         }
 
         public string GetDictionaryEntryByXmlId(string bookGuid, string xmlEntryId,

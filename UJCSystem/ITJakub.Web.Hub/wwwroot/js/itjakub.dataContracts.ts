@@ -111,6 +111,17 @@ interface ISaveProjectResponsiblePerson {
     responsibleTypeId: number;
 }
 
+interface IPage {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+}
+
+interface IPageWithContext extends IPage {
+    contextStructure: IKwicStructure;
+}
+
 interface IMetadataResource {
     title: string;
     subTitle: string;
@@ -130,6 +141,81 @@ interface IMetadataResource {
     manuscriptRepository: string;
     manuscriptExtent: string;
     lastModification?: string;
+}
+
+interface IBookContract {
+    id: number;
+    title: string;
+    subTitle: string;
+    authors: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    publishPlace: string;
+    publishDate: string;
+    publisherText: string;
+    publisherEmail: string;
+    copyright: string;
+    biblText: string;
+    originDate: string;
+    notBefore: string;
+    notAfter: string;
+
+    manuscriptIdno: string;
+    manuscriptSettlement: string;
+    manuscriptCountry: string;
+    manuscriptRepository: string;
+    manuscriptExtent: string;
+    manuscriptTitle: string;
+
+    lastModification: string;
+}
+
+interface ICorpusSearchResult {
+    bookId: number;
+    //bookXmlId: string;
+    //versionXmlId: string;
+    title: string;
+    author: string;
+    originDate: string;
+    relicAbbreviation: string;
+    sourceAbbreviation: string;
+    notes: Array<string>;
+    pageResultContext: IPageWithContext;
+    verseResultContext: IVerseResultContext;
+    bibleVerseResultContext: IBibleVerseResultContext;
+}
+
+interface IKwicStructure {
+    before: string;
+    match: string;
+    after: string;
+}
+
+interface IVerseResultContext {
+    verseXmlId: string;
+    verseName: string;
+}
+
+interface IBibleVerseResultContext {
+    bibleBook: string;
+    bibleChapter: string;
+    bibleVerse: string;
+}
+
+interface ITermContract {
+    id: number;
+    name: string;
+    position: number;
+    categoryId: number;
+}
+
+interface IChapterHieararchyContract {
+    id: number;
+    versionId: number;
+    name: string;
+    position: number;
+    beginningPageId: number;
+    subChapters: Array<IChapterHieararchyContract>;
 }
 
 interface ISaveMetadataResource extends IMetadataResource {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Vokabular.RestClient.Results;
 
 namespace Vokabular.RestClient
 {
@@ -20,7 +21,12 @@ namespace Vokabular.RestClient
             return GetAsync<T>(uriPath).GetAwaiter().GetResult();
         }
 
-        protected Stream GetStream(string uriPath)
+        protected string GetString(string uriPath)
+        {
+            return GetStringAsync(uriPath).GetAwaiter().GetResult();
+        }
+
+        protected FileResultData GetStream(string uriPath)
         {
             return GetStreamAsync(uriPath).GetAwaiter().GetResult();
         }
@@ -43,6 +49,11 @@ namespace Vokabular.RestClient
         protected T PostStream<T>(string uriPath, Stream data, IEnumerable<Tuple<string, string>> headers = null)
         {
             return PostStreamAsync<T>(uriPath, data, headers).GetAwaiter().GetResult();
+        }
+
+        protected string PostReturnString(string uriPath, object data)
+        {
+            return PostReturnStringAsync(uriPath, data).GetAwaiter().GetResult();
         }
 
         protected T Put<T>(string uriPath, object data)

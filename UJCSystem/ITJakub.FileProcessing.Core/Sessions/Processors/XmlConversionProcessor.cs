@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using ITJakub.Shared.Contracts.Resources;
 using Ujc.Ovj.Ooxml.Conversion;
+using Vokabular.Core.Storage.Resources;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
-using Resource = ITJakub.Core.Resources.Resource;
+using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.FileProcessing.Core.Sessions.Processors
 {
@@ -41,7 +41,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 metaDataFileName = string.Format("{0}.xmd", Path.GetFileNameWithoutExtension(inputFileResource.FileName));
             }
 
-            var metaDataResource = new Resource
+            var metaDataResource = new FileResource
             {
                 FileName = metaDataFileName,
                 FullPath = Path.Combine(resourceSessionDirector.SessionPath, metaDataFileName),
