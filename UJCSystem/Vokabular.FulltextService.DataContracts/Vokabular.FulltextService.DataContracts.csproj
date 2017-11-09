@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NEST" Version="5.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ITJakub.Shared.Contracts\ITJakub.Shared.Contracts.csproj" />
     <ProjectReference Include="..\Vokabular.RestClient\Vokabular.RestClient.csproj" />
     <ProjectReference Include="..\Vokabular.Shared.DataContracts\Vokabular.Shared.DataContracts.csproj" />
