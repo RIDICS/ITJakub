@@ -128,12 +128,12 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in fulltext DB
 
-                var projectIdList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
                 var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
                 {
                     Key = CriteriaKey.ResultRestriction,
-                    ProjectIds = projectIdList
+                    ProjectIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
                 };
                 nonMetadataCriterias.Add(projectRestrictionCriteria);
 
@@ -431,12 +431,12 @@ namespace Vokabular.MainService.Core.Managers
 
             // Search in fulltext DB
 
-            var projectIdList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
             var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
             {
                 Key = CriteriaKey.ResultRestriction,
-                ProjectIds = projectIdList
+                ProjectIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
             };
             nonMetadataCriterias.Add(projectRestrictionCriteria);
 

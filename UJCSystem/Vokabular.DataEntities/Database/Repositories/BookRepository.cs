@@ -280,14 +280,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<long> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        public virtual IList<ProjectIdentificationResult> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
             var session = GetSession();
 
-            var query = session.CreateQuery(creator.GetProjectIdListQueryString())
+            var query = session.CreateQuery(creator.GetProjectIdentificationListQueryString())
                 //.SetPaging(creator) // return ALL project.Ids
-                .SetParameters(creator);
-            var result = query.List<long>();
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.AliasToBean<ProjectIdentificationResult>());
+            var result = query.List<ProjectIdentificationResult>();
             return result;
         }
 
