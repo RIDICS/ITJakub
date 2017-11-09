@@ -240,7 +240,7 @@
         const pageRowEl = commentAreaEl.parent(".page-row");
         const pageName = pageRowEl.data("page-name") as string;
         const textId = pageRowEl.data("page") as number;
-        const ajax = $.post(`${this.util.getServerAddress()}admin/project/LoadCommentFile`,
+        const ajax = $.post(`${this.util.getServerAddress()}Admin/ContentEditor/LoadCommentFile`,
             { textId: textId });
         ajax.done(
             (fileContent: ICommentSctucture[]) => {

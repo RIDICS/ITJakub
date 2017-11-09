@@ -40,7 +40,7 @@
                 parentCommentId: parentCommentId,
                 textReferenceId: textReferenceId
             };
-            const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
+            const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
                 {
                     comment: comment,
                     textId: textId
@@ -185,7 +185,7 @@
                         textReferenceId: textReferenceId
                     };
                     if (id === 0) {
-                        const sendAjax = $.post(`${serverAddress}admin/project/SaveComment`,
+                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/SaveComment`,
                             {
                                 comment: comment,
                                 textId: textId
@@ -193,7 +193,7 @@
                         );
                         this.onCommentSendRequest(sendAjax, textAreaEl, textId);
                     } else {
-                        const sendAjax = $.post(`${serverAddress}admin/project/UpdateComment`,
+                        const sendAjax = $.post(`${serverAddress}Admin/ContentEditor/UpdateComment`,
                             {
                                 comment: comment,
                                 textId: textId
