@@ -286,32 +286,26 @@ interface ICommentSctucture extends ICommentStructureBase {
     time: number;
 }
 
-interface IParentPage {
-    id: number;
-    versionId: number;
-    name: string;
-    position: number;
-}
-
-interface ITextProjectPage {
+interface ITextWithPage {
     bookVersionId: number;
-    externalId: string;
     id: number;
-    parentPage: IParentPage;
+    parentPage: IPage;
     versionId: number;
     versionNumber: number;
 }
 
-interface IPageTextBase {
+interface ICreateTextVersion {
     text: string;
     id: number;
     versionNumber: number;
 }
 
-interface IPageText extends IPageTextBase{
+interface ITextWithContent {
+    id: number;
     versionId: number;
-    externalId: string;
+    versionNumber: number;
     bookVersionId: number;
+    text: string;
 }
 
 enum AudioType {

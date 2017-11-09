@@ -985,7 +985,7 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public long SetTextResource(long textId, ShortTextContract request)
+        public long CreateTextResourceVersion(long textId, CreateTextRequestContract request)
         {
             try
             {

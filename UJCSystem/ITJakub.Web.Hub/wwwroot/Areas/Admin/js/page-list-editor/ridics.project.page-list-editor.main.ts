@@ -206,7 +206,7 @@ class PageListEditorMain {
         const fromBook = $(".generate-pages-from-book").prop("checked") as boolean;
         if (fromBook) { //TODO dropdown select meaning
             const pageListAjax = util.getPagesList(projectId);
-            pageListAjax.done((data: IParentPage[]) => {
+            pageListAjax.done((data: IPage[]) => {
                 const pageList: string[] = [];
                 this.enableCheckboxes();
                 for (let i = 0; i < data.length; i++) {

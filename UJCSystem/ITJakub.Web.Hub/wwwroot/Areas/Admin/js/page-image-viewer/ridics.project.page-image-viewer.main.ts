@@ -12,7 +12,7 @@ class ImageViewerMain {
         const upload = new ImageViewerUpload(projectId);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
         const compositionPagesAjax = util.getPagesList(projectId);
-        compositionPagesAjax.done((pages: IParentPage[]) => {
+        compositionPagesAjax.done((pages: IPage[]) => {
             navigation.init(pages);
             upload.init();
         });

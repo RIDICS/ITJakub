@@ -7,14 +7,14 @@
         this.gui = gui;
     }
 
-    init(pages: IParentPage[]) {
+    init(pages: IPage[]) {
         this.createSlider(pages);
         this.showTooltipOnHover();
         this.pageButtonClickProcess(pages);
         this.listenToPageEnteredConfirmation(pages);
     }
 
-    private createSlider(pages: IParentPage[]) {
+    private createSlider(pages: IPage[]) {
         $(() => {
             const tooltip = $(".slider-tooltip");
             const tooltipText = tooltip.children(".slider-tooltip-text");
@@ -50,7 +50,7 @@
         return index;
     }
 
-    private pageButtonClickProcess(pages: IParentPage[]) {
+    private pageButtonClickProcess(pages: IPage[]) {
         $(".page-navigator").on("click",
             ".previous-page",
             () => {
@@ -84,7 +84,7 @@
             });
     }
 
-    private listenToPageEnteredConfirmation(pages: IParentPage[]) {
+    private listenToPageEnteredConfirmation(pages: IPage[]) {
         $(".page-menu-row").on("click",
             ".go-to-page-button",
             () => {
@@ -101,7 +101,7 @@
             });
     }
 
-    private processPageInputField(pages: IParentPage[]) {
+    private processPageInputField(pages: IPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         console.log(inputFieldValue);
@@ -137,7 +137,7 @@
         $(".text-editor-page-slider").slider("value", index);
     }
 
-    private loadPage(index: number, pages: IParentPage[], sliderNeedsUpdate: boolean) {
+    private loadPage(index: number, pages: IPage[], sliderNeedsUpdate: boolean) {
         const pageName = pages[index].name;
         if (sliderNeedsUpdate) {
             this.updateSlider(index, pageName);

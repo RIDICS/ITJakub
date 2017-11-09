@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,7 +15,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
-using Newtonsoft.Json;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.MainService.DataContracts.Data;
@@ -537,7 +535,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult LoadCommentFile(long textId)
         {
-            var parts = new List<CommentStructure>();
+            var parts = new List<CommentStructureResponse>();
             using (var client = GetRestClient())
             {
                 var result = client.GetCommentsForText(textId);
@@ -548,7 +546,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 foreach (var pageComments in result)
                 {
                     var order = 0;
-                    var mainComment = new CommentStructure
+                    var mainComment = new CommentStructureResponse
                     {
                         Order = order,
                         Time = ((DateTimeOffset) pageComments.CreateTime).ToUnixTimeMilliseconds(),
@@ -567,7 +565,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         foreach (var textComment in pageComments.TextComments)
                         {
                             order++;
-                            var nestedComment = new CommentStructure
+                            var nestedComment = new CommentStructureResponse
                             {
                                 Order = order,
                                 Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
@@ -668,11 +666,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult SetTextResource(long textId, ShortTextContract request)
+        public IActionResult SetTextResource(long textId, CreateTextRequestContract request)
         {
             using (var client = GetRestClient())
             {
-                var result = client.SetTextResource(textId, request);
+                var result = client.CreateTextResourceVersion(textId, request);
                 return Json(result);
             }
         }
@@ -698,17 +696,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         #endregion
-    }
-
-    public class CommentStructure : TextCommentContractBase
-    {
-        public string Picture { get; set; }
-        public bool Nested { get; set; }
-        public long TextId { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public int Order { get; set; }
-        public long Time { get; set; }
     }
 
     public static class ProjectMock

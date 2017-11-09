@@ -52,7 +52,7 @@
         const textId = pageEl.data("page") as number;
         const renderedText = this.util.loadRenderedText(textId);
         const compositionAreaDiv = pageEl.find(".rendered-text");
-        renderedText.done((data: IPageText) => {
+        renderedText.done((data: ITextWithContent) => {
             const compositionAreaEl = pageEl.children(".composition-area");
             const pageBody = data.text;
             const id = data.id;
@@ -79,7 +79,7 @@
         const textId = pageEl.data("page") as number;
         const plainText = this.util.loadPlainText(textId);
         const textAreaEl = $(pageEl.find(".plain-text"));
-        plainText.done((data: IPageText) => {
+        plainText.done((data: ITextWithContent) => {
             textAreaEl.val(data.text);
             const compositionAreaEl = pageEl.children(".composition-area");
             const id = data.id;

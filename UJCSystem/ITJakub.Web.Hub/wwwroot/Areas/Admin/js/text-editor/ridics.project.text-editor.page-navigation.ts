@@ -14,7 +14,7 @@
     private skippingToPage = false;
 
 
-    init(compositionPages: ITextProjectPage[]) {
+    init(compositionPages: ITextWithPage[]) {
         var loadingPages: number[] = [];
         this.createSlider(loadingPages, compositionPages);
         $(".pages-start").on("scroll resize",
@@ -27,7 +27,7 @@
         this.showTooltipOnHover();
     }
 
-    private createSlider(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private createSlider(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $(() => {
             var tooltip = $(".slider-tooltip");
             var tooltipText = tooltip.children(".slider-tooltip-text");
@@ -74,7 +74,7 @@
         $(".page-indicator").text(pageName);
     }
 
-    private refreshSwatch(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private refreshSwatch(loadingPages: number[], compositionPages: ITextWithPage[]) {
         const pageIdIndex = $("#page-slider").slider("value");
         const pageId = compositionPages[pageIdIndex].id;
         this.navigateToPage(pageId, loadingPages, compositionPages);
@@ -95,7 +95,7 @@
         }
     }
 
-    private attachEventToGoToPageButton(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private attachEventToGoToPageButton(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $("#project-resource-preview").on("click",
             ".go-to-page-button",
             () => {
@@ -103,7 +103,7 @@
             });
     }
 
-    private attachEventInputFieldEnterKey(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private attachEventInputFieldEnterKey(loadingPages: number[], compositionPages: ITextWithPage[]) {
         $("#project-resource-preview").on("keypress",
             ".go-to-page-field",
             (event) => {
@@ -123,7 +123,7 @@
         }
     }
 
-    private processPageInputField(loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private processPageInputField(loadingPages: number[], compositionPages: ITextWithPage[]) {
         const inputField = $(".go-to-page-field");
         const inputFieldValue = inputField.val() as string;
         if (inputFieldValue === "") {
@@ -142,7 +142,7 @@
         }
     }
 
-    private navigateToPage(textId: number, loadingPages: number[], compositionPages: ITextProjectPage[]) {
+    private navigateToPage(textId: number, loadingPages: number[], compositionPages: ITextWithPage[]) {
         const firstId = compositionPages[0].id;
         const numberOfPagesToPreload = 10;
         const preloadedPage = textId - numberOfPagesToPreload;

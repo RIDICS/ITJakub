@@ -86,7 +86,7 @@
         return ajax;
     }
 
-    savePlainText(textId: number, request: IPageTextBase): JQueryXHR {
+    savePlainText(textId: number, request: ICreateTextVersion): JQueryXHR {
         const ajax = $.post(`${this.serverPath}admin/project/SetTextResource`,
             {
                 textId: textId,

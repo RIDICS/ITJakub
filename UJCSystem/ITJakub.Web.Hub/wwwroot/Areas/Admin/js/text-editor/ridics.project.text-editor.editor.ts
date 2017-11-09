@@ -165,7 +165,7 @@
         const compositionArea = pageEl.children(".composition-area");
         const id = compositionArea.data("id");
         const versionNumber = compositionArea.data("version-number");
-        const request: IPageTextBase = {
+        const request: ICreateTextVersion = {
             id: id,
             text: contents,
             versionNumber: versionNumber

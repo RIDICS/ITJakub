@@ -35,7 +35,7 @@ class TextEditorMain {
         const projectAjax = util.getProjectContent(projectId);
         pageTextEditor.init();
         connections.init();
-        projectAjax.done((data: ITextProjectPage[]) => {
+        projectAjax.done((data: ITextWithPage[]) => {
             const numberOfPages = data.length;
             this.numberOfPages = numberOfPages;
             for (let i = 0; i < numberOfPages; i++) {
