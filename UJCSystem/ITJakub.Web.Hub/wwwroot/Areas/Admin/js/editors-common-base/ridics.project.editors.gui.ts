@@ -1,4 +1,4 @@
-﻿class ImageViewerPageGui {
+﻿class EditorsGui {
 
     showInfoDialog(title: string, message: string) {
         const dialogEl = $(".info-modal-dialog");

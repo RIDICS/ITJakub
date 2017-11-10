@@ -1,8 +1,8 @@
 ﻿class ImageViewerPageNavigation {
     private readonly contentAddition: ImageViewerContentAddition;
-    private readonly gui: ImageViewerPageGui;
+    private readonly gui: EditorsGui;
 
-    constructor(contentAddition: ImageViewerContentAddition, gui: ImageViewerPageGui) {
+    constructor(contentAddition: ImageViewerContentAddition, gui: EditorsGui) {
         this.contentAddition = contentAddition;
         this.gui = gui;
     }

@@ -319,6 +319,17 @@ gulp.task("bundle:ridics_admin_page-list-editor", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
+gulp.task("bundle:ridics_admin_editors-common-base", function () {
+    return gulp.src([
+        paths.webroot + "Areas/Admin/js/editors-common-base/ridics.project.editors*.js"
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat("ridics.project.editors-common-base.bundle.js"))
+        .pipe(sourcemaps.write())
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
+});
+
 gulp.task("bundlejs_areas",
 [
     "bundle:itjakub_audiobooks",
@@ -329,6 +340,7 @@ gulp.task("bundlejs_areas",
     "bundle:itjakub_dictionary_headwords",
     "bundle:itjakub_lemmatization",
     "bundle:itjakub_professionalliterature_list",
+    "bundle:ridics_admin_editors-common-base",
     "bundle:ridics_admin_text-editor",
     "bundle:ridics_admin_page-image-viewer",
     "bundle:ridics_admin_page-list-editor"

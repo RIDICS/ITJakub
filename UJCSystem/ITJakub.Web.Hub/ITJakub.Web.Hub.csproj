@@ -82,7 +82,7 @@
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.content-placement.ts" />
-    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.gui.ts" />
+    <TypeScriptCompile Include="wwwroot\Areas\Admin\js\editors-common-base\ridics.project.editors.gui.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.main.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.navigation.ts" />
     <TypeScriptCompile Include="wwwroot\Areas\Admin\js\page-image-viewer\ridics.project.page-image-viewer.upload.ts" />
