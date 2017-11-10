@@ -24,47 +24,53 @@ class TextEditorMain {
 
     init(projectId: number) {
         const gui = new TextEditorGui();
-        const connections = new Connections();
         const util = new EditorsUtil();
-        const commentArea = new CommentArea(util, gui);
-        const commentInput = new CommentInput(commentArea, util, gui);
-        const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
-        const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
-        const lazyLoad = new PageLazyLoading(pageStructure);
-        const pageNavigation = new TextEditorPageNavigation(this, gui);
         const projectAjax = util.getProjectContent(projectId);
-        pageTextEditor.init();
-        connections.init();
         projectAjax.done((data: ITextWithPage[]) => {
-            const numberOfPages = data.length;
-            this.numberOfPages = numberOfPages;
-            for (let i = 0; i < numberOfPages; i++) {
-                const textProjectPage = data[i];
-                let commentAreaClass = "";
-                if (i % 2 === 0) {
-                    commentAreaClass = "comment-area-collapsed-even"; //style even and odd comment sections separately
-                } else {
-                    commentAreaClass = "comment-area-collapsed-odd";
+            if (data.length) {
+                const connections = new Connections();
+                const commentArea = new CommentArea(util, gui);
+                const commentInput = new CommentInput(commentArea, util, gui);
+                const pageTextEditor = new Editor(commentInput, util, gui, commentArea);
+                const pageStructure = new PageStructure(commentArea, util, this, pageTextEditor, gui);
+                const lazyLoad = new PageLazyLoading(pageStructure);
+                const pageNavigation = new TextEditorPageNavigation(this, gui);
+                pageTextEditor.init();
+                connections.init();
+                const numberOfPages = data.length;
+                this.numberOfPages = numberOfPages;
+                for (let i = 0; i < numberOfPages; i++) {
+                    const textProjectPage = data[i];
+                    let commentAreaClass = "";
+                    if (i % 2 === 0) {
+                        commentAreaClass =
+                            "comment-area-collapsed-even"; //style even and odd comment sections separately
+                    } else {
+                        commentAreaClass = "comment-area-collapsed-odd";
+                    }
+                    const compositionAreaDiv =
+                        `<div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
+                    const commentAreaDiv = `<div class="col-xs-5 comment-area ${
+                        commentAreaClass}"></div>`;
+                    const pageNameDiv = `<div class="page-number text-center invisible">[${textProjectPage.parentPage
+                        .name
+                        }]</div>`;
+                    $(".pages-start")
+                        .append(
+                            `<div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
+                            textProjectPage.parentPage.name
+                            }">${pageNameDiv}${compositionAreaDiv}${
+                            commentAreaDiv}</div>`);
                 }
-                const compositionAreaDiv =
-                    `<div class="col-xs-7 composition-area"><div class="loading composition-area-loading"></div><div class="page"><div class="viewer"><span class="rendered-text"></span></div></div></div>`;
-                const commentAreaDiv = `<div class="col-xs-5 comment-area ${
-                    commentAreaClass}"></div>`;
-                const pageNameDiv = `<div class="page-number text-center invisible">[${textProjectPage.parentPage
-                    .name
-                    }]</div>`;
-                $(".pages-start")
-                    .append(
-                        `<div class="row page-row lazyload" data-page="${textProjectPage.id}" data-page-name="${
-                        textProjectPage.parentPage.name
-                        }">${pageNameDiv}${compositionAreaDiv}${
-                        commentAreaDiv}</div>`);
+                lazyLoad.init();
+                pageNavigation.init(data);
+                this.attachEventShowPageCheckbox(pageNavigation);
+                commentInput.init();
+                commentArea.init();
+            } else {
+                const error = new AlertComponentBuilder(AlertType.Error).addContent("No text pages for this project");
+                $("#project-resource-preview").empty().append(error.buildElement());
             }
-            lazyLoad.init();
-            pageNavigation.init(data);
-            this.attachEventShowPageCheckbox(pageNavigation);
-            commentInput.init();
-            commentArea.init();
         });
         projectAjax.fail(() => {
             gui.showMessageDialog("Error", "Failed to get project information.");
