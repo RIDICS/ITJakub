@@ -210,7 +210,27 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
             return result;
         }
-        
+
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+
         public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
         {
             var result = GetSession().QueryOver<HeadwordResource>()

@@ -5,6 +5,7 @@ using ITJakub.SearchService.DataContracts.Types;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -116,7 +117,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
 
@@ -131,9 +132,14 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
                 var dbResult = ssc.ListSearchEditionsResults(criteria);
-                var projectIds = dbResult.SearchResults.Select(x => x.BookId)
+                var projectIds = dbResult.SearchResults.Select(x => x.BookXmlId)
                     .ToList();
-                return projectIds;
+
+                return new FulltextSearchResultData
+                {
+                    StringList = projectIds,
+                    SearchResultType = FulltextSearchResultType.ProjectExternalId,
+                };
             }
         }
     }

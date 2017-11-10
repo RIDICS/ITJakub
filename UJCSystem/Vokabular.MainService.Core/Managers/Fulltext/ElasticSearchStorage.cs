@@ -2,6 +2,7 @@
 using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
@@ -51,7 +52,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new System.NotImplementedException();
         }
 
-        public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
