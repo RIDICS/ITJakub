@@ -24,8 +24,7 @@
                 max: pages.length - 1,
                 step: 1,
                 create: function() {
-                    const sliderNeedsUpdate = true;
-                    thisClass.loadPage(0, pages, sliderNeedsUpdate);
+                    thisClass.loadPage(0, pages);
                 },
                 slide(event, ui) {
                     const index = ui.value;
@@ -37,8 +36,7 @@
                 change: (event, ui) => {
                     const index = ui.value;
                     if (!isNaN(index)) {
-                        const sliderNeedsUpdate = false;
-                        thisClass.loadPage(index, pages, sliderNeedsUpdate);
+                        thisClass.loadPage(index, pages);
                     }
                 }
             });
@@ -105,12 +103,11 @@
             this.gui.showInfoDialog("Warning", "You haven't entered anything. Please enter a page name.");
         } else {
             const namesStringArray: string[] = $.map(pages, (x) => { return x.name });
-            const index = this.getPageIdByPageName(inputFieldValue, namesStringArray);
+            const index = this.getPageIdByPageName(inputFieldValue, namesStringArray);//TODO precise page names are needed. Implement partial page name search?
             if (index === -1) {
                 this.gui.showInfoDialog("Warning", "No such page.");
             } else {
-                const sliderNeedsUpdate = true;
-                this.loadPage(index, pages, sliderNeedsUpdate);
+                $(".text-editor-page-slider").slider("value", index);
                 inputField.val("");
             }
         }
@@ -126,18 +123,15 @@
         $(".page-indicator").text(pageName);
     }
 
-    private updateSlider(index: number, pageName: string) {
+    private updateSliderTooltipText(index: number, pageName: string) {
         const tooltip = $(".slider-tooltip");
         const tooltipText = tooltip.children(".slider-tooltip-text");
         tooltipText.text(`Page: ${pageName}`);
-        $(".text-editor-page-slider").slider("value", index);
     }
 
-    private loadPage(index: number, pages: IPage[], sliderNeedsUpdate: boolean) {
+    private loadPage(index: number, pages: IPage[]) {
         const pageName = pages[index].name;
-        if (sliderNeedsUpdate) {
-            this.updateSlider(index, pageName);
-        }
+        this.updateSliderTooltipText(index, pageName);
         this.updatePageIndicator(pageName);
         this.contentAddition.formImageContent(pages[index].id);
     }
