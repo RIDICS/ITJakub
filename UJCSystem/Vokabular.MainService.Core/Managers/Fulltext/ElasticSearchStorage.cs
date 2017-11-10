@@ -1,6 +1,10 @@
-﻿using Vokabular.DataEntities.Database.Entities;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
+using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -27,6 +31,30 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public string GetHeadwordTextFromSearch(HeadwordResource headwordResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
+            throw new System.NotImplementedException();
+        }
+
+        private void UpdateCriteriaWithSnapshotRestriction(List<SearchCriteriaContract> criteria,
+            IList<ProjectIdentificationResult> projects)
+        {
+            var bookVersionRestrictionCriteria = new SnapshotResultRestrictionCriteriaContract
+            {
+                SnapshotIds = projects.Select(x => x.SnapshotId).ToList()
+            };
+            criteria.Add(bookVersionRestrictionCriteria);
+        }
+
+        public long SearchByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+
+            throw new System.NotImplementedException();
+        }
+
+        public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+
             throw new System.NotImplementedException();
         }
     }

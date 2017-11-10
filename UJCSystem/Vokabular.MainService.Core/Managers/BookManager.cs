@@ -95,12 +95,12 @@ namespace Vokabular.MainService.Core.Managers
             return resultList;
         }
 
-        private TermCriteriaConditionCreator CreateTermConditionCreatorOrDefault(SearchRequestContract request, FilteredCriterias processedCriterias)
+        private TermCriteriaPageConditionCreator CreateTermConditionCreatorOrDefault(SearchRequestContract request, FilteredCriterias processedCriterias)
         {
-            TermCriteriaConditionCreator termCriteria = null;
+            TermCriteriaPageConditionCreator termCriteria = null;
             if (request.FetchTerms && request.ConditionConjunction.Any(x => x.Key == CriteriaKey.Term))
             {
-                termCriteria = new TermCriteriaConditionCreator();
+                termCriteria = new TermCriteriaPageConditionCreator();
                 termCriteria.AddCriteria(processedCriterias.MetadataCriterias);
             }
 
@@ -128,20 +128,17 @@ namespace Vokabular.MainService.Core.Managers
             {
                 // Search in fulltext DB
 
+                // 1) search in metadata
                 var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
-                var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
-                {
-                    Key = CriteriaKey.ResultRestriction,
-                    ProjectIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
-                };
-                nonMetadataCriterias.Add(projectRestrictionCriteria);
+                // 2) search in fulltext
+                var fulltextStorage = GetFulltextStorage();
+                var resultProjectIds = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
+                // TODO add sorting parameter for fulltext search
 
-                // TODO send request to fulltext DB and remove this mock:
-                var mockResultProjectIdList = new List<long>(){1};
-
+                // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList, termCriteria);
+                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, resultProjectIds, termCriteria);
                 var dbResult = searchByCriteriaFulltextResultWork.Execute();
 
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);
@@ -337,8 +334,25 @@ namespace Vokabular.MainService.Core.Managers
                 Count = request.Count
             };
 
-            var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
-            return result;
+            if (processedCriterias.NonMetadataCriterias.Count > 0)
+            {
+                // Search in fulltext DB
+
+                // 1) search in metadata
+                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+                // 2) search in fulltext
+                var fulltextStorage = GetFulltextStorage();
+                var result = fulltextStorage.SearchByCriteriaCount(processedCriterias.NonMetadataCriterias, projectIdentificatorList);
+                return result;
+            }
+            else
+            {
+                // Search in relational DB
+
+                var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
+                return result;
+            }
         }
 
         public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
@@ -433,10 +447,10 @@ namespace Vokabular.MainService.Core.Managers
 
             var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
-            var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
+            var projectRestrictionCriteria = new SnapshotResultRestrictionCriteriaContract
             {
                 Key = CriteriaKey.ResultRestriction,
-                ProjectIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
+                SnapshotIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
             };
             nonMetadataCriterias.Add(projectRestrictionCriteria);
 
@@ -713,7 +727,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            var termConditionCreator = new TermCriteriaConditionCreator();
+            var termConditionCreator = new TermCriteriaPageConditionCreator();
             termConditionCreator.AddCriteria(termConditions);
             termConditionCreator.SetProjectIds(new[] {projectId});
 

@@ -240,7 +240,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public IList<PageResource> GetPagesWithTerms(TermCriteriaConditionCreator creator)
+        public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
                 .SetParameters(creator);
