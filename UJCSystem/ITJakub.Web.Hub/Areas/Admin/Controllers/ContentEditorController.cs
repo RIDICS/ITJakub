@@ -37,44 +37,38 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 foreach (var pageComments in result)
                 {
                     var order = 0;
-                    var mainComment = new CommentStructureResponse
-                    {
-                        Order = order,
-                        Time = ((DateTimeOffset)pageComments.CreateTime).ToUnixTimeMilliseconds(),
-                        Text = pageComments.Text,
-                        Picture = pageComments.User.AvatarUrl,
-                        Id = pageComments.Id,
-                        Nested = false,
-                        TextId = textId,
-                        TextReferenceId = pageComments.TextReferenceId,
-                        Name = pageComments.User.FirstName,
-                        Surname = pageComments.User.LastName
-                    };
+                    var mainComment = CreateComment(order, pageComments, false, textId);
                     parts.Add(mainComment);
                     if (pageComments.TextComments.Count > 0)
                     {
                         foreach (var textComment in pageComments.TextComments)
                         {
                             order++;
-                            var nestedComment = new CommentStructureResponse
-                            {
-                                Order = order,
-                                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
-                                Text = textComment.Text,
-                                Picture = textComment.User.AvatarUrl,
-                                Id = textComment.Id,
-                                Nested = true,
-                                TextId = textId,
-                                TextReferenceId = textComment.TextReferenceId,
-                                Name = textComment.User.FirstName,
-                                Surname = textComment.User.LastName
-                            };
+                            var nestedComment = CreateComment(order, textComment, true, textId);
                             parts.Add(nestedComment);
                         }
                     }
                 }
             }
             return Json(parts);
+        }
+
+        private static CommentStructureResponse CreateComment(int order, GetTextCommentContract textComment, bool nested, long textId)
+        {
+            var comment = new CommentStructureResponse
+            {
+                Order = order,
+                Time = ((DateTimeOffset)textComment.CreateTime).ToUnixTimeMilliseconds(),
+                Text = textComment.Text,
+                Picture = textComment.User.AvatarUrl,
+                Id = textComment.Id,
+                Nested = nested,
+                TextId = textId,
+                TextReferenceId = textComment.TextReferenceId,
+                Name = textComment.User.FirstName,
+                Surname = textComment.User.LastName
+            };
+            return comment;
         }
 
         [HttpPost]
@@ -106,13 +100,13 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult GetPageImage(long pageId)
         {
             using (var client = GetRestClient())
             {
                 var result = client.GetPageImage(pageId);
-                return new FileStreamResult(result.Stream, "image/jpeg");
+                return new FileStreamResult(result.Stream, result.MimeType);
             }
         }
 
