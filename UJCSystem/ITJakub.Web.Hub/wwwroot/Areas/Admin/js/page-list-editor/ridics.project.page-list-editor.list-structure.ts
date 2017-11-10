@@ -1,18 +1,18 @@
 ﻿class PageListStructure {
 
-    private generateListStructure(pageList: string[], jEl: JQuery) {
+    private generateListStructure(pageList: string[], jEl: JQuery, addHeaders: boolean) {
         const listStart = `<ul class="page-list">`;
         const listItemStart = `<li class="ui-widget-content page-list-item">`;
         const listItemEnd = `</li>`;
         const listEnd = "</ul>";
         var elm = "";
-        elm += listStart;
+        if(addHeaders){elm += listStart;}
         for (let i = 0; i < pageList.length; i++) {
             elm += listItemStart;
             elm += pageList[i];
             elm += listItemEnd;
         }
-        elm += listEnd;
+        if(addHeaders){elm += listEnd;}
         const html = $.parseHTML(elm);
         jEl.append(html);
     }
@@ -22,8 +22,14 @@
     }
 
     createList(pageList: string[], jEl: JQuery) {
-        this.generateListStructure(pageList, jEl);
+        const addHeaders = true;
+        this.generateListStructure(pageList, jEl, addHeaders);
         this.makeSelectable(jEl);
+    }
+
+    appendList(pageList: string[], jEl: JQuery) {
+        const addHeaders = false;
+        this.generateListStructure(pageList, jEl, addHeaders);
     }
 
     movePageUp(jEl: JQuery) {

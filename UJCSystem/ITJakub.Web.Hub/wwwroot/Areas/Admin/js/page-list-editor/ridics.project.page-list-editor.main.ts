@@ -20,6 +20,7 @@
 
         $("#project-pages-edit-button").click(() => {
             this.editDialog.show();
+            this.loadExistingPages(projectId, util, listStructure);
             $(".page-list-editor-content").on("click",
                 ".edit-page-list",
                 () => {
@@ -32,10 +33,6 @@
             $(".page-list-editor-content").on("click",
                 ".generate-page-list",
                 () => {
-                    const pageListEl = $(".page-list");
-                    if (pageListEl.length) {
-                        pageListEl.remove();
-                    }
                     const pageListTextareaEl = $(".page-list-edit-textarea");
                     if (pageListTextareaEl.length) {
                         pageListTextareaEl.remove();
@@ -201,33 +198,35 @@
             });
     }
 
+    private loadExistingPages(projectId: number,
+        util: EditorsUtil,
+        listStructure: PageListStructure) {
+        const pageListAjax = util.getPagesList(projectId);
+        pageListAjax.done((data: IPage[]) => {
+            const pageList: string[] = [];
+            this.enableCheckboxes();
+            for (let i = 0; i < data.length; i++) {
+                const pageName = data[i].name;
+                if (pageName.toLocaleLowerCase() === "fc") {
+                    this.checkmarkFC();
+                }
+                if (pageName.toLocaleLowerCase() === "fs") {
+                    this.checkmarkFS();
+                }
+                pageList.push(pageName);
+            }
+            this.populateList(pageList, listStructure);
+            this.trackSpecialPagesCheckboxesState();
+        });
+        pageListAjax.fail(() => {
+            this.gui.showInfoDialog("Error", "Load failure due to server error");
+        });
+    }
+
     private startGeneration(listGenerator: PageListGenerator,
         projectId: number,
         util: EditorsUtil,
         listStructure: PageListStructure) {
-        const fromBook = $(".generate-pages-from-book").prop("checked") as boolean;
-        if (fromBook) { //TODO dropdown select meaning
-            const pageListAjax = util.getPagesList(projectId);
-            pageListAjax.done((data: IPage[]) => {
-                const pageList: string[] = [];
-                this.enableCheckboxes();
-                for (let i = 0; i < data.length; i++) {
-                    const pageName = data[i].name;
-                    if (pageName.toLocaleLowerCase() === "fc") {
-                        this.checkmarkFC();
-                    }
-                    if (pageName.toLocaleLowerCase() === "fs") {
-                        this.checkmarkFS();
-                    }
-                    pageList.push(pageName);
-                }
-                this.populateList(pageList, listStructure);
-                this.trackSpecialPagesCheckboxesState();
-            });
-            pageListAjax.fail(() => {
-                this.gui.showInfoDialog("Error", "Load failure due to server error");
-            });
-        } else {
             const fromFieldValue = $("#project-pages-generate-from").val();
             const toFieldValue = $("#project-pages-generate-to").val();
             if (/\d+/.test(fromFieldValue) && /\d+/.test(toFieldValue)) {
@@ -248,11 +247,16 @@
             } else {
                 this.gui.showInfoDialog("Warning", "Please enter a number.");
             }
-        }
     }
 
     private populateList(pageList: string[], listStructure: PageListStructure) {
-        const listEl = $(".page-list-container");
-        listStructure.createList(pageList, listEl);
+        const listContainerEl = $(".page-list-container");
+        const listEl = listContainerEl.children(".page-list");
+        if (!listEl.length) {
+            listStructure.createList(pageList, listContainerEl);
+        } else {
+            this.gui.showInfoDialog("Info", "Page names already exist for this project. Appending generated names to the end of the list.");
+            listStructure.appendList(pageList, listEl);
+        }
     }
 }
