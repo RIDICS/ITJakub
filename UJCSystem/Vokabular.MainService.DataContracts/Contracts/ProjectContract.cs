@@ -14,4 +14,10 @@ namespace Vokabular.MainService.DataContracts.Contracts
         public string LiteraryOriginalText { get; set; }
         public int PageCount { get; set; }
     }
+
+    public class EditionNote//TODO find correct place
+    {
+        public long ProjectId { get; set; }
+        public string Content { get; set; }
+    }
 }

@@ -308,6 +308,11 @@ interface ITextWithContent {
     text: string;
 }
 
+interface IEditionNote {
+    projectId: number;
+    content: string;
+}
+
 enum AudioType {
     Unknown = "Unknown",
     Mp3 = "Mp3",

@@ -114,4 +114,16 @@
         }
         return result;
     }
+
+    loadEditionNote(projectId: number): JQueryXHR {
+        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetEditionNote`,
+            {
+                projectId: projectId,
+            });
+        return ajax;
+    }
+
+    saveEditionNote() {
+        //TODO add logic
+    }
 }

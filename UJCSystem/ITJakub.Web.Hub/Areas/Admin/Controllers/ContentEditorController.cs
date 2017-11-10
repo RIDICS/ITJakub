@@ -159,5 +159,27 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(result);
             }
         }
+
+        [HttpGet]
+        public IActionResult GetEditionNote(long projectId)
+        {
+            using (var client = GetRestClient())
+            {
+                //var result = client.CreateTextResourceVersion(textId, request);
+                var result = "Example text of a note";//TODO add logic
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SetEditionNote(EditionNote request)
+        {
+            using (var client = GetRestClient())
+            {
+                //var result = client.CreateTextResourceVersion(textId, request);
+                var result = "TODO";//TODO add logic
+                return Json(result);
+            }
+        }
     }
 }
