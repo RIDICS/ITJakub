@@ -288,6 +288,10 @@
                     background: @page-list-element-selecting-color;
                     color: white;
                 }
+
+                .page-list-item{
+                    min-height:20px; //some pages don't have a name
+                }
             }
         }
     }
@@ -297,6 +301,24 @@
 
         .page-list-editor-controls-label {
             margin-left: 5px;
+        }
+
+        .generate-list-inputs {
+
+            .generate-list-numberic-input-group {
+                margin-top: 2px;
+                margin-bottom: 2px;
+
+                &-heading {
+                    margin-top: 2px;
+                    margin-bottom: 4px;
+                }
+            }
+
+            .generate-list-from-book-input-group {
+                margin-top: 10px;
+                margin-bottom: 4px;
+            }
         }
     }
 
@@ -310,24 +332,6 @@
 
     .bottom-buttons button {
         margin-top: 3px;
-    }
-
-    .generate-list-inputs{
-
-    .generate-list-numberic-input-group {
-        margin-top: 2px;
-        margin-bottom: 2px;
-
-        &-heading {
-            margin-top: 2px;
-            margin-bottom: 4px;
-        }
-    }
-
-    .generate-list-from-book-input-group {
-        margin-top: 10px;
-        margin-bottom:4px;
-    }
     }
 }
 
