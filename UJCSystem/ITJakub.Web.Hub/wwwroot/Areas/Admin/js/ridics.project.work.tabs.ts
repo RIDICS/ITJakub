@@ -503,6 +503,20 @@ class ProjectWorkHistoryTab extends ProjectModuleTabBase {
     initTab() { }
 }
 
+class ProjectWorkNoteTab extends ProjectModuleTabBase {
+    private readonly projectId: number;
+
+    constructor(projectId: number) {
+        super();
+        this.projectId = projectId;
+    }
+
+    initTab() {
+        const main = new EditionNote(this.projectId);
+        main.init();
+    }
+}
+
 class MetadataUiHelper {
     public static addPerson($container: JQuery, label: string, idValue: string | number): HTMLDivElement {
         var rootElement = document.createElement("div");

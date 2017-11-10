@@ -120,6 +120,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Metadata", workMetadaViewModel);
                     case ProjectModuleTabType.WorkHistory:
                         return PartialView("Work/_History");
+                    case ProjectModuleTabType.WorkNote:
+                        return PartialView("Work/_Note");
                     default:
                         return NotFound();
                 }

@@ -170,6 +170,8 @@ class ProjectWorkModule extends ProjectModuleBase {
                 return new ProjectWorkCooperationTab(this.projectId);
             case ProjectModuleTabType.WorkHistory:
                 return new ProjectWorkHistoryTab(this.projectId);
+            case ProjectModuleTabType.WorkNote:
+                return new ProjectWorkNoteTab(this.projectId);
             default:
                 return null;
         }
@@ -597,6 +599,7 @@ enum ProjectModuleTabType {
     WorkCooperation = 2,
     WorkMetadata = 3,
     WorkHistory = 4,
+    WorkNote = 5,
     ResourcePreview = 101,
     ResourceDiscussion = 102,
     ResourceMetadata = 103,
