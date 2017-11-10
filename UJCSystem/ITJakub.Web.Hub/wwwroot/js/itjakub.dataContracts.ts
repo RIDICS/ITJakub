@@ -315,6 +315,12 @@ enum AudioType {
     Wav = "Wav",
 }
 
+enum TextFormatEnumContract
+{
+    Raw = 0,
+    Html = 1
+}
+
 
 //TODO Switch TypeScript to version 2.4 and use enums with String values
 //enum ResourceType {
