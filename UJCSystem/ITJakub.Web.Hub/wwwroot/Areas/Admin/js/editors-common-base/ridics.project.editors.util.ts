@@ -9,23 +9,8 @@
         return pageListAjax;
     }
 
-    getImageOnPage(pageId: number, callbackSuccess: Function, callbackFail: Function) {
-        const params = "pageId="+pageId;
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", `${this.serverPath}Admin/ContentEditor/GetPageImage`);
-        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhr.responseType = "blob";
-        xhr.send(params); 
-        xhr.onreadystatechange = function (this) {
-            if (this.readyState === 4 && this.status === 200) {
-                console.log(this.response, typeof this.response);
-                callbackSuccess(this.response);
-            }
-            if (this.readyState === 4 && this.status !== 200) {
-                console.log(this.response, typeof this.response);
-                callbackFail(this.response);
-            }
-        }
+    getImageUrlOnPage(pageId: number): string {
+        return `${this.serverPath}Admin/ContentEditor/GetPageImage?pageId=${pageId}`;
     }
 
     savePageList(pageList: string[]): JQueryXHR {
@@ -72,7 +57,7 @@
 */
     loadPlainText(textId: number): JQueryXHR {
         const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
-            { textId: textId, format: "Raw" });
+            { textId: textId, format: TextFormatEnumContract.Raw });
         return ajax;
     }
 
@@ -82,7 +67,8 @@
 * @returns {JQueryXHR} Ajax query of rendered text
 */
     loadRenderedText(textId: number): JQueryXHR {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`, { textId: textId, format: "Html" });
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetTextResource`,
+            { textId: textId, format: TextFormatEnumContract.Html });
         return ajax;
     }
 

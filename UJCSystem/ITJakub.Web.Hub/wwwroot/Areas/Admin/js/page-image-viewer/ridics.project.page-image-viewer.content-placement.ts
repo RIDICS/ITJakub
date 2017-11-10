@@ -6,17 +6,10 @@
     }
 
     formImageContent(pageId: number) {
-        this.util.getImageOnPage(pageId,
-            (response) => {
-                var url = window.URL;
-                const imgUrl = url.createObjectURL(response);
-                const pageImageEl = $(".page-image");
-                const imageString = `<img src="${imgUrl}">`;
-                pageImageEl.text("");
-                pageImageEl.append(imageString);
-            },
-            () => {
-                //TODO
-            });
+        const imgUrl = this.util.getImageUrlOnPage(pageId);
+        const pageImageEl = $(".page-image");
+        const imageString = `<img src="${imgUrl}">`;
+        pageImageEl.empty();
+        pageImageEl.append(imageString);
     }
 }
