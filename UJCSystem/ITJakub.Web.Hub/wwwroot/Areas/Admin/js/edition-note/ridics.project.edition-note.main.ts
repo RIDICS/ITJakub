@@ -1,6 +1,8 @@
 ﻿class EditionNote {
     private readonly projectId;
     private simplemde: SimpleMDE;
+    private util: EditorsUtil;
+    private gui: EditorsGui;
 
     constructor(projectId: number) {
         this.projectId = projectId;
@@ -8,8 +10,11 @@
 
     init() {
         const util = new EditorsUtil();
+        const gui = new EditorsGui();
+        this.util = util;
+        this.gui = gui;
         const noteContentAjax = util.loadEditionNote(this.projectId);
-        noteContentAjax.done((note:string) => {
+        noteContentAjax.done((note: string) => {
             this.initEditorOnTextarea(note);
         });
         noteContentAjax.fail(() => {
@@ -41,6 +46,16 @@
     }
 
     private saveNote(noteValue: string) {
-        //TODO add logic
+        const request: IEditionNote = {
+            projectId: this.projectId,
+            content: noteValue
+        };
+        const saveNoteAjax = this.util.saveEditionNote(request);
+        saveNoteAjax.done(() => {
+            this.gui.showInfoDialog("Success", "Note has been saved successfully");
+        });
+        saveNoteAjax.fail(() => {
+            this.gui.showInfoDialog("Fail", "Note has not been saved");
+        });
     }
 }

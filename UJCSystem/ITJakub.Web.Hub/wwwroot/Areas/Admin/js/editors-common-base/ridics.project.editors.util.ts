@@ -123,7 +123,9 @@
         return ajax;
     }
 
-    saveEditionNote() {
-        //TODO add logic
+    saveEditionNote(noteRequest: IEditionNote) {
+        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/SetEditionNote`,
+            noteRequest);
+        return ajax;
     }
 }
