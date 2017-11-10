@@ -18,17 +18,17 @@
             </span>
         </div>
     </div>
-    <div class="col-xs-3"></div>
-    <div class="col-xs-2 page-navigator">
+    <div class="col-xs-2"></div>
+    <div class="col-xs-4 page-navigator">
         <div class="col-xs-4 previous-page page-navigation-arrow text-center">
             <i class="fa fa-chevron-left" aria-hidden="true"></i>
         </div>
-        <div class="col-xs-4 page-indicator"></div>
+        <div class="col-xs-4 page-indicator text-center"></div>
         <div class="col-xs-4 next-page page-navigation-arrow text-center">
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
         </div>
     </div>
-    <div class="col-xs-3"></div>
+    <div class="col-xs-2"></div>
     <div class="col-xs-2"><button class="btn btn-default upload-new-image-button">Upload new version</button></div>
 </div>
 <div class="content-images">
@@ -70,6 +70,23 @@
                 <div class="dialog-error alert alert-danger true-inline-alert">Chyba při ukládání</div>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
                 <button type="button" class="btn btn-default save-button"><span class="saving-icon loading-small-button"></span>Hotovo</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade info-modal-dialog" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title info-dialog-title"></h4>
+            </div>
+            <div class="modal-body">
+                <p class="info-dialog-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

@@ -7,7 +7,6 @@ class ImageViewerMain {
     init(projectId: number) {
         const util = new EditorsUtil();
         const gui = new ImageViewerPageGui();
-        gui.init();
         const contentAddition = new ImageViewerContentAddition(util);
         const upload = new ImageViewerUpload(projectId);
         const navigation = new ImageViewerPageNavigation(contentAddition, gui);
