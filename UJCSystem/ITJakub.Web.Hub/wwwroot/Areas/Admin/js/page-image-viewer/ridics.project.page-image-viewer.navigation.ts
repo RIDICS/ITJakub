@@ -57,10 +57,8 @@
                 var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
                 if (!isNaN(index)) {
                     index--;
-                    $(".text-editor-page-slider").slider("value", index);
-                    const sliderNeedsUpdate = true;
                     if (index > -1 && index < pages.length) {
-                        //this.loadPage(index, pages, sliderNeedsUpdate);TODO check whether actually needed
+                        $(".text-editor-page-slider").slider("value", index);
                     } else {
                         this.gui.showInfoDialog("Warning", "No more pages on the left.");
                     }
@@ -73,10 +71,8 @@
                 var index = parseInt($(".text-editor-page-slider").slider("option", "value"));
                 if (!isNaN(index)) {
                     index++;
-                    $(".text-editor-page-slider").slider("value", index);
-                    const sliderNeedsUpdate = true;
                     if (index > -1 && index < pages.length) {
-                        //this.loadPage(index, pages, sliderNeedsUpdate);TODO check whether actually needed
+                        $(".text-editor-page-slider").slider("value", index);
                     } else {
                         this.gui.showInfoDialog("Warning", "No more pages on the right.");
                     }
