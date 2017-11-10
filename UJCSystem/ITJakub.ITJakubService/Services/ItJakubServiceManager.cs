@@ -13,7 +13,6 @@ using ITJakub.Shared.Contracts.Favorites;
 using ITJakub.Shared.Contracts.News;
 using ITJakub.Shared.Contracts.Notes;
 using ITJakub.Shared.Contracts.Searching.Criteria;
-using ITJakub.Shared.Contracts.Searching.Results;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;

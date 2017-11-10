@@ -5,7 +5,7 @@ using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.SearchService.DataContracts.Contracts.SearchResults
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "PageListContract")]
     public class PageListContract
     {
         [DataMember]

@@ -2,7 +2,7 @@ using System.Runtime.Serialization;
 
 namespace Vokabular.Shared.DataContracts.Search.CriteriaItem
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching", Name = "BookVersionPairContract")]
     public class BookVersionPairContract
     {
         [DataMember]

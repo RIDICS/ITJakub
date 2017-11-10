@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using System.ServiceModel;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.DataContracts;
 using ITJakub.SearchService.DataContracts.Contracts;
 using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
 using ITJakub.SearchService.DataContracts.Types;
-using ITJakub.Shared.Contracts.Searching.Results;
 using log4net;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.SearchService
 {

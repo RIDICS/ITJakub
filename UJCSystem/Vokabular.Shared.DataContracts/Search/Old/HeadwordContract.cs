@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together with change xquery
+namespace Vokabular.Shared.DataContracts.Search.Old
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts", Name = "HeadwordContract")]
     public class HeadwordContract
     {
         [DataMember]
@@ -14,7 +14,7 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
         public IList<HeadwordBookInfoContract> Dictionaries { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts", Name = "HeadwordBookInfoContract")]
     public class HeadwordBookInfoContract
     {
         [DataMember]
@@ -30,7 +30,7 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
         public long? PageId { get; set; }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts", Name = "HeadwordListContract")]
     public class HeadwordListContract
     {
         [DataMember]
@@ -72,7 +72,7 @@ namespace ITJakub.ITJakubService.DataContracts // TODO fix namespace together wi
         }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.ITJakubService.DataContracts", Name = "DictionaryContract")]
     public class DictionaryContract
     {
         [DataMember]

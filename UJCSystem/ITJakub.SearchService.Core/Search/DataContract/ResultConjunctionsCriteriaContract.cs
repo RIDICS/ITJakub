@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
-using ITJakub.Shared.Contracts.Searching.Criteria;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 
 namespace ITJakub.SearchService.Core.Search.DataContract
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.SearchService.Core.Search.DataContract", Name = "ResultConjunctionsCriteriaContract")]
     public class ResultConjunctionsCriteriaContract
     {
         [DataMember]

@@ -14,7 +14,6 @@ using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
 using ITJakub.SearchService.DataContracts.Types;
 using ITJakub.Shared.Contracts;
 using ITJakub.Shared.Contracts.Searching.Criteria;
-using ITJakub.Shared.Contracts.Searching.Results;
 using Vokabular.Core.Data;
 using Vokabular.Core.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;

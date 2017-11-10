@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using ITJakub.ITJakubService.DataContracts;
 using ITJakub.SearchService.Core.Search;
 using ITJakub.SearchService.Core.Search.DataContract;
 using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
 using ITJakub.SearchService.DataContracts.Types;
-using ITJakub.Shared.Contracts.Searching.Results;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.Old;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace ITJakub.SearchService.Core.Exist
@@ -148,7 +147,9 @@ namespace ITJakub.SearchService.Core.Exist
 
             //AdjustStartIndexes(filteredCriterias.ResultSpecifications);
 
-            return SearchResultContractList.FromXml(m_communicationManager.ListSearchEditionsResults(filteredCriterias.ToXml()));
+            var serializedCriterias = filteredCriterias.ToXml();
+            var result = m_communicationManager.ListSearchEditionsResults(serializedCriterias);
+            return SearchResultContractList.FromXml(result);
         }
 
         private void AdjustStartIndexes(ResultCriteriaContract resultCriteriaContract)
@@ -195,7 +196,8 @@ namespace ITJakub.SearchService.Core.Exist
             if (resultSearchCriteria.ResultBooks == null)
                 return 0;
 
-            return m_communicationManager.GetSearchCriteriaResultsCount(resultSearchCriteria.ToXml());
+            var serializedCriteria = resultSearchCriteria.ToXml();
+            return m_communicationManager.GetSearchCriteriaResultsCount(serializedCriteria);
         }
 
         public PageListContract GetSearchEditionsPageList(List<SearchCriteriaContract> searchCriterias)
