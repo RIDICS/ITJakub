@@ -1,11 +1,10 @@
-﻿///<reference path="../editors-common-base/ridics.project.editors.util.ts" />
-///<reference path="./ridics.project.page-list-editor.generator.ts" />
-///<reference path="./ridics.project.page-list-editor.list-structure.ts" />
-///<reference path="./ridics.project.page-list-editor.editor.ts" />
-
-class PageListEditorMain {
+﻿class PageListEditorMain {
     private editDialog: BootstrapDialogWrapper;
+    private readonly gui: EditorsGui;
 
+    constructor() {
+        this.gui = new EditorsGui();
+    }
 
     init(projectId: number) {
 
@@ -170,13 +169,16 @@ class PageListEditorMain {
     }
 
     private trackSpecialPagesCheckboxesState() {
-        $(".special-pages-controls").off();
-        var fsCheckboxPrevState = $(".book-startpage-checkbox").prop("checked") as boolean;
-        var fcCheckboxPrevState = $(".book-cover-checkbox").prop("checked") as boolean;
-        $(".special-pages-controls").on("click",
+        const specialPagesControlsEl = $(".special-pages-controls");
+        const startpageCheckboxEl = $(".book-startpage-checkbox");
+        const bookcoverCheckboxEl = $(".book-cover-checkbox");
+        specialPagesControlsEl.off();
+        var fsCheckboxPrevState = startpageCheckboxEl.prop("checked") as boolean;
+        var fcCheckboxPrevState = bookcoverCheckboxEl.prop("checked") as boolean;
+        specialPagesControlsEl.on("click",
             ".book-cover-checkbox",
             () => {
-                const fcCheckboxCurrentState = $(".book-cover-checkbox").prop("checked") as boolean;
+                const fcCheckboxCurrentState = bookcoverCheckboxEl.prop("checked") as boolean;
                 if (fcCheckboxPrevState && !fcCheckboxCurrentState) {
                     this.removeFCPage();
                 }
@@ -185,10 +187,10 @@ class PageListEditorMain {
                 }
                 fcCheckboxPrevState = fcCheckboxCurrentState;
             });
-        $(".special-pages-controls").on("click",
+        specialPagesControlsEl.on("click",
             ".book-startpage-checkbox",
             () => {
-                const fsCheckboxCurrentState = $(".book-startpage-checkbox").prop("checked") as boolean;
+                const fsCheckboxCurrentState = startpageCheckboxEl.prop("checked") as boolean;
                 if (fsCheckboxPrevState && !fsCheckboxCurrentState) {
                     this.removeFSPage();
                 }
@@ -223,7 +225,7 @@ class PageListEditorMain {
                 this.trackSpecialPagesCheckboxesState();
             });
             pageListAjax.fail(() => {
-                alert("Load failure due to server error.");
+                this.gui.showInfoDialog("Error", "Load failure due to server error");
             });
         } else {
             const fromFieldValue = $("#project-pages-generate-from").val();
@@ -240,11 +242,11 @@ class PageListEditorMain {
                         this.enableCheckboxes();
                         this.trackSpecialPagesCheckboxesState();
                     } else {
-                        alert("Please swap to and from numbers.");
+                        this.gui.showInfoDialog("Warning", "Please swap to and from numbers.");
                     }
                 }
             } else {
-                alert("Please enter a number.");
+                this.gui.showInfoDialog("Warning", "Please enter a number.");
             }
         }
     }
