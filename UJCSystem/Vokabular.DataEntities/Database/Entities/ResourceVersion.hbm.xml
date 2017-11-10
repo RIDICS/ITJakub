@@ -15,8 +15,6 @@
     
     <many-to-one name="Resource" class="Resource" lazy="proxy" not-null="true" cascade="save-update" />
     
-    <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
-
     <bag name="Snapshots" table="Snapshot_ResourceVersion" inverse="true" lazy="true">
       <key column="ResourceVersion" />
       <many-to-many class="Snapshot" column="Snapshot" />
@@ -40,6 +38,7 @@
 
       <property name="ExternalId" />
       <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" />
+      <many-to-one name="ResourcePage" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="ImageResource" name="ImageResource" >
@@ -49,6 +48,7 @@
       <property name="FileId" not-null="false" />
       <property name="MimeType" not-null="true" />
       <property name="Size" not-null="true" />
+      <many-to-one name="ResourcePage" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="MetadataResource" name="MetadataResource" >
@@ -84,6 +84,7 @@
       <property name="FileId" not-null="false" />
       <property name="AudioType" not-null="true" />
       <property name="MimeType" not-null="true" />
+      <many-to-one name="ResourceTrack" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="TrackResource" name="TrackResource" >
@@ -102,6 +103,7 @@
       <property name="Name" not-null="true" />
       <property name="Position" not-null="true" />
       <many-to-one name="ResourceBeginningPage" class="Resource" lazy="proxy" />
+      <many-to-one name="ParentResource" class="Resource" lazy="proxy" not-null="false" />
     </joined-subclass>
 
     <joined-subclass table="HeadwordResource" name="HeadwordResource" >

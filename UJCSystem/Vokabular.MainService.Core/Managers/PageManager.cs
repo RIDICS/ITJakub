@@ -36,7 +36,7 @@ namespace Vokabular.MainService.Core.Managers
         public List<TextWithPageContract> GetTextResourceList(long projectId, long? resourceGroupId)
         {
             var dbResult = m_resourceRepository.InvokeUnitOfWork(x => x.GetProjectTexts(projectId, resourceGroupId, true));
-            var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ParentResource.LatestVersion).Position);
+            var sortedDbResult = dbResult.OrderBy(x => ((PageResource) x.ResourcePage.LatestVersion).Position);
             var result = Mapper.Map<List<TextWithPageContract>>(sortedDbResult);
             return result;
         }

@@ -24,6 +24,6 @@ namespace Vokabular.Shared.DataContracts.Types
         [EnumMember] SelectedCategory = 13,
         [EnumMember] Term = 14,
         [EnumMember] Authorization = 15,
-        [EnumMember] NewResultRestriction = 16,
+        [EnumMember] SnapshotResultRestriction = 16,
     }
 }

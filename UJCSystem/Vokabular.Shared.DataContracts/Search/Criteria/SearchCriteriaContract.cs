@@ -8,7 +8,7 @@ namespace Vokabular.Shared.DataContracts.Search.Criteria
     [KnownType(typeof(WordListCriteriaContract))]
     [KnownType(typeof(ResultCriteriaContract))]
     [KnownType(typeof(ResultRestrictionCriteriaContract))]
-    [KnownType(typeof(NewResultRestrictionCriteriaContract))]
+    [KnownType(typeof(SnapshotResultRestrictionCriteriaContract))]
     [KnownType(typeof(TokenDistanceListCriteriaContract))]
     [KnownType(typeof(RegexSearchCriteriaContract))]
     [KnownType(typeof(RegexTokenListCriteriaContract))]

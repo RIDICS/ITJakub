@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ITJakub.SearchService.DataContracts.Types;
 using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Types;
+using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -81,6 +87,54 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 var bookVersion = headwordResource.BookVersion;
                 var result = ssc.GetDictionaryEntryFromSearch(searchRequest.ConditionConjunction, project.ExternalId, bookVersion.ExternalId, headwordResource.ExternalId, "dictionaryToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
                 return result;
+            }
+        }
+
+        private void UpdateCriteriaWithBookVersionRestriction(List<SearchCriteriaContract> criteria,
+            IList<ProjectIdentificationResult> projects)
+        {
+            var resultBooks = projects.Select(x => new BookVersionPairContract
+            {
+                Guid = x.ProjectExternalId,
+                VersionId = x.BookVersionExternalId,
+            }).ToList();
+
+            var bookVersionRestrictionCriteria = new ResultRestrictionCriteriaContract
+            {
+                ResultBooks = resultBooks,
+            };
+            criteria.Add(bookVersionRestrictionCriteria);
+        }
+
+        public long SearchByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var result = ssc.GetSearchCriteriaResultsCount(criteria);
+                return result;
+            }
+        }
+
+        public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            criteria.Add(new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count,
+                Sorting = SortEnum.Title, // TODO use sorting from method parameter
+                Direction = ListSortDirection.Ascending,
+            });
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.ListSearchEditionsResults(criteria);
+                var projectIds = dbResult.SearchResults.Select(x => x.BookId)
+                    .ToList();
+                return projectIds;
             }
         }
     }

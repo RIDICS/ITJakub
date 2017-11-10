@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -40,14 +41,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var user = m_resourceRepository.Load<User>(userId);
             var bookVersion = m_resourceRepository.Load<BookVersionResource>(bookVersionId);
             var dbPages = m_resourceRepository.GetProjectPages(projectId);
-            var dbPagesDict = dbPages.ToDictionary(x => x.Name);
+            var dbPagesDict = dbPages.ToDictionaryMultipleValues(x => x.Name);
 
             // Update page list
             foreach (var page in bookData.Pages)
             {
-                PageResource dbPageResource;
-                
-                if (!dbPagesDict.TryGetValue(page.Text, out dbPageResource))
+                List<PageResource> dbPageResources;
+                PageResource dbPageResource = null;
+                if (dbPagesDict.TryGetValue(page.Text, out dbPageResources))
+                {
+                    dbPageResource = dbPageResources.Count == 1
+                        ? dbPageResources.First()
+                        : dbPageResources.FirstOrDefault(x => x.Position == page.Position); // If multiple pages have the same name, try identify page by Position
+                }
+
+                if (dbPageResource == null)
                 {
                     var newResource = new Resource
                     {
@@ -98,7 +106,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         CreateTime = now,
                         CreatedByUser = user,
                         ExternalId = page.XmlId,
-                        ParentResource = dbPageResource.Resource,
+                        ResourcePage = dbPageResource.Resource,
                         BookVersion = bookVersion,
                         VersionNumber = 0
                     };
@@ -123,7 +131,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                         FileId = fileInfo?.NewNameInStorage,
                         MimeType = imageMimeType,
                         Size = fileInfo != null ? fileInfo.NewFileSize : 0L,
-                        ParentResource = dbPageResource.Resource,
+                        ResourcePage = dbPageResource.Resource,
                         VersionNumber = 0
                     };
                     newPageImageResources.Add(newImageResource);
@@ -164,7 +172,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var resourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Transcribed, DefaultImportResourceGroupName);
             var dbTexts = m_resourceRepository.GetProjectTexts(projectId, resourceGroup.Id, false);
             var dbTextsByPageResId = new Dictionary<long, List<TextResource>>();
-            foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ParentResource.Id))
+            foreach (var textResourceByPageGroup in dbTexts.GroupBy(x => x.ResourcePage.Id))
             {
                 dbTextsByPageResId.Add(textResourceByPageGroup.Key, textResourceByPageGroup.ToList());
             }
@@ -172,7 +180,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var pageTextData in newPageTextResources)
             {
                 var newTextResource = pageTextData.NewTextResource;
-                var pageResourceId = newTextResource.ParentResource.Id;
+                var pageResourceId = newTextResource.ResourcePage.Id;
                 List<TextResource> originDbTexts;
                 TextResource originDbText;
                 dbTextsByPageResId.TryGetValue(pageResourceId, out originDbTexts);
@@ -216,14 +224,14 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var imageResourceGroup = GetOrCreateNamedResourceGroup(projectId, TextTypeEnum.Original, DefaultImportResourceGroupName);
             var dbImages = m_resourceRepository.GetProjectImages(projectId, imageResourceGroup.Id);
             var dbImagesByPageResId = new Dictionary<long, List<ImageResource>>();
-            foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ParentResource.Id))
+            foreach (var imageResourceByPageGroup in dbImages.GroupBy(x => x.ResourcePage.Id))
             {
                 dbImagesByPageResId.Add(imageResourceByPageGroup.Key, imageResourceByPageGroup.ToList());
             }
 
             foreach (var newImageResource in newPageImageResources)
             {
-                var pageResourceId = newImageResource.ParentResource.Id;
+                var pageResourceId = newImageResource.ResourcePage.Id;
                 List<ImageResource> originDbImages;
                 ImageResource originDbImage;
                 dbImagesByPageResId.TryGetValue(pageResourceId, out originDbImages);

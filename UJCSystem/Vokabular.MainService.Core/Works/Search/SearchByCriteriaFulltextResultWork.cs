@@ -11,9 +11,9 @@ namespace Vokabular.MainService.Core.Works.Search
     {
         private readonly MetadataRepository m_metadataRepository;
         private readonly IList<long> m_projectIdList;
-        private readonly TermCriteriaConditionCreator m_termCriteriaCreator;
+        private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
 
-        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, IList<long> projectIdList, TermCriteriaConditionCreator termCriteriaCreator) : base(metadataRepository)
+        public SearchByCriteriaFulltextResultWork(MetadataRepository metadataRepository, IList<long> projectIdList, TermCriteriaPageConditionCreator termCriteriaCreator) : base(metadataRepository)
         {
             m_metadataRepository = metadataRepository;
             m_projectIdList = projectIdList;

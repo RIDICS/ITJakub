@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Managers;
@@ -42,11 +43,13 @@ namespace Vokabular.FulltextService.Controllers
                             }
                         }
                         break;
-                    case CriteriaKey.NewResultRestriction:
-                        var resultRestrictionCriteria = searchCriteria as NewResultRestrictionCriteriaContract;
+                    case CriteriaKey.SnapshotResultRestriction:
+                        var resultRestrictionCriteria = searchCriteria as SnapshotResultRestrictionCriteriaContract;
                         if (resultRestrictionCriteria == null)
                             continue;
-                        projectIdList.AddRange(resultRestrictionCriteria.ProjectIds);
+
+                        throw new NotImplementedException("Update search from projectId to snapshotId");
+                        projectIdList.AddRange(resultRestrictionCriteria.SnapshotIds);
                         break;
                 }
             }

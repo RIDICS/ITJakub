@@ -27,7 +27,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(x => x.Snapshots, () => snapshotAlias)
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
-                .Where(x => x.ParentResource == null && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Where(x => x.ResourceTrack == null && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .AndRestrictionOn(() => projectAlias.Id).IsInG(projectIdList)
                 .OrderBy(() => projectAlias.Id).Asc
                 .OrderBy(x => x.AudioType).Asc
@@ -46,7 +46,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .Where(() => projectAlias.Id == projectId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .Fetch(x => x.Resource).Eager
-                .OrderBy(x => x.ParentResource).Asc
+                .OrderBy(x => x.ResourceTrack).Asc
                 .OrderBy(x => x.AudioType).Asc
                 .List();
 
@@ -127,7 +127,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 //.JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ParentResource.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Where(x => x.ResourcePage.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.CreateTime).Desc
                 .Fetch(x => x.BookVersion).Eager
                 .List();
@@ -144,7 +144,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 //.JoinAlias(() => snapshotAlias.Project, () => projectAlias)
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .JoinAlias(() => resourceAlias.Project, () => projectAlias)
-                .Where(x => x.ParentResource.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
+                .Where(x => x.ResourcePage.Id == resourcePageId && snapshotAlias.Id == projectAlias.LatestPublishedSnapshot.Id)
                 .OrderBy(x => x.CreateTime).Desc
                 .List();
         }
@@ -280,14 +280,15 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
-        public virtual IList<long> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
+        public virtual IList<ProjectIdentificationResult> SearchProjectIdByCriteriaQuery(SearchCriteriaQueryCreator creator)
         {
             var session = GetSession();
 
-            var query = session.CreateQuery(creator.GetProjectIdListQueryString())
+            var query = session.CreateQuery(creator.GetProjectIdentificationListQueryString())
                 //.SetPaging(creator) // return ALL project.Ids
-                .SetParameters(creator);
-            var result = query.List<long>();
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.AliasToBean<ProjectIdentificationResult>());
+            var result = query.List<ProjectIdentificationResult>();
             return result;
         }
 

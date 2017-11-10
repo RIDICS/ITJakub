@@ -5,6 +5,6 @@ namespace Vokabular.Shared.DataContracts.Search
     public class FulltextSearchResultContract
     {
         public int Count { get; set; }
-        public IList<long> ProjectIds { get; set; }
+        public List<long> ProjectIds { get; set; }
     }
 }

@@ -15,11 +15,11 @@ namespace Vokabular.Shared.DataContracts.Search.Criteria
     }
 
     [DataContract]
-    public class NewResultRestrictionCriteriaContract : SearchCriteriaContract
+    public class SnapshotResultRestrictionCriteriaContract : SearchCriteriaContract
     {
-        public override CriteriaKey Key => CriteriaKey.NewResultRestriction;
+        public override CriteriaKey Key => CriteriaKey.SnapshotResultRestriction;
 
         [DataMember]
-        public IList<long> ProjectIds { get; set; }
+        public IList<long> SnapshotIds { get; set; }
     }
 }

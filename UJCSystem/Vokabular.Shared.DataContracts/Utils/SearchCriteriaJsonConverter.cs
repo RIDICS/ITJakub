@@ -56,8 +56,8 @@ namespace Vokabular.Shared.DataContracts.Utils
                     return typeof(ResultCriteriaContract);
                 case CriteriaKey.ResultRestriction:
                     return typeof(ResultRestrictionCriteriaContract);
-                case CriteriaKey.NewResultRestriction:
-                    return typeof(NewResultRestrictionCriteriaContract);
+                case CriteriaKey.SnapshotResultRestriction:
+                    return typeof(SnapshotResultRestrictionCriteriaContract);
                 case CriteriaKey.TokenDistance:
                 case CriteriaKey.HeadwordDescriptionTokenDistance:
                     return typeof(TokenDistanceListCriteriaContract);

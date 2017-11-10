@@ -38,7 +38,7 @@ namespace Vokabular.MainService.Core.Works.Text
                 CreatedByUser = m_resourceRepository.Load<User>(m_userId),
                 CreateTime = timeNow,
                 ExternalId = externalTextId,
-                ParentResource = latestVersion.ParentResource,
+                ResourcePage = latestVersion.ResourcePage,
                 Resource = latestVersion.Resource,
                 VersionNumber = newVersionNumber,
             };
