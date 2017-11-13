@@ -138,4 +138,14 @@
         const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetLiteraryKindList`);
         return ajax;
     }
+
+    getCategoryList() {
+        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetCategoryList`);
+        return ajax;
+    }
+
+    getLitararyOriginalList() {
+        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetLiteraryKindList`);
+        return ajax;
+    }
 }

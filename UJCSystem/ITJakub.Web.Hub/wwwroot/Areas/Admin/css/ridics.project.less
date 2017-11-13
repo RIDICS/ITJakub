@@ -469,6 +469,33 @@ table {
     }
 }
 
+.table-of-keys-content {
+    height: 640px;
+
+    .table-of-keys {
+        height: 90%;
+
+        .selectable-list-div {
+            list-style-type: none;
+            height: inherit;
+
+            .ui-selected {
+                background: @page-list-element-selected-color;
+                color: white;
+            }
+
+            .ui-selecting {
+                background: @page-list-element-selecting-color;
+                color: white;
+            }
+        }
+    }
+
+    .pagination-row-elements {
+        height: 10%;
+    }
+}
+
 #project-resource-images {
     height: 95%;
     padding-right: 15px;

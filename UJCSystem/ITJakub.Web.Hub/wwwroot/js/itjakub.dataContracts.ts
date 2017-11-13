@@ -273,6 +273,11 @@ enum KeyTableEditorType {
     ResponsiblePerson = 3
 }
 
+interface IGenreResponseContract {
+    id: number,
+    name: string
+}
+
 interface ICommentStructureBase {
     id: number;
     textReferenceId: string;
@@ -315,7 +320,12 @@ interface ITextWithContent {
     text: string;
 }
 
-interface IEditionNote {//TODO expand after server functionality is done
+interface ILiteraryGenreContract {
+    id: number;
+    name: string;
+}
+
+interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;
 }
@@ -327,8 +337,7 @@ enum AudioType {
     Wav = "Wav",
 }
 
-enum TextFormatEnumContract
-{
+enum TextFormatEnumContract {
     Raw = 0,
     Html = 1
 }

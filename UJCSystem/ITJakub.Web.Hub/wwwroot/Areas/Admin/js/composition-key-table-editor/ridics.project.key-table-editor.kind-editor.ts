@@ -6,6 +6,8 @@
     }
 
     init() {
-//TODO add logic
+        this.util.getLitararyKindList().done((data) => {
+            console.log(data);
+        });
     }
 }
