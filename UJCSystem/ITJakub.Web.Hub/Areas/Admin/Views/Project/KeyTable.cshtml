@@ -1,0 +1,38 @@
+﻿@using ITJakub.Web.Hub.Areas.Admin.Models.Type
+@{
+    ViewBag.Title = "Administrace číselníků";
+}
+@section styles {
+    <link rel="stylesheet" href="~/Areas/Admin/css/ridics.project.css" />
+}
+@section scripts {
+    <script src="~/Areas/Admin/js/ridics.project.editors-common-base.bundle.js"></script>
+    <script src="~/Areas/Admin/js/ridics.project.composition-key-table-editor.bundle.js"></script>
+}
+<div class="content-container">
+    <div class="row project-layout">
+        <div class="left-menu" id="left-menu">
+            <div class="project-title">Název díla</div>
+            <div class="list-group list-group-root" id="project-navigation">
+                <a href="#" class="list-group-item active" id="project-navigation-root">Číselník</a>
+                <div class="list-group">
+                    <a href="#" class="list-group-item key-table-editor-selection" data-editor-type="@{@((int)KeyTableEditorType.Category)}">Category</a>
+                    <a href="#" class="list-group-item key-table-editor-selection" data-editor-type="@{@((int)KeyTableEditorType.Genre)}">Genre</a>
+                    <a href="#" class="list-group-item key-table-editor-selection" data-editor-type="@{@((int)KeyTableEditorType.Kind)}">Kind</a>
+                    <a href="#" class="list-group-item key-table-editor-selection" data-editor-type="@{@((int)KeyTableEditorType.ResponsiblePerson)}">Responsible Person</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="vertical-splitter"></div>
+
+        <div class="vertical-splitter-control">
+            <button id="splitter-button" class="btn btn-default">
+                <span class="glyphicon glyphicon-menu-left"></span>
+            </button>
+        </div>
+
+        <div class="content" id="project-layout-content">
+        </div>
+    </div>
+</div>

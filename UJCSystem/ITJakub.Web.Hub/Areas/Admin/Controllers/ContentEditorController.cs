@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ITJakub.Web.Hub.Areas.Admin.Models.Response;
+using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
@@ -165,7 +166,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                //var result = client.CreateTextResourceVersion(textId, request);
+                //var result = client.
                 var result = "Example text of a note";//TODO add logic
                 return Json(result);
             }
@@ -176,8 +177,48 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
             using (var client = GetRestClient())
             {
-                //var result = client.CreateTextResourceVersion(textId, request);
+                //var result = client.
                 var result = "TODO";//TODO add logic
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetLitararyGenreList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetLitararyGenreList();
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetLiteraryKindList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetLiteraryKindList();
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetCategoryList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetCategoryList();
+                return Json(result);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetLitararyOriginalList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetLitararyOriginalList();
                 return Json(result);
             }
         }

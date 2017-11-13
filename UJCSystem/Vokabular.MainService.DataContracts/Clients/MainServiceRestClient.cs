@@ -878,7 +878,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                //TODO add logic
+                //TODO add logic for saving page list after editing
                 throw new NotImplementedException();
             }
             catch (HttpRequestException e)

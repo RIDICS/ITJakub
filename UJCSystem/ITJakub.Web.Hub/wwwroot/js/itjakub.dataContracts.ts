@@ -266,6 +266,13 @@ enum ResponsibleTypeEnum {
     Kolace = 2,
 }
 
+enum KeyTableEditorType {
+    Genre = 0,
+    Kind = 1,
+    Category = 2,
+    ResponsiblePerson = 3
+}
+
 interface ICommentStructureBase {
     id: number;
     textReferenceId: string;
@@ -308,7 +315,7 @@ interface ITextWithContent {
     text: string;
 }
 
-interface IEditionNote {
+interface IEditionNote {//TODO expand after server functionality is done
     projectId: number;
     content: string;
 }

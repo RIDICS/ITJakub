@@ -330,6 +330,17 @@ gulp.task("bundle:ridics_admin_editors-common-base", function () {
         .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
 });
 
+gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
+    return gulp.src([
+        paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor*.js"
+        ])
+        .pipe(sourcemaps.init())
+        .pipe(concat("ridics.project.composition-key-table-editor.bundle.js"))
+        .pipe(sourcemaps.write())
+        //.pipe(uglify())
+        .pipe(gulp.dest(paths.webroot + "Areas/Admin/js"));
+});
+
 gulp.task("bundlejs_areas",
 [
     "bundle:itjakub_audiobooks",
@@ -343,7 +354,8 @@ gulp.task("bundlejs_areas",
     "bundle:ridics_admin_editors-common-base",
     "bundle:ridics_admin_text-editor",
     "bundle:ridics_admin_page-image-viewer",
-    "bundle:ridics_admin_page-list-editor"
+    "bundle:ridics_admin_page-list-editor",
+    "bundle:ridics_admin_composition-key-table-editor"
 ]);
 
 

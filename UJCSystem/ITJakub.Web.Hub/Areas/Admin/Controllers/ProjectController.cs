@@ -53,6 +53,28 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult KeyTable()
+        {
+            return View();
+        }
+
+        public IActionResult KeyTableType(KeyTableEditorType editorType)
+        {
+            switch (editorType)
+            {
+                case KeyTableEditorType.Category:
+                    return PartialView("KeyTableEditors/_Category");
+                case KeyTableEditorType.Genre:
+                    return PartialView("KeyTableEditors/_Genre");
+                case KeyTableEditorType.Kind:
+                    return PartialView("KeyTableEditors/_Kind");
+                case KeyTableEditorType.ResponsiblePerson:
+                    return PartialView("KeyTableEditors/_ResponsiblePerson");
+                default:
+                    return PartialView("KeyTableEditors/_Category");
+            }
+        }
+
         public IActionResult Project(long id)
         {
             using (var client = GetRestClient())
