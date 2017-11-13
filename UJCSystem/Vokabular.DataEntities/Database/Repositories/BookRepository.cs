@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
@@ -277,7 +278,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var headwordRestrictions = creator.GetHeadwordRestrictions();
 
-            var projectIds = SearchProjectIdByCriteriaQuery(creator);
+            var projectIds = SearchProjectIdByCriteriaQuery(creator).Select(x => x.ProjectId);
 
             var result = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
@@ -323,7 +324,7 @@ namespace Vokabular.DataEntities.Database.Repositories
 
             var headwordRestrictions = creator.GetHeadwordRestrictions();
 
-            var projectIds = SearchProjectIdByCriteriaQuery(creator);
+            var projectIds = SearchProjectIdByCriteriaQuery(creator).Select(x => x.ProjectId);
 
             var result = GetSession().QueryOver<HeadwordResource>()
                 .JoinAlias(x => x.HeadwordItems, () => headwordItemAlias)
