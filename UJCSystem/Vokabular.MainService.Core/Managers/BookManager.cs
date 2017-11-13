@@ -30,22 +30,27 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class BookManager
     {
+        private const int CorpusMaxCount = 200;
+        private const int CorpusDefaultCount = 50;
+        private const int CorpusDefaultStart = 0;
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
         private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
         private readonly FileSystemManager m_fileSystemManager;
+        private readonly CorpusSearchManager m_corpusSearchManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
-            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager)
+            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager, CorpusSearchManager corpusSearchManager)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_fileSystemManager = fileSystemManager;
+            m_corpusSearchManager = corpusSearchManager;
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
             m_categoryRepository = categoryRepository;
         }
@@ -53,6 +58,16 @@ namespace Vokabular.MainService.Core.Managers
         private IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Research)
         {
             return m_fulltextStorages[projectType];
+        }
+
+        public int GetCorpusStart(int? start)
+        {
+            return start ?? CorpusDefaultStart;
+        }
+
+        public int GetCorpusCount(int? count)
+        {
+            return count != null ? Math.Min(count.Value, CorpusMaxCount) : CorpusDefaultCount;
         }
 
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
@@ -433,29 +448,33 @@ namespace Vokabular.MainService.Core.Managers
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
 
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Start = request.Start,
-                Count = request.Count,
-            };
-
             if (processedCriterias.NonMetadataCriterias.Count == 0)
             {
                 throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
             }
 
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+
             // Search in fulltext DB
 
             var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
 
-            var projectRestrictionCriteria = new SnapshotResultRestrictionCriteriaContract
-            {
-                Key = CriteriaKey.ResultRestriction,
-                SnapshotIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
-            };
-            nonMetadataCriterias.Add(projectRestrictionCriteria);
+            var fulltextStorage = GetFulltextStorage();
+            var start = GetCorpusStart(request.Start);
+            var count = GetCorpusCount(request.Count);
+            var result = fulltextStorage.SearchCorpusByCriteria(start, count, request.ContextLength, nonMetadataCriterias, projectIdentificatorList);
 
-            // TODO send request to fulltext DB and remove this mock:
+            switch (result.SearchResultType)
+            {
+                case FulltextSearchResultType.ProjectId:
+                    return m_corpusSearchManager.GetCorpusSearchResultByStandardIds(result.List);
+                case FulltextSearchResultType.ProjectExternalId:
+                    return m_corpusSearchManager.GetCorpusSearchResultByExternalIds(result.List);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
+            // TODO remove this mock:
 
             var mockResults = new List<CorpusSearchResultContract>
             {

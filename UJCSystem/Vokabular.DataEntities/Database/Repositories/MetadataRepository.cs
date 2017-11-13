@@ -420,5 +420,31 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(count)
                 .List<string>();
         }
+
+        public IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
+        }
+
+        public IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
+        }
     }
 }

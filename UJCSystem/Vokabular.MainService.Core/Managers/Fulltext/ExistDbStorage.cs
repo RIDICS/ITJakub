@@ -159,5 +159,45 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 };
             }
         }
+
+        public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.GetCorpusSearchResultsCount(criteria);
+                return dbResult;
+            }
+        }
+
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.GetCorpusSearchResults(criteria);
+
+                var resultList = dbResult.SearchResults.Select(x => new CorpusSearchResultData
+                {
+                    ProjectExternalId = x.BookXmlId,
+                    Notes = x.Notes,
+                    PageResultContext = new CorpusSearchPageResultData
+                    {
+                        TextExternalId = x.PageResultContext?.PageXmlId,
+                        ContextStructure = x.PageResultContext?.ContextStructure,
+                    },
+                    VerseResultContext = x.VerseResultContext,
+                    BibleVerseResultContext = x.BibleVerseResultContext,
+                }).ToList();
+
+                return new CorpusSearchResultDataList
+                {
+                    SearchResultType = FulltextSearchResultType.ProjectExternalId,
+                    List = resultList,
+                };
+            }
+        }
     }
 }
