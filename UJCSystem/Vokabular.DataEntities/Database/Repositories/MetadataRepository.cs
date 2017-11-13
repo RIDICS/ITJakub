@@ -263,7 +263,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
-                .SetParameters(creator);
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.DistinctRootEntity);
             var result = query.List<PageResource>();
             return result;
         }

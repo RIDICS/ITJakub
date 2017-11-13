@@ -1247,7 +1247,7 @@
         $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];
-            var pageDiv = document.getElementById(page.PageXmlId);
+            var pageDiv = document.getElementById(page.pageId.toString());
             $(pageDiv).addClass("search-unloaded");
         }
         this.moveToPageNumber(this.actualPageIndex, true);
@@ -2574,11 +2574,11 @@ class TermsPanel extends LeftSidePanel {
         var hrefElement = document.createElement("a");
         hrefElement.href = "#";
         $(hrefElement).click(() => {
-            this.parentReader.moveToPage(Number(page.PageXmlId), true);
+            this.parentReader.moveToPage(page.pageId, true);
         });
 
         var textSpanElement = document.createElement("span");
-        textSpanElement.innerHTML = `[${page.PageName}]`;
+        textSpanElement.innerHTML = `[${page.pageName}]`;
         
         $(hrefElement).append(textSpanElement);
 
@@ -2725,8 +2725,8 @@ class SearchResult {
 }
 
 class PageDescription {
-    PageXmlId: string;
-    PageName: string;
+    pageId: number;
+    pageName: string;
 }
 
 interface IBookmarkPosition {

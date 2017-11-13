@@ -727,19 +727,42 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            var termConditionCreator = new TermCriteriaPageConditionCreator();
-            termConditionCreator.AddCriteria(termConditions);
-            termConditionCreator.SetProjectIds(new[] {projectId});
+            IList<PageResource> pagesByMetadata = null;
+            if (termConditions.Count > 0)
+            {
+                var termConditionCreator = new TermCriteriaPageConditionCreator();
+                termConditionCreator.AddCriteria(termConditions);
+                termConditionCreator.SetProjectIds(new[] { projectId });
 
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+            }
 
+            IList<PageResource> pagesByFulltext = null;
             if (fulltextConditions.Count > 0)
             {
                 // TODO filter pages by fulltext conditions
                 throw new NotImplementedException();
             }
-            
-            var result = Mapper.Map<List<PageContract>>(dbResult);
+
+            IList<PageResource> resultPages = null;
+            if (termConditions.Count > 0 && fulltextConditions.Count > 0)
+            {
+                // TODO intersect results
+            }
+            else if (fulltextConditions.Count > 0)
+            {
+                resultPages = pagesByFulltext;
+            }
+            else if (termConditions.Count > 0)
+            {
+                resultPages = pagesByMetadata;
+            }
+            else
+            {
+                throw new ArgumentException("No supported search criteria was specified");
+            }
+
+            var result = Mapper.Map<List<PageContract>>(resultPages);
             return result;
         }
     }
