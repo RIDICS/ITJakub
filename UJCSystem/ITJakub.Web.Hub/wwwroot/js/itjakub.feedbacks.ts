@@ -49,7 +49,7 @@ var feedbacksOnPage = 5;
 
 $(document).ready(() => {
 
-    var notFilledMessage = "&lt;Nezadáno&gt;";
+    var notFilledMessage = localization.translateFormat("NotFilled", new Array<string>("&lt;", "&gt;"), "ItJakubJs").value;
 
 
     paginator = new Pagination({
@@ -111,11 +111,11 @@ $(document).ready(() => {
                     if (typeof user !== "undefined" && user !== null) {
                         name = user.firstName + " " + user.lastName;
                         email = user.email;
-                        signed = "ano";
+                        signed = localization.translate("yes", "ItJakub").value;
                     } else {
                         name = actualFeedback.filledName;
                         email = actualFeedback.filledEmail;
-                        signed = "ne";
+                        signed = localization.translate("no", "ItJakub").value;
                     }
 
                     if (typeof name === "undefined" || name === null || name === "") {
@@ -128,37 +128,44 @@ $(document).ready(() => {
 
                     var feedbackNameSpan = document.createElement("span");
                     $(feedbackNameSpan).addClass("feedback-name");
-                    feedbackNameSpan.innerHTML = `Jméno: ${name}`;
+                    feedbackNameSpan.innerHTML =
+                        localization.translateFormat("Name:", new Array<string>(name), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackNameSpan);
 
                     var feedbackEmailSpan = document.createElement("span");
                     $(feedbackEmailSpan).addClass("feedback-email");
-                    feedbackEmailSpan.innerHTML = `E-mail: ${email}`;
+                    feedbackEmailSpan.innerHTML = 
+                        localization.translateFormat("Email:", new Array<string>(email), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackEmailSpan);
 
                     var feedbackSignedUserSpan = document.createElement("span");
                     $(feedbackSignedUserSpan).addClass("feedback-signed");
-                    feedbackSignedUserSpan.innerHTML = `Přihlášený uživatel: ${signed}`;
+                    feedbackSignedUserSpan.innerHTML =
+                        localization.translateFormat("LoggedUser:", new Array<string>(signed), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackSignedUserSpan);
 
                     var feedbackCategorySpan = document.createElement("span");
                     $(feedbackCategorySpan).addClass("feedback-category");
-                    feedbackCategorySpan.innerHTML = `Kategorie: ${categoryTranslation[category]}`;
+                    feedbackCategorySpan.innerHTML = 
+                        localization.translateFormat("Category:", new Array<string>(categoryTranslation[category]), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackCategorySpan);
 
                     var feedbackDateSpan = document.createElement("span");
                     $(feedbackDateSpan).addClass("feedback-date");
-                    feedbackDateSpan.innerHTML = `Datum: ${date.toLocaleDateString()}`;
+                    feedbackDateSpan.innerHTML = 
+                        localization.translateFormat("Date:", new Array<string>(date.toLocaleDateString()), "ItJakubJs").value;
+
 
                     feedbackHeaderInfosDiv.appendChild(feedbackDateSpan);
 
                     var feedbackTimeSpan = document.createElement("span");
                     $(feedbackTimeSpan).addClass("feedback-time");
-                    feedbackTimeSpan.innerHTML = `Čas: ${date.toLocaleTimeString()}`;
+                    feedbackTimeSpan.innerHTML = 
+                        localization.translateFormat("Time:", new Array<string>(date.toLocaleTimeString()), "ItJakubJs").value;
 
                     feedbackHeaderInfosDiv.appendChild(feedbackTimeSpan);
 
@@ -193,10 +200,11 @@ $(document).ready(() => {
                         var separator = document.createElement("hr");
 
                         var feedbackHeadwordDiv = document.createElement("div");
-                        $(feedbackHeadwordDiv).text("Slovníkové heslo: " + actualFeedback.headwordInfo.defaultHeadword);
+                        $(feedbackHeadwordDiv).text(localization.translateFormat("DictionaryHeadword:", new Array<string>(actualFeedback.headwordInfo.defaultHeadword), "ItJakubJs").value);
 
                         var feedbackDictionaryDiv = document.createElement("div");
-                        $(feedbackDictionaryDiv).text("Slovník: " + actualFeedback.headwordInfo.dictionaryName);
+                        $(feedbackHeadwordDiv).text(localization.translateFormat("Dictionary:", new Array<string>(actualFeedback.headwordInfo.dictionaryName), "ItJakubJs").value);
+
 
                         $(feedbackBodyDiv)
                             .append(separator)

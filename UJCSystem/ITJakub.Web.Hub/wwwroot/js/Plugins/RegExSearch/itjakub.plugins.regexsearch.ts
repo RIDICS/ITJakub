@@ -101,7 +101,7 @@ class Search {
        
             var advancedButton = document.createElement("button");
             advancedButton.type = "button";
-            advancedButton.innerHTML = "Pokročilé";
+            advancedButton.innerHTML = localization.translate("Advanced", "PluginsJs").value;
             advancedButton.classList.add("btn");
             advancedButton.classList.add("btn-default");
             advancedButton.classList.add("searchbar-button");
@@ -145,7 +145,7 @@ class Search {
         
         var searchbarInput: HTMLInputElement = document.createElement("input");
         searchbarInput.type = "text";
-        searchbarInput.placeholder = "Hledat...";
+        searchbarInput.placeholder = localization.translate("Search...", "PluginsJs").value;
         searchbarInput.setAttribute("data-keyboard-id", "0");
         var searchbarInputClassList = searchbarInput.classList;
         searchbarInputClassList.add("form-control");
@@ -346,7 +346,7 @@ class RegExAdvancedSearchEditor {
         var commandsDiv = document.createElement("div");
         $(commandsDiv).addClass("regex-search-buttons-bottom-area");
 
-        var sentButton = HtmlItemsFactory.createButton("Dokončit");
+        var sentButton = HtmlItemsFactory.createButton(localization.translate("Finish", "PluginsJs").value);
         $(sentButton).addClass("regex-search-button");
         commandsDiv.appendChild(sentButton);
         $(sentButton).click(() => {
@@ -354,7 +354,7 @@ class RegExAdvancedSearchEditor {
             this.regexDoneCallback(json);
         });
 
-        var cancelButton = HtmlItemsFactory.createButton("Zrušit");
+        var cancelButton = HtmlItemsFactory.createButton(localization.translate("Cancel", "PluginsJs").value);
         $(cancelButton).addClass("regex-search-button");
         commandsDiv.appendChild(cancelButton);
         $(cancelButton).click(() => {
@@ -497,7 +497,7 @@ class RegExConditionListItem {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+ A zároveň";
+        addWordSpan.innerHTML = localization.translate("+And", "PluginsJs").value;
         $(addWordSpan).click(() => {
             this.parent.addNewCondition();
         });
@@ -520,7 +520,7 @@ class RegExConditionListItem {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = "A zároveň";
+        delimeterDiv.innerHTML = localization.translate("And", "PluginsJs").value;
 
         var trashButton = document.createElement("button");
         $(trashButton).addClass("regexsearch-delimiter-remove-button");
@@ -573,7 +573,7 @@ class RegExConditionListItem {
         mainSearchDiv.appendChild(searchDestinationDiv);
 
         var searchDestinationSpan = document.createElement("span");
-        searchDestinationSpan.innerHTML = "Zvolte oblast vyhledávání";
+        searchDestinationSpan.innerHTML = localization.translate("ChooseSearchFiled", "PluginsJs").value;
         $(searchDestinationSpan).addClass("regexsearch-upper-select-label");
         searchDestinationDiv.appendChild(searchDestinationSpan);
 
@@ -581,29 +581,29 @@ class RegExConditionListItem {
         $(searchDestinationSelect).addClass("regexsearch-select");
         searchDestinationDiv.appendChild(searchDestinationSelect);
 
-        var metadataOptGroup = HtmlItemsFactory.createOptionGroup("Metadata");
+        var metadataOptGroup = HtmlItemsFactory.createOptionGroup(localization.translate("Metadata", "PluginsJs").value);
         searchDestinationSelect.appendChild(metadataOptGroup);
 
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Titul", SearchTypeEnum.Title.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Autor", SearchTypeEnum.Author.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Editor", SearchTypeEnum.Editor.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Období vzniku", SearchTypeEnum.Dating.toString()));
-        metadataOptGroup.appendChild(HtmlItemsFactory.createOption("Téma", SearchTypeEnum.Term.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Title", "PluginsJs").value, SearchTypeEnum.Title.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Author", "PluginsJs").value, SearchTypeEnum.Author.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Editor", "PluginsJs").value, SearchTypeEnum.Editor.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Dating", "PluginsJs").value, SearchTypeEnum.Dating.toString()));
+        metadataOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Term", "PluginsJs").value, SearchTypeEnum.Term.toString()));
 
-        var textOptGroup = HtmlItemsFactory.createOptionGroup("Text");
+        var textOptGroup = HtmlItemsFactory.createOptionGroup(localization.translate("Text", "PluginsJs").value);
         searchDestinationSelect.appendChild(textOptGroup);
 
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Fulltext", SearchTypeEnum.Fulltext.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.TokenDistance.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("Ve větě", SearchTypeEnum.Sentence.toString()));
-        textOptGroup.appendChild(HtmlItemsFactory.createOption("V nadpisu", SearchTypeEnum.Heading.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Fulltext", "PluginsJs").value, SearchTypeEnum.Fulltext.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("TokenDistance", "PluginsJs").value, SearchTypeEnum.TokenDistance.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("InSentence", "PluginsJs").value, SearchTypeEnum.Sentence.toString()));
+        textOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("InHeading", "PluginsJs").value, SearchTypeEnum.Heading.toString()));
 
-        var headwordsOptGroup = HtmlItemsFactory.createOptionGroup("Hesla");
+        var headwordsOptGroup = HtmlItemsFactory.createOptionGroup(localization.translate("Headword", "PluginsJs").value);
         searchDestinationSelect.appendChild(headwordsOptGroup);
 
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("X tokenů od sebe", SearchTypeEnum.HeadwordDescriptionTokenDistance.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Hesla", SearchTypeEnum.Headword.toString()));
-        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption("Heslová stať", SearchTypeEnum.HeadwordDescription.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("TokenDistance", "PluginsJs").value, SearchTypeEnum.HeadwordDescriptionTokenDistance.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("Headword", "PluginsJs").value, SearchTypeEnum.Headword.toString()));
+        headwordsOptGroup.appendChild(HtmlItemsFactory.createOption(localization.translate("HeadwordDescription", "PluginsJs").value, SearchTypeEnum.HeadwordDescription.toString()));
 
         $(searchDestinationSelect).change((eventData: Event) => {
             var oldSelectedSearchType = this.selectedSearchType;
@@ -757,7 +757,7 @@ class RegExWordConditionList implements IRegExConditionListBase {
         //wordListContainerDiv.appendChild(wordFormDiv); //TODO implement after it iss implemented on server side
 
         var wordFormSpan = document.createElement("span");
-        wordFormSpan.innerHTML = "Tvar slova";
+        wordFormSpan.innerHTML = localization.translate("WordForm", "PluginsJs").value;
         $(wordFormSpan).addClass("regexsearch-upper-select-label");
         wordFormDiv.appendChild(wordFormSpan);
 
@@ -765,10 +765,10 @@ class RegExWordConditionList implements IRegExConditionListBase {
         $(wordFormSelect).addClass("regexsearch-select");
         wordFormDiv.appendChild(wordFormSelect);
 
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Lemma", this.wordFormType.Lemma));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - nové", this.wordFormType.HyperlemmaNew));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Hyperlemma - staré", this.wordFormType.HyperlemmaOld));
-        wordFormSelect.appendChild(HtmlItemsFactory.createOption("Stemma", this.wordFormType.Stemma));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Lemma", "PluginsJs").value, this.wordFormType.Lemma));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("HyperlemmaNew", "PluginsJs").value, this.wordFormType.HyperlemmaNew));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("HyperlemmaOld", "PluginsJs").value, this.wordFormType.HyperlemmaOld));
+        wordFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Stemma", "PluginsJs").value, this.wordFormType.Stemma));
 
         this.selectedWordFormType = this.wordFormType.Lemma;
 
@@ -883,7 +883,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         $(centuryCheckboxDiv).addClass("regex-dating-checkbox-div");
 
         var centuryNameSpan: HTMLSpanElement = window.document.createElement("span");
-        centuryNameSpan.innerHTML = "Století";
+        centuryNameSpan.innerHTML = localization.translate("Century", "PluginsJs").value;
         centuryCheckboxDiv.appendChild(centuryNameSpan);
         centurySliderDiv.appendChild(centuryCheckboxDiv);
         precisionInpuDiv.appendChild(centurySliderDiv);
@@ -895,7 +895,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         this.centurySliderValues = centuryArray;
 
-        var sliderCentury = this.makeSlider(centuryArray, ". století",(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
+        var sliderCentury = this.makeSlider(centuryArray, localization.translate(".Century", "PluginsJs").value,(selectedValue: DatingSliderValue) => { this.centuryChanged(selectedValue) });
         $(sliderCentury).change();
         centurySliderDiv.appendChild(sliderCentury);
 
@@ -926,13 +926,18 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var periodNameSpan: HTMLSpanElement = window.document.createElement("span");
-        periodNameSpan.innerHTML = "Přibližná doba";
+        periodNameSpan.innerHTML = localization.translate("ApproxTime", "PluginsJs").value;
         periodCheckboxDiv.appendChild(periodValueCheckbox);
         periodCheckboxDiv.appendChild(periodNameSpan);
         periodSliderDiv.appendChild(periodCheckboxDiv);
         precisionInpuDiv.appendChild(periodSliderDiv);
 
-        this.periodSliderValues = new Array<DatingSliderValue>(new DatingSliderValue("začátek", 0, -85), new DatingSliderValue("čtvrtina", 0, -75), new DatingSliderValue("třetina", 0, -66), new DatingSliderValue("polovina", 0, -50), new DatingSliderValue("konec", 85, 0));
+        this.periodSliderValues = new Array<DatingSliderValue>(
+            new DatingSliderValue(localization.translate("Start", "PluginsJs").value, 0, -85),
+            new DatingSliderValue(localization.translate("Quarter", "PluginsJs").value, 0, -75),
+            new DatingSliderValue(localization.translate("Third", "PluginsJs").value, 0, -66),
+            new DatingSliderValue(localization.translate("Half", "PluginsJs").value, 0, -50),
+            new DatingSliderValue(localization.translate("end", "PluginsJs").value, 85, 0));
 
         var sliderPeriod = this.makeSlider(this.periodSliderValues, "",(selectedValue: DatingSliderValue) => { this.periodChanged(selectedValue) });
         $(sliderPeriod).slider("option", "disabled", true);
@@ -968,7 +973,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
         });
 
         var decadesNameSpan: HTMLSpanElement = window.document.createElement("span");
-        decadesNameSpan.innerHTML = "Léta";
+        decadesNameSpan.innerHTML = localization.translate("Decades", "PluginsJs").value;
         decadeCheckboxDiv.appendChild(decadesCheckbox);
         decadeCheckboxDiv.appendChild(decadesNameSpan);
         decadesSliderDiv.appendChild(decadeCheckboxDiv);
@@ -981,7 +986,7 @@ class RegExDatingConditionRangePeriodView implements IRegExDatingConditionView {
 
         this.decadeSliderValues = decadesArray;
 
-        var sliderDecades = this.makeSlider(decadesArray, ". léta",(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue) });
+        var sliderDecades = this.makeSlider(decadesArray, localization.translate(".Decades", "PluginsJs").value,(selectedValue: DatingSliderValue) => { this.decadeChanged(selectedValue) });
         $(sliderDecades).slider("option", "disabled", true);
         $(sliderDecades).parent().siblings(".slider").find(".slider-tip").hide();
         $(sliderDecades).change();
@@ -1148,7 +1153,7 @@ class RegExDatingConditionRangeYearView implements IRegExDatingConditionView {
 
         var spanInput: HTMLSpanElement = document.createElement("span");
         $(spanInput).addClass("regex-dating-input-span");
-        spanInput.innerHTML = "Rok:";
+        spanInput.innerHTML = localization.translate("Year:", "PluginsJs").value;
         
         precisionInpuDiv.appendChild(spanInput);
         precisionInpuDiv.appendChild(textInput);
@@ -1345,7 +1350,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+ Nebo";
+        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1369,7 +1374,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = "Nebo";
+        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1414,7 +1419,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         $(datingSelectDiv).addClass("regex-dating-condition-select");
 
         var datingFormSpan = document.createElement("span");
-        datingFormSpan.innerHTML = "Zadání rozmezí";
+        datingFormSpan.innerHTML = localization.translate("DatingSelect", "PluginsJs").value;
         $(datingFormSpan).addClass("regexsearch-upper-select-label");
         datingSelectDiv.appendChild(datingFormSpan);
 
@@ -1422,10 +1427,10 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         $(datingFormSelect).addClass("regexsearch-select");
         datingSelectDiv.appendChild(datingFormSelect);
 
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Starší než", DatingRangeEnum.OlderThen.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mladší než", DatingRangeEnum.YoungerThen.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Mezi", DatingRangeEnum.Between.toString()));
-        datingFormSelect.appendChild(HtmlItemsFactory.createOption("Kolem", DatingRangeEnum.Around.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("OlderThan", "PluginsJs").value, DatingRangeEnum.OlderThen.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("YoungerThan", "PluginsJs").value, DatingRangeEnum.YoungerThen.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Between", "PluginsJs").value, DatingRangeEnum.Between.toString()));
+        datingFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Around", "PluginsJs").value, DatingRangeEnum.Around.toString()));
 
         this.datingRange = DatingRangeEnum.OlderThen;
 
@@ -1444,7 +1449,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         $(precisionSelectDiv).addClass("regex-dating-condition-select");
 
         var precisionFormSpan = document.createElement("span");
-        precisionFormSpan.innerHTML = "Zadání přesnosti";
+        precisionFormSpan.innerHTML = localization.translate("PrecisionSelect", "PluginsJs").value;
         $(precisionFormSpan).addClass("regexsearch-upper-select-label");
         precisionSelectDiv.appendChild(precisionFormSpan);
 
@@ -1452,8 +1457,8 @@ class RegExDatingCondition implements IRegExConditionItemBase{
         $(precisionFormSelect).addClass("regexsearch-select");
         precisionSelectDiv.appendChild(precisionFormSelect);
 
-        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Období", DatingPrecisionEnum.Period.toString()));
-        precisionFormSelect.appendChild(HtmlItemsFactory.createOption("Rok", DatingPrecisionEnum.Year.toString()));
+        precisionFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Period", "PluginsJs").value, DatingPrecisionEnum.Period.toString()));
+        precisionFormSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Year", "PluginsJs").value, DatingPrecisionEnum.Year.toString()));
 
         this.datingPrecision = DatingPrecisionEnum.Period;
 
@@ -1489,7 +1494,7 @@ class RegExDatingCondition implements IRegExConditionItemBase{
 
         if (this.datingRange === DatingRangeEnum.Between) {
             var delimeter = document.createElement("div");
-            delimeter.innerHTML = "až";
+            delimeter.innerHTML = localization.translate("Till", "PluginsJs").value;
             this.precisionInputDiv.appendChild(delimeter);
 
             var oldSecondView = this.secondDateView;
@@ -1623,7 +1628,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+ Nebo";
+        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -1647,7 +1652,7 @@ class RegExWordCondition implements IRegExConditionItemBase{
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = "Nebo";
+        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -1825,7 +1830,7 @@ class RegExWordInput {
         this.editorDiv = editorDiv;
 
         var conditionTitleDiv = document.createElement("div");
-        conditionTitleDiv.innerHTML = "Podmínka";
+        conditionTitleDiv.innerHTML = localization.translate("Constraint", "PluginsJs").value;
         editorDiv.appendChild(conditionTitleDiv);
         
         var conditionTypeDiv = document.createElement("div");
@@ -1836,11 +1841,11 @@ class RegExWordInput {
         conditionSelect.classList.add("regexsearch-condition-select");
         conditionTypeDiv.appendChild(conditionSelect);
 
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Začíná na", WordInputTypeEnum.StartsWith.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("StartsWith", "PluginsJs").value, WordInputTypeEnum.StartsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nezačíná na", this.conditionType.NotStartsWith));
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Obsahuje", WordInputTypeEnum.Contains.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("Contains", "PluginsJs").value, WordInputTypeEnum.Contains.toString()));
         //conditionSelect.appendChild(this.createOption("Neobsahuje", this.conditionType.NotContains));
-        conditionSelect.appendChild(HtmlItemsFactory.createOption("Končí na", WordInputTypeEnum.EndsWith.toString()));
+        conditionSelect.appendChild(HtmlItemsFactory.createOption(localization.translate("EndsWith", "PluginsJs").value, WordInputTypeEnum.EndsWith.toString()));
         //conditionSelect.appendChild(this.createOption("Nekončí na", this.conditionType.NotEndsWith));
 
 
@@ -2097,7 +2102,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
         var delimeterDiv = document.createElement("div");
         var addWordSpan = document.createElement("span");
         $(addWordSpan).addClass("regex-clickable-text");
-        addWordSpan.innerHTML = "+ Nebo";
+        addWordSpan.innerHTML = localization.translate("+Or", "PluginsJs").value;
         $(addWordSpan).click(() => {
             this.parent.addItem();
         });
@@ -2121,7 +2126,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
     private createTextDelimeter(): HTMLDivElement {
         var delimeterDiv = document.createElement("div");
-        delimeterDiv.innerHTML = "Nebo";
+        delimeterDiv.innerHTML = localization.translate("Or", "PluginsJs").value;
         $(delimeterDiv).addClass(this.delimeterClass);
 
         var trashButton = document.createElement("button");
@@ -2157,7 +2162,7 @@ class RegExTokenDistanceCondition implements IRegExConditionItemBase {
 
         var inputTextSpan = document.createElement("span");
         $(inputTextSpan).addClass("regexsearch-token-distance-condition-input-text");
-        inputTextSpan.innerHTML = "Vzdálenost: ";
+        inputTextSpan.innerHTML = localization.translate("Distance:", "PluginsJs").value;
         inputTextDiv.appendChild(inputTextSpan);
 
         var tokenDistanceInput = document.createElement("input");

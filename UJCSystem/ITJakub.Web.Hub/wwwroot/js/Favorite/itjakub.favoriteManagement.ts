@@ -20,7 +20,6 @@ class FavoriteManagement {
     private currentTypeFilter: number;
     private currentNameFilter: string;
 
-    private localization : Localization;
 	private localizationScope = "FavoriteJs";
 
     constructor(favoriteManager: FavoriteManager) {
@@ -36,8 +35,6 @@ class FavoriteManagement {
 
         this.newFavoriteLabelDialog = new FavoriteManagementDialog($("#new-favorite-label-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
-
-        this.localization = new Localization();
     }
 
     public init() {
@@ -296,7 +293,7 @@ class FavoriteManagement {
 
         $("#remove-dialog .modal-body")
             //.text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
-            .text(this.localization.translateFormat("DeleteModalText", new Array<string>(labelName), this.localizationScope).value)
+            .text(localization.translateFormat("DeleteModalText", new Array<string>(labelName), this.localizationScope).value)
 
         $("#remove-dialog .remove-button")
             .off("click")
@@ -324,7 +321,7 @@ class FavoriteManagement {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteLabel(labelId, (error) => {
             if (error) {
-                this.removeDialog.showError(this.localization.translate("DeleteTagError", this.localizationScope).value);
+                this.removeDialog.showError(localization.translate("DeleteTagError", this.localizationScope).value);
                 return;
             }
 
@@ -341,7 +338,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.createFavoriteLabel(name, color, (id, error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError(this.localization.translate("SaveTagError", this.localizationScope).value);
+                this.newFavoriteLabelDialog.showError(localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -369,7 +366,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.updateFavoriteLabel(labelId, name, color, (error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError(this.localization.translate("SaveTagError", this.localizationScope).value);
+                this.newFavoriteLabelDialog.showError(localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -391,10 +388,10 @@ class FavoriteManagement {
 
         var error = "";
         if (!name) {
-            error = this.localization.translate("MissingName", this.localizationScope).value;
+            error = localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += this.localization.translate("IncorrectColorFormat", this.localizationScope).value;
+            error += localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.newFavoriteLabelDialog.showError(error);
@@ -454,7 +451,6 @@ class FavoriteManagementItem {
     private removeDialog: FavoriteManagementDialog;
     private onRemoveCallback: (id: number) => void;
 
-    private localization : Localization;
     private localizationScope = "FavoriteJs";
 
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
@@ -464,8 +460,6 @@ class FavoriteManagementItem {
         this.id = id;
         this.type = type;
         this.container = container;
-
-        this.localization = new Localization();
 
         this.editFavoriteDialog = new FavoriteManagementDialog($("#edit-favorite-dialog"));
         this.removeDialog = new FavoriteManagementDialog($("#remove-dialog"));
@@ -489,7 +483,7 @@ class FavoriteManagementItem {
         var nameLink = document.createElement("a");
         var nameDiv = document.createElement("div");
         $(nameDiv)
-            .text(this.name != null && this.name !== "" ? this.name : this.localization.translate("NoName", this.localizationScope).value)
+            .text(this.name != null && this.name !== "" ? this.name : localization.translate("NoName", this.localizationScope).value)
             .addClass("favorite-item-name");
         $(nameLink)
             .attr("href", getBaseUrl() + "Favorite/Favorite?id=" + this.id)
@@ -520,12 +514,12 @@ class FavoriteManagementItem {
             .append(editIcon);
         $(removeLink)
             .attr("href", "#")
-            .attr("title", this.localization.translate("DeleteFav", this.localizationScope).value)
+            .attr("title", localization.translate("DeleteFav", this.localizationScope).value)
             .append(removeIconContainer)
             .click(() => {
                 $("#remove-dialog .modal-body")
                     //.text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
-                    .text(this.localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), this.localizationScope).value);
+                    .text(localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), this.localizationScope).value);
 
                 $("#remove-dialog .remove-button")
                     .off("click")
@@ -536,7 +530,7 @@ class FavoriteManagementItem {
             });
         $(editLink)
             .attr("href", "#")
-            .attr("title", this.localization.translate("ModifyFavItem", this.localizationScope).value)
+            .attr("title", localization.translate("ModifyFavItem", this.localizationScope).value)
             .append(editIconContainer)
             .click(() => {
                 $("#favorite-item-name").val(this.name);
@@ -575,7 +569,7 @@ class FavoriteManagementItem {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteItem(this.id, (error) => {
             if (error) {
-                this.removeDialog.showError(this.localization.translate("DeleteItemError", this.localizationScope).value);
+                this.removeDialog.showError(localization.translate("DeleteItemError", this.localizationScope).value);
                 return;
             }
 
@@ -596,7 +590,7 @@ class FavoriteManagementItem {
         this.editFavoriteDialog.showSaving();
         this.favoriteManager.updateFavoriteItem(this.id, newName, (error) => {
             if (error) {
-                this.editFavoriteDialog.showError(this.localization.translate("SaveItemError", this.localizationScope).value);
+                this.editFavoriteDialog.showError(localization.translate("SaveItemError", this.localizationScope).value);
                 return;
             }
 
@@ -614,27 +608,27 @@ class FavoriteManagementItem {
         switch (this.type) {
             case FavoriteType.Book:
                 $(icon).addClass("glyphicon-book")
-                    .attr("title", this.localization.translate("Book", this.localizationScope).value);
+                    .attr("title", localization.translate("Book", this.localizationScope).value);
                 break;
             case FavoriteType.PageBookmark:
                 $(icon).addClass("glyphicon-bookmark")
-                    .attr("title", this.localization.translate("PageBookmarkInBook", this.localizationScope).value);
+                    .attr("title", localization.translate("PageBookmarkInBook", this.localizationScope).value);
                 break;
             case FavoriteType.Category:
                 $(icon).addClass("glyphicon-list")
-                    .attr("title", this.localization.translate("Category", this.localizationScope).value);
+                    .attr("title", localization.translate("Category", this.localizationScope).value);
                 break;
             case FavoriteType.Query:
                 $(icon).addClass("glyphicon-search")
-                    .attr("title", this.localization.translate("SearchingQuery", this.localizationScope).value);
+                    .attr("title", localization.translate("SearchingQuery", this.localizationScope).value);
                 break;
             case FavoriteType.BookVersion:
                 $(icon).addClass("glyphicon-tags")
-                    .attr("title", this.localization.translate("BookVersion", this.localizationScope).value);
+                    .attr("title", localization.translate("BookVersion", this.localizationScope).value);
                 break;
             default:
                 $(icon).addClass("glyphicon-question-sign")
-                    .attr("title", this.localization.translate("UnknownFavItemType", this.localizationScope).value);
+                    .attr("title", localization.translate("UnknownFavItemType", this.localizationScope).value);
                 break;
         }
         return icon;

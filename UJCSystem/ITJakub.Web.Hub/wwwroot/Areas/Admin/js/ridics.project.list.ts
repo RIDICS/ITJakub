@@ -12,11 +12,8 @@ class ProjectList {
     private pageSize: number;
     private totalCount: number;
 
-    private localization : Localization;
-
     constructor() {
         this.projectClient = new ProjectClient();
-        this.localization = new Localization();
 
         this.newProjectDialog = new BootstrapDialogWrapper({
             element: $("#new-project-dialog"),
@@ -97,7 +94,7 @@ class ProjectList {
             .html("<div class=\"loader\"></div>")
             .load(url, null, (responseText, textStatus, xmlHttpRequest) => {
                 if (xmlHttpRequest.status !== HttpStatusCode.Success) {
-                    var alert = new AlertComponentBuilder(AlertType.Error).addContent(this.localization.translate("ListError", "Admin").value);
+                    var alert = new AlertComponentBuilder(AlertType.Error).addContent(localization.translate("ListError", "Admin").value);
                     $listContainer
                         .empty()
                         .append(alert.buildElement());

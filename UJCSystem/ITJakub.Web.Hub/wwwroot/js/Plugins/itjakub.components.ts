@@ -9,17 +9,17 @@
             parallelUploads: 5,
             acceptedFiles: this.acceptedFiles,
 
-            dictInvalidFileType: "Tento formát není podporovaný. Vyberte prosím jiný soubor s příponou " + this.acceptedFiles,
-            dictDefaultMessage: "Pro nahrávání sem přesuňte soubory",
-            dictFallbackMessage: "Váš prohlížeč nepodporuje nahrávání souborů pomocí drag'n'drop.",
-            dictFallbackText: "Použijte prosím záložní formulář umíštěný níže.",
-            dictFileTooBig: "Velikost souboru ({{filesize}}MB) překročila maximální povolenou velikost {{maxFilesize}}MB.",
-            dictResponseError: "Chyba při nahrávání souboru (stavový kód {{statusCode}}).",
-            dictCancelUpload: "Zrušit nahrávání",
-            dictCancelUploadConfirmation: "Opravdu chcete zrušit nahrávání tohoto souboru?",
-            dictRemoveFile: "Odstranit soubor",
+            dictInvalidFileType: localization.translate("FormatNotSupported").value + this.acceptedFiles,
+            dictDefaultMessage: localization.translate("DropFilesForUpload").value,
+            dictFallbackMessage: localization.translate("BrowserDoesntSupportDragNDrop").value,
+            dictFallbackText: localization.translate("UseBackupForm").value,
+            dictFileTooBig: localization.translate("FileTooBig").value,
+            dictResponseError: localization.translate("UploadFileError").value,
+            dictCancelUpload: localization.translate("CancelUpload").value,
+            dictCancelUploadConfirmation: localization.translate("CancelUploadModalConfirm").value,
+            dictRemoveFile: localization.translate("DeleteFile").value,
             dictRemoveFileConfirmation: null,
-            dictMaxFilesExceeded: "Nelze nahrát žádné další soubory."
+            dictMaxFilesExceeded: localization.translate("CannotUploadMoreFiles").value
         };
         return options;
     }

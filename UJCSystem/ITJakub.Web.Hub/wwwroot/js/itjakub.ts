@@ -1,9 +1,12 @@
 ﻿/// <reference path="Plugins/Bibliography/itjakub.plugins.bibliography.ts"/>
 /// <reference path="Plugins/DropdownSelect/itjakub.plugins.dropdownselect.ts"/>
 
+var localization;
 
 //sets state to main plugins menu
 $(document).ready(() => {
+    localization = new Localization();
+
     $('#main-plugins-menu').find('li').removeClass('active');
     var href = window.location.pathname;
     var liTargetingActualPage = $('#main-plugins-menu').find("a[href='" + href.toString() + "']").parent('li');
@@ -27,7 +30,7 @@ $(document).ready(() => {
     });
 
     // Disable Dropzone auto-initializing
-    Dropzone.autoDiscover = false;
+    Dropzone.autoDiscover = false;   
 });
 
 function getQueryStringParameterByName(name) {

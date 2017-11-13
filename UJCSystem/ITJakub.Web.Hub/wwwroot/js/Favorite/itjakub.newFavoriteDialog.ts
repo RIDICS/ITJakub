@@ -11,7 +11,6 @@
     private isInitialized;
     private pendingShow: boolean|string;
 
-    private localization : Localization;
 	private localizationScope = "FavoriteJs";
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
@@ -19,8 +18,6 @@
         this.favoriteManager = favoriteManager;
         this.isInitialized = false;
         this.pendingShow = false;
-
-        this.localization = new Localization();
     }
 
     public setSaveCallback(value: (data: INewFavoriteItemData) => void) {
@@ -41,8 +38,8 @@
 
     private finishInitialization() {
         var dialogHeading = this.allowMultipleLabels
-            ? this.localization.translate("AttachNewTags", this.localizationScope).value
-            : this.localization.translate("AttachNewTag", this.localizationScope).value;
+            ? localization.translate("AttachNewTags", this.localizationScope).value
+            : localization.translate("AttachNewTag", this.localizationScope).value;
         $(".modal-title", this.container).text(dialogHeading);
 
         var saveIcon = document.createElement("span");
@@ -79,7 +76,7 @@
         var url = getBaseUrl() + "Favorite/NewFavorite?" + queryString;
 
         $(this.saveTitle)
-            .text(this.localization.translate("Confirm", this.localizationScope).value);
+            .text(localization.translate("Confirm", this.localizationScope).value);
         $(".modal-body", this.container)
             .addClass("loading")
             .empty();
@@ -227,14 +224,14 @@
         var newSaveTitle: string;
         switch (tabClass) {
             case "tab-favorite-label-assign":
-                newSaveTitle = this.allowMultipleLabels ? this.localization.translate("ConfirmTagsAttachment", this.localizationScope).value : 
-                                                          this.localization.translate("ConfirmTagAttachment", this.localizationScope).value;
+                newSaveTitle = this.allowMultipleLabels ? localization.translate("ConfirmTagsAttachment", this.localizationScope).value : 
+                                                          localization.translate("ConfirmTagAttachment", this.localizationScope).value;
                 break;
             case "tab-favorite-label-create":
-                newSaveTitle = this.localization.translate("CreateAndAttachTag", this.localizationScope).value;
+                newSaveTitle = localization.translate("CreateAndAttachTag", this.localizationScope).value;
                 break;
             default:
-                newSaveTitle = this.localization.translate("Save", this.localizationScope).value;
+                newSaveTitle = localization.translate("Save", this.localizationScope).value;
         }
         $(this.saveTitle).text(newSaveTitle);
     }
@@ -289,7 +286,7 @@
             $(emptyLabel)
                 .addClass("label")
                 .addClass("label-default")
-                .text(this.localization.translate("NoTag", this.localizationScope).value);
+                .text(localization.translate("NoTag", this.localizationScope).value);
             $(".favorite-selected-label-info", this.container)
                 .append(emptyLabel);
         } else {
@@ -321,10 +318,10 @@
 
         var error = "";
         if (!labelName) {
-            error = this.localization.translate("MissingName", this.localizationScope).value;
+            error = localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += this.localization.translate("IncorrectColorFormat", this.localizationScope).value;
+            error += localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.showError(error);
@@ -333,7 +330,7 @@
 
         this.favoriteManager.createFavoriteLabel(labelName, color, (id, error) => {
             if (error) {
-                this.showError(this.localization.translate("CreateNewTagError", this.localizationScope).value);
+                this.showError(localization.translate("CreateNewTagError", this.localizationScope).value);
                 return;
             }
 

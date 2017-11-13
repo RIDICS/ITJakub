@@ -245,7 +245,7 @@ class BibliographyFactory {
                 .css("font-weight", "bold")
                 .css("margin-left", "3px")
                 .text("...")
-                .attr("title", "Zobrazit všechny přiřazené štítky")
+                .attr("title", localization.translate("ShowAllAssignedLabels", "PluginsJs").value)
                 .attr("data-toggle", "tooltip")
                 .tooltip();
             resultList.push(showAllLink);
@@ -303,7 +303,7 @@ class BibliographyFactory {
             .css("border-color", colorData.borderColor)
             .text(labelName)
             .attr("data-toggle", "tooltip")
-            .attr("title", "Uloženo jako: " + favoriteTitle)
+            .attr("title", localization.translateFormat("SavedAs:", new Array<string>(favoriteTitle), "PluginsJs").value)
             .tooltip();
         return label;
     }

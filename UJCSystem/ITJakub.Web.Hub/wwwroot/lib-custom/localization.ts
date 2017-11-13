@@ -12,9 +12,6 @@
 
     private mSiteUrl: string;
 
-    constructor() {
-        
-    }
 
     public translate(text: string, scope?: string, cultureName?: string): ILocalizedString {
         let dictionary = this.getDictionary(scope, cultureName);

@@ -1,12 +1,7 @@
 ﻿class NewFavoriteNotification {
     private container: HTMLDivElement;
 
-    private localization : Localization;
     private localizationScope = "FavoriteJs";
-    
-    constructor() {
-        this.localization = new Localization();
-    }
 
     public show() {
         var $container = $("#favorite-change-notification");
@@ -28,8 +23,8 @@
         var closeButton = document.createElement("a");
         var closeButtonContent = document.createElement("span");
         
-        $(info).text(this.localization.translate("TagsChangedPleaseReload", this.localizationScope).value);
-        $(refreshLink).text(this.localization.translate("ReloadPageAgain", this.localizationScope).value)
+        $(info).text(localization.translate("TagsChangedPleaseReload", this.localizationScope).value);
+        $(refreshLink).text(localization.translate("ReloadPageAgain", this.localizationScope).value)
             .attr("href", "#")
             .click(() => {
                 location.reload();
@@ -40,7 +35,7 @@
         $(closeButton)
             .addClass("close")
             .attr("type", "button")
-            .attr("title", this.localization.translate("Hide", this.localizationScope).value)
+            .attr("title", localization.translate("Hide", this.localizationScope).value)
             .append(closeButtonContent)
             .click(() => {
                 $(this.container).hide();

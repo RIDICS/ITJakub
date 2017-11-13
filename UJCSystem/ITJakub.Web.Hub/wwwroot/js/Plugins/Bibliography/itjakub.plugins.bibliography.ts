@@ -104,7 +104,7 @@ class BibliographyModule {
         } else {
             var divElement: HTMLDivElement = document.createElement('div');
             $(divElement).addClass('bib-listing-empty');
-            divElement.innerHTML = "Žádné výsledky k zobrazení";
+            divElement.innerHTML = localization.translate("NoResultsToShow", "PluginsJs");
             this.booksContainer.appendChild(divElement);
         }
 
@@ -185,14 +185,14 @@ class BibliographyModule {
     }
 
     public showSearchError() {
-        var errorDiv = BibliographyFactory.makeError("Chyba při vyhledávání.");
+        var errorDiv = BibliographyFactory.makeError(localization.translate("SearchError", "PluginsJs").value);
         $(this.booksContainer)
             .removeClass("loader")
             .append(errorDiv);
     }
 
     public showPageLoadError() {
-        var errorDiv = BibliographyFactory.makeError("Chyba při načítání seznamu děl.");
+        var errorDiv = BibliographyFactory.makeError(localization.translate("LoadingBookListError", "PluginsJs").value);
         $(this.booksContainer)
             .removeClass("loader")
             .append(errorDiv);
@@ -348,6 +348,10 @@ var audioTypeTranslation = [
 ];
 
 function translateAudioType(audioType: number): string {
+    if (audioType === 0) {
+        return localization.translate("Unknown", "PluginsJs").value;
+    }
+
     return audioTypeTranslation[audioType];
 }
 

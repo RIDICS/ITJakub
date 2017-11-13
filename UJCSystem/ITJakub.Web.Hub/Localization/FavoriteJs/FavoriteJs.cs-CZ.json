@@ -29,7 +29,7 @@
 		"DeleteTagError" : "Chyba při odstraňování štítku",
 		"SaveTagError" : "Chyba při ukládání štítku",
 		"MissingName" : "Nebylo zadáno jméno.",
-		"IncorrectColorFormat" : " Nesprávný formát barvy (požadovaný formát: #000000)."
+		"IncorrectColorFormat" : " Nesprávný formát barvy (požadovaný formát: #000000).",
 		"NoName" : "<bez názvu>",
 		"DeleteFav" : "Smazat oblíbenou položku",
 		"DeleteItemModalText" : "Opravdu chcete smazat vybranou oblíbenou položku ({0})?",
@@ -66,7 +66,6 @@
 		"TagsChangedPleaseReload" : "Přiřazené štítky se změnily. Pro správné zobrazení štítků je nutné načíst tuto stránku znovu. ",
 		"ReloadPageAgain" : "Načíst stránku znovu.",
 		"Hide" : "Skrýt"
-		
 		
 	}
 }

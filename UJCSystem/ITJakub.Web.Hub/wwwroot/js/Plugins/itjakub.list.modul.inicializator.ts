@@ -12,7 +12,7 @@
                 searchBoxInputSelector: ".searchbar-input.tt-input",
                 dataSet: {
                     name: "Title",
-                    groupHeader: "Název",
+                    groupHeader: localization.translate("TitleSearchBox", "PluginsJs").value,
                     parameterUrlString: null
                 }
             }

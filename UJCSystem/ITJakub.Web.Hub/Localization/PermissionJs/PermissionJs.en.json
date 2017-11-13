@@ -1,0 +1,23 @@
+{
+	"culture":"en",
+	"scope":"PermissionJs",
+	"dictionary": {
+		"News" : "News",
+		"BookUploading" : "Book uploading",
+		"PermissionManagement" : "Permission management",
+		"FeedbackManagement" : "Feedback management",
+		"ReadCardFile" : "Reading cardfiles",
+		"AutoImport" : "Translate[Automatické právo na kategorii]",
+		"ReadLemmatization" : "Lemmatization reading",
+		"EditLemmatization" : "Lemmatization editing",
+		"DerivateLemmatization" : "Translate[Derivace hláskových podob]",
+		"PrintEdition" : "Edition printing",
+		"EditStaticText" : "Translate[Úprava statických textů]",
+		"UnknownPermission" : "Unknown permission",
+		
+		"AddNews" : "Translate[Přidávat novinky]",
+		"UploadBook" : "Translate[Nahrávat díla]",
+		"ManagePermissions" : "Translate[Spravovat práva]",
+		"ReadFeedback" : "Translate[Číst připomínky]"
+		}
+}

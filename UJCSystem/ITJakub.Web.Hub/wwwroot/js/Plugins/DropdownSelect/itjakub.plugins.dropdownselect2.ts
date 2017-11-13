@@ -290,13 +290,13 @@
         var booksCountString = String(booksCount);
 
         if (!this.rootCategory.checkBox.indeterminate) {
-            categoriesCountString = "Všechny";
-            booksCountString = "Všechna";
+            categoriesCountString = localization.translate("All1", "PluginsJs").value;
+            booksCountString = localization.translate("All2", "PluginsJs").value;
         }
         
         var infoDiv = document.createElement("div");
-        var infoText = "Prohledávané kategorie: " + categoriesCountString + "<br>"
-            + "Prohledávaná díla: " + booksCountString;
+        var infoText = localization.translate("SearchCategories", "PluginsJs") + categoriesCountString + "<br>"
+            + localization.translate("SearchBooks", "PluginsJs") + booksCountString;
         
         infoDiv.innerHTML = infoText;
 
