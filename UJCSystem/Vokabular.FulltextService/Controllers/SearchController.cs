@@ -26,7 +26,7 @@ namespace Vokabular.FulltextService.Controllers
         public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContractBase searchRequest)
         {
             List<string> wordList = new List<string>();
-            List<long> projectIdList = new List<long>();
+            List<long> snapshotIdList = new List<long>();
             foreach (var searchCriteria in searchRequest.ConditionConjunction)
             {
                 switch (searchCriteria.Key)
@@ -47,13 +47,11 @@ namespace Vokabular.FulltextService.Controllers
                         var resultRestrictionCriteria = searchCriteria as SnapshotResultRestrictionCriteriaContract;
                         if (resultRestrictionCriteria == null)
                             continue;
-
-                        throw new NotImplementedException("Update search from projectId to snapshotId");
-                        projectIdList.AddRange(resultRestrictionCriteria.SnapshotIds);
+                        snapshotIdList.AddRange(resultRestrictionCriteria.SnapshotIds);
                         break;
                 }
             }
-            return m_searchManager.SearchByCriteria(wordList, projectIdList);
+            return m_searchManager.SearchByCriteria(wordList, snapshotIdList);
         }
     }
 }

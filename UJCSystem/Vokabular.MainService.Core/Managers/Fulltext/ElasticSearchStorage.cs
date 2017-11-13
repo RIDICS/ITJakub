@@ -56,21 +56,23 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public long SearchByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
-
-            throw new System.NotImplementedException();
+            return 10;//TODO mock
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchByCriteriaCount(criteria);
+                return result.Count;
+            }
         }
 
         public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
-            FulltextSearchResultContract result;
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-                result = fulltextServiceClient.SearchByCriteria(criteria);
+               var result = fulltextServiceClient.SearchByCriteria(criteria);
+               return result.ProjectIds;
             }
-
-            return result.ProjectIds;
         }
     }
 }

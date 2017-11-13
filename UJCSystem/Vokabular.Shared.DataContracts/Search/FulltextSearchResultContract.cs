@@ -4,7 +4,7 @@ namespace Vokabular.Shared.DataContracts.Search
 {
     public class FulltextSearchResultContract
     {
-        public int Count { get; set; }
+        public long Count { get; set; }
         public List<long> ProjectIds { get; set; }
     }
 }

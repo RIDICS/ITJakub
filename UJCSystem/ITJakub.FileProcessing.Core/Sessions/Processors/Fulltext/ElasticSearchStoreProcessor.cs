@@ -28,8 +28,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
         {
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
-                
-
                 return client.CreateTextResource(m_converter.Convert(resourceUploadContract.DataStream), 1);
             }
         }

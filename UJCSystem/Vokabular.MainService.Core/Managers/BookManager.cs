@@ -49,7 +49,7 @@ namespace Vokabular.MainService.Core.Managers
             m_categoryRepository = categoryRepository;
         }
 
-        private IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Research)
+        private IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Community)
         {
             return m_fulltextStorages[projectType];
         }
