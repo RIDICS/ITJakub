@@ -267,39 +267,28 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult TextSearchInBookPaged(string text, int start, int count, string bookXmlId, string versionXmlId)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
-                new WordListCriteriaContract
+                Start = 0,
+                Count = 1,
+                HitSettingsContract = new HitSettingsContract
                 {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
-                    {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
-                    }
-                },
-                new ResultCriteriaContract
-                {
-                    Start = 0,
-                    Count = 1,
-                    HitSettingsContract = new HitSettingsContract
-                    {
-                        ContextLength = 45,
-                        Count = count,
-                        Start = start
-                    }
-                },
-                new ResultRestrictionCriteriaContract
-                {
-                    ResultBooks =
-                        new List<BookVersionPairContract>
-                        {
-                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
-                        }
+                    ContextLength = 45,
+                    Count = count,
+                    Start = start
                 }
-            };
+            });
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks =
+                    new List<BookVersionPairContract>
+                    {
+                        new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
+                    }
+            });
+
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
@@ -314,33 +303,22 @@ namespace ITJakub.Web.Hub.Areas.Editions.Controllers
 
         public ActionResult TextSearchInBookCount(string text, string bookXmlId, string versionXmlId)
         {
-            var listSearchCriteriaContracts = new List<SearchCriteriaContract>
+            var listSearchCriteriaContracts = CreateTextCriteriaList(CriteriaKey.Fulltext, text);
+
+            listSearchCriteriaContracts.Add(new ResultCriteriaContract
             {
-                new WordListCriteriaContract
-                {
-                    Key = CriteriaKey.Fulltext,
-                    Disjunctions = new List<WordCriteriaContract>
+                Start = 0,
+                Count = 1
+            });
+            listSearchCriteriaContracts.Add(new ResultRestrictionCriteriaContract
+            {
+                ResultBooks =
+                    new List<BookVersionPairContract>
                     {
-                        new WordCriteriaContract
-                        {
-                            Contains = new List<string> {text}
-                        }
+                        new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
                     }
-                },
-                new ResultCriteriaContract
-                {
-                    Start = 0,
-                    Count = 1
-                },
-                new ResultRestrictionCriteriaContract
-                {
-                    ResultBooks =
-                        new List<BookVersionPairContract>
-                        {
-                            new BookVersionPairContract {Guid = bookXmlId, VersionId = versionXmlId}
-                        }
-                }
-            };
+            });
+            
             using (var client = GetMainServiceClient())
             {
                 var result = client.SearchByCriteria(listSearchCriteriaContracts).FirstOrDefault();
