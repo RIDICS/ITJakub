@@ -14,8 +14,11 @@ class GroupPermissionEditor {
     private bookSelector: BooksSelector;
     private specialPermissionSelector: SpecialPermissionsSelector;
 
+    private specialPermissionTextResolver : SpecialPermissionTextResolver;
+
     constructor(mainContainer: string) {
         this.mainContainer = mainContainer;
+        this.specialPermissionTextResolver = new SpecialPermissionTextResolver();
     }
 
     private searchboxStateChangedCallback(selectedExists: boolean, selectionConfirmed: boolean) {
@@ -460,7 +463,7 @@ class GroupPermissionEditor {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+        nameSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
 
         groupSpecialPermissionsLi.appendChild(nameSpan);
 
@@ -525,7 +528,7 @@ class GroupPermissionEditor {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("list-item-name");
-        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+        textSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
 
         specPermissionLi.appendChild(textSpan);
 
@@ -552,85 +555,91 @@ class GroupPermissionEditor {
 }
 
 class SpecialPermissionTextResolver {
+    private localization : Localization;
+    private localizationScope = "FavoriteJs";
     
-    private static newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
-    private static uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
-    private static managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
-    private static feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
-    private static cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
-    private static autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
-    private static readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
-    private static editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
-    private static derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
-    private static editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
-    private static editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
-    
-    static resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
-
-        switch (type) {
-            case this.newsPermission:
-                return "Novinky";
-            case this.uploadBookPermission:
-                return "Nahrávání děl";
-            case this.managePermission:
-                return "Správa práv";
-            case this.feedbackPermission:
-                return "Správa připomínek";
-            case this.cardFilePermission:
-                return "Prohlížení kartoték";
-            case this.autoimportPermission:
-                return "Automatické právo na kategorii";
-            case this.readLemmatizationPermission:
-                return "Prohlížení lematizace";
-            case this.editLemmatizationPermission:
-                return "Úprava lematizace";
-            case this.derivateLemmatizationPermission:
-                return "Derivace hláskových podob";
-            case this.editionPrintPermission:
-                return "Tisk edic";
-            case this.editStaticTextPermission:
-                return "Úprava statických textů";
-            default:
-                return "Neznámé právo";
-        }
-         
+    constructor() {
+        this.localization = new Localization();
     }
 
-    static resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
+
+    private newsPermission: string = "ITJakub.Shared.Contracts.NewsPermissionContract";
+    private uploadBookPermission: string = "ITJakub.Shared.Contracts.UploadBookPermissionContract";
+    private managePermission: string = "ITJakub.Shared.Contracts.ManagePermissionsPermissionContract";
+    private feedbackPermission: string = "ITJakub.Shared.Contracts.FeedbackPermissionContract";
+    private cardFilePermission: string = "ITJakub.Shared.Contracts.CardFilePermissionContract";
+    private autoimportPermission: string = "ITJakub.Shared.Contracts.AutoImportCategoryPermissionContract";
+    private readLemmatizationPermission: string = "ITJakub.Shared.Contracts.ReadLemmatizationPermissionContract";
+    private editLemmatizationPermission: string = "ITJakub.Shared.Contracts.EditLemmatizationPermissionContract";
+    private derivateLemmatizationPermission: string = "ITJakub.Shared.Contracts.DerivateLemmatizationPermissionContract";
+    private editionPrintPermission: string = "ITJakub.Shared.Contracts.EditionPrintPermissionContract";
+    private editStaticTextPermission: string = "ITJakub.Shared.Contracts.EditStaticTextPermissionContract";
+    
+    public resolveSpecialPermissionCategoryText(type: string, specialPermissions: ISpecialPermission[]): string {
 
         switch (type) {
             case this.newsPermission:
-                return "Přidávat novinky";
+                return this.localization.translate("News", this.localizationScope).value;
             case this.uploadBookPermission:
-                return "Nahrávat díla";
+                return this.localization.translate("BookUploading", this.localizationScope).value;
             case this.managePermission:
-                return "Spravovat práva";
+                return this.localization.translate("PermissionManagement", this.localizationScope).value;
             case this.feedbackPermission:
-                return "Číst připomínky";
+                return this.localization.translate("FeedbackManagement", this.localizationScope).value;
+            case this.cardFilePermission:
+                return this.localization.translate("ReadCardFile", this.localizationScope).value;
+            case this.autoimportPermission:
+                return this.localization.translate("AutoImport", this.localizationScope).value;
+            case this.readLemmatizationPermission:
+                return this.localization.translate("ReadLemmatization", this.localizationScope).value;
+            case this.editLemmatizationPermission:
+                return this.localization.translate("EditLemmatization", this.localizationScope).value;
+            case this.derivateLemmatizationPermission:
+                return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
+            case this.editionPrintPermission:
+                return this.localization.translate("PrintEdition", this.localizationScope).value;
+            case this.editStaticTextPermission:
+                return this.localization.translate("EditStaticText", this.localizationScope).value;
+            default:
+                return this.localization.translate("UnknownPermission", this.localizationScope).value;
+        }    
+    }
+
+    public resolveSpecialPermissionText(type: string, specialPermission: ISpecialPermission): string {
+
+        switch (type) {
+            case this.newsPermission:
+                return this.localization.translate("AddNews", this.localizationScope).value;
+            case this.uploadBookPermission:
+                return this.localization.translate("UploadBook", this.localizationScope).value;
+            case this.managePermission:
+                return this.localization.translate("ManagePermissions", this.localizationScope).value;
+            case this.feedbackPermission:
+                return this.localization.translate("ReadFeedback", this.localizationScope).value;
             case this.cardFilePermission:
                 return this.resolveCardFileText(<ICardFilePermission>specialPermission);
             case this.autoimportPermission:
                 return this.resolveAutoImportText(<IAutoImportPermission>specialPermission);
             case this.readLemmatizationPermission:
-                return "Prohlížení lematizace";
+                return this.localization.translate("ReadLemmatization", this.localizationScope).value;
             case this.editLemmatizationPermission:
-                return "Úprava lematizace";
+                return this.localization.translate("EditLemmatization", this.localizationScope).value;
             case this.derivateLemmatizationPermission:
-                return "Derivace hláskových podob";
+                return this.localization.translate("DerivateLemmatization", this.localizationScope).value;
             case this.editionPrintPermission:
-                return "Tisk edic";
+                return this.localization.translate("PrintEdition", this.localizationScope).value;
             case this.editStaticTextPermission:
-                return "Úprava statických textů";
+                return this.localization.translate("EditStaticText", this.localizationScope).value;
             default:
-                return "Neznámé právo";
+                return this.localization.translate("UnknownPermission", this.localizationScope).value;
         }
     }
 
-    private static resolveCardFileText(cardFilePermission: ICardFilePermission):string {
+    private resolveCardFileText(cardFilePermission: ICardFilePermission):string {
         return cardFilePermission.cardFileName;
     }
 
-    private static resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
+    private resolveAutoImportText(autoimportPermission: IAutoImportPermission): string {
         return autoimportPermission.category.description;
     }
 
@@ -640,8 +649,12 @@ class SpecialPermissionsSelector {
     private container: HTMLDivElement;
     private specialPermissionIds: Array<number>;
 
+    private specialPermissionTextResolver: SpecialPermissionTextResolver;
+
     constructor(container: HTMLDivElement) {
         this.container = container;
+
+        this.specialPermissionTextResolver = new SpecialPermissionTextResolver();
     }
 
     public make() {
@@ -724,7 +737,7 @@ class SpecialPermissionsSelector {
 
         var nameSpan = document.createElement("span");
         $(nameSpan).addClass("list-item-name");
-        nameSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
+        nameSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionCategoryText(type, specialPermissions);
 
         groupSpecialPermissionsLi.appendChild(nameSpan);
 
@@ -794,7 +807,7 @@ class SpecialPermissionsSelector {
 
         var textSpan = document.createElement("span");
         $(textSpan).addClass("list-item-name");
-        textSpan.innerHTML = SpecialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
+        textSpan.innerHTML = this.specialPermissionTextResolver.resolveSpecialPermissionText(type, specialPermission);
 
         specPermissionLi.appendChild(textSpan);
 

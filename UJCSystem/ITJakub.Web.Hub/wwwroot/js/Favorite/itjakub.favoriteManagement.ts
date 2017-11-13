@@ -21,6 +21,7 @@ class FavoriteManagement {
     private currentNameFilter: string;
 
     private localization : Localization;
+	private localizationScope = "FavoriteJs";
 
     constructor(favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -295,7 +296,7 @@ class FavoriteManagement {
 
         $("#remove-dialog .modal-body")
             //.text("Opravdu chcete smazat vybraný štítek (" + labelName + ")? Štítek bude smazán včetně všech přiřazených oblíbených položek.");
-            .text(this.localization.translateFormat("DeleteModalText", new Array<string>(labelName)).value);
+            .text(this.localization.translateFormat("DeleteModalText", new Array<string>(labelName), this.localizationScope).value)
 
         $("#remove-dialog .remove-button")
             .off("click")
@@ -323,7 +324,7 @@ class FavoriteManagement {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteLabel(labelId, (error) => {
             if (error) {
-                this.removeDialog.showError("Chyba při odstraňování štítku");
+                this.removeDialog.showError(this.localization.translate("DeleteTagError", this.localizationScope).value);
                 return;
             }
 
@@ -340,7 +341,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.createFavoriteLabel(name, color, (id, error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                this.newFavoriteLabelDialog.showError(this.localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -368,7 +369,7 @@ class FavoriteManagement {
         this.newFavoriteLabelDialog.showSaving();
         this.favoriteManager.updateFavoriteLabel(labelId, name, color, (error) => {
             if (error) {
-                this.newFavoriteLabelDialog.showError("Chyba při ukládání štítku");
+                this.newFavoriteLabelDialog.showError(this.localization.translate("SaveTagError", this.localizationScope).value);
                 return;
             }
 
@@ -390,10 +391,10 @@ class FavoriteManagement {
 
         var error = "";
         if (!name) {
-            error = "Nebylo zadáno jméno.";
+            error = this.localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+            error += this.localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.newFavoriteLabelDialog.showError(error);
@@ -454,6 +455,7 @@ class FavoriteManagementItem {
     private onRemoveCallback: (id: number) => void;
 
     private localization : Localization;
+    private localizationScope = "FavoriteJs";
 
     constructor(container: JQuery, type: FavoriteType, id: number, name: string, createTime: string, favoriteManager: FavoriteManager) {
         this.favoriteManager = favoriteManager;
@@ -487,7 +489,7 @@ class FavoriteManagementItem {
         var nameLink = document.createElement("a");
         var nameDiv = document.createElement("div");
         $(nameDiv)
-            .text(this.name != null && this.name !== "" ? this.name : this.localization.translate("NoName", "FavoriteJs").value)
+            .text(this.name != null && this.name !== "" ? this.name : this.localization.translate("NoName", this.localizationScope).value)
             .addClass("favorite-item-name");
         $(nameLink)
             .attr("href", getBaseUrl() + "Favorite/Favorite?id=" + this.id)
@@ -518,12 +520,12 @@ class FavoriteManagementItem {
             .append(editIcon);
         $(removeLink)
             .attr("href", "#")
-            .attr("title", this.localization.translate("DeleteFav", "FavoriteJs").value)
+            .attr("title", this.localization.translate("DeleteFav", this.localizationScope).value)
             .append(removeIconContainer)
             .click(() => {
                 $("#remove-dialog .modal-body")
                     //.text("Opravdu chcete smazat vybranou oblíbenou položku (" + this.name + ")?");
-                    .text(this.localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), "FavoriteJs").value);
+                    .text(this.localization.translateFormat("DeleteItemModalText", new Array<string>(this.name), this.localizationScope).value);
 
                 $("#remove-dialog .remove-button")
                     .off("click")
@@ -534,7 +536,7 @@ class FavoriteManagementItem {
             });
         $(editLink)
             .attr("href", "#")
-            .attr("title", "Upravit oblíbenou položku")
+            .attr("title", this.localization.translate("ModifyFavItem", this.localizationScope).value)
             .append(editIconContainer)
             .click(() => {
                 $("#favorite-item-name").val(this.name);
@@ -573,7 +575,7 @@ class FavoriteManagementItem {
         this.removeDialog.showSaving();
         this.favoriteManager.deleteFavoriteItem(this.id, (error) => {
             if (error) {
-                this.removeDialog.showError("Chyba při odstraňování položky");
+                this.removeDialog.showError(this.localization.translate("DeleteItemError", this.localizationScope).value);
                 return;
             }
 
@@ -594,7 +596,7 @@ class FavoriteManagementItem {
         this.editFavoriteDialog.showSaving();
         this.favoriteManager.updateFavoriteItem(this.id, newName, (error) => {
             if (error) {
-                this.editFavoriteDialog.showError("Chyba při ukládání položky");
+                this.editFavoriteDialog.showError(this.localization.translate("SaveItemError", this.localizationScope).value);
                 return;
             }
 
@@ -612,27 +614,27 @@ class FavoriteManagementItem {
         switch (this.type) {
             case FavoriteType.Book:
                 $(icon).addClass("glyphicon-book")
-                    .attr("title", "Kniha");
+                    .attr("title", this.localization.translate("Book", this.localizationScope).value);
                 break;
             case FavoriteType.PageBookmark:
                 $(icon).addClass("glyphicon-bookmark")
-                    .attr("title", "Záložka na stránku v knize");
+                    .attr("title", this.localization.translate("PageBookmarkInBook", this.localizationScope).value);
                 break;
             case FavoriteType.Category:
                 $(icon).addClass("glyphicon-list")
-                    .attr("title", "Kategorie");
+                    .attr("title", this.localization.translate("Category", this.localizationScope).value);
                 break;
             case FavoriteType.Query:
                 $(icon).addClass("glyphicon-search")
-                    .attr("title", "Vyhledávací dotaz");
+                    .attr("title", this.localization.translate("SearchingQuery", this.localizationScope).value);
                 break;
             case FavoriteType.BookVersion:
                 $(icon).addClass("glyphicon-tags")
-                    .attr("title", "Verze knihy");
+                    .attr("title", this.localization.translate("BookVersion", this.localizationScope).value);
                 break;
             default:
                 $(icon).addClass("glyphicon-question-sign")
-                    .attr("title", "Neznámý typ oblíbené položky");
+                    .attr("title", this.localization.translate("UnknownFavItemType", this.localizationScope).value);
                 break;
         }
         return icon;

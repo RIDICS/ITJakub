@@ -23,6 +23,7 @@
     private overrideSetQueryCallback: (text: string) => void;
 
     private localization : Localization;
+    private localizationScope = "FavoriteJs";
 
     constructor(renderContainer: JQuery, inputTextbox: JQuery, bookType: BookTypeEnum, queryType: QueryTypeEnum) {
         this.inputTextbox = inputTextbox;
@@ -134,11 +135,11 @@
             //.addClass("col-md-5")
             .addClass("favorite-query-header")
             .addClass("favorite-query-header-label")
-            .text(this.localization.translate("Filter", "FavoriteJs").value);
+            .text(this.localization.translate("Filter", this.localizationScope).value);
         $(filterInput)
             .attr("type", "text")
-            .attr("placeholder", this.localization.translate("TagName", "FavoriteJs").value)
-            .attr("title", this.localization.translate("FilterTagsByName", "FavoriteJs").value)
+            .attr("placeholder", this.localization.translate("TagName", this.localizationScope).value)
+            .attr("title", this.localization.translate("FilterTagsByName", this.localizationScope).value)
             .addClass("form-control")
             .addClass("input-sm");
         $(filterInputContainer)
@@ -156,14 +157,14 @@
             .attr("href", "#")
             .addClass("favorite-query-label")
             .data("id", 0)
-            .data("name", this.localization.translate("AllShowed", "FavoriteJs").value)
+            .data("name", this.localization.translate("AllShowed", this.localizationScope).value)
             .data("color", "#0000DD")
             .text("Zobrazit vše");
         this.displayAllLink = displayAllLink;
 
         $(noFilteredLabel)
             .addClass("text-center")
-            .text(this.localization.translate("NoTagsInFilter", "FavoriteJs").value)
+            .text(this.localization.translate("NoTagsInFilter", this.localizationScope).value)
             .hide();
         this.noFilteredLabel = noFilteredLabel;
 
@@ -181,12 +182,12 @@
         this.renderFavoriteLabels(favoriteLabels);
 
         $(listHeaderSpan)
-            .text(this.localization.translate("InsertQueryFromFav", "FavoriteJs").value);
+            .text(this.localization.translate("InsertQueryFromFav", this.localizationScope).value);
         $(listHeaderLabel)
             .addClass("label")
             .addClass("favorite-query-label-selected")
             .css("background-color", "#0000DD")
-            .text(this.localization.translate("AllShowed", "FavoriteJs").value);
+            .text(this.localization.translate("AllShowed", this.localizationScope).value);
 
         $(listHeaderContainer)
             .addClass("col-md-8")
@@ -219,12 +220,12 @@
         var noQueryDiv = document.createElement("div");
         $(noQueryDiv)
             .css("margin-left", "15px")
-            .text(this.localization.translate("NoQueryInFilter", "FavoriteJs").value)
+            .text(this.localization.translate("NoQueryInFilter", this.localizationScope).value)
             .hide();
         var noSelectedLabelDiv = document.createElement("div");
         $(noSelectedLabelDiv)
             .css("margin-left", "15px")
-            .text(this.localization.translate("ChooseTag", "FavoriteJs").value)
+            .text(this.localization.translate("ChooseTag", this.localizationScope).value)
             .hide();
         this.noQueryDiv = noQueryDiv;
         this.noSelectedLabelDiv = noSelectedLabelDiv;
@@ -264,7 +265,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonText)
-            .text(this.localization.translate("SaveCurrentQuery", "FavoriteJs").value);
+            .text(this.localization.translate("SaveCurrentQuery", this.localizationScope).value);
 
         $(saveButton)
             .addClass("btn")
@@ -451,7 +452,7 @@
         });
 
         $(".favorite-query-save-button", this.renderContainer).click(() => {
-            this.favoriteDialog.show(this.localization.translate("NewFavQuery", "FavoriteJs").value);
+            this.favoriteDialog.show(this.localization.translate("NewFavQuery", this.localizationScope).value);
         });
 
         $(this.filterLabelInput).on("change keyup paste", () => {
@@ -554,7 +555,7 @@
         var query = this.inputTextbox.val();
         this.favoriteManager.createFavoriteQuery(this.bookType, this.queryType, query, itemName, labelIds, (id, error) => {
             if (error) {
-                this.favoriteDialog.showError(this.localization.translate("CreateFavQueryError", "FavoriteJs").value);
+                this.favoriteDialog.showError(this.localization.translate("CreateFavQueryError", this.localizationScope).value);
                 return;
             }
 
@@ -567,7 +568,9 @@
 class InsertQueryDialog {
     private container: HTMLDivElement;
     private submitCallback: () => void;
+
     private localization: Localization;
+    private localizationScope = "FavoriteJs";
 
     constructor() {
         this.localization = new Localization();
@@ -587,7 +590,7 @@ class InsertQueryDialog {
 
         $(title)
             .addClass("modal-title")
-            .text(this.localization.translate("InsertQuery","FavoriteJs").value);
+            .text(this.localization.translate("InsertQuery", this.localizationScope).value);
         $(closeButton)
             .attr("type", "button")
             .attr("data-dismiss", "modal")
@@ -596,20 +599,20 @@ class InsertQueryDialog {
 
         $(body)
             .addClass("modal-body")
-            .text(this.localization.translate("ReplaceQuery", "FavoriteJs").value);
+            .text(this.localization.translate("ReplaceQuery", this.localizationScope).value);
 
         $(noButton)
             .attr("type", "button")
             .attr("data-dismiss", "modal")
             .addClass("btn")
             .addClass("btn-default")
-            .text(this.localization.translate("Close", "FavoriteJs").value);
+            .text(this.localization.translate("Close", this.localizationScope).value);
 
         $(yesButton)
             .attr("type", "button")
             .addClass("btn")
             .addClass("btn-default")
-            .text(this.localization.translate("Insert", "FavoriteJs").value)
+            .text(this.localization.translate("Insert", this.localizationScope).value)
             .click(this.onSubmitClick.bind(this));
 
         $(header)
@@ -662,6 +665,7 @@ class FilterSearchBox{
     private searchButton: HTMLButtonElement;
 
     private localization: Localization;
+    private localizationScope = "FavoriteJs";
 
     constructor() {
         this.localization = new Localization();
@@ -691,8 +695,8 @@ class FilterSearchBox{
         $(input)
             .attr("type", "text")
             .addClass("form-control")
-            .attr("placeholder", this.localization.translate("SearchQuery", "FavoriteJs").value)
-            .attr("title", this.localization.translate("SearchByName", "FavoriteJs").value);
+            .attr("placeholder", this.localization.translate("SearchQuery", this.localizationScope).value)
+            .attr("title", this.localization.translate("SearchByName", this.localizationScope).value);
         this.input = input;
 
         $(this.groupContainer)

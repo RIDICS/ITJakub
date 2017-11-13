@@ -10,12 +10,17 @@
     private selectedRadioButton: HTMLInputElement;
     private isInitialized;
     private pendingShow: boolean|string;
+
+    private localization : Localization;
+	private localizationScope = "FavoriteJs";
     
     constructor(favoriteManager: FavoriteManager, allowMultipleLabels: boolean) {
         this.allowMultipleLabels = allowMultipleLabels;
         this.favoriteManager = favoriteManager;
         this.isInitialized = false;
         this.pendingShow = false;
+
+        this.localization = new Localization();
     }
 
     public setSaveCallback(value: (data: INewFavoriteItemData) => void) {
@@ -36,8 +41,8 @@
 
     private finishInitialization() {
         var dialogHeading = this.allowMultipleLabels
-            ? "Přiřadit nové štítky k vybrané položce"
-            : "Přiřadit nový štítek k vybrané položce";
+            ? this.localization.translate("AttachNewTags", this.localizationScope).value
+            : this.localization.translate("AttachNewTag", this.localizationScope).value;
         $(".modal-title", this.container).text(dialogHeading);
 
         var saveIcon = document.createElement("span");
@@ -74,7 +79,7 @@
         var url = getBaseUrl() + "Favorite/NewFavorite?" + queryString;
 
         $(this.saveTitle)
-            .text("Potvrdit");
+            .text(this.localization.translate("Confirm", this.localizationScope).value);
         $(".modal-body", this.container)
             .addClass("loading")
             .empty();
@@ -222,13 +227,14 @@
         var newSaveTitle: string;
         switch (tabClass) {
             case "tab-favorite-label-assign":
-                newSaveTitle = this.allowMultipleLabels ? "Potvrdit přiřazení štítků" : "Potvrdit přiřazení štítku";
+                newSaveTitle = this.allowMultipleLabels ? this.localization.translate("ConfirmTagsAttachment", this.localizationScope).value : 
+                                                          this.localization.translate("ConfirmTagAttachment", this.localizationScope).value;
                 break;
             case "tab-favorite-label-create":
-                newSaveTitle = "Vytvořit a přiřadit štítek";
+                newSaveTitle = this.localization.translate("CreateAndAttachTag", this.localizationScope).value;
                 break;
             default:
-                newSaveTitle = "Uložit";
+                newSaveTitle = this.localization.translate("Save", this.localizationScope).value;
         }
         $(this.saveTitle).text(newSaveTitle);
     }
@@ -283,7 +289,7 @@
             $(emptyLabel)
                 .addClass("label")
                 .addClass("label-default")
-                .text("Žádný štítek");
+                .text(this.localization.translate("NoTag", this.localizationScope).value);
             $(".favorite-selected-label-info", this.container)
                 .append(emptyLabel);
         } else {
@@ -315,10 +321,10 @@
 
         var error = "";
         if (!labelName) {
-            error = "Nebylo zadáno jméno.";
+            error = this.localization.translate("MissingName", this.localizationScope).value;
         }
         if (!FavoriteHelper.isValidHexColor(color)) {
-            error += " Nesprávný formát barvy (požadovaný formát: #000000).";
+            error += this.localization.translate("IncorrectColorFormat", this.localizationScope).value;
         }
         if (error.length > 0) {
             this.showError(error);
@@ -327,7 +333,7 @@
 
         this.favoriteManager.createFavoriteLabel(labelName, color, (id, error) => {
             if (error) {
-                this.showError("Chyba při vytváření nového štítku");
+                this.showError(this.localization.translate("CreateNewTagError", this.localizationScope).value);
                 return;
             }
 

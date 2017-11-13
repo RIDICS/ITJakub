@@ -1,6 +1,13 @@
 ﻿class NewFavoriteNotification {
     private container: HTMLDivElement;
 
+    private localization : Localization;
+    private localizationScope = "FavoriteJs";
+    
+    constructor() {
+        this.localization = new Localization();
+    }
+
     public show() {
         var $container = $("#favorite-change-notification");
         if ($container.length > 0) {
@@ -21,8 +28,8 @@
         var closeButton = document.createElement("a");
         var closeButtonContent = document.createElement("span");
         
-        $(info).text("Přiřazené štítky se změnily. Pro správné zobrazení štítků je nutné načíst tuto stránku znovu. ");
-        $(refreshLink).text("Načíst stránku znovu.")
+        $(info).text(this.localization.translate("TagsChangedPleaseReload", this.localizationScope).value);
+        $(refreshLink).text(this.localization.translate("ReloadPageAgain", this.localizationScope).value)
             .attr("href", "#")
             .click(() => {
                 location.reload();
@@ -33,7 +40,7 @@
         $(closeButton)
             .addClass("close")
             .attr("type", "button")
-            .attr("title", "Skrýt")
+            .attr("title", this.localization.translate("Hide", this.localizationScope).value)
             .append(closeButtonContent)
             .click(() => {
                 $(this.container).hide();

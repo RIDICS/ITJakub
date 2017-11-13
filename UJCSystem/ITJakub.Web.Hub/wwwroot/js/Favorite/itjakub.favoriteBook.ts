@@ -7,6 +7,7 @@
     private loading: boolean;
 
     private localization : Localization;
+	private localizationScope = "FavoriteJs";
 
     constructor(container: JQuery, bookType: BookTypeEnum, dropdownSelect: DropDownSelect2) {
         this.dropdownSelect = dropdownSelect;
@@ -28,7 +29,7 @@
             .addClass("glyphicon")
             .addClass("glyphicon-star-empty");
         $(buttonContentSpan)
-            .text(this.localization.translate("ChooseFav", "FavoriteJs").value);
+            .text(this.localization.translate("ChooseFav", this.localizationScope).value);
         $(headerButton)
             .attr("type", "button")
             .addClass("favorite-book-select-button")
@@ -105,7 +106,7 @@
                 var emptyDiv = document.createElement("div");
                 $(emptyDiv)
                     .addClass("text-center")
-                    .text(this.localization.translate("NoTagsHasFav", "FavoriteJs").value);
+                    .text(this.localization.translate("NoTagsHasFav", this.localizationScope).value);
                 this.bodyDiv.appendChild(emptyDiv);
             }
 
