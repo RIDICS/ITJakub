@@ -106,7 +106,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/TextSearchInBookPagesWithMatchHit",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -136,7 +136,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "Editions/Editions/AdvancedSearchInBookPagesWithMatchHit",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {

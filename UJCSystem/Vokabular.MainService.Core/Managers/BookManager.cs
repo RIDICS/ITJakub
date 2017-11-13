@@ -14,6 +14,7 @@ using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -740,20 +741,34 @@ namespace Vokabular.MainService.Core.Managers
             IList<PageResource> pagesByFulltext = null;
             if (fulltextConditions.Count > 0)
             {
-                // TODO filter pages by fulltext conditions
-                throw new NotImplementedException();
+                var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
+                
+                var fulltextStorage = GetFulltextStorage();
+                var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
+
+                switch (fulltextResult.SearchResultType)
+                {
+                    case PageSearchResultType.TextId:
+                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextVersionId(fulltextResult.LongList));
+                        break;
+                    case PageSearchResultType.TextExternalId:
+                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
             IList<PageResource> resultPages = null;
-            if (termConditions.Count > 0 && fulltextConditions.Count > 0)
+            if (pagesByMetadata != null && pagesByFulltext != null)
             {
-                // TODO intersect results
+                resultPages = pagesByMetadata.Intersect(pagesByFulltext).ToList();
             }
-            else if (fulltextConditions.Count > 0)
+            else if (pagesByFulltext != null)
             {
                 resultPages = pagesByFulltext;
             }
-            else if (termConditions.Count > 0)
+            else if (pagesByMetadata != null)
             {
                 resultPages = pagesByMetadata;
             }

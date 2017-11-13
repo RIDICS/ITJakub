@@ -1239,7 +1239,7 @@
         return this.searchPanel;
     }
 
-    showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<PageDescription>) {
+    showSearchResultInPages(searchQuery: string, isQueryJson: boolean, pages: Array<IPage>) {
         this.textPanel.setSearchedQuery(searchQuery, isQueryJson);
         $(".search-unloaded").removeClass(".search-unloaded");
         var previousSearchPages = $(".search-loaded");
@@ -1247,7 +1247,7 @@
         $(previousSearchPages).addClass("unloaded");
         for (var i = 0; i < pages.length; i++) {
             var page = pages[i];
-            var pageDiv = document.getElementById(page.pageId.toString());
+            var pageDiv = document.getElementById(page.id.toString());
             $(pageDiv).addClass("search-unloaded");
         }
         this.moveToPageNumber(this.actualPageIndex, true);

@@ -17,6 +17,28 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
+        public virtual ProjectIdentificationResult GetProjectIdentification(long projectId)
+        {
+            ProjectIdentificationResult resultAlias = null;
+            Snapshot snapshotAlias = null;
+            BookVersionResource bookVersionResourceAlias = null;
+
+            var dbResult = GetSession().QueryOver<Project>()
+                .JoinAlias(x => x.LatestPublishedSnapshot, () => snapshotAlias)
+                .JoinAlias(() => snapshotAlias.BookVersion, () => bookVersionResourceAlias)
+                .SelectList(list => list
+                    .Select(x => x.Id).WithAlias(() => resultAlias.ProjectId)
+                    .Select(x => x.ExternalId).WithAlias(() => resultAlias.ProjectExternalId)
+                    .Select(() => snapshotAlias.Id).WithAlias(() => resultAlias.SnapshotId)
+                    .Select(() => bookVersionResourceAlias.ExternalId).WithAlias(() => resultAlias.BookVersionExternalId)
+                )
+                .Where(x => x.Id == projectId)
+                .TransformUsing(Transformers.AliasToBean<ProjectIdentificationResult>())
+                .SingleOrDefault<ProjectIdentificationResult>();
+
+            return dbResult;
+        }
+
         public virtual IList<AudioResource> GetFullBookRecordings(IEnumerable<long> projectIdList)
         {
             Resource resourceAlias = null;
@@ -338,6 +360,46 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .And(() => bookTypeAlias.Type == bookType)
                 .Select(Projections.Distinct(Projections.Property(() => projectAlias.Id)))
                 .List<long>();
+        }
+
+        public virtual IList<PageResource> GetPagesByTextVersionId(IList<long> textVersionIds)
+        {
+            Resource resourceAlias = null;
+
+            var subquery = QueryOver.Of<TextResource>()
+                .WhereRestrictionOn(x => x.Id).IsInG(textVersionIds)
+                .Select(x => x.ResourcePage.Id);
+
+            var pageResourceIds = GetSession().QueryOver<PageResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Fetch(x => x.Resource).Eager
+                .OrderBy(x => x.Position).Asc
+                .WithSubquery
+                .WhereProperty(() => resourceAlias.Id).In(subquery)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
+
+            return pageResourceIds;
+        }
+
+        public IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds)
+        {
+            Resource resourceAlias = null;
+
+            var subquery = QueryOver.Of<TextResource>()
+                .WhereRestrictionOn(x => x.ExternalId).IsInG(textExternalIds)
+                .Select(x => x.ResourcePage.Id);
+
+            var pageResourceIds = GetSession().QueryOver<PageResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .Fetch(x => x.Resource).Eager
+                .OrderBy(x => x.Position).Asc
+                .WithSubquery
+                .WhereProperty(() => resourceAlias.Id).In(subquery)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
+
+            return pageResourceIds;
         }
     }
 }

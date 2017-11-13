@@ -142,5 +142,22 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 };
             }
         }
+
+        public PageSearchResultData SearchPageByCriteria(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, new List<ProjectIdentificationResult> {project});
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.GetSearchEditionsPageList(criteria);
+                var projectIds = dbResult.PageList.Select(x => x.PageXmlId).ToList();
+
+                return new PageSearchResultData
+                {
+                    StringList = projectIds,
+                    SearchResultType = PageSearchResultType.TextExternalId,
+                };
+            }
+        }
     }
 }

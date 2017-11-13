@@ -58,5 +58,10 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
             throw new System.NotImplementedException();
         }
+
+        public PageSearchResultData SearchPageByCriteria(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
