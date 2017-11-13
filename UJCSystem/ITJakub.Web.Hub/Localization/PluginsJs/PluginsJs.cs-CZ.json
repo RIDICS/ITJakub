@@ -117,12 +117,12 @@
 		"DeleteFile" : "Odstranit soubor",
 		"CannotUploadMoreFiles" : "Nelze nahrát žádné další soubory.",
 		
-		"" : "",
-		"" : "",
-		"" : "",
-		"" : ""
+		"WebUseCookies" : "Tento web používá cookies.",
+		"CookieInfo" : "Tyto stránky používají soubory cookies s cílem zajistit uživatelům lepší internetový zážitek a dále také zlepšit výkonnost a funkčnost stránek. Používáním těchto webových stránek souhlasíte s použitím souborů cookie.",
+		"Continue" : "Pokračovat",
+		"LearnMore" : "Zjistit více",
 		
+		"TitleSearchBox" : "Název"
 
-		
 		}
 }
