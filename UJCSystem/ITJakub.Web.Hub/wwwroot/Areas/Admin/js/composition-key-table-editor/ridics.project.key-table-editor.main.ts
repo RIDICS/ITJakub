@@ -14,7 +14,6 @@ class KeyTableEditorMain {
 
     init() {
         this.switchOnClick();
-        this.viewManager.loadEditor(KeyTableEditorType.Genre);
     }
 
     private switchOnClick() {
