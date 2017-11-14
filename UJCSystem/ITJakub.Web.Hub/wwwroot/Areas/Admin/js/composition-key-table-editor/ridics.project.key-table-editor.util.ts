@@ -45,4 +45,24 @@
             contentType: "application/json; charset=UTF-8"
         });
     }
+
+    getLitararyGenreList() {
+        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLitararyGenreList`);
+        return ajax;
+    }
+
+    getLitararyKindList() {
+        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLiteraryKindList`);
+        return ajax;
+    }
+
+    getCategoryList() {
+        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetCategoryList`);
+        return ajax;
+    }
+
+    getLitararyOriginalList() {
+        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLiteraryKindList`);
+        return ajax;
+    }
 }

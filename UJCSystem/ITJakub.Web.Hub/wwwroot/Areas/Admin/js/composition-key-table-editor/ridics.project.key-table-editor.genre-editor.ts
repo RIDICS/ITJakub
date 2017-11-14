@@ -1,18 +1,16 @@
 ﻿class KeyTableGenreEditor {
-    private readonly commonUtil: EditorsUtil;
     private readonly util: KeyTableViewManager;
     private readonly gui: EditorsGui;
     private genreItemList: IGenreResponseContract[];
     private numberOfItemsPerPage = 28;
 
     constructor() {
-        this.commonUtil = new EditorsUtil();//TODO move everything related to own util
         this.util = new KeyTableViewManager();
         this.gui = new EditorsGui();
     }
 
     init() {
-        this.commonUtil.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
+        this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             console.log(data);
             const itemsOnPage = this.numberOfItemsPerPage;
@@ -56,7 +54,8 @@
         var elm = "";
         elm += listStart;
         for (let i = 0; i < genreItemList.length; i++) {
-            const listItemStart = `<li class="ui-widget-content page-list-item" data-genre-id="${genreItemList[i].id}">`;
+            const listItemStart =
+                `<li class="ui-widget-content page-list-item" data-genre-id="${genreItemList[i].id}">`;
             elm += listItemStart;
             elm += genreItemList[i].name;
             elm += listItemEnd;
@@ -72,53 +71,62 @@
     }
 
     private genreCreation() {
-        $(".crud-buttons-div").on("click", ".create-new-genre", () => {
-            this.gui.showInputDialog("Name input", "Please input new genre name:");
-            $(".info-dialog-ok-button").on("click", () => {
-                const textareaEl = $(".input-dialog-textarea");
-                const genreString = textareaEl.val();
-                const newGenreAjax = this.util.createNewGenre(genreString);
-                newGenreAjax.done(() => {
-                    textareaEl.val("");
-                    this.gui.showInfoDialog("Success", "New genre has been created");
-                    $(".info-dialog-ok-button").off();
-                });
-                newGenreAjax.fail(() => {
-                    this.gui.showInfoDialog("Error", "New genre has not been created");
-                    $(".info-dialog-ok-button").off();
-                });
+        $(".crud-buttons-div").on("click",
+            ".create-new-genre",
+            () => {
+                this.gui.showInputDialog("Name input", "Please input new genre name:");
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        const genreString = textareaEl.val();
+                        const newGenreAjax = this.util.createNewGenre(genreString);
+                        newGenreAjax.done(() => {
+                            textareaEl.val("");
+                            this.gui.showInfoDialog("Success", "New genre has been created");
+                            $(".info-dialog-ok-button").off();
+                        });
+                        newGenreAjax.fail(() => {
+                            this.gui.showInfoDialog("Error", "New genre has not been created");
+                            $(".info-dialog-ok-button").off();
+                        });
+                    });
             });
-        });
     }
 
     private genreRename() {
-        $(".crud-buttons-div").on("click", ".rename-genre", () => {
-            this.gui.showInputDialog("Name input", "Please input genre name after rename:");
-            $(".info-dialog-ok-button").on("click", () => {
-                const textareaEl = $(".input-dialog-textarea");
-                const genreString = textareaEl.val();
-                const selectedPageEl = $(".page-list").children(".ui-selected");
-                if (selectedPageEl.length) {
-                    const id = selectedPageEl.data("genre-id") as number;
-                    console.log(id);
-                    const renameAjax = this.util.renameGenre(genreString, id);
-                    renameAjax.done(() => {
-                        textareaEl.val("");
-                        this.gui.showInfoDialog("Success", "Genre has been renamed");
-                        $(".info-dialog-ok-button").off();
+        $(".crud-buttons-div").on("click",
+            ".rename-genre",
+            () => {
+                this.gui.showInputDialog("Name input", "Please input genre name after rename:");
+                $(".info-dialog-ok-button").on("click",
+                    () => {
+                        const textareaEl = $(".input-dialog-textarea");
+                        const genreString = textareaEl.val();
+                        const selectedPageEl = $(".page-list").children(".ui-selected");
+                        if (selectedPageEl.length) {
+                            const id = selectedPageEl.data("genre-id") as number;
+                            console.log(id);
+                            const renameAjax = this.util.renameGenre(genreString, id);
+                            renameAjax.done(() => {
+                                textareaEl.val("");
+                                this.gui.showInfoDialog("Success", "Genre has been renamed");
+                                $(".info-dialog-ok-button").off();
+                            });
+                            renameAjax.fail(() => {
+                                this.gui.showInfoDialog("Error", "Genre has not been renamed");
+                                $(".info-dialog-ok-button").off();
+                            });
+                        }
                     });
-                    renameAjax.fail(() => {
-                        this.gui.showInfoDialog("Error", "Genre has not been renamed");
-                        $(".info-dialog-ok-button").off();
-                    });
-                }
             });
-        });
     }
+
     private genreDelete() {
-        $(".crud-buttons-div").on("click", ".delete-genre", () => {
-            this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
-            //TODO add logic on ok button
-        });
+        $(".crud-buttons-div").on("click",
+            ".delete-genre",
+            () => {
+                this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
+                //TODO add logic on ok button
+            });
     }
 }

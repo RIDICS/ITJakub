@@ -1,8 +1,8 @@
 ﻿class KeyTableKindEditor {
-    private readonly util: EditorsUtil;
+    private readonly util: KeyTableViewManager;
 
     constructor() {
-        this.util = new EditorsUtil();
+        this.util = new KeyTableViewManager();
     }
 
     init() {

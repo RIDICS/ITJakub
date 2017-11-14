@@ -128,24 +128,4 @@
             noteRequest);
         return ajax;
     }
-
-    getLitararyGenreList() {
-        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetLitararyGenreList`);
-        return ajax;
-    }
-
-    getLitararyKindList() {
-        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetLiteraryKindList`);
-        return ajax;
-    }
-
-    getCategoryList() {
-        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetCategoryList`);
-        return ajax;
-    }
-
-    getLitararyOriginalList() {
-        const ajax = $.get(`${this.serverPath}Admin/ContentEditor/GetLiteraryKindList`);
-        return ajax;
-    }
 }
