@@ -476,7 +476,6 @@ table {
         height: 90%;
 
         .selectable-list-div {
-            list-style-type: none;
             height: inherit;
 
             .ui-selected {
@@ -487,6 +486,13 @@ table {
             .ui-selecting {
                 background: @page-list-element-selecting-color;
                 color: white;
+            }
+
+            .page-list {
+                list-style-type: none;
+                &-item{
+                    min-height:20px;
+                }
             }
         }
     }
