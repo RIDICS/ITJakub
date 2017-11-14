@@ -1,41 +1,38 @@
-﻿using Vokabular.FulltextService.Core.Communication;
+﻿using System;
+using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.DataContracts.Contracts;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
-    public class TextResourceManager
+    public class TextResourceManager : ElasticsearchManagerBase
     {
-        private const string Index = "module"; //TODO rename index and type
-        private const string Type = "page";
-        private readonly CommunicationProvider m_communicationProvider;
-
-        public TextResourceManager(CommunicationProvider communicationProvider)
-        {
-            m_communicationProvider = communicationProvider;
-        }
+        public TextResourceManager(CommunicationProvider communicationProvider) : base(communicationProvider)
+        {}
 
         public TextResourceContract GetTextResource(string textResourceId)
         {
-            var client = m_communicationProvider.GetElasticClient();
-            var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(Index).Type(Type));
-            if (response.OriginalException != null)
+            var client = CommunicationProvider.GetElasticClient();
+            var response = client.Get<TextResourceContract>(textResourceId, idx => idx.Index(Index).Type(PageType));
+            if (!response.IsValid)
             {
-                throw response.OriginalException;
+                throw new Exception(response.DebugInformation);
             }
             return response.Source;
         }
 
         public ResultContract CreateTextResource(TextResourceContract textResource)
         {
-            var client = m_communicationProvider.GetElasticClient();
-            var response = client.Index(textResource, idx => idx.Index(Index).Type(Type));
+            var client = CommunicationProvider.GetElasticClient();
+            var response = client.Index(textResource, idx => idx.Index(Index).Type(PageType));
+
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+
             if (response.Created)
             {
                 return new ResultContract {Id = response.Id};
-            }
-            if (response.OriginalException != null)
-            {
-                throw response.OriginalException;
             }
             return new ResultContract {Id = null};
         }

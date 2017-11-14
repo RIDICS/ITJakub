@@ -2,7 +2,7 @@
 {
     public class SnapshotResourceContract
     {
-        public long ProjectId { get; set; }
+        public long SnapshotId { get; set; }
         public string Text { get; set; }
     }
 }

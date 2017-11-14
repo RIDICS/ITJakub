@@ -65,9 +65,9 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             }
         }
 
-        public void CreateSnapshot(long projectId, List<string> pageIds)
+        public void CreateSnapshot(long snapshotId, List<string> pageIds)
         {
-            var snapshotResource = new SnapshotPageIdsResourceContract { PageIds = pageIds, ProjectId = projectId};
+            var snapshotResource = new SnapshotPageIdsResourceContract { PageIds = pageIds, SnapshotId = snapshotId};
 
             try
             {
@@ -88,7 +88,7 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase { ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"search", searchRequest);
+                var result = Post<FulltextSearchResultContract>($"search/snapshot", searchRequest);
                 return result;
 
             }
@@ -106,7 +106,24 @@ namespace Vokabular.FulltextService.DataContracts.Clients
             var searchRequest = new SearchRequestContractBase {ConditionConjunction = searchCriterias};
             try
             {
-                var result = Post<FulltextSearchResultContract>($"search/count", searchRequest);
+                var result = Post<FulltextSearchResultContract>($"search/snapshot/count", searchRequest);
+                return result;
+
+            }
+            catch (HttpRequestException e)
+            {
+                if (Logger.IsErrorEnabled())
+                    Logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public TextResourceContract GetTextResourceFromSearch(string resourceId, TextFormatEnumContract format, SearchPageRequestContract searchRequest)
+        {
+            try
+            {
+                var result = Post<TextResourceContract>($"search/page/{resourceId}?formatValue={format}", searchRequest);
                 return result;
 
             }

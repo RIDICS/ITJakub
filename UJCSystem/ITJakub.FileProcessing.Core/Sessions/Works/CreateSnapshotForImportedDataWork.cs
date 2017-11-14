@@ -18,6 +18,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly BookData m_bookData;
         private readonly string m_comment;
         private readonly long m_bookVersionId;
+        private long m_snapshotId;
 
         public CreateSnapshotForImportedDataWork(ProjectRepository projectRepository, long projectId, int userId, IList<long> resourceVersionIds, BookData bookData, string comment, long bookVersionId) : base(projectRepository)
         {
@@ -61,6 +62,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
 
             project.LatestPublishedSnapshot = newDbSnapshot;
             m_projectRepository.Update(project);
+            m_snapshotId = newDbSnapshot.VersionNumber;
         }
 
         private List<BookType> CreateBookTypes()
@@ -145,6 +147,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
                 default:
                     throw new ArgumentOutOfRangeException(nameof(xmlId), xmlId, "Unknown XML ID of category");
             }
+        }
+
+        public long SnapshotId
+        {
+            get { return m_snapshotId; }
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Vokabular.FulltextService.DataContracts.Contracts
 {
     public class SnapshotPageIdsResourceContract
     {
-        public long ProjectId { get; set; }
+        public long SnapshotId { get; set; }
         public List<string> PageIds { get; set; }
 
     }

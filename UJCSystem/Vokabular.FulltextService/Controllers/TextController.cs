@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Vokabular.FulltextService.Core.Helpers;
+using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.FulltextService.Core.Managers;
-using Vokabular.FulltextService.Core.Managers.Markdown;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
 using Vokabular.Shared.DataContracts.Types;
@@ -14,31 +15,20 @@ namespace Vokabular.FulltextService.Controllers
     {
         private static readonly ILogger Logger = ApplicationLogging.CreateLogger<TextController>();
         private readonly TextResourceManager m_textResourceManager;
-        private readonly IMarkdownToHtmlConverter m_markdownToHtmlConverter;
+        private readonly ITextConverter m_textConverter;
 
-        public TextController(TextResourceManager textResourceManager, IMarkdownToHtmlConverter markdownToHtmlConverter)
+        public TextController(TextResourceManager textResourceManager, ITextConverter textConverter)
         {
             m_textResourceManager = textResourceManager;
-            m_markdownToHtmlConverter = markdownToHtmlConverter;
+            m_textConverter = textConverter;
         }
 
         [HttpGet("{textResourceId}")]
         public TextResourceContract GetTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue)
         {
             var textResource = m_textResourceManager.GetTextResource(textResourceId);
+            textResource.Text = m_textConverter.Convert(textResource.Text, formatValue);
             
-            switch (formatValue)
-            {
-                case TextFormatEnumContract.Raw:
-                    break;
-                case TextFormatEnumContract.Html:
-                    textResource.Text = m_markdownToHtmlConverter.ConvertToHtml(textResource.Text);
-                    break;
-                case TextFormatEnumContract.Rtf:
-                    throw new NotSupportedException();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(formatValue), formatValue, null);
-            }
             return textResource;
         }
 

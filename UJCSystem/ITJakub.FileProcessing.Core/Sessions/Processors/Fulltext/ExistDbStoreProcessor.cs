@@ -47,7 +47,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             }
         }
 
-        public void PublishSnapshot(long projectId, List<string> externalPageIds)
+        public void PublishSnapshot(long snapshotId, List<string> externalPageIds)
         {
             // Snapshots are not supported in eXistDB storage, uploaded book version is directly published
         }

@@ -13,6 +13,6 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
 
         void UploadBibliographyFile(VersionResourceUploadContract resourceUploadContract);
 
-        void PublishSnapshot(long projectId, List<string> externalPageIds);
+        void PublishSnapshot(long snapshotId, List<string> externalPageIds);
     }
 }

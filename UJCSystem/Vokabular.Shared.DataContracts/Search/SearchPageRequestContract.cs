@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Utils;
 
-namespace Vokabular.MainService.DataContracts.Contracts.Search
+namespace Vokabular.Shared.DataContracts.Search
 {
     public class SearchPageRequestContract
     {

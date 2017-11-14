@@ -23,15 +23,23 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public string GetPageText(TextResource textResource, TextFormatEnumContract format)
         {
-            throw new System.NotImplementedException();
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.GetTextResource(textResource.ExternalId, format);
+                return result.Text;
+            }
         }
 
         public string GetPageTextFromSearch(TextResource textResource, TextFormatEnumContract format,
             SearchPageRequestContract searchRequest)
         {
-            throw new System.NotImplementedException();
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.GetTextResourceFromSearch(textResource.ExternalId, format, searchRequest);
+                return result.Text;
+            }
         }
-
+    
         public string GetHeadwordText(HeadwordResource headwordResource, TextFormatEnumContract format)
         {
             throw new System.NotImplementedException();
@@ -56,7 +64,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public long SearchByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
-            return 10;//TODO mock
+            
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.SearchByCriteriaCount(criteria);

@@ -1,6 +1,7 @@
 ﻿using Vokabular.FulltextService.Core.Communication;
+using Vokabular.FulltextService.Core.Helpers;
+using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.FulltextService.Core.Managers;
-using Vokabular.FulltextService.Core.Managers.Markdown;
 using Vokabular.Shared.Container;
 
 namespace Vokabular.FulltextService.Core
@@ -16,6 +17,7 @@ namespace Vokabular.FulltextService.Core
             container.AddPerWebRequest<SearchManager>();
 
             container.AddPerWebRequest<IMarkdownToHtmlConverter, MarkdigMarkdownToHtmlConverter>();
+            container.AddPerWebRequest<ITextConverter, TextConverter>();
         }
     }
 }

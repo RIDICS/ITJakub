@@ -22,16 +22,16 @@ namespace Vokabular.FulltextService.Controllers
         }
 
         [HttpPost]
-        public ResultContract CreateSnapshot([FromBody] SnapshotPageIdsResourceContract snapshotResourceContract)
+        public ResultContract CreateSnapshot([FromBody] SnapshotPageIdsResourceContract snapshotPageIdsResourceContract)
         {
             StringBuilder builder = new StringBuilder();
-            foreach (var pageId in snapshotResourceContract.PageIds)
+            foreach (var pageId in snapshotPageIdsResourceContract.PageIds)
             {
                 var textResource = m_textResourceManager.GetTextResource(pageId);
                 builder.Append(textResource.Text);
             }
-            var snapShot = new SnapshotResourceContract{ProjectId = snapshotResourceContract.ProjectId, Text = builder.ToString()};
-            var result = m_snapshotResourceManager.CreateSnapshotResource(snapShot);
+            var snapShotResource = new SnapshotResourceContract{SnapshotId = snapshotPageIdsResourceContract.SnapshotId, Text = builder.ToString()};
+            var result = m_snapshotResourceManager.CreateSnapshotResource(snapShotResource);
             return result;
 
         }

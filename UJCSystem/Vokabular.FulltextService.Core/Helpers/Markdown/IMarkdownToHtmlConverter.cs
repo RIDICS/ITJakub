@@ -1,4 +1,4 @@
-﻿namespace Vokabular.FulltextService.Core.Managers.Markdown
+﻿namespace Vokabular.FulltextService.Core.Helpers.Markdown
 {
     public interface IMarkdownToHtmlConverter
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
-using Vokabular.MainService.DataContracts.Contracts.Search;
+using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 

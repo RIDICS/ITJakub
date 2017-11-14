@@ -1,58 +1,73 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
-    public class SearchManager
+    public class SearchManager : ElasticsearchManagerBase
     {
-        private const string Index = "module"; //TODO rename index and type
-        private const string Type = "snapshot";
+        public SearchManager(CommunicationProvider communicationProvider) : base(communicationProvider){}
 
-        private readonly CommunicationProvider m_communicationProvider;
-
-        public SearchManager(CommunicationProvider communicationProvider)
+   
+        public FulltextSearchResultContract SearchByCriteriaCount(SearchRequestContractBase searchRequest)
         {
-            m_communicationProvider = communicationProvider;
-        }
+            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
+            var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
 
+            var client = CommunicationProvider.GetElasticClient();
+            var response = client.Count<SnapshotResourceContract>(s => s
+                .Index(Index)
+                .Type(SnapshotType)
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery.ToArray())
+                    )
+                )
+            );
 
-        public FulltextSearchResultContract SearchByCriteria(List<string> searchCriterias, List<long> projectIdList)
-        {
-            var client = m_communicationProvider.GetElasticClient();
-            var queryContainer = new QueryContainer();
-            foreach (var searchCriteria in searchCriterias)
+            if (!response.IsValid)
             {
-                queryContainer |= new MatchPhraseQuery
-                {
-                    Field = "Text",
-                    Query = searchCriteria
-                };
-                
+                throw new Exception(response.DebugInformation);
             }
+
+            return new FulltextSearchResultContract{Count = response.Count};
+        }
+        public FulltextSearchResultContract SearchByCriteria(SearchRequestContractBase searchRequest)
+        {
+            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
+            var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
+            
+            var client = CommunicationProvider.GetElasticClient();
             var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(Index)
-                .Type(Type)
+                .Type(SnapshotType)
+                .From(searchRequest.Start ?? 0)
+                .Size(searchRequest.Count ?? 10)
                 .Source(sf => sf
                     .Includes(i => i
                         .Fields(
-                            f => f.ProjectId
+                            f => f.SnapshotId
                         )
                     )
                 )
                 .Query(q => q
                     .Bool(b => b
-                        .Filter(f => f.Terms(m => m.Field(fi => fi.ProjectId).Terms(projectIdList)))
-                        .Should(queryContainer)
+                        .Filter(filterQuery)
+                        .Must(mustQuery.ToArray())
                     )
                 )
+                
             );
+            
             if (!response.IsValid)
             {
                 throw new Exception(response.DebugInformation);
@@ -61,66 +76,167 @@ namespace Vokabular.FulltextService.Core.Managers
             result.ProjectIds = new List<long>();
 
             foreach (var document in response.Documents)
-                result.ProjectIds.Add(document.ProjectId);
+                result.ProjectIds.Add(document.SnapshotId);
 
             return result;
         }
 
-        /*public FulltextSearchResultContract SearchByCriteria(SearchRequestContractBase searchRequest)
+        private QueryContainer GetFilterSearchQueryFromRequest(SearchRequestContractBase searchRequest)
         {
-            var snapshotIdFilter = GetSnapshotIdFilterFromRequest(searchRequest);
-            List<string> wordList = new List<string>();
-            
-            foreach (var searchCriteria in searchRequest.ConditionConjunction)
-            {
-                switch (searchCriteria.Key)
-                {
-                    case CriteriaKey.Fulltext:
-                        var worldListCriteria = searchCriteria as WordListCriteriaContract;
-                        if (worldListCriteria == null)
-                            continue;
-                        foreach (var disjunction in worldListCriteria.Disjunctions)
-                        {
-                            foreach (var contain in disjunction.Contains)
-                            {
-                                wordList.Add(contain);
-                            }
-                        }
-                        break;
-                    
-                }
-            }
+            var filterQueries = GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.FilterQuery);
+            return filterQueries.FirstOrDefault();
         }
 
-        /*private QueryContainer GetSearchQueryFromRequest(SearchRequestContract searchRequest)
+        private IEnumerable<QueryContainer> GetMustSearchQueryFromRequest(SearchRequestContractBase searchRequest)
         {
-            
+            return GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.SearchQuery);
         }
-        */
-        private QueryContainer GetSnapshotIdFilterFromRequest(SearchRequestContractBase searchRequest)
+
+        private IEnumerable<QueryContainer> GetHighlightQueryFromRequest(SearchPageRequestContract searchRequest)
         {
-            var snapshotIdList = new List<long>();
-            foreach (var criteriaContract in searchRequest.ConditionConjunction)
+            return GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.HighlightQuery);
+        }
+        private IEnumerable<QueryContainer> GetQueriesFromRequest(IList<SearchCriteriaContract> conditionConjunction, QueryType queryType)
+        {
+            var queryList = new List<QueryContainer>();
+            var minimumShouldMatch = queryType == QueryType.SearchQuery ? 1 : 0;
+            foreach (var criteriaContract in conditionConjunction)
             {
-                if (criteriaContract.Key != CriteriaKey.SnapshotResultRestriction)
+                if (queryType == QueryType.FilterQuery && criteriaContract.Key == CriteriaKey.SnapshotResultRestriction)
                 {
-                    continue;
-                }
-                var resultRestrictionCriteria = criteriaContract as SnapshotResultRestrictionCriteriaContract;
-                if (resultRestrictionCriteria == null)
+                    var snapshotIdFilterQuery = GetSnapshotIdFilterQueryFromCriteria(criteriaContract as SnapshotResultRestrictionCriteriaContract);
+                    if (snapshotIdFilterQuery != null)
+                    {
+                        queryList.Add(snapshotIdFilterQuery);
+                    }
+                }else if ((queryType == QueryType.SearchQuery || queryType == QueryType.HighlightQuery) && criteriaContract.Key == CriteriaKey.Fulltext)
                 {
-                    continue;
+                    var query = GetShouldQuery(criteriaContract as WordListCriteriaContract, minimumShouldMatch);
+                    if (query != null)
+                    {
+                        queryList.Add(query);
+                    }
                 }
-                snapshotIdList.AddRange(resultRestrictionCriteria.SnapshotIds);
             }
 
-            QueryContainer queryContainer = new QueryContainer(new TermsQuery
+            return queryList;
+        }
+
+        private BoolQuery GetShouldQuery(WordListCriteriaContract worldListCriteriaContract, int minimumShouldMatch = 1)
+        {
+            if (worldListCriteriaContract == null)
             {
-                Field = "ProjectId",
-                Terms = snapshotIdList.Select(x => (object)x), //HACK long to object
+                return null;
+            }
+
+            var shouldQueriesList = new List<QueryContainer>();
+            foreach (var disjunction in worldListCriteriaContract.Disjunctions)
+            {
+                shouldQueriesList.Add(new RegexpQuery
+                {
+                    Field = TextField,
+                    Value = GetRegexpFromDisjunction(disjunction),
+                    Flags = RegexpQueryFlags,
+                });
+            }
+
+            return new BoolQuery
+            {
+                Should = shouldQueriesList,
+                MinimumShouldMatch = minimumShouldMatch,
+            };
+        }
+
+        private string GetRegexpFromDisjunction(WordCriteriaContract disjunction)
+        {
+            if (!string.IsNullOrWhiteSpace(disjunction.ExactMatch))
+            {
+                return disjunction.ExactMatch;
+            }
+
+            var regexpBuilder = new StringBuilder();
+
+            if (!string.IsNullOrWhiteSpace(disjunction.StartsWith))
+            {
+                regexpBuilder.Append(disjunction.StartsWith.ToLower());
+            }
+
+            regexpBuilder.Append(".*");
+
+            foreach (var contain in disjunction.Contains)
+            {
+                if (!string.IsNullOrWhiteSpace(contain))
+                {
+                    regexpBuilder.Append(contain.ToLower());
+                    regexpBuilder.Append(".*");
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(disjunction.EndsWith))
+            {
+                regexpBuilder.Append(disjunction.EndsWith.ToLower());
+            }
+
+            return regexpBuilder.ToString();
+        }
+
+        private QueryContainer GetSnapshotIdFilterQueryFromCriteria(SnapshotResultRestrictionCriteriaContract resultRestrictionCriteria)
+        {
+            return resultRestrictionCriteria == null ? null :
+            new QueryContainer(new TermsQuery
+            {
+                Field = SnapshotIdField,
+                Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object)id), //HACK long to object
             });
-
-            return queryContainer;
         }
+
+        public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
+        {
+            var query = GetHighlightQueryFromRequest(searchRequest);
+
+            var client = CommunicationProvider.GetElasticClient();
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(Index)
+                .Type(SnapshotType)
+                .Source(sf => sf
+                    .Includes(i => i
+                        .Fields(
+                            f => f.Text
+                        )
+                    )
+                )
+                .Query(q => q
+                    .Bool(b => b
+                        .Should(query.ToArray())
+                        .Must(m => m.MatchPhrase(mp => mp.Field(IdField).Query(textResourceId)))
+                    )
+                )
+                .Highlight(h => h
+                    .PreTags("*")
+                    .PostTags("*")
+                    .Fields(f => f
+                        .Field(TextField)
+                        .NumberOfFragments(0)
+                    )
+                )
+            );
+
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+            foreach (var highlight in response.Hits.Select(d=>d.Highlights))
+            {
+                
+            }
+            return null;
+        }
+    }
+
+    internal enum QueryType
+    {
+        FilterQuery,
+        SearchQuery,
+        HighlightQuery,
     }
 }

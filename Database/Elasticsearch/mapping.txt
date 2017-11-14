@@ -1,0 +1,20 @@
+PUT module 
+{
+  "mappings": {
+    "page": { 
+      "_all":       { "enabled": false  }, 
+      "properties": { 
+        "text":    { "type": "text" }, 
+        "versionNumber":     { "type": "integer"  }
+        
+      }
+    },
+    "snapshot": { 
+      "_all":       { "enabled": false  }, 
+      "properties": { 
+        "snapshotId":	{ "type": "long"  }, 
+        "text":     { "type": "text" }
+      }
+    }
+  }
+}
