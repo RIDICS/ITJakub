@@ -771,7 +771,7 @@ namespace Vokabular.MainService.Core.Managers
                         pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextVersionId(fulltextResult.LongList));
                         break;
                     case PageSearchResultType.TextExternalId:
-                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList));
+                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList, projectId));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

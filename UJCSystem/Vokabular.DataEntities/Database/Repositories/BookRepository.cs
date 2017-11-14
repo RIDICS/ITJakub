@@ -383,23 +383,34 @@ namespace Vokabular.DataEntities.Database.Repositories
             return pageResourceIds;
         }
 
-        public IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds)
+        public IList<PageResource> GetPagesByTextExternalId(IList<string> textExternalIds, long? projectId, string projectExternalId = null)
         {
             Resource resourceAlias = null;
+            Project projectAlias = null;
 
             var subquery = QueryOver.Of<TextResource>()
                 .WhereRestrictionOn(x => x.ExternalId).IsInG(textExternalIds)
                 .Select(x => x.ResourcePage.Id);
 
-            var pageResourceIds = GetSession().QueryOver<PageResource>()
+            var query = GetSession().QueryOver<PageResource>()
                 .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
                 .Fetch(x => x.Resource).Eager
                 .OrderBy(x => x.Position).Asc
                 .WithSubquery
                 .WhereProperty(() => resourceAlias.Id).In(subquery)
-                .And(x => x.Id == resourceAlias.LatestVersion.Id)
-                .List();
+                .And(x => x.Id == resourceAlias.LatestVersion.Id);
 
+            if (projectId != null)
+            {
+                query.And(() => projectAlias.Id == projectId.Value);
+            }
+            if (projectExternalId != null)
+            {
+                query.And(() => projectAlias.ExternalId == projectExternalId);
+            }
+
+            var pageResourceIds = query.List();
             return pageResourceIds;
         }
     }
