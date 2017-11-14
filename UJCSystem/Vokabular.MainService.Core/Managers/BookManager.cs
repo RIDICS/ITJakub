@@ -770,7 +770,7 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            IList<PageResource> resultPages = null;
+            IList<PageResource> resultPages;
             if (pagesByMetadata != null && pagesByFulltext != null)
             {
                 resultPages = pagesByMetadata.Intersect(pagesByFulltext).ToList();
@@ -790,6 +790,18 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = Mapper.Map<List<PageContract>>(resultPages);
             return result;
+        }
+
+        public string GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
+            if (projectIdentification == null)
+                return null;
+
+            var fulltextStorage = GetFulltextStorage();
+            var resultText = fulltextStorage.GetEditionNote(projectIdentification, format);
+
+            return resultText;
         }
     }
 }

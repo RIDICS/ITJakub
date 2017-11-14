@@ -180,5 +180,16 @@ namespace Vokabular.MainService.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet("{projectId}/edition-note")]
+        public IActionResult GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetEditionNote(projectId, formatValue);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
     }
 }

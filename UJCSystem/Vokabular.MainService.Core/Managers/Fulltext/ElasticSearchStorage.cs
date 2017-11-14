@@ -84,7 +84,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             throw new System.NotImplementedException();
         }
 
-        public string GetEditionNote(ProjectIdentificationResult project)
+        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
         {
             throw new System.NotImplementedException();
         }

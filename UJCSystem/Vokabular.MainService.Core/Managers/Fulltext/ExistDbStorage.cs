@@ -257,11 +257,13 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public string GetEditionNote(ProjectIdentificationResult project)
+        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
         {
+            var outputFormat = ConvertOutputTextFormat(format);
+
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {
-                var result = ssc.GetBookEditionNote(project.ProjectExternalId, project.BookVersionExternalId, "pageToHtml.xsl", OutputFormatEnumContract.Html, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                var result = ssc.GetBookEditionNote(project.ProjectExternalId, project.BookVersionExternalId, "pageToHtml.xsl", outputFormat, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
                 return result;
             }
         }
