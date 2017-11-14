@@ -38,18 +38,21 @@ namespace Vokabular.MainService.Core.Managers
         private readonly BookRepository m_bookRepository;
         private readonly FileSystemManager m_fileSystemManager;
         private readonly CorpusSearchManager m_corpusSearchManager;
+        private readonly HeadwordSearchManager m_headwordSearchManager;
         private readonly CategoryRepository m_categoryRepository;
         private readonly Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
             MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
-            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager, CorpusSearchManager corpusSearchManager)
+            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager,
+            CorpusSearchManager corpusSearchManager, HeadwordSearchManager headwordSearchManager)
         {
             m_metadataRepository = metadataRepository;
             m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_fileSystemManager = fileSystemManager;
             m_corpusSearchManager = corpusSearchManager;
+            m_headwordSearchManager = headwordSearchManager;
             m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
             m_categoryRepository = categoryRepository;
         }
@@ -170,7 +173,7 @@ namespace Vokabular.MainService.Core.Managers
                 var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts, searchByCriteriaWork.TermHits);
                 return resultList;
             }
-            
+
 
             // If no book restriction is set, filter books in SQL and prepare for searching in eXistDB
             //if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
@@ -377,7 +380,6 @@ namespace Vokabular.MainService.Core.Managers
 
             var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
             var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var resultCriteria = processedCriterias.ResultCriteria;
 
             var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
             {
@@ -387,25 +389,25 @@ namespace Vokabular.MainService.Core.Managers
 
             if (processedCriterias.NonMetadataCriterias.Count > 0)
             {
-                // TODO: Search in fulltext DB
+                // Search in fulltext DB
 
-                //var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                // 1) search in metadata
+                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+                
+                // 2) search in fulltext
+                var fulltextStorage = GetFulltextStorage();
+                var fulltextSearchResultData = fulltextStorage.SearchHeadwordByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
 
-                //var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
-                //{
-                //    Key = CriteriaKey.ResultRestriction,
-                //    ProjectIds = projectIdList
-                //};
-                //nonMetadataCriterias.Add(projectRestrictionCriteria);
-
-                //// TODO send request to fulltext DB and remove this mock:
-                //var mockResultProjectIdList = new List<long>() { 1 };
-
-                //var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
-                //var dbResult = searchByCriteriaFulltextResultWork.Execute();
-
-                //var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts);
-                //return resultList;
+                // 3) load paged result
+                switch (fulltextSearchResultData.SearchResultType)
+                {
+                    case FulltextSearchResultType.ProjectId:
+                        return m_headwordSearchManager.GetHeadwordSearchResultByStandardIds(fulltextSearchResultData.List);
+                    case FulltextSearchResultType.ProjectExternalId:
+                        return m_headwordSearchManager.GetHeadwordSearchResultByExternalIds(fulltextSearchResultData.List);
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
             else
             {
@@ -417,9 +419,6 @@ namespace Vokabular.MainService.Core.Managers
                 var resultList = Mapper.Map<List<HeadwordContract>>(dbResult);
                 return resultList;
             }
-
-
-            throw new NotImplementedException();
         }
 
         public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
@@ -435,8 +434,25 @@ namespace Vokabular.MainService.Core.Managers
                 Count = request.Count
             };
 
-            var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
-            return result;
+            if (processedCriterias.NonMetadataCriterias.Count > 0)
+            {
+                // Search in fulltext DB
+
+                // 1) search in metadata
+                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+                // 2) search in fulltext
+                var fulltextStorage = GetFulltextStorage();
+                var result = fulltextStorage.SearchHeadwordByCriteriaCount(processedCriterias.NonMetadataCriterias, projectIdentificatorList);
+                return result;
+            }
+            else
+            {
+                // Search in relational DB
+
+                var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
+                return result;
+            }
         }
 
         public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)

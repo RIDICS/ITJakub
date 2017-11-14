@@ -73,5 +73,20 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         {
             throw new System.NotImplementedException();
         }
+
+        public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetEditionNote(ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

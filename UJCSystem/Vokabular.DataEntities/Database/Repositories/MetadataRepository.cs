@@ -237,7 +237,24 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.HeadwordItems).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
+            return result;
+        }
+
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.HeadwordItems).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .SingleOrDefault();
             return result;
         }
 

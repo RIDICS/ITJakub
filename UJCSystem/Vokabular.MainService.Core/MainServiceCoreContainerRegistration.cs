@@ -15,6 +15,7 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<BookManager>();
             container.AddPerWebRequest<CategoryManager>();
             container.AddPerWebRequest<CorpusSearchManager>();
+            container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<PageManager>();
             container.AddPerWebRequest<PersonManager>();

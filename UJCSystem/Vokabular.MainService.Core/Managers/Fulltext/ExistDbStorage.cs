@@ -212,5 +212,58 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
                 };
             }
         }
+
+        public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResultCount = ssc.ListSearchDictionariesResultsCount(criteria);
+                return dbResultCount;
+            }
+        }
+
+        public HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            criteria.Add(new ResultCriteriaContract
+            {
+                Start = start,
+                Count = count,
+            });
+
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var dbResult = ssc.ListSearchDictionariesResults(criteria);
+
+                var resultList = new List<HeadwordDictionaryEntryData>();
+                foreach (var headwordData in dbResult.HeadwordList)
+                {
+                    var headwordDictionaryEntries = headwordData.Dictionaries.Select(x => new HeadwordDictionaryEntryData
+                    {
+                        ProjectExternalId = x.BookXmlId,
+                        HeadwordExternalId = x.EntryXmlId,
+                    });
+                    resultList.AddRange(headwordDictionaryEntries);
+                }
+
+                return new HeadwordSearchResultDataList
+                {
+                    SearchResultType = FulltextSearchResultType.ProjectExternalId,
+                    List = resultList
+                };
+            }
+        }
+
+        public string GetEditionNote(ProjectIdentificationResult project)
+        {
+            using (var ssc = m_communicationProvider.GetSearchServiceClient())
+            {
+                var result = ssc.GetBookEditionNote(project.ProjectExternalId, project.BookVersionExternalId, "pageToHtml.xsl", OutputFormatEnumContract.Html, ResourceLevelEnumContract.Shared); // TODO dynamically resolve transformation type
+                return result;
+            }
+        }
     }
 }
