@@ -12,7 +12,6 @@
     init() {
         this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
-            console.log(data);
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage);
             this.loadPage(1);

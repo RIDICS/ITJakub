@@ -213,6 +213,33 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult CreateCategory(CategoryContract category)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.CreateCategory(category);
+                return Json(result);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameCategory(int categoryId, CategoryContract category)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.UpdateCategory(categoryId, category);
+                return Json(result);
+            }
+        }
+        [HttpPost]
+        public void DeleteCategory(int categoryId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteCategory(categoryId);
+            }
+        }
+
         [HttpGet]
         public IActionResult GetLitararyOriginalList()
         {

@@ -519,6 +519,38 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public int UpdateCategory(int categoryId, CategoryContract category)//TODO
+        {
+            try
+            {
+                var resultId = Put<int>("category/"+categoryId, category);
+                System.Diagnostics.Debug.WriteLine(resultId);
+                return resultId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteCategory(int categoryId)
+        {
+            try
+            {
+                Delete("category/"+categoryId);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<CategoryContract> GetCategoryList()
         {
             try

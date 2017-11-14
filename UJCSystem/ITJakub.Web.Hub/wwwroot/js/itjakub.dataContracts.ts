@@ -275,7 +275,7 @@ enum KeyTableEditorType {
 
 interface IGenreResponseContract {
     id: number,
-    name: string
+    name: string;
 }
 
 interface ICommentStructureBase {
@@ -323,6 +323,13 @@ interface ITextWithContent {
 interface ILiteraryGenreContract {
     id: number;
     name: string;
+}
+
+interface ICategoryContract {
+id:number;
+parentCategoryId?:number;
+externalId:string;
+description:string;
 }
 
 interface IEditionNote { //TODO expand after server functionality is done
