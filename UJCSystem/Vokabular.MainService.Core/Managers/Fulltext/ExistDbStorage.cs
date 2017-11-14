@@ -11,6 +11,7 @@ using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
 using Vokabular.Shared.DataContracts.Search.OldCriteriaItem;
+using HitSettingsContract = Vokabular.Shared.DataContracts.Search.OldCriteriaItem.HitSettingsContract;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -174,6 +175,18 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
         public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithBookVersionRestriction(criteria, projects);
+
+            criteria.Add(new ResultCriteriaContract
+            {
+                Sorting = SortEnum.Title, // TODO use sorting from method parameter
+                Direction = ListSortDirection.Ascending,
+                HitSettingsContract = new HitSettingsContract
+                {
+                    Start = start,
+                    Count = count,
+                    ContextLength = contextLength,
+                }
+            });
 
             using (var ssc = m_communicationProvider.GetSearchServiceClient())
             {

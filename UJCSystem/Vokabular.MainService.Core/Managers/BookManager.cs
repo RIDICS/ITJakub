@@ -22,7 +22,6 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -473,54 +472,31 @@ namespace Vokabular.MainService.Core.Managers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
-            // TODO remove this mock:
-
-            var mockResults = new List<CorpusSearchResultContract>
-            {
-                new CorpusSearchResultContract
-                {
-                    Title = "Title",
-                    SourceAbbreviation = "Ts",
-                    RelicAbbreviation = "Tr",
-                    Author = "AuthLabel",
-                    BookId = 1,
-                    OriginDate = "1990",
-                    Notes = new List<string> {"not1", "not2"},
-                    BibleVerseResultContext = new BibleVerseResultContext
-                    {
-                        BibleBook = "BB",
-                        BibleChapter = "BC",
-                        BibleVerse = "BV"
-                    },
-                    PageResultContext = new PageWithContextContract
-                    {
-                        Id = 2581,
-                        VersionId = 3692,
-                        Name = "25r",
-                        Position = 25,
-                        ContextStructure = new KwicStructure
-                        {
-                            After = "end of sentence",
-                            Match = "word",
-                            Before = "sentece start"
-                        }
-                    },
-                    VerseResultContext = new VerseResultContext
-                    {
-                        VerseName = "Verse1",
-                        VerseXmlId = "xml-v"
-                    }
-                }
-            };
-
-            return mockResults;
         }
 
         public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
         {
-            // TODO implement this method and remove mock
-            return 1;
+            // TODO add authorization
+            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
+
+            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
+            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
+
+            if (processedCriterias.NonMetadataCriterias.Count == 0)
+            {
+                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
+            }
+
+            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters);
+
+            // Search in fulltext DB
+
+            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
+
+            var fulltextStorage = GetFulltextStorage();
+            var resultCount = fulltextStorage.SearchCorpusByCriteriaCount(nonMetadataCriterias, projectIdentificatorList);
+
+            return resultCount;
         }
 
         public BookContract GetBookInfo(long projectId)

@@ -18,13 +18,6 @@ namespace Vokabular.MainService.Core.Managers.Fulltext.Data
         public BibleVerseResultContext BibleVerseResultContext { get; set; }
     }
 
-    public class CorpusSearchResultDataList
-    {
-        public FulltextSearchResultType SearchResultType { get; set; }
-        
-        public List<CorpusSearchResultData> List { get; set; }
-    }
-
     public class CorpusSearchPageResultData
     {
         public long TextId { get; set; }

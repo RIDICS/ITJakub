@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.MainService.DataContracts.Contracts.Search;
 
 namespace Vokabular.MainService.Core.AutoMapperProfiles
 {
@@ -13,6 +14,9 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
                 .ForMember(dest => dest.VersionId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position));
+
+            CreateMap<PageResource, PageWithContextContract>()
+                .IncludeBase<PageResource, PageContract>();
         }
     }
 }
