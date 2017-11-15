@@ -18,27 +18,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public virtual IList<LiteraryKind> GetLiteraryKindList()
-        {
-            return GetSession().QueryOver<LiteraryKind>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
-        public virtual IList<LiteraryGenre> GetLiteraryGenreList()
-        {
-            return GetSession().QueryOver<LiteraryGenre>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
-        public virtual IList<LiteraryOriginal> GetLiteraryOriginalList()
-        {
-            return GetSession().QueryOver<LiteraryOriginal>()
-                .OrderBy(x => x.Name).Asc
-                .List();
-        }
-
         public virtual MetadataResource GetLatestMetadataResource(long projectId)
         {
             Resource resourceAlias = null;

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
@@ -48,6 +49,17 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode((int) exception.StatusCode, exception.Message);
             }
+        }
+
+        [HttpGet("{categoryId}")]
+        [ProducesResponseType(typeof(CategoryContract), StatusCodes.Status200OK)]
+        public IActionResult GetCategory(int categoryId)
+        {
+            var result = m_categoryManager.GetCategory(categoryId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
         }
 
         [HttpGet("")]

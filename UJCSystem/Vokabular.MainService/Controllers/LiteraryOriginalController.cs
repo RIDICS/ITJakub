@@ -8,17 +8,17 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class LiteraryOriginalController : Controller
     {
-        private readonly ProjectMetadataManager m_projectMetadataManager;
+        private readonly CatalogValueManager m_catalogValueManager;
 
-        public LiteraryOriginalController(ProjectMetadataManager projectMetadataManager)
+        public LiteraryOriginalController(CatalogValueManager catalogValueManager)
         {
-            m_projectMetadataManager = projectMetadataManager;
+            m_catalogValueManager = catalogValueManager;
         }
 
         [HttpGet("")]
         public List<LiteraryOriginalContract> GetLiteraryOriginalList()
         {
-            var result = m_projectMetadataManager.GetLiteraryOriginalList();
+            var result = m_catalogValueManager.GetLiteraryOriginalList();
             return result;
         }
     }

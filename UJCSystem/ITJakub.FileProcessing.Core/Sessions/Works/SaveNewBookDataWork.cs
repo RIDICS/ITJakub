@@ -12,6 +12,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ResourceRepository m_resourceRepository;
+        private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly BookData m_bookData;
         private readonly long? m_nullableProjectId;
         private readonly string m_message;
@@ -21,11 +22,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
         private List<long> m_importedResourceVersionIds;
 
         public SaveNewBookDataWork(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            ResourceRepository resourceRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
+            ResourceRepository resourceRepository, CatalogValueRepository catalogValueRepository, ResourceSessionDirector resourceDirector) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_resourceRepository = resourceRepository;
+            m_catalogValueRepository = catalogValueRepository;
             m_nullableProjectId = resourceDirector.GetSessionInfoValue<long?>(SessionInfo.ProjectId);
             m_bookData = resourceDirector.GetSessionInfoValue<BookData>(SessionInfo.BookData);
             m_message = resourceDirector.GetSessionInfoValue<string>(SessionInfo.Message);
@@ -52,9 +54,9 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
             // Categories are not updated from import (XMD doesn't contain detailed categorization)
             //new UpdateCategoriesSubtask(m_categoryRepository).UpdateCategoryList(m_projectId, m_bookData);
 
-            new UpdateLiteraryKindsSubtask(m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
-            new UpdateLiteraryGenresSubtask(m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
-            new UpdateLiteraryOriginalsSubtask(m_metadataRepository).UpdateLiteraryOriginals(m_projectId, m_bookData);
+            new UpdateLiteraryKindsSubtask(m_catalogValueRepository, m_metadataRepository).UpdateLiteraryKinds(m_projectId, m_bookData);
+            new UpdateLiteraryGenresSubtask(m_catalogValueRepository, m_metadataRepository).UpdateLiteraryGenres(m_projectId, m_bookData);
+            new UpdateLiteraryOriginalsSubtask(m_catalogValueRepository, m_metadataRepository).UpdateLiteraryOriginals(m_projectId, m_bookData);
             new UpdateKeywordsSubtask(m_metadataRepository).UpdateKeywords(m_projectId, m_bookData);
 
             var updateTermsSubtask = new UpdateTermsSubtask(m_resourceRepository);

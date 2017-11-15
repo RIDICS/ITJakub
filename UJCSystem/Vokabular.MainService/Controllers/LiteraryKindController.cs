@@ -8,24 +8,24 @@ namespace Vokabular.MainService.Controllers
     [Route("api/[controller]")]
     public class LiteraryKindController : Controller
     {
-        private readonly ProjectMetadataManager m_projectMetadataManager;
+        private CatalogValueManager m_catalogValueManager;
 
-        public LiteraryKindController(ProjectMetadataManager projectMetadataManager)
+        public LiteraryKindController(CatalogValueManager catalogValueManager)
         {
-            m_projectMetadataManager = projectMetadataManager;
+            m_catalogValueManager = catalogValueManager;
         }
 
         [HttpPost("")]
         public int CreateLiteraryKind([FromBody] LiteraryKindContract literaryKind)
         {
-            var resultId = m_projectMetadataManager.CreateLiteraryKind(literaryKind.Name);
+            var resultId = m_catalogValueManager.CreateLiteraryKind(literaryKind.Name);
             return resultId;
         }
 
         [HttpGet("")]
         public List<LiteraryKindContract> GetLiteraryKindList()
         {
-            var result = m_projectMetadataManager.GetLiteraryKindList();
+            var result = m_catalogValueManager.GetLiteraryKindList();
             return result;
         }
     }

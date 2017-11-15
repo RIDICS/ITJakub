@@ -25,34 +25,6 @@ namespace Vokabular.MainService.Core.Managers
             m_categoryRepository = categoryRepository;
         }
 
-        public int CreateLiteraryKind(string name)
-        {
-            return new CreateLiteraryKindWork(m_metadataRepository, name).Execute();
-        }
-
-        public int CreateLiteraryGenre(string name)
-        {
-            return new CreateLiteraryGenreWork(m_metadataRepository, name).Execute();
-        }
-
-        public List<LiteraryKindContract> GetLiteraryKindList()
-        {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryKindList());
-            return Mapper.Map<List<LiteraryKindContract>>(result);
-        }
-
-        public List<LiteraryGenreContract> GetLiteraryGenreList()
-        {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryGenreList());
-            return Mapper.Map<List<LiteraryGenreContract>>(result);
-        }
-
-        public List<LiteraryOriginalContract> GetLiteraryOriginalList()
-        {
-            var result = m_metadataRepository.InvokeUnitOfWork(x => x.GetLiteraryOriginalList());
-            return Mapper.Map<List<LiteraryOriginalContract>>(result);
-        }
-
         public ProjectMetadataResultContract GetProjectMetadata(long projectId, GetProjectMetadataParameter parameters)
         {
             var work = new GetLatestProjectMetadataWork(m_metadataRepository, projectId, parameters);

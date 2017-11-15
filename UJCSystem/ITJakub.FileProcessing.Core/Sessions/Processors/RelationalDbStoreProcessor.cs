@@ -16,13 +16,15 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
         private readonly ProjectRepository m_projectRepository;
         private readonly MetadataRepository m_metadataRepository;
         private readonly ResourceRepository m_resourceRepository;
+        private readonly CatalogValueRepository m_catalogValueRepository;
 
         public RelationalDbStoreProcessor(ProjectRepository projectRepository, MetadataRepository metadataRepository,
-            ResourceRepository resourceRepository)
+            ResourceRepository resourceRepository, CatalogValueRepository catalogValueRepository)
         {
             m_projectRepository = projectRepository;
             m_metadataRepository = metadataRepository;
             m_resourceRepository = resourceRepository;
+            m_catalogValueRepository = catalogValueRepository;
         }
 
         public void Process(ResourceSessionDirector resourceDirector)
@@ -34,7 +36,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
                 bookData.FileNameMapping.Add(fileResource.FileName, fileResource);
             }
 
-            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, resourceDirector);
+            var saveNewBookDataWork = new SaveNewBookDataWork(m_projectRepository, m_metadataRepository, m_resourceRepository, m_catalogValueRepository, resourceDirector);
             saveNewBookDataWork.Execute();
 
             var projectId = saveNewBookDataWork.ProjectId;

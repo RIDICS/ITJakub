@@ -1,26 +1,27 @@
-﻿using Vokabular.DataEntities.Database.Repositories;
+﻿using Vokabular.DataEntities.Database.Entities;
+using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class CreateLiteraryKindWork : UnitOfWorkBase<int>
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly string m_name;
 
-        public CreateLiteraryKindWork(MetadataRepository metadataRepository, string name) : base(metadataRepository)
+        public CreateLiteraryKindWork(CatalogValueRepository catalogValueRepository, string name) : base(catalogValueRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_catalogValueRepository = catalogValueRepository;
             m_name = name;
         }
 
         protected override int ExecuteWorkImplementation()
         {
-            var literaryKind = new DataEntities.Database.Entities.LiteraryKind
+            var literaryKind = new LiteraryKind
             {
                 Name = m_name
             };
-            return (int) m_metadataRepository.Create(literaryKind);
+            return (int) m_catalogValueRepository.Create(literaryKind);
         }
     }
 }

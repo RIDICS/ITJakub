@@ -7,10 +7,12 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateLiteraryOriginalsSubtask
     {
+        private readonly CatalogValueRepository m_catalogValueRepository;
         private readonly MetadataRepository m_metadataRepository;
 
-        public UpdateLiteraryOriginalsSubtask(MetadataRepository metadataRepository)
+        public UpdateLiteraryOriginalsSubtask(CatalogValueRepository catalogValueRepository, MetadataRepository metadataRepository)
         {
+            m_catalogValueRepository = catalogValueRepository;
             m_metadataRepository = metadataRepository;
         }
 
@@ -19,7 +21,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.LiteraryOriginals == null)
                 return;
 
-            var dbOriginalList = m_metadataRepository.GetLiteraryOriginalList();
+            var dbOriginalList = m_catalogValueRepository.GetLiteraryOriginalList();
             var project = m_metadataRepository.GetAdditionalProjectMetadata(projectId, false, false, false, false, true);
 
             foreach (var newOriginalName in bookData.LiteraryOriginals)
@@ -33,7 +35,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     {
                         Name = newOriginalName
                     };
-                    m_metadataRepository.Create(dbOriginal);
+                    m_catalogValueRepository.Create(dbOriginal);
                     dbOriginalList.Add(dbOriginal);
                 }
 
@@ -43,7 +45,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     project.LiteraryOriginals.Add(dbOriginal);
                 }
             }
-            m_metadataRepository.Update(project);
+            m_catalogValueRepository.Update(project);
         }
     }
 }
