@@ -73,7 +73,7 @@
         $(".crud-buttons-div").on("click",
             ".create-new-genre",
             () => {
-                this.gui.showInputDialog("Name input", "Please input new genre name:");
+                this.gui.showSingleInputDialog("Name input", "Please input new genre name:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
@@ -96,7 +96,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-genre",
             () => {
-                this.gui.showInputDialog("Name input", "Please input genre name after rename:");
+                this.gui.showSingleInputDialog("Name input", "Please input genre name after rename:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
