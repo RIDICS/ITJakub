@@ -37,6 +37,11 @@ namespace Vokabular.MainService.Core.Managers
             return new CreateOrUpdateKeywordWork(m_catalogValueRepository, null, name).Execute();
         }
 
+        public int CreateResponsibleType(ResponsibleTypeContract responsibleTypeData)
+        {
+            return new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, null, responsibleTypeData).Execute();
+        }
+
         public List<LiteraryGenreContract> GetLiteraryGenreList()
         {
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetLiteraryGenreList());
@@ -61,6 +66,12 @@ namespace Vokabular.MainService.Core.Managers
             return Mapper.Map<List<KeywordContract>>(resultList);
         }
 
+        public List<ResponsibleTypeContract> GetResponsibleTypeList()
+        {
+            var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetResponsibleTypeList());
+            return Mapper.Map<List<ResponsibleTypeContract>>(resultList);
+        }
+
         public void UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
         {
             new CreateOrUpdateLiteraryGenreWork(m_catalogValueRepository, literaryGenreId, data.Name).Execute();
@@ -81,6 +92,11 @@ namespace Vokabular.MainService.Core.Managers
             new CreateOrUpdateKeywordWork(m_catalogValueRepository, keywordId, data.Name).Execute();
         }
 
+        public void UpdateResponsibleType(int responsibleTypeId, ResponsibleTypeContract data)
+        {
+            new CreateOrUpdateResponsibleTypeWork(m_catalogValueRepository, responsibleTypeId, data).Execute();
+        }
+
         public void DeleteLiteraryGenre(int literaryGenreId)
         {
             new DeleteCatalogValueWork<LiteraryGenre>(m_catalogValueRepository, literaryGenreId).Execute();
@@ -99,6 +115,11 @@ namespace Vokabular.MainService.Core.Managers
         public void DeleteKeyword(int keywordId)
         {
             new DeleteCatalogValueWork<Keyword>(m_catalogValueRepository, keywordId).Execute();
+        }
+
+        public void DeleteResponsibleType(int responsibleTypeId)
+        {
+            new DeleteCatalogValueWork<ResponsibleType>(m_catalogValueRepository, responsibleTypeId).Execute();
         }
 
         public LiteraryGenreContract GetLiteraryGenre(int literaryGenreId)
@@ -124,6 +145,11 @@ namespace Vokabular.MainService.Core.Managers
             var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<Keyword>(keywordId));
             return Mapper.Map<KeywordContract>(result);
         }
-
+        
+        public ResponsibleTypeContract GetResponsibleType(int responsibleTypeId)
+        {
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<ResponsibleType>(responsibleTypeId));
+            return Mapper.Map<ResponsibleTypeContract>(result);
+        }
     }
 }

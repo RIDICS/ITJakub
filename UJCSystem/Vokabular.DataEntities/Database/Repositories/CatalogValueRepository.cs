@@ -38,5 +38,12 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .OrderBy(x => x.Text).Asc
                 .List();
         }
+
+        public virtual IList<ResponsibleType> GetResponsibleTypeList()
+        {
+            return GetSession().QueryOver<ResponsibleType>()
+                .OrderBy(x => x.Text).Asc
+                .List();
+        }
     }
 }

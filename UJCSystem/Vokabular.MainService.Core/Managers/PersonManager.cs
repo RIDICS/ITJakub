@@ -50,19 +50,7 @@ namespace Vokabular.MainService.Core.Managers
             var resultId = new CreateResponsiblePersonWork(m_personRepository, responsiblePerson).Execute();
             return resultId;
         }
-
-        public int CreateResponsibleType(ResponsibleTypeContract responsibleType)
-        {
-            var resultId = new CreateResponsibleTypeWork(m_personRepository, responsibleType).Execute();
-            return resultId;
-        }
-
-        public List<ResponsibleTypeContract> GetResponsibleTypeList()
-        {
-            var result = new GetResponsibleTypeListWork(m_personRepository).Execute();
-            return Mapper.Map<List<ResponsibleTypeContract>>(result);
-        }
-
+        
         public List<OriginalAuthorContract> GetAuthorAutocomplete(string query, BookTypeEnumContract? bookType)
         {
             if (query == null)
