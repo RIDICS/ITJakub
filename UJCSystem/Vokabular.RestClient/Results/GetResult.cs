@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http.Headers;
-using Vokabular.RestClient.Headers;
+﻿using System.Net.Http.Headers;
 
 namespace Vokabular.RestClient.Results
 {
@@ -17,16 +13,5 @@ namespace Vokabular.RestClient.Results
         public T Result { get; }
 
         public HttpResponseHeaders ResponseHeaders { get; }
-
-        public int GetTotalCountHeader()
-        {
-            IEnumerable<string> values;
-            if (ResponseHeaders.TryGetValues(CustomHttpHeaders.TotalCount, out values))
-            {
-                return Convert.ToInt32(values.First());
-            }
-
-            return -1;
-        }
     }
 }

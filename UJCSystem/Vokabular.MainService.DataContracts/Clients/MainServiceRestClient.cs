@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
@@ -34,16 +33,12 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        public ProjectListData GetProjectList(int start, int count)
+        public PagedResultList<ProjectContract> GetProjectList(int start, int count)
         {
             try
             {
-                var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
-                return new ProjectListData
-                {
-                    TotalCount = result.GetTotalCountHeader(),
-                    List = result.Result
-                };
+                var result = GetPagedList<ProjectContract>($"project?start={start}&count={count}");
+                return result;
             }
             catch (HttpRequestException e)
             {

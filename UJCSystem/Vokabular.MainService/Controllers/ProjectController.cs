@@ -5,16 +5,12 @@ using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.Core.Parameter;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.RestClient.Headers;
 
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ProjectController : Controller
+    public class ProjectController : BaseController
     {
-        private const int DefaultStartItem = 0;
-        private const int DefaultProjectItemCount = 5;
-
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
         private readonly PageManager m_pageManager;
@@ -25,22 +21,14 @@ namespace Vokabular.MainService.Controllers
             m_projectMetadataManager = projectMetadataManager;
             m_pageManager = pageManager;
         }
-
+        
         [HttpGet]
         public List<ProjectContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count)
         {
-            if (start == null)
-            {
-                start = DefaultStartItem;
-            }
-            if (count == null)
-            {
-                count = DefaultProjectItemCount;
-            }
+            var result = m_projectManager.GetProjectList(start, count);
 
-            var result = m_projectManager.GetProjectList(start.Value, count.Value);
+            SetTotalCountHeader(result.TotalCount);
 
-            Response.Headers.Add(CustomHttpHeaders.TotalCount, result.TotalCount.ToString());
             return result.List;
         }
 

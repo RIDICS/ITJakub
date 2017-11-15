@@ -16,6 +16,11 @@ namespace Vokabular.RestClient
             return GetFullAsync<T>(uriPath).GetAwaiter().GetResult();
         }
 
+        protected PagedResultList<T> GetPagedList<T>(string uriPath)
+        {
+            return GetPagedListAsync<T>(uriPath).GetAwaiter().GetResult();
+        }
+
         protected T Get<T>(string uriPath)
         {
             return GetAsync<T>(uriPath).GetAwaiter().GetResult();
