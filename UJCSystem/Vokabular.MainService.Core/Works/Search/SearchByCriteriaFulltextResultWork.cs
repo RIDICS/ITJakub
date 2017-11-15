@@ -27,23 +27,24 @@ namespace Vokabular.MainService.Core.Works.Search
         {
             List<long> projectIds;
             IList<MetadataResource> metadataList;
+            List<MetadataResource> orderedList;
 
             switch (m_fulltextSearchResultData.SearchResultType)
             {
                 case FulltextSearchResultType.ProjectId:
                     projectIds = m_fulltextSearchResultData.LongList;
                     metadataList = m_metadataRepository.GetMetadataWithFetchForBiblModuleByProject(projectIds);
+                    orderedList = CreateOrderedListById(projectIds, metadataList);
                     break;
                 case FulltextSearchResultType.ProjectExternalId:
                     metadataList = m_metadataRepository.GetMetadataWithFetchForBiblModuleByProjectExternalIds(m_fulltextSearchResultData.StringList);
+                    orderedList = CreateOrderedListByExternalId(m_fulltextSearchResultData.StringList, metadataList);
                     projectIds = metadataList.Select(x => x.Resource.Project.Id).ToList();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
             
-            // TODO missing sort results by input ID list order
-
             PageCounts = m_metadataRepository.GetPageCount(projectIds);
 
             if (m_termCriteriaCreator != null)
@@ -54,7 +55,29 @@ namespace Vokabular.MainService.Core.Works.Search
                     : new List<PageResource>();
             }
 
-            return metadataList;
+            return orderedList;
+        }
+
+        private List<MetadataResource> CreateOrderedListById(IList<long> orderedProjectIdList, IList<MetadataResource> metadataList)
+        {
+            var result = new List<MetadataResource>();
+            foreach (var projectId in orderedProjectIdList)
+            {
+                var metadataResource = metadataList.FirstOrDefault(x => x.Resource.Project.Id == projectId);
+                result.Add(metadataResource);
+            }
+            return result;
+        }
+
+        private List<MetadataResource> CreateOrderedListByExternalId(IList<string> orderedProjectExternalIds, IList<MetadataResource> metadataList)
+        {
+            var result = new List<MetadataResource>();
+            foreach (var projectExternalId in orderedProjectExternalIds)
+            {
+                var metadataResource = metadataList.FirstOrDefault(x => x.Resource.Project.ExternalId == projectExternalId);
+                result.Add(metadataResource);
+            }
+            return result;
         }
 
         public IList<PageCountResult> PageCounts { get; set; }

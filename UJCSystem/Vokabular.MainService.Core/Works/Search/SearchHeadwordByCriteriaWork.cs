@@ -26,14 +26,14 @@ namespace Vokabular.MainService.Core.Works.Search
             var headwordIds = headwordsDbResult.Select(x => x.Id).ToList();
             var headwords = m_metadataRepository.GetHeadwordWithFetch(headwordIds);
 
-            var resultHeadwords = new List<HeadwordResource>(headwords.Count);
+            var orderedResultHeadwords = new List<HeadwordResource>(headwords.Count);
             foreach (var headwordId in headwordIds)
             {
                 var headword = headwords.First(x => x.Id == headwordId);
-                resultHeadwords.Add(headword);
+                orderedResultHeadwords.Add(headword);
             }
             
-            return resultHeadwords;
+            return orderedResultHeadwords;
         }
     }
 }

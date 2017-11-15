@@ -24,15 +24,15 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<HeadwordContract> GetHeadwordSearchResultByExternalIds(List<HeadwordDictionaryEntryData> list)
         {
-            var resultList = new List<HeadwordContract>();
+            var orderedResultList = new List<HeadwordContract>();
             foreach (var headwordDictionaryEntryData in list)
             {
                 var headwordInfo = m_metadataRepository.InvokeUnitOfWork(x => x.GetHeadwordWithFetchByExternalId(headwordDictionaryEntryData.ProjectExternalId, headwordDictionaryEntryData.HeadwordExternalId));
                 var headwordContract = Mapper.Map<HeadwordContract>(headwordInfo);
-                resultList.Add(headwordContract);
+                orderedResultList.Add(headwordContract);
             }
 
-            return resultList;
+            return orderedResultList;
         }
     }
 }

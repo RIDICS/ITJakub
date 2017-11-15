@@ -32,7 +32,7 @@ namespace Vokabular.MainService.Core.Managers
             var dbProjects = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByProjectExternalIds(projectExternalIds));
             var bookDictionary = dbProjects.ToDictionary(x => x.Resource.Project.ExternalId);
 
-            var pageResourceList = m_bookRepository.InvokeUnitOfWork(repository =>
+            var orderedPageResourceList = m_bookRepository.InvokeUnitOfWork(repository =>
             {
                 var result = new List<PageResource>();
                 foreach (var corpusSearchResultData in list)
@@ -44,11 +44,11 @@ namespace Vokabular.MainService.Core.Managers
                 return result;
             });
 
-            var resultList = new List<CorpusSearchResultContract>();
+            var orderedResultList = new List<CorpusSearchResultContract>();
             for (int i = 0; i < list.Count; i++)
             {
                 var corpusResultData = list[i];
-                var pageInfo = pageResourceList[i];
+                var pageInfo = orderedPageResourceList[i];
                 var projectMetadata = bookDictionary[corpusResultData.ProjectExternalId];
 
                 var pageContextContract = Mapper.Map<PageWithContextContract>(pageInfo);
@@ -67,10 +67,10 @@ namespace Vokabular.MainService.Core.Managers
                     BibleVerseResultContext = corpusResultData.BibleVerseResultContext,
                     VerseResultContext = corpusResultData.VerseResultContext,
                 };
-                resultList.Add(corpusItemContract);
+                orderedResultList.Add(corpusItemContract);
             }
 
-            return resultList;
+            return orderedResultList;
         }
     }
 }
