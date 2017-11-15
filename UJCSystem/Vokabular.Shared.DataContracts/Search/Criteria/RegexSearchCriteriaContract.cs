@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 
 namespace Vokabular.Shared.DataContracts.Search.Criteria
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria", Name = "RegexSearchCriteriaContract")]
     public class RegexSearchCriteriaContract : SearchCriteriaContract
     {
         [DataMember]

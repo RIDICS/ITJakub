@@ -4,7 +4,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.Shared.DataContracts.Search.Criteria
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Criteria", Name = "SelectedCategoryCriteriaContract")]
     public class SelectedCategoryCriteriaContract : SearchCriteriaContract
     {
         public override CriteriaKey Key

@@ -3,24 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using AutoMapper;
-using Vokabular.Core.Data;
-using Vokabular.Core.Search;
 using Vokabular.Core.Storage;
 using Vokabular.DataEntities.Database.ConditionCriteria;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
-using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.Repositories;
-using Vokabular.DataEntities.Database.Search;
 using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Managers.Fulltext;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Search;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Results;
-using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search;
@@ -31,476 +27,27 @@ namespace Vokabular.MainService.Core.Managers
     {
         private readonly CriteriaKey[] m_supportedSearchPageCriteria = {CriteriaKey.Fulltext, CriteriaKey.Heading, CriteriaKey.Sentence, CriteriaKey.Term, CriteriaKey.TokenDistance };
         private readonly MetadataRepository m_metadataRepository;
-        private readonly MetadataSearchCriteriaProcessor m_metadataSearchCriteriaProcessor;
         private readonly BookRepository m_bookRepository;
         private readonly FileSystemManager m_fileSystemManager;
+        private readonly FulltextStorageProvider m_fulltextStorageProvider;
         private readonly CategoryRepository m_categoryRepository;
-        private readonly Dictionary<ProjectType, IFulltextStorage> m_fulltextStorages;
 
         public BookManager(MetadataRepository metadataRepository, CategoryRepository categoryRepository,
-            MetadataSearchCriteriaProcessor metadataSearchCriteriaProcessor, BookRepository bookRepository,
-            IFulltextStorage[] fulltextStorages, FileSystemManager fileSystemManager)
+            BookRepository bookRepository, FileSystemManager fileSystemManager, FulltextStorageProvider fulltextStorageProvider)
         {
             m_metadataRepository = metadataRepository;
-            m_metadataSearchCriteriaProcessor = metadataSearchCriteriaProcessor;
             m_bookRepository = bookRepository;
             m_fileSystemManager = fileSystemManager;
-            m_fulltextStorages = fulltextStorages.ToDictionary(x => x.ProjectType);
+            m_fulltextStorageProvider = fulltextStorageProvider;
             m_categoryRepository = categoryRepository;
         }
-
-        private IFulltextStorage GetFulltextStorage(ProjectType projectType = ProjectType.Community)
-        {
-            return m_fulltextStorages[projectType];
-        }
-
+        
         public List<BookWithCategoriesContract> GetBooksByType(BookTypeEnumContract bookType)
         {
             var bookTypeEnum = Mapper.Map<BookTypeEnum>(bookType);
             var dbMetadataList = m_metadataRepository.InvokeUnitOfWork(x => x.GetMetadataByBookType(bookTypeEnum));
             var resultList = Mapper.Map<List<BookWithCategoriesContract>>(dbMetadataList);
             return resultList;
-        }
-
-        private List<SearchResultContract> MapToSearchResult(IList<MetadataResource> dbResult,
-            IList<PageCountResult> dbPageCounts, IList<PageResource> termHits)
-        {
-            var resultList = new List<SearchResultContract>(dbResult.Count);
-            var termResultDictionary = termHits?
-                .GroupBy(x => x.Resource.Project.Id)
-                .ToDictionary(key => key.Key, val => val.OrderBy(x => x.Position).ToList());
-            foreach (var dbMetadata in dbResult)
-            {
-                var resultItem = Mapper.Map<SearchResultContract>(dbMetadata);
-                resultList.Add(resultItem);
-
-                var pageCountItem = dbPageCounts.FirstOrDefault(x => x.ProjectId == dbMetadata.Resource.Project.Id);
-                resultItem.PageCount = pageCountItem != null ? pageCountItem.PageCount : 0;
-
-                if (termResultDictionary != null)
-                {
-                    if (!termResultDictionary.TryGetValue(dbMetadata.Resource.Project.Id, out var termPageHitList))
-                    {
-                        termPageHitList = new List<PageResource>();
-                    }
-                    
-                    resultItem.TermPageHits = new SearchTermResultContract
-                    {
-                        PageHitsCount = termPageHitList.Count,
-                        PageHits = Mapper.Map<List<PageContract>>(termPageHitList),
-                    };
-                }
-            }
-
-            return resultList;
-        }
-
-        private TermCriteriaPageConditionCreator CreateTermConditionCreatorOrDefault(SearchRequestContract request, FilteredCriterias processedCriterias)
-        {
-            TermCriteriaPageConditionCreator termCriteria = null;
-            if (request.FetchTerms && request.ConditionConjunction.Any(x => x.Key == CriteriaKey.Term))
-            {
-                termCriteria = new TermCriteriaPageConditionCreator();
-                termCriteria.AddCriteria(processedCriterias.MetadataCriterias);
-            }
-
-            return termCriteria;
-        }
-
-        public List<SearchResultContract> SearchByCriteria(SearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var resultCriteria = processedCriterias.ResultCriteria;
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Sort = request.Sort,
-                SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
-            };
-
-            if (processedCriterias.NonMetadataCriterias.Count > 0)
-            {
-                // Search in fulltext DB
-
-                // 1) search in metadata
-                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
-                // 2) search in fulltext
-                var fulltextStorage = GetFulltextStorage();
-                var resultProjectIds = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList); //TODO change projectIds to snapshotIds
-                // TODO add sorting parameter for fulltext search
-                
-                // 3) load paged result
-                var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, resultProjectIds, termCriteria);
-                var dbResult = searchByCriteriaFulltextResultWork.Execute();
-
-                var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts, searchByCriteriaFulltextResultWork.TermHits);
-                return resultList;
-            }
-            else
-            {
-                // Search in relational DB
-
-                var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
-                var searchByCriteriaWork = new SearchByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator, termCriteria);
-                var dbResult = searchByCriteriaWork.Execute();
-
-                var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts, searchByCriteriaWork.TermHits);
-                return resultList;
-            }
-            
-
-            // If no book restriction is set, filter books in SQL and prepare for searching in eXistDB
-            //if (nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().FirstOrDefault() == null)
-            //{
-            //    var databaseSearchResult = m_metadataRepository.SearchByCriteriaQuery(queryCreator);
-
-            //    if (databaseSearchResult.Count == 0)
-            //    {
-            //        return new List<SearchResultContract>();
-            //    }
-
-            //    var resultContract = new ResultRestrictionCriteriaContract
-            //    {
-            //        ResultBooks = databaseSearchResult
-            //    };
-            //    nonMetadataCriterias.Add(resultContract);
-            //}
-
-            //var resultCriteriaContract = nonMetadataCriterias.OfType<ResultCriteriaContract>().FirstOrDefault();
-
-            //Dictionary<long, List<PageDescriptionContract>> bookTermResults = null;
-            //Dictionary<long, long> bookTermResultsCount = null;
-
-            //if (filteredCriterias.NonMetadataCriterias.All(x => x.Key == CriteriaKey.ResultRestriction || x.Key == CriteriaKey.Result))
-            //{
-            //    // Search only in SQL
-            //    var resultRestriction = nonMetadataCriterias.OfType<ResultRestrictionCriteriaContract>().First();
-            //    var guidListRestriction = resultRestriction.ResultBooks.Select(x => x.Guid).ToList();
-            //    var resultBookVersions = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidListRestriction, resultCriteria.Start,
-            //        resultCriteria.Count, resultCriteria.Sorting, resultCriteria.Direction);
-            //    var pageCounts = m_bookVersionRepository.GetBooksPageCountByGuid(guidListRestriction)
-            //        .ToDictionary(x => x.BookId, x => x.Count);
-
-
-            //    if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
-            //    {
-            //        var termQueryCreator = new TermCriteriaQueryCreator();
-            //        termQueryCreator.AddCriteria(filteredCriterias.MetadataCriterias);
-
-            //        var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidListRestriction, termQueryCreator);
-            //        bookTermResults =
-            //            booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName, PageXmlId = x.PageXmlId })
-            //                .ToDictionary(x => x.Key, x => x.ToList());
-
-            //        var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidListRestriction, termQueryCreator);
-            //        bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
-            //    }
-
-            //    var resultContractList = Mapper.Map<IList<SearchResultContract>>(resultBookVersions);
-
-            //    foreach (var resultContract in resultContractList)
-            //    {
-            //        resultContract.PageCount = pageCounts[resultContract.BookId];
-
-            //        if (bookTermResults != null)
-            //        {
-            //            List<PageDescriptionContract> pageDescriptionContracts;
-            //            long termResultsCount;
-            //            resultContract.TermsPageHits = bookTermResults.TryGetValue(resultContract.BookId, out pageDescriptionContracts)
-            //                ? pageDescriptionContracts
-            //                : new List<PageDescriptionContract>();
-            //            resultContract.TermsPageHitsCount = bookTermResultsCount.TryGetValue(resultContract.BookId, out termResultsCount)
-            //                ? Convert.ToInt32(termResultsCount)
-            //                : 0;
-            //        }
-            //    }
-
-            //    return resultContractList;
-            //}
-
-            //// Fulltext search
-            //var searchResults = m_searchServiceClient.ListSearchEditionsResults(nonMetadataCriterias);
-
-            //var guidList = searchResults.SearchResults.Select(x => x.BookXmlId).ToList();
-            //var result = m_bookVersionRepository.GetBookVersionDetailsByGuid(guidList);
-            //var resultPageCountDictionary = m_bookVersionRepository.GetBooksPageCountByGuid(guidList)
-            //    .ToDictionary(x => x.BookId, x => x.Count);
-
-            //var resultDictionary = result.ToDictionary(x => x.Book.Guid);
-
-
-            //if (resultCriteriaContract != null && resultCriteriaContract.TermsSettingsContract != null)
-            //{
-            //    var termQueryCreator = new TermCriteriaQueryCreator();
-            //    termQueryCreator.AddCriteria(filteredCriterias.MetadataCriterias);
-
-            //    var booksTermResults = m_bookVersionRepository.GetBooksTermResults(guidList, termQueryCreator);
-            //    bookTermResults =
-            //        booksTermResults.GroupBy(x => x.BookId, x => new PageDescriptionContract { PageName = x.PageName, PageXmlId = x.PageXmlId })
-            //            .ToDictionary(x => x.Key, x => x.ToList());
-
-            //    var booksTermResultsCount = m_bookVersionRepository.GetBooksTermResultsCount(guidList, termQueryCreator);
-            //    bookTermResultsCount = booksTermResultsCount.ToDictionary(x => x.BookId, x => x.PagesCount);
-            //}
-
-            //var searchResultFullContext = new List<SearchResultContract>();
-
-
-            //foreach (var searchResult in searchResults.SearchResults)
-            //{
-            //    var localResult = Mapper.Map<SearchResultContract>(resultDictionary[searchResult.BookXmlId]);
-            //    localResult.TotalHitCount = searchResult.TotalHitCount;
-            //    localResult.Results = searchResult.Results;
-            //    localResult.PageCount = resultPageCountDictionary[localResult.BookId];
-
-            //    if (bookTermResults != null)
-            //    {
-            //        List<PageDescriptionContract> pageDescriptionContracts;
-            //        long termResultsCount;
-            //        localResult.TermsPageHits = bookTermResults.TryGetValue(localResult.BookId, out pageDescriptionContracts)
-            //            ? pageDescriptionContracts
-            //            : new List<PageDescriptionContract>();
-            //        localResult.TermsPageHitsCount = bookTermResultsCount.TryGetValue(localResult.BookId, out termResultsCount)
-            //            ? Convert.ToInt32(termResultsCount)
-            //            : 0;
-            //    }
-
-            //    searchResultFullContext.Add(localResult);
-            //}
-
-            //return searchResultFullContext;
-        }
-
-        public List<AudioBookSearchResultContract> SearchAudioByCriteria(SearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Sort = request.Sort,
-                SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
-            };
-            
-            // Search only in relational DB
-
-            var searchByCriteriaWork = new SearchAudioByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
-            var dbResult = searchByCriteriaWork.Execute();
-
-            //var resultList = MapToSearchResult(dbResult, searchByCriteriaWork.PageCounts);
-            var resultList = new List<AudioBookSearchResultContract>(dbResult.Count);
-            foreach (var dbMetadata in dbResult)
-            {
-                var resultItem = Mapper.Map<AudioBookSearchResultContract>(dbMetadata);
-                resultList.Add(resultItem);
-
-                if (searchByCriteriaWork.FullBookRecordingsByProjectId.TryGetValue(dbMetadata.Resource.Project.Id, out var audioList))
-                {
-                    resultItem.FullBookRecordings = Mapper.Map<List<AudioContract>>(audioList);
-                }
-                else
-                {
-                    resultItem.FullBookRecordings = new List<AudioContract>();
-                }
-            }
-            
-            return resultList;
-        }
-
-        public long SearchByCriteriaCount(SearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Sort = request.Sort,
-                SortDirection = request.SortDirection,
-                Start = request.Start,
-                Count = request.Count
-            };
-
-            if (processedCriterias.NonMetadataCriterias.Count > 0)
-            {
-                // Search in fulltext DB
-
-                // 1) search in metadata
-                var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
-                // 2) search in fulltext
-                var fulltextStorage = GetFulltextStorage();
-                var result = fulltextStorage.SearchByCriteriaCount(processedCriterias.NonMetadataCriterias, projectIdentificatorList);
-                return result;
-            }
-            else
-            {
-                // Search in relational DB
-
-                var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchByCriteriaQueryCount(queryCreator));
-                return result;
-            }
-        }
-
-        public List<HeadwordContract> SearchHeadwordByCriteria(HeadwordSearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-            var resultCriteria = processedCriterias.ResultCriteria;
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Start = request.Start,
-                Count = request.Count
-            };
-
-            if (processedCriterias.NonMetadataCriterias.Count > 0)
-            {
-                // TODO: Search in fulltext DB
-
-                //var projectIdList = m_metadataRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
-                //var projectRestrictionCriteria = new NewResultRestrictionCriteriaContract
-                //{
-                //    Key = CriteriaKey.ResultRestriction,
-                //    ProjectIds = projectIdList
-                //};
-                //nonMetadataCriterias.Add(projectRestrictionCriteria);
-
-                //// TODO send request to fulltext DB and remove this mock:
-                //var mockResultProjectIdList = new List<long>() { 1 };
-
-                //var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, mockResultProjectIdList);
-                //var dbResult = searchByCriteriaFulltextResultWork.Execute();
-
-                //var resultList = MapToSearchResult(dbResult, searchByCriteriaFulltextResultWork.PageCounts);
-                //return resultList;
-            }
-            else
-            {
-                // Search in relational DB
-
-                var searchByCriteriaWork = new SearchHeadwordByCriteriaWork(m_metadataRepository, m_bookRepository, queryCreator);
-                var dbResult = searchByCriteriaWork.Execute();
-
-                var resultList = Mapper.Map<List<HeadwordContract>>(dbResult);
-                return resultList;
-            }
-
-
-            throw new NotImplementedException();
-        }
-
-        public long SearchHeadwordByCriteriaCount(HeadwordSearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Start = request.Start,
-                Count = request.Count
-            };
-
-            var result = m_bookRepository.InvokeUnitOfWork(x => x.SearchHeadwordByCriteriaQueryCount(queryCreator));
-            return result;
-        }
-
-        public List<CorpusSearchResultContract> SearchCorpusByCriteria(CorpusSearchRequestContract request)
-        {
-            // TODO add authorization
-            //m_authorizationManager.AuthorizeCriteria(searchCriteriaContracts);
-
-            var processedCriterias = m_metadataSearchCriteriaProcessor.ProcessSearchCriterias(request.ConditionConjunction);
-            var nonMetadataCriterias = processedCriterias.NonMetadataCriterias;
-
-            var queryCreator = new SearchCriteriaQueryCreator(processedCriterias.ConjunctionQuery, processedCriterias.MetadataParameters)
-            {
-                Start = request.Start,
-                Count = request.Count,
-            };
-
-            if (processedCriterias.NonMetadataCriterias.Count == 0)
-            {
-                throw new HttpErrorCodeException("Missing any fulltext criteria", HttpStatusCode.BadRequest);
-            }
-
-            // Search in fulltext DB
-
-            var projectIdentificatorList = m_bookRepository.InvokeUnitOfWork(x => x.SearchProjectIdByCriteriaQuery(queryCreator));
-
-            var projectRestrictionCriteria = new SnapshotResultRestrictionCriteriaContract
-            {
-                Key = CriteriaKey.ResultRestriction,
-                SnapshotIds = projectIdentificatorList.Select(x => x.ProjectId).ToList()
-            };
-            nonMetadataCriterias.Add(projectRestrictionCriteria);
-
-            // TODO send request to fulltext DB and remove this mock:
-
-            var mockResults = new List<CorpusSearchResultContract>
-            {
-                new CorpusSearchResultContract
-                {
-                    Title = "Title",
-                    SourceAbbreviation = "Ts",
-                    RelicAbbreviation = "Tr",
-                    Author = "AuthLabel",
-                    BookId = 1,
-                    OriginDate = "1990",
-                    Notes = new List<string> {"not1", "not2"},
-                    BibleVerseResultContext = new BibleVerseResultContext
-                    {
-                        BibleBook = "BB",
-                        BibleChapter = "BC",
-                        BibleVerse = "BV"
-                    },
-                    PageResultContext = new PageWithContextContract
-                    {
-                        Id = 2581,
-                        VersionId = 3692,
-                        Name = "25r",
-                        Position = 25,
-                        ContextStructure = new KwicStructure
-                        {
-                            After = "end of sentence",
-                            Match = "word",
-                            Before = "sentece start"
-                        }
-                    },
-                    VerseResultContext = new VerseResultContext
-                    {
-                        VerseName = "Verse1",
-                        VerseXmlId = "xml-v"
-                    }
-                }
-            };
-
-            return mockResults;
-        }
-
-        public long SearchCorpusByCriteriaCount(CorpusSearchRequestContract request)
-        {
-            // TODO implement this method and remove mock
-            return 1;
         }
 
         public BookContract GetBookInfo(long projectId)
@@ -620,7 +167,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
 
             var result = searchRequest == null
                 ? fulltextStorage.GetPageText(textResource, format)
@@ -675,7 +222,7 @@ namespace Vokabular.MainService.Core.Managers
                 return null;
             }
 
-            var fulltextStorage = GetFulltextStorage();
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
 
             var result = request == null
                 ? fulltextStorage.GetHeadwordText(headwordResource, format)
@@ -727,20 +274,69 @@ namespace Vokabular.MainService.Core.Managers
                 }
             }
 
-            var termConditionCreator = new TermCriteriaPageConditionCreator();
-            termConditionCreator.AddCriteria(termConditions);
-            termConditionCreator.SetProjectIds(new[] {projectId});
+            IList<PageResource> pagesByMetadata = null;
+            if (termConditions.Count > 0)
+            {
+                var termConditionCreator = new TermCriteriaPageConditionCreator();
+                termConditionCreator.AddCriteria(termConditions);
+                termConditionCreator.SetProjectIds(new[] { projectId });
 
-            var dbResult = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+                pagesByMetadata = m_metadataRepository.InvokeUnitOfWork(x => x.GetPagesWithTerms(termConditionCreator));
+            }
 
+            IList<PageResource> pagesByFulltext = null;
             if (fulltextConditions.Count > 0)
             {
-                // TODO filter pages by fulltext conditions
-                throw new NotImplementedException();
+                var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
+                
+                var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+                var fulltextResult = fulltextStorage.SearchPageByCriteria(fulltextConditions, projectIdentification);
+
+                switch (fulltextResult.SearchResultType)
+                {
+                    case PageSearchResultType.TextId:
+                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextVersionId(fulltextResult.LongList));
+                        break;
+                    case PageSearchResultType.TextExternalId:
+                        pagesByFulltext = m_bookRepository.InvokeUnitOfWork(x => x.GetPagesByTextExternalId(fulltextResult.StringList, projectId));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
-            
-            var result = Mapper.Map<List<PageContract>>(dbResult);
+
+            IList<PageResource> resultPages;
+            if (pagesByMetadata != null && pagesByFulltext != null)
+            {
+                resultPages = pagesByMetadata.Intersect(pagesByFulltext).ToList();
+            }
+            else if (pagesByFulltext != null)
+            {
+                resultPages = pagesByFulltext;
+            }
+            else if (pagesByMetadata != null)
+            {
+                resultPages = pagesByMetadata;
+            }
+            else
+            {
+                throw new ArgumentException("No supported search criteria was specified");
+            }
+
+            var result = Mapper.Map<List<PageContract>>(resultPages);
             return result;
+        }
+
+        public string GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            var projectIdentification = m_bookRepository.InvokeUnitOfWork(x => x.GetProjectIdentification(projectId));
+            if (projectIdentification == null)
+                return null;
+
+            var fulltextStorage = m_fulltextStorageProvider.GetFulltextStorage();
+            var resultText = fulltextStorage.GetEditionNote(projectIdentification, format);
+
+            return resultText;
         }
     }
 }

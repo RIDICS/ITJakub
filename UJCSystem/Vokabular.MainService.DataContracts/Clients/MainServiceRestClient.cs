@@ -1158,5 +1158,21 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
+
+        public string GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/{projectId}/edition-note?format={format}");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
     }
 }

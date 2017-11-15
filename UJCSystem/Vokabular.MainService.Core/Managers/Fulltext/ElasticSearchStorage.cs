@@ -3,6 +3,7 @@ using System.Linq;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.MainService.Core.Communication;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
@@ -72,15 +73,45 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             }
         }
 
-        public List<long> SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        public FulltextSearchResultData SearchProjectIdByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
             UpdateCriteriaWithSnapshotRestriction(criteria, projects);
 
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                var result = fulltextServiceClient.SearchByCriteria(criteria);
-               return result.ProjectIds;
+               return new FulltextSearchResultData{LongList = result.ProjectIds, SearchResultType = FulltextSearchResultType.ProjectId};
             }
+        }
+
+        public PageSearchResultData SearchPageByCriteria(List<SearchCriteriaContract> criteria, ProjectIdentificationResult project)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public HeadwordSearchResultDataList SearchHeadwordByCriteria(int start, int count, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetEditionNote(ProjectIdentificationResult project, TextFormatEnumContract format)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 
@@ -14,10 +13,12 @@ namespace Vokabular.MainService.Controllers
     public class BookController : Controller
     {
         private readonly BookManager m_bookManager;
+        private readonly BookSearchManager m_bookSearchManager;
 
-        public BookController(BookManager bookManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager)
         {
             m_bookManager = bookManager;
+            m_bookSearchManager = bookSearchManager;
         }
 
         [HttpGet("type/{bookType}")]
@@ -35,14 +36,14 @@ namespace Vokabular.MainService.Controllers
         public List<SearchResultContract> SearchBook([FromBody] SearchRequestContract request)
             // TODO possible switch SearchResultContract to BookContract
         {
-            var result = m_bookManager.SearchByCriteria(request);
+            var result = m_bookSearchManager.SearchByCriteria(request);
             return result;
         }
 
         [HttpPost("search-count")]
         public long SearchBookResultCount([FromBody] SearchRequestContract request)
         {
-            var result = m_bookManager.SearchByCriteriaCount(request);
+            var result = m_bookSearchManager.SearchByCriteriaCount(request);
             return result;
         }
 
@@ -176,6 +177,17 @@ namespace Vokabular.MainService.Controllers
         {
             var formatValue = format ?? TextFormatEnumContract.Html;
             var result = m_bookManager.GetHeadwordText(headwordId, formatValue, request);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("{projectId}/edition-note")]
+        public IActionResult GetEditionNote(long projectId, [FromQuery] TextFormatEnumContract? format)
+        {
+            var formatValue = format ?? TextFormatEnumContract.Html;
+            var result = m_bookManager.GetEditionNote(projectId, formatValue);
             if (result == null)
                 return NotFound();
 

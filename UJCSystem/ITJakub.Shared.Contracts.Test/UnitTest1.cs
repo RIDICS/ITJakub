@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using ITJakub.SearchService.DataContracts.Contracts.SearchResults;
-using ITJakub.Shared.Contracts.Searching.Results;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Vokabular.Shared.DataContracts.Search.Old;
 

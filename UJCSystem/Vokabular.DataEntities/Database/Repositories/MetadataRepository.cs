@@ -210,14 +210,51 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
             return result;
         }
-        
+
+        public virtual IList<MetadataResource> GetMetadataWithFetchForBiblModuleByProjectExternalIds(IEnumerable<string> projectExternalIdList)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var session = GetSession();
+
+            var result = session.QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIdList)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot).Eager
+                .Fetch(x => x.Resource.Project.LatestPublishedSnapshot.DefaultBookType).Eager
+                .List();
+            return result;
+        }
+
         public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
         {
             var result = GetSession().QueryOver<HeadwordResource>()
                 .WhereRestrictionOn(x => x.Id).IsInG(headwordIds)
                 .Fetch(x => x.Resource).Eager
                 .Fetch(x => x.HeadwordItems).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
                 .List();
+            return result;
+        }
+
+        public virtual HeadwordResource GetHeadwordWithFetchByExternalId(string projectExternalId, string headwordExternalId)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            var result = GetSession().QueryOver<HeadwordResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .Where(x => x.ExternalId == headwordExternalId && projectAlias.ExternalId == projectExternalId && x.Id == resourceAlias.LatestVersion.Id)
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.HeadwordItems).Eager
+                .TransformUsing(Transformers.DistinctRootEntity)
+                .SingleOrDefault();
             return result;
         }
 
@@ -243,7 +280,8 @@ namespace Vokabular.DataEntities.Database.Repositories
         public IList<PageResource> GetPagesWithTerms(TermCriteriaPageConditionCreator creator)
         {
             var query = GetSession().CreateQuery(creator.GetQueryString())
-                .SetParameters(creator);
+                .SetParameters(creator)
+                .SetResultTransformer(Transformers.DistinctRootEntity);
             var result = query.List<PageResource>();
             return result;
         }
@@ -398,6 +436,32 @@ namespace Vokabular.DataEntities.Database.Repositories
             return query
                 .Take(count)
                 .List<string>();
+        }
+
+        public IList<MetadataResource> GetMetadataByProjectIds(IEnumerable<long> projectIds)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.Id).IsInG(projectIds)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
+        }
+
+        public IList<MetadataResource> GetMetadataByProjectExternalIds(IEnumerable<string> projectExternalIds)
+        {
+            Resource resourceAlias = null;
+            Project projectAlias = null;
+
+            return GetSession().QueryOver<MetadataResource>()
+                .JoinAlias(x => x.Resource, () => resourceAlias)
+                .JoinAlias(() => resourceAlias.Project, () => projectAlias)
+                .WhereRestrictionOn(() => projectAlias.ExternalId).IsInG(projectExternalIds)
+                .And(x => x.Id == resourceAlias.LatestVersion.Id)
+                .List();
         }
     }
 }
