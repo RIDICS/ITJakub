@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
@@ -7,17 +8,31 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 using Vokabular.MainService.Core.Utils;
 using Vokabular.MainService.Core.Works.Person;
 using Vokabular.MainService.DataContracts.Contracts;
+using Vokabular.RestClient.Results;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.MainService.Core.Managers
 {
     public class PersonManager
     {
+        private const int DefaultStart = 0;
+        private const int DefaultCount = 20;
+        private const int MaxResultCount = 200;
         private readonly PersonRepository m_personRepository;
 
         public PersonManager(PersonRepository personRepository)
         {
             m_personRepository = personRepository;
+        }
+
+        private int GetStart(int? start)
+        {
+            return start ?? DefaultStart;
+        }
+
+        private int GetCount(int? count)
+        {
+            return count != null ? Math.Min(count.Value, MaxResultCount) : DefaultCount;
         }
 
         #region OriginalAuthor CRUD
@@ -93,6 +108,16 @@ namespace Vokabular.MainService.Core.Managers
 
             var result = m_personRepository.InvokeUnitOfWork(x => x.GetResponsiblePersonAutocomplete(query, DefaultValues.AutocompleteMaxCount));
             return Mapper.Map<List<ResponsiblePersonContract>>(result);
+        }
+
+        public PagedResultList<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public PagedResultList<OriginalAuthorContract> GetOriginalAuthorList(int? start, int? count)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

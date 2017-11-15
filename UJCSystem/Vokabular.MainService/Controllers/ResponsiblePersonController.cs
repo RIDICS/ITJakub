@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -9,7 +8,7 @@ using Vokabular.RestClient.Errors;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class ResponsiblePersonController : Controller
+    public class ResponsiblePersonController : BaseController
     {
         private readonly PersonManager m_personManager;
         private readonly CatalogValueManager m_catalogValueManager;
@@ -66,9 +65,12 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        public List<ResponsibleTypeContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
+        public List<ResponsiblePersonContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
         {
-            throw new NotImplementedException();
+            var result = m_personManager.GetResponsiblePersonList(start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
 
         [HttpGet("autocomplete")]
