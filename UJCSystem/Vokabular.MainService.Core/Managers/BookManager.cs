@@ -133,9 +133,9 @@ namespace Vokabular.MainService.Core.Managers
 
                 // 2) search in fulltext
                 var fulltextStorage = GetFulltextStorage();
-                var resultProjectIds = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList);
+                var resultProjectIds = fulltextStorage.SearchProjectIdByCriteria(queryCreator.GetStart(), queryCreator.GetCount(), nonMetadataCriterias, projectIdentificatorList); //TODO change projectIds to snapshotIds
                 // TODO add sorting parameter for fulltext search
-
+                
                 // 3) load paged result
                 var termCriteria = CreateTermConditionCreatorOrDefault(request, processedCriterias);
                 var searchByCriteriaFulltextResultWork = new SearchByCriteriaFulltextResultWork(m_metadataRepository, resultProjectIds, termCriteria);

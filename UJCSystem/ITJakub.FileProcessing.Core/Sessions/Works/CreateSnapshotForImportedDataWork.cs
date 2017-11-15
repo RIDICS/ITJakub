@@ -58,11 +58,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works
                 ResourceVersions = resourceVersions
             };
 
-            m_projectRepository.Create(newDbSnapshot);
+            m_snapshotId = (long)m_projectRepository.Create(newDbSnapshot);
 
             project.LatestPublishedSnapshot = newDbSnapshot;
             m_projectRepository.Update(project);
-            m_snapshotId = newDbSnapshot.VersionNumber;
         }
 
         private List<BookType> CreateBookTypes()

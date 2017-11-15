@@ -26,20 +26,15 @@ namespace Vokabular.FulltextService.Controllers
             m_textConverter = textConverter;
         }
 
-        [HttpPost("page/{resourceId}")]
-        public TextResourceContract SearchPageByCriteria(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchRequest)
+        [HttpPost("snapshot/count")]
+        public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
         {
             if (searchRequest == null)
             {
                 throw new ArgumentNullException(nameof(searchRequest), "Search request is null");
             }
-
-            var textResource =  m_searchManager.SearchPageByCriteria(textResourceId, searchRequest);
-            textResource.Text = m_textConverter.Convert(textResource.Text, formatValue);
-
-            return textResource;
+            return m_searchManager.SearchByCriteriaCount(searchRequest);
         }
-
 
         [HttpPost("snapshot")]
         public FulltextSearchResultContract SearchByCriteria([FromBody] SearchRequestContractBase searchRequest)
@@ -51,14 +46,20 @@ namespace Vokabular.FulltextService.Controllers
             return m_searchManager.SearchByCriteria(searchRequest);
         }
 
-        [HttpPost("snapshot/count")]
-        public FulltextSearchResultContract SearchByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
+        [HttpPost("page/{resourceId}")]
+        public TextResourceContract SearchPageByCriteria(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchRequest)
         {
             if (searchRequest == null)
             {
                 throw new ArgumentNullException(nameof(searchRequest), "Search request is null");
             }
-            return m_searchManager.SearchByCriteriaCount(searchRequest);
+
+            var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchRequest);
+            textResource.Text = m_textConverter.Convert(textResource.Text, formatValue);
+
+            return textResource;
         }
-}
+
+
+    }
 }

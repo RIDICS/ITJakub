@@ -23,6 +23,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
 
             var client = CommunicationProvider.GetElasticClient();
+
             var response = client.Count<SnapshotResourceContract>(s => s
                 .Index(Index)
                 .Type(SnapshotType)
@@ -47,6 +48,7 @@ namespace Vokabular.FulltextService.Core.Managers
             var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
             
             var client = CommunicationProvider.GetElasticClient();
+
             var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(Index)
                 .Type(SnapshotType)
@@ -72,19 +74,60 @@ namespace Vokabular.FulltextService.Core.Managers
             {
                 throw new Exception(response.DebugInformation);
             }
+
             var result = new FulltextSearchResultContract();
             result.ProjectIds = new List<long>();
-
-            foreach (var document in response.Documents)
-                result.ProjectIds.Add(document.SnapshotId);
-
+            result.ProjectIds.AddRange(response.Documents.Select(d => d.SnapshotId));
+            
             return result;
+        }
+
+        public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
+        {
+            throw new NotImplementedException();
+            var query = GetHighlightQueryFromRequest(searchRequest);
+
+            var client = CommunicationProvider.GetElasticClient();
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(Index)
+                .Type(SnapshotType)
+                .Source(sf => sf
+                    .Includes(i => i
+                        .Fields(
+                            f => f.Text
+                        )
+                    )
+                )
+                .Query(q => q
+                    .Bool(b => b
+                        .Should(query.ToArray())
+                        .Must(m => m.MatchPhrase(mp => mp.Field(IdField).Query(textResourceId)))
+                    )
+                )
+                .Highlight(h => h
+                    .PreTags("*")
+                    .PostTags("*")
+                    .Fields(f => f
+                        .Field(TextField)
+                        .NumberOfFragments(0)
+                    )
+                )
+            );
+
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+            foreach (var highlight in response.Hits.Select(d => d.Highlights))
+            {
+
+            }
+            return null;
         }
 
         private QueryContainer GetFilterSearchQueryFromRequest(SearchRequestContractBase searchRequest)
         {
-            var filterQueries = GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.FilterQuery);
-            return filterQueries.FirstOrDefault();
+            return GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.FilterQuery).FirstOrDefault();
         }
 
         private IEnumerable<QueryContainer> GetMustSearchQueryFromRequest(SearchRequestContractBase searchRequest)
@@ -96,22 +139,26 @@ namespace Vokabular.FulltextService.Core.Managers
         {
             return GetQueriesFromRequest(searchRequest.ConditionConjunction, QueryType.HighlightQuery);
         }
+
         private IEnumerable<QueryContainer> GetQueriesFromRequest(IList<SearchCriteriaContract> conditionConjunction, QueryType queryType)
         {
             var queryList = new List<QueryContainer>();
             var minimumShouldMatch = queryType == QueryType.SearchQuery ? 1 : 0;
-            foreach (var criteriaContract in conditionConjunction)
+
+            foreach (var searchCriteria in conditionConjunction)
             {
-                if (queryType == QueryType.FilterQuery && criteriaContract.Key == CriteriaKey.SnapshotResultRestriction)
+                if (queryType == QueryType.FilterQuery && searchCriteria.Key == CriteriaKey.SnapshotResultRestriction)
                 {
-                    var snapshotIdFilterQuery = GetSnapshotIdFilterQueryFromCriteria(criteriaContract as SnapshotResultRestrictionCriteriaContract);
+                    var snapshotIdFilterQuery = GetSnapshotIdFilterQueryFromCriteria(searchCriteria as SnapshotResultRestrictionCriteriaContract);
+
                     if (snapshotIdFilterQuery != null)
                     {
                         queryList.Add(snapshotIdFilterQuery);
                     }
-                }else if ((queryType == QueryType.SearchQuery || queryType == QueryType.HighlightQuery) && criteriaContract.Key == CriteriaKey.Fulltext)
+                }
+                else if ((queryType == QueryType.SearchQuery || queryType == QueryType.HighlightQuery) && searchCriteria.Key == CriteriaKey.Fulltext)
                 {
-                    var query = GetShouldQuery(criteriaContract as WordListCriteriaContract, minimumShouldMatch);
+                    var query = GetBoolShouldQuery(searchCriteria as WordListCriteriaContract, minimumShouldMatch);
                     if (query != null)
                     {
                         queryList.Add(query);
@@ -122,17 +169,18 @@ namespace Vokabular.FulltextService.Core.Managers
             return queryList;
         }
 
-        private BoolQuery GetShouldQuery(WordListCriteriaContract worldListCriteriaContract, int minimumShouldMatch = 1)
+        private BoolQuery GetBoolShouldQuery(WordListCriteriaContract worldListCriteriaContract, int minimumShouldMatch = 1)
         {
             if (worldListCriteriaContract == null)
             {
                 return null;
             }
 
-            var shouldQueriesList = new List<QueryContainer>();
+            var shouldQueryList = new List<QueryContainer>();
+
             foreach (var disjunction in worldListCriteriaContract.Disjunctions)
             {
-                shouldQueriesList.Add(new RegexpQuery
+                shouldQueryList.Add(new RegexpQuery
                 {
                     Field = TextField,
                     Value = GetRegexpFromDisjunction(disjunction),
@@ -142,7 +190,7 @@ namespace Vokabular.FulltextService.Core.Managers
 
             return new BoolQuery
             {
-                Should = shouldQueriesList,
+                Should = shouldQueryList,
                 MinimumShouldMatch = minimumShouldMatch,
             };
         }
@@ -189,48 +237,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object)id), //HACK long to object
             });
         }
-
-        public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
-        {
-            var query = GetHighlightQueryFromRequest(searchRequest);
-
-            var client = CommunicationProvider.GetElasticClient();
-            var response = client.Search<SnapshotResourceContract>(s => s
-                .Index(Index)
-                .Type(SnapshotType)
-                .Source(sf => sf
-                    .Includes(i => i
-                        .Fields(
-                            f => f.Text
-                        )
-                    )
-                )
-                .Query(q => q
-                    .Bool(b => b
-                        .Should(query.ToArray())
-                        .Must(m => m.MatchPhrase(mp => mp.Field(IdField).Query(textResourceId)))
-                    )
-                )
-                .Highlight(h => h
-                    .PreTags("*")
-                    .PostTags("*")
-                    .Fields(f => f
-                        .Field(TextField)
-                        .NumberOfFragments(0)
-                    )
-                )
-            );
-
-            if (!response.IsValid)
-            {
-                throw new Exception(response.DebugInformation);
-            }
-            foreach (var highlight in response.Hits.Select(d=>d.Highlights))
-            {
-                
-            }
-            return null;
-        }
+        
     }
 
     internal enum QueryType

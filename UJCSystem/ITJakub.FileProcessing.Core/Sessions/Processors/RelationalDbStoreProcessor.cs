@@ -49,7 +49,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message, bookVersionId);
             createNewSnapshot.Execute();
 
-            PublishSnapshotToExternalDatabase(projectId, bookData.Pages);//TODO change projectId to snapshotId
+            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, bookData.Pages);
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);
             //var bookVersion = m_bookVersionRepository.FindById<BookVersion>(bookVersionId);
