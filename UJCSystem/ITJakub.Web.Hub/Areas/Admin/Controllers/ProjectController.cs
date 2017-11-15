@@ -70,6 +70,14 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                     return PartialView("KeyTableEditors/_Kind");
                 case KeyTableEditorType.ResponsiblePerson:
                     return PartialView("KeyTableEditors/_ResponsiblePerson");
+                case KeyTableEditorType.ResponsiblePersonEditor:
+                    return PartialView("KeyTableEditors/_ResponsiblePersonEditor");
+                case KeyTableEditorType.LiteraryOriginal:
+                    return PartialView("KeyTableEditors/_LiteraryOriginal");
+                case KeyTableEditorType.OriginalAuthor:
+                    return PartialView("KeyTableEditors/_OriginalAuthor");
+                case KeyTableEditorType.Keyword:
+                    return PartialView("KeyTableEditors/_Keyword");
                 default:
                     return PartialView("KeyTableEditors/_Category");
             }
