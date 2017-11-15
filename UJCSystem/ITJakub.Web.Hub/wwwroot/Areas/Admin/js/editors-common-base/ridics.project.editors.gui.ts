@@ -9,12 +9,23 @@
         dialogEl.modal("show");
     }
 
-    showInputDialog(title: string, message: string) {
+    showSingleInputDialog(title: string, message: string) {
         const dialogEl = $(".input-modal-dialog");
         const titleEl = dialogEl.find(".input-dialog-title");
         const messageEl = dialogEl.find(".input-dialog-message");
         titleEl.text(title);
         messageEl.text(message);
+        dialogEl.modal("show");
+    }
+
+    showDoubleInputDialog(title: string, primaryMessage: string, secondaryMessage: string) {
+        const dialogEl = $(".double-input-modal-dialog");
+        const titleEl = dialogEl.find(".double-input-dialog-title");
+        const primaryMessageEl = dialogEl.find(".primary-input-dialog-message");
+        const secondaryMessageEl = dialogEl.find(".secondary-input-dialog-message");
+        titleEl.text(title);
+        primaryMessageEl.text(primaryMessage);
+        secondaryMessageEl.text(secondaryMessage);
         dialogEl.modal("show");
     }
 
