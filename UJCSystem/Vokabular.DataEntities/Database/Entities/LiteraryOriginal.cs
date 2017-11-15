@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 
 namespace Vokabular.DataEntities.Database.Entities
 {
-    public class LiteraryOriginal : IEquatable<LiteraryOriginal>
+    public class LiteraryOriginal : IEquatable<LiteraryOriginal>, ICatalogValue
     {
         public virtual int Id { get; set; }
 

@@ -8,28 +8,28 @@ using Vokabular.RestClient.Errors;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class LiteraryGenreController : Controller
+    public class KeywordController : Controller
     {
         private readonly CatalogValueManager m_catalogValueManager;
 
-        public LiteraryGenreController(CatalogValueManager catalogValueManager)
+        public KeywordController(CatalogValueManager catalogValueManager)
         {
             m_catalogValueManager = catalogValueManager;
         }
 
         [HttpPost("")]
-        public int CreateLiteraryGenre([FromBody] LiteraryGenreContract data)
+        public int CreateKeyword([FromBody] KeywordContract data)
         {
-            var resultId = m_catalogValueManager.CreateLiteraryGenre(data.Name);
+            var resultId = m_catalogValueManager.CreateKeyword(data.Name);
             return resultId;
         }
 
-        [HttpPut("{literaryGenreId}")]
-        public IActionResult UpdateLiteraryGenre(int literaryGenreId, [FromBody] LiteraryGenreContract data)
+        [HttpPut("{keywordId}")]
+        public IActionResult UpdateKeyword(int keywordId, [FromBody] KeywordContract data)
         {
             try
             {
-                m_catalogValueManager.UpdateLiteraryGenre(literaryGenreId, data);
+                m_catalogValueManager.UpdateKeyword(keywordId, data);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -38,12 +38,12 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpDelete("{literaryGenreId}")]
-        public IActionResult DeleteLiteraryGenre(int literaryGenreId)
+        [HttpDelete("{keywordId}")]
+        public IActionResult DeleteKeyword(int keywordId)
         {
             try
             {
-                m_catalogValueManager.DeleteLiteraryGenre(literaryGenreId);
+                m_catalogValueManager.DeleteKeyword(keywordId);
                 return Ok();
             }
             catch (HttpErrorCodeException exception)
@@ -52,11 +52,11 @@ namespace Vokabular.MainService.Controllers
             }
         }
 
-        [HttpGet("{literaryGenreId}")]
-        [ProducesResponseType(typeof(LiteraryGenreContract), StatusCodes.Status200OK)]
-        public IActionResult GetLiteraryGenre(int literaryGenreId)
+        [HttpGet("{keywordId}")]
+        [ProducesResponseType(typeof(KeywordContract), StatusCodes.Status200OK)]
+        public IActionResult GetKeyword(int keywordId)
         {
-            var result = m_catalogValueManager.GetLiteraryGenre(literaryGenreId);
+            var result = m_catalogValueManager.GetKeyword(keywordId);
             if (result == null)
                 return NotFound();
 
@@ -64,9 +64,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        public List<LiteraryGenreContract> GetLiteraryGenreList()
+        public List<KeywordContract> GetKeywordList()
         {
-            var result = m_catalogValueManager.GetLiteraryGenreList();
+            var result = m_catalogValueManager.GetKeywordList();
             return result;
         }
     }

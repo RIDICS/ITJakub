@@ -40,6 +40,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, KeywordProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
+            container.AddSingleton<Profile, LiteraryOriginalProfile>();
             container.AddSingleton<Profile, MetadataProfile>();
             container.AddSingleton<Profile, NamedResourceGroupProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();
