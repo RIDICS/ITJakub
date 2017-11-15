@@ -5,15 +5,25 @@ using System.Text;
 using Nest;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.DataContracts.Contracts;
+using Vokabular.MainService.Core.Managers.Fulltext.Data;
+using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
+using Vokabular.Shared.DataContracts.Search.Corpus;
 using Vokabular.Shared.DataContracts.Search.Criteria;
 using Vokabular.Shared.DataContracts.Search.CriteriaItem;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
 {
     public class SearchManager : ElasticsearchManagerBase
     {
+        private const int FragmentSize = 50;
+        private const int FragmentNumber = 10000;
+        private const int DefaultStart = 0;
+        private const int DefaultSize = 10;
+        private const string HighlightTag = "$";
+        
         public SearchManager(CommunicationProvider communicationProvider) : base(communicationProvider){}
 
    
@@ -52,12 +62,12 @@ namespace Vokabular.FulltextService.Core.Managers
             var response = client.Search<SnapshotResourceContract>(s => s
                 .Index(Index)
                 .Type(SnapshotType)
-                .From(searchRequest.Start ?? 0)
-                .Size(searchRequest.Count ?? 10)
+                .From(searchRequest.Start ?? DefaultStart)
+                .Size(searchRequest.Count ?? DefaultSize)
                 .Source(sf => sf
                     .Includes(i => i
                         .Fields(
-                            f => f.SnapshotId
+                            f => f.ProjectId
                         )
                     )
                 )
@@ -67,7 +77,6 @@ namespace Vokabular.FulltextService.Core.Managers
                         .Must(mustQuery.ToArray())
                     )
                 )
-                
             );
             
             if (!response.IsValid)
@@ -77,9 +86,161 @@ namespace Vokabular.FulltextService.Core.Managers
 
             var result = new FulltextSearchResultContract();
             result.ProjectIds = new List<long>();
-            result.ProjectIds.AddRange(response.Documents.Select(d => d.SnapshotId));
+            result.ProjectIds.AddRange(response.Documents.Select(d => d.ProjectId));
             
             return result;
+        }
+
+        public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount(SearchRequestContractBase searchRequest)
+        {
+            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
+            var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
+
+            var client = CommunicationProvider.GetElasticClient();
+
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(Index)
+                .Type(SnapshotType)
+                .Source(sf => sf
+                    .Includes(i => i
+                        .Fields(
+                            f => null
+                        )
+                    )
+                )
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery.ToArray())
+                    )
+                )
+                .Highlight(h => h
+                    .PreTags(HighlightTag)
+                    .PostTags(HighlightTag)
+                    .Fields(f => f
+                        .Field(SnapshotTextField)
+                        .NumberOfFragments(FragmentNumber)
+                        .FragmentSize(FragmentSize)
+                        .Type(HighlighterType.Fvh)
+                        )
+                )
+                
+            );
+
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+            int counter = 0;
+            foreach (var highlightField in response.Hits.Select(d => d.Highlights))
+            {
+                foreach (var value in highlightField.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        counter += GetNumberOfHighlitOccurences(highlight);
+                    }
+                }
+            }
+            return new FulltextSearchCorpusResultContract{ Count = counter };
+        }
+
+        public CorpusSearchResultDataList SearchCorpusByCriteria(CorpusSearchRequestContract searchRequest)
+        {
+            var start = searchRequest.Start ?? 0;
+            var count = searchRequest.Count ?? 10;
+            var filterQuery = GetFilterSearchQueryFromRequest(searchRequest);
+            var mustQuery = GetMustSearchQueryFromRequest(searchRequest);
+
+            var client = CommunicationProvider.GetElasticClient();
+
+            var response = client.Search<SnapshotResourceContract>(s => s
+                .Index(Index)
+                .Type(SnapshotType)
+                .Source(sf => sf
+                    .Includes(i => i
+                        .Fields(
+                            f => null
+                        )
+                    )
+                )
+                .Query(q => q
+                    .Bool(b => b
+                        .Filter(filterQuery)
+                        .Must(mustQuery.ToArray())
+                    )
+                )
+                .Highlight(h => h
+                    .PreTags(HighlightTag)
+                    .PostTags(HighlightTag)
+                    .Fields(f => f
+                        .Field(SnapshotTextField)
+                        .NumberOfFragments(FragmentNumber)
+                        .FragmentSize(FragmentSize)
+                        .Type(HighlighterType.Fvh)
+                    )
+                )
+
+            );
+
+            if (!response.IsValid)
+            {
+                throw new Exception(response.DebugInformation);
+            }
+            int counter = 0;
+            var result = new CorpusSearchResultDataList {List = new List<CorpusSearchResultData>(),  SearchResultType = FulltextSearchResultType.ProjectId};
+            
+            foreach (var highlightField in response.Hits.Select(d => d.Highlights))
+            {
+                foreach (var value in highlightField.Values)
+                {
+                    foreach (var highlight in value.Highlights)
+                    {
+                        if (counter < start)
+                        {
+                            counter++;
+                            continue;
+                        }
+                        var resultData = GetCorpusSearchResultDataList(highlight);
+                        result.List.AddRange(resultData);
+
+                        counter++;
+                        if (counter == start + count)
+                        {
+                            return result;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
+        private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string sentence)
+        {
+            var result = new List<CorpusSearchResultData>();
+            var index = sentence.IndexOf(HighlightTag, StringComparison.Ordinal);
+            do
+            {
+                var corpusSearchResult = GetCorpusSearchResultData(sentence, index, out index);
+                result.Add(corpusSearchResult);
+                index = sentence.IndexOf(HighlightTag, index + HighlightTag.Length, StringComparison.Ordinal);
+            } while (index > 0);
+            
+            return result;
+        }
+
+        private CorpusSearchResultData GetCorpusSearchResultData(string sentence, int index, out int newIndex)
+        {
+            string before, match, after;
+            newIndex = sentence.IndexOf(HighlightTag, index + 1, StringComparison.Ordinal);
+
+            before = sentence.Substring(0, index);
+            match = sentence.Substring(index + HighlightTag.Length, newIndex - (index + HighlightTag.Length));
+            after = sentence.Substring(newIndex + HighlightTag.Length, sentence.Length - (newIndex + HighlightTag.Length));
+
+            before = before.Replace(HighlightTag, "");
+            after = after.Replace(HighlightTag, "");
+            return new CorpusSearchResultData{ PageResultContext  = new CorpusSearchPageResultData{ ContextStructure = new KwicStructure{After = after, Before = before, Match = match} } };
         }
 
         public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
@@ -94,7 +255,7 @@ namespace Vokabular.FulltextService.Core.Managers
                 .Source(sf => sf
                     .Includes(i => i
                         .Fields(
-                            f => f.Text
+                            f => f.SnapshotText
                         )
                     )
                 )
@@ -108,7 +269,7 @@ namespace Vokabular.FulltextService.Core.Managers
                     .PreTags("*")
                     .PostTags("*")
                     .Fields(f => f
-                        .Field(TextField)
+                        .Field(PageTextField)
                         .NumberOfFragments(0)
                     )
                 )
@@ -182,7 +343,7 @@ namespace Vokabular.FulltextService.Core.Managers
             {
                 shouldQueryList.Add(new RegexpQuery
                 {
-                    Field = TextField,
+                    Field = SnapshotTextField,
                     Value = GetRegexpFromDisjunction(disjunction),
                     Flags = RegexpQueryFlags,
                 });
@@ -193,6 +354,16 @@ namespace Vokabular.FulltextService.Core.Managers
                 Should = shouldQueryList,
                 MinimumShouldMatch = minimumShouldMatch,
             };
+        }
+
+        private QueryContainer GetSnapshotIdFilterQueryFromCriteria(SnapshotResultRestrictionCriteriaContract resultRestrictionCriteria)
+        {
+            return resultRestrictionCriteria == null ? null :
+                new QueryContainer(new TermsQuery
+                {
+                    Field = SnapshotIdField,
+                    Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object)id), //HACK long to object
+                });
         }
 
         private string GetRegexpFromDisjunction(WordCriteriaContract disjunction)
@@ -227,17 +398,13 @@ namespace Vokabular.FulltextService.Core.Managers
 
             return regexpBuilder.ToString();
         }
-
-        private QueryContainer GetSnapshotIdFilterQueryFromCriteria(SnapshotResultRestrictionCriteriaContract resultRestrictionCriteria)
-        {
-            return resultRestrictionCriteria == null ? null :
-            new QueryContainer(new TermsQuery
-            {
-                Field = SnapshotIdField,
-                Terms = resultRestrictionCriteria.SnapshotIds.Select(id => (object)id), //HACK long to object
-            });
-        }
         
+        private int GetNumberOfHighlitOccurences(string sentence)
+        {
+            var s = sentence.Split(new[] {HighlightTag}, StringSplitOptions.None);
+            return sentence.Split(new[] { HighlightTag }, StringSplitOptions.None).Length / 2;
+        }
+
     }
 
     internal enum QueryType

@@ -42,11 +42,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors.Fulltext
             // This data is not stored in ElasticSearch
         }
 
-        public void PublishSnapshot(long snapshotId, List<string> externalPageIds)
+        public void PublishSnapshot(long snapshotId, long projectId, List<string> externalPageIds)
         {
             using (var client = m_communicationProvider.GetFulltextServiceClient())
             {
-                client.CreateSnapshot(snapshotId, externalPageIds);
+                client.CreateSnapshot(snapshotId, projectId, externalPageIds);
             }
         }
     }

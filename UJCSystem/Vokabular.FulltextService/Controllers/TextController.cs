@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Helpers;
-using Vokabular.FulltextService.Core.Helpers.Markdown;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
@@ -27,7 +25,7 @@ namespace Vokabular.FulltextService.Controllers
         public TextResourceContract GetTextResource(string textResourceId, [FromQuery] TextFormatEnumContract formatValue)
         {
             var textResource = m_textResourceManager.GetTextResource(textResourceId);
-            textResource.Text = m_textConverter.Convert(textResource.Text, formatValue);
+            textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
             
             return textResource;
         }

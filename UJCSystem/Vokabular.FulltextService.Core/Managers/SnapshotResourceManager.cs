@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
 using Vokabular.FulltextService.Core.Communication;
 using Vokabular.FulltextService.DataContracts.Contracts;
-using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Core.Managers
 {

@@ -28,9 +28,9 @@ namespace Vokabular.FulltextService.Controllers
             foreach (var pageId in snapshotPageIdsResourceContract.PageIds)
             {
                 var textResource = m_textResourceManager.GetTextResource(pageId);
-                builder.Append(textResource.Text);
+                builder.Append(textResource.PageText);
             }
-            var snapShotResource = new SnapshotResourceContract{SnapshotId = snapshotPageIdsResourceContract.SnapshotId, Text = builder.ToString()};
+            var snapShotResource = new SnapshotResourceContract{SnapshotId = snapshotPageIdsResourceContract.SnapshotId, ProjectId = snapshotPageIdsResourceContract.ProjectId, SnapshotText = builder.ToString()};
             var result = m_snapshotResourceManager.CreateSnapshotResource(snapShotResource);
             return result;
 

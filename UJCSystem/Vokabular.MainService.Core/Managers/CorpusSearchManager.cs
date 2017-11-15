@@ -36,7 +36,16 @@ namespace Vokabular.MainService.Core.Managers
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByStandardIds(List<CorpusSearchResultData> list)
         {
-            throw new NotImplementedException();
+            var tmp = new List<CorpusSearchResultContract>();
+            foreach (var data in list)
+            {
+                tmp.Add(new CorpusSearchResultContract
+                {
+                    PageResultContext = new PageWithContextContract { ContextStructure = data.PageResultContext.ContextStructure}
+                });
+            }
+            return tmp;
+            //throw new NotImplementedException();
         }
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByExternalIds(List<CorpusSearchResultData> list)

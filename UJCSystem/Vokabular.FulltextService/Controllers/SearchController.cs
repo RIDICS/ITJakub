@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Vokabular.FulltextService.Core.Helpers;
 using Vokabular.FulltextService.Core.Managers;
 using Vokabular.FulltextService.DataContracts.Contracts;
 using Vokabular.Shared;
+using Vokabular.Shared.DataContracts;
 using Vokabular.Shared.DataContracts.Search;
-using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.FulltextService.Controllers
@@ -46,6 +46,26 @@ namespace Vokabular.FulltextService.Controllers
             return m_searchManager.SearchByCriteria(searchRequest);
         }
 
+        [HttpPost("snapshot/corpus/count")]
+        public FulltextSearchCorpusResultContract SearchCorpusByCriteriaCount([FromBody] SearchRequestContractBase searchRequest)
+        {
+            if (searchRequest == null)
+            {
+                throw new ArgumentNullException(nameof(searchRequest), "Search request is null");
+            }
+            return m_searchManager.SearchCorpusByCriteriaCount(searchRequest);
+        }
+
+        [HttpPost("snapshot/corpus")]
+        public CorpusSearchResultDataList SearchCorpusByCriteria([FromBody] CorpusSearchRequestContract searchRequest)
+        {
+            if (searchRequest == null)
+            {
+                throw new ArgumentNullException(nameof(searchRequest), "Search request is null");
+            }
+            return m_searchManager.SearchCorpusByCriteria(searchRequest);
+        }
+
         [HttpPost("page/{resourceId}")]
         public TextResourceContract SearchPageByCriteria(string textResourceId, [FromQuery] TextFormatEnumContract formatValue, [FromBody] SearchPageRequestContract searchRequest)
         {
@@ -55,7 +75,7 @@ namespace Vokabular.FulltextService.Controllers
             }
 
             var textResource = m_searchManager.SearchPageByCriteria(textResourceId, searchRequest);
-            textResource.Text = m_textConverter.Convert(textResource.Text, formatValue);
+            textResource.PageText = m_textConverter.Convert(textResource.PageText, formatValue);
 
             return textResource;
         }

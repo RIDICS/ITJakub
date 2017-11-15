@@ -9,7 +9,9 @@ namespace Vokabular.FulltextService.Core.Managers
         protected const string PageType = "page";
         protected const string SnapshotType = "snapshot";
         protected const string SnapshotIdField = "snapshotId";
-        protected const string TextField = "text";
+        protected const string ProjectIdField = "projectId";
+        protected const string PageTextField = "pageText";
+        protected const string SnapshotTextField = "snapshotText";
         protected const string IdField = "_id";
         protected const string RegexpQueryFlags = "ALL";
 

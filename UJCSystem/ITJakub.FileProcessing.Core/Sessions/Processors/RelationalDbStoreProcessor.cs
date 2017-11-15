@@ -49,7 +49,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             var createNewSnapshot = new CreateSnapshotForImportedDataWork(m_projectRepository, projectId, userId, resourceVersionIds, bookData, message, bookVersionId);
             createNewSnapshot.Execute();
 
-            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, bookData.Pages);
+            PublishSnapshotToExternalDatabase(createNewSnapshot.SnapshotId, projectId, bookData.Pages);
 
             //var bookVersionId = m_bookVersionRepository.Create(bookData);
             //var bookVersion = m_bookVersionRepository.FindById<BookVersion>(bookVersionId);
@@ -88,10 +88,10 @@ namespace ITJakub.FileProcessing.Core.Sessions.Processors
             //}
         }
 
-        private void PublishSnapshotToExternalDatabase(long snapshotId, List<BookPageData> bookDataPages)
+        private void PublishSnapshotToExternalDatabase(long snapshotId, long projectId, List<BookPageData> bookDataPages)
         {
             var externalIds = bookDataPages.Select(x => x.XmlId).ToList();
-            m_fulltextResourceProcessor.PublishSnapshot(snapshotId, externalIds);
+            m_fulltextResourceProcessor.PublishSnapshot(snapshotId, projectId, externalIds);
         }
     }
 }

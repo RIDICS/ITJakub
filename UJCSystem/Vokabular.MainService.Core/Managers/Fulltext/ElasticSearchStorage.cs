@@ -8,6 +8,7 @@ using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.Shared.DataContracts.Search;
 using Vokabular.Shared.DataContracts.Types;
 using Vokabular.Shared.DataContracts.Search.Criteria;
+using Vokabular.Shared.DataContracts.Search.ResultContracts;
 
 namespace Vokabular.MainService.Core.Managers.Fulltext
 {
@@ -27,7 +28,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.GetTextResource(textResource.ExternalId, format);
-                return result.Text;
+                return result.PageText;
             }
         }
 
@@ -37,7 +38,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
                 var result = fulltextServiceClient.GetTextResourceFromSearch(textResource.ExternalId, format, searchRequest);
-                return result.Text;
+                return result.PageText;
             }
         }
     
@@ -79,7 +80,7 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
             using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
             {
-               var result = fulltextServiceClient.SearchByCriteria(criteria);
+               var result = fulltextServiceClient.SearchByCriteria(start, count, criteria);
                return new FulltextSearchResultData{LongList = result.ProjectIds, SearchResultType = FulltextSearchResultType.ProjectId};
             }
         }
@@ -91,12 +92,23 @@ namespace Vokabular.MainService.Core.Managers.Fulltext
 
         public long SearchCorpusByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                var result = fulltextServiceClient.SearchCorpusByCriteriaCount(criteria);
+                return result.Count;
+            }
         }
 
         public CorpusSearchResultDataList SearchCorpusByCriteria(int start, int count, int contextLength, List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
         {
-            throw new System.NotImplementedException();
+            UpdateCriteriaWithSnapshotRestriction(criteria, projects);
+            
+            using (var fulltextServiceClient = m_communicationProvider.GetFulltextServiceClient())
+            {
+                return fulltextServiceClient.SearchCorpusByCriteria(start, count, contextLength, criteria);
+            }
         }
 
         public long SearchHeadwordByCriteriaCount(List<SearchCriteriaContract> criteria, IList<ProjectIdentificationResult> projects)
