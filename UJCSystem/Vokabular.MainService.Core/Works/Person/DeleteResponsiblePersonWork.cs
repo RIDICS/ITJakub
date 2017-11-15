@@ -7,28 +7,28 @@ using Vokabular.RestClient.Errors;
 
 namespace Vokabular.MainService.Core.Works.Person
 {
-    public class DeleteOriginalAuthorWork : UnitOfWorkBase
+    public class DeleteResponsiblePersonWork : UnitOfWorkBase
     {
         private readonly PersonRepository m_personRepository;
-        private readonly int m_authorId;
+        private readonly int m_personId;
 
-        public DeleteOriginalAuthorWork(PersonRepository personRepository, int authorId) : base(personRepository)
+        public DeleteResponsiblePersonWork(PersonRepository personRepository, int personId) : base(personRepository)
         {
             m_personRepository = personRepository;
-            m_authorId = authorId;
+            m_personId = personId;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var dbAuthor = m_personRepository.FindById<OriginalAuthor>(m_authorId);
-            if (dbAuthor == null)
+            var item = m_personRepository.FindById<ResponsiblePerson>(m_personId);
+            if (item == null)
             {
                 throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
             }
 
             try
             {
-                m_personRepository.Delete(dbAuthor);
+                m_personRepository.Delete(item);
                 m_personRepository.UnitOfWork.CurrentSession.Flush();
             }
             catch (GenericADOException exception)

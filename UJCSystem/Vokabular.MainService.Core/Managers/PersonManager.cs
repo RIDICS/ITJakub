@@ -20,6 +20,8 @@ namespace Vokabular.MainService.Core.Managers
             m_personRepository = personRepository;
         }
 
+        #region OriginalAuthor CRUD
+
         public int CreateOriginalAuthor(OriginalAuthorContract author)
         {
             var resultId = new CreateOriginalAuthorWork(m_personRepository, author).Execute();
@@ -45,12 +47,35 @@ namespace Vokabular.MainService.Core.Managers
             deleteOriginalAuthorWork.Execute();
         }
 
+        #endregion
+
+        #region ResponsiblePerson CRUD
+
         public int CreateResponsiblePerson(ResponsiblePersonContract responsiblePerson)
         {
-            var resultId = new CreateResponsiblePersonWork(m_personRepository, responsiblePerson).Execute();
+            var resultId = new CreateOrUpdateResponsiblePersonWork(m_personRepository, null, responsiblePerson).Execute();
             return resultId;
         }
-        
+
+        public void UpdateResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract data)
+        {
+            new CreateOrUpdateResponsiblePersonWork(m_personRepository, responsiblePersonId, data).Execute();
+        }
+
+        public void DeleteResponsiblePerson(int responsiblePersonId)
+        {
+            new DeleteResponsiblePersonWork(m_personRepository, responsiblePersonId).Execute();
+        }
+
+        public ResponsiblePersonContract GetResponsiblePerson(int responsiblePersonId)
+        {
+            var responsiblePerson = m_personRepository.InvokeUnitOfWork(x => x.FindById<ResponsiblePerson>(responsiblePersonId));
+            return Mapper.Map<ResponsiblePersonContract>(responsiblePerson);
+        }
+
+        #endregion
+
+
         public List<OriginalAuthorContract> GetAuthorAutocomplete(string query, BookTypeEnumContract? bookType)
         {
             if (query == null)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.Core.Managers;
@@ -23,6 +24,51 @@ namespace Vokabular.MainService.Controllers
         public int CreateResponsiblePerson([FromBody] ResponsiblePersonContract responsiblePerson)
         {
             return m_personManager.CreateResponsiblePerson(responsiblePerson);
+        }
+
+        [HttpPut("{responsiblePersonId}")]
+        public IActionResult UpdateResponsiblePerson(int responsiblePersonId, [FromBody] ResponsiblePersonContract data)
+        {
+            try
+            {
+                m_personManager.UpdateResponsiblePerson(responsiblePersonId, data);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpDelete("{responsiblePersonId}")]
+        public IActionResult DeleteResponsiblePerson(int responsiblePersonId)
+        {
+            try
+            {
+                m_personManager.DeleteResponsiblePerson(responsiblePersonId);
+                return Ok();
+            }
+            catch (HttpErrorCodeException exception)
+            {
+                return StatusCode((int)exception.StatusCode, exception.Message);
+            }
+        }
+
+        [HttpGet("{responsiblePersonId}")]
+        [ProducesResponseType(typeof(ResponsiblePersonContract), StatusCodes.Status200OK)]
+        public IActionResult GetResponsiblePerson(int responsiblePersonId)
+        {
+            var result = m_personManager.GetResponsiblePerson(responsiblePersonId);
+            if (result == null)
+                return NotFound();
+
+            return Ok(result);
+        }
+
+        [HttpGet("")]
+        public List<ResponsibleTypeContract> GetResponsiblePersonList([FromQuery] int? start, [FromQuery] int? count)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("autocomplete")]
