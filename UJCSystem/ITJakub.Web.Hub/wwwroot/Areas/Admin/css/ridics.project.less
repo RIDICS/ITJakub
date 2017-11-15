@@ -483,22 +483,34 @@ table {
 
         .selectable-list-div {
             height: inherit;
+            overflow-y: scroll;
 
-            .ui-selected {
+            .page-list-item-selected {
                 background: @page-list-element-selected-color;
-                color: white;
-            }
-
-            .ui-selecting {
-                background: @page-list-element-selecting-color;
                 color: white;
             }
 
             .page-list {
                 list-style-type: none;
 
+                .collapse-category-button {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    margin-right: 5px;
+                }
+
+                .child-category {
+                    margin-left: 1.5em;
+                    margin-top: 0.3em;
+                    margin-bottom: 0.1em;
+                }
+
                 &-item {
+                    position: relative;
                     min-height: 20px;
+                    user-select: none;
+                    border: 1px solid #dddddd;
                 }
             }
         }

@@ -1,8 +1,8 @@
 ﻿class KeyTableCategoryEditor {
     private readonly util: KeyTableViewManager;
     private readonly gui: EditorsGui;
-    private categoryItemList: ICategoryContract[];
-    private numberOfItemsPerPage = 28;
+    private categoryItemList: JQuery;
+    private numberOfItemsPerPage = 25;
     private currentPage: number;
 
     constructor() {
@@ -13,7 +13,7 @@
     init() {
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();
-            this.categoryItemList = data;
+            this.categoryItemList = this.generateListStructure(data);
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage);
             this.loadPage(1); //initialise at page 1
@@ -25,7 +25,7 @@
 
     private updateContentAfterChange() {
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
-            this.categoryItemList = data;
+            this.categoryItemList = this.generateListStructure(data);
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage);
@@ -47,58 +47,115 @@
 
     private loadPage(pageNumber: number) {
         const listEl = $(".selectable-list-div");
-        const splitArray = this.splitCategoryArray(this.categoryItemList, pageNumber);
-        this.generateListStructure(splitArray, listEl);
+        listEl.empty();
+        const splitArray = this.splitCategoryArray(this.categoryItemList.children(".page-list-item"), pageNumber);
+        listEl.append(`<div class="page-list"></div>`);
+        listEl.children(".page-list").append(splitArray);
+        this.makeSelectable(listEl);
+        this.collapseCategories();
     }
 
-    private splitCategoryArray(categoryItemList: ICategoryContract[], page: number): ICategoryContract[] {
+    private splitCategoryArray(categoryItemList: JQuery, page: number): JQuery {
+        console.log(categoryItemList);
         const numberOfListItemsPerPage = this.numberOfItemsPerPage;
         const startIndex = (page - 1) * numberOfListItemsPerPage;
         const endIndex = page * numberOfListItemsPerPage;
-        const splitArray = categoryItemList.slice(startIndex, endIndex);
+        const splitArray = categoryItemList.clone().slice(startIndex, endIndex);
         return splitArray;
     }
 
-    private generateListStructure(categoryItemList: ICategoryContract[], jEl: JQuery) {
-        jEl.empty();
-        const listStart = `<ul class="page-list">`;
-        const listItemEnd = `</li>`;
-        const listEnd = "</ul>";
+    private generateListStructure(categoryItemList: ICategoryContract[]):JQuery {
+        const listStart = `<div class="page-list">`;
+        const listItemEnd = `</div>`;
+        const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < categoryItemList.length; i++) {
             const listItemStart =
-                `<li class="ui-widget-content page-list-item" data-category-id="${categoryItemList[i].id}">`;
+                `<div class="page-list-item" data-category-id="${categoryItemList[i].id}" data-parent-category-id="${categoryItemList[i].parentCategoryId}">`;
             elm += listItemStart;
             elm += categoryItemList[i].description;
             elm += listItemEnd;
         }
         elm += listEnd;
         const html = $.parseHTML(elm);
-        jEl.append(html);
-        this.makeSelectable(jEl);
+        const jListEl = $(html);
+        const hierarchicallySortedList = this.hierarchicallySortCategories(jListEl);
+        return hierarchicallySortedList;
+    }
+
+    private hierarchicallySortCategories(jEl: JQuery):JQuery {
+        const pageListItem = jEl.children(".page-list-item");
+        pageListItem.each((index, element) => {
+            const listItemEl = $(element);
+            const parentCategoryId = listItemEl.data("parent-category-id");
+            if (parentCategoryId !== null) {
+                listItemEl.detach();
+                listItemEl.addClass("child-category");
+                const parentCategoryEl = jEl.find(`*[data-category-id="${parentCategoryId}"]`);
+                parentCategoryEl.append(listItemEl);
+            }
+        });
+        return jEl;
+    }
+
+    private collapseCategories() {
+        const mainCategoriesEls = $(".page-list").children(".page-list-item");
+        mainCategoriesEls.each((index, element) => {
+            const mainCategoryEl = $(element);
+            const childrenCategories = mainCategoryEl.children(".child-category");
+            if (childrenCategories.length) {
+                childrenCategories.hide();
+                mainCategoryEl.append(`<span class="collapse-category-button" title="Toggle collapsed category"><i class="fa fa-arrows-v" aria-hidden="true"></i></span>`);
+                this.trackCollapseCategoryButton(childrenCategories);
+            }
+        });
+    }
+
+    private trackCollapseCategoryButton(childrenCategories:JQuery) {
+        $(".collapse-category-button").on("click", () => {
+            childrenCategories.toggle();
+        });
     }
 
     private makeSelectable(jEl: JQuery) {
-        jEl.children(".page-list").selectable();
+        jEl.children(".page-list").on("click", ".page-list-item", (event) => {
+            event.stopImmediatePropagation();
+            const targetEl = $(event.target);
+            if (targetEl.hasClass("collapse-category-button") || targetEl.parent().hasClass("collapse-category-button")) {
+                return;
+            }
+            targetEl.toggleClass("page-list-item-selected");
+            $(".page-list-item").not(targetEl).removeClass("page-list-item-selected");
+        });
     }
 
     private categoryCreation() {
         $(".crud-buttons-div").on("click",
             ".create-new-category",
             () => {
-                console.log("Create");
-                this.gui.showInputDialog("Name input", "Please input new category name:");
+                this.gui.showDoubleInputDialog("Name input", "Please input new category description:", "Please choose parent category:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
-                        const textareaEl = $(".input-dialog-textarea");
-                        const categoryString = textareaEl.val();
+                        const descriptionTextareaEl = $(".primary-input-dialog-textarea");
+                        const categoryString = descriptionTextareaEl.val();
                         if (!categoryString) {
                             this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                         } else {
-                            const newCategoryAjax = this.util.createNewCategory(categoryString); //TODO parentCategoryId
+                            const parentCategoryIdSelectEl = $(".id-method-selection");
+                            const parentCategorySelectString = parentCategoryIdSelectEl.val() as string;
+                            console.log(parentCategorySelectString);
+                            let parentCategoryIdNumber = 0;
+                            if (parentCategorySelectString === "new") {
+                                parentCategoryIdNumber = null;
+                            } else if (parentCategorySelectString === "fromChosen") {
+                                const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                                parentCategoryIdNumber = selectedPageEl.data("category-id") as number;//TODO check when page is not selected
+                                console.log(parentCategoryIdNumber);
+                            }
+                            const newCategoryAjax = this.util.createNewCategory(categoryString, parentCategoryIdNumber);
                             newCategoryAjax.done(() => {
-                                textareaEl.val("");
+                                descriptionTextareaEl.val("");
                                 this.gui.showInfoDialog("Success", "New category has been created");
                                 $(".info-dialog-ok-button").off();
                                 this.updateContentAfterChange();
@@ -116,7 +173,7 @@
         $(".crud-buttons-div").on("click",
             ".rename-category",
             () => {
-                this.gui.showInputDialog("Name input", "Please input category name after rename:");
+                this.gui.showSingleInputDialog("Name input", "Please input category name after rename:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
@@ -124,10 +181,11 @@
                         if (!categoryString) {
                             this.gui.showInfoDialog("Warning", "You haven't entered anything.");
                         } else {
-                            const selectedPageEl = $(".page-list").children(".ui-selected");
+                            const selectedPageEl = $(".page-list").find(".page-list-item-selected");
                             if (selectedPageEl.length) {
                                 const id = selectedPageEl.data("category-id") as number;
-                                const renameAjax = this.util.renameCategory(id, categoryString); //TODO parentCategoryId
+                                const parentCategoryid = selectedPageEl.data("parent-category-id") as number;
+                                const renameAjax = this.util.renameCategory(id, categoryString, parentCategoryid);
                                 renameAjax.done(() => {
                                     textareaEl.val("");
                                     this.gui.showInfoDialog("Success", "Category has been renamed");
@@ -151,7 +209,7 @@
                 this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
                 $(".confirmation-ok-button").on("click",
                     () => {
-                        const selectedPageEl = $(".page-list").children(".ui-selected");
+                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
                         if (selectedPageEl.length) {
                             const id = selectedPageEl.data("category-id") as number;
                             const deleteAjax = this.util.deleteCategory(id);
