@@ -13,10 +13,12 @@ namespace Vokabular.MainService.Controllers
     public class BookController : Controller
     {
         private readonly BookManager m_bookManager;
+        private readonly BookSearchManager m_bookSearchManager;
 
-        public BookController(BookManager bookManager)
+        public BookController(BookManager bookManager, BookSearchManager bookSearchManager)
         {
             m_bookManager = bookManager;
+            m_bookSearchManager = bookSearchManager;
         }
 
         [HttpGet("type/{bookType}")]
@@ -34,14 +36,14 @@ namespace Vokabular.MainService.Controllers
         public List<SearchResultContract> SearchBook([FromBody] SearchRequestContract request)
             // TODO possible switch SearchResultContract to BookContract
         {
-            var result = m_bookManager.SearchByCriteria(request);
+            var result = m_bookSearchManager.SearchByCriteria(request);
             return result;
         }
 
         [HttpPost("search-count")]
         public long SearchBookResultCount([FromBody] SearchRequestContract request)
         {
-            var result = m_bookManager.SearchByCriteriaCount(request);
+            var result = m_bookSearchManager.SearchByCriteriaCount(request);
             return result;
         }
 

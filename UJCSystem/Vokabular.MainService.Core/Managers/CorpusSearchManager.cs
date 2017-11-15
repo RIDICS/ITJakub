@@ -12,6 +12,9 @@ namespace Vokabular.MainService.Core.Managers
 {
     public class CorpusSearchManager
     {
+        private const int CorpusMaxCount = 200;
+        private const int CorpusDefaultCount = 50;
+        private const int CorpusDefaultStart = 0;
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
 
@@ -19,6 +22,16 @@ namespace Vokabular.MainService.Core.Managers
         {
             m_metadataRepository = metadataRepository;
             m_bookRepository = bookRepository;
+        }
+
+        public int GetCorpusStart(int? start)
+        {
+            return start ?? CorpusDefaultStart;
+        }
+
+        public int GetCorpusCount(int? count)
+        {
+            return count != null ? Math.Min(count.Value, CorpusMaxCount) : CorpusDefaultCount;
         }
 
         public List<CorpusSearchResultContract> GetCorpusSearchResultByStandardIds(List<CorpusSearchResultData> list)
