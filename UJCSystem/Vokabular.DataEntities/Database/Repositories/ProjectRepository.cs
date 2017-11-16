@@ -73,5 +73,35 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Take(1)
                 .SingleOrDefault();
         }
+
+        public virtual Project GetProjectWithKeywords(long projectId)
+        {
+            return GetSession().QueryOver<Project>()
+                .Where(x => x.Id == projectId)
+                .Fetch(x => x.Keywords).Eager
+                .SingleOrDefault();
+        }
+
+        public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
+        {
+            var query = GetSession().QueryOver<ProjectOriginalAuthor>()
+                .Where(x => x.Project.Id == projectId);
+
+            if (includeAuthors)
+            {
+                query.Fetch(x => x.OriginalAuthor);
+            }
+
+            return query.List();
+        }
+        
+        public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
+        {
+            return GetSession().QueryOver<ProjectResponsiblePerson>()
+                .Where(x => x.Project.Id == projectId)
+                .Fetch(x => x.ResponsiblePerson).Eager
+                .Fetch(x => x.ResponsibleType).Eager
+                .List();
+        }
     }
 }

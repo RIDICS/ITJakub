@@ -115,5 +115,26 @@ namespace Vokabular.DataEntities.Database.Repositories
                 Count = totalCount.Value
             };
         }
+
+        public virtual OriginalAuthor GetAuthorByName(string firstName, string lastName)
+        {
+            return GetSession().QueryOver<OriginalAuthor>()
+                .Where(x => x.FirstName == firstName && x.LastName == lastName)
+                .SingleOrDefault();
+        }
+
+        public virtual ResponsiblePerson GetResponsiblePersonByName(string firstName, string lastName)
+        {
+            return GetSession().QueryOver<ResponsiblePerson>()
+                .Where(x => x.FirstName == firstName && x.LastName == lastName)
+                .SingleOrDefault();
+        }
+
+        public virtual ResponsibleType GetResponsibleTypeByName(string text)
+        {
+            return GetSession().QueryOver<ResponsibleType>()
+                .Where(x => x.Text == text)
+                .SingleOrDefault();
+        }
     }
 }

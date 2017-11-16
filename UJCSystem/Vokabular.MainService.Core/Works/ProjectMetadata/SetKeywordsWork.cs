@@ -5,30 +5,30 @@ using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
-    public class SetLiteraryGenreWork : UnitOfWorkBase
+    public class SetKeywordsWork : UnitOfWorkBase
     {
         private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
-        private readonly IList<int> m_genreIdList;
-        
-        public SetLiteraryGenreWork(ProjectRepository projectRepository, long projectId, IList<int> genreIdList) : base(projectRepository)
+        private readonly IList<int> m_keywordIdList;
+
+        public SetKeywordsWork(ProjectRepository projectRepository, long projectId, IList<int> keywordIdList) : base(projectRepository)
         {
             m_projectRepository = projectRepository;
             m_projectId = projectId;
-            m_genreIdList = genreIdList;
+            m_keywordIdList = keywordIdList;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var literaryGenreList = new List<LiteraryGenre>();
-            foreach (var id in m_genreIdList)
+            var keywordList = new List<Keyword>();
+            foreach (var id in m_keywordIdList)
             {
-                var literaryGenre = m_projectRepository.Load<LiteraryGenre>(id);
-                literaryGenreList.Add(literaryGenre);
+                var keyword = m_projectRepository.Load<Keyword>(id);
+                keywordList.Add(keyword);
             }
 
             var project = m_projectRepository.Load<Project>(m_projectId);
-            project.LiteraryGenres = literaryGenreList;
+            project.Keywords = keywordList;
 
             m_projectRepository.Update(project);
         }

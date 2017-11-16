@@ -8,27 +8,27 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
 {
     public class SetResponsiblePersonsWork : UnitOfWorkBase
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly ProjectRepository m_projectRepository;
         private readonly long m_projectId;
         private readonly IList<ProjectResponsiblePersonIdContract> m_projectResponsiblePersonIdList;
 
-        public SetResponsiblePersonsWork(MetadataRepository metadataRepository, long projectId, IList<ProjectResponsiblePersonIdContract> projectResponsiblePersonIdList) : base(metadataRepository)
+        public SetResponsiblePersonsWork(ProjectRepository projectRepository, long projectId, IList<ProjectResponsiblePersonIdContract> projectResponsiblePersonIdList) : base(projectRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_projectRepository = projectRepository;
             m_projectId = projectId;
             m_projectResponsiblePersonIdList = projectResponsiblePersonIdList;
         }
 
         protected override void ExecuteWorkImplementation()
         {
-            var dbProjectResponsibles = m_metadataRepository.GetProjectResponsibleList(m_projectId);
-            var project = m_metadataRepository.Load<Project>(m_projectId);
+            var dbProjectResponsibles = m_projectRepository.GetProjectResponsibleList(m_projectId);
+            var project = m_projectRepository.Load<Project>(m_projectId);
             
             var newDbProjectResponsibles = new List<ProjectResponsiblePerson>();
             foreach (var projectPerson in m_projectResponsiblePersonIdList)
             {
-                var responsiblePerson = m_metadataRepository.Load<ResponsiblePerson>(projectPerson.ResponsiblePersonId);
-                var responsibleType = m_metadataRepository.Load<ResponsibleType>(projectPerson.ResponsibleTypeId);
+                var responsiblePerson = m_projectRepository.Load<ResponsiblePerson>(projectPerson.ResponsiblePersonId);
+                var responsibleType = m_projectRepository.Load<ResponsibleType>(projectPerson.ResponsibleTypeId);
                 var newProjectResponsible = new ProjectResponsiblePerson
                 {
                     Project = project,
@@ -43,14 +43,14 @@ namespace Vokabular.MainService.Core.Works.ProjectMetadata
             foreach (var dbProjectResponsible in dbProjectResponsibles)
             {
                 if (!newDbProjectResponsibles.Contains(dbProjectResponsible))
-                    m_metadataRepository.Delete(dbProjectResponsible);
+                    m_projectRepository.Delete(dbProjectResponsible);
             }
 
             // Create new responsibles
             foreach (var newDbProjectResponsible in newDbProjectResponsibles)
             {
                 if (!dbProjectResponsibles.Contains(newDbProjectResponsible))
-                    m_metadataRepository.Create(newDbProjectResponsible);
+                    m_projectRepository.Create(newDbProjectResponsible);
             }
         }
     }

@@ -80,65 +80,7 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .Where(x => x.Id == projectId)
                 .FutureValue().Value;
         }
-
-        public virtual Project GetProjectWithKeywords(long projectId)
-        {
-            return GetSession().QueryOver<Project>()
-                .Where(x => x.Id == projectId)
-                .Fetch(x => x.Keywords).Eager
-                .SingleOrDefault();
-        }
-
-        public virtual IList<ProjectOriginalAuthor> GetProjectOriginalAuthorList(long projectId, bool includeAuthors = false)
-        {
-            var query = GetSession().QueryOver<ProjectOriginalAuthor>()
-                .Where(x => x.Project.Id == projectId);
-
-            if (includeAuthors)
-            {
-                query.Fetch(x => x.OriginalAuthor);
-            }
-
-            return query.List();
-        }
-
-        public virtual OriginalAuthor GetAuthorByName(string firstName, string lastName)
-        {
-            return GetSession().QueryOver<OriginalAuthor>()
-                .Where(x => x.FirstName == firstName && x.LastName == lastName)
-                .SingleOrDefault();
-        }
         
-        public virtual Keyword GetKeywordByName(string name)
-        {
-            return GetSession().QueryOver<Keyword>()
-                .Where(x => x.Text == name)
-                .SingleOrDefault();
-        }
-
-        public virtual IList<ProjectResponsiblePerson> GetProjectResponsibleList(long projectId)
-        {
-            return GetSession().QueryOver<ProjectResponsiblePerson>()
-                .Where(x => x.Project.Id == projectId)
-                .Fetch(x => x.ResponsiblePerson).Eager
-                .Fetch(x => x.ResponsibleType).Eager
-                .List();
-        }
-
-        public virtual ResponsiblePerson GetResponsiblePersonByName(string firstName, string lastName)
-        {
-            return GetSession().QueryOver<ResponsiblePerson>()
-                .Where(x => x.FirstName == firstName && x.LastName == lastName)
-                .SingleOrDefault();
-        }
-
-        public virtual ResponsibleType GetResponsibleTypeByName(string text)
-        {
-            return GetSession().QueryOver<ResponsibleType>()
-                .Where(x => x.Text == text)
-                .SingleOrDefault();
-        }
-
         public virtual IList<MetadataResource> GetMetadataByBookType(BookTypeEnum bookTypeEnum)
         {
             Resource resourceAlias = null;
@@ -210,6 +152,7 @@ namespace Vokabular.DataEntities.Database.Repositories
             return result;
         }
 
+        // TODO MOVE THIS AWAY: (THIS IS NOT METADATA!)
         public virtual IList<HeadwordResource> GetHeadwordWithFetch(IEnumerable<long> headwordIds)
         {
             var result = GetSession().QueryOver<HeadwordResource>()

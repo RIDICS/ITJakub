@@ -134,7 +134,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarykind", request);
+                Put<object>($"project/{projectId}/literary-kind", request);
             }
             catch (HttpRequestException e)
             {
@@ -149,7 +149,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/literarygenre", request);
+                Put<object>($"project/{projectId}/literary-genre", request);
             }
             catch (HttpRequestException e)
             {
@@ -179,7 +179,7 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
             try
             {
-                Put<object>($"project/{projectId}/responsibleperson", request);
+                Put<object>($"project/{projectId}/responsible-person", request);
             }
             catch (HttpRequestException e)
             {

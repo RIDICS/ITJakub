@@ -7,11 +7,13 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 {
     public class UpdateKeywordsSubtask
     {
-        private readonly MetadataRepository m_metadataRepository;
+        private readonly CatalogValueRepository m_catalogValueRepository;
+        private readonly ProjectRepository m_projectRepository;
 
-        public UpdateKeywordsSubtask(MetadataRepository metadataRepository)
+        public UpdateKeywordsSubtask(ProjectRepository projectRepository, CatalogValueRepository catalogValueRepository)
         {
-            m_metadataRepository = metadataRepository;
+            m_catalogValueRepository = catalogValueRepository;
+            m_projectRepository = projectRepository;
         }
 
         public void UpdateKeywords(long projectId, BookData bookData)
@@ -19,11 +21,11 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             if (bookData.Keywords == null)
                 return;
 
-            var project = m_metadataRepository.GetProjectWithKeywords(projectId);
+            var project = m_projectRepository.GetProjectWithKeywords(projectId);
 
             foreach (var newKeywordName in bookData.Keywords)
             {
-                var dbKeyword = m_metadataRepository.GetKeywordByName(newKeywordName);
+                var dbKeyword = m_catalogValueRepository.GetKeywordByName(newKeywordName);
 
                 // Create new Keyword
                 if (dbKeyword == null)
@@ -40,7 +42,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                     project.Keywords.Add(dbKeyword);
                 }
             }
-            m_metadataRepository.Update(project);
+            m_projectRepository.Update(project);
         }
     }
 }

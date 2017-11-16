@@ -13,12 +13,14 @@ namespace Vokabular.MainService.Controllers
     {
         private readonly ProjectManager m_projectManager;
         private readonly ProjectMetadataManager m_projectMetadataManager;
+        private readonly ProjectInfoManager m_projectInfoManager;
         private readonly PageManager m_pageManager;
 
-        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, PageManager pageManager)
+        public ProjectController(ProjectManager projectManager, ProjectMetadataManager projectMetadataManager, ProjectInfoManager projectInfoManager, PageManager pageManager)
         {
             m_projectManager = projectManager;
             m_projectMetadataManager = projectMetadataManager;
+            m_projectInfoManager = projectInfoManager;
             m_pageManager = pageManager;
         }
         
@@ -88,28 +90,46 @@ namespace Vokabular.MainService.Controllers
             return m_projectMetadataManager.CreateNewProjectMetadataVersion(projectId, metadata);
         }
 
-        [HttpPut("{projectId}/literarykind")]
+        [HttpPut("{projectId}/literary-kind")]
         public void SetLiteraryKinds(long projectId, [FromBody] IntegerIdListContract kindIdList)
         {
-            m_projectMetadataManager.SetLiteraryKinds(projectId, kindIdList);
+            m_projectInfoManager.SetLiteraryKinds(projectId, kindIdList);
         }
 
-        [HttpPut("{projectId}/literarygenre")]
+        [HttpPut("{projectId}/literary-genre")]
         public void SetLiteraryGenres(long projectId, [FromBody] IntegerIdListContract genreIdList)
         {
-            m_projectMetadataManager.SetLiteraryGenres(projectId, genreIdList);
+            m_projectInfoManager.SetLiteraryGenres(projectId, genreIdList);
+        }
+
+        [HttpPut("{projectId}/literary-original")]
+        public void SetLiteraryOriginal(long projectId, [FromBody] IntegerIdListContract litOriginalIdList)
+        {
+            m_projectInfoManager.SetLiteraryOriginals(projectId, litOriginalIdList);
+        }
+
+        [HttpPut("{projectId}/keyword")]
+        public void SetKeywords(long projectId, [FromBody] IntegerIdListContract keywordIdList)
+        {
+            m_projectInfoManager.SetKeywords(projectId, keywordIdList);
+        }
+
+        [HttpPut("{projectId}/category")]
+        public void SetCategories(long projectId, [FromBody] IntegerIdListContract categoryIdList)
+        {
+            m_projectInfoManager.SetCategories(projectId, categoryIdList);
         }
 
         [HttpPut("{projectId}/author")]
         public void SetAuthors(long projectId, [FromBody] IntegerIdListContract authorIdList)
         {
-            m_projectMetadataManager.SetAuthors(projectId, authorIdList);
+            m_projectInfoManager.SetAuthors(projectId, authorIdList);
         }
 
-        [HttpPut("{projectId}/responsibleperson")]
+        [HttpPut("{projectId}/responsible-person")]
         public void SetResponsiblePersons(long projectId, [FromBody] List<ProjectResponsiblePersonIdContract> projectResposibleIdList)
         {
-            m_projectMetadataManager.SetResponsiblePersons(projectId, projectResposibleIdList);
+            m_projectInfoManager.SetResponsiblePersons(projectId, projectResposibleIdList);
         }
 
         [HttpGet("{projectId}/page")]
