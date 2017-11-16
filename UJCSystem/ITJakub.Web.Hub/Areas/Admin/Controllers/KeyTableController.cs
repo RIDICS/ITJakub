@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using ITJakub.Web.Hub.Areas.Admin.Models.Response;
-using ITJakub.Web.Hub.Areas.Admin.Models.Type;
+﻿using ITJakub.Web.Hub.Areas.Admin.Models.Type;
 using ITJakub.Web.Hub.Controllers;
 using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
 using Vokabular.MainService.DataContracts.Contracts;
-using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -22,110 +18,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             return View();
         }
 
-        public IActionResult KeyTableType(KeyTableEditorType editorType)
-        {
-            switch (editorType)
-            {
-                case KeyTableEditorType.Category:
-                    return PartialView("KeyTableEditors/_Category");
-                case KeyTableEditorType.Genre:
-                    return PartialView("KeyTableEditors/_Genre");
-                case KeyTableEditorType.Kind:
-                    return PartialView("KeyTableEditors/_Kind");
-                case KeyTableEditorType.ResponsiblePerson:
-                    return PartialView("KeyTableEditors/_ResponsiblePerson");
-                case KeyTableEditorType.ResponsiblePersonEditor:
-                    return PartialView("KeyTableEditors/_ResponsiblePersonEditor");
-                case KeyTableEditorType.LiteraryOriginal:
-                    return PartialView("KeyTableEditors/_LiteraryOriginal");
-                case KeyTableEditorType.OriginalAuthor:
-                    return PartialView("KeyTableEditors/_OriginalAuthor");
-                case KeyTableEditorType.Keyword:
-                    return PartialView("KeyTableEditors/_Keyword");
-                default:
-                    return PartialView("KeyTableEditors/_Category");
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateLiteraryKind(LiteraryKindContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryKind(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateLiteraryGenre(LiteraryGenreContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryGenre(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateAuthor(OriginalAuthorContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateOriginalAuthor(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsiblePerson(ResponsiblePersonContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsiblePerson(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsibleType(request);
-                return Json(newId);
-            }
-        }
-
-        public IActionResult GetResponsibleTypeList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsibleTypeList();
-                return Json(result);
-            }
-        }
-
-        [HttpGet]
-        public IActionResult GetLitararyGenreList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetLitararyGenreList();
-                return Json(result);
-            }
-        }
-
-        [HttpGet]
-        public IActionResult GetLiteraryKindList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetLiteraryKindList();
-                return Json(result);
-            }
-        }
-
+        //Category
         [HttpGet]
         public IActionResult GetCategoryList()
         {
@@ -163,6 +56,99 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
+        //Genre
+        [HttpPost]
+        public IActionResult CreateLiteraryGenre(LiteraryGenreContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryGenre(request);
+                return Json(newId);
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetLitararyGenreList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetLitararyGenreList();
+                return Json(result);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult RenameLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateLiteraryGenre(literaryGenreId, data);
+                return Json(response);
+            }
+        }
+
+        [HttpPost]
+        public void DeleteLiteraryGenre(int literaryGenreId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteLiteraryGenre(literaryGenreId);
+            }
+        }
+
+        //Kind
+        [HttpPost]
+        public IActionResult CreateLiteraryKind(LiteraryKindContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryKind(request);
+                return Json(newId);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetLiteraryKindList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetLiteraryKindList();
+                return Json(result);
+            }
+        }
+
+        //Responsible person editor
+
+        //Responsible person
+        [HttpPost]
+        public IActionResult CreateResponsiblePerson(ResponsiblePersonContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateResponsiblePerson(request);
+                return Json(newId);
+            }
+        }
+        [HttpPost]
+        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateResponsibleType(request);
+                return Json(newId);
+            }
+        }
+
+        public IActionResult GetResponsibleTypeList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetResponsibleTypeList();
+                return Json(result);
+            }
+        }
+        //Literary original
         [HttpGet]
         public IActionResult GetLitararyOriginalList()
         {
@@ -170,6 +156,52 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var result = client.GetLitararyOriginalList();
                 return Json(result);
+            }
+        }
+        //Original author
+        [HttpPost]
+        public IActionResult CreateAuthor(OriginalAuthorContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateOriginalAuthor(request);
+                return Json(newId);
+            }
+        }
+        //Keyword
+        [HttpGet]
+        public IActionResult GetKeywordList()
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetKeywordList();
+                return Json(result);
+            }
+        }
+        [HttpPost]
+        public void DeleteKeyword(int keywordId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteKeyword(keywordId);
+            }
+        }
+        [HttpPost]
+        public IActionResult CreateKeyword(KeywordContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateKeyword(request);
+                return Json(newId);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameKeyword(int keywordId, KeywordContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateKeyword(keywordId, request);
+                return Json(response);
             }
         }
     }

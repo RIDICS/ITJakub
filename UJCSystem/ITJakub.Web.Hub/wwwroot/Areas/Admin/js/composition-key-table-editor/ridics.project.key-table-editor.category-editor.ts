@@ -10,24 +10,33 @@
     }
 
     init() {
+        $("#project-layout-content").find("*").off();
+        $(".create-key-table-entry").text("Create new category");
+        $(".rename-key-table-entry").text("Rename category");
+        $(".delete-key-table-entry").text("Delete category");
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryCreation();
             this.categoryItemList = this.generateListStructure(data);
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage);
-            this.loadPage(1); //initialise at page 1
-            this.currentPage = 1;
+            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
+            const initialPage = 1;
+            this.loadPage(initialPage);
+            this.currentPage = initialPage;
             this.categoryRename();
             this.categoryDelete();
+        }).fail(() => {
+            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            $("#project-layout-content").empty().append(error.buildElement());
         });
     }
 
     private updateContentAfterChange() {
+
         this.util.getCategoryList().done((data: ICategoryContract[]) => {
             this.categoryItemList = this.generateListStructure(data);
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage);
+            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
         }).fail(() => {
             this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
         });
@@ -44,7 +53,6 @@
     }
 
     private splitCategoryArray(categoryItemList: JQuery, page: number): JQuery {
-        console.log(categoryItemList);
         const numberOfListItemsPerPage = this.numberOfItemsPerPage;
         const startIndex = (page - 1) * numberOfListItemsPerPage;
         const endIndex = page * numberOfListItemsPerPage;
@@ -108,7 +116,7 @@
 
     private categoryCreation() {
         $(".crud-buttons-div").on("click",
-            ".create-new-category",
+            ".create-key-table-entry",
             () => {
                 this.gui.showDoubleInputDialog("Name input", "Please input new category description:", "Please choose parent category:");
                 $(".info-dialog-ok-button").on("click",
@@ -120,14 +128,16 @@
                         } else {
                             const parentCategoryIdSelectEl = $(".id-method-selection");
                             const parentCategorySelectString = parentCategoryIdSelectEl.val() as string;
-                            console.log(parentCategorySelectString);
                             let parentCategoryIdNumber = 0;
                             if (parentCategorySelectString === "new") {
                                 parentCategoryIdNumber = null;
                             } else if (parentCategorySelectString === "fromChosen") {
                                 const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                                if (!selectedPageEl.length) {
+                                    this.gui.showInfoDialog("Info", "Please choose a category");
+                                    return;
+                                }
                                 parentCategoryIdNumber = selectedPageEl.data("category-id") as number;//TODO check when page is not selected
-                                console.log(parentCategoryIdNumber);
                             }
                             const newCategoryAjax = this.util.createNewCategory(categoryString, parentCategoryIdNumber);
                             newCategoryAjax.done(() => {
@@ -147,7 +157,7 @@
 
     private categoryRename() {
         $(".crud-buttons-div").on("click",
-            ".rename-category",
+            ".rename-key-table-entry",
             () => {
                 this.gui.showSingleInputDialog("Name input", "Please input category name after rename:");
                 $(".info-dialog-ok-button").on("click",
@@ -172,6 +182,8 @@
                                     this.gui.showInfoDialog("Error", "Category has not been renamed");
                                     $(".info-dialog-ok-button").off();
                                 });
+                            } else {
+                                this.gui.showInfoDialog("Info", "Please choose a category");
                             }
                         }
                     });
@@ -180,7 +192,7 @@
 
     private categoryDelete() {
         $(".crud-buttons-div").on("click",
-            ".delete-category",
+            ".delete-key-table-entry",
             () => {
                 this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this category?");
                 $(".confirmation-ok-button").on("click",
@@ -198,6 +210,8 @@
                                 $(".confirmation-ok-button").off();
                                 this.gui.showInfoDialog("Error", "Category deletion was not successful");
                             });
+                        } else {
+                            this.gui.showInfoDialog("Info", "Please choose a category");
                         }
                     });
             });

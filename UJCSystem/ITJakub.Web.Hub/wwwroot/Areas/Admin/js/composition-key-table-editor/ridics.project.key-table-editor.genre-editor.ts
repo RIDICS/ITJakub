@@ -10,54 +10,55 @@
     }
 
     init() {
+        $("#project-layout-content").find("*").off();
+        $(".create-key-table-entry").text("Create new genre");
+        $(".rename-key-table-entry").text("Rename genre");
+        $(".delete-key-table-entry").text("Delete genre");
         this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage, this.loadPage);
-            this.loadPage(1);
+            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
+            const initialPage = 1;
+            this.loadPage(initialPage);
+            this.currentPage = initialPage;
             this.genreRename();
             this.genreDelete();
+            this.genreCreation();
+        }).fail(() => {
+            const error = new AlertComponentBuilder(AlertType.Error).addContent("Failed to load editor");
+            $("#project-layout-content").empty().append(error.buildElement());
         });
-        this.genreCreation();
+    }
+
+    private updateContentAfterChange() {
+        this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
+            this.genreItemList = data;
+            this.loadPage(this.currentPage);
+            const itemsOnPage = this.numberOfItemsPerPage;
+            this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
+        }).fail(() => {
+            this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
+        });
     }
 
     private loadPage(pageNumber: number) {
         const listEl = $(".selectable-list-div");
-        const splitArray = this.splitGenreArray(this.genreItemList, pageNumber);
-        this.generateListStructure(splitArray, listEl);
+        const splitArray = this.splitArray(this.genreItemList, pageNumber);
+        listEl.empty();
+        const generatedListStructure = this.generateGenreList(splitArray, listEl);
+        listEl.append(generatedListStructure);
+        this.makeSelectable(listEl);
     }
 
-    private splitGenreArray(genreItemList: IGenreResponseContract[], page: number): IGenreResponseContract[] {
-        const numberOfListItemsPerPage = this.numberOfItemsPerPage;
-        const startIndex = (page - 1) * numberOfListItemsPerPage;
-        const endIndex = page * numberOfListItemsPerPage;
-        const splitArray = genreItemList.slice(startIndex, endIndex);
-        return splitArray;
-    }
-
-    private generateListStructure(genreItemList: IGenreResponseContract[], jEl: JQuery) {
-        jEl.empty();
-        const listStart = `<div class="page-list">`;
-        const listItemEnd = `</div>`;
-        const listEnd = "</div>";
-        var elm = "";
-        elm += listStart;
-        for (let i = 0; i < genreItemList.length; i++) {
-            const listItemStart =
-                `<div class="page-list-item" data-genre-id="${genreItemList[i].id}">`;
-            elm += listItemStart;
-            elm += genreItemList[i].name;
-            elm += listItemEnd;
-        }
-        elm += listEnd;
-        const html = $.parseHTML(elm);
-        jEl.append(html);
-        this.makeSelectable(jEl);
+    protected generateGenreList(genreItemList: IGenreResponseContract[], jEl: JQuery): JQuery {
+        const nameArray = genreItemList.map(a => a.name);
+        const idArray = genreItemList.map(a => a.id);
+        return this.generateSimpleList(idArray, nameArray, jEl);
     }
 
     private genreCreation() {
         $(".crud-buttons-div").on("click",
-            ".create-new-genre",
+            ".create-key-table-entry",
             () => {
                 this.gui.showSingleInputDialog("Name input", "Please input new genre name:");
                 $(".info-dialog-ok-button").on("click",
@@ -69,6 +70,7 @@
                             textareaEl.val("");
                             this.gui.showInfoDialog("Success", "New genre has been created");
                             $(".info-dialog-ok-button").off();
+                            this.updateContentAfterChange();
                         });
                         newGenreAjax.fail(() => {
                             this.gui.showInfoDialog("Error", "New genre has not been created");
@@ -80,27 +82,29 @@
 
     private genreRename() {
         $(".crud-buttons-div").on("click",
-            ".rename-genre",
+            ".rename-key-table-entry",
             () => {
                 this.gui.showSingleInputDialog("Name input", "Please input genre name after rename:");
                 $(".info-dialog-ok-button").on("click",
                     () => {
                         const textareaEl = $(".input-dialog-textarea");
-                        const genreString = textareaEl.val();
-                        const selectedPageEl = $(".page-list").children(".ui-selected");
+                        const genreName = textareaEl.val();
+                        const selectedPageEl = $(".page-list").children(".page-list-item-selected");
                         if (selectedPageEl.length) {
-                            const id = selectedPageEl.data("genre-id") as number;
-                            console.log(id);
-                            const renameAjax = this.util.renameGenre(genreString, id);
+                            const genreId = selectedPageEl.data("key-id") as number;
+                            const renameAjax = this.util.renameGenre(genreId, genreName);
                             renameAjax.done(() => {
                                 textareaEl.val("");
                                 this.gui.showInfoDialog("Success", "Genre has been renamed");
                                 $(".info-dialog-ok-button").off();
+                                this.updateContentAfterChange();
                             });
                             renameAjax.fail(() => {
                                 this.gui.showInfoDialog("Error", "Genre has not been renamed");
                                 $(".info-dialog-ok-button").off();
                             });
+                        } else {
+                            this.gui.showInfoDialog("Warning", "Please choose a genre");
                         }
                     });
             });
@@ -108,10 +112,28 @@
 
     private genreDelete() {
         $(".crud-buttons-div").on("click",
-            ".delete-genre",
+            ".delete-key-table-entry",
             () => {
                 this.gui.showConfirmationDialog("Confirm", "Are you sure you want to delete this genre?");
-                //TODO add logic on ok button
+                $(".confirmation-ok-button").on("click",
+                    () => {
+                        const selectedPageEl = $(".page-list").find(".page-list-item-selected");
+                        if (selectedPageEl.length) {
+                            const id = selectedPageEl.data("key-id") as number;
+                            const deleteAjax = this.util.deleteGenre(id);
+                            deleteAjax.done(() => {
+                                $(".confirmation-ok-button").off();
+                                this.gui.showInfoDialog("Success", "Genre deletion was successful");
+                                this.updateContentAfterChange();
+                            });
+                            deleteAjax.fail(() => {
+                                $(".confirmation-ok-button").off();
+                                this.gui.showInfoDialog("Error", "Genre deletion was not successful");
+                            });
+                        } else {
+                            this.gui.showInfoDialog("Warning", "Please choose a genre");
+                        }
+                    });
             });
     }
 }

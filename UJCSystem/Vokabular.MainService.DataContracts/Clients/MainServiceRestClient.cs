@@ -418,6 +418,37 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public object UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
+        {
+            try
+            {
+                var response = Put<object>("literarygenre/"+literaryGenreId, data);
+                return response;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteLiteraryGenre(int literaryGenreId)
+        {
+            try
+            {
+                Delete("literarygenre/"+ literaryGenreId);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateOriginalAuthor(OriginalAuthorContract author)
         {
             try
@@ -456,6 +487,54 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = Get<List<LiteraryKindContract>>("literarykind");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public List<KeywordContract> GetKeywordList()
+        {
+            try
+            {
+                var result = Get<List<KeywordContract>>("keyword");
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateKeyword(KeywordContract keyword)
+        {
+            try
+            {
+                var newId = Post<int>("keyword", keyword);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public object UpdateKeyword(int keywordId, KeywordContract data)
+        {
+            try
+            {
+                var response = Put<object>("keyword/" + keywordId, data);
+                return response;
             }
             catch (HttpRequestException e)
             {
@@ -514,12 +593,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int UpdateCategory(int categoryId, CategoryContract category)//TODO
+        public object UpdateCategory(int categoryId, CategoryContract category)//TODO
         {
             try
             {
-                var resultId = Put<int>("category/"+categoryId, category);
-                System.Diagnostics.Debug.WriteLine(resultId);
+                var resultId = Put<object>("category/"+categoryId, category);
                 return resultId;
             }
             catch (HttpRequestException e)
@@ -536,6 +614,21 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 Delete("category/"+categoryId);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteKeyword(int keywordId)
+        {
+            try
+            {
+                Delete("keyword/" + keywordId);
             }
             catch (HttpRequestException e)
             {
