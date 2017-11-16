@@ -24,4 +24,30 @@
             $(".page-list-item").not(targetEl).removeClass("page-list-item-selected");
         });
     }
+
+    protected splitArray(genreItemList: any[], page: number): any[] {
+        const numberOfListItemsPerPage = this.numberOfItemsPerPage;
+        const startIndex = (page - 1) * numberOfListItemsPerPage;
+        const endIndex = page * numberOfListItemsPerPage;
+        const splitArray = genreItemList.slice(startIndex, endIndex);
+        return splitArray;
+    }
+
+    protected generateSimpleList(ids: number[], names:string[], jEl: JQuery): JQuery {
+        const listStart = `<div class="page-list">`;
+        const listItemEnd = "</div>";
+        const listEnd = "</div>";
+        var elm = "";
+        elm += listStart;
+        for (let i = 0; i < ids.length; i++) {
+            const listItemStart =
+                `<div class="page-list-item" data-key-id="${ids[i]}">`;
+            elm += listItemStart;
+            elm += names[i];
+            elm += listItemEnd;
+        }
+        elm += listEnd;
+        const html = $.parseHTML(elm);
+        return $(html);
+    }
 }
