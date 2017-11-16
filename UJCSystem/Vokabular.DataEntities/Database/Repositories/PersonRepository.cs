@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Transform;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -74,6 +76,44 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .ThenBy(x => x.FirstName).Asc
                 .Take(count)
                 .List();
+        }
+
+        public ListWithTotalCountResult<ResponsiblePerson> GetResponsiblePersonList(int start, int count)
+        {
+            var query = GetSession().QueryOver<ResponsiblePerson>()
+                .OrderBy(x => x.LastName).Asc
+                .ThenBy(x => x.FirstName).Asc
+                .Skip(start)
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery()
+                .FutureValue<int>();
+
+            return new ListWithTotalCountResult<ResponsiblePerson>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
+        }
+
+        public ListWithTotalCountResult<OriginalAuthor> GetOriginalAuthorList(int start, int count)
+        {
+            var query = GetSession().QueryOver<OriginalAuthor>()
+                .OrderBy(x => x.LastName).Asc
+                .ThenBy(x => x.FirstName).Asc
+                .Skip(start)
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery()
+                .FutureValue<int>();
+
+            return new ListWithTotalCountResult<OriginalAuthor>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
         }
     }
 }

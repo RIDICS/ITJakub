@@ -1,4 +1,6 @@
-﻿namespace Vokabular.MainService.DataContracts.Contracts
+﻿using System.Collections.Generic;
+
+namespace Vokabular.MainService.DataContracts.Contracts
 {
     public class CategoryContract
     {
@@ -9,5 +11,10 @@
         public string ExternalId { get; set; }
 
         public string Description { get; set; }
+    }
+
+    public class CategoryTreeContract : CategoryContract
+    {
+        public List<CategoryTreeContract> Subcategories { get; set; }
     }
 }
