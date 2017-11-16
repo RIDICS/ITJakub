@@ -145,6 +145,13 @@ namespace Vokabular.MainService.Controllers
             var result = m_pageManager.GetTextResourceList(projectId, resourceGroupId);
             return result;
         }
+
+        [HttpGet("{projectId}/image")]
+        public List<ImageWithPageContract> GetImageList(long projectId)
+        {
+            var result = m_pageManager.GetImageResourceList(projectId);
+            return result;
+        }
         
         [HttpGet("text/{textId}")]
         public FullTextContract GetTextResource(long textId, [FromQuery] TextFormatEnumContract? format)
@@ -181,6 +188,17 @@ namespace Vokabular.MainService.Controllers
         public void DeleteComment(long commentId)
         {
             m_pageManager.DeleteComment(commentId);
+        }
+
+        [HttpGet("image/{imageId}")]
+        public IActionResult GetImage(long imageId)
+        {
+            var result = m_pageManager.GetImageResource(imageId);
+            if (result == null)
+                return NotFound();
+
+            Response.ContentLength = result.FileSize;
+            return File(result.Stream, result.MimeType, result.FileName);
         }
     }
 }
