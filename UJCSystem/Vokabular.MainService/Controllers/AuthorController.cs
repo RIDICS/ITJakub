@@ -9,7 +9,7 @@ using Vokabular.Shared.DataContracts.Types;
 namespace Vokabular.MainService.Controllers
 {
     [Route("api/[controller]")]
-    public class AuthorController : Controller
+    public class AuthorController : BaseController
     {
         private readonly PersonManager m_personManager;
 
@@ -67,6 +67,15 @@ namespace Vokabular.MainService.Controllers
             {
                 return StatusCode((int)exception.StatusCode, exception.Message);
             }
+        }
+
+        [HttpGet("")]
+        public List<OriginalAuthorContract> GetOriginalAuthorList([FromQuery] int? start, [FromQuery] int? count)
+        {
+            var result = m_personManager.GetOriginalAuthorList(start, count);
+
+            SetTotalCountHeader(result.TotalCount);
+            return result.List;
         }
     }
 }

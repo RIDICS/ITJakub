@@ -1,6 +1,6 @@
 using AutoMapper;
 using ITJakub.DataEntities.Database.Entities;
-using ITJakub.ITJakubService.DataContracts;
+using Vokabular.Shared.DataContracts.Search.Old;
 
 namespace ITJakub.ITJakubService.Core.AutoMapperProfiles
 {

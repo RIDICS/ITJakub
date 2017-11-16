@@ -167,7 +167,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Text
                     },
-                    ParentResource = new Resource {Id = 90},
+                    ResourcePage = new Resource {Id = 90},
                     ExternalId = "xml-40-r",
                     VersionNumber = 1
                 },
@@ -179,7 +179,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Text
                     },
-                    ParentResource = new Resource {Id = 80},
+                    ResourcePage = new Resource {Id = 80},
                     ExternalId = "xml-40-v",
                     VersionNumber = 1
                 },
@@ -191,7 +191,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Text
                     },
-                    ParentResource = new Resource {Id = 90},
+                    ResourcePage = new Resource {Id = 90},
                     ExternalId = "xml-copy",
                     VersionNumber = 1
                 }
@@ -210,7 +210,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Image
                     },
-                    ParentResource = new Resource {Id = 90},
+                    ResourcePage = new Resource {Id = 90},
                     FileName = "image_40r.jpg",
                     VersionNumber = 1
                 },
@@ -222,7 +222,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Image
                     },
-                    ParentResource = new Resource {Id = 80},
+                    ResourcePage = new Resource {Id = 80},
                     FileName = "image_40v.jpg",
                     VersionNumber = 1
                 },
@@ -234,7 +234,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                         ContentType = ContentTypeEnum.Page,
                         ResourceType = ResourceTypeEnum.Image
                     },
-                    ParentResource = new Resource {Id = 90},
+                    ResourcePage = new Resource {Id = 90},
                     FileName = "image_copy.jpg",
                     VersionNumber = 1
                 }
@@ -456,7 +456,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     },
                     FileName = "file-1.mp3",
                     VersionNumber = 1,
-                    ParentResource = new Resource
+                    ResourceTrack = new Resource
                     {
                         Id = 1
                     }
@@ -469,7 +469,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     },
                     FileName = "file-2.mp3",
                     VersionNumber = 1,
-                    ParentResource = new Resource
+                    ResourceTrack = new Resource
                     {
                         Id = 2
                     }
@@ -482,7 +482,7 @@ namespace ITJakub.FileProcessing.Service.Test.Mock
                     },
                     FileName = "file-2.wav",
                     VersionNumber = 1,
-                    ParentResource = new Resource
+                    ResourceTrack = new Resource
                     {
                         Id = 2
                     }

@@ -18,6 +18,8 @@
     <many-to-one name="CreatedByUser" class="User" lazy="proxy" not-null="true" />
     
     <many-to-one name="DefaultBookType" class="BookType" lazy="proxy" not-null="true" />
+
+    <many-to-one name="BookVersion" class="BookVersionResource" lazy="proxy" not-null="false" />
     
     <bag name="ResourceVersions" table="Snapshot_ResourceVersion" cascade="save-update" lazy="true">
       <key column="Snapshot" />

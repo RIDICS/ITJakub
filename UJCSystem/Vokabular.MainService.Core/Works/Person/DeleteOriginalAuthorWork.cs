@@ -1,4 +1,5 @@
 using System.Net;
+using NHibernate.Exceptions;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Repositories;
 using Vokabular.DataEntities.Database.UnitOfWork;
@@ -21,9 +22,19 @@ namespace Vokabular.MainService.Core.Works.Person
         {
             var dbAuthor = m_personRepository.FindById<OriginalAuthor>(m_authorId);
             if (dbAuthor == null)
+            {
                 throw new HttpErrorCodeException(ErrorMessages.NotFound, HttpStatusCode.NotFound);
+            }
 
-            m_personRepository.Delete(dbAuthor);
+            try
+            {
+                m_personRepository.Delete(dbAuthor);
+                m_personRepository.UnitOfWork.CurrentSession.Flush();
+            }
+            catch (GenericADOException exception)
+            {
+                throw new HttpErrorCodeException("Could not delete resource. Existing relation to Project?", exception, HttpStatusCode.BadRequest);
+            }
         }
     }
 }

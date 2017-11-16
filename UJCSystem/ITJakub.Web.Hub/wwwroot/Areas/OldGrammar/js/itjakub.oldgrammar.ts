@@ -23,14 +23,14 @@
 
     var search: Search;
     
-    function convertSearchResults(responseResults: Array<Object>): PageDescription[]{
+    function convertSearchResults(responseResults: Array<IPage>): PageDescription[]{
 
         var searchResults = new Array<PageDescription>();
         for (var i = 0; i < responseResults.length; i++) {
             var result = responseResults[i];
             var searchResult = new PageDescription();
-            searchResult.PageXmlId = result["PageXmlId"];
-            searchResult.PageName = result["PageName"];
+            searchResult.pageId = result.id;
+            searchResult.pageName = result.name;
             searchResults.push(searchResult);
         }
 
@@ -48,7 +48,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/TextSearchInBook",
-            data: { text: text, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { text: text, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {
@@ -71,7 +71,7 @@
             type: "GET",
             traditional: true,
             url: getBaseUrl() + "OldGrammar/OldGrammar/AdvancedSearchInBook",
-            data: { json: json, bookXmlId: readerPlugin.getBookXmlId(), versionXmlId: readerPlugin.getVersionXmlId() },
+            data: { json: json, projectId: readerPlugin.getBookXmlId(), snapshotId: readerPlugin.getVersionXmlId() },
             dataType: 'json',
             contentType: 'application/json',
             success: response => {

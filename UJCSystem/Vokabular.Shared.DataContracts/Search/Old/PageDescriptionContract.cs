@@ -2,7 +2,7 @@
 
 namespace Vokabular.Shared.DataContracts.Search.Old
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "PageDescriptionContract")]
     public class PageDescriptionContract
     {
         [DataMember]

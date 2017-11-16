@@ -14,10 +14,10 @@ namespace Vokabular.MainService.Core.Works.Search
         private readonly MetadataRepository m_metadataRepository;
         private readonly BookRepository m_bookRepository;
         private readonly SearchCriteriaQueryCreator m_queryCreator;
-        private readonly TermCriteriaConditionCreator m_termCriteriaCreator;
+        private readonly TermCriteriaPageConditionCreator m_termCriteriaCreator;
 
         public SearchByCriteriaWork(MetadataRepository metadataRepository, BookRepository bookRepository,
-            SearchCriteriaQueryCreator queryCreator, TermCriteriaConditionCreator termCriteriaCreator) : base(
+            SearchCriteriaQueryCreator queryCreator, TermCriteriaPageConditionCreator termCriteriaCreator) : base(
             metadataRepository)
         {
             m_metadataRepository = metadataRepository;

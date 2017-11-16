@@ -8,7 +8,7 @@ using Vokabular.Shared.DataContracts.Types;
 
 namespace Vokabular.Shared.DataContracts.Search.Old
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "SearchResultContract")]
     [KnownType(typeof(AudioBookSearchResultContract))]
     [KnownType(typeof(SearchResultDetailContract))]
     public class SearchResultContract
@@ -116,7 +116,7 @@ namespace Vokabular.Shared.DataContracts.Search.Old
         }
     }
 
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "SearchResultDetailContract")]
     public class SearchResultDetailContract : SearchResultContract
     {
 

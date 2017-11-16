@@ -343,6 +343,7 @@ namespace ITJakub.FileProcessing.Service.Test
                 Page = new BookPageData
                 {
                     Text = "40r",
+                    Position = 1,
                     XmlId = "new-xml-40-r"
                 },
                 SubContentItems = new List<BookContentItemData>()
@@ -354,6 +355,7 @@ namespace ITJakub.FileProcessing.Service.Test
                 Page = new BookPageData
                 {
                     Text = "40v",
+                    Position = 2,
                     XmlId = "new-xml-40-v"
                 },
                 SubContentItems = new List<BookContentItemData>()

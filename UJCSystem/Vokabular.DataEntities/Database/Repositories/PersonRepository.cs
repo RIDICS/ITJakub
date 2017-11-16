@@ -15,13 +15,6 @@ namespace Vokabular.DataEntities.Database.Repositories
         {
         }
 
-        public IList<ResponsibleType> GetResponsibleTypeList()
-        {
-            return GetSession().QueryOver<ResponsibleType>()
-                .OrderBy(x => x.Text).Asc
-                .List();
-        }
-
         public IList<OriginalAuthor> GetAuthorAutocomplete(string queryString, BookTypeEnum? bookTypeEnum, int count)
         {
             OriginalAuthor authorAlias = null;

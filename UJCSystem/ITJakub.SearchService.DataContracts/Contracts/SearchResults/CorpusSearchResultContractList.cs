@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
+using Vokabular.Shared.DataContracts.Search.Old;
 
-namespace ITJakub.Shared.Contracts.Searching.Results // wrong namespace is required for deserialization from SearchService
+namespace ITJakub.SearchService.DataContracts.Contracts.SearchResults
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "CorpusSearchResultContractList")]
     public class CorpusSearchResultContractList
     {
         [DataMember]

@@ -3,9 +3,9 @@ using System.IO;
 using System.Runtime.Serialization;
 using Vokabular.Shared.DataContracts.Search.Corpus;
 
-namespace ITJakub.Shared.Contracts.Searching.Results // wrong namespace is required for deserialization from SearchService
+namespace Vokabular.Shared.DataContracts.Search.Old
 {
-    [DataContract]
+    [DataContract(Namespace = "http://schemas.datacontract.org/2004/07/ITJakub.Shared.Contracts.Searching.Results", Name = "CorpusSearchResultContract")]
     public class CorpusSearchResultContract
     {
         [DataMember]

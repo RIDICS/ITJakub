@@ -11,23 +11,25 @@ namespace Vokabular.MainService.Controllers
     public class HeadwordController : Controller
     {
         private readonly BookManager m_bookManager;
+        private readonly BookSearchManager m_bookSearchManager;
 
-        public HeadwordController(BookManager bookManager)
+        public HeadwordController(BookManager bookManager, BookSearchManager bookSearchManager)
         {
             m_bookManager = bookManager;
+            m_bookSearchManager = bookSearchManager;
         }
 
         [HttpPost("search")]
         public List<HeadwordContract> SearchHeadword([FromBody] HeadwordSearchRequestContract request)
         {
-            var result = m_bookManager.SearchHeadwordByCriteria(request);
+            var result = m_bookSearchManager.SearchHeadwordByCriteria(request);
             return result;
         }
 
         [HttpPost("search-count")]
         public long SearchHeadwordResultCount([FromBody] HeadwordSearchRequestContract request)
         {
-            var result = m_bookManager.SearchHeadwordByCriteriaCount(request);
+            var result = m_bookSearchManager.SearchHeadwordByCriteriaCount(request);
             return result;
         }
 

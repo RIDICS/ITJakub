@@ -13,7 +13,11 @@ namespace Vokabular.MainService.Core
         public void Install(IIocContainer container)
         {
             container.AddPerWebRequest<BookManager>();
+            container.AddPerWebRequest<BookSearchManager>();
+            container.AddPerWebRequest<CatalogValueManager>();
             container.AddPerWebRequest<CategoryManager>();
+            container.AddPerWebRequest<CorpusSearchManager>();
+            container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
             container.AddPerWebRequest<PageManager>();
             container.AddPerWebRequest<PersonManager>();
@@ -24,6 +28,7 @@ namespace Vokabular.MainService.Core
 
             container.AddPerWebRequest<CommunicationConfigurationProvider>();
             container.AddPerWebRequest<CommunicationProvider>();
+            container.AddPerWebRequest<FulltextStorageProvider>();
             container.AddPerWebRequest<IFulltextStorage, ExistDbStorage>();
             container.AddPerWebRequest<IFulltextStorage, ElasticSearchStorage>();
 
@@ -35,6 +40,7 @@ namespace Vokabular.MainService.Core
             container.AddSingleton<Profile, KeywordProfile>();
             container.AddSingleton<Profile, LiteraryGenreProfile>();
             container.AddSingleton<Profile, LiteraryKindProfile>();
+            container.AddSingleton<Profile, LiteraryOriginalProfile>();
             container.AddSingleton<Profile, MetadataProfile>();
             container.AddSingleton<Profile, NamedResourceGroupProfile>();
             container.AddSingleton<Profile, OriginalAuthorProfile>();

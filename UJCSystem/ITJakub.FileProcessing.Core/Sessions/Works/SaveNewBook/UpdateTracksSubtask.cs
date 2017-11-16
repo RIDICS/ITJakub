@@ -34,8 +34,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
 
             var dbTracks = m_resourceRepository.GetProjectTracks(projectId);
             var dbAudioList = m_resourceRepository.GetProjectAudioResources(projectId);
-            var dbAudioGroups = dbAudioList.Where(x => x.ParentResource != null)
-                .GroupBy(x => x.ParentResource.Id)
+            var dbAudioGroups = dbAudioList.Where(x => x.ResourceTrack != null)
+                .GroupBy(x => x.ResourceTrack.Id)
                 .ToDictionary(x => x.Key, x => x.ToList());
             foreach (var track in bookData.Tracks)
             {
@@ -152,7 +152,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
                 Comment = comment,
                 CreateTime = now,
                 CreatedByUser = user,
-                ParentResource = resourceTrack
+                ResourceTrack = resourceTrack
             };
             resource.LatestVersion = newDbAudio;
             resource.Name = data.FileName;

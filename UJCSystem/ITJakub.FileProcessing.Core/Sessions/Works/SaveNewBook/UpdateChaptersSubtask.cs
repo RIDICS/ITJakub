@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ITJakub.FileProcessing.Core.Data;
+using ITJakub.FileProcessing.Core.Sessions.Works.Helpers;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
 using Vokabular.DataEntities.Database.Repositories;
@@ -32,16 +33,16 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var project = m_resourceRepository.Load<Project>(projectId);
 
             var dbChapters = m_resourceRepository.GetProjectChapters(projectId);
-            var dbChaptersByName = dbChapters.ToDictionary(x => x.Name);
-            var dbPagesByName = dbPageResources != null
-                ? dbPageResources.ToDictionary(x => x.Name)
-                : new Dictionary<string, PageResource>();
+            var dbChaptersByName = dbChapters.ToDictionaryMultipleValues(x => x.Name);
+            var dbPagesByPosition = dbPageResources != null
+                ? dbPageResources.ToDictionary(x => x.Position)
+                : new Dictionary<int, PageResource>();
 
             var chapterRecursionData = new ChapterRecursionData
             {
                 ImportedChapterResourceIds = importedChapterResourceIds,
                 DbChaptersByName = dbChaptersByName,
-                DbPagesByName = dbPagesByName,
+                DbPagesByPosition = dbPagesByPosition,
                 Project = project,
                 User = user,
                 Now = now,
@@ -64,7 +65,7 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             var parentChapterResourceResourceId = parentChapterResourceResource?.Id;
 
             var importedChapterResourceIds = data.ImportedChapterResourceIds;
-            var dbPagesByName = data.DbPagesByName;
+            var dbPagesByPosition = data.DbPagesByPosition;
             var dbChaptersByName = data.DbChaptersByName;
             var project = data.Project;
             var user = data.User;
@@ -74,13 +75,21 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
             foreach (var bookContentItem in bookContentItems)
             {
                 PageResource dbPage;
-                if (!dbPagesByName.TryGetValue(bookContentItem.Page.Text, out dbPage))
+                if (!dbPagesByPosition.TryGetValue(bookContentItem.Page.Position, out dbPage))
                 {
-                    throw new ArgumentException($"Trying assign Chapter to non-existent Page {bookContentItem.Page.Text}");
+                    throw new ArgumentException($"Trying assign Chapter to non-existent Page with position {bookContentItem.Page.Position} (page name: {bookContentItem.Page.Text})");
                 }
 
-                ChapterResource dbChapter;
-                if (!dbChaptersByName.TryGetValue(bookContentItem.Text, out dbChapter))
+                ChapterResource dbChapter = null;
+                List<ChapterResource> dbChapters;
+                if (dbChaptersByName.TryGetValue(bookContentItem.Text, out dbChapters))
+                {
+                    dbChapter = dbChapters.Count == 1
+                        ? dbChapters.First()
+                        : dbChapters.FirstOrDefault(x => x.Position == bookContentItem.ItemOrder); // If multiple chapters have the same name, try identify chapter by Position
+                }
+
+                if (dbChapter == null)
                 {
                     var newResource = new Resource
                     {
@@ -136,8 +145,8 @@ namespace ITJakub.FileProcessing.Core.Sessions.Works.SaveNewBook
         private class ChapterRecursionData
         {
             public HashSet<long> ImportedChapterResourceIds { get; set; }
-            public Dictionary<string, ChapterResource> DbChaptersByName { get; set; }
-            public Dictionary<string, PageResource> DbPagesByName { get; set; }
+            public Dictionary<string, List<ChapterResource>> DbChaptersByName { get; set; }
+            public Dictionary<int, PageResource> DbPagesByPosition { get; set; }
             public Project Project { get; set; }
             public User User { get; set; }
             public DateTime Now { get; set; }

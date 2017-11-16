@@ -1,6 +1,6 @@
-﻿using ITJakub.SearchService.DataContracts.Types;
-using ITJakub.Web.Hub.Core.Communication;
+﻿using ITJakub.Web.Hub.Core.Communication;
 using Microsoft.AspNetCore.Mvc;
+using Vokabular.MainService.DataContracts.Contracts.Type;
 
 namespace ITJakub.Web.Hub.Controllers
 {
@@ -12,9 +12,9 @@ namespace ITJakub.Web.Hub.Controllers
 
         public ActionResult EditionNote(long bookId)
         {
-            using (var client = GetMainServiceClient())
+            using (var client = GetRestClient())
             {
-                var text = client.GetBookEditionNote(bookId, OutputFormatEnumContract.Html);
+                var text = client.GetEditionNote(bookId, TextFormatEnumContract.Html);
                 ViewData["noteText"] = text;
                 return View();
             }

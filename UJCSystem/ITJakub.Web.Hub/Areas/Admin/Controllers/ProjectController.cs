@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
+using Vokabular.RestClient.Results;
 
 namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 {
@@ -30,7 +30,7 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         {
         }
 
-        private ProjectListViewModel CreateProjectListViewModel(ProjectListData data, int start)
+        private ProjectListViewModel CreateProjectListViewModel(PagedResultList<ProjectContract> data, int start)
         {
             var listViewModel = Mapper.Map<List<ProjectItemViewModel>>(data.List);
             return new ProjectListViewModel

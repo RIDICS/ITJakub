@@ -54,9 +54,9 @@ namespace Vokabular.DataEntities.Database.ConditionCriteria
         }
     }
 
-    public class TermCriteriaConditionCreator : CriteriaConditionCreatorBase, ISearchCriteriaCreator
+    public class TermCriteriaPageConditionCreator : CriteriaConditionCreatorBase, ISearchCriteriaCreator
     {
-        public TermCriteriaConditionCreator()
+        public TermCriteriaPageConditionCreator()
         {
             Parameters = new Dictionary<string, object>();
         }

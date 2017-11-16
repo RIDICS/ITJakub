@@ -13,7 +13,7 @@ namespace Vokabular.DataEntities.Database.Search
         private const int MaxCount = 100;
         private const int DefaultCount = 10;
         private const int DefaultStart = 0;
-        private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot";
+        private const string FromClause = "from MetadataResource metadata inner join metadata.Resource resource inner join resource.Project project inner join project.LatestPublishedSnapshot snapshot left outer join snapshot.BookVersion bookVersion";
         // inner join to LatestPublishedSnapshots filters result only to published Projects
         private const string ResultFromClause = "from MetadataResource metadata1 inner join metadata1.Resource resource1";// left outer join resource1.Project project1 inner join project1.LatestPublishedSnapshot snapshot1";
 
@@ -54,11 +54,11 @@ namespace Vokabular.DataEntities.Database.Search
             return queryString;
         }
 
-        public string GetProjectIdListQueryString()
+        public string GetProjectIdentificationListQueryString()
         {
             var joinAndWhereClause = CreateJoinAndWhereClause(m_conjunctionQuery);
             
-            var queryString = $"select distinct project.Id {FromClause} {joinAndWhereClause}";
+            var queryString = $"select distinct project.Id as ProjectId, project.ExternalId as ProjectExternalId, snapshot.Id as SnapshotId, bookVersion.ExternalId as BookVersionExternalId {FromClause} {joinAndWhereClause}";
 
             return queryString;
         }

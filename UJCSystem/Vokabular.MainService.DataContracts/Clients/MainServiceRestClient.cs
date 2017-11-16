@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Vokabular.MainService.DataContracts.Contracts;
 using Vokabular.MainService.DataContracts.Contracts.Search;
 using Vokabular.MainService.DataContracts.Contracts.Type;
-using Vokabular.MainService.DataContracts.Data;
 using Vokabular.RestClient;
 using Vokabular.RestClient.Errors;
 using Vokabular.RestClient.Extensions;
@@ -34,16 +33,12 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        public ProjectListData GetProjectList(int start, int count)
+        public PagedResultList<ProjectContract> GetProjectList(int start, int count)
         {
             try
             {
-                var result = GetFull<List<ProjectContract>>($"project?start={start}&count={count}");
-                return new ProjectListData
-                {
-                    TotalCount = result.GetTotalCountHeader(),
-                    List = result.Result
-                };
+                var result = GetPagedList<ProjectContract>($"project?start={start}&count={count}");
+                return result;
             }
             catch (HttpRequestException e)
             {
@@ -1226,6 +1221,22 @@ namespace Vokabular.MainService.DataContracts.Clients
             try
             {
                 var result = PostReturnString($"book/headword/{headwordId}/text/search?format={format}", request);
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public string GetEditionNote(long projectId, TextFormatEnumContract format)
+        {
+            try
+            {
+                var result = GetString($"book/{projectId}/edition-note?format={format}");
                 return result;
             }
             catch (HttpRequestException e)

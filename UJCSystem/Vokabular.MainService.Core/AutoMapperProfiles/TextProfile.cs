@@ -19,7 +19,7 @@ namespace Vokabular.MainService.Core.AutoMapperProfiles
 
             CreateMap<TextResource, TextWithPageContract>()
                 .IncludeBase<TextResource, TextContract>()
-                .ForMember(dest => dest.ParentPage, opt => opt.MapFrom(src => src.ParentResource.LatestVersion));
+                .ForMember(dest => dest.ParentPage, opt => opt.MapFrom(src => src.ResourcePage.LatestVersion));
         }
     }
 }
