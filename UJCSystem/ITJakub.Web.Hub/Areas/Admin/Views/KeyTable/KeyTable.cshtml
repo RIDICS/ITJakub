@@ -37,6 +37,101 @@
         </div>
 
         <div class="content" id="project-layout-content">
+            <div class="table-of-keys-content">
+                <div class="row table-of-keys">
+                    <div class="col-xs-9 selectable-list-div"></div>
+                    <div class="col-xs-3 crud-buttons-div"><div class="btn-group-vertical">
+                        <button type="button" class="btn btn-default create-key-table-entry">Create table of keys entry</button>
+                        <button type="button" class="btn btn-default rename-key-table-entry">Rename table of keys entry</button>
+                        <button type="button" class="btn btn-default delete-key-table-entry">Delete table of keys entry</button>
+                    </div></div>
+                </div>
+                <div class="row pagination-row-elements">
+                    <div class="col-xs-12 text-center key-table-pagination"></div>
+                </div></div>
+            <div class="modal fade double-input-modal-dialog" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title double-input-dialog-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <p class="primary-input-dialog-message"></p>
+                                    <textarea class="textarea-no-resize primary-input-dialog-textarea" rows="4" cols="30"></textarea>
+                                </div>
+                                <div class="col-xs-6">
+                                    <p class="secondary-input-dialog-message"></p>
+                                    <select class="id-method-selection">
+                                        <option value="new">No parent category</option>
+                                        <option value="fromChosen">From selected category</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default info-dialog-ok-button" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade input-modal-dialog" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title input-dialog-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="input-dialog-message"></p>
+                            <textarea class="textarea-no-resize input-dialog-textarea" rows="4" cols="30"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default info-dialog-ok-button" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade info-modal-dialog" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title info-dialog-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="info-dialog-message"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade confirmation-modal-dialog" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title confirmation-dialog-title"></h4>
+                        </div>
+                        <div class="modal-body">
+                            <p class="confirmation-dialog-message"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default confirmation-ok-button" data-dismiss="modal">Ok</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
