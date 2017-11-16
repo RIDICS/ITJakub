@@ -332,7 +332,8 @@ gulp.task("bundle:ridics_admin_editors-common-base", function () {
 
 gulp.task("bundle:ridics_admin_composition-key-table-editor", function () {
     return gulp.src([
-        paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor*.js"
+        paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor.table-base.js",
+        paths.webroot + "Areas/Admin/js/composition-key-table-editor/ridics.project.key-table-editor!(table-base)*.js"
         ])
         .pipe(sourcemaps.init())
         .pipe(concat("ridics.project.composition-key-table-editor.bundle.js"))
