@@ -33,11 +33,11 @@ namespace Vokabular.MainService.DataContracts.Clients
         {
         }
 
-        public PagedResultList<ProjectContract> GetProjectList(int start, int count)
+        public PagedResultList<ProjectDetailContract> GetProjectList(int start, int count, bool fetchPageCount = false)
         {
             try
             {
-                var result = GetPagedList<ProjectContract>($"project?start={start}&count={count}");
+                var result = GetPagedList<ProjectDetailContract>($"project?start={start}&count={count}&fetchPageCount={fetchPageCount}");
                 return result;
             }
             catch (HttpRequestException e)
@@ -49,11 +49,11 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public ProjectContract GetProject(long projectId)
+        public ProjectDetailContract GetProject(long projectId, bool fetchPageCount = false)
         {
             try
             {
-                var project = Get<ProjectContract>($"project/{projectId}");
+                var project = Get<ProjectDetailContract>($"project/{projectId}?fetchPageCount={fetchPageCount}");
                 return project;
             }
             catch (HttpRequestException e)

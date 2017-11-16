@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Vokabular.DataEntities.Database.Daos;
 using Vokabular.DataEntities.Database.Entities;
 using Vokabular.DataEntities.Database.Entities.Enums;
+using Vokabular.DataEntities.Database.Entities.SelectResults;
 using Vokabular.DataEntities.Database.UnitOfWork;
 
 namespace Vokabular.DataEntities.Database.Repositories
@@ -11,21 +13,23 @@ namespace Vokabular.DataEntities.Database.Repositories
         public ProjectRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public virtual int GetProjectCount()
+        
+        public virtual ListWithTotalCountResult<Project> GetProjectList(int start, int count)
         {
-            return GetSession().QueryOver<Project>()
-                .RowCount();
-        }
-
-        public virtual IList<Project> GetProjectList(int start, int count)
-        {
-            return GetSession().QueryOver<Project>()
+            var query = GetSession().QueryOver<Project>()
                 .Fetch(x => x.CreatedByUser).Eager
                 .OrderBy(x => x.Name).Asc
                 .Skip(start)
-                .Take(count)
-                .List();
+                .Take(count);
+
+            var list = query.Future();
+            var totalCount = query.ToRowCountQuery().FutureValue<int>();
+
+            return new ListWithTotalCountResult<Project>
+            {
+                List = list.ToList(),
+                Count = totalCount.Value
+            };
         }
 
         public virtual Project GetProject(long projectId)

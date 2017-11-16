@@ -23,9 +23,9 @@ namespace Vokabular.MainService.Controllers
         }
         
         [HttpGet]
-        public List<ProjectContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count)
+        public List<ProjectDetailContract> GetProjectList([FromQuery] int? start, [FromQuery] int? count, [FromQuery] bool? fetchPageCount)
         {
-            var result = m_projectManager.GetProjectList(start, count);
+            var result = m_projectManager.GetProjectList(start, count, fetchPageCount ?? false);
 
             SetTotalCountHeader(result.TotalCount);
 
@@ -33,10 +33,10 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("{projectId}")]
-        [ProducesResponseType(typeof(ProjectContract), StatusCodes.Status200OK)]
-        public IActionResult GetProject(long projectId)
+        [ProducesResponseType(typeof(ProjectDetailContract), StatusCodes.Status200OK)]
+        public IActionResult GetProject(long projectId, [FromQuery] bool? fetchPageCount)
         {
-            var projectData = m_projectManager.GetProject(projectId);
+            var projectData = m_projectManager.GetProject(projectId, fetchPageCount ?? false);
             if (projectData == null)
                 return NotFound();
 
