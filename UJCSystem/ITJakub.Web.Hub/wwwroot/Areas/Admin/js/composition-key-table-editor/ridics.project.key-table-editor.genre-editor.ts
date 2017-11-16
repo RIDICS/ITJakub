@@ -1,11 +1,11 @@
 ﻿class KeyTableGenreEditor {
-    private readonly util: KeyTableViewManager;
+    private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
     private genreItemList: IGenreResponseContract[];
     private numberOfItemsPerPage = 28;
 
     constructor() {
-        this.util = new KeyTableViewManager();
+        this.util = new KeyTableUtilManager();
         this.gui = new EditorsGui();
     }
 

@@ -1,11 +1,11 @@
-﻿class KeyTableViewManager {
+﻿class KeyTableUtilManager {
     loadEditor(editorType: KeyTableEditorType) {
-        const url = `${getBaseUrl()}Admin/Project/KeyTableType`;
+        const url = `${getBaseUrl()}Admin/KeyTable/KeyTableType`;
         $("#project-layout-content").load(url, { editorType: editorType });
     }
 
     createNewGenre(name: string): JQueryXHR {
-        const url = `${getBaseUrl()}Admin/Project/CreateLiteraryGenre`;
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateLiteraryGenre`;
         const id = 0; //genre doesn't have an id yet
         const payload: ILiteraryGenreContract = {
             name: name,
@@ -21,7 +21,7 @@
     }
 
     renameGenre(name: string, id: number): JQueryXHR {
-        const url = `${getBaseUrl()}Admin/Project/CreateLiteraryGenre`; //TODO change address
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateLiteraryGenre`; //TODO change address
         const payload: ILiteraryGenreContract = {
             name: name,
             id: id
@@ -36,7 +36,7 @@
     }
 
     deleteGenre(id: number): JQueryXHR {
-        const url = `${getBaseUrl()}Admin/Project/CreateLiteraryGenre`; //TODO change address
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateLiteraryGenre`; //TODO change address
         return $.ajax({
             type: "POST", //TODO needs DELETE
             url: url,
@@ -47,17 +47,17 @@
     }
 
     getLitararyGenreList() {
-        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLitararyGenreList`);
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLitararyGenreList`);
         return ajax;
     }
 
     getLitararyKindList() {
-        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLiteraryKindList`);
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryKindList`);
         return ajax;
     }
 
     getCategoryList(): JQueryXHR {
-        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetCategoryList`);
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetCategoryList`);
         return ajax;
     }
 
@@ -70,7 +70,7 @@
             parentCategoryId: parentCategoryId,
             description:description
         };
-        const ajax = $.post(`${getBaseUrl()}Admin/ContentEditor/CreateCategory`, { category: category });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/CreateCategory`, { category: category });
         return ajax;
     }
 
@@ -82,7 +82,7 @@
             parentCategoryId: parentCategoryId,
             description: description
         };
-        const ajax = $.post(`${getBaseUrl()}Admin/ContentEditor/RenameCategory`,
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameCategory`,
             {
                 categoryId: categoryId,
                 category: category
@@ -92,12 +92,12 @@
 
     deleteCategory(categoryId: number): JQueryXHR {
         console.log(categoryId);
-        const ajax = $.post(`${getBaseUrl()}Admin/ContentEditor/DeleteCategory`, { categoryId: categoryId });
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteCategory`, { categoryId: categoryId });
         return ajax;
     }
 
     getLitararyOriginalList(): JQueryXHR {
-        const ajax = $.get(`${getBaseUrl()}Admin/ContentEditor/GetLiteraryKindList`);
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryKindList`);
         return ajax;
     }
 }

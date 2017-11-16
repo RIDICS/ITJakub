@@ -6,10 +6,10 @@ $(document).ready(() => {
 });
 
 class KeyTableEditorMain {
-    private readonly viewManager: KeyTableViewManager;
+    private readonly viewManager: KeyTableUtilManager;
 
     constructor() {
-        this.viewManager = new KeyTableViewManager();
+        this.viewManager = new KeyTableUtilManager();
     }
 
     init() {

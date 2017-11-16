@@ -1,12 +1,12 @@
 ﻿class KeyTableCategoryEditor {
-    private readonly util: KeyTableViewManager;
+    private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
     private categoryItemList: JQuery;
     private numberOfItemsPerPage = 25;
     private currentPage: number;
 
     constructor() {
-        this.util = new KeyTableViewManager();
+        this.util = new KeyTableUtilManager();
         this.gui = new EditorsGui();
     }
 

@@ -53,36 +53,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
 
-        public IActionResult KeyTable()
-        {
-            return View();
-        }
-
-        public IActionResult KeyTableType(KeyTableEditorType editorType)
-        {
-            switch (editorType)
-            {
-                case KeyTableEditorType.Category:
-                    return PartialView("KeyTableEditors/_Category");
-                case KeyTableEditorType.Genre:
-                    return PartialView("KeyTableEditors/_Genre");
-                case KeyTableEditorType.Kind:
-                    return PartialView("KeyTableEditors/_Kind");
-                case KeyTableEditorType.ResponsiblePerson:
-                    return PartialView("KeyTableEditors/_ResponsiblePerson");
-                case KeyTableEditorType.ResponsiblePersonEditor:
-                    return PartialView("KeyTableEditors/_ResponsiblePersonEditor");
-                case KeyTableEditorType.LiteraryOriginal:
-                    return PartialView("KeyTableEditors/_LiteraryOriginal");
-                case KeyTableEditorType.OriginalAuthor:
-                    return PartialView("KeyTableEditors/_OriginalAuthor");
-                case KeyTableEditorType.Keyword:
-                    return PartialView("KeyTableEditors/_Keyword");
-                default:
-                    return PartialView("KeyTableEditors/_Category");
-            }
-        }
-
         public IActionResult Project(long id)
         {
             using (var client = GetRestClient())
@@ -374,84 +344,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var newResourceId = client.DuplicateResource(request.ResourceId);
                 return Json(newResourceId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateLiteraryKind([FromBody] LiteraryKindContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryKind(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateLiteraryGenre([FromBody] LiteraryGenreContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryGenre(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateAuthor([FromBody] OriginalAuthorContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateOriginalAuthor(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsiblePerson([FromBody] ResponsiblePersonContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsiblePerson(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateResponsibleType([FromBody] ResponsibleTypeContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateResponsibleType(request);
-                return Json(newId);
-            }
-        }
-
-        [HttpPost]
-        public IActionResult CreateCategory([FromBody] CategoryContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateCategory(request);
-                return Json(newId);
-            }
-        }
-
-        public IActionResult GetCategoryList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetCategoryList();
-                return Json(result);
-            }
-        }
-
-        public IActionResult GetResponsibleTypeList()
-        {
-            using (var client = GetRestClient())
-            {
-                var result = client.GetResponsibleTypeList();
-                return Json(result);
             }
         }
 
