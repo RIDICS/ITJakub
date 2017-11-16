@@ -6,11 +6,6 @@ $(document).ready(() => {
 });
 
 class KeyTableEditorMain {
-    private readonly viewManager: KeyTableUtilManager;
-
-    constructor() {
-        this.viewManager = new KeyTableUtilManager();
-    }
 
     init() {
         this.switchOnClick();
@@ -39,40 +34,36 @@ class KeyTableEditorMain {
     private initEditor(editor: KeyTableEditorType) {
         switch (editor) {
         case KeyTableEditorType.Genre:
-            this.viewManager.loadEditor(editor);
             const genreEditor = new KeyTableGenreEditor();
             genreEditor.init();
             break;
         case KeyTableEditorType.Category:
-            this.viewManager.loadEditor(editor);
             const categoryEditor = new KeyTableCategoryEditor();
             categoryEditor.init();
             break;
         case KeyTableEditorType.Kind:
-            this.viewManager.loadEditor(editor);
             const kindEditor = new KeyTableKindEditor();
             kindEditor.init();
             break;
         case KeyTableEditorType.ResponsiblePerson:
-            this.viewManager.loadEditor(editor);
-            const personEditor = new KeyTableResponsiblePersonEditor();
+            const personEditor = new KeyTableResponsiblePerson();
             personEditor.init();
             break;
         case KeyTableEditorType.ResponsiblePersonEditor:
-                this.viewManager.loadEditor(editor);
-                //TODO
-                break;
+            const editorPersonEditor = new KeyTableResponsiblePersonEditor();
+            editorPersonEditor.init();
+            break;
         case KeyTableEditorType.Keyword:
-            this.viewManager.loadEditor(editor);
-            //TODO
+            const keywordEditor = new KeyTableKeywordEditor();
+            keywordEditor.init();
             break;
         case KeyTableEditorType.LiteraryOriginal:
-            this.viewManager.loadEditor(editor);
-            //TODO
+            const literaryOriginalEditor = new KeyTableLiteraryOriginalEditor();
+            literaryOriginalEditor.init();
             break;
         case KeyTableEditorType.OriginalAuthor:
-            this.viewManager.loadEditor(editor);
-            //TODO
+                const originalAuthorEditor = new KeyTableOriginalAuthorEditor();
+            originalAuthorEditor.init();
             break;
         default:
             const error = new AlertComponentBuilder(AlertType.Error).addContent("Invalid editor type");
