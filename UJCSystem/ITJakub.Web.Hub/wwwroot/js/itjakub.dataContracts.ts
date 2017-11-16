@@ -329,6 +329,11 @@ interface ILiteraryGenreContract {
     name: string;
 }
 
+interface IKeywordContract {
+    id: number;
+    name: string;
+}
+
 interface ICategoryContract {
 id:number;
 parentCategoryId?:number;
