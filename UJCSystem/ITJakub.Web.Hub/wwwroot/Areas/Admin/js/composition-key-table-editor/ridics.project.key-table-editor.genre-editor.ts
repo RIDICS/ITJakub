@@ -1,10 +1,10 @@
-﻿class KeyTableGenreEditor {
+﻿class KeyTableGenreEditor extends KeyTableEditorBase{
     private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
     private genreItemList: IGenreResponseContract[];
-    private numberOfItemsPerPage = 28;
 
     constructor() {
+        super();
         this.util = new KeyTableUtilManager();
         this.gui = new EditorsGui();
     }
@@ -13,22 +13,12 @@
         this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage);
+            this.initPagination(data.length, itemsOnPage, this.loadPage);
             this.loadPage(1);
             this.genreRename();
             this.genreDelete();
         });
         this.genreCreation();
-    }
-
-    private initPagination(itemsCount: number, itemsOnPage: number) {
-        const pagination = new Pagination({
-            container: $(".key-table-pagination"),
-            pageClickCallback: (pageNumber) => {
-                this.loadPage(pageNumber);
-            }
-        });
-        pagination.make(itemsCount, itemsOnPage);
     }
 
     private loadPage(pageNumber: number) {
@@ -47,14 +37,14 @@
 
     private generateListStructure(genreItemList: IGenreResponseContract[], jEl: JQuery) {
         jEl.empty();
-        const listStart = `<ul class="page-list">`;
-        const listItemEnd = `</li>`;
-        const listEnd = "</ul>";
+        const listStart = `<div class="page-list">`;
+        const listItemEnd = `</div>`;
+        const listEnd = "</div>";
         var elm = "";
         elm += listStart;
         for (let i = 0; i < genreItemList.length; i++) {
             const listItemStart =
-                `<li class="ui-widget-content page-list-item" data-genre-id="${genreItemList[i].id}">`;
+                `<div class="page-list-item" data-genre-id="${genreItemList[i].id}">`;
             elm += listItemStart;
             elm += genreItemList[i].name;
             elm += listItemEnd;
@@ -63,10 +53,6 @@
         const html = $.parseHTML(elm);
         jEl.append(html);
         this.makeSelectable(jEl);
-    }
-
-    private makeSelectable(jEl: JQuery) {
-        jEl.children(".page-list").selectable();
     }
 
     private genreCreation() {

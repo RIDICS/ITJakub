@@ -1,11 +1,10 @@
-﻿class KeyTableCategoryEditor {
+﻿class KeyTableCategoryEditor extends KeyTableEditorBase {
     private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
     private categoryItemList: JQuery;
-    private numberOfItemsPerPage = 25;
-    private currentPage: number;
 
     constructor() {
+        super();
         this.util = new KeyTableUtilManager();
         this.gui = new EditorsGui();
     }
@@ -15,7 +14,7 @@
             this.categoryCreation();
             this.categoryItemList = this.generateListStructure(data);
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage);
+            this.initPagination(data.length, itemsOnPage, this.loadPage);
             this.loadPage(1); //initialise at page 1
             this.currentPage = 1;
             this.categoryRename();
@@ -28,21 +27,10 @@
             this.categoryItemList = this.generateListStructure(data);
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
-            this.initPagination(data.length, itemsOnPage);
+            this.initPagination(data.length, itemsOnPage, this.loadPage);
         }).fail(() => {
             this.gui.showInfoDialog("Warning", "Connection to server lost.\nAutomatic page reload is not possible.");
         });
-    }
-
-    private initPagination(itemsCount: number, itemsOnPage: number) {
-        const pagination = new Pagination({
-            container: $(".key-table-pagination"),
-            pageClickCallback: (pageNumber) => {
-                this.loadPage(pageNumber);
-                this.currentPage = pageNumber;
-            }
-        });
-        pagination.make(itemsCount, itemsOnPage);
     }
 
     private loadPage(pageNumber: number) {
@@ -115,18 +103,6 @@
     private trackCollapseCategoryButton(childrenCategories:JQuery) {
         $(".collapse-category-button").on("click", () => {
             childrenCategories.toggle();
-        });
-    }
-
-    private makeSelectable(jEl: JQuery) {
-        jEl.children(".page-list").on("click", ".page-list-item", (event) => {
-            event.stopImmediatePropagation();
-            const targetEl = $(event.target);
-            if (targetEl.hasClass("collapse-category-button") || targetEl.parent().hasClass("collapse-category-button")) {
-                return;
-            }
-            targetEl.toggleClass("page-list-item-selected");
-            $(".page-list-item").not(targetEl).removeClass("page-list-item-selected");
         });
     }
 
