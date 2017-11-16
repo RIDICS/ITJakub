@@ -45,6 +45,19 @@ namespace Vokabular.MainService.Core.Managers
             return resultId;
         }
 
+        public void UpdateProject(long projectId, ProjectContract data)
+        {
+            var currentUserId = m_userManager.GetCurrentUserId();
+            var work = new UpdateProjectWork(m_projectRepository, projectId, data, currentUserId);
+            work.Execute();
+        }
+
+        public void DeleteProject(long projectId)
+        {
+            // TODO probably only set Project as removed
+            throw new NotImplementedException();
+        }
+
         public PagedResultList<ProjectDetailContract> GetProjectList(int? start, int? count, bool fetchPageCount)
         {
             var startValue = GetStart(start);

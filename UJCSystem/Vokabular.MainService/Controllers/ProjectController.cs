@@ -49,10 +49,16 @@ namespace Vokabular.MainService.Controllers
             return m_projectManager.CreateProject(project);
         }
 
+        [HttpPut("{projectId}")]
+        public void UpdateProject(long projectId, [FromBody] ProjectContract data)
+        {
+            m_projectManager.UpdateProject(projectId, data);
+        }
+
         [HttpDelete("{projectId}")]
         public void DeleteProject(long projectId)
         {
-            throw new System.NotImplementedException();
+            m_projectManager.DeleteProject(projectId);
         }
 
         [HttpGet("{projectId}/metadata")]
