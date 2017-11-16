@@ -187,8 +187,8 @@ namespace Vokabular.FulltextService.Core.Managers
             {
                 throw new Exception(response.DebugInformation);
             }
-            int counter = 0;
-            var result = new CorpusSearchResultDataList {List = new List<CorpusSearchResultData>(),  SearchResultType = FulltextSearchResultType.ProjectId};
+            int startCounter = 0;
+            var result = new CorpusSearchResultDataList {List = new List<CorpusSearchResultData>(),  SearchResultType = FulltextSearchResultType.ProjectExternalId};
             
             foreach (var highlightField in response.Hits.Select(d => d.Highlights))
             {
@@ -196,16 +196,30 @@ namespace Vokabular.FulltextService.Core.Managers
                 {
                     foreach (var highlight in value.Highlights)
                     {
-                        if (counter < start)
+                        var numberOfOccurences = GetNumberOfHighlitOccurences(highlight);
+
+                        if (startCounter + numberOfOccurences <= start)
                         {
-                            counter++;
+                            startCounter += numberOfOccurences;
                             continue;
                         }
-                        var resultData = GetCorpusSearchResultDataList(highlight);
-                        result.List.AddRange(resultData);
 
-                        counter++;
-                        if (counter == start + count)
+                        var resultData = GetCorpusSearchResultDataList(highlight, value.DocumentId);
+
+                        if (startCounter < start)
+                        {
+                            resultData.RemoveRange(0, start - startCounter);
+                            startCounter += resultData.Count;
+                        }
+
+                        if (result.List.Count + resultData.Count > count)
+                        {
+                            resultData = resultData.GetRange(0, count - result.List.Count);
+                        }
+
+                        result.List.AddRange(resultData);
+                        
+                        if (result.List.Count == count)
                         {
                             return result;
                         }
@@ -213,34 +227,6 @@ namespace Vokabular.FulltextService.Core.Managers
                 }
             }
             return result;
-        }
-
-        private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string sentence)
-        {
-            var result = new List<CorpusSearchResultData>();
-            var index = sentence.IndexOf(HighlightTag, StringComparison.Ordinal);
-            do
-            {
-                var corpusSearchResult = GetCorpusSearchResultData(sentence, index, out index);
-                result.Add(corpusSearchResult);
-                index = sentence.IndexOf(HighlightTag, index + HighlightTag.Length, StringComparison.Ordinal);
-            } while (index > 0);
-            
-            return result;
-        }
-
-        private CorpusSearchResultData GetCorpusSearchResultData(string sentence, int index, out int newIndex)
-        {
-            string before, match, after;
-            newIndex = sentence.IndexOf(HighlightTag, index + 1, StringComparison.Ordinal);
-
-            before = sentence.Substring(0, index);
-            match = sentence.Substring(index + HighlightTag.Length, newIndex - (index + HighlightTag.Length));
-            after = sentence.Substring(newIndex + HighlightTag.Length, sentence.Length - (newIndex + HighlightTag.Length));
-
-            before = before.Replace(HighlightTag, "");
-            after = after.Replace(HighlightTag, "");
-            return new CorpusSearchResultData{ PageResultContext  = new CorpusSearchPageResultData{ ContextStructure = new KwicStructure{After = after, Before = before, Match = match} } };
         }
 
         public TextResourceContract SearchPageByCriteria(string textResourceId, SearchPageRequestContract searchRequest)
@@ -399,12 +385,42 @@ namespace Vokabular.FulltextService.Core.Managers
             return regexpBuilder.ToString();
         }
         
-        private int GetNumberOfHighlitOccurences(string sentence)
+        private int GetNumberOfHighlitOccurences(string highlightedText)
         {
-            var s = sentence.Split(new[] {HighlightTag}, StringSplitOptions.None);
-            return sentence.Split(new[] { HighlightTag }, StringSplitOptions.None).Length / 2;
+            return highlightedText.Split(new[] { HighlightTag }, StringSplitOptions.None).Length / 2;
         }
 
+        private List<CorpusSearchResultData> GetCorpusSearchResultDataList(string highlightedText, string externalId)
+        {
+            var result = new List<CorpusSearchResultData>();
+
+            var index = highlightedText.IndexOf(HighlightTag, StringComparison.Ordinal);
+
+            do
+            {
+                var corpusSearchResult = GetCorpusSearchResultData(highlightedText, externalId, index, out index);
+                result.Add(corpusSearchResult);
+
+                index = highlightedText.IndexOf(HighlightTag, index + HighlightTag.Length, StringComparison.Ordinal);
+
+            } while (index > 0);
+
+            return result;
+        }
+
+        private CorpusSearchResultData GetCorpusSearchResultData(string highlightedText, string externalId, int index, out int newIndex)
+        {
+            newIndex = highlightedText.IndexOf(HighlightTag, index + 1, StringComparison.Ordinal);
+
+            var before = highlightedText.Substring(0, index);
+            var match = highlightedText.Substring(index + HighlightTag.Length, newIndex - (index + HighlightTag.Length));
+            var after = highlightedText.Substring(newIndex + HighlightTag.Length, highlightedText.Length - (newIndex + HighlightTag.Length));
+
+            before = before.Replace(HighlightTag, "");
+            after = after.Replace(HighlightTag, "");
+
+            return new CorpusSearchResultData { ProjectExternalId = externalId, PageResultContext = new CorpusSearchPageResultData { ContextStructure = new KwicStructure { After = after, Before = before, Match = match } } };
+        }
     }
 
     internal enum QueryType
