@@ -145,22 +145,30 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(newId);
             }
         }
-        [HttpPost]
-        public IActionResult CreateResponsibleType(ResponsibleTypeContract request)
+        [HttpGet]
+        public IActionResult GetResponsiblePersonList(int? start, int? count)
         {
             using (var client = GetRestClient())
             {
-                var newId = client.CreateResponsibleType(request);
-                return Json(newId);
+                var result = client.GetResponsiblePersonList(start, count);
+                return Json(result);
             }
         }
-
-        public IActionResult GetResponsibleTypeList()
+        [HttpPost]
+        public IActionResult RenameResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract request)
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetResponsibleTypeList();
-                return Json(result);
+                var response = client.UpdateResponsiblePerson(responsiblePersonId, request);
+                return Json(response);
+            }
+        }
+        [HttpPost]
+        public void DeleteResponsiblePerson(int responsiblePersonId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteResponsiblePerson(responsiblePersonId);
             }
         }
         //Literary original

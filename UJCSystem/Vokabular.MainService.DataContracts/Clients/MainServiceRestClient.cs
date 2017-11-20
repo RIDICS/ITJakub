@@ -511,7 +511,54 @@ namespace Vokabular.MainService.DataContracts.Clients
                 throw;
             }
         }
-        
+
+        public List<ResponsiblePersonContract> GetResponsiblePersonList(int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<ResponsiblePersonContract>>(UrlQueryBuilder.Create("responsibleperson").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public object UpdateResponsiblePerson(int responsiblePersonId, ResponsiblePersonContract data)
+        {
+            try
+            {
+                var response = Put<object>("responsibleperson/" + responsiblePersonId, data);
+                return response;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteResponsiblePerson(int responsiblePersonId)
+        {
+            try
+            {
+                Delete("responsibleperson/" + responsiblePersonId);
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public List<LiteraryKindContract> GetLiteraryKindList()
         {
             try

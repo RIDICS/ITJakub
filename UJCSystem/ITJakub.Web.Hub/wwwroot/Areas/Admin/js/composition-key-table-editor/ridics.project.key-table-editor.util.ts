@@ -119,7 +119,42 @@
     //responsible person editor section end
 
     //responsible person section start
+    getResponsiblePersonList(start?: number, count?: number): JQueryXHR {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetResponsiblePersonList`,
+            {
+                start: start,
+                count: count
+            });
+        return ajax;
+    }
 
+    createResponsiblePerson(name: string, surname: string) {//TODO
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateResponsiblePerson`;
+        const id = 0; //keyword doesn't have an id yet
+        const payload: IResponsiblePersonContract = {
+            id: id,
+            firstName: name,
+            lastName: surname
+        };
+        return $.post(url, { request: payload });
+    }
+    renameResponsiblePerson(responsiblePersonId: number, name: string, surname: string): JQueryXHR {
+        const responsiblePerson: IResponsiblePersonContract = {
+            id: responsiblePersonId,
+            firstName: name,
+            lastName: surname
+        };
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameResponsiblePerson`,
+            {
+                responsiblePersonId: responsiblePersonId,
+                request: responsiblePerson
+            });
+        return ajax;
+    }
+    deleteResponsiblePerson(responsiblePersonId: number): JQueryXHR {
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteResponsiblePerson`, { responsiblePersonId: responsiblePersonId });
+        return ajax;
+    }
     //responsible person section end
 
     //literary original section start
@@ -158,6 +193,7 @@
     }
 
     //literary original section end
+    //original author section start
     getOriginalAuthorList(start?: number, count?: number): JQueryXHR {
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetOriginalAuthorList`,
             {
@@ -173,7 +209,7 @@
         const payload: IOriginalAuthorContract = {
             id: id,
             firstName: name,
-            lastName:surname
+            lastName: surname
         };
         return $.post(url, { request: payload });
     }
@@ -181,7 +217,7 @@
         const originalAuthor: IOriginalAuthorContract = {
             id: authorId,
             firstName: name,
-            lastName:surname
+            lastName: surname
         };
         const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameOriginalAuthor`,
             {
@@ -191,12 +227,9 @@
         return ajax;
     }
     deleteOriginalAuthor(authorId: number): JQueryXHR {
-        console.log(authorId);
         const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteOriginalAuthor`, { authorId: authorId });
         return ajax;
     }
-    //original author section start
-
     //original author section end
 
     //keyword section start

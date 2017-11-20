@@ -1,7 +1,6 @@
 ﻿class KeyTableOriginalAuthorEditor extends KeyTableEditorBase {
     private readonly util: KeyTableUtilManager;
     private readonly gui: EditorsGui;
-    private authorItemList: IOriginalAuthorContract[];
 
     constructor() {
         super();
@@ -62,7 +61,6 @@
                         const nameString = nameTextareaEl.val();
                         const surnameTextareaEl = $(".secondary-input-author-textarea");
                         const surnameString = surnameTextareaEl.val();
-                        console.log(nameString, surnameString);
                         const newAuthorAjax = this.util.createOriginalAuthor(nameString, surnameString);
                         newAuthorAjax.done(() => {
                             nameTextareaEl.val("");
