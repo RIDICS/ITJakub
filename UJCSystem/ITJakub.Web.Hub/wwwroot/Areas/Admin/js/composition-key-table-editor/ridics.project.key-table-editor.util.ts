@@ -84,6 +84,31 @@
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryKindList`);
         return ajax;
     }
+    deleteLiteraryKind(literaryKindId: number): JQueryXHR {
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryKind`, { literaryKindId: literaryKindId });
+        return ajax;
+    }
+    createNewLiteraryKind(name: string): JQueryXHR {
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateLiteraryKind`;
+        const id = 0; //keyword doesn't have an id yet
+        const payload: ILiteraryKindContract = {
+            name: name,
+            id: id
+        };
+        return $.post(url, { request: payload });
+    }
+    renameLiteraryKind(literaryKindId: number, name: string): JQueryXHR {
+        const literaryKind: ILiteraryKindContract = {
+            id: literaryKindId,
+            name: name
+        };
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameLiteraryKind`,
+            {
+                literaryKindId: literaryKindId,
+                request: literaryKind
+            });
+        return ajax;
+    }
     //kind section end
 
     //responsible person editor section start
@@ -99,7 +124,6 @@
         const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryOriginalList`);
         return ajax;
     }
-
     deleteLiteraryOriginal(literaryOriginalId: number): JQueryXHR {
         const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryOriginal`, { literaryOriginalId: literaryOriginalId });
         return ajax;

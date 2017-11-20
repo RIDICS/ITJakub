@@ -386,22 +386,6 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
-        public int CreateLiteraryKind(LiteraryKindContract literaryKind)
-        {
-            try
-            {
-                var newId = Post<int>("literarykind", literaryKind);
-                return newId;
-            }
-            catch (HttpRequestException e)
-            {
-                if (m_logger.IsErrorEnabled())
-                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
-
-                throw;
-            }
-        }
-
         public int CreateLiteraryGenre(LiteraryGenreContract literaryGenre)
         {
             try
@@ -487,6 +471,53 @@ namespace Vokabular.MainService.DataContracts.Clients
             {
                 var result = Get<List<LiteraryKindContract>>("literarykind");
                 return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public int CreateLiteraryKind(LiteraryKindContract literaryKind)
+        {
+            try
+            {
+                var newId = Post<int>("literarykind", literaryKind);
+                return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public object UpdateLiteraryKind(int literaryKindId, LiteraryKindContract data)
+        {
+            try
+            {
+                var response = Put<object>("literarykind/" + literaryKindId, data);
+                return response;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteLiteraryKind(int literaryKindId)
+        {
+            try
+            {
+                Delete("literarykind/" + literaryKindId);
             }
             catch (HttpRequestException e)
             {

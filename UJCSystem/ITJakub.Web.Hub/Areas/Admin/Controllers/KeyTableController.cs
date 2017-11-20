@@ -98,16 +98,6 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
 
         //Kind
-        [HttpPost]
-        public IActionResult CreateLiteraryKind(LiteraryKindContract request)
-        {
-            using (var client = GetRestClient())
-            {
-                var newId = client.CreateLiteraryKind(request);
-                return Json(newId);
-            }
-        }
-
         [HttpGet]
         public IActionResult GetLiteraryKindList()
         {
@@ -117,7 +107,32 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                 return Json(result);
             }
         }
-
+        [HttpPost]
+        public IActionResult CreateLiteraryKind(LiteraryKindContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryKind(request);
+                return Json(newId);
+            }
+        }
+        [HttpPost]
+        public void DeleteLiteraryKind(int literaryKindId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteLiteraryKind(literaryKindId);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameLiteraryKind(int literaryKindId, LiteraryKindContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateLiteraryKind(literaryKindId, request);
+                return Json(response);
+            }
+        }
         //Responsible person editor
 
         //Responsible person

@@ -123,7 +123,7 @@
                             const deleteAjax = this.util.deleteLiteraryOriginal(literaryOriginalId);
                             deleteAjax.done(() => {
                                 $(".confirmation-ok-button").off();
-                                this.gui.showInfoDialog("Success", "Genre deletion was successful");
+                                this.gui.showInfoDialog("Success", "Literary original deletion was successful");
                                 this.updateContentAfterChange();
                             });
                             deleteAjax.fail(() => {

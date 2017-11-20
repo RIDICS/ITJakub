@@ -339,6 +339,11 @@ interface ILiteraryOriginalContract {
     name: string;
 }
 
+interface ILiteraryKindContract {
+    id: number;
+    name: string;
+}
+
 interface ICategoryContract {
     id: number;
     parentCategoryId?: number;
