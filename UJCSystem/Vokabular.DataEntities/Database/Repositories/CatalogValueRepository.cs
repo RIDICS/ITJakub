@@ -46,11 +46,31 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .List();
         }
 
+        public virtual IList<TermCategory> GetTermCategoryList()
+        {
+            return GetSession().QueryOver<TermCategory>()
+                .OrderBy(x => x.Name).Asc
+                .List();
+        }
+
         public virtual Keyword GetKeywordByName(string name)
         {
             return GetSession().QueryOver<Keyword>()
                 .Where(x => x.Text == name)
                 .SingleOrDefault();
+        }
+
+        public virtual IList<Term> GetTermList(int? categoryId = null)
+        {
+            var query = GetSession().QueryOver<Term>()
+                .OrderBy(x => x.Position).Asc;
+
+            if (categoryId != null)
+            {
+                query.Where(x => x.TermCategory.Id == categoryId.Value);
+            }
+
+            return query.List();
         }
     }
 }

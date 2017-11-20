@@ -65,9 +65,9 @@ namespace Vokabular.MainService.Controllers
         }
 
         [HttpGet("")]
-        public List<TermContract> GetTermList([FromQuery] int? start, [FromQuery] int? count)
+        public List<TermContract> GetTermList([FromQuery] int? termCategoryId)
         {
-            var result = m_termManager.GetTermList(start, count);
+            var result = m_termManager.GetTermList(termCategoryId);
             return result;
         }
 

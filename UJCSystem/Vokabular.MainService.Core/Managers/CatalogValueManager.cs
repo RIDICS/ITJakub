@@ -44,7 +44,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public int CreateTermCategory(TermCategoryContract data)
         {
-            throw new System.NotImplementedException();
+            return new CreateOrUpdateTermCategoryWork(m_catalogValueRepository, null, data).Execute();
         }
 
         public List<LiteraryGenreContract> GetLiteraryGenreList()
@@ -79,7 +79,8 @@ namespace Vokabular.MainService.Core.Managers
         
         public List<TermCategoryContract> GetTermCategoryList()
         {
-            throw new System.NotImplementedException();
+            var resultList = m_catalogValueRepository.InvokeUnitOfWork(x => x.GetTermCategoryList());
+            return Mapper.Map<List<TermCategoryContract>>(resultList);
         }
 
         public void UpdateLiteraryGenre(int literaryGenreId, LiteraryGenreContract data)
@@ -109,7 +110,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void UpdateTermCategory(int termCategoryId, TermCategoryContract data)
         {
-            throw new System.NotImplementedException();
+            new CreateOrUpdateTermCategoryWork(m_catalogValueRepository, termCategoryId, data).Execute();
         }
 
         public void DeleteLiteraryGenre(int literaryGenreId)
@@ -139,7 +140,7 @@ namespace Vokabular.MainService.Core.Managers
 
         public void DeleteTermCategory(int termCategoryId)
         {
-            throw new System.NotImplementedException();
+            new DeleteCatalogValueWork<TermCategory>(m_catalogValueRepository, termCategoryId).Execute();
         }
 
         public LiteraryGenreContract GetLiteraryGenre(int literaryGenreId)
@@ -174,7 +175,8 @@ namespace Vokabular.MainService.Core.Managers
         
         public TermCategoryContract GetTermCategory(int termCategoryId)
         {
-            throw new System.NotImplementedException();
+            var result = m_catalogValueRepository.InvokeUnitOfWork(x => x.FindById<TermCategory>(termCategoryId));
+            return Mapper.Map<TermCategoryContract>(result);
         }
     }
 }
