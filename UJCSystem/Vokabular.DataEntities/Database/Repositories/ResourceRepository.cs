@@ -198,6 +198,8 @@ namespace Vokabular.DataEntities.Database.Repositories
                 .JoinAlias(x => x.Resource, () => resourceAlias)
                 .Where(x => x.Id == resourceAlias.LatestVersion.Id && resourceAlias.Id == resourceId)
                 .Fetch(x => x.BookVersion).Eager
+                .Fetch(x => x.Resource).Eager
+                .Fetch(x => x.Resource.Project).Eager
                 .SingleOrDefault();
         }
 

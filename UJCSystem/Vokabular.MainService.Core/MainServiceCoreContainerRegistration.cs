@@ -19,10 +19,10 @@ namespace Vokabular.MainService.Core
             container.AddPerWebRequest<CorpusSearchManager>();
             container.AddPerWebRequest<HeadwordSearchManager>();
             container.AddPerWebRequest<NamedResourceGroupManager>();
-            container.AddPerWebRequest<PageManager>();
             container.AddPerWebRequest<PersonManager>();
             container.AddPerWebRequest<ProjectContentManager>();
             container.AddPerWebRequest<ProjectInfoManager>();
+            container.AddPerWebRequest<ProjectItemManager>();
             container.AddPerWebRequest<ProjectManager>();
             container.AddPerWebRequest<ProjectMetadataManager>();
             container.AddPerWebRequest<ProjectResourceManager>();
