@@ -51,8 +51,8 @@
         return $.post(url, { request: payload });
     }
 
-    getLitararyGenreList() {
-        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLitararyGenreList`);
+    getLiteraryGenreList() {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryGenreList`);
         return ajax;
     }
 
@@ -95,8 +95,34 @@
     //responsible person section end
 
     //literary original section start
-    getLitararyOriginalList(): JQueryXHR {
-        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryKindList`);
+    getLiteraryOriginalList(): JQueryXHR {
+        const ajax = $.get(`${getBaseUrl()}Admin/KeyTable/GetLiteraryOriginalList`);
+        return ajax;
+    }
+
+    deleteLiteraryOriginal(literaryOriginalId: number): JQueryXHR {
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/DeleteLiteraryOriginal`, { literaryOriginalId: literaryOriginalId });
+        return ajax;
+    }
+    createNewLiteraryOriginal(name: string): JQueryXHR {
+        const url = `${getBaseUrl()}Admin/KeyTable/CreateLiteraryOriginal`;
+        const id = 0; //keyword doesn't have an id yet
+        const payload: ILiteraryOriginalContract = {
+            name: name,
+            id: id
+        };
+        return $.post(url, { request: payload });
+    }
+    renameLiteraryOriginal(literaryOriginalId: number, name: string): JQueryXHR {
+        const literaryOriginal: ILiteraryOriginalContract = {
+            id: literaryOriginalId,
+            name: name
+        };
+        const ajax = $.post(`${getBaseUrl()}Admin/KeyTable/RenameLiteraryOriginal`,
+            {
+                literaryOriginalId: literaryOriginalId,
+                request: literaryOriginal
+            });
         return ajax;
     }
     //literary original section end

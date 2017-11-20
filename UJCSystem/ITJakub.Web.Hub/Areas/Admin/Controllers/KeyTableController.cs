@@ -69,11 +69,11 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
 
 
         [HttpGet]
-        public IActionResult GetLitararyGenreList()
+        public IActionResult GetLiteraryGenreList()
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetLitararyGenreList();
+                var result = client.GetLiteraryGenreList();
                 return Json(result);
             }
         }
@@ -150,12 +150,38 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
         }
         //Literary original
         [HttpGet]
-        public IActionResult GetLitararyOriginalList()
+        public IActionResult GetLiteraryOriginalList()
         {
             using (var client = GetRestClient())
             {
-                var result = client.GetLitararyOriginalList();
+                var result = client.GetLiteraryOriginalList();
                 return Json(result);
+            }
+        }
+        [HttpPost]
+        public void DeleteLiteraryOriginal(int literaryOriginalId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteLiteraryOriginal(literaryOriginalId);
+            }
+        }
+        [HttpPost]
+        public IActionResult CreateLiteraryOriginal(LiteraryOriginalContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var newId = client.CreateLiteraryOriginal(request);
+                return Json(newId);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameLiteraryOriginal(int literaryOriginalId, LiteraryOriginalContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateLiteraryOriginal(literaryOriginalId, request);
+                return Json(response);
             }
         }
         //Original author

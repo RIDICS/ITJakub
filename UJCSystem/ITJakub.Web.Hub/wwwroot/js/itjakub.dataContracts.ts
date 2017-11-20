@@ -334,11 +334,16 @@ interface IKeywordContract {
     name: string;
 }
 
+interface ILiteraryOriginalContract {
+    id: number;
+    name: string;
+}
+
 interface ICategoryContract {
-id:number;
-parentCategoryId?:number;
-externalId:string;
-description:string;
+    id: number;
+    parentCategoryId?: number;
+    externalId: string;
+    description: string;
 }
 
 interface IEditionNote { //TODO expand after server functionality is done

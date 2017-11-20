@@ -107,8 +107,8 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
                         return PartialView("Work/_Cooperation");
                     case ProjectModuleTabType.WorkMetadata:
                         var literaryKinds = client.GetLiteraryKindList();
-                        var literaryGenres = client.GetLitararyGenreList();
-                        var literaryOriginals = client.GetLitararyOriginalList();
+                        var literaryGenres = client.GetLiteraryGenreList();
+                        var literaryOriginals = client.GetLiteraryOriginalList();
                         var responsibleTypes = client.GetResponsibleTypeList();
                         var projectMetadata = client.GetProjectMetadata(projectId.Value, true, true, true, true, true);
                         var workMetadaViewModel = Mapper.Map<ProjectWorkMetadataViewModel>(projectMetadata);

@@ -14,7 +14,7 @@
         $(".create-key-table-entry").text("Create new genre");
         $(".rename-key-table-entry").text("Rename genre");
         $(".delete-key-table-entry").text("Delete genre");
-        this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
+        this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             const itemsOnPage = this.numberOfItemsPerPage;
             this.initPagination(data.length, itemsOnPage, this.loadPage.bind(this));
@@ -31,7 +31,7 @@
     }
 
     private updateContentAfterChange() {
-        this.util.getLitararyGenreList().done((data: IGenreResponseContract[]) => {
+        this.util.getLiteraryGenreList().done((data: IGenreResponseContract[]) => {
             this.genreItemList = data;
             this.loadPage(this.currentPage);
             const itemsOnPage = this.numberOfItemsPerPage;
@@ -50,7 +50,7 @@
         this.makeSelectable(listEl);
     }
 
-    protected generateGenreList(genreItemList: IGenreResponseContract[], jEl: JQuery): JQuery {
+    private generateGenreList(genreItemList: IGenreResponseContract[], jEl: JQuery): JQuery {
         const nameArray = genreItemList.map(a => a.name);
         const idArray = genreItemList.map(a => a.id);
         return this.generateSimpleList(idArray, nameArray, jEl);
