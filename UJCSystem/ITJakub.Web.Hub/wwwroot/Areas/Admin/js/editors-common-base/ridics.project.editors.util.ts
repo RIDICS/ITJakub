@@ -29,9 +29,9 @@
  * Generates guid on the server
  * @returns {JQueryXHR} Ajax conraining GUID
  */
-    createTextRefereceId(): JQueryXHR {
-        const ajax = $.post(`${this.serverPath}Admin/ContentEditor/GetGuid`);
-        return ajax;
+    createTextRefereceId(): string {
+        const guid = Guid.generate();
+        return guid;
     }
 
     getProjectContent(projectId: number): JQueryXHR {

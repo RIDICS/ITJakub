@@ -33,9 +33,8 @@
         if (userIsEnteringText) {
             $(".preloading-pages-spinner").show();
             const textId = this.getCurrentTextId();
-            const ajax = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
-            ajax.done((data: string) => {
-                const textReferenceId = data;
+            const textReferenceId = (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, true);
+                $(".preloading-pages-spinner").hide();
                 const id = 0; //creating comment
                 const parentComment = null; //creating comment
                 const dialog = this.gui.showCommentInputDialog(() => {
@@ -45,13 +44,6 @@
                         this.userIsEnteringText = !this.userIsEnteringText;
                         this.commentInput.toggleCommentSignsAndReturnCommentNumber(editor, false);
                     });
-            });
-            ajax.fail(() => {
-                this.gui.showMessageDialog("Error", "Comment addition failed");
-            });
-            ajax.always(() => {
-                $(".preloading-pages-spinner").hide();
-            });
         } else {
             const commentInputDialogEl = $(".comment-input-dialog");
             (this.commentInput).toggleCommentSignsAndReturnCommentNumber(editor, false);

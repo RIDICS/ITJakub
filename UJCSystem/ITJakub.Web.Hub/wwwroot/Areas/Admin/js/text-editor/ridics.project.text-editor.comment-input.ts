@@ -101,7 +101,7 @@
             });
     }
 
-    toggleCommentSignsAndReturnCommentNumber(editor: SimpleMDE, addSigns: boolean): JQueryXHR {
+    toggleCommentSignsAndReturnCommentNumber(editor: SimpleMDE, addSigns: boolean): string {
         const cm = editor.codemirror as CodeMirror.Doc;
         let output = "";
         let markSize: number;
@@ -129,9 +129,7 @@
                 { line: selectionEndLine, ch: selectionEndChar - markSize });
             return null;
         } else {
-            const ajaxTextReferenceId = this.util.createTextRefereceId();
-            ajaxTextReferenceId.done((data: string) => {
-                const textReferenceId = data;
+            const textReferenceId = this.util.createTextRefereceId();
                 if (addSigns) {
                     const uniqueNumberLength = textReferenceId.length;
                     markSize = uniqueNumberLength + 2; // + $ + %
@@ -140,11 +138,7 @@
                     cm.setSelection({ line: selectionStartLine, ch: selectionStartChar }, //setting caret
                         { line: selectionEndLine, ch: selectionEndChar + 2 * markSize });
                 }
-            });
-            ajaxTextReferenceId.fail(() => {
-                this.gui.showMessageDialog("Error", "Comment creation failed");
-            });
-            return ajaxTextReferenceId;
+                return textReferenceId;
         }
     }
 
