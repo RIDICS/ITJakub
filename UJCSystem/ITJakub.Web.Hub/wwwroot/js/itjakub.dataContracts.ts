@@ -351,6 +351,12 @@ interface ICategoryContract {
     description: string;
 }
 
+interface IOriginalAuthorContract {
+    id: number;
+    firstName: string;
+    lastName: string;
+}
+
 interface IEditionNote { //TODO expand after server functionality is done
     projectId: number;
     content: string;

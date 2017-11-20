@@ -8,6 +8,12 @@ $(document).ready(() => {
 class KeyTableEditorMain {
 
     init() {
+        const editorsList = $(".list-group");
+        const editorsListItems = editorsList.children(".key-table-editor-selection");
+        const firstEditorListItem = editorsListItems.first();
+        const editorId = firstEditorListItem.data("editor-type") as number;
+        this.initEditor(editorId);
+        firstEditorListItem.addClass("active");
         this.switchOnClick();
         var $splitterButton = $("#splitter-button");
         $splitterButton.click(() => {
@@ -26,7 +32,10 @@ class KeyTableEditorMain {
         $(".left-menu").on("click",
             ".key-table-editor-selection",
             (event) => {
-                const target: KeyTableEditorType = $(event.target).data("editor-type");
+                const targetEl = $(event.target);
+                const target: KeyTableEditorType = targetEl.data("editor-type");
+                targetEl.toggleClass("active");
+                targetEl.siblings(".key-table-editor-selection").removeClass("active");
                 this.initEditor(target);
             });
     }

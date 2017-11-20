@@ -433,12 +433,59 @@ namespace Vokabular.MainService.DataContracts.Clients
             }
         }
 
+        public List<OriginalAuthorContract> GetOriginalAuthorList(int? start, int? count)
+        {
+            try
+            {
+                var result = Get<List<OriginalAuthorContract>>(UrlQueryBuilder.Create("author").AddParameter("start", start.ToString()).AddParameter("count", count.ToString()).ToQuery());
+                return result;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
         public int CreateOriginalAuthor(OriginalAuthorContract author)
         {
             try
             {
                 var newId = Post<int>("author", author);
                 return newId;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public object UpdateOriginalAuthor(int authorId, OriginalAuthorContract data)
+        {
+            try
+            {
+                var response = Put<object>("author/" + authorId, data);
+                return response;
+            }
+            catch (HttpRequestException e)
+            {
+                if (m_logger.IsErrorEnabled())
+                    m_logger.LogError("{0} failed with {1}", GetCurrentMethod(), e);
+
+                throw;
+            }
+        }
+
+        public void DeleteOriginalAuthor(int authorId)
+        {
+            try
+            {
+                Delete("author/" + authorId);
             }
             catch (HttpRequestException e)
             {

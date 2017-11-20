@@ -200,6 +200,15 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             }
         }
         //Original author
+        [HttpGet]
+        public IActionResult GetOriginalAuthorList(int? start, int? count)
+        {
+            using (var client = GetRestClient())
+            {
+                var result = client.GetOriginalAuthorList(start, count);
+                return Json(result);
+            }
+        }
         [HttpPost]
         public IActionResult CreateAuthor(OriginalAuthorContract request)
         {
@@ -207,6 +216,23 @@ namespace ITJakub.Web.Hub.Areas.Admin.Controllers
             {
                 var newId = client.CreateOriginalAuthor(request);
                 return Json(newId);
+            }
+        }
+        [HttpPost]
+        public IActionResult RenameOriginalAuthor(int authorId, OriginalAuthorContract request)
+        {
+            using (var client = GetRestClient())
+            {
+                var response = client.UpdateOriginalAuthor(authorId, request);
+                return Json(response);
+            }
+        }
+        [HttpPost]
+        public void DeleteOriginalAuthor(int authorId)
+        {
+            using (var client = GetRestClient())
+            {
+                client.DeleteOriginalAuthor(authorId);
             }
         }
         //Keyword
